@@ -23,7 +23,8 @@ This to install QGIS 3.2.3 in Ubuntu bionic::
 
 Clone the repository running::
 
-    sudo apt install git python-pip python-dev
+    sudo apt install git python3-pip python3-dev python3-qgis #dependencies when using python3
+    #sudo apt install git python-pip python-dev python-qgis #dependencies when using python2
     cd ~
     mkdir cadastre
     cd cadastre
