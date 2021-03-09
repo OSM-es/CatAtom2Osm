@@ -800,11 +800,13 @@ class TestConsLayer(unittest.TestCase):
                         areap += geom.area()
                 aream = sum([g.area() for g in list(chg.values())])
                 self.assertEqual(100*round(areap, 2), 100*round(aream, 2))
+                self.assertEqual(len(cn), 0)
+            else:
+                self.assertEqual(set(cn), set([p.id() for p in parts_for_level[max_level, min_level]]))
             self.assertEqual(max([l[0] for l in list(parts_for_level.keys())]), max_level)
             self.assertEqual(max([l[1] for l in list(parts_for_level.keys())]), min_level)
             self.assertEqual(ch[footprint.id()][6], max_level)
             self.assertEqual(ch[footprint.id()][7], min_level)
-            self.assertEqual(set(cn), set([p.id() for p in parts_for_level[max_level, min_level]]))
 
     @mock.patch('layer.tqdm')
     def test_merge_building_parts(self, m_tqdm):

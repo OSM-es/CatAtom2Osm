@@ -26,7 +26,7 @@ andalucia = {'04': 'Almeria', '11': 'Cadiz', '14': 'Cordova', '18': 'Granada',
 
 cdau_url = 'http://www.juntadeandalucia.es/institutodeestadisticaycartografia/cdau/portales/{}'
 csv_name = 'portal_{}.csv'
-meta_url = 'http://www.callejerodeandalucia.es/portal/web/cdau/inf_alfa'
+meta_url = 'https://www.callejerodeandalucia.es/portal/informaci%C3%B3n-alfanum%C3%A9rica'
 cdau_crs = 25830
 cdau_thr = 5 # Threhold in meters to conflate Cadastre addresses
 cod_mun_trans = {

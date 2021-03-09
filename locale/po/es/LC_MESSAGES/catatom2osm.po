@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: CatAtom2Osm\n"
-"POT-Creation-Date: 2020-01-07 12:11+WET\n"
+"POT-Creation-Date: 2021-03-09 08:24+WET\n"
 "PO-Revision-Date: 2017-05-28 19:23+WEST\n"
 "Last-Translator: Javier Sánchez <javiersanp@gmail.com>\n"
 "Language: es\n"
@@ -173,187 +173,196 @@ msgstr "Error al cargar el archivo CSV '%s'"
 msgid "Downloading"
 msgstr "Descargando '%s'"
 
-#: layer.py:238
+#: layer.py:239
 msgid "Error when creating shapefile: '%s'"
 msgstr "Error al crear el archivo shapefile: '%s'"
 
-#: layer.py:331 layer.py:1060
+#: layer.py:335 layer.py:1064
 msgid "Append"
 msgstr "Agregar"
 
-#: layer.py:347 layer.py:1089
+#: layer.py:351 layer.py:1093
 msgid "Loaded %d features in '%s' from '%s'"
 msgstr "Cargados %d características en '%s' desde '%s'"
 
-#: layer.py:360
+#: layer.py:364
 msgid "Reproject"
 msgstr "Reproyectar"
 
-#: layer.py:381
+#: layer.py:385
 msgid "Reprojected the '%s' layer to '%s' CRS"
 msgstr "Reproyectada la capa '%s' al CRS '%s'"
 
-#: layer.py:409
+#: layer.py:413
 msgid "Join field"
 msgstr "Unir campo"
 
-#: layer.py:435
+#: layer.py:439
 msgid "Joined '%s' to '%s'"
 msgstr "Combinado '%s' a '%s'"
 
-#: layer.py:549
+#: layer.py:553
 msgid "Detected a %s geometry in the '%s' layer"
 msgstr "Detectada una geometría %s en la capa '%s'"
 
-#: layer.py:559
+#: layer.py:563
 msgid "Loaded %d nodes, %d ways, %d relations from '%s' layer"
 msgstr "Cargados %d nodos, %d vías, %d relaciones de la capa '%s'"
 
-#: layer.py:611
+#: layer.py:615
 msgid "Explode multi pars"
 msgstr "Separar geometrías multiparte"
 
-#: layer.py:625 layer.py:1092
+#: layer.py:629 layer.py:1096
 msgid "%d multi-polygons splitted into %d polygons in the '%s' layer"
 msgstr "%d multipolígonos divididos a %d poligonos en la capa '%s'"
 
-#: layer.py:689
+#: layer.py:693
 msgid "Topology"
 msgstr "Topología"
 
-#: layer.py:757
+#: layer.py:761
 msgid "Merged %d close vertices in the '%s' layer"
 msgstr "Fusionados %d vértices próximos en la capa '%s'"
 
-#: layer.py:761
+#: layer.py:765
 msgid "Created %d topological points in the '%s' layer"
 msgstr "Creados %d puntos topológicos en la capa '%s'"
 
-#: layer.py:784
+#: layer.py:788
 msgid "Delete invalid geometries"
 msgstr "Eliminar geometrías no válidas"
 
-#: layer.py:875
+#: layer.py:879
 msgid "Deleted %d invalid ring geometries in the '%s' layer"
 msgstr "Eliminados %d anillos de geometrías no válidos en la capa '%s'"
 
-#: layer.py:880
+#: layer.py:884
 msgid "Deleted %d invalid geometries in the '%s' layer"
 msgstr "Eliminadas %d geometrías no válidas en la capa '%s'"
 
-#: layer.py:884
+#: layer.py:888
 msgid "Deleted %d zig-zag vertices in the '%s' layer"
 msgstr "Eliminados %d vértices en zig-zag en la capa '%s'"
 
-#: layer.py:888
+#: layer.py:892
 msgid "Deleted %d spike vertices in the '%s' layer"
 msgstr "Fusionados %d vértices en punta en la capa '%s'"
 
-#: layer.py:908
+#: layer.py:912
 msgid "Simplify"
 msgstr "Simplificar"
 
-#: layer.py:946
+#: layer.py:950
 msgid "Simplified %d vertices in the '%s' layer"
 msgstr "Simplificados %d vértices en la capa '%s'"
 
-#: layer.py:972
+#: layer.py:976
 msgid "%d adjacent polygons merged into %d polygons in the '%s' layer"
 msgstr "%d polígonos adyacentes fusionados a %d polígonos en la capa '%s'"
 
-#: layer.py:979
+#: layer.py:983
 msgid "Difference"
 msgstr "Diferencia"
 
-#: layer.py:1158
+#: layer.py:1162
 msgid "Refused %d addresses because they exist in OSM"
 msgstr "Rechazadas %d direcciones por existir en OSM"
 
-#: layer.py:1164
+#: layer.py:1168
 msgid "Deleted %d addresses without house number"
 msgstr "Eliminadas %d direcciones sin número de portal"
 
-#: layer.py:1289
-msgid "Missing building footprint for this part"
+#: layer.py:1293
+#, fuzzy
+msgid "Missing building outline for this part"
 msgstr "Falta el contorno del edificio para esta parte"
 
-#: layer.py:1346
+#: layer.py:1350
 msgid "Remove outside parts"
 msgstr "Eliminar partes exteriores"
 
-#: layer.py:1369
-msgid "Removed %d building parts outside the footprint"
+#: layer.py:1373
+#, fuzzy
+msgid "Removed %d building parts outside the outline"
 msgstr "Eliminadas %d partes de edificio fuera del contorno"
 
-#: layer.py:1373
+#: layer.py:1377
 msgid "Deleted %d building parts with no floors above ground"
 msgstr "Eliminadas %d partes de edificio sin plantas sobre el nivel del suelo"
 
-#: layer.py:1378
-msgid "Generated %d building footprints"
+#: layer.py:1382
+#, fuzzy
+msgid "Generated %d building outlines"
 msgstr "Generados %d contornos de edificios"
 
-#: layer.py:1422
+#: layer.py:1428
 msgid "This part is bigger than its building"
 msgstr "Esta parte es mayor que su edificio"
 
-#: layer.py:1486
+#: layer.py:1448
+msgid "Building parts don't fill the building outline"
+msgstr "Las partes de edificio no cubren todo el contorno"
+
+#: layer.py:1497
 msgid "Merge building parts"
 msgstr "Combinar partes de edificios"
 
-#: layer.py:1531
+#: layer.py:1542
 msgid "Located %d swimming pools over a building"
 msgstr "Localizadas %d piscinas sobre un edificio"
 
-#: layer.py:1534
+#: layer.py:1545
 msgid "Deleted %d buildings coincidents with a swimming pool"
 msgstr "Eliminados %d edificios conicidentes con una piscina"
 
-#: layer.py:1538
-msgid "Translated %d level values to the footprint"
+#: layer.py:1549
+#, fuzzy
+msgid "Translated %d level values to the outline"
 msgstr "Trasladados %d valores de niveles al contorno"
 
-#: layer.py:1541
-msgid "Merged %d building parts to the footprint"
+#: layer.py:1552
+#, fuzzy
+msgid "Merged %d building parts to the outline"
 msgstr "Fusionados %d partes de edificios al contorno"
 
-#: layer.py:1545
+#: layer.py:1556
 msgid "Merged %d adjacent parts"
 msgstr "Fusionadas %d partes adyacentes"
 
-#: layer.py:1621
+#: layer.py:1632
 msgid "Moved %d addresses to entrance, %d changed to parcel"
 msgstr "Desplazadas %d direcciones a entrada, %d cambiadas a parcela"
 
-#: layer.py:1626
+#: layer.py:1637
 msgid "Deleted %d addresses without associated building"
 msgstr "Eliminadas %d direcciones sin edificio asociado"
 
-#: layer.py:1629
+#: layer.py:1640
 msgid "Refused %d addresses belonging to multiple buildings"
 msgstr "Eliminadas %d direcciones pertenecientes a edificios múltiples"
 
-#: layer.py:1640
+#: layer.py:1651
 msgid "GEOS validation"
 msgstr "Validación GEOS"
 
-#: layer.py:1652
+#: layer.py:1663
 msgid "Check, area too small"
 msgstr "Comprobar, área demasiado pequeña"
 
-#: layer.py:1655
+#: layer.py:1666
 msgid "Check, area too big"
 msgstr "Comprobar, área demasiado grande"
 
-#: layer.py:1670
+#: layer.py:1681
 msgid "Conflate"
 msgstr "Combinación"
 
-#: layer.py:1683
+#: layer.py:1694
 msgid "OSM building with id %s is not valid"
 msgstr "El edificio de OSM con id %s no es váido"
 
-#: layer.py:1704
+#: layer.py:1715
 msgid "Detected %d conflicts in %d buildings/pools from OSM"
 msgstr "Detectados %d edificios/piscinas con conflicto de %d en OSM"
 
@@ -636,7 +645,8 @@ msgid "Swimming pools"
 msgstr "Piscinas"
 
 #: report.py:91
-msgid "Parts outside footprint deleted"
+#, fuzzy
+msgid "Parts outside outline deleted"
 msgstr "Partes fuera de contorno eliminadas"
 
 #: report.py:92
@@ -644,7 +654,8 @@ msgid "Parts with no floors above ground"
 msgstr "Partes bajo rasante eliminadas"
 
 #: report.py:93
-msgid "Building footprints created"
+#, fuzzy
+msgid "Building outlines created"
 msgstr "Contornos de edificios creados"
 
 #: report.py:94
@@ -656,7 +667,8 @@ msgid "Buildings resulting from splitting multiparts"
 msgstr "Edificios resultantes de dividir multipartes"
 
 #: report.py:96
-msgid "Parts merged to the footprint"
+#, fuzzy
+msgid "Parts merged to the outline"
 msgstr "Partes fusionadas al contorno"
 
 #: report.py:97

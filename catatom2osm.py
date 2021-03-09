@@ -507,9 +507,9 @@ class CatAtom2Osm(object):
                 bu = group[0]
                 entrance = False
                 if 'entrance' in ad.tags:
-                    footprint = [bu] if isinstance(bu, osm.Way) \
+                    outline = [bu] if isinstance(bu, osm.Way) \
                         else [m.element for m in bu.members if m.role == 'outer']
-                    for w in footprint:
+                    for w in outline:
                         entrance = w.search_node(ad.x, ad.y)
                         if entrance:
                             entrance.tags.update(ad.tags)

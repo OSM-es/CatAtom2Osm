@@ -1,6 +1,13 @@
 Registro de cambios
 ===================
 
+**09-03-2021 (1.3.1)**
+* Añade 'fixme' cuando el área de las partes no coincida con la del edificio (#56).
+
+**08-03-2021 (1.3)**
+* Conserva todas las partes de los edificios para ajustarse mejor al estandar 
+  de Edificios 3D Sencillos (#56).
+
 **08-01-2020 (1.2.2)**
 * Corrige TypeError: expected string or bytes-like object #49
 * Corrige Infinite loop deleting invalid geometries #50

@@ -11,7 +11,7 @@ import sys
 import compat
 
 app_name = 'CatAtom2Osm'
-app_version = '1.2.2'
+app_version = '1.3.1'
 app_author = 'Javier Sanchez Portero'
 app_copyright = '2017, Javier Sanchez Portero'
 app_desc = 'Tool to convert INSPIRE data sets from the Spanish Cadastre ATOM Services to OSM files'
@@ -65,7 +65,7 @@ dist_thr = 0.02 # Threshold in meters for vertex simplification and topological 
 straight_thr = 2 # Threshold in degrees from straight angle to delete a vertex
 acute_thr = 10 # Remove vertices with an angle smaller than this value
 min_area = 0.05 # Delete geometries with an area smaller than this value
-addr_thr = 10 # Distance in meters to merge address node with building footprint
+addr_thr = 10 # Distance in meters to merge address node with building outline
 acute_inv = 5 # Remove geometries/rings that result invalid after removing any vertex with an angle smaller than this value
 dist_inv = 0.1 # Threshold in meters to filter angles for zig-zag and spikes
 entrance_thr = 0.4 # Minimum distance in meters from a entrance to the nearest corner

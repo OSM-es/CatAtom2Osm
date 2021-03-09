@@ -88,12 +88,12 @@ class Report(object):
             ('inp_parts', TAB + _('Building parts')),
             ('inp_pools', TAB + _('Swimming pools')),
             ('subgroup_bu_process', _('Process')),
-            ('orphand_parts', _("Parts outside footprint deleted")),
+            ('orphand_parts', _("Parts outside outline deleted")),
             ('underground_parts', _("Parts with no floors above ground")),
-            ('new_footprints', _("Building footprints created")),
+            ('new_outlines', _("Building outlines created")),
             ('multipart_geoms_building', _("Buildings with multipart geometries")),
             ('exploded_parts_building', _("Buildings resulting from splitting multiparts")),
-            ('parts_to_footprint', _("Parts merged to the footprint")),
+            ('parts_to_outline', _("Parts merged to the outline")),
             ('adjacent_parts', _("Adjacent parts merged")),
             ('buildings_in_pools', _("Buildings coincidents with a swimming pool deleted")),
             ('geom_rings_building', _('Invalid geometry rings deleted')),
@@ -252,9 +252,9 @@ class Report(object):
             self.errors.append(_("Sum of buildings, parts and pools should "
                 "be equal to the feature count"))
         if self.sum('out_features', 'orphand_parts', 'underground_parts', 
-                'multipart_geoms_building', 'parts_to_footprint',
+                'multipart_geoms_building', 'parts_to_outline',
                 'adjacent_parts', 'geom_invalid_building', 'buildings_in_pools') - \
-                self.sum('new_footprints', 'exploded_parts_building') != \
+                self.sum('new_outlines', 'exploded_parts_building') != \
                     self.get('inp_features'):
             self.errors.append(_("Sum of output and deleted minus created "
                 "building features should be equal to input features"))
