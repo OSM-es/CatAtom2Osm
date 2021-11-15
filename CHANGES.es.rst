@@ -1,6 +1,10 @@
 Registro de cambios
 ===================
 
+**15-11-2021 (1.3.9)**
+* Simplificar configuración de idioma (#60).
+* Añade la configuración del idioma al informe (#60).
+
 **07-06-2021 (1.3.8)**
 * Corrige error de versionado de Docker.
 

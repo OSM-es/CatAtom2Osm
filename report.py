@@ -44,6 +44,7 @@ class Report(object):
             ('group_system_info', _('System info')),
             ('app_version', _('Application version')),
             ('platform', _('Platform')),
+            ('language', _('Language')),
             ('qgs_version', _('QGIS version')),
             ('gdal_version', _('GDAL version')),
             ('cpu_count', _('CPU count')),
@@ -220,6 +221,7 @@ class Report(object):
             v.pop(1)
             self.platform = ' '.join(v)
             self.app_version = setup.app_name + ' ' + setup.app_version
+            self.language = setup.language
             self.cpu_count = psutil.cpu_count(logical=False)
             self.cpu_freq = getattr(getattr(psutil, 'cpu_freq', lambda: 0)(), 'max', 0)
             self.memory = psutil.virtual_memory().total / MEMORY_UNIT

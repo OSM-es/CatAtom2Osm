@@ -1,6 +1,10 @@
 Change log
 ==========
 
+**2021-11-15 (1.3.9)**
+* Simplify language setup (#60).
+* Add the language setup to the report (#60).
+
 **2021-06-07 (1.3.8)**
 * Fixes Docker versioning error.
 
