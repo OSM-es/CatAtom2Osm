@@ -26,7 +26,6 @@ RUN mkdir -p "$home" && chown $uid:$gid "$home" \
   && useradd -d "$home" -u $uid -g $group -s /bin/bash $user
 RUN mkdir -p "/tmp/runtime-$user" && chown $uid:$gid "/tmp/runtime-$user"
 ENV XDG_RUNTIME_DIR="/tmp/runtime-$user"
-mkdir -p "$home/local"
 
 # Copy only requirements to cache them in docker layer
 WORKDIR $APP_PATH
