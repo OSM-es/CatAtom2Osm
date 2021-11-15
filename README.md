@@ -23,9 +23,10 @@ QGIS >= 2.10.1, GDAL >= 2 are required.
 Install
 -------
 
-See INSTALL.md (https://OSM-es.github.io/CatAtom2Osm/en/install.html).
-Alternatively, you could use this Docker image 
+We recomend to use this Docker image 
 (https://hub.docker.com/r/egofer/catatom2osm).
+
+If you want to install without Docker see INSTALL.md (https://OSM-es.github.io/CatAtom2Osm/en/install.html). 
 
 Usage
 -----
@@ -53,6 +54,23 @@ Cadastre.
 * \-a, --all             Process all datasets (equivalent to -bdptz)
 * \-m, --manual          Dissable conflation with OSM data
 * \--log=log_level       Select the log level between DEBUG, INFO, WARNING, ERROR or CRITICAL
+
+Settings
+--------
+
+The software use the system locales to select the language to use translating the throughfare types. To use another language, set the LANG environment variable.
+
+	LANG=es_ES.UTF-8; catatom2osm
+
+Forces to use Spanish.
+
+	LANG=cat_ES.UTF-8; catatom2osm
+
+Forces to use Catalan.
+
+	LANG=cat_ES.UTF-8; catatom2osm
+
+Forces to use Galician
 
 Documentation
 -------------

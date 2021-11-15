@@ -168,18 +168,3 @@ Y para ejecutar las pruebas del código::
 
     python -m unittest discover
 
-
-Configuración
-=============
-
-El programa viene configurado por defecto para usar castellano en la traducción de los tipos de nombres de viales. Si quieres usar otro idioma tienes que configurarlo en el archivo 'setup.py'. Sustituye 'es' por 'cat' para configurar el idioma catalán, o por 'gl' para gallego, en estas líneas del código:
-
-   # Dictionary for default 'highway_types.csv'
-   highway_types = highway_types_es
-
-   # List of highway types to translate as place addresses
-   place_types = place_types_es
-
-   # List of place types to remove from the name
-   remove_place_from_name = [place_types_es[26]]
-

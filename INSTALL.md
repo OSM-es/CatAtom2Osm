@@ -166,18 +166,3 @@ And to run the code tests::
 
     python -m unittest discover
 
-
-Settings
-========
-
-The software by default use Spanish to transle the throughfare types. To use another language, edit the file 'setup.py'. Change 'es' to 'cat' for Catalan, or to 'gl' for Galician, in this lines:
-
-   # Dictionary for default 'highway_types.csv'
-   highway_types = highway_types_es
-
-   # List of highway types to translate as place addresses
-   place_types = place_types_es
-
-   # List of place types to remove from the name
-   remove_place_from_name = [place_types_es[26]]
-

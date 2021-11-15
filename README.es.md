@@ -25,9 +25,10 @@ Se necestitan QGIS >= 2.10.1, GDAL >= 2.
 Instalación
 -----------
 
-Ver INSTALL.es.md (https://OSM-es.github.io/CatAtom2Osm/es/install.html)
-Alternativamente, se puede usar esta imagen de Docker 
+Se recomienda usar la herramienta mediante esta imagen de Docker 
 (https://hub.docker.com/r/egofer/catatom2osm).
+
+Si se desea una instalación sin Docker ver INSTALL.es.md (https://OSM-es.github.io/CatAtom2Osm/es/install.html) 
 
 Uso
 ---
@@ -56,6 +57,22 @@ INSPIRE del Catastro Español.
 * \-m, --manual          Desactiva la combinación con datos OSM
 * \--log=log_level       Selecciona el nivel de registro entre DEBUG, INFO, WARNING, ERROR o CRITICAL.
 
+Configuración
+-------------
+
+El programa usa la configuración de localización del sistema para seleccionar el idioma en la traducción de los tipos de nombres de viales. Si quieres usar otro, asigna la variable de entorno LANG.
+
+	LANG=es_ES.UTF-8; catatom2osm
+
+Para forzar a usar Español.
+
+	LANG=cat_ES.UTF-8; catatom2osm
+
+Para forzar a usar Catalán.
+
+	LANG=cat_ES.UTF-8; catatom2osm
+
+Para forzar a usar Gallego.
 
 Documentación
 -------------
