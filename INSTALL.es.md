@@ -1,5 +1,12 @@
 # Instalación
 
+## Docker
+
+Para garantizar resultados homogeneos por todos los importadores, el procedimiento recomendado es usar la imagen Docker:
+https://hub.docker.com/r/egofer/catatom2osm
+
+Se desaconseja utilizar la aplicación con la instalación local que se describe a continuación solo por motivos históricos.
+
 ## Linux
 
 Instalar QGIS siguiendo las instrucciones de https://qgis.org
