@@ -13,6 +13,7 @@ MSGFMT        = msgfmt
 LOCALE_DIR    = locale/po
 INSTALL_DIR   = /usr/local/bin/
 OS            = $(shell uname)
+VERSION       = $(shell catatom2osm -v 2>&1)
 
 # Internal variables.
 PAPEROPT_a4     = -D latex_paper_size=a4
@@ -24,15 +25,18 @@ I18NSPHINXOPTS  = $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) .
 .PHONY: help
 help:
 	@echo "Please use \`make <target>' where <target> is one of"
-	@echo "  clean      to clean docs build directory"
-	@echo "  test       to run unit tests"
-	@echo "  coverage   to make coverage report files"
-	@echo "  api        to make autodoc files"
-	@echo "  html       to make documentation html files"
-	@echo "  msg        to build translations file"
-	@echo "  install    to create application simbolic link"
-	@echo "  uninstall  to remove application simbolic link"
+	@echo "  clean      Clean docs build directory"
+	@echo "  test       Run unit tests"
+	@echo "  coverage   Make coverage report files"
+	@echo "  api        Make autodoc files"
+	@echo "  html       Make documentation html files"
+	@echo "  msg        Build translations file"
+	@echo "  install    Create application simbolic link"
+	@echo "  uninstall  Remove application simbolic link"
 	@echo "  all        clean api coverage html msg"
+	@echo "  run        Run a Docker container for command line"
+	@echo "  shell      Run a Docker container for developing"
+	@echo "  publish    Push last version to Docker Hub"
 
 .PHONY: clean
 clean:
@@ -101,3 +105,25 @@ uninstall:
 
 all: clean coverage api html msg
 .PHONY: all
+
+.PHONY: run
+run:
+	@mkdir -p results
+	@sudo docker build -t catatom2osm .
+	@sudo docker run --rm -it -v $(PWD):/opt/CatAtom2Osm -v $(PWD)/results:/catastro catatom2osm
+
+.PHONY: shell
+shell:
+	@mkdir -p results
+	@sudo docker build -t catatom2osm:dev --build-arg REQUISITES=requisites-dev.txt .
+	@sudo docker run --rm -it -v $(PWD):/opt/CatAtom2Osm -v $(PWD)/results:/catastro -w /opt/CatAtom2Osm catatom2osm:dev
+
+.PHONY: publish
+publish:
+	@sudo docker build -t catatom2osm .
+	@echo $(VERSION)
+	@echo "Pulsa una tecla para continuar"
+	@read
+	@sudo docker tag catatom2osm:latest egofer/catatom2osm:latest
+	@sudo docker tag catatom2osm:latest egofer/catatom2osm:1.3.10
+	@sudo docker push -a egofer/catatom2osm

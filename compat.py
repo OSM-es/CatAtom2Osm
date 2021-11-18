@@ -46,7 +46,7 @@ def set_es_time():
 def get_stderr():
     """Return wrapped version of stderr encoded to terminal code page"""
     if six.PY2:
-        return codecs.getwriter(sys.stdout.encoding)(sys.stderr)
+        return codecs.getwriter(sys.stdout.encoding or 'UTF-8')(sys.stderr)
     return sys.stderr
 
 
@@ -58,10 +58,10 @@ class Terminal(object):
     def encode(self, msg):
         """Encode strings to W$ terminal with Python2"""
         return str(msg) if sys.stdout.encoding == 'utf-8' else \
-            bytes(msg, self.encoding).decode(sys.stdout.encoding)
+            bytes(msg, self.encoding).decode(sys.stdout.encoding or 'UTF-8')
 
     def decode(self, msg):
         """Decode strings from W$ terminal with Python2"""
         return str(msg) if sys.stdout.encoding == 'utf-8' else \
-            bytes(msg, sys.stdout.encoding).decode(self.encoding)
+            bytes(msg, sys.stdout.encoding).decode(self.encoding or 'UTF-8')
 
