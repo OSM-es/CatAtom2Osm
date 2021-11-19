@@ -194,9 +194,9 @@ class Node(Element):
     def __init__(self, container, x, y=0, *args, **kwargs):
         """Use any of this:
         >>> d = osm.Osm()
-        >>> n1 = d.Osm(1,1)
+        >>> n1 = d.Node(1,1)
         >>> p = (1,1)
-        >>> n2 = d.Osm(p)
+        >>> n2 = d.Node(p)
         """
         super(Node, self).__init__(container, *args, **kwargs)
         (self.x, self.y) = (x[0], x[1]) \
@@ -271,10 +271,11 @@ class Way(Element):
         return (len(self.nodes) > 2) and self.nodes[0] == self.nodes[-1]
 
     def is_open(self):
-        """Returns true if the way is closed"""
+        """Returns true if the way is not closed"""
         return (len(self.nodes) > 1) and self.nodes[0] != self.nodes[-1]
 
     def shoelace(self):
+        """Returns the area for a closed way or 0, + for CCW nodes, - for CW"""
         s = 0
         if self.is_closed():
             for i in range(len(self.nodes) - 1):
@@ -356,7 +357,7 @@ class Way(Element):
         
 
 class Relation(Element):
-    """A relation is a collection of nodes, ways or relations"""
+    """A relation is a collection of nodes, ways or relations with a role."""
 
     def __init__(self, container, members=[], *args, **kwargs):
         super(Relation, self).__init__(container, *args, **kwargs)

@@ -1,3 +1,4 @@
+"""Accessory methods for compatibility between different systems"""
 from builtins import str, bytes
 import codecs
 import gettext
