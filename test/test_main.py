@@ -124,3 +124,21 @@ class TestMain(unittest.TestCase):
             main.run()
         mocklog.setLevel.assert_called_once_with(logging.DEBUG)
         mocklog.error.assert_not_called()
+
+    @mock.patch(
+        'main.sys.argv',
+        ['catatom2osm.py', 'foobar', '-r', '123', '-u', '321', '-t', '-z'],
+    )
+    @mock.patch('catatom2osm.CatAtom2Osm')
+    def test_zone(self, mockcat):
+        main.run()
+        self.assertTrue(mockcat.called)
+        self.assertEqual(mockcat.call_args_list[0][0][0], 'foobar')
+        options = mockcat.call_args_list[0][0][1]
+        d = {
+            'building': True, 'all': False, 'tasks': False, 'log_level': 'INFO',
+            'parcel': False, 'list': False, 'zoning': False, 'address': True,
+            'rzone': [123], 'uzone': False
+        }
+        for (k, v) in list(d.items()):
+            self.assertEqual(getattr(options, k), v)

@@ -67,6 +67,12 @@ def run():
     parser.add_argument("-a", "--all", dest="all", default=False,
         action="store_true", help=terminal.encode(_("Process all datasets ("
         "equivalent to -bdptz)")))
+    parser.add_argument("-r", "--rustic", dest="rzone", metavar="label", nargs=1,
+        default=False, type=int, help=terminal.encode(_("Process a rustic "
+        "polygon given its label")))
+    parser.add_argument("-u", "--urban", dest="uzone", metavar="label", nargs=1,
+        default=False, type=int, help=terminal.encode(_("Process an urban "
+        "block given its label")))
     parser.add_argument("-m", "--manual", dest="manual",
         default=False, action="store_true", 
         help=terminal.encode(_("Dissable conflation with OSM data")))
@@ -78,6 +84,16 @@ def run():
         "between DEBUG, INFO, WARNING, ERROR or CRITICAL.")))
     options = parser.parse_args()
     report.options = ' '.join(sys.argv[1:])
+    if options.rzone:
+            options.uzone = False
+    if options.uzone or options.rzone:
+        if not options.building and not options.address:
+            options.building = options.address = True
+        options.zoning = False
+        options.tasks = False
+        options.parcel = False
+        options.all = False
+        options.download = False
     if options.all:
         options.building = True
         options.tasks = True

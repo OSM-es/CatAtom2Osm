@@ -43,17 +43,20 @@ Cadastre.
 
 **Options**:
 
-* \-h, --help            Show this help message and exit
-* \-v, --version         Print CatAtom2Osm version and exit
-* \-l prov, --list=prov  List available municipalities given the two digits province code
-* \-t, --tasks           Splits constructions into tasks files (default, implies -z)
-* \-z, --zoning          Process the cadastral zoning dataset.
-* \-b, --building        Process buildings to a single file instead of tasks
-* \-d, --address         Process the address dataset
-* \-p, --parcel          Process the cadastral parcel dataset
-* \-a, --all             Process all datasets (equivalent to -bdptz)
-* \-m, --manual          Dissable conflation with OSM data
-* \--log=log_level       Select the log level between DEBUG, INFO, WARNING, ERROR or CRITICAL
+* \-h, --help                Show this help message and exit
+* \-v, --version             Print CatAtom2Osm version and exit
+* \-l [prov], --list [prov]  List available municipalities given the two digits province code
+* \-t, --tasks               Splits constructions into tasks files (default, implies -z)
+* \-b, --building            Process buildings to a single file instead of tasks
+* \-d, --address             Process the address dataset
+* \-z, --zoning              Process the cadastral zoning dataset.
+* \-p, --parcel              Process the cadastral parcel dataset
+* \-a, --all                 Process all datasets (equivalent to -bdptz)
+* \-r label, --rustic label  Process a rustic polygon given its label
+* \-u label, --urban label   Process an urban block given its label
+* \-m, --manual              Dissable conflation with OSM data
+* \-w, --download            Download only
+* \--log=log_level           Select the log level between DEBUG, INFO, WARNING, ERROR or CRITICAL
 
 Settings
 --------

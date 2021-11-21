@@ -45,17 +45,20 @@ INSPIRE del Catastro Español.
 
 **Opciones**:
 
-* \-h, --help            Muestra este mensaje de ayuda y termina
-* \-v, --version         Imprime la versión de CatAtom2Osm y termina
-* \-l prov, --list=prov  Lista los municipios disponibles para el código provincial de dos dígitos
-* \-t, --tasks           Reparte las construcciones en archivos de tareas (predeterminada, implica -z)
-* \-z, --zoning          Procesa el conjunto de datos de zonificación catastral
-* \-b, --building        Procesa los edificios a un archivo individual en lugar de tareas
-* \-d, --address         Procesa el conjunto de datos de direcciones
-* \-p, --parcel          Procesa el conjunto de datos de parcelas catastrales
-* \-a, --all             Procesa todos los conjuntos de datos (equivalente a -bdptz)
-* \-m, --manual          Desactiva la combinación con datos OSM
-* \--log=log_level       Selecciona el nivel de registro entre DEBUG, INFO, WARNING, ERROR o CRITICAL.
+* \-h, --help                Muestra este mensaje de ayuda y termina
+* \-v, --version             Imprime la versión de CatAtom2Osm y termina
+* \-l [prov], --list [prov]  Lista los municipios disponibles para el código provincial de dos dígitos
+* \-t, --tasks               Reparte las construcciones en archivos de tareas (predeterminada, implica -z)
+* \-b, --building            Procesa los edificios a un archivo individual en lugar de tareas
+* \-d, --address             Procesa el conjunto de datos de direcciones
+* \-z, --zoning              Procesa el conjunto de datos de zonificación catastral
+* \-p, --parcel              Procesa el conjunto de datos de parcelas catastrales
+* \-a, --all                 Procesa todos los conjuntos de datos (equivalente a -bdptz)
+* \-r label, --rustic label  Procesa un polígono de rústica dada su etiqueta
+* \-u label, --urban label   Procesa una manzana urbana dada su etiqueta
+* \-m, --manual              Desactiva la combinación con datos OSM
+* \-w, --download            Solo descargar
+* \--log=log_level           Selecciona el nivel de registro entre DEBUG, INFO, WARNING, ERROR o CRITICAL.
 
 Configuración
 -------------
