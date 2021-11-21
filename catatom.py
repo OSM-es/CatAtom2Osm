@@ -173,7 +173,7 @@ class Reader(object):
 
         Args:
             layername (str): Short name of the Cadastre layer. Any of 
-                'building', 'buildingpart', 'otherconstruction', 
+                'building', 'buildingpart', 'otherconstruction',
                 'cadastralparcel', 'cadastralzoning', 'address', 
                 'thoroughfarename', 'postaldescriptor', 'adminunitname'
             allow_empty (bool): If False (default), raise a exception for empty
@@ -210,6 +210,7 @@ class Reader(object):
     def get_boundary(self, zoning):
         """
         Gets the id of the OSM administrative boundary from Overpass.
+        If it fails falls back to the bounding box.
         Precondition: called after read any gml (metadata adquired)
         """
         self.boundary_bbox = zoning.bounding_box()

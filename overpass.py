@@ -32,8 +32,8 @@ class Query(object):
         self.url = ''
 
     def set_search_area(self, search_area):
-        """Set the area to search in. It could either the osm id of a named area
-           or a bounding box (bottom, left, top, right) clause."""
+        """Set the area to search in. It could be either the osm id of a named
+           area or a bounding box (bottom, left, top, right) clause."""
         if re.match(r'^\d{1,8}$', search_area):
             self.area_id = search_area
             self.bbox = ''

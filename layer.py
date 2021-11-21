@@ -606,7 +606,7 @@ class PolygonLayer(BaseLayer):
     def explode_multi_parts(self, request=QgsFeatureRequest()):
         """
         Creates a new WKBPolygon feature for each part of any WKBMultiPolygon
-        feature in request. This avoid relations with may 'outer' members in
+        feature in request. This avoid relations with many 'outer' members in
         OSM data set. From this moment, localId will not be a unique identifier
         for buildings.
         """
@@ -1069,6 +1069,7 @@ class ZoningLayer(PolygonLayer):
                 zone = feature['LocalisedCharacterString'][0]
             if level == None or level == zone:
                 feat = self.copy_feature(feature)
+                """
                 geom = feature.geometry()
                 mp = Geometry.get_multipolygon(geom)
                 if len(mp) > 1:
@@ -1080,8 +1081,9 @@ class ZoningLayer(PolygonLayer):
                     multi += 1
                     total += 1
                 elif len(mp) == 1:
-                    to_add.append(feat)
-                    total += 1
+                """
+                to_add.append(feat)
+                total += 1
             if len(to_add) > BUFFER_SIZE:
                 self.writer.addFeatures(to_add)
                 to_add = []
