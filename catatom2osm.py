@@ -101,8 +101,6 @@ class CatAtom2Osm(object):
             self.options.parcel = False
         if self.options.zoning or self.options.tasks:
             self.process_zoning()
-            if not self.options.tasks:
-                self.delete_shp('rustic_zoning.shp')
         self.address_osm = osm.Osm()
         self.building_osm = osm.Osm()
         if self.options.address and not self.is_new and not self.options.manual:
