@@ -1070,7 +1070,7 @@ class ZoningLayer(PolygonLayer):
                 zone = feature['LocalisedCharacterString'][0]
             if level == None or level == zone:
                 feat = self.copy_feature(feature)
-                if type(feat['label']) is int:
+                if feat['plabel'] is None:
                     feat['plabel'] = feature['label']
                 geom = feature.geometry()
                 mp = Geometry.get_multipolygon(geom)
