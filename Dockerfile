@@ -16,7 +16,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update -y \
   && apt-get upgrade -y \
   && apt-get install -y language-pack-es-base language-pack-ca-base \
-    language-pack-gl-base language-pack-eu-base python python-pip git qgis nano
+    language-pack-gl-base language-pack-eu-base python python-pip git qgis  \
+    nano gettext
 ENV LANG=es_ES.UTF-8
 ENV PYTHONIOENCODING=utf-8
 ENV QT_QPA_PLATFORM=offscreen
