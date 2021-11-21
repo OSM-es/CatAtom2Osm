@@ -1032,6 +1032,7 @@ class ZoningLayer(PolygonLayer):
             self.writer.addAttributes([
                 QgsField('localId', QVariant.String, len=254),
                 QgsField('label', QVariant.String, len=254),
+                QgsField('plabel', QVariant.String, len=254),
                 QgsField('levelName', QVariant.String, len=254),
                 QgsField('zipcode', QVariant.String, len=5),
             ])
@@ -1069,6 +1070,8 @@ class ZoningLayer(PolygonLayer):
                 zone = feature['LocalisedCharacterString'][0]
             if level == None or level == zone:
                 feat = self.copy_feature(feature)
+                if type(feat['label']) is int:
+                    feat['plabel'] = feature['label']
                 geom = feature.geometry()
                 mp = Geometry.get_multipolygon(geom)
                 if len(mp) > 1:
