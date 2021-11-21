@@ -47,8 +47,9 @@ Cadastre.
 * \-v, --version         Print CatAtom2Osm version and exit
 * \-l prov, --list=prov  List available municipalities given the two digits province code
 * \-t, --tasks           Splits constructions into tasks files (default, implies -z)
-* \-z, --zoning          Process the cadastral zoning dataset.
 * \-b, --building        Process buildings to a single file instead of tasks
+* \-z, --zoning          Process the cadastral zoning dataset
+* \-o, --zone            Process zone with given label
 * \-d, --address         Process the address dataset
 * \-p, --parcel          Process the cadastral parcel dataset
 * \-a, --all             Process all datasets (equivalent to -bdptz)

@@ -52,13 +52,16 @@ def run():
     parser.add_argument("-t", "--tasks", dest="tasks", default=False,
         action="store_true", help=terminal.encode(_("Splits constructions into "
         "tasks files (default, implies -z)")))
-    parser.add_argument("-z", "--zoning", dest="zoning", 
-        default=False, action="store_true", 
-        help=terminal.encode(_("Process the cadastral zoning dataset")))
     parser.add_argument("-b", "--building", dest="building", default=False,
         action="store_true", help=terminal.encode(_("Process buildings to a "
         "single file instead of tasks")))
-    parser.add_argument("-d", "--address", dest="address", 
+    parser.add_argument("-z", "--zoning", dest="zoning",
+        default=False, action="store_true", 
+        help=terminal.encode(_("Process the cadastral zoning dataset")))
+    parser.add_argument("-o", "--zone", dest="zone", metavar="label", nargs=1,
+        default=False, type=int, help=terminal.encode(_("Process zone with "
+        "given label")))
+    parser.add_argument("-d", "--address", dest="address",
         default=False, action="store_true", 
         help=terminal.encode(_("Process the address dataset (default)")))
     parser.add_argument("-p", "--parcel", dest="parcel", 
@@ -78,6 +81,14 @@ def run():
         "between DEBUG, INFO, WARNING, ERROR or CRITICAL.")))
     options = parser.parse_args()
     report.options = ' '.join(sys.argv[1:])
+    if options.zone:
+        if not options.building and not options.address:
+            options.building = options.address = True
+        options.zoning = False
+        options.tasks = False
+        options.parcel = False
+        options.all = False
+        options.download = False
     if options.all:
         options.building = True
         options.tasks = True

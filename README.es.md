@@ -49,8 +49,9 @@ INSPIRE del Catastro Español.
 * \-v, --version         Imprime la versión de CatAtom2Osm y termina
 * \-l prov, --list=prov  Lista los municipios disponibles para el código provincial de dos dígitos
 * \-t, --tasks           Reparte las construcciones en archivos de tareas (predeterminada, implica -z)
-* \-z, --zoning          Procesa el conjunto de datos de zonificación catastral
 * \-b, --building        Procesa los edificios a un archivo individual en lugar de tareas
+* \-z, --zoning          Procesa el conjunto de datos de zonificación catastral
+* \-o, --zone            Procesa la zona con la etiqueta indicada
 * \-d, --address         Procesa el conjunto de datos de direcciones
 * \-p, --parcel          Procesa el conjunto de datos de parcelas catastrales
 * \-a, --all             Procesa todos los conjuntos de datos (equivalente a -bdptz)
