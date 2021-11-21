@@ -11,6 +11,7 @@ ARG home=/catastro
 
 # System deps
 ENV APP_PATH=/opt/CatAtom2Osm
+ENV PYTHONPATH=$APP_PATH
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update -y \
   && apt-get upgrade -y \
