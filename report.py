@@ -306,6 +306,8 @@ class Report(object):
                             output += TAB + value + setup.eol
                 else:
                     value = self.values[key]
+                    if value is None:
+                        value = ''
                     if key in self.formats:
                         value = self.formats[key](value)
                     elif isinstance(value, int):

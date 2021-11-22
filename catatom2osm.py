@@ -431,7 +431,12 @@ class CatAtom2Osm(object):
             poly = next(self.rustic_zoning.getFeatures()) if rzone else None
             self.urban_zoning.append(zoning_gml, level='M', label=uzone, zone=poly)
         del zoning_gml
-        self.cat.get_boundary(self.rustic_zoning)
+        if uzone:
+            self.cat.boundary_search_area = self.urban_zoning.bounding_box()
+        elif rzone:
+            self.cat.boundary_search_area = self.rustic_zoning.bounding_box()
+        else:
+            self.cat.get_boundary(self.rustic_zoning)
         report.cat_mun = self.cat.cat_mun
         report.mun_name = getattr(self.cat, 'boundary_name', None)
         report.mun_area = round(self.rustic_zoning.get_area() / 1E6, 1)
