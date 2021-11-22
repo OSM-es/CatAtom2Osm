@@ -41,7 +41,8 @@ class TestCatAtom2Osm(unittest.TestCase):
     def setUp(self):
         self.options = {'building': False, 'all': False, 'tasks': True, 
             'log_level': 'INFO', 'parcel': False, 'list': False, 'zoning': True, 
-            'version': False, 'address': False, 'manual': False}
+            'version': False, 'address': False, 'manual': False, 'uzone': False,
+            'rzone': False}
         self.m_app = mock.MagicMock()
         self.m_app.options = Values(self.options)
         self.m_app.get_translations.return_value = ([], False)
@@ -372,7 +373,9 @@ class TestCatAtom2Osm(unittest.TestCase):
         m_layer.ZoningLayer.return_value.get_area.return_value = 1
         self.m_app.get_zoning = get_func(cat.CatAtom2Osm.get_zoning)
         self.m_app.get_zoning(self.m_app)
-        self.m_app.rustic_zoning.append.assert_called_once_with(m_zoning_gml, level='P')
+        self.m_app.rustic_zoning.append.assert_called_once_with(
+            m_zoning_gml, level='P', zones=False,
+        )
         self.m_app.cat.get_boundary.assert_called_once_with(self.m_app.rustic_zoning)
         self.assertEqual(m_report.mun_name, 'foobar')
 
@@ -388,7 +391,9 @@ class TestCatAtom2Osm(unittest.TestCase):
         m_layer.ZoningLayer.side_effect = [mu, mr]
         self.m_app.get_zoning = get_func(cat.CatAtom2Osm.get_zoning)
         self.m_app.get_zoning(self.m_app)
-        self.m_app.urban_zoning.append.assert_called_once_with(m_zoning_gml, level='M')
+        self.m_app.urban_zoning.append.assert_called_once_with(
+            m_zoning_gml, level='M', zones=False
+        )
         self.m_app.urban_zoning.topology()
         self.m_app.urban_zoning.clean_duplicated_nodes_in_polygons()
         self.m_app.urban_zoning.merge_adjacents.called_once_with()

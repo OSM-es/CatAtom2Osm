@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: CatAtom2Osm\n"
-"POT-Creation-Date: 2021-11-21 10:54+UTC\n"
+"POT-Creation-Date: 2021-11-21 22:23+UTC\n"
 "PO-Revision-Date: 2017-05-28 19:23+WEST\n"
 "Last-Translator: Javier Sánchez <javiersanp@gmail.com>\n"
 "Language: es\n"
@@ -434,28 +434,36 @@ msgstr "Procesa el conjunto de datos de parcelas catastrales"
 msgid "Process all datasets (equivalent to -bdptz)"
 msgstr "Procesa todos los conjuntos de datos (equivalente a -bdptz)"
 
-#: main.py:75
+#: main.py:71
+msgid "Process a rustic polygon given its label"
+msgstr "Procesa un polígono rústico dada su etiqueta"
+
+#: main.py:74
+msgid "Process an urban block given its label"
+msgstr "Procesa una manzana urbana dada su etiqueta"
+
+#: main.py:78
 msgid "Dissable conflation with OSM data"
 msgstr "Desactiva la combinación con datos de OSM"
 
-#: main.py:77
+#: main.py:80
 msgid "Download only"
 msgstr "Solo descargar"
 
-#: main.py:80
+#: main.py:83
 msgid "Select the log level between DEBUG, INFO, WARNING, ERROR or CRITICAL."
 msgstr ""
 "Selecciona el nivel de registro entre DEBUG, INFO, WARNING, ERROR o CRITICAL."
 
-#: main.py:105
+#: main.py:110
 msgid "Using Python %s.%s.%s"
 msgstr "Usando Python %s.%s.%s"
 
-#: main.py:108
+#: main.py:113
 msgid "Too many arguments, supply only a directory path."
 msgstr "Demasiados argumentos, proporcione sólo la ruta de un directorio."
 
-#: main.py:120
+#: main.py:125
 msgid "Please, install QGIS"
 msgstr "Por favor, instala QGIS"
 

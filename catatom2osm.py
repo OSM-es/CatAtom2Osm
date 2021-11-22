@@ -416,11 +416,21 @@ class CatAtom2Osm(object):
         Reads cadastralzoning and splits in 'MANZANA' (urban) and 'POLIGONO'
         (rustic)
         """
+        uzone = self.options.uzone
+        rzone = self.options.rzone
         zoning_gml = self.cat.read("cadastralzoning")
         fn = os.path.join(self.path, 'rustic_zoning.shp')
         layer.ZoningLayer.create_shp(fn, zoning_gml.crs())
         self.rustic_zoning = layer.ZoningLayer('r{:03}', fn, 'rusticzoning', 'ogr')
-        self.rustic_zoning.append(zoning_gml, level='P')
+        if not uzone:
+            self.rustic_zoning.append(zoning_gml, level='P', zones=rzone)
+        if self.options.tasks or self.options.zoning or rzone or uzone:
+            fn = os.path.join(self.path, 'urban_zoning.shp')
+            layer.ZoningLayer.create_shp(fn, zoning_gml.crs())
+            self.urban_zoning = layer.ZoningLayer('u{:05}', fn, 'urbanzoning', 'ogr')
+            if not rzone:
+                self.urban_zoning.append(zoning_gml, level='M', zones=uzone)
+        del zoning_gml
         self.cat.get_boundary(self.rustic_zoning)
         report.cat_mun = self.cat.cat_mun
         report.mun_name = getattr(self.cat, 'boundary_name', None)
@@ -433,12 +443,6 @@ class CatAtom2Osm(object):
             if 'population' in self.cat.boundary_data:
                 report.mun_population = (self.cat.boundary_data['population'], 
                     self.cat.boundary_data.get('population:date', '?'))
-        if self.options.tasks or self.options.zoning:
-            fn = os.path.join(self.path, 'urban_zoning.shp')
-            layer.ZoningLayer.create_shp(fn, zoning_gml.crs())
-            self.urban_zoning = layer.ZoningLayer('u{:05}', fn, 'urbanzoning', 'ogr')
-            self.urban_zoning.append(zoning_gml, level='M')
-        del zoning_gml
 
     def read_address(self):
         """Reads Address GML dataset"""
