@@ -1055,20 +1055,33 @@ class ZoningLayer(PolygonLayer):
             to_change[zone.id()] = get_attributes(zone)
         self.writer.changeAttributeValues(to_change)
 
-    def append(self, layer, level=None):
-        """Append features of layer with levelName 'M' for rustic or 'P' for urban"""
+    def append(self, layer, level=None, zones=False):
+        """Append features. Split multipolygon geometries.
+
+        Args:
+            layer(QgsVectorLayer): cadastralzoning GML source
+            level(str): 'P' for levelName 'POLIGON' (rustic) or
+                        'M' for levelName 'MANZANA' (urban) or
+                        None for both
+            zones(list[int]): Filter for zones with this labels
+        """
         self.setCrs(layer.crs())
         total = 0
         to_add = []
         multi = 0
         final = 0
         pbar = self.get_progressbar(_("Append"), layer.featureCount())
-        for feature in layer.getFeatures():
+        if zones:
+            exp = QgsExpression("label IN (%s)" % str(zones)[1:-1])
+            request = QgsFeatureRequest(exp)
+        else:
+            request = QgsFeatureRequest()
+        for feature in layer.getFeatures(request):
             if layer.dataProvider().fieldNameIndex('levelName') > 0:
-                zone = feature['levelName'][3]
+                zone_type = feature['levelName'][3]
             else:
-                zone = feature['LocalisedCharacterString'][0]
-            if level == None or level == zone:
+                zone_type = feature['LocalisedCharacterString'][0]
+            if level == None or level == zone_type:
                 feat = self.copy_feature(feature)
                 if feat['plabel'] is None:
                     feat['plabel'] = feature['label']
@@ -1263,7 +1276,7 @@ class ConsLayer(PolygonLayer):
 
     def set_tasks(self, uzoning, rzoning):
         """Assings to each building and pool the task label of the zone in witch
-        it is containd. Parts receives the label of the building it belongs. 
+        it is contained. Parts receives the label of the building it belongs.
         Parts without associated building are ignored"""
         uindex = uzoning.get_index()
         rindex = rzoning.get_index()
