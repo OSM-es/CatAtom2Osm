@@ -71,10 +71,10 @@ def run():
         action="store_true", help=terminal.encode(_("Process all datasets ("
         "equivalent to -bdptz)")))
     parser.add_argument("-r", "--rustic", dest="rzone", metavar="label", nargs=1,
-        default=False, type=int, help=terminal.encode(_("Process a rustic "
+        default=False, type=str, help=terminal.encode(_("Process a rustic "
         "polygon given its label")))
     parser.add_argument("-u", "--urban", dest="uzone", metavar="label", nargs=1,
-        default=False, type=int, help=terminal.encode(_("Process an urban "
+        default=False, type=str, help=terminal.encode(_("Process an urban "
         "block given its label")))
     parser.add_argument("-m", "--manual", dest="manual",
         default=False, action="store_true", 

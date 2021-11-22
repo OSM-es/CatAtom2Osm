@@ -48,19 +48,6 @@ class TestMain(unittest.TestCase):
         for (k, v) in list(d.items()):
             self.assertEqual(getattr(options, k), v)
 
-    @mock.patch('main.sys.argv', ['catatom2osm.py', 'foobar', '-o', '123', '-t', '-z'])
-    @mock.patch('catatom2osm.CatAtom2Osm')
-    def test_zone(self, mockcat):
-        main.run()
-        self.assertTrue(mockcat.called)
-        self.assertEqual(mockcat.call_args_list[0][0][0], 'foobar')
-        options = mockcat.call_args_list[0][0][1]
-        d = {'building': True, 'all': False, 'tasks': False, 'log_level': 'INFO',
-            'parcel': False, 'list': False, 'zoning': False, 'address': True,
-            'zone': [123]}
-        for (k, v) in list(d.items()):
-            self.assertEqual(getattr(options, k), v)
-
     @mock.patch('main.sys.argv', ['catatom2osm.py', 'foobar', '-a'])
     @mock.patch('catatom2osm.CatAtom2Osm')
     def test_all(self, mockcat):
@@ -151,7 +138,7 @@ class TestMain(unittest.TestCase):
         d = {
             'building': True, 'all': False, 'tasks': False, 'log_level': 'INFO',
             'parcel': False, 'list': False, 'zoning': False, 'address': True,
-            'rzone': [123], 'uzone': False
+            'rzone': ['123'], 'uzone': False
         }
         for (k, v) in list(d.items()):
             self.assertEqual(getattr(options, k), v)
