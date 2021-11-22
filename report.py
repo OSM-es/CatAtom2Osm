@@ -19,18 +19,7 @@ MEMORY_LABEL = 'MB'
 int_format = lambda v: locale.format_string('%d', v, True)
 
 class Report(object):
-    """Statistics report
 
-    Collects data to produce a report with the most important statistics on
-    the execution of the program and detected problems. Can contain properties
-    dynamically saved in 'self.values'. Example:
-        report.foo = 'bar' --> report.values['foo'] = 'bar'
-
-    The properties listed in 'self.titles' will appear in the final report as
-    title: value. Properties that starts with 'group_' or 'subgroup_' are group
-    or subgroups titles. Properties listed in 'self.formats' go through the
-    lambda function.
-    """
     def __init__(self, **kwargs):
         self.values = {
             'date': datetime.now().strftime('%x'),
@@ -153,16 +142,18 @@ class Report(object):
         self.tasks_with_fixmes = set()
 
     def __setattr__(self, key, value):
-        if key in ['values', 'titles', 'formats']:
+        if key in ['values', 'titles', 'groups']:
             super(Report, self).__setattr__(key, value)
         else:
             self.values[key] = value
 
     def __getattr__(self, key):
-        return self.values[key]
+        if key.startswith('_'):
+            return super(Report, self).__getattr__(key, value)
+        else:
+            return self.values[key]
 
     def address_stats(self, address_osm):
-        """Counts addresses by type in a osm.Osm data set"""
         for el in address_osm.elements:
             if 'addr:street' in el.tags:
                 self.inc('out_addr_str')
@@ -176,7 +167,6 @@ class Report(object):
                     self.inc('out_address_building')
 
     def cons_stats(self, data, task_label=None):
-        """Counts buildings, parts and pools in a osm.Osm data set"""
         for el in data.elements:
             if 'leisure' in el.tags and el.tags['leisure'] == 'swimming_pool':
                 self.inc('out_pools')
@@ -197,13 +187,11 @@ class Report(object):
         return sorted(self.tasks_with_fixmes)
 
     def osm_stats(self, data):
-        """Counts elements in a osm.Osm data set"""
         self.inc('nodes', len(data.nodes))
         self.inc('ways', len(data.ways))
         self.inc('relations', len(data.relations))
 
     def cons_end_stats(self):
-        """Counts buildings by type and maximum levels above and below ground"""
         self.dlag = ', '.join(["%d: %d" % (l, c) for (l, c) in \
             list(OrderedDict(Counter(list(self.max_level.values()))).items())])
         self.dlbg = ', '.join(["%d: %d" % (l, c) for (l, c) in \
@@ -212,7 +200,6 @@ class Report(object):
             for (b, c) in list(self.building_counter.items())])
 
     def fixme_stats(self):
-        """Count fixmes by type"""
         fixme_count = sum(self.fixme_counter.values())
         if fixme_count:
             self.fixme_count = fixme_count
@@ -230,7 +217,6 @@ class Report(object):
         return sum(self.get(key) for key in args)
 
     def get_sys_info(self):
-        """Get information about the system"""
         try:
             import psutil
             p = psutil.Process()
@@ -249,7 +235,6 @@ class Report(object):
             pass
 
     def validate(self):
-        """Detect inconsistencies in the report results"""
         if self.sum('inp_address_entrance', 'inp_address_parcel') != \
                 self.get('inp_address'):
             self.errors.append(_("Sum of address types should be equal "
@@ -286,7 +271,6 @@ class Report(object):
                     "to the number of buildings"))
 
     def to_string(self):
-        """Output report results to a string"""
         self.validate()
         if self.get('sys_info'):
             self.get_sys_info()
@@ -331,7 +315,6 @@ class Report(object):
         return output
 
     def to_file(self, fn):
-        """Output report results to 'fn' file"""
         with io.open(fn, "w", encoding=setup.encoding) as fo:
             fo.write(self.to_string())
 

@@ -1045,6 +1045,23 @@ class ZoningLayer(PolygonLayer):
         self.task_number = 0
         self.task_pattern = pattern
 
+    @staticmethod
+    def get_zone_type(feature):
+        """Get type of a zone
+
+        Args:
+            feature(QgsFeature): A feature of this layer
+        Returns:
+            (str) 'P' (rustic polygon) or 'M' (urban block)
+        """
+        if feature.fieldNameIndex('levelName') < 0:
+            zone_type = feature['LocalisedCharacterString'][0]
+        else:
+            if type(feature['levelName']) is list:
+                zone_type = feature['levelName'][0]
+            zone_type = feature['levelName'].split(':')[-1][0]
+        return zone_type
+
     def set_tasks(self, zip_code):
         """Assings a unique task label to each zone by overriding splitted 
         multiparts and merged adjacent zones"""
@@ -1077,10 +1094,7 @@ class ZoningLayer(PolygonLayer):
         else:
             request = QgsFeatureRequest()
         for feature in layer.getFeatures(request):
-            if layer.dataProvider().fieldNameIndex('levelName') > 0:
-                zone_type = feature['levelName'][3]
-            else:
-                zone_type = feature['LocalisedCharacterString'][0]
+            zone_type = self.get_zone_type(feature)
             if level == None or level == zone_type:
                 feat = self.copy_feature(feature)
                 if feat['plabel'] is None:

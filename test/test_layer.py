@@ -544,10 +544,10 @@ class TestZoningLayer(unittest.TestCase):
         self.assertGreater(self.layer1.featureCount() + self.layer2.featureCount(),
             self.fixture.featureCount())
         for f in self.layer1.getFeatures():
-            self.assertEqual(f['levelName'][3], 'M')
+            self.assertEqual(self.layer1.get_zone_type(f), 'M')
             self.assertFalse(len(Geometry.get_multipolygon(f)) > 1)
         for f in self.layer2.getFeatures():
-            self.assertEqual(f['levelName'][3], 'P')
+            self.assertEqual(self.layer1.get_zone_type(f), 'P')
             self.assertFalse(len(Geometry.get_multipolygon(f)) > 1)
 
     @mock.patch('layer.tqdm')
@@ -593,18 +593,17 @@ class TestZoningLayer(unittest.TestCase):
         self.assertEqual(max(labels), len(labels))
         self.assertEqual(min(labels), 1)
         self.assertEqual(next(self.layer2.getFeatures())['zipcode'], '12345')
-        
+
+
     @mock.patch('layer.tqdm')
     def test_set_cons_tasks(self, m_tqdm):
-        test = Counter({'86416': 198, '84428': 89, '88423': 86, '86417': 70,
-            '89423': 61, '86423': 57, '87427': 53, '86439': 45, '86464': 38,
-            '85426': 34, '89403': 33, '86435': 32, '86434': 28, '88429': 27,
-            '90417': 27, '88427': 26, '91441': 26, '90425': 23, '85449': 22,
-            '013': 21, '88405': 19, '83424': 17, '86448': 16, '83429': 15,
-            '87459': 14, '85411': 14, '87425': 12, '85439': 12, '82426': 9,
-            '88416': 9, '90424': 8, '86433': 7, '004': 7, '005': 6,
-            '89414': 6, '83428': 5, '86459': 4, '90429': 4, '86427': 4,
-            '88428': 3, '88393': 3, '86449': 2, '89415': 2, '003': 1})
+        test = Counter({u'86416': 198, u'84428': 89, u'88423': 86, u'86417': 70, u'89423': 61, u'86423': 57, u'87427': 53,
+             u'86439': 45, u'86464': 38, u'85426': 34, u'89403': 33, u'86435': 32, u'86434': 28, u'88429': 27,
+             u'90417': 27, u'88427': 26, u'91441': 26, u'90425': 23, u'85449': 22, u'88405': 19, u'13': 18,
+             u'83424': 17, u'86448': 16, u'83429': 15, u'87459': 14, u'85411': 14, u'87425': 12, u'85439': 12,
+             u'82426': 9, u'88416': 9, u'90424': 8, u'86433': 7, u'4': 7, u'5': 6, u'89414': 6, u'83428': 5,
+             u'86459': 4, u'90429': 4, u'86427': 4, u'88428': 3, u'86441': 3, u'88393': 3, u'86449': 2, u'89415': 2,
+             u'3': 1})
         fixture = QgsVectorLayer('test/cons.shp', 'building', 'ogr')
         building = ConsLayer()
         building.append(fixture)
