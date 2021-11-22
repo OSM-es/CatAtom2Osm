@@ -387,6 +387,30 @@ class TestBaseLayer2(unittest.TestCase):
         layer.export('foobar', 'foo', overwrite=False)
         mock_os.remove.assert_called_once_with('foobar')
 
+    @mock.patch('layer.tqdm')
+    def test_get_features_inside(self, m_tqdm):
+        layer = BaseLayer('test/building.gml', 'building', 'ogr')
+        zone = Geometry.fromPolygonXY([[
+            Point(357528.004, 3124148.587),
+            Point(357509.281, 3124115.955),
+            Point(357540.681, 3124106.153),
+            Point(357554.591, 3124142.072),
+            Point(357528.004, 3124148.587),
+        ]])
+        fids = layer.get_features_inside(zone)
+        request = QgsFeatureRequest()
+        request.setFilterFids(fids)
+        refs = set()
+        for feat in layer.getFeatures(request):
+            refs.add(feat['localId'][:14])
+        expected = set([
+            '7541408CS5274S', '7541409CS5274S', '7541404CS5274S',
+            '7541405CS5274S', '7541410CS5274S', '7640715CS5274S',
+            '7541403CS5274S', '7640714CS5274S',
+        ])
+        self.assertEqual(refs, expected)
+
+
 class TestPolygonLayer(unittest.TestCase):
 
     @mock.patch('layer.tqdm')
@@ -544,16 +568,17 @@ class TestZoningLayer(unittest.TestCase):
         del self.layer2
         ZoningLayer.delete_shp('rustic_zoning.shp')
 
-    def test_append(self):
+    @mock.patch('layer.tqdm')
+    def test_append(self, m_tqdm):
         self.layer1.append(self.fixture, 'M')
         self.layer2.append(self.fixture, 'P')
         self.assertGreater(self.layer1.featureCount() + self.layer2.featureCount(),
             self.fixture.featureCount())
         for f in self.layer1.getFeatures():
-            self.assertEqual(self.layer1.get_zone_type(f), 'M')
+            self.assertTrue(self.layer1.check_zone(f, level='M'))
             self.assertFalse(len(Geometry.get_multipolygon(f)) > 1)
         for f in self.layer2.getFeatures():
-            self.assertEqual(self.layer1.get_zone_type(f), 'P')
+            self.assertTrue(self.layer1.check_zone(f, level='P'))
             self.assertFalse(len(Geometry.get_multipolygon(f)) > 1)
 
     @mock.patch('layer.tqdm')
@@ -569,19 +594,38 @@ class TestZoningLayer(unittest.TestCase):
         zoning.append(zoning, m_layer, level=None)
         self.assertFalse(zoning.writer.addFeatures.called)
 
-    def test_append_polygon(self):
-        self.layer1.append(self.fixture, 'P', zones=[8])
+    @mock.patch('layer.tqdm')
+    def test_append_polygon(self, m_tqdm):
+        self.layer1.append(self.fixture, level='P', label='008')
         self.assertEqual(self.layer1.featureCount(), 1)
         feat = next(self.layer1.getFeatures())
         self.assertEqual(feat['label'], '8')
 
-    def test_append_block(self):
-        self.layer1.append(self.fixture, 'M', zones=[2003, 86423])
-        self.assertEqual(self.layer1.featureCount(), 2)
-        labels = [feat['label'] for feat in self.layer1.getFeatures()]
-        self.assertEqual(set(labels), set(['2003', '86423']))
+    @mock.patch('layer.tqdm')
+    def test_append_block(self, m_tqdm):
+        self.layer1.append(self.fixture, level='M', label='2003')
+        self.assertEqual(self.layer1.featureCount(), 1)
+        feat = next(self.layer1.getFeatures())
+        self.assertEqual(feat['label'], '2003')
 
-    def test_get_adjacents_and_geometries(self):
+    @mock.patch('layer.tqdm')
+    def test_append_zone1(self, m_tqdm):
+        exp = QgsExpression("label = '8'")
+        request = QgsFeatureRequest(exp)
+        poly = next(self.fixture.getFeatures(request))
+        self.layer1.append(self.fixture, level='M', zone=poly)
+        self.assertEqual(self.layer1.featureCount(), 0)
+
+    @mock.patch('layer.tqdm')
+    def test_append_zone2(self, m_tqdm):
+        exp = QgsExpression("label = '9'")
+        request = QgsFeatureRequest(exp)
+        poly = next(self.fixture.getFeatures(request))
+        self.layer1.append(self.fixture, level='M', zone=poly)
+        self.assertEqual(self.layer1.featureCount(), 38)
+
+    @mock.patch('layer.tqdm')
+    def test_get_adjacents_and_geometries(self, m_tqdm):
         self.layer1.append(self.fixture, 'M')
         (groups, geometries) = self.layer1.get_adjacents_and_geometries()
         self.assertTrue(all([len(g) > 1 for g in groups]))
@@ -590,13 +634,15 @@ class TestZoningLayer(unittest.TestCase):
                 if group != other:
                     self.assertTrue(all(p not in other for p in group))
 
-    def test_merge_adjacents(self):
+    @mock.patch('layer.tqdm')
+    def test_merge_adjacents(self, m_tqdm):
         self.layer1.append(self.fixture, 'M')
         self.layer1.merge_adjacents()
         (groups, geometries) = self.layer1.get_adjacents_and_geometries()
         self.assertEqual(len(groups), 0)
         
-    def test_set_tasks(self):
+    @mock.patch('layer.tqdm')
+    def test_set_tasks(self, m_tqdm):
         self.layer1.append(self.fixture, 'M')
         self.layer2.append(self.fixture, 'P')
         self.layer1.set_tasks('12345')

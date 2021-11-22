@@ -416,20 +416,20 @@ class CatAtom2Osm(object):
         Reads cadastralzoning and splits in 'MANZANA' (urban) and 'POLIGONO'
         (rustic)
         """
-        uzone = self.options.uzone
-        rzone = self.options.rzone
+        uzone = self.options.uzone and self.options.uzone[0]
+        rzone = self.options.rzone and self.options.rzone[0]
         zoning_gml = self.cat.read("cadastralzoning")
         fn = os.path.join(self.path, 'rustic_zoning.shp')
         layer.ZoningLayer.create_shp(fn, zoning_gml.crs())
         self.rustic_zoning = layer.ZoningLayer('r{:03}', fn, 'rusticzoning', 'ogr')
         if not uzone:
-            self.rustic_zoning.append(zoning_gml, level='P', zones=rzone)
+            self.rustic_zoning.append(zoning_gml, level='P', label=rzone)
         if self.options.tasks or self.options.zoning or rzone or uzone:
             fn = os.path.join(self.path, 'urban_zoning.shp')
             layer.ZoningLayer.create_shp(fn, zoning_gml.crs())
             self.urban_zoning = layer.ZoningLayer('u{:05}', fn, 'urbanzoning', 'ogr')
-            if not rzone:
-                self.urban_zoning.append(zoning_gml, level='M', zones=uzone)
+            poly = next(self.rustic_zoning.getFeatures()) if rzone else None
+            self.urban_zoning.append(zoning_gml, level='M', label=uzone, zone=poly)
         del zoning_gml
         self.cat.get_boundary(self.rustic_zoning)
         report.cat_mun = self.cat.cat_mun

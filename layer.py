@@ -491,6 +491,17 @@ class BaseLayer(QgsVectorLayer):
             bbox = '{:.8f},{:.8f},{:.8f},{:.8f}'.format(*bbox)
         return bbox
 
+    def get_features_inside(self, zone):
+        """Return fids of features inside zone"""
+        index = self.get_index()
+        features = {f.id(): f for f in self.getFeatures()}
+        fids = []
+        for fid in index.intersects(zone.boundingBox()):
+            geom = features[fid].geometry()
+            if zone.contains(geom) or zone.overlaps(geom):
+                fids.append(fid)
+        return fids
+
     def export(self, path, driver_name="ESRI Shapefile", overwrite=True, target_crs_id=None):
         """Write layer to file
 
@@ -602,7 +613,7 @@ class PolygonLayer(BaseLayer):
     def get_area(self):
         """Returns total area"""
         return sum([f.geometry().area() for f in self.getFeatures()])
-            
+
     def explode_multi_parts(self, request=QgsFeatureRequest()):
         """
         Creates a new WKBPolygon feature for each part of any WKBMultiPolygon
@@ -1046,21 +1057,26 @@ class ZoningLayer(PolygonLayer):
         self.task_pattern = pattern
 
     @staticmethod
-    def get_zone_type(feature):
-        """Get type of a zone
-
-        Args:
-            feature(QgsFeature): A feature of this layer
-        Returns:
-            (str) 'P' (rustic polygon) or 'M' (urban block)
-        """
-        if feature.fieldNameIndex('levelName') < 0:
-            zone_type = feature['LocalisedCharacterString'][0]
+    def check_zone(feat, level=None, label=None, zone=None):
+        if feat.fieldNameIndex('levelName') < 0:
+            zone_type = feat['LocalisedCharacterString'][0]
         else:
-            if type(feature['levelName']) is list:
-                zone_type = feature['levelName'][0]
-            zone_type = feature['levelName'].split(':')[-1][0]
-        return zone_type
+            if type(feat['levelName']) is list:
+                zone_type = feat['levelName'][0]
+            zone_type = feat['levelName'].split(':')[-1][0]
+        if zone:
+            if is_inside(feat, zone):
+                return level is None or level == zone_type
+            return False
+        if level:
+            if label:
+                if level == zone_type:
+                    l = 3 if zone_type == 'P' else 5
+                    return str(feat['label']).zfill(l) == label.zfill(l)
+                else:
+                    return False
+            return level == zone_type
+        return True
 
     def set_tasks(self, zip_code):
         """Assings a unique task label to each zone by overriding splitted 
@@ -1072,15 +1088,14 @@ class ZoningLayer(PolygonLayer):
             to_change[zone.id()] = get_attributes(zone)
         self.writer.changeAttributeValues(to_change)
 
-    def append(self, layer, level=None, zones=False):
+    def append(self, layer, level=None, label=None, zone=None):
         """Append features. Split multipolygon geometries.
 
         Args:
             layer(QgsVectorLayer): cadastralzoning GML source
-            level(str): 'P' for levelName 'POLIGON' (rustic) or
-                        'M' for levelName 'MANZANA' (urban) or
-                        None for both
-            zones(list[int]): Filter for zones with this labels
+            level(str): 'P' (rustic polygon), 'M' (urban block) or None for both
+            label(int): Filter for zones with this label
+            zone(QgsFeature): Filter for zones inside zone
         """
         self.setCrs(layer.crs())
         total = 0
@@ -1088,14 +1103,8 @@ class ZoningLayer(PolygonLayer):
         multi = 0
         final = 0
         pbar = self.get_progressbar(_("Append"), layer.featureCount())
-        if zones:
-            exp = QgsExpression("label IN (%s)" % str(zones)[1:-1])
-            request = QgsFeatureRequest(exp)
-        else:
-            request = QgsFeatureRequest()
-        for feature in layer.getFeatures(request):
-            zone_type = self.get_zone_type(feature)
-            if level == None or level == zone_type:
+        for feature in layer.getFeatures():
+            if self.check_zone(feature, level, label, zone):
                 feat = self.copy_feature(feature)
                 if feat['plabel'] is None:
                     feat['plabel'] = feature['label']

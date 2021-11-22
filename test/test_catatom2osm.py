@@ -374,7 +374,7 @@ class TestCatAtom2Osm(unittest.TestCase):
         self.m_app.get_zoning = get_func(cat.CatAtom2Osm.get_zoning)
         self.m_app.get_zoning(self.m_app)
         self.m_app.rustic_zoning.append.assert_called_once_with(
-            m_zoning_gml, level='P', zones=False,
+            m_zoning_gml, level='P', label=False
         )
         self.m_app.cat.get_boundary.assert_called_once_with(self.m_app.rustic_zoning)
         self.assertEqual(m_report.mun_name, 'foobar')
@@ -392,7 +392,7 @@ class TestCatAtom2Osm(unittest.TestCase):
         self.m_app.get_zoning = get_func(cat.CatAtom2Osm.get_zoning)
         self.m_app.get_zoning(self.m_app)
         self.m_app.urban_zoning.append.assert_called_once_with(
-            m_zoning_gml, level='M', zones=False
+            m_zoning_gml, level='M', zone=None, label=False
         )
         self.m_app.urban_zoning.topology()
         self.m_app.urban_zoning.clean_duplicated_nodes_in_polygons()
