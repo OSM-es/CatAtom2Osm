@@ -537,10 +537,16 @@ class TestZoningLayer(unittest.TestCase):
         ZoningLayer.create_shp(fn, self.fixture.crs())
         self.layer2 = ZoningLayer('r{:03}', fn, 'rusticzoning', 'ogr')
         self.assertTrue(self.layer2.isValid(), "Init QGIS")
+
+    def tearDown(self):
+        del self.layer1
+        ZoningLayer.delete_shp('urban_zoning.shp')
+        del self.layer2
+        ZoningLayer.delete_shp('rustic_zoning.shp')
+
+    def test_append(self):
         self.layer1.append(self.fixture, 'M')
         self.layer2.append(self.fixture, 'P')
-        
-    def test_append(self):
         self.assertGreater(self.layer1.featureCount() + self.layer2.featureCount(),
             self.fixture.featureCount())
         for f in self.layer1.getFeatures():
@@ -563,13 +569,20 @@ class TestZoningLayer(unittest.TestCase):
         zoning.append(zoning, m_layer, level=None)
         self.assertFalse(zoning.writer.addFeatures.called)
 
-    def tearDown(self):
-        del self.layer1
-        ZoningLayer.delete_shp('urban_zoning.shp')
-        del self.layer2
-        ZoningLayer.delete_shp('rustic_zoning.shp')
+    def test_append_polygon(self):
+        self.layer1.append(self.fixture, 'P', zones=[8])
+        self.assertEqual(self.layer1.featureCount(), 1)
+        feat = next(self.layer1.getFeatures())
+        self.assertEqual(feat['label'], '8')
+
+    def test_append_block(self):
+        self.layer1.append(self.fixture, 'M', zones=[2003, 86423])
+        self.assertEqual(self.layer1.featureCount(), 2)
+        labels = [feat['label'] for feat in self.layer1.getFeatures()]
+        self.assertEqual(set(labels), set(['2003', '86423']))
 
     def test_get_adjacents_and_geometries(self):
+        self.layer1.append(self.fixture, 'M')
         (groups, geometries) = self.layer1.get_adjacents_and_geometries()
         self.assertTrue(all([len(g) > 1 for g in groups]))
         for group in groups:
@@ -578,11 +591,14 @@ class TestZoningLayer(unittest.TestCase):
                     self.assertTrue(all(p not in other for p in group))
 
     def test_merge_adjacents(self):
+        self.layer1.append(self.fixture, 'M')
         self.layer1.merge_adjacents()
         (groups, geometries) = self.layer1.get_adjacents_and_geometries()
         self.assertEqual(len(groups), 0)
         
     def test_set_tasks(self):
+        self.layer1.append(self.fixture, 'M')
+        self.layer2.append(self.fixture, 'P')
         self.layer1.set_tasks('12345')
         labels = {int(f['label'][1:]) for f in self.layer1.getFeatures()}
         self.assertEqual(max(labels), len(labels))
@@ -594,9 +610,10 @@ class TestZoningLayer(unittest.TestCase):
         self.assertEqual(min(labels), 1)
         self.assertEqual(next(self.layer2.getFeatures())['zipcode'], '12345')
 
-
     @mock.patch('layer.tqdm')
     def test_set_cons_tasks(self, m_tqdm):
+        self.layer1.append(self.fixture, 'M')
+        self.layer2.append(self.fixture, 'P')
         test = Counter({u'86416': 198, u'84428': 89, u'88423': 86, u'86417': 70, u'89423': 61, u'86423': 57, u'87427': 53,
              u'86439': 45, u'86464': 38, u'85426': 34, u'89403': 33, u'86435': 32, u'86434': 28, u'88429': 27,
              u'90417': 27, u'88427': 26, u'91441': 26, u'90425': 23, u'85449': 22, u'88405': 19, u'13': 18,
