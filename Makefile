@@ -109,21 +109,21 @@ all: clean coverage api html msg
 .PHONY: run
 run:
 	@mkdir -p results
-	@sudo docker build -t catatom2osm .
-	@sudo docker run --rm -it -v $(PWD):/opt/CatAtom2Osm -v $(PWD)/results:/catastro catatom2osm
+	@docker build -t catatom2osm .
+	@docker run --rm -it -v $(PWD):/opt/CatAtom2Osm -v $(PWD)/results:/catastro catatom2osm
 
 .PHONY: shell
 shell:
 	@mkdir -p results
-	@sudo docker build -t catatom2osm:dev --build-arg REQUISITES=requisites-dev.txt .
-	@sudo docker run --rm -it -v $(PWD):/opt/CatAtom2Osm -v $(PWD)/results:/catastro -w /opt/CatAtom2Osm catatom2osm:dev
+	@docker build -t catatom2osm:dev --build-arg REQUISITES=requisites-dev.txt .
+	@docker run --rm -it -v $(PWD):/opt/CatAtom2Osm -v $(PWD)/results:/catastro -w /opt/CatAtom2Osm catatom2osm:dev
 
 .PHONY: publish
 publish:
-	@sudo docker build -t catatom2osm .
+	@docker build -t catatom2osm .
 	@echo $(VERSION)
 	@echo "Pulsa una tecla para continuar"
 	@read
-	@sudo docker tag catatom2osm:latest egofer/catatom2osm:latest
-	@sudo docker tag catatom2osm:latest egofer/catatom2osm:1.3.10
-	@sudo docker push -a egofer/catatom2osm
+	@docker tag catatom2osm:latest egofer/catatom2osm:latest
+	@docker tag catatom2osm:latest egofer/catatom2osm:1.3.10
+	@docker push -a egofer/catatom2osm
