@@ -92,6 +92,7 @@ class CatAtom2Osm(object):
         """Launches the app"""
         log.info(_("Start processing '%s'"), report.mun_code)
         self.get_zoning()
+        self.process_zoning()
         if self.options.address:
             self.read_address()
         if self.is_new:
@@ -99,8 +100,6 @@ class CatAtom2Osm(object):
             self.options.building = False
             self.options.zoning = False
             self.options.parcel = False
-        if self.options.zoning or self.options.tasks:
-            self.process_zoning()
         self.address_osm = osm.Osm()
         self.building_osm = osm.Osm()
         if self.options.address and not self.is_new and not self.options.manual:
@@ -128,12 +127,13 @@ class CatAtom2Osm(object):
             self.address_osm = self.address.to_osm()
             del self.address
             self.delete_shp('address.shp')
+        if self.options.zoning or self.options.tasks:
+            self.output_zoning()
         if self.options.tasks:
             self.process_tasks(self.building)
         if self.options.zoning:
             self.export_layer(self.urban_zoning, 'urban_zoning.geojson', 'GeoJSON')
             self.export_layer(self.rustic_zoning, 'rustic_zoning.geojson', 'GeoJSON')
-            self.rustic_zoning.difference(self.urban_zoning)
             self.rustic_zoning.append(self.urban_zoning)
             self.export_layer(self.rustic_zoning, 'zoning.geojson', 'GeoJSON')
         if hasattr(self, 'urban_zoning'):
@@ -176,21 +176,21 @@ class CatAtom2Osm(object):
         layer.ConsLayer.create_shp(fn, building_gml.crs())
         self.building = layer.ConsLayer(fn, providerLib='ogr', 
             source_date=building_gml.source_date)
-        self.building.append(building_gml)
-        report.inp_buildings = building_gml.featureCount()
-        report.inp_features = report.inp_buildings
+        self.building.append(building_gml, query=self.zone_query)
+        report.inp_buildings = self.building.featureCount()
         del building_gml
         part_gml = self.cat.read("buildingpart")
-        self.building.append(part_gml)
-        report.inp_parts = part_gml.featureCount()
-        report.inp_features += report.inp_parts
+        self.building.append(part_gml, query=self.zone_query)
+        report.inp_parts = self.building.featureCount() - report.inp_buildings
         del part_gml
         other_gml = self.cat.read("otherconstruction", True)
         report.inp_pools = 0
         if other_gml:
-            self.building.append(other_gml)
-            report.inp_pools = other_gml.featureCount()
-            report.inp_features += report.inp_pools
+            self.building.append(other_gml, query=self.zone_query)
+            report.inp_pools = self.building.featureCount() \
+                               - report.inp_buildings \
+                               - report.inp_parts
+        report.inp_features = self.building.featureCount()
         del other_gml
 
     def process_tasks(self, source):
@@ -280,6 +280,9 @@ class CatAtom2Osm(object):
         self.urban_zoning.delete_invalid_geometries()
         self.urban_zoning.simplify()
         self.rustic_zoning.clean()
+        self.rustic_zoning.difference(self.urban_zoning)
+
+    def output_zoning(self):
         self.urban_zoning.reproject()
         self.rustic_zoning.reproject()
         out_path = os.path.join(self.path, 'boundary.poly')
@@ -422,21 +425,24 @@ class CatAtom2Osm(object):
         fn = os.path.join(self.path, 'rustic_zoning.shp')
         layer.ZoningLayer.create_shp(fn, zoning_gml.crs())
         self.rustic_zoning = layer.ZoningLayer('r{:03}', fn, 'rusticzoning', 'ogr')
+        fn = os.path.join(self.path, 'urban_zoning.shp')
+        layer.ZoningLayer.create_shp(fn, zoning_gml.crs())
+        self.urban_zoning = layer.ZoningLayer('u{:05}', fn, 'urbanzoning', 'ogr')
         if not uzone:
             self.rustic_zoning.append(zoning_gml, level='P', label=rzone)
         if self.options.tasks or self.options.zoning or rzone or uzone:
-            fn = os.path.join(self.path, 'urban_zoning.shp')
-            layer.ZoningLayer.create_shp(fn, zoning_gml.crs())
-            self.urban_zoning = layer.ZoningLayer('u{:05}', fn, 'urbanzoning', 'ogr')
             poly = next(self.rustic_zoning.getFeatures()) if rzone else None
             self.urban_zoning.append(zoning_gml, level='M', label=uzone, zone=poly)
         del zoning_gml
         if uzone:
             self.cat.boundary_search_area = self.urban_zoning.bounding_box()
+            self.zone_query = lambda f, kwargs: self.urban_zoning.is_inside(f)
         elif rzone:
             self.cat.boundary_search_area = self.rustic_zoning.bounding_box()
+            self.zone_query = lambda f, kwargs: self.rustic_zoning.is_inside(f)
         else:
             self.cat.get_boundary(self.rustic_zoning)
+            self.zone_query = None
         report.cat_mun = self.cat.cat_mun
         report.mun_name = getattr(self.cat, 'boundary_name', None)
         report.mun_area = round(self.rustic_zoning.get_area() / 1E6, 1)
