@@ -491,17 +491,6 @@ class BaseLayer(QgsVectorLayer):
             bbox = '{:.8f},{:.8f},{:.8f},{:.8f}'.format(*bbox)
         return bbox
 
-    def get_features_inside(self, zone):
-        """Return fids of features inside zone"""
-        index = self.get_index()
-        features = {f.id(): f for f in self.getFeatures()}
-        fids = []
-        for fid in index.intersects(zone.boundingBox()):
-            geom = features[fid].geometry()
-            if zone.contains(geom) or zone.overlaps(geom):
-                fids.append(fid)
-        return fids
-
     def export(self, path, driver_name="ESRI Shapefile", overwrite=True, target_crs_id=None):
         """Write layer to file
 
@@ -613,6 +602,13 @@ class PolygonLayer(BaseLayer):
     def get_area(self):
         """Returns total area"""
         return sum([f.geometry().area() for f in self.getFeatures()])
+
+    def is_inside(self, feature):
+        """Returns true if feature is inside any feature in this layer"""
+        for feat in self.getFeatures():
+            if is_inside(feature, feat):
+                return True
+        return False
 
     def explode_multi_parts(self, request=QgsFeatureRequest()):
         """

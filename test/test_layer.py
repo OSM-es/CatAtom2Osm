@@ -387,29 +387,6 @@ class TestBaseLayer2(unittest.TestCase):
         layer.export('foobar', 'foo', overwrite=False)
         mock_os.remove.assert_called_once_with('foobar')
 
-    @mock.patch('layer.tqdm')
-    def test_get_features_inside(self, m_tqdm):
-        layer = BaseLayer('test/building.gml', 'building', 'ogr')
-        zone = Geometry.fromPolygonXY([[
-            Point(357528.004, 3124148.587),
-            Point(357509.281, 3124115.955),
-            Point(357540.681, 3124106.153),
-            Point(357554.591, 3124142.072),
-            Point(357528.004, 3124148.587),
-        ]])
-        fids = layer.get_features_inside(zone)
-        request = QgsFeatureRequest()
-        request.setFilterFids(fids)
-        refs = set()
-        for feat in layer.getFeatures(request):
-            refs.add(feat['localId'][:14])
-        expected = set([
-            '7541408CS5274S', '7541409CS5274S', '7541404CS5274S',
-            '7541405CS5274S', '7541410CS5274S', '7640715CS5274S',
-            '7541403CS5274S', '7640714CS5274S',
-        ])
-        self.assertEqual(refs, expected)
-
 
 class TestPolygonLayer(unittest.TestCase):
 
@@ -623,6 +600,45 @@ class TestZoningLayer(unittest.TestCase):
         poly = next(self.fixture.getFeatures(request))
         self.layer1.append(self.fixture, level='M', zone=poly)
         self.assertEqual(self.layer1.featureCount(), 38)
+
+    @mock.patch('layer.tqdm')
+    def test_is_inside_full(self, m_tqdm):
+        self.layer1.append(self.fixture, 'M')
+        zone = Geometry.fromPolygonXY([[
+            Point(357275.888, 3123959.765),
+            Point(357276.418, 3123950.625),
+            Point(357286.220, 3123957.911),
+            Point(357275.888, 3123959.765),
+        ]])
+        feat = QgsFeature(self.layer1.fields())
+        feat.setGeometry(zone)
+        self.assertTrue(self.layer1.is_inside(feat))
+
+    @mock.patch('layer.tqdm')
+    def test_is_inside_part(self, m_tqdm):
+        self.layer1.append(self.fixture, 'M')
+        feat = QgsFeature(self.layer1.fields())
+        zone = Geometry.fromPolygonXY([[
+            Point(357270.987, 3123924.266),
+            Point(357282.643, 3123936.187),
+            Point(357283.703, 3123920.822),
+            Point(357270.987, 3123924.266),
+        ]])
+        feat.setGeometry(zone)
+        self.assertTrue(self.layer1.is_inside(feat))
+
+    @mock.patch('layer.tqdm')
+    def test_is_inside_false(self, m_tqdm):
+        self.layer1.append(self.fixture, 'M')
+        feat = QgsFeature(self.layer1.fields())
+        zone = Geometry.fromPolygonXY([[
+            Point(357228.335, 3123901.881),
+            Point(357231.779, 3123922.677),
+            Point(357245.555, 3123897.377),
+            Point(357228.335, 3123901.881),
+        ]])
+        feat.setGeometry(zone)
+        self.assertFalse(self.layer1.is_inside(feat))
 
     @mock.patch('layer.tqdm')
     def test_get_adjacents_and_geometries(self, m_tqdm):
