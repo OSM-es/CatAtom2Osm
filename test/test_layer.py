@@ -328,7 +328,7 @@ class TestBaseLayer(unittest.TestCase):
         layer.reproject()
         feature_out = next(layer.getFeatures())
         self.assertEqual(layer.featureCount(), features_before)
-        self.assertEqual(layer.crs(), QgsCoordinateReferenceSystem(4326))
+        self.assertEqual(layer.crs(), QgsCoordinateReferenceSystem_fromEpsgId(4326))
         crs_transform = ggs2coordinate_transform(layer.crs(), crs_before)
         geom_out = feature_out.geometry()
         geom_out.transform(crs_transform)
@@ -373,7 +373,7 @@ class TestBaseLayer2(unittest.TestCase):
         mock_fw.writeAsVectorFormat.assert_called_once_with(layer, 'foobar',
             'utf-8', layer.crs(), 'ESRI Shapefile')
 
-    @mock.patch('layer.QgsCoordinateReferenceSystem')
+    @mock.patch('layer.QgsCoordinateReferenceSystem_fromEpsgId')
     @mock.patch('layer.QgsVectorFileWriter')
     @mock.patch('layer.os')
     def test_export_other(self, mock_os, mock_fw, mock_crs):

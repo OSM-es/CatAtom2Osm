@@ -1,6 +1,8 @@
 #Retro compatibility for QGIS2
 
-from qgis.core import QgsCoordinateTransform, QgsProject
+from qgis.core import (
+    QgsCoordinateTransform, QgsProject, QgsCoordinateReferenceSystem
+)
 try:
     from qgis.PyQt.QtCore import QVariant
 except ImportError:
@@ -28,3 +30,8 @@ def ggs2coordinate_transform(src_crs, target_crs):
     except TypeError:
         return QgsCoordinateTransform(src_crs, target_crs)
 
+def QgsCoordinateReferenceSystem_fromEpsgId(epsg_id):
+    try:
+        return QgsCoordinateReferenceSystem.fromEpsgId(epsg_id)
+    except AttributeError:
+        return QgsCoordinateReferenceSystem(epsg_id)

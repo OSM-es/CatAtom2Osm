@@ -358,7 +358,7 @@ class BaseLayer(QgsVectorLayer):
             target_crs (QgsCoordinateReferenceSystem): New CRS to apply.
         """
         if target_crs is None:
-            target_crs = QgsCoordinateReferenceSystem(4326)
+            target_crs = QgsCoordinateReferenceSystem_fromEpsgId(4326)
         crs_transform = ggs2coordinate_transform(self.crs(), target_crs)
         to_change = {}
         pbar = self.get_progressbar(_("Reproject"), self.featureCount())
@@ -483,7 +483,7 @@ class BaseLayer(QgsVectorLayer):
         if bbox:
             p1 = Geometry.fromPointXY(Point(bbox.xMinimum(), bbox.yMinimum()))
             p2 = Geometry.fromPointXY(Point(bbox.xMaximum(), bbox.yMaximum()))
-            target_crs = QgsCoordinateReferenceSystem(4326)
+            target_crs = QgsCoordinateReferenceSystem_fromEpsgId(4326)
             crs_transform = ggs2coordinate_transform(self.crs(), target_crs)
             p1.transform(crs_transform)
             p2.transform(crs_transform)
@@ -514,7 +514,7 @@ class BaseLayer(QgsVectorLayer):
         if target_crs_id is None:
             target_crs = self.crs() 
         else:
-             target_crs = QgsCoordinateReferenceSystem(target_crs_id)
+             target_crs = QgsCoordinateReferenceSystem_fromEpsgId(target_crs_id)
         if os.path.exists(path) and overwrite:
             if driver_name == 'ESRI Shapefile':
                 QgsVectorFileWriter.deleteShapeFile(path)
@@ -1768,7 +1768,7 @@ class HighwayLayer(BaseLayer):
                 QgsField('name', QVariant.String, len=254),
             ])
             self.updateFields()
-        self.setCrs(QgsCoordinateReferenceSystem(4326))
+        self.setCrs(QgsCoordinateReferenceSystem_fromEpsgId(4326))
 
     def read_from_osm(self, data):
         """Get features from a osm dataset"""
