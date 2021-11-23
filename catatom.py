@@ -6,7 +6,6 @@ import logging
 import os
 import re
 import zipfile
-from qgis.core import QgsCoordinateReferenceSystem
 from requests.exceptions import ConnectionError
 
 import download
@@ -15,6 +14,7 @@ import layer
 import overpass
 import setup
 from compat import etree
+from qgiscompat import QgsCoordinateReferenceSystem_fromEpsgId
 from report import instance as report
 log = setup.log
 
@@ -199,7 +199,7 @@ class Reader(object):
             gml = layer.BaseLayer(gml_path, layername+'.gml', 'ogr')
             if not gml.isValid():
                 raise IOError(_("Failed to load layer '%s'") % gml_path)
-        crs = QgsCoordinateReferenceSystem(self.crs_ref)
+        crs = QgsCoordinateReferenceSystem_fromEpsgId(self.crs_ref)
         if not crs.isValid():
             raise IOError(_("Could not determine the CRS of '%s'") % gml_path)
         gml.setCrs(crs)

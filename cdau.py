@@ -17,6 +17,7 @@ import download
 import layer
 import setup
 from report import instance as report
+from qgiscompat import *
 log = setup.log
 compat.set_es_time()
 
@@ -135,7 +136,7 @@ class Reader(object):
         csv = layer.BaseLayer(csv_path, csv_fn, 'ogr')
         if not csv.isValid():
             raise IOError(_("Failed to load layer '%s'") % csv_path)
-        csv.setCrs(QgsCoordinateReferenceSystem(cdau_crs))
+        csv.setCrs(QgsCoordinateReferenceSystem_fromEpsgId(cdau_crs))
         log.info(_("Read %d features in '%s'"), csv.featureCount(), csv_path)
         self.get_metadata(csv_path.replace('.csv', '.txt'))
         csv.source_date = self.src_date
