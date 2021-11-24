@@ -152,7 +152,8 @@ class CatAtom2Osm(object):
                     report.address_stats(self.building_osm)
             if not self.options.tasks:
                 report.cons_stats(self.building_osm)
-            self.write_osm(self.building_osm, 'building.osm')
+            fn = self.label + '.osm' if self.label else 'building.osm'
+            self.write_osm(self.building_osm, fn)
             if not self.options.tasks:
                 report.osm_stats(self.building_osm)
             del self.building_osm
@@ -436,10 +437,12 @@ class CatAtom2Osm(object):
         del zoning_gml
         if uzone:
             self.cat.boundary_search_area = self.urban_zoning.bounding_box()
-            self.zone_query = lambda f, kwargs: self.urban_zoning.is_inside(f)
+            self.label = uzone
+            self.zone_query = lambda f, kwargs: f['localId'][0:5] == self.label
         elif rzone:
             self.cat.boundary_search_area = self.rustic_zoning.bounding_box()
-            self.zone_query = lambda f, kwargs: self.rustic_zoning.is_inside(f)
+            self.label = rzone
+            self.zone_query = lambda f, kwargs: f['localId'][6:9] == self.label
         else:
             self.cat.get_boundary(self.rustic_zoning)
             self.zone_query = None
