@@ -108,19 +108,6 @@ class CatAtom2Osm(object):
         if self.options.building or self.options.tasks:
             self.get_building()
             self.process_building()
-            if self.options.address:
-                self.building.move_address(self.address)
-            self.building.reproject()
-            if self.options.tasks:
-                self.building.set_tasks(self.urban_zoning, self.rustic_zoning)
-            if not self.options.manual:
-                current_bu_osm = self.get_current_bu_osm()
-                if self.building.conflate(current_bu_osm):
-                    fn = os.path.join(self.path, 'current_building')
-                    if not os.path.exists(fn + '.bak.osm'):
-                        shutil.copyfile(fn+'.osm', fn+'.bak.osm')
-                    self.write_osm(current_bu_osm, 'current_building.osm')
-                del current_bu_osm
             report.building_counter = Counter()
         if self.options.address:
             self.address.reproject()
@@ -143,20 +130,7 @@ class CatAtom2Osm(object):
             del self.rustic_zoning
         self.delete_shp('rustic_zoning.shp')
         if self.options.building:
-            self.building_osm = self.building.to_osm()
-            del self.building
-            self.delete_shp('building.shp')
-            if self.options.address:
-                self.merge_address(self.building_osm, self.address_osm)
-                if not self.options.tasks:
-                    report.address_stats(self.building_osm)
-            if not self.options.tasks:
-                report.cons_stats(self.building_osm)
-            fn = self.label + '.osm' if self.label else 'building.osm'
-            self.write_osm(self.building_osm, fn)
-            if not self.options.tasks:
-                report.osm_stats(self.building_osm)
-            del self.building_osm
+            self.output_building()
         elif self.options.tasks:
             del self.building
             self.delete_shp('building.shp')
@@ -296,6 +270,43 @@ class CatAtom2Osm(object):
         self.building.explode_multi_parts()
         self.building.clean()
         self.building.validate(report.max_level, report.min_level)
+        if self.options.address:
+            self.building.move_address(self.address)
+        self.building.reproject()
+        if self.options.tasks:
+            self.building.set_tasks(self.urban_zoning, self.rustic_zoning)
+        if not self.options.manual:
+            current_bu_osm = self.get_current_bu_osm()
+            if self.building.conflate(current_bu_osm):
+                fn = os.path.join(self.path, 'current_building')
+                if not os.path.exists(fn + '.bak.osm'):
+                    shutil.copyfile(fn + '.osm', fn + '.bak.osm')
+                self.write_osm(current_bu_osm, 'current_building.osm')
+            del current_bu_osm
+
+    def output_building(self):
+        self.building_osm = self.building.to_osm()
+        del self.building
+        self.delete_shp('building.shp')
+        if self.options.address:
+            self.merge_address(self.building_osm, self.address_osm)
+            if not self.options.tasks:
+                report.address_stats(self.building_osm)
+        if not self.options.tasks:
+            report.cons_stats(self.building_osm)
+        if self.label is None:
+            fn = 'building.osm'
+            compress = False
+        else:
+            base_path = os.path.join(self.path, 'tasks')
+            if not os.path.exists(base_path):
+                os.makedirs(base_path)
+            fn = os.path.join('tasks', self.label + '.osm')
+            compress = True
+        self.write_osm(self.building_osm, fn, compress=compress)
+        if not self.options.tasks:
+            report.osm_stats(self.building_osm)
+        del self.building_osm
 
     def process_parcel(self):
         parcel_gml = self.cat.read("cadastralparcel")
@@ -445,6 +456,7 @@ class CatAtom2Osm(object):
             self.zone_query = lambda f, kwargs: f['localId'][6:9] == self.label
         else:
             self.cat.get_boundary(self.rustic_zoning)
+            self.label = None
             self.zone_query = None
         report.cat_mun = self.cat.cat_mun
         report.mun_name = getattr(self.cat, 'boundary_name', None)
