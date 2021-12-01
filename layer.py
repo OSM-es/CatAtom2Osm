@@ -1103,7 +1103,9 @@ class ZoningLayer(PolygonLayer):
             if self.check_zone(feature, level, label, zone):
                 feat = self.copy_feature(feature)
                 if feat['plabel'] is None:
-                    feat['plabel'] = feature['label']
+                    feat['plabel'] = self.task_pattern.format(
+                        int(feature['label'])
+                    )[1:]
                 geom = feature.geometry()
                 mp = Geometry.get_multipolygon(geom)
                 if len(mp) > 1:
