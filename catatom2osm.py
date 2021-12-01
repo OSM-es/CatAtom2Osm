@@ -256,10 +256,10 @@ class CatAtom2Osm(object):
         self.urban_zoning.simplify()
         self.rustic_zoning.clean()
         self.rustic_zoning.difference(self.urban_zoning)
-
-    def output_zoning(self):
         self.urban_zoning.reproject()
         self.rustic_zoning.reproject()
+
+    def output_zoning(self):
         out_path = os.path.join(self.path, 'boundary.poly')
         self.rustic_zoning.export_poly(out_path)
         log.info(_("Generated '%s'"), out_path)
