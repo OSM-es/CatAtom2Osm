@@ -39,8 +39,8 @@ class TestQgsSingleton(unittest.TestCase):
 class TestCatAtom2Osm(unittest.TestCase):
 
     def setUp(self):
-        self.options = {'building': False, 'all': False, 'tasks': True, 
-            'log_level': 'INFO', 'parcel': False, 'list': False, 'zoning': True, 
+        self.options = {'building': False, 'all': False, 'tasks': True,
+            'log_level': 'INFO', 'parcel': False, 'list': False, 'zoning': True,
             'version': False, 'address': False, 'manual': False, 'uzone': False,
             'rzone': False}
         self.m_app = mock.MagicMock()
@@ -69,23 +69,15 @@ class TestCatAtom2Osm(unittest.TestCase):
         m_gdal.PushErrorHandler.called_once_with('CPLQuietErrorHandler')
 
     @mock.patch('catatom2osm.report')
-    @mock.patch('catatom2osm.shutil')
-    def test_run1(self, m_sh, m_report):
+    def test_run1(self, m_report):
         self.m_app.run = get_func(cat.CatAtom2Osm.run)
         self.m_app.is_new = False
-        u = self.m_app.urban_zoning
-        r = self.m_app.rustic_zoning
         building = self.m_app.building
         self.m_app.run(self.m_app)
         self.m_app.process_zoning.assert_called_once_with()
         self.m_app.process_building.assert_called_with()
         self.m_app.read_address.assert_not_called()
-        building.move_address.assert_not_called()
         self.m_app.address.to_osm.assert_not_called()
-        current_bu_osm = self.m_app.get_current_bu_osm.return_value
-        building.conflate.assert_called_once_with(current_bu_osm)
-        self.m_app.write_osm.assert_called_once_with(current_bu_osm, 'current_building.osm')
-        building.set_tasks.assert_called_once_with(u, r)
         self.m_app.process_tasks.assert_called_once_with(building)
         self.m_app.process_parcel.assert_not_called()
 
@@ -94,7 +86,7 @@ class TestCatAtom2Osm(unittest.TestCase):
         self.m_app.run = get_func(cat.CatAtom2Osm.run)
         building = self.m_app.building
         address = self.m_app.address
-        self.m_app.options = Values({'building': True, 'tasks': False, 
+        self.m_app.options = Values({'building': True, 'tasks': False,
             'parcel': True, 'zoning': False, 'address': True, 'manual': False})
         self.m_app.is_new = False
         building.conflate.return_value = False
@@ -106,13 +98,8 @@ class TestCatAtom2Osm(unittest.TestCase):
         self.m_app.read_address.assert_called_once_with()
         current_address = self.m_app.get_current_ad_osm.return_value
         address.conflate.assert_called_once_with(current_address)
-        building.move_address.assert_called_once_with(address)
         address.to_osm.assert_called_once_with()
-        self.m_app.write_osm.assert_has_calls([
-            mock.call(building_osm, 'building.osm'),
-            mock.call(address_osm, 'address.osm'),
-        ])
-        self.m_app.process_zoning.assert_not_called()
+        self.m_app.write_osm.assert_called_once_with(address_osm, 'address.osm')
         self.m_app.process_parcel.assert_called_once_with()
 
     @mock.patch('catatom2osm.report')
@@ -137,7 +124,7 @@ class TestCatAtom2Osm(unittest.TestCase):
     def test_run5(self, m_report):
         address = self.m_app.address
         self.m_app.run = get_func(cat.CatAtom2Osm.run)
-        self.m_app.options = Values({'building': True, 'tasks': False, 
+        self.m_app.options = Values({'building': True, 'tasks': False,
             'parcel': False, 'zoning': False, 'address': True, 'manual': True})
         self.m_app.is_new = False
         building = self.m_app.building
@@ -158,7 +145,9 @@ class TestCatAtom2Osm(unittest.TestCase):
         fn = os.path.join('foo', 'building.shp')
         m_layer.ConsLayer.assert_called_once_with(fn, providerLib='ogr', source_date = 1)
         building.append.assert_has_calls([
-            mock.call(x), mock.call(y), mock.call(z)
+            mock.call(x, query=self.m_app.zone_query),
+            mock.call(y, query=self.m_app.zone_query),
+            mock.call(z, query=self.m_app.zone_query),
         ])
 
     @mock.patch('catatom2osm.layer')
@@ -170,12 +159,14 @@ class TestCatAtom2Osm(unittest.TestCase):
         building = m_layer.ConsLayer.return_value
         self.m_app.get_building(self.m_app)
         building.append.assert_has_calls([
-            mock.call(x), mock.call(y)
+            mock.call(x, query=self.m_app.zone_query),
+            mock.call(y, query=self.m_app.zone_query),
         ])
 
+    @mock.patch('catatom2osm.shutil')
     @mock.patch('catatom2osm.layer')
     @mock.patch('catatom2osm.report')
-    def test_process_building(self, m_report, m_layer):
+    def test_process_building1(self, m_report, m_layer, m_sh):
         m_report.values['max_level'] = {}
         m_report.values['min_level'] = {}
         self.m_app.process_building = get_func(cat.CatAtom2Osm.process_building)
@@ -184,6 +175,21 @@ class TestCatAtom2Osm(unittest.TestCase):
         self.m_app.building.explode_multi_parts.assert_called_once_with()
         self.m_app.building.clean.assert_called_once_with()
         self.m_app.building.validate.assert_called_once_with(m_report.max_level, m_report.min_level)
+
+    @mock.patch('catatom2osm.report')
+    @mock.patch('catatom2osm.shutil')
+    def test_process_building2(self, m_sh, m_report):
+        self.m_app.process_building = get_func(cat.CatAtom2Osm.process_building)
+        u = self.m_app.urban_zoning
+        r = self.m_app.rustic_zoning
+        building = self.m_app.building
+        self.m_app.is_new = False
+        self.m_app.process_building(self.m_app)
+        building.move_address.assert_not_called()
+        current_bu_osm = self.m_app.get_current_bu_osm.return_value
+        building.conflate.assert_called_once_with(current_bu_osm)
+        self.m_app.write_osm.assert_called_once_with(current_bu_osm, 'current_building.osm')
+        building.set_tasks.assert_called_once_with(u, r)
 
     @mock.patch('catatom2osm.os')
     @mock.patch('catatom2osm.layer')
@@ -526,4 +532,3 @@ class TestCatAtom2Osm(unittest.TestCase):
         self.m_app.read_osm.return_value = d
         address = self.m_app.get_current_ad_osm(self.m_app)
         self.assertEqual(m_report.osm_addresses_whithout_number, 2)
-
