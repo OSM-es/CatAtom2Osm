@@ -127,7 +127,7 @@ class TestMain(unittest.TestCase):
 
     @mock.patch(
         'main.sys.argv',
-        ['catatom2osm.py', 'foobar', '-r', '123', '-u', '321', '-t', '-z'],
+        ['catatom2osm.py', 'foobar', '-o', '123', '-t', '-z'],
     )
     @mock.patch('catatom2osm.CatAtom2Osm')
     def test_zone(self, mockcat):
@@ -138,7 +138,7 @@ class TestMain(unittest.TestCase):
         d = {
             'building': True, 'all': False, 'tasks': False, 'log_level': 'INFO',
             'parcel': False, 'list': False, 'zoning': False, 'address': True,
-            'rzone': ['123'], 'uzone': False
+            'zone': '123',
         }
         for (k, v) in list(d.items()):
             self.assertEqual(getattr(options, k), v)

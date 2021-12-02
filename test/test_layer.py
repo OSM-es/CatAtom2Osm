@@ -572,36 +572,6 @@ class TestZoningLayer(unittest.TestCase):
         self.assertFalse(zoning.writer.addFeatures.called)
 
     @mock.patch('layer.tqdm')
-    def test_append_polygon(self, m_tqdm):
-        self.layer1.append(self.fixture, level='P', label='008')
-        self.assertEqual(self.layer1.featureCount(), 1)
-        feat = next(self.layer1.getFeatures())
-        self.assertEqual(feat['label'], '8')
-
-    @mock.patch('layer.tqdm')
-    def test_append_block(self, m_tqdm):
-        self.layer1.append(self.fixture, level='M', label='2003')
-        self.assertEqual(self.layer1.featureCount(), 1)
-        feat = next(self.layer1.getFeatures())
-        self.assertEqual(feat['label'], '2003')
-
-    @mock.patch('layer.tqdm')
-    def test_append_zone1(self, m_tqdm):
-        exp = QgsExpression("label = '8'")
-        request = QgsFeatureRequest(exp)
-        poly = next(self.fixture.getFeatures(request))
-        self.layer1.append(self.fixture, level='M', zone=poly)
-        self.assertEqual(self.layer1.featureCount(), 0)
-
-    @mock.patch('layer.tqdm')
-    def test_append_zone2(self, m_tqdm):
-        exp = QgsExpression("label = '9'")
-        request = QgsFeatureRequest(exp)
-        poly = next(self.fixture.getFeatures(request))
-        self.layer1.append(self.fixture, level='M', zone=poly)
-        self.assertEqual(self.layer1.featureCount(), 38)
-
-    @mock.patch('layer.tqdm')
     def test_is_inside_full(self, m_tqdm):
         self.layer1.append(self.fixture, 'M')
         zone = Geometry.fromPolygonXY([[
@@ -694,6 +664,31 @@ class TestZoningLayer(unittest.TestCase):
             else:
                 tasks[feat['task']] += 1
         self.assertEqual(tasks, test)
+
+    @mock.patch('layer.tqdm')
+    def test_get_labels(self, m_tqdm):
+        self.layer1.append(self.fixture, 'M')
+        self.layer2.append(self.fixture, 'P')
+        test = Counter({
+             u'86416': 56, u'84428': 21, u'88423': 18, u'86423': 18,
+             u'89423': 17, u'86439': 17, u'86417': 17, u'90417': 12,
+             u'86464': 11, u'88427': 9, u'86435': 9, u'85426': 9,
+             u'85449': 9, u'87427': 9, u'88429': 8, u'89403': 8, u'013': 7,
+             u'90425': 7, u'91441': 7, u'86434': 5, u'83424': 5, u'004': 5,
+             u'87425': 5, u'87459': 4, u'86448': 4, u'83429': 4,
+             u'86433': 3, u'88416': 3, u'90424': 3, u'85439': 3,
+             u'88405': 2, u'005': 2, u'85411': 2, u'86459': 1, u'88428': 1,
+             u'82426': 1, u'83428': 1, u'87432': 1, u'86449': 1,
+             u'90429': 1, u'86441': 1, u'86427': 1, u'89415': 1,
+             u'89414': 1, u'88393': 1
+        })
+        fn = 'test/cons.shp'
+        building_gml = BaseLayer(fn, 'building', 'ogr')
+        building = ConsLayer(fn, providerLib='ogr')
+        building.get_labels(building_gml, self.layer1, self.layer2)
+        self.assertEqual(building.labels['000902900CS52D_part1'], '004')
+        labels = Counter(building.labels.values())
+        self.assertEqual(labels, test)
 
 
 class TestConsLayer(unittest.TestCase):

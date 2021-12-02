@@ -59,8 +59,8 @@ def run():
         default=False, action="store_true", 
         help=terminal.encode(_("Process the cadastral zoning dataset")))
     parser.add_argument("-o", "--zone", dest="zone", metavar="label", nargs=1,
-        default=False, type=int, help=terminal.encode(_("Process zone with "
-        "given label")))
+        default=False, type=str, help=terminal.encode(_("Process a zone given "
+        "its label")))
     parser.add_argument("-d", "--address", dest="address",
         default=False, action="store_true", 
         help=terminal.encode(_("Process the address dataset (default)")))
@@ -70,12 +70,6 @@ def run():
     parser.add_argument("-a", "--all", dest="all", default=False,
         action="store_true", help=terminal.encode(_("Process all datasets ("
         "equivalent to -bdptz)")))
-    parser.add_argument("-r", "--rustic", dest="rzone", metavar="label", nargs=1,
-        default=False, type=str, help=terminal.encode(_("Process a rustic "
-        "polygon given its label")))
-    parser.add_argument("-u", "--urban", dest="uzone", metavar="label", nargs=1,
-        default=False, type=str, help=terminal.encode(_("Process an urban "
-        "block given its label")))
     parser.add_argument("-m", "--manual", dest="manual",
         default=False, action="store_true", 
         help=terminal.encode(_("Dissable conflation with OSM data")))
@@ -87,9 +81,8 @@ def run():
         "between DEBUG, INFO, WARNING, ERROR or CRITICAL.")))
     options = parser.parse_args()
     report.options = ' '.join(sys.argv[1:])
-    if options.rzone:
-            options.uzone = False
-    if options.uzone or options.rzone:
+    options.zone = options.zone[0] if options.zone else None
+    if options.zone:
         if not options.building and not options.address:
             options.building = options.address = True
         options.zoning = False

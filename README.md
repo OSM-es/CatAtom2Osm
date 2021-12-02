@@ -52,8 +52,7 @@ Cadastre.
 * \-z, --zoning              Process the cadastral zoning dataset.
 * \-p, --parcel              Process the cadastral parcel dataset
 * \-a, --all                 Process all datasets (equivalent to -bdptz)
-* \-r label, --rustic label  Process a rustic polygon given its label
-* \-u label, --urban label   Process an urban block given its label
+* \-o label, --zone label    Process a zone given its label
 * \-m, --manual              Dissable conflation with OSM data
 * \-w, --download            Download only
 * \--log=log_level           Select the log level between DEBUG, INFO, WARNING, ERROR or CRITICAL

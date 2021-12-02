@@ -54,8 +54,7 @@ INSPIRE del Catastro Español.
 * \-z, --zoning              Procesa el conjunto de datos de zonificación catastral
 * \-p, --parcel              Procesa el conjunto de datos de parcelas catastrales
 * \-a, --all                 Procesa todos los conjuntos de datos (equivalente a -bdptz)
-* \-r label, --rustic label  Procesa un polígono de rústica dada su etiqueta
-* \-u label, --urban label   Procesa una manzana urbana dada su etiqueta
+* \-o label, --zone label    Procesa una zona dada su etiqueta
 * \-m, --manual              Desactiva la combinación con datos OSM
 * \-w, --download            Solo descargar
 * \--log=log_level           Selecciona el nivel de registro entre DEBUG, INFO, WARNING, ERROR o CRITICAL.

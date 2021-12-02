@@ -12,6 +12,7 @@ from tqdm import tqdm
 from qgis.core import *
 from qgiscompat import *
 
+import csvtools
 import hgwnames
 import osm
 import setup
@@ -22,8 +23,10 @@ log = setup.log
 BUFFER_SIZE = 512
 SIMPLIFY_BUILDING_PARTS = False
 
-is_inside = lambda f1, f2: \
-    f2.geometry().contains(f1.geometry()) or f2.geometry().overlaps(f1.geometry())
+is_inside = lambda f1, f2: (
+        f2.geometry().contains(f1.geometry())
+        or f2.geometry().overlaps(f1.geometry())
+)
 
 get_attributes = lambda feat: \
     dict([(i, feat[i]) for i in range(len(feat.fields().toList()))])
@@ -473,14 +476,18 @@ class BaseLayer(QgsVectorLayer):
         else:
             return QgsSpatialIndex()
 
-    def bounding_box(self):
-        bbox = None
-        for f in self.getFeatures():
-            if bbox is None:
-                bbox = f.geometry().boundingBox()
-            else:
-                bbox.combineExtentWith(f.geometry().boundingBox())
-        if bbox:
+    def bounding_box(self, expression=None):
+        """Returns bounding box of matching features using an expression or all
+        features if expression is None. The bounding box is transformed to EPSG
+        4326 and expressed in overpass format."""
+        if expression is None:
+            self.selectAll()
+        else:
+            self.selectByExpression(expression)
+        bbox = self.boundingBoxOfSelected()
+        if bbox.isEmpty():
+            bbox = None
+        else:
             p1 = Geometry.fromPointXY(Point(bbox.xMinimum(), bbox.yMinimum()))
             p2 = Geometry.fromPointXY(Point(bbox.xMaximum(), bbox.yMaximum()))
             target_crs = QgsCoordinateReferenceSystem_fromEpsgId(4326)
@@ -604,11 +611,11 @@ class PolygonLayer(BaseLayer):
         return sum([f.geometry().area() for f in self.getFeatures()])
 
     def is_inside(self, feature):
-        """Returns true if feature is inside any feature in this layer"""
+        """Returns list of features of this layer that have feature inside"""
         for feat in self.getFeatures():
             if is_inside(feature, feat):
-                return True
-        return False
+                return feat
+        return None
 
     def explode_multi_parts(self, request=QgsFeatureRequest()):
         """
@@ -1053,26 +1060,16 @@ class ZoningLayer(PolygonLayer):
         self.task_pattern = pattern
 
     @staticmethod
-    def check_zone(feat, level=None, label=None, zone=None):
+    def check_zone(feat, level=None):
+        if not level:
+            return True
         if feat.fieldNameIndex('levelName') < 0:
             zone_type = feat['LocalisedCharacterString'][0]
         else:
             if type(feat['levelName']) is list:
                 zone_type = feat['levelName'][0]
             zone_type = feat['levelName'].split(':')[-1][0]
-        if zone:
-            if is_inside(feat, zone):
-                return level is None or level == zone_type
-            return False
-        if level:
-            if label:
-                if level == zone_type:
-                    l = 3 if zone_type == 'P' else 5
-                    return str(feat['label']).zfill(l) == label.zfill(l)
-                else:
-                    return False
-            return level == zone_type
-        return True
+        return level == zone_type
 
     def set_tasks(self, zip_code):
         """Assings a unique task label to each zone by overriding splitted 
@@ -1084,14 +1081,21 @@ class ZoningLayer(PolygonLayer):
             to_change[zone.id()] = get_attributes(zone)
         self.writer.changeAttributeValues(to_change)
 
-    def append(self, layer, level=None, label=None, zone=None):
+    def get_label(self, feature):
+        """Format a zone label"""
+        label = feature['label']
+        try:
+            label = self.task_pattern.format(int(feature['label']))[1:]
+        except:
+            pass
+        return label
+
+    def append(self, layer, level=None):
         """Append features. Split multipolygon geometries.
 
         Args:
             layer(QgsVectorLayer): cadastralzoning GML source
             level(str): 'P' (rustic polygon), 'M' (urban block) or None for both
-            label(int): Filter for zones with this label
-            zone(QgsFeature): Filter for zones inside zone
         """
         self.setCrs(layer.crs())
         total = 0
@@ -1100,12 +1104,10 @@ class ZoningLayer(PolygonLayer):
         final = 0
         pbar = self.get_progressbar(_("Append"), layer.featureCount())
         for feature in layer.getFeatures():
-            if self.check_zone(feature, level, label, zone):
+            if self.check_zone(feature, level):
                 feat = self.copy_feature(feature)
                 if feat['plabel'] is None:
-                    feat['plabel'] = self.task_pattern.format(
-                        int(feature['label'])
-                    )[1:]
+                    feat['plabel'] = self.get_label(feature)
                 geom = feature.geometry()
                 mp = Geometry.get_multipolygon(geom)
                 if len(mp) > 1:
@@ -1271,6 +1273,12 @@ class ConsLayer(PolygonLayer):
             'nature': 'constructionNature'
         }
         self.source_date = source_date
+        self.labels = {}
+        self.labels_path = os.path.join(
+            os.path.dirname(self.writer.dataSourceUri()), 'cons_labels.csv'
+        )
+        if os.path.exists(self.labels_path):
+            csvtools.csv2dict(self.labels_path, self.labels)
 
     @staticmethod
     def is_building(feature):
@@ -1295,10 +1303,76 @@ class ConsLayer(PolygonLayer):
             request.setFilterFids(fids)
         super(ConsLayer, self).explode_multi_parts(request)
 
+    def get_labels(self, gml, uzoning, rzoning):
+        """Builds a index of localId of features in 'gml' vs the label of the
+        zone in witch the construction is contained. If the construction
+        overlaps many zones, take the zone with the largest intersection.
+        Building parts are expected to get their key from the localId of the
+        building. If they don't have an associated building, they get their own
+        localId as key.
+        If gml is one other constructions layer, the index is persisted to file.
+        """
+        if os.path.exists(self.labels_path):
+            return
+        uindex = uzoning.get_index()
+        rindex = rzoning.get_index()
+        ufeatures = {f.id(): f for f in uzoning.getFeatures()}
+        rfeatures = {f.id(): f for f in rzoning.getFeatures()}
+        pbar = gml.get_progressbar(_("Labeling"), gml.featureCount())
+        for feat in gml.getFeatures():
+            localid = feat['localId'][:14]
+            label = self.labels.get(localid, None)
+            if label is None:
+                if self.is_part(feat):
+                    localid = feat['localId']
+                fids = uindex.intersects(feat.geometry().boundingBox())
+                zones = [
+                    ufeatures[fid] for fid in fids
+                    if is_inside(feat, ufeatures[fid])
+                ]
+                zoning = uzoning
+                if len(zones) == 0:
+                    zoning = rzoning
+                    fids = rindex.intersects(feat.geometry().boundingBox())
+                    zones = [
+                        rfeatures[fid] for fid in fids
+                        if is_inside(feat, rfeatures[fid])
+                    ]
+                if len(zones) == 0:
+                    label = 'nozone'
+                    log.warning(
+                        _("Feature '%s' is not in any zone."), feat['localId']
+                    )
+                else:
+                    label = zoning.get_label(zones[0])
+                    geom = feat.geometry()
+                    parea = zones[0].geometry().intersection(geom).area()
+                    for z in zones[1:]:
+                        area = z.geometry().intersection(geom).area()
+                        if area > parea:
+                            parea = area
+                            label = zoning.get_label(z)
+                self.labels[localid] = label
+            pbar.update()
+        pbar.close()
+        if self.is_pool(feat):
+            csvtools.dict2csv(self.labels_path, self.labels)
+
+    def detect_missing_building_parts(self):
+        """Add a tag to parts without associated building."""
+        to_change = {}
+        for feat in self.search("regexp_match(localId, '_part')"):
+            if feat['localId'] in self.labels:
+                feat['fixme'] = _("Missing building outline for this part")
+                to_change[feat.id()] = get_attributes(feat)
+        if len(to_change) > 0:
+            self.writer.changeAttributeValues(to_change)
+
     def set_tasks(self, uzoning, rzoning):
         """Assings to each building and pool the task label of the zone in witch
         it is contained. Parts receives the label of the building it belongs.
         Parts without associated building are ignored"""
+        # TODO: REMOVE
         uindex = uzoning.get_index()
         rindex = rzoning.get_index()
         ufeatures = {f.id(): f for f in uzoning.getFeatures()}
