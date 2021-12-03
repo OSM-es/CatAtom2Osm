@@ -46,6 +46,7 @@ Cadastre.
 * \-h, --help                Show this help message and exit
 * \-v, --version             Print CatAtom2Osm version and exit
 * \-l [prov], --list [prov]  List available municipalities given the two digits province code
+* \--list-zones              List zone labels in the municipality.
 * \-t, --tasks               Splits constructions into tasks files (default, implies -z)
 * \-b, --building            Process buildings to a single file instead of tasks
 * \-d, --address             Process the address dataset

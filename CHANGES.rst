@@ -1,6 +1,10 @@
 Change log
 ==========
 
+**2021-12-03 (1.4.0dev)**
+* Option to divide large municipalities by zones (#58).
+* Option to list zones in a municipality (#58).
+
 **2021-11-15 (1.3.10)**
 * Simplify language setup (#60).
 * Add the language setup to the report (#60).

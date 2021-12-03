@@ -1190,6 +1190,11 @@ class AddressLayer(BaseLayer):
     def create_shp(name, crs, fields=QgsFields(), geom_type=WKBPoint):
         QgsVectorFileWriter(name, 'UTF-8', fields, geom_type, crs, 'ESRI Shapefile')
 
+    @staticmethod
+    def is_address(feature):
+        """Address features have '.' but not '_' in its localId field"""
+        return '.' in feature['localId'] and '_' not in feature['localId']
+
     def to_osm(self, data=None, tags={}, upload='never'):
         """Export to OSM"""
         return super(AddressLayer, self).to_osm(translate.address_tags, data, 

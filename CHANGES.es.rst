@@ -1,6 +1,10 @@
 Registro de cambios
 ===================
 
+**03-12-2021 (1.4.0dev)**
+* Opción para dividir municipios grandes por zonas (#58).
+* Opción para listar zonas de un municipio (#58).
+
 **15-11-2021 (1.3.10)**
 * Simplificar configuración de idioma (#60).
 * Añade la configuración del idioma al informe (#60).

@@ -9,7 +9,6 @@ import os
 import io, codecs
 import gzip
 import logging
-import shutil
 from collections import defaultdict, Counter
 
 from qgis.core import *

@@ -48,6 +48,7 @@ INSPIRE del Catastro Español.
 * \-h, --help                Muestra este mensaje de ayuda y termina
 * \-v, --version             Imprime la versión de CatAtom2Osm y termina
 * \-l [prov], --list [prov]  Lista los municipios disponibles para el código provincial de dos dígitos
+* \--list-zones              Lista las etiquetas de las zonas del municipio
 * \-t, --tasks               Reparte las construcciones en archivos de tareas (predeterminada, implica -z)
 * \-b, --building            Procesa los edificios a un archivo individual en lugar de tareas
 * \-d, --address             Procesa el conjunto de datos de direcciones
