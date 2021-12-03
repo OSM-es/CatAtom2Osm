@@ -10,7 +10,7 @@ import io, codecs
 import gzip
 import logging
 import shutil
-from collections import defaultdict, Counter, OrderedDict
+from collections import defaultdict, Counter
 
 from qgis.core import *
 import qgis.utils
@@ -20,6 +20,7 @@ qgis_utils = getattr(qgis.utils, 'QGis', getattr(qgis.utils, 'Qgis', None))
 from osgeo import gdal
 
 import catatom
+import cdau  # Used in get_auxiliary_addresses
 import csvtools
 import layer
 import osm
@@ -89,6 +90,8 @@ class CatAtom2Osm(object):
             raise ValueError(msg)
         self.highway_names_path = os.path.join(self.path, 'highway_names.csv')
         self.is_new = not os.path.exists(self.highway_names_path)
+        if self.label:
+            self.delete_current_osm_files()
 
     def run(self):
         """Launches the app"""
@@ -100,7 +103,7 @@ class CatAtom2Osm(object):
         self.process_zoning()
         self.address_osm = osm.Osm()
         self.building_osm = osm.Osm()
-        if self.options.address and self.is_new:
+        if self.options.address and self.is_new and not self.label:
             self.options.tasks = False
             self.options.building = False
             self.options.zoning = False
@@ -109,7 +112,9 @@ class CatAtom2Osm(object):
             self.get_building()
         if self.options.address:
             self.read_address()
-            if not self.is_new and not self.options.manual:
+            if self.label or (
+                not self.is_new and not self.options.manual
+            ):
                 current_address = self.get_current_ad_osm()
                 self.address.conflate(current_address)
         self.urban_zoning.reproject() # TODO: necesario para get_tasks
@@ -147,10 +152,13 @@ class CatAtom2Osm(object):
         if self.options.address:
             if not self.options.building and not self.options.tasks:
                 report.address_stats(self.address_osm)
-            self.write_osm(self.address_osm, 'address.osm')
+            if not self.label:
+                self.write_osm(self.address_osm, 'address.osm')
             del self.address_osm
         if self.options.parcel:
             self.process_parcel()
+        if self.label:
+            self.delete_current_osm_files()
         self.end_messages()
 
     def list_zones(self):
@@ -322,13 +330,8 @@ class CatAtom2Osm(object):
         if self.options.tasks:
             self.building.set_tasks(self.urban_zoning, self.rustic_zoning)
         if not self.options.manual:
-            fn = os.path.join(self.path, 'current_building')
-            if os.path.exists(fn + '.osm') and self.label:
-                os.remove(fn + '.osm')
             current_bu_osm = self.get_current_bu_osm()
             if self.building.conflate(current_bu_osm):
-                if not os.path.exists(fn + '.bak.osm'):
-                    shutil.copyfile(fn + '.osm', fn + '.bak.osm')
                 self.write_osm(current_bu_osm, 'current_building.osm')
             del current_bu_osm
 
@@ -706,3 +709,9 @@ class CatAtom2Osm(object):
         if log.getEffectiveLevel() > logging.DEBUG:
             path = os.path.join(self.path, name) if relative else name
             layer.BaseLayer.delete_shp(path)
+
+    def delete_current_osm_files(self):
+        for f in ['current_address', 'current_building', 'current_highway']:
+            fn = os.path.join(self.path, f + '.osm')
+            if os.path.exists(fn):
+                os.remove(fn)
