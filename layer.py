@@ -1060,9 +1060,9 @@ class ZoningLayer(PolygonLayer):
         }
         self.source_date = source_date
         self.task_number = 0
-        self.task_pattern = self.upattern
+        self.task_pattern = self.rpattern
         if baseName == 'urbanzoning':
-            self.task_pattern = self.rpattern
+            self.task_pattern = self.upattern
 
     @staticmethod
     def check_zone(feat, level=None):
