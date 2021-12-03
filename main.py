@@ -49,6 +49,8 @@ def run():
     parser.add_argument("-l", "--list", dest="list", metavar="prov", nargs='?',
         default=False, const=99, help=terminal.encode(_("List available municipalities "
         "given the two digits province code")))
+    parser.add_argument("--list-zones", dest="list_zones", default=False,
+        action="store_true", help=terminal.encode(_("List zone labels in the municipality")))
     parser.add_argument("-t", "--tasks", dest="tasks", default=False,
         action="store_true", help=terminal.encode(_("Splits constructions into "
         "tasks files (default, implies -z)")))

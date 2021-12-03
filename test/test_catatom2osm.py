@@ -40,7 +40,7 @@ class TestCatAtom2Osm(unittest.TestCase):
 
     def setUp(self):
         self.options = {
-            'building': False, 'all': False, 'tasks': True,
+            'building': False, 'all': False, 'tasks': True, 'list_zones': False,
             'log_level': 'INFO', 'parcel': False, 'list': False, 'zoning': True,
             'version': False, 'address': False, 'manual': False, 'zone': False,
         }
@@ -92,7 +92,8 @@ class TestCatAtom2Osm(unittest.TestCase):
         building = self.m_app.building
         address = self.m_app.address
         self.m_app.options = Values({'building': True, 'tasks': False,
-            'parcel': True, 'zoning': False, 'address': True, 'manual': False})
+            'parcel': True, 'zoning': False, 'address': True, 'manual': False,
+            'list_zones': False})
         self.m_app.is_new = False
         building.conflate.return_value = False
         address_osm = self.m_app.address.to_osm.return_value
@@ -130,7 +131,8 @@ class TestCatAtom2Osm(unittest.TestCase):
         address = self.m_app.address
         self.m_app.run = get_func(cat.CatAtom2Osm.run)
         self.m_app.options = Values({'building': True, 'tasks': False,
-            'parcel': False, 'zoning': False, 'address': True, 'manual': True})
+            'parcel': False, 'zoning': False, 'address': True, 'manual': True,
+            'list_zones': False})
         self.m_app.is_new = False
         building = self.m_app.building
         self.m_app.run(self.m_app)

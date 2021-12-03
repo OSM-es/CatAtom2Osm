@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: CatAtom2Osm\n"
-"POT-Creation-Date: 2021-12-02 19:18+UTC\n"
+"POT-Creation-Date: 2021-12-03 08:31+UTC\n"
 "PO-Revision-Date: 2017-05-28 19:23+WEST\n"
 "Last-Translator: Javier Sánchez <javiersanp@gmail.com>\n"
 "Language: es\n"
@@ -40,7 +40,7 @@ msgstr "Buscando la url para la capa '%s' de '%s'..."
 msgid "Zip code '%s' don't exists"
 msgstr "El Código Postal '%s' no existe"
 
-#: catatom.py:87 catatom2osm.py:426 cdau.py:134
+#: catatom.py:87 catatom2osm.py:436 cdau.py:134
 msgid "Downloading '%s'"
 msgstr "Descargando '%s'"
 
@@ -97,67 +97,67 @@ msgstr "Se requiere QGIS versión %s o superior"
 msgid "Required GDAL version %s or greater"
 msgstr "Se requiere GDAL versión %s o superior"
 
-#: catatom2osm.py:97
+#: catatom2osm.py:101
 msgid "Start processing '%s'"
 msgstr "Comienza el procesado de '%s'"
 
-#: catatom2osm.py:280
+#: catatom2osm.py:290
 msgid "Generated %d rustic and %d urban tasks files"
 msgstr "Generados %d archivos de tareas de rústica y %d de urbana"
 
-#: catatom2osm.py:283
+#: catatom2osm.py:293
 msgid "There are %d buildings without zone, check tasks/missing.osm"
 msgstr "Existen %d edificios sin zona, compruebe tasks/missing.osm"
 
-#: catatom2osm.py:304 catatom2osm.py:374 catatom2osm.py:408
+#: catatom2osm.py:314 catatom2osm.py:384 catatom2osm.py:418
 msgid "Generated '%s'"
 msgstr "Generado '%s'"
 
-#: catatom2osm.py:368
+#: catatom2osm.py:378
 msgid "Check %d fixme tags"
 msgstr "Revisa %d etiquetas fixme"
 
-#: catatom2osm.py:381
+#: catatom2osm.py:391
 msgid "The translation file '%s' have been writen in '%s'"
 msgstr "El archivo de conversiones '%s' ha sido generado en '%s'"
 
-#: catatom2osm.py:383
+#: catatom2osm.py:393
 msgid "Please, check it and run again"
 msgstr "Por favor, compruébelo y ejecute de nuevo"
 
-#: catatom2osm.py:385
+#: catatom2osm.py:395
 msgid "Finished!"
 msgstr "¡Terminado!"
 
-#: catatom2osm.py:410
+#: catatom2osm.py:420
 msgid "Failed to write layer: '%s'"
 msgstr "Error al escribir la capa: '%s'"
 
-#: catatom2osm.py:435
+#: catatom2osm.py:445
 msgid "No OSM data were obtained from '%s'"
 msgstr "No se obtuvieron datos OSM de '%s'"
 
-#: catatom2osm.py:439
+#: catatom2osm.py:449
 msgid "Read '%s': %d nodes, %d ways, %d relations"
 msgstr "Leído '%s': %d nodos, %d vías, %d relaciones"
 
-#: catatom2osm.py:468
+#: catatom2osm.py:478
 msgid "Generated '%s': %d nodes, %d ways, %d relations"
 msgstr "Generado '%s': %d nodos, %d vías, %d relaciones"
 
-#: catatom2osm.py:516
+#: catatom2osm.py:524
 msgid "Could not resolve joined tables for the '%s' layer"
 msgstr "No se pudieron resolver las tablas combinadas para la capa '%s'"
 
-#: catatom2osm.py:543
+#: catatom2osm.py:551
 msgid "Deleted %d addresses refused by street name"
 msgstr "Eliminadas %d direcciones rechazadas por nombre de vial"
 
-#: catatom2osm.py:613
+#: catatom2osm.py:621
 msgid "Refused %d 'parcel' addresses not unique for it building"
 msgstr "Rechazadas %d direcciones tipo parcela no únicas para su edificio"
 
-#: catatom2osm.py:690
+#: catatom2osm.py:695
 msgid "There are %d address without house number in the OSM data"
 msgstr "Existen %d direcciones sin número de portal en OSM"
 
@@ -185,11 +185,11 @@ msgstr "Descargando '%s'"
 msgid "Error when creating shapefile: '%s'"
 msgstr "Error al crear el archivo shapefile: '%s'"
 
-#: layer.py:338 layer.py:1105
+#: layer.py:338 layer.py:1113
 msgid "Append"
 msgstr "Agregar"
 
-#: layer.py:354 layer.py:1132
+#: layer.py:354 layer.py:1140
 msgid "Loaded %d features in '%s' from '%s'"
 msgstr "Cargados %d características en '%s' desde '%s'"
 
@@ -221,7 +221,7 @@ msgstr "Cargados %d nodos, %d vías, %d relaciones de la capa '%s'"
 msgid "Explode multi pars"
 msgstr "Separar geometrías multiparte"
 
-#: layer.py:643 layer.py:1135
+#: layer.py:643 layer.py:1143
 msgid "%d multi-polygons splitted into %d polygons in the '%s' layer"
 msgstr "%d multipolígonos divididos a %d poligonos en la capa '%s'"
 
@@ -273,107 +273,107 @@ msgstr "%d polígonos adyacentes fusionados a %d polígonos en la capa '%s'"
 msgid "Difference"
 msgstr "Diferencia"
 
-#: layer.py:1201
+#: layer.py:1209
 msgid "Refused %d addresses because they exist in OSM"
 msgstr "Rechazadas %d direcciones por existir en OSM"
 
-#: layer.py:1207
+#: layer.py:1215
 msgid "Deleted %d addresses without house number"
 msgstr "Eliminadas %d direcciones sin número de portal"
 
-#: layer.py:1321
+#: layer.py:1329
 msgid "Labeling"
 msgstr "Etiquetado"
 
-#: layer.py:1344
+#: layer.py:1352
 msgid "Feature '%s' is not in any zone."
 msgstr "La catracterística '%s' no está en ninguna zona"
 
-#: layer.py:1366 layer.py:1404
+#: layer.py:1374 layer.py:1412
 msgid "Missing building outline for this part"
 msgstr "Falta el contorno del edificio para esta parte"
 
-#: layer.py:1461
+#: layer.py:1469
 msgid "Remove outside parts"
 msgstr "Eliminar partes exteriores"
 
-#: layer.py:1484
+#: layer.py:1492
 msgid "Removed %d building parts outside the outline"
 msgstr "Eliminadas %d partes de edificio fuera del contorno"
 
-#: layer.py:1488
+#: layer.py:1496
 msgid "Deleted %d building parts with no floors above ground"
 msgstr "Eliminadas %d partes de edificio sin plantas sobre el nivel del suelo"
 
-#: layer.py:1493
+#: layer.py:1501
 msgid "Generated %d building outlines"
 msgstr "Generados %d contornos de edificios"
 
-#: layer.py:1539
+#: layer.py:1547
 msgid "This part is bigger than its building"
 msgstr "Esta parte es mayor que su edificio"
 
-#: layer.py:1559
+#: layer.py:1567
 msgid "Building parts don't fill the building outline"
 msgstr "Las partes de edificio no cubren todo el contorno"
 
-#: layer.py:1608
+#: layer.py:1616
 msgid "Merge building parts"
 msgstr "Combinar partes de edificios"
 
-#: layer.py:1653
+#: layer.py:1661
 msgid "Located %d swimming pools over a building"
 msgstr "Localizadas %d piscinas sobre un edificio"
 
-#: layer.py:1656
+#: layer.py:1664
 msgid "Deleted %d buildings coincidents with a swimming pool"
 msgstr "Eliminados %d edificios conicidentes con una piscina"
 
-#: layer.py:1660
+#: layer.py:1668
 msgid "Translated %d level values to the outline"
 msgstr "Trasladados %d valores de niveles al contorno"
 
-#: layer.py:1663
+#: layer.py:1671
 msgid "Merged %d building parts to the outline"
 msgstr "Fusionados %d partes de edificios al contorno"
 
-#: layer.py:1667
+#: layer.py:1675
 msgid "Merged %d adjacent parts"
 msgstr "Fusionadas %d partes adyacentes"
 
-#: layer.py:1743
+#: layer.py:1751
 msgid "Moved %d addresses to entrance, %d changed to parcel"
 msgstr "Desplazadas %d direcciones a entrada, %d cambiadas a parcela"
 
-#: layer.py:1748
+#: layer.py:1756
 msgid "Deleted %d addresses without associated building"
 msgstr "Eliminadas %d direcciones sin edificio asociado"
 
-#: layer.py:1751
+#: layer.py:1759
 msgid "Refused %d addresses belonging to multiple buildings"
 msgstr "Eliminadas %d direcciones pertenecientes a edificios múltiples"
 
-#: layer.py:1762
+#: layer.py:1770
 msgid "GEOS validation"
 msgstr "Validación GEOS"
 
-#: layer.py:1774
+#: layer.py:1782
 msgid "Check, area too small"
 msgstr "Comprobar, área demasiado pequeña"
 
-#: layer.py:1777
+#: layer.py:1785
 msgid "Check, area too big"
 msgstr "Comprobar, área demasiado grande"
 
-#: layer.py:1792
+#: layer.py:1800
 msgid "Conflate"
 msgstr "Combinación"
 
-#: layer.py:1805
+#: layer.py:1813
 msgid "OSM building with id %s is not valid"
 msgstr "El edificio de OSM con id %s no es váido"
 
-#: layer.py:1826
+#: layer.py:1834
 msgid "Detected %d conflicts in %d buildings/pools from OSM"
 msgstr "Detectados %d edificios/piscinas con conflicto de %d en OSM"
 
@@ -414,57 +414,61 @@ msgstr ""
 "Lista los municipios disponibles para el código provincial de dos dígitos"
 
 #: main.py:53
+msgid "List zone labels in the municipality"
+msgstr "Lista las etiquetas de las zonas del municipio"
+
+#: main.py:55
 msgid "Splits constructions into tasks files (default, implies -z)"
 msgstr ""
 "Reparte las construcciones en archivos de tareas (predeterminada, implica -z)"
 
-#: main.py:56
+#: main.py:58
 msgid "Process buildings to a single file instead of tasks"
 msgstr "Procesa los edificios a un archivo individual en lugar de tareas"
 
-#: main.py:60
+#: main.py:62
 msgid "Process the cadastral zoning dataset"
 msgstr "Procesa el conjunto de datos de zonificación catastral"
 
-#: main.py:62
+#: main.py:64
 #, fuzzy
 msgid "Process a zone given its label"
 msgstr "Procesa la zona con la etiqueta indicada"
 
-#: main.py:66
+#: main.py:68
 msgid "Process the address dataset (default)"
 msgstr "Procesa el conjunto de datos de direcciones (predeterminada)"
 
-#: main.py:69
+#: main.py:71
 msgid "Process the cadastral parcel dataset"
 msgstr "Procesa el conjunto de datos de parcelas catastrales"
 
-#: main.py:71
+#: main.py:73
 msgid "Process all datasets (equivalent to -bdptz)"
 msgstr "Procesa todos los conjuntos de datos (equivalente a -bdptz)"
 
-#: main.py:75
+#: main.py:77
 msgid "Dissable conflation with OSM data"
 msgstr "Desactiva la combinación con datos de OSM"
 
-#: main.py:77
+#: main.py:79
 msgid "Download only"
 msgstr "Solo descargar"
 
-#: main.py:80
+#: main.py:82
 msgid "Select the log level between DEBUG, INFO, WARNING, ERROR or CRITICAL."
 msgstr ""
 "Selecciona el nivel de registro entre DEBUG, INFO, WARNING, ERROR o CRITICAL."
 
-#: main.py:106
+#: main.py:108
 msgid "Using Python %s.%s.%s"
 msgstr "Usando Python %s.%s.%s"
 
-#: main.py:109
+#: main.py:111
 msgid "Too many arguments, supply only a directory path."
 msgstr "Demasiados argumentos, proporcione sólo la ruta de un directorio."
 
-#: main.py:121
+#: main.py:123
 msgid "Please, install QGIS"
 msgstr "Por favor, instala QGIS"
 

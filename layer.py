@@ -1039,7 +1039,10 @@ class ParcelLayer(BaseLayer):
 class ZoningLayer(PolygonLayer):
     """Class for cadastral zoning"""
 
-    def __init__(self, pattern='{}', path="Polygon", baseName="cadastralzoning",
+    upattern = '{:05}'
+    rpattern = '{:03}'
+
+    def __init__(self, path="Polygon", baseName="cadastralzoning",
             providerLib="memory", source_date=None):
         super(ZoningLayer, self).__init__(path, baseName, providerLib)
         if self.fields().isEmpty():
@@ -1057,7 +1060,9 @@ class ZoningLayer(PolygonLayer):
         }
         self.source_date = source_date
         self.task_number = 0
-        self.task_pattern = pattern
+        self.task_pattern = self.upattern
+        if baseName == 'urbanzoning':
+            self.task_pattern = self.rpattern
 
     @staticmethod
     def check_zone(feat, level=None):
@@ -1071,24 +1076,27 @@ class ZoningLayer(PolygonLayer):
             zone_type = feat['levelName'].split(':')[-1][0]
         return level == zone_type
 
+    @staticmethod
+    def get_label(feature):
+        """Format a zone label"""
+        label = feature['label']
+        level = ZoningLayer.check_zone(feature, 'M')
+        pattern = ZoningLayer.upattern if level else ZoningLayer.rpattern
+        try:
+            label = pattern.format(int(feature['label']))
+        except:
+            pass
+        return label
+
     def set_tasks(self, zip_code):
         """Assings a unique task label to each zone by overriding splitted 
         multiparts and merged adjacent zones"""
         to_change = {}
         for i, zone in enumerate(self.getFeatures()):
-            zone['label'] = self.task_pattern.format(i + 1)
+            zone['label'] = self.name()[0] + self.task_pattern.format(i + 1)
             zone['zipcode'] = zip_code
             to_change[zone.id()] = get_attributes(zone)
         self.writer.changeAttributeValues(to_change)
-
-    def get_label(self, feature):
-        """Format a zone label"""
-        label = feature['label']
-        try:
-            label = self.task_pattern.format(int(feature['label']))[1:]
-        except:
-            pass
-        return label
 
     def append(self, layer, level=None):
         """Append features. Split multipolygon geometries.

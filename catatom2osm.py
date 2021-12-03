@@ -95,6 +95,9 @@ class CatAtom2Osm(object):
 
     def run(self):
         """Launches the app"""
+        if self.options.list_zones:
+            self.list_zones()
+            return
         log.info(_("Start processing '%s'"), report.mun_code)
         self.get_zoning()
         self.process_zoning()
@@ -152,6 +155,11 @@ class CatAtom2Osm(object):
         if self.options.parcel:
             self.process_parcel()
         self.end_messages()
+
+    def list_zones(self):
+        zoning_gml = self.cat.read("cadastralzoning")
+        for feat in zoning_gml.getFeatures():
+            print(layer.ZoningLayer.get_label(feat))
 
     def zone_query(self, feat, kwargs):
         """Filter feat by zone label if needed."""
@@ -479,12 +487,10 @@ class CatAtom2Osm(object):
         zoning_gml = self.cat.read("cadastralzoning")
         fn = os.path.join(self.path, 'rustic_zoning.shp')
         layer.ZoningLayer.create_shp(fn, zoning_gml.crs())
-        self.rustic_zoning = layer.ZoningLayer('r{:03}', fn, 'rusticzoning',
-                                               'ogr')
+        self.rustic_zoning = layer.ZoningLayer(fn, 'rusticzoning', 'ogr')
         fn = os.path.join(self.path, 'urban_zoning.shp')
         layer.ZoningLayer.create_shp(fn, zoning_gml.crs())
-        self.urban_zoning = layer.ZoningLayer('u{:05}', fn, 'urbanzoning',
-                                              'ogr')
+        self.urban_zoning = layer.ZoningLayer(fn, 'urbanzoning', 'ogr')
         self.rustic_zoning.append(zoning_gml, level='P')
         if self.options.tasks or self.options.zoning or self.label:
             self.urban_zoning.append(zoning_gml, level='M')

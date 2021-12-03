@@ -532,11 +532,11 @@ class TestZoningLayer(unittest.TestCase):
         self.assertTrue(self.fixture.isValid(), "Loading fixture")
         fn = 'urban_zoning.shp'
         ZoningLayer.create_shp(fn, self.fixture.crs())
-        self.layer1 = ZoningLayer('u{:05}', fn, 'urbanzoning', 'ogr')
+        self.layer1 = ZoningLayer(fn, 'urbanzoning', 'ogr')
         self.assertTrue(self.layer1.isValid(), "Init QGIS")
         fn = 'rustic_zoning.shp'
         ZoningLayer.create_shp(fn, self.fixture.crs())
-        self.layer2 = ZoningLayer('r{:03}', fn, 'rusticzoning', 'ogr')
+        self.layer2 = ZoningLayer(fn, 'rusticzoning', 'ogr')
         self.assertTrue(self.layer2.isValid(), "Init QGIS")
 
     def tearDown(self):
