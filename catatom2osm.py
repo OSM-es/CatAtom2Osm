@@ -89,9 +89,16 @@ class CatAtom2Osm(object):
                 "Required GDAL version %s or greater") % setup.MIN_GDAL_VERSION
             raise ValueError(msg)
         self.highway_names_path = os.path.join(self.path, 'highway_names.csv')
-        self.is_new = not os.path.exists(self.highway_names_path)
+        self.tasks_path = os.path.join(self.path, 'tasks')
+        if self.label or self.options.tasks:
+            if not os.path.exists(self.tasks_path):
+                os.makedirs(self.tasks_path)
         if self.label:
+            self.highway_names_path = os.path.join(
+                self.path, 'tasks', self.label + '_highway_names.csv'
+            )
             self.delete_current_osm_files()
+        self.is_new = not os.path.exists(self.highway_names_path)
 
     def run(self):
         """Launches the app"""
@@ -100,7 +107,8 @@ class CatAtom2Osm(object):
             return
         log.info(_("Start processing '%s'"), report.mun_code)
         self.get_zoning()
-        self.process_zoning()
+        if not self.label:
+            self.process_zoning()
         self.address_osm = osm.Osm()
         self.building_osm = osm.Osm()
         if self.options.address and self.is_new and not self.label:
@@ -258,12 +266,9 @@ class CatAtom2Osm(object):
         """
         Put each building into a shp file named according to the field 'label'.
         """
-        base_path = os.path.join(self.path, 'tasks')
-        if not os.path.exists(base_path):
-            os.makedirs(base_path)
-        else:
-            for fn in os.listdir(base_path):
-                os.remove(os.path.join(base_path, fn))
+        if os.path.exists(self.tasks_path):
+            for fn in os.listdir(self.tasks_path):
+                os.remove(os.path.join(self.tasks_path, fn))
         tasks_r = 0
         tasks_u = 0
         tasks_m = 0
@@ -388,9 +393,10 @@ class CatAtom2Osm(object):
             fn = os.path.join(self.path, 'report.txt')
             report.to_file(fn)
         if self.is_new:
-            log.info(_("The translation file '%s' have been writen in "
-                       "'%s'"), 'highway_names.csv', self.path)
-            log.info(_("Please, check it and run again"))
+            msg = (
+                _("Generated '%s'") + '. ' + _("Please, check it and run again")
+            )
+            log.info(msg, self.highway_names_path)
         else:
             log.info(_("Finished!"))
 

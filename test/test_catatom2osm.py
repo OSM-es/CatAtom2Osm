@@ -50,6 +50,7 @@ class TestCatAtom2Osm(unittest.TestCase):
         self.m_app.path = 'foo'
         self.m_app.highway_names_path = 'foo/highway_names.csv'
         self.m_app.label = None
+        self.m_app.tasks_path = 'foo/tasks'
         self.m_app.is_new = False
 
     @mock.patch('catatom2osm.QgsSingleton')
@@ -58,12 +59,16 @@ class TestCatAtom2Osm(unittest.TestCase):
     @mock.patch('catatom2osm.os')
     def test_init(self, m_os, m_report, m_cat, m_qgs):
         m_qgs.return_value = 'foo'
+        m_cat.return_value.path = 'foo'
+        m_os.path.join = lambda *args: '/'.join(args)
+        m_os.path.exists.return_value = False
         self.m_app.init = get_func(cat.CatAtom2Osm.__init__)
         self.m_app.init(self.m_app, 'xxx/12345', self.m_app.options)
         m_cat.assert_called_once_with('xxx/12345')
         self.assertEqual(self.m_app.path, m_cat().path)
         self.assertEqual(m_report.mun_code, m_cat().zip_code)
         self.assertEqual(self.m_app.qgs, 'foo')
+        m_os.makedirs.assert_called_once_with('foo/tasks')
 
     @mock.patch('catatom2osm.gdal')
     def test_gdal(self, m_gdal):
@@ -265,7 +270,6 @@ class TestCatAtom2Osm(unittest.TestCase):
         m_os.path.exists.return_value = False
         building.copy_feature.side_effect = [100, 101, 102]
         self.m_app.get_tasks(self.m_app, building)
-        m_os.makedirs.assert_called_once_with('foo/tasks')
         self.assertEqual(m_report.tasks_r, 1)
         self.assertEqual(m_report.tasks_u, 1)
 
@@ -291,12 +295,12 @@ class TestCatAtom2Osm(unittest.TestCase):
         self.m_app.end_messages(self.m_app)
         self.assertEqual(m_log.warning.call_args_list[0][0][1], 3)
         self.assertEqual('review.txt', m_log.info.call_args_list[0][0][1])
-        self.assertIn('translation', m_log.info.call_args_list[1][0][0])
+        self.assertIn('check it', m_log.info.call_args_list[1][0][0])
         self.m_app.fixmes = 0
         self.m_app.is_new = False
         self.m_app.options.tasks = False
         self.m_app.end_messages(self.m_app)
-        self.assertEqual(m_log.info.call_args_list[3][0][0], 'Finished!')
+        self.assertEqual(m_log.info.call_args_list[2][0][0], 'Finished!')
 
     def test_exit(self):
         self.m_app.exit = get_func(cat.CatAtom2Osm.exit)

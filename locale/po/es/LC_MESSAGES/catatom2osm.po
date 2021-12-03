@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: CatAtom2Osm\n"
-"POT-Creation-Date: 2021-12-03 08:31+UTC\n"
+"POT-Creation-Date: 2021-12-03 11:46+UTC\n"
 "PO-Revision-Date: 2017-05-28 19:23+WEST\n"
 "Last-Translator: Javier Sánchez <javiersanp@gmail.com>\n"
 "Language: es\n"
@@ -40,7 +40,7 @@ msgstr "Buscando la url para la capa '%s' de '%s'..."
 msgid "Zip code '%s' don't exists"
 msgstr "El Código Postal '%s' no existe"
 
-#: catatom.py:87 catatom2osm.py:436 cdau.py:134
+#: catatom.py:87 catatom2osm.py:437 cdau.py:134
 msgid "Downloading '%s'"
 msgstr "Descargando '%s'"
 
@@ -81,19 +81,19 @@ msgstr "Oficina territorial"
 msgid "Territorial office %s"
 msgstr "Oficina territorial %s"
 
-#: catatom2osm.py:81
+#: catatom2osm.py:79
 msgid "Initialized QGIS %s API"
 msgstr "Inicializada la API de QGIS %s"
 
-#: catatom2osm.py:82
+#: catatom2osm.py:80
 msgid "Using GDAL %s"
 msgstr "Usando GDAL %s"
 
-#: catatom2osm.py:84
+#: catatom2osm.py:82
 msgid "Required QGIS version %s or greater"
 msgstr "Se requiere QGIS versión %s o superior"
 
-#: catatom2osm.py:90
+#: catatom2osm.py:88
 msgid "Required GDAL version %s or greater"
 msgstr "Se requiere GDAL versión %s o superior"
 
@@ -101,15 +101,15 @@ msgstr "Se requiere GDAL versión %s o superior"
 msgid "Start processing '%s'"
 msgstr "Comienza el procesado de '%s'"
 
-#: catatom2osm.py:290
+#: catatom2osm.py:295
 msgid "Generated %d rustic and %d urban tasks files"
 msgstr "Generados %d archivos de tareas de rústica y %d de urbana"
 
-#: catatom2osm.py:293
+#: catatom2osm.py:298
 msgid "There are %d buildings without zone, check tasks/missing.osm"
 msgstr "Existen %d edificios sin zona, compruebe tasks/missing.osm"
 
-#: catatom2osm.py:314 catatom2osm.py:384 catatom2osm.py:418
+#: catatom2osm.py:319 catatom2osm.py:384 catatom2osm.py:392 catatom2osm.py:419
 msgid "Generated '%s'"
 msgstr "Generado '%s'"
 
@@ -117,47 +117,43 @@ msgstr "Generado '%s'"
 msgid "Check %d fixme tags"
 msgstr "Revisa %d etiquetas fixme"
 
-#: catatom2osm.py:391
-msgid "The translation file '%s' have been writen in '%s'"
-msgstr "El archivo de conversiones '%s' ha sido generado en '%s'"
-
-#: catatom2osm.py:393
+#: catatom2osm.py:392
 msgid "Please, check it and run again"
 msgstr "Por favor, compruébelo y ejecute de nuevo"
 
-#: catatom2osm.py:395
+#: catatom2osm.py:396
 msgid "Finished!"
 msgstr "¡Terminado!"
 
-#: catatom2osm.py:420
+#: catatom2osm.py:421
 msgid "Failed to write layer: '%s'"
 msgstr "Error al escribir la capa: '%s'"
 
-#: catatom2osm.py:445
+#: catatom2osm.py:446
 msgid "No OSM data were obtained from '%s'"
 msgstr "No se obtuvieron datos OSM de '%s'"
 
-#: catatom2osm.py:449
+#: catatom2osm.py:450
 msgid "Read '%s': %d nodes, %d ways, %d relations"
 msgstr "Leído '%s': %d nodos, %d vías, %d relaciones"
 
-#: catatom2osm.py:478
+#: catatom2osm.py:479
 msgid "Generated '%s': %d nodes, %d ways, %d relations"
 msgstr "Generado '%s': %d nodos, %d vías, %d relaciones"
 
-#: catatom2osm.py:524
+#: catatom2osm.py:525
 msgid "Could not resolve joined tables for the '%s' layer"
 msgstr "No se pudieron resolver las tablas combinadas para la capa '%s'"
 
-#: catatom2osm.py:551
+#: catatom2osm.py:552
 msgid "Deleted %d addresses refused by street name"
 msgstr "Eliminadas %d direcciones rechazadas por nombre de vial"
 
-#: catatom2osm.py:621
+#: catatom2osm.py:622
 msgid "Refused %d 'parcel' addresses not unique for it building"
 msgstr "Rechazadas %d direcciones tipo parcela no únicas para su edificio"
 
-#: catatom2osm.py:695
+#: catatom2osm.py:696
 msgid "There are %d address without house number in the OSM data"
 msgstr "Existen %d direcciones sin número de portal en OSM"
 
@@ -460,15 +456,15 @@ msgid "Select the log level between DEBUG, INFO, WARNING, ERROR or CRITICAL."
 msgstr ""
 "Selecciona el nivel de registro entre DEBUG, INFO, WARNING, ERROR o CRITICAL."
 
-#: main.py:108
+#: main.py:109
 msgid "Using Python %s.%s.%s"
 msgstr "Usando Python %s.%s.%s"
 
-#: main.py:111
+#: main.py:112
 msgid "Too many arguments, supply only a directory path."
 msgstr "Demasiados argumentos, proporcione sólo la ruta de un directorio."
 
-#: main.py:123
+#: main.py:124
 msgid "Please, install QGIS"
 msgstr "Por favor, instala QGIS"
 
