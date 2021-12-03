@@ -5,7 +5,7 @@ Tool to convert INSPIRE data sets from the Spanish Cadastre ATOM Services to OSM
 from __future__ import division
 from builtins import map, object
 from past.builtins import basestring
-import os, sys
+import os
 import io, codecs
 import gzip
 import logging
@@ -20,15 +20,12 @@ qgis_utils = getattr(qgis.utils, 'QGis', getattr(qgis.utils, 'Qgis', None))
 from osgeo import gdal
 
 import catatom
-import cdau
 import csvtools
 import layer
 import osm
 import osmxml
 import overpass
 import setup
-import translate
-from compat import etree
 from report import instance as report
 
 log = setup.log
@@ -103,7 +100,7 @@ class CatAtom2Osm(object):
         self.process_zoning()
         self.address_osm = osm.Osm()
         self.building_osm = osm.Osm()
-        if self.is_new:
+        if self.options.address and self.is_new:
             self.options.tasks = False
             self.options.building = False
             self.options.zoning = False
