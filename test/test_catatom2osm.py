@@ -48,12 +48,15 @@ class TestCatAtom2Osm(unittest.TestCase):
         self.m_app.options = Values(self.options)
         self.m_app.get_translations.return_value = ([], False)
         self.m_app.path = 'foo'
+        self.m_app.highway_names_path = 'foo/highway_names.csv'
         self.m_app.label = None
+        self.m_app.is_new = False
 
     @mock.patch('catatom2osm.QgsSingleton')
     @mock.patch('catatom.Reader')
     @mock.patch('catatom2osm.report')
-    def test_init(self, m_report, m_cat, m_qgs):
+    @mock.patch('catatom2osm.os')
+    def test_init(self, m_os, m_report, m_cat, m_qgs):
         m_qgs.return_value = 'foo'
         self.m_app.init = get_func(cat.CatAtom2Osm.__init__)
         self.m_app.init(self.m_app, 'xxx/12345', self.m_app.options)
@@ -117,7 +120,7 @@ class TestCatAtom2Osm(unittest.TestCase):
     def test_run4(self, m_report):
         del self.m_app.building_gml
         self.m_app.is_new = True
-        self.m_app.options.address = True
+        self.m_app.options.tasks = False
         self.m_app.run = get_func(cat.CatAtom2Osm.run)
         self.m_app.run(self.m_app)
         self.m_app.process_tasks.assert_not_called()
@@ -415,14 +418,18 @@ class TestCatAtom2Osm(unittest.TestCase):
         self.m_app.cat.read.return_value.fieldNameIndex.return_value = 0
         m_layer.AddressLayer.return_value.translate_field.return_value = 1
         self.m_app.read_address(self.m_app)
-        self.m_app.address.append.assert_called_once_with(self.m_app.cat.read())
+        self.m_app.address.append.assert_called_once_with(
+            self.m_app.cat.read(), query=self.m_app.zone_query
+        )
         self.m_app.address.append.reset_mock()
         self.m_app.cat.read.return_value.writer.fieldNameIndex.return_value = -1
         with self.assertRaises(IOError):
             self.m_app.read_address(self.m_app)
         self.m_app.cat.read.return_value.writer.fieldNameIndex.side_effect = [-1, 0]
         self.m_app.read_address(self.m_app)
-        self.m_app.address.append.assert_called_once_with(self.m_app.cat.read())
+        self.m_app.address.append.assert_called_once_with(
+            self.m_app.cat.read(), query=self.m_app.zone_query
+        )
 
     @mock.patch('catatom2osm.cdau')
     def test_get_auxiliary_addresses(self, m_cdau):
@@ -480,18 +487,18 @@ class TestCatAtom2Osm(unittest.TestCase):
         m_csv.csv2dict.return_value = {'RAZ': ' raz '}
         m_os.path.exists.return_value = True
         address = mock.MagicMock()
-        (names, is_new) = self.m_app.get_translations(self.m_app, address)
+        names = self.m_app.get_translations(self.m_app, address)
         m_csv.dict2csv.assert_not_called()
         m_csv.csv2dict.assert_has_calls([
             mock.call('bar/highway_types.csv', setup.highway_types),
             mock.call('foo/highway_names.csv', {}),
         ])
         self.assertEqual(names, {'RAZ': 'raz'})
-        self.assertFalse(is_new)
         address.get_highway_names.return_value = {'TAZ': ' taz '}
         m_csv.csv2dict.reset_mock()
         m_os.path.exists.return_value = False
-        (names, is_new) = self.m_app.get_translations(self.m_app, address)
+        self.m_app.is_new = True
+        names = self.m_app.get_translations(self.m_app, address)
         address.get_highway_names.assert_called_once_with(self.m_app.get_highway.return_value)
         m_csv.csv2dict.assert_not_called()
         m_csv.dict2csv.assert_has_calls([
@@ -499,9 +506,8 @@ class TestCatAtom2Osm(unittest.TestCase):
             mock.call('foo/highway_names.csv', {'TAZ': 'taz'}, sort=1),
         ])
         self.assertEqual(names, {'TAZ': 'taz'})
-        self.assertTrue(is_new)
         self.m_app.options.manual = True
-        (names, is_new) = self.m_app.get_translations(self.m_app, address)
+        names = self.m_app.get_translations(self.m_app, address)
         address.get_highway_names.assert_called_with(None)
 
     @mock.patch('catatom2osm.layer')

@@ -1344,14 +1344,14 @@ class ConsLayer(PolygonLayer):
                         _("Feature '%s' is not in any zone."), feat['localId']
                     )
                 else:
-                    label = zoning.get_label(zones[0])
+                    label = zones[0]['plabel']  # zoning.get_label(zones[0])
                     geom = feat.geometry()
                     parea = zones[0].geometry().intersection(geom).area()
                     for z in zones[1:]:
                         area = z.geometry().intersection(geom).area()
                         if area > parea:
                             parea = area
-                            label = zoning.get_label(z)
+                            label = z['plabel']  # zoning.get_label(z)
                 self.labels[localid] = label
             pbar.update()
         pbar.close()

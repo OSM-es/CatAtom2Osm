@@ -90,27 +90,28 @@ class CatAtom2Osm(object):
             msg = _(
                 "Required GDAL version %s or greater") % setup.MIN_GDAL_VERSION
             raise ValueError(msg)
-        self.is_new = False
+        self.highway_names_path = os.path.join(self.path, 'highway_names.csv')
+        self.is_new = not os.path.exists(self.highway_names_path)
 
     def run(self):
         """Launches the app"""
         log.info(_("Start processing '%s'"), report.mun_code)
         self.get_zoning()
         self.process_zoning()
-        if self.options.address:
-            self.read_address()
+        self.address_osm = osm.Osm()
+        self.building_osm = osm.Osm()
         if self.is_new:
             self.options.tasks = False
             self.options.building = False
             self.options.zoning = False
             self.options.parcel = False
-        self.address_osm = osm.Osm()
-        self.building_osm = osm.Osm()
-        if self.options.address and not self.is_new and not self.options.manual:
-            current_address = self.get_current_ad_osm()
-            self.address.conflate(current_address)
         if self.options.building or self.options.tasks:
             self.get_building()
+        if self.options.address:
+            self.read_address()
+            if not self.is_new and not self.options.manual:
+                current_address = self.get_current_ad_osm()
+                self.address.conflate(current_address)
         self.urban_zoning.reproject() # TODO: necesario para get_tasks
         self.rustic_zoning.reproject()
         if self.options.building or self.options.tasks:
@@ -156,7 +157,8 @@ class CatAtom2Osm(object):
         """Filter feat by zone label if needed."""
         if self.label is None:
             return True
-        label = self.building.labels.get(feat['localId'][:14], None)
+        localid = feat['localId'].split('.')[-1][:14]
+        label = self.building.labels.get(localid, None)
         if label is None:
             label = self.building.labels.get(feat['localId'], None)
         return label == self.label
@@ -528,7 +530,7 @@ class CatAtom2Osm(object):
         layer.AddressLayer.create_shp(fn, address_gml.crs())
         self.address = layer.AddressLayer(fn, providerLib='ogr',
                                           source_date=address_gml.source_date)
-        self.address.append(address_gml)
+        self.address.append(address_gml, query=self.zone_query)
         self.address.join_field(postaldescriptor, 'PD_id', 'gml_id',
                                 ['postCode'])
         self.address.join_field(thoroughfarename, 'TN_id', 'gml_id', ['text'],
@@ -537,7 +539,7 @@ class CatAtom2Osm(object):
         self.address.get_image_links()
         self.export_layer(self.address, 'address.geojson', 'GeoJSON',
                           target_crs_id=4326)
-        (highway_names, self.is_new) = self.get_translations(self.address)
+        highway_names = self.get_translations(self.address)
         ia = self.address.translate_field('TN_text', highway_names)
         if ia > 0:
             log.debug(_("Deleted %d addresses refused by street name"), ia)
@@ -633,22 +635,19 @@ class CatAtom2Osm(object):
             csvtools.dict2csv(highway_types_path, setup.highway_types)
         else:
             csvtools.csv2dict(highway_types_path, setup.highway_types)
-        highway_names_path = os.path.join(self.path, 'highway_names.csv')
-        if not os.path.exists(highway_names_path):
+        if self.is_new:
             if self.options.manual:
                 highway = None
             else:
                 highway = self.get_highway()
                 highway.reproject(address.crs())
             highway_names = address.get_highway_names(highway)
-            csvtools.dict2csv(highway_names_path, highway_names, sort=1)
-            is_new = True
+            csvtools.dict2csv(self.highway_names_path, highway_names, sort=1)
         else:
-            highway_names = csvtools.csv2dict(highway_names_path, {})
-            is_new = False
+            highway_names = csvtools.csv2dict(self.highway_names_path, {})
         for key, value in list(highway_names.items()):
             highway_names[key] = value.strip()
-        return (highway_names, is_new)
+        return highway_names
 
     def get_highway(self):
         """Gets OSM highways needed for street names conflation"""
