@@ -495,7 +495,12 @@ class BaseLayer(QgsVectorLayer):
             crs_transform = ggs2coordinate_transform(self.crs(), target_crs)
             p1.transform(crs_transform)
             p2.transform(crs_transform)
-            bbox = [p1.asPoint().y(), p1.asPoint().x(), p2.asPoint().y(), p2.asPoint().x()]
+            bbox = [
+                p1.asPoint().y() - setup.bbox_buffer,
+                p1.asPoint().x() - setup.bbox_buffer,
+                p2.asPoint().y() + setup.bbox_buffer,
+                p2.asPoint().x() + setup.bbox_buffer,
+            ]
             bbox = '{:.8f},{:.8f},{:.8f},{:.8f}'.format(*bbox)
         return bbox
 

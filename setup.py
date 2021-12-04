@@ -71,6 +71,7 @@ dist_inv = 0.1 # Threshold in meters to filter angles for zig-zag and spikes
 entrance_thr = 0.4 # Minimum distance in meters from a entrance to the nearest corner
 warning_min_area = 1 # Area in m2 for small area warning
 warning_max_area = 30000 # Area in m2 for big area warning
+bbox_buffer = 0.0002 # Buffer in degrees around overpass bounding boxes
 
 changeset_tags = {
     'comment': "#Spanish_Cadastre_Buildings_Import",
