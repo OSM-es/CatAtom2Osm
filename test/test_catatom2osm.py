@@ -175,10 +175,9 @@ class TestCatAtom2Osm(unittest.TestCase):
             mock.call(y, query=self.m_app.zone_query),
         ])
 
-    @mock.patch('catatom2osm.shutil')
     @mock.patch('catatom2osm.layer')
     @mock.patch('catatom2osm.report')
-    def test_process_building1(self, m_report, m_layer, m_sh):
+    def test_process_building1(self, m_report, m_layer):
         m_report.values['max_level'] = {}
         m_report.values['min_level'] = {}
         self.m_app.process_building = get_func(cat.CatAtom2Osm.process_building)
@@ -189,8 +188,7 @@ class TestCatAtom2Osm(unittest.TestCase):
         self.m_app.building.validate.assert_called_once_with(m_report.max_level, m_report.min_level)
 
     @mock.patch('catatom2osm.report')
-    @mock.patch('catatom2osm.shutil')
-    def test_process_building2(self, m_sh, m_report):
+    def test_process_building2(self, m_report):
         self.m_app.process_building = get_func(cat.CatAtom2Osm.process_building)
         u = self.m_app.urban_zoning
         r = self.m_app.rustic_zoning
