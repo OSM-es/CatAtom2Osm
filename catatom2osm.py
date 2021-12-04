@@ -177,7 +177,10 @@ class CatAtom2Osm(object):
         """Filter feat by zone label if needed."""
         if self.label is None:
             return True
-        localid = feat['localId'].split('.')[-1][:14]
+        if not self.building.is_pool(feat):
+            localid = feat['localId'].split('.')[-1][:14]
+        else:
+            localid = feat['localId'][:14]
         label = self.building.labels.get(localid, None)
         if label is None:
             label = self.building.labels.get(feat['localId'], None)
