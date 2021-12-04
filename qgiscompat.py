@@ -1,7 +1,11 @@
 #Retro compatibility for QGIS2
 
 from qgis.core import (
-    QgsCoordinateTransform, QgsProject, QgsCoordinateReferenceSystem
+    QgsCoordinateReferenceSystem,
+    QgsCoordinateTransform,
+    QgsFields,
+    QgsProject,
+    QgsVectorFileWriter,
 )
 try:
     from qgis.PyQt.QtCore import QVariant
@@ -35,3 +39,36 @@ def QgsCoordinateReferenceSystem_fromEpsgId(epsg_id):
         return QgsCoordinateReferenceSystem.fromEpsgId(epsg_id)
     except AttributeError:
         return QgsCoordinateReferenceSystem(epsg_id)
+
+
+def QgsVectorFileWriter_create(
+    name, crs, fields=QgsFields(), geom_type=WKBMultiPolygon
+):
+    if hasattr(QgsVectorFileWriter, 'create'):
+        transform_context = QgsProject.instance().transformContext()
+        save_options = QgsVectorFileWriter.SaveVectorOptions()
+        save_options.driverName = "ESRI Shapefile"
+        save_options.fileEncoding = "UTF-8"
+        writer = QgsVectorFileWriter.create(
+            name, fields, geom_type, crs, transform_context, save_options
+        )
+    else:
+        writer = QgsVectorFileWriter(
+            name, 'UTF-8', fields, geom_type, crs, 'ESRI Shapefile'
+        )
+    return writer
+
+def QgsVectorFileWriter_writeAsVectorFormat(layer, name, crs, driver_name):
+    if hasattr(QgsVectorFileWriter, 'writeAsVectorFormatV2'):
+        transform_context = QgsProject.instance().transformContext()
+        save_options = QgsVectorFileWriter.SaveVectorOptions()
+        save_options.driverName = driver_name
+        save_options.fileEncoding = "UTF-8"
+        error = QgsVectorFileWriter.writeAsVectorFormatV2(
+            layer, name, transform_context, save_options
+        )
+    else:
+        error = QgsVectorFileWriter.writeAsVectorFormat(
+            layer, name, "utf-8", crs, driver_name
+        )
+    return error

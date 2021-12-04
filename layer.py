@@ -236,10 +236,11 @@ class BaseLayer(QgsVectorLayer):
 
     @staticmethod
     def create_shp(name, crs, fields=QgsFields(), geom_type=WKBMultiPolygon):
-        writer = QgsVectorFileWriter(name, 'UTF-8', fields, geom_type, crs, 
-            'ESRI Shapefile')
+        writer = QgsVectorFileWriter_create(name, crs, fields, geom_type)
         if writer.hasError() != QgsVectorFileWriter.NoError:
-            msg = _("Error when creating shapefile: '%s'") % writer.errorMessage()
+            msg = _(
+                "Error when creating shapefile: '%s'"
+            ) % writer.errorMessage()
             raise IOError(msg)
         return writer
 
@@ -516,8 +517,9 @@ class BaseLayer(QgsVectorLayer):
                 QgsVectorFileWriter.deleteShapeFile(path)
             else:
                 os.remove(path)
-        result = QgsVectorFileWriter.writeAsVectorFormat(self, path, "utf-8",
-                target_crs, driver_name)
+        result = QgsVectorFileWriter_writeAsVectorFormat(
+            self, path, target_crs, driver_name
+        )
         try:
             return result[0] == QgsVectorFileWriter.NoError
         except TypeError:
@@ -787,10 +789,9 @@ class PolygonLayer(BaseLayer):
         Also removes zig-zag and spike vertex (see Point.get_spike_context).
         """
         if log.getEffectiveLevel() <= logging.DEBUG:
-            fpath = os.path.join(os.path.dirname(self.writer.dataSourceUri()), 
-                'debug_notvalid.shp')
-            debshp = QgsVectorFileWriter(fpath, 'UTF-8', QgsFields(),
-                WKBPolygon, self.crs(), 'ESRI Shapefile')
+            debshp = DebugWriter(
+                'debug_notvalid.shp', self, QgsFields(), WKBPolygon
+            )
             debshp2 = DebugWriter("debug_spikes.shp", self)
         to_change = {}
         to_clean = []
@@ -1188,7 +1189,7 @@ class AddressLayer(BaseLayer):
 
     @staticmethod
     def create_shp(name, crs, fields=QgsFields(), geom_type=WKBPoint):
-        QgsVectorFileWriter(name, 'UTF-8', fields, geom_type, crs, 'ESRI Shapefile')
+        BaseLayer.create_shp(name, crs, fields, geom_type)
 
     @staticmethod
     def is_address(feature):
@@ -1873,22 +1874,28 @@ class HighwayLayer(BaseLayer):
         self.writer.addFeatures(to_add)
 
 
-class DebugWriter(QgsVectorFileWriter):
+class DebugWriter():
     """A QgsVectorFileWriter for debugging purposess."""
 
-    def __init__(self, filename, layer, driver_name="ESRI Shapefile"):
+    def __init__(
+        self, filename, layer, driver_name="ESRI Shapefile", geom_type=WKBPoint
+    ):
         """
         Args:
-            filename (str): File name of the layer
-            crs (QgsCoordinateReferenceSystem): Crs of layer.
+            filename (str): File name of this layer
+            layer (QgsVectorLayer): A layer to test.
             driver_name (str): Defaults to ESRI Shapefile.
         """
-        fpath = os.path.join(os.path.dirname( \
-                layer.dataProvider().dataSourceUri()), filename)
-        self.fields = QgsFields()
-        self.fields.append(QgsField("note", QVariant.String, len=100))
-        QgsVectorFileWriter.__init__(self, fpath, "utf-8", self.fields,
-                WKBPoint, layer.crs(), driver_name)
+        fpath = os.path.join(
+            os.path.dirname(layer.dataProvider().dataSourceUri()), filename
+        )
+        fields = QgsFields()
+        fields.append(QgsField("note", QVariant.String, len=100))
+        writer = QgsVectorFileWriter_create(
+            fpath, layer.crs(), fields, geom_type
+        )
+        self.fields = fields
+        self.writer = writer
 
     def add_point(self, point, note=None):
         """Adds a point to the layer with the attribute note."""
@@ -1898,3 +1905,6 @@ class DebugWriter(QgsVectorFileWriter):
         if note:
             feat.setAttribute("note", note[:254])
         return self.addFeature(feat)
+
+    def addFeature(self, *args, **kwargs):
+        self.writer.addFeature(*args, **kwargs)
