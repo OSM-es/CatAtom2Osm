@@ -170,8 +170,12 @@ class CatAtom2Osm(object):
 
     def list_zones(self):
         zoning_gml = self.cat.read("cadastralzoning")
-        for feat in zoning_gml.getFeatures():
-            print(layer.ZoningLayer.get_label(feat))
+        labels = {
+            layer.ZoningLayer.get_label(feat)
+            for feat in zoning_gml.getFeatures()
+        }
+        for label in sorted(labels):
+            print(label)
 
     def zone_query(self, feat, kwargs):
         """Filter feat by zone label if needed."""
