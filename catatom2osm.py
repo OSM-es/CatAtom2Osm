@@ -117,6 +117,8 @@ class CatAtom2Osm(object):
             self.options.parcel = False
         if self.options.building or self.options.tasks:
             self.get_building()
+            if self.building.featureCount() == 0:
+                return
         if self.options.address:
             self.read_address()
             if self.label or (
