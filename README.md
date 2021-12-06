@@ -1,6 +1,8 @@
 Read me
 =======
 
+![](https://user-images.githubusercontent.com/1605829/141660065-1ad64b8f-dde9-4946-a4af-b556c270545f.png)
+
 Tool to convert INSPIRE data sets from the Spanish Cadastre ATOM Services (http://www.catastro.minhap.gob.es/webinspire/index.html) to OSM files. This is part of an import proposal under construction:
 
 https://wiki.openstreetmap.org/wiki/Spanish_Cadastre/Buildings_Import
