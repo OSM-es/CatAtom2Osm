@@ -163,7 +163,8 @@ class TestCatAtom2Osm(unittest.TestCase):
         ])
 
     @mock.patch('catatom2osm.layer')
-    def test_get_building2(self, m_layer):
+    @mock.patch('catatom2osm.csvtools.dict2csv')
+    def test_get_building2(self, m_csv, m_layer):
         self.m_app.get_building = get_func(cat.CatAtom2Osm.get_building)
         x = mock.MagicMock()
         y = mock.MagicMock()

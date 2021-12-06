@@ -1374,8 +1374,6 @@ class ConsLayer(PolygonLayer):
                 self.labels[localid] = label
             pbar.update()
         pbar.close()
-        if self.is_pool(feat):
-            csvtools.dict2csv(self.labels_path, self.labels)
 
     def detect_missing_building_parts(self):
         """Add a tag to parts without associated building."""

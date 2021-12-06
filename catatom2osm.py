@@ -228,6 +228,7 @@ class CatAtom2Osm(object):
                 - report.inp_buildings
                 - report.inp_parts
             )
+        csvtools.dict2csv(self.building.labels_path, self.building.labels)
         report.inp_features = self.building.featureCount()
 
     def process_tasks(self, source):
