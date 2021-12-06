@@ -551,27 +551,14 @@ class TestZoningLayer(unittest.TestCase):
     def test_append(self, m_tqdm):
         self.layer1.append(self.fixture, 'M')
         self.layer2.append(self.fixture, 'P')
-        self.assertGreater(self.layer1.featureCount() + self.layer2.featureCount(),
-            self.fixture.featureCount())
+        self.assertEqual(
+            self.layer1.featureCount() + self.layer2.featureCount(),
+            self.fixture.featureCount()
+        )
         for f in self.layer1.getFeatures():
             self.assertTrue(self.layer1.check_zone(f, level='M'))
-            self.assertFalse(len(Geometry.get_multipolygon(f)) > 1)
         for f in self.layer2.getFeatures():
             self.assertTrue(self.layer1.check_zone(f, level='P'))
-            self.assertFalse(len(Geometry.get_multipolygon(f)) > 1)
-
-    @mock.patch('layer.tqdm')
-    @mock.patch('layer.Geometry')
-    def test_append_void_geometry(self, m_geom, m_tqdm):
-        m_geom.get_multipolygon.return_value = []
-        m_layer = mock.MagicMock()
-        m_layer.getFeatures.return_value = [mock.MagicMock()]
-        m_layer.dataProvider.return_value.fieldNameIndex.return_value = 1
-        zoning = mock.MagicMock()
-        f = ZoningLayer.append
-        zoning.append = getattr(f, '__func__', f)
-        zoning.append(zoning, m_layer, level=None)
-        self.assertFalse(zoning.writer.addFeatures.called)
 
     @mock.patch('layer.tqdm')
     def test_is_inside_full(self, m_tqdm):
@@ -623,13 +610,6 @@ class TestZoningLayer(unittest.TestCase):
                     self.assertTrue(all(p not in other for p in group))
 
     @mock.patch('layer.tqdm')
-    def test_merge_adjacents(self, m_tqdm):
-        self.layer1.append(self.fixture, 'M')
-        self.layer1.merge_adjacents()
-        (groups, geometries) = self.layer1.get_adjacents_and_geometries()
-        self.assertEqual(len(groups), 0)
-        
-    @mock.patch('layer.tqdm')
     def test_set_tasks(self, m_tqdm):
         self.layer1.append(self.fixture, 'M')
         self.layer2.append(self.fixture, 'P')
@@ -648,15 +628,19 @@ class TestZoningLayer(unittest.TestCase):
     def test_set_cons_tasks(self, m_tqdm):
         self.layer1.append(self.fixture, 'M')
         self.layer2.append(self.fixture, 'P')
-        test = Counter({u'86416': 198, u'84428': 89, u'88423': 86, u'86417': 70, u'89423': 61, u'86423': 57, u'87427': 53,
-             u'86439': 45, u'86464': 38, u'85426': 34, u'89403': 33, u'86435': 32, u'86434': 28, u'88429': 27,
-             u'90417': 27, u'88427': 26, u'91441': 26, u'90425': 23, u'85449': 22, u'88405': 19, u'13': 18,
-             u'83424': 17, u'86448': 16, u'83429': 15, u'87459': 14, u'85411': 14, u'87425': 12, u'85439': 12,
-             u'82426': 9, u'88416': 9, u'90424': 8, u'86433': 7, u'4': 7, u'5': 6, u'89414': 6, u'83428': 5,
-             u'86459': 4, u'90429': 4, u'86427': 4, u'88428': 3, u'86441': 3, u'88393': 3, u'86449': 2, u'89415': 2,
-             u'3': 1})
-        fixture = QgsVectorLayer('test/cons.shp', 'building', 'ogr')
+        test = Counter({u'86416': 198, u'84428': 89, u'88423': 86, u'86417': 65,
+            u'89423': 61, u'86423': 57, u'87427': 53, u'86439': 45, u'86464': 38,
+            u'85426': 34, u'90417': 34, u'86435': 32, u'86434': 28, u'88429': 27,
+            u'88427': 26, u'89403': 26, u'91441': 26, u'90425': 23, u'85449': 22,
+            u'88405': 19, u'013': 18, u'83424': 17, u'86448': 16, u'83429': 15,
+            u'87459': 14, u'85411': 14, u'87425': 12, u'85439': 12, u'82426': 9,
+            u'88416': 9, u'004': 9, u'90424': 8, u'86433': 7, u'005': 6,
+            u'89414': 6, u'83428': 5, u'87432': 5, u'86459': 4, u'90429': 4,
+            u'86427': 4, u'88428': 3, u'86441': 3, u'88393': 3, u'86449': 2,
+            u'89415': 2})
+        fixture = BaseLayer('test/cons.shp', 'building', 'ogr')
         building = ConsLayer()
+        building.get_labels(fixture, self.layer1, self.layer2)
         building.append(fixture)
         building.set_tasks(self.layer1, self.layer2)
         tasks = Counter()

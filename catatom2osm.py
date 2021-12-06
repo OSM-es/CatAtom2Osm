@@ -4,7 +4,6 @@ Tool to convert INSPIRE data sets from the Spanish Cadastre ATOM Services to OSM
 """
 from __future__ import division
 from builtins import map, object
-from past.builtins import basestring
 import os
 import io, codecs
 import gzip
@@ -124,8 +123,6 @@ class CatAtom2Osm(object):
             ):
                 current_address = self.get_current_ad_osm()
                 self.address.conflate(current_address)
-        self.urban_zoning.reproject() # TODO: necesario para get_tasks
-        self.rustic_zoning.reproject()
         if self.options.building or self.options.tasks:
             self.process_building()
             report.building_counter = Counter()
@@ -171,7 +168,7 @@ class CatAtom2Osm(object):
     def list_zones(self):
         zoning_gml = self.cat.read("cadastralzoning")
         labels = {
-            layer.ZoningLayer.get_label(feat)
+            layer.ZoningLayer.format_label(feat)
             for feat in zoning_gml.getFeatures()
         }
         for label in sorted(labels):
@@ -179,16 +176,7 @@ class CatAtom2Osm(object):
 
     def zone_query(self, feat, kwargs):
         """Filter feat by zone label if needed."""
-        if self.label is None:
-            return True
-        if not self.building.is_pool(feat):
-            localid = feat['localId'].split('.')[-1][:14]
-        else:
-            localid = feat['localId'][:14]
-        label = self.building.labels.get(localid, None)
-        if label is None:
-            label = self.building.labels.get(feat['localId'], None)
-        return label == self.label
+        return self.label is None or self.building.get_label(feat) == self.label
 
     def get_building(self):
         """Merge building, parts and pools"""
@@ -238,10 +226,14 @@ class CatAtom2Osm(object):
         """
         self.get_tasks(source)
         zoning = [] if report.tasks_m == 0 else [('missing', None)]
-        zoning += [(zone['label'], zone.id()) for zone in
-                   self.rustic_zoning.getFeatures()]
-        zoning += [(zone['label'], zone.id()) for zone in
-                   self.urban_zoning.getFeatures()]
+        zoning += [
+            (self.rustic_zoning.format_label(zone), zone.id())
+            for zone in self.rustic_zoning.getFeatures()
+        ]
+        zoning += [
+            (self.urban_zoning.format_label(zone), zone.id())
+            for zone in self.urban_zoning.getFeatures()
+        ]
         to_clean = {'r': [], 'u': []}
         for zone in zoning:
             label = zone[0]
@@ -263,7 +255,8 @@ class CatAtom2Osm(object):
                     self.write_osm(task_osm, fn, compress=True)
                     report.osm_stats(task_osm)
             else:
-                to_clean[label[0]].append(zone[1])
+                t = 'r' if len(label) == 3 else 'u'
+                to_clean[t].append(zone[1])
         if to_clean['r']:
             self.rustic_zoning.writer.deleteFeatures(to_clean['r'])
         if to_clean['u']:
@@ -283,24 +276,26 @@ class CatAtom2Osm(object):
         to_add = []
         fcount = source.featureCount()
         for i, feat in enumerate(source.getFeatures()):
-            label = feat['task'] if isinstance(feat['task'], basestring) else ''
+            label = feat['task'] or ''
             f = source.copy_feature(feat, {}, {})
             if i == fcount - 1 or last_task is None or label == last_task:
                 to_add.append(f)
             if i == fcount - 1 or (
-                    last_task is not None and label != last_task):
+                last_task is not None and label != last_task
+            ):
                 if last_task == '':
                     last_task = 'missing'
                     tasks_m += len(to_add)
                 fn = os.path.join(self.path, 'tasks', last_task + '.shp')
                 if not os.path.exists(fn):
                     layer.ConsLayer.create_shp(fn, source.crs())
-                    if last_task[0] == 'r':
+                    if len(last_task or '') == 3:
                         tasks_r += 1
-                    elif last_task[0] == 'u':
+                    elif len(last_task or '') == 5:
                         tasks_u += 1
-                task = layer.ConsLayer(fn, last_task, 'ogr',
-                                       source_date=source.source_date)
+                task = layer.ConsLayer(
+                    fn, last_task, 'ogr', source_date=source.source_date
+                )
                 task.writer.addFeatures(to_add)
                 to_add = [f]
             last_task = label
@@ -308,7 +303,8 @@ class CatAtom2Osm(object):
                   tasks_u)
         if tasks_m > 0:
             msg = _(
-                "There are %d buildings without zone, check tasks/missing.osm") % tasks_m
+                "There are %d buildings without zone, check tasks/missing.osm"
+            ) % tasks_m
             log.warning(msg)
             report.warnings.append(msg)
         report.tasks_r = tasks_r
@@ -317,15 +313,14 @@ class CatAtom2Osm(object):
 
     def process_zoning(self):
         self.urban_zoning.topology()
-        self.urban_zoning.merge_adjacents()
-        self.rustic_zoning.set_tasks(self.cat.zip_code)
-        self.urban_zoning.set_tasks(self.cat.zip_code)
         self.urban_zoning.delete_invalid_geometries()
         self.urban_zoning.simplify()
         self.rustic_zoning.clean()
         self.rustic_zoning.difference(self.urban_zoning)
 
     def output_zoning(self):
+        self.urban_zoning.reproject()
+        self.rustic_zoning.reproject()
         out_path = os.path.join(self.path, 'boundary.poly')
         self.rustic_zoning.export_poly(out_path)
         log.info(_("Generated '%s'"), out_path)

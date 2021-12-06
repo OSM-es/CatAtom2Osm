@@ -1,6 +1,8 @@
 Registro de cambios
 ===================
 
+* Reorganización de ficheros de tareas enhancement
+
 **03-12-2021 (1.4.0dev)**
 * Opción para dividir municipios grandes por zonas (#58).
 * Opción para listar zonas de un municipio (#58).

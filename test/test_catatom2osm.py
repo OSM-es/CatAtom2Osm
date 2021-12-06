@@ -219,27 +219,26 @@ class TestCatAtom2Osm(unittest.TestCase):
         zones = []
         for i in range(5):
             zones.append(mock.MagicMock())
-            zones[i].id.return_value = i
-            zones[i].__getitem__.return_value = '{}00{}'.format(
-                ('r', 'u')[i % 2], i
-            )
+            zones[i].id.return_value = i + 1
         self.m_app.urban_zoning.getFeatures.return_value = [zones[1], zones[3]]
         self.m_app.rustic_zoning.getFeatures.return_value = [
             zones[0], zones[2], zones[4]
         ]
+        self.m_app.rustic_zoning.format_label = lambda f: '00' + str(f.id())
+        self.m_app.urban_zoning.format_label = lambda f: '0000' + str(f.id())
         self.m_app.process_tasks = get_func(cat.CatAtom2Osm.process_tasks)
         self.m_app.process_tasks(self.m_app, building)
         m_layer.ConsLayer.assert_has_calls([
             mock.call('foo/tasks/missing.shp', 'missing', 'ogr', source_date=1234),
-            mock.call('foo/tasks/r000.shp', 'r000', 'ogr', source_date=1234),
-            mock.call('foo/tasks/r002.shp', 'r002', 'ogr', source_date=1234),
-            mock.call('foo/tasks/u001.shp', 'u001', 'ogr', source_date=1234),
-            mock.call('foo/tasks/u003.shp', 'u003', 'ogr', source_date=1234),
+            mock.call('foo/tasks/001.shp', '001', 'ogr', source_date=1234),
+            mock.call('foo/tasks/003.shp', '003', 'ogr', source_date=1234),
+            mock.call('foo/tasks/00002.shp', '00002', 'ogr', source_date=1234),
+            mock.call('foo/tasks/00004.shp', '00004', 'ogr', source_date=1234),
         ])
-        comment = setup.changeset_tags['comment'] + ' AAA BBB u003'
+        comment = setup.changeset_tags['comment'] + ' AAA BBB 00004'
         task.to_osm.assert_called_with(upload='yes', tags={'comment': comment})
         self.assertEqual(self.m_app.merge_address.call_count, 5)
-        self.m_app.rustic_zoning.writer.deleteFeatures.assert_called_once_with([4])
+        self.m_app.rustic_zoning.writer.deleteFeatures.assert_called_once_with([5])
 
     @mock.patch('catatom2osm.os')
     @mock.patch('catatom2osm.layer')
@@ -249,7 +248,9 @@ class TestCatAtom2Osm(unittest.TestCase):
         m_os.path.exists.return_value = True
         building = mock.MagicMock()
         building.source_date = 1234
-        building.getFeatures.return_value = [{'task': 'r1'}, {'task': 'u1'}, {'task': 'u1'}]
+        building.getFeatures.return_value = [
+            {'task': '001'}, {'task': '00001'}, {'task': '00001'}
+        ]
         building.featureCount.return_value = 3
         building.copy_feature.side_effect = [100, 101, 102]
         m_os.listdir.return_value = ['1', '2', '3']
@@ -261,9 +262,9 @@ class TestCatAtom2Osm(unittest.TestCase):
             mock.call('foo/tasks/1'), mock.call('foo/tasks/2'), mock.call('foo/tasks/3')
         ])
         m_layer.ConsLayer.assert_has_calls([
-            mock.call('foo/tasks/r1.shp', 'r1', 'ogr', source_date=1234),
+            mock.call('foo/tasks/001.shp', '001', 'ogr', source_date=1234),
             mock.call().writer.addFeatures([100]),
-            mock.call('foo/tasks/u1.shp', 'u1', 'ogr', source_date=1234),
+            mock.call('foo/tasks/00001.shp', '00001', 'ogr', source_date=1234),
             mock.call().writer.addFeatures([101, 102])
         ])
         m_os.path.exists.return_value = False

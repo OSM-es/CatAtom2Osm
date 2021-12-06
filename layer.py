@@ -293,7 +293,7 @@ class BaseLayer(QgsVectorLayer):
             self.writer.addAttributes(feature.fields().toList())
             self.updateFields()
         dst_ft = QgsFeature(self.fields())
-        dst_ft.setGeometry(feature.geometry())
+        dst_ft.setGeometry(feature.geometry())  # TODO: Add makeValid (QGIS3)
         src_attrs = [f.name() for f in feature.fields()]
         for field in self.fields().toList():
             dst_attr = field.name()
@@ -1055,7 +1055,6 @@ class ZoningLayer(PolygonLayer):
             self.writer.addAttributes([
                 QgsField('localId', QVariant.String, len=254),
                 QgsField('label', QVariant.String, len=254),
-                QgsField('plabel', QVariant.String, len=254),
                 QgsField('levelName', QVariant.String, len=254),
                 QgsField('zipcode', QVariant.String, len=5),
             ])
@@ -1083,7 +1082,7 @@ class ZoningLayer(PolygonLayer):
         return level == zone_type
 
     @staticmethod
-    def get_label(feature):
+    def format_label(feature):
         """Format a zone label"""
         label = feature['label']
         level = ZoningLayer.check_zone(feature, 'M')
@@ -1105,49 +1104,11 @@ class ZoningLayer(PolygonLayer):
         self.writer.changeAttributeValues(to_change)
 
     def append(self, layer, level=None):
-        """Append features. Split multipolygon geometries.
-
-        Args:
-            layer(QgsVectorLayer): cadastralzoning GML source
-            level(str): 'P' (rustic polygon), 'M' (urban block) or None for both
-        """
-        self.setCrs(layer.crs())
-        total = 0
-        to_add = []
-        multi = 0
-        final = 0
-        pbar = self.get_progressbar(_("Append"), layer.featureCount())
-        for feature in layer.getFeatures():
-            if self.check_zone(feature, level):
-                feat = self.copy_feature(feature)
-                if feat['plabel'] is None:
-                    feat['plabel'] = self.get_label(feature)
-                geom = feature.geometry()
-                mp = Geometry.get_multipolygon(geom)
-                if len(mp) > 1:
-                    for part in mp:
-                        f = QgsFeature(feat)
-                        f.setGeometry(Geometry.fromPolygonXY(part))
-                        to_add.append(f)
-                        final += 1
-                    multi += 1
-                    total += 1
-                elif len(mp) == 1:
-                    to_add.append(feat)
-                    total += 1
-            if len(to_add) > BUFFER_SIZE:
-                self.writer.addFeatures(to_add)
-                to_add = []
-            pbar.update()
-        pbar.close()
-        if len(to_add) > 0:
-            self.writer.addFeatures(to_add)
-        if total:
-            log.debug (_("Loaded %d features in '%s' from '%s'"), total,
-                self.name(), layer.name())
-        if multi:
-            log.debug(_("%d multi-polygons splitted into %d polygons in "
-                "the '%s' layer"), multi, final, self.name())
+        if level is None:
+            super(ZoningLayer, self).append(layer)
+        else:
+            query = lambda feat, kwargs: self.check_zone(feat, kwargs['level'])
+            super(ZoningLayer, self).append(layer, query=query, level=level)
 
     def export_poly(self, filename):
         """Export as polygon file for Osmosis"""
@@ -1322,6 +1283,17 @@ class ConsLayer(PolygonLayer):
             request.setFilterFids(fids)
         super(ConsLayer, self).explode_multi_parts(request)
 
+    def get_label(self, feat):
+        """Get the zone label for this feature from the index"""
+        if not self.is_pool(feat):
+            localid = feat['localId'].split('.')[-1][:14]
+        else:
+            localid = feat['localId'][:14]
+        label = self.labels.get(localid, None)
+        if label is None:
+            label = self.labels.get(feat['localId'], None)
+        return label
+
     def get_labels(self, gml, uzoning, rzoning):
         """Builds a index of localId of features in 'gml' vs the label of the
         zone in witch the construction is contained. If the construction
@@ -1363,14 +1335,14 @@ class ConsLayer(PolygonLayer):
                         _("Feature '%s' is not in any zone."), feat['localId']
                     )
                 else:
-                    label = zones[0]['plabel']  # zoning.get_label(zones[0])
+                    label = zoning.format_label(zones[0])
                     geom = feat.geometry()
                     parea = zones[0].geometry().intersection(geom).area()
                     for z in zones[1:]:
                         area = z.geometry().intersection(geom).area()
                         if area > parea:
                             parea = area
-                            label = z['plabel']  # zoning.get_label(z)
+                            label = zoning.format_label(z)
                 self.labels[localid] = label
             pbar.update()
         pbar.close()
@@ -1389,35 +1361,10 @@ class ConsLayer(PolygonLayer):
         """Assings to each building and pool the task label of the zone in witch
         it is contained. Parts receives the label of the building it belongs.
         Parts without associated building are ignored"""
-        # TODO: REMOVE
-        uindex = uzoning.get_index()
-        rindex = rzoning.get_index()
-        ufeatures = {f.id(): f for f in uzoning.getFeatures()}
-        rfeatures = {f.id(): f for f in rzoning.getFeatures()}
-        tasks = {}
-        for feat in self.search("not regexp_match(localId, '_part')"):
-            if feat['localId'] not in tasks:
-                label = None
-                fids = uindex.intersects(feat.geometry().boundingBox())
-                for fid in fids:
-                    zone = ufeatures[fid]
-                    if is_inside(feat, zone):
-                        label = tasks[feat['localId'].split('_')[0]] = zone['label']
-                        break
-                if label is None:
-                    fids = rindex.intersects(feat.geometry().boundingBox())
-                    for fid in fids:
-                        zone = rfeatures[fid]
-                        if is_inside(feat, zone):
-                            label = tasks[feat['localId'].split('_')[0]] = zone['label']
-                            break
-        del uindex, rindex, ufeatures, rfeatures
         to_change = {}
         for feat in self.getFeatures():
-            ref = feat['localId'].split('_')[0]
-            if ref in tasks:
-                feat['task'] = tasks[ref]
-            else:
+            feat['task'] = self.get_label(feat)
+            if self.is_part(feat) and feat['localId'][:14] not in self.labels:
                 feat['fixme'] = _("Missing building outline for this part")
             to_change[feat.id()] = get_attributes(feat)
             if len(to_change) > BUFFER_SIZE:
@@ -1482,6 +1429,7 @@ class ConsLayer(PolygonLayer):
                 if feat['lev_above'] == 0 and feat['lev_below'] != 0:
                     to_clean_b.append(feat.id())
                 elif ref not in buildings:
+                    # TODO remove
                     parts_for_ref[ref].append(feat)
                 else:
                     bu = buildings[ref]
