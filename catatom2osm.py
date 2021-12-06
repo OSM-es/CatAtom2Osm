@@ -388,7 +388,9 @@ class CatAtom2Osm(object):
             with open(os.path.join(self.path, filename), "w") as fo:
                 fo.write(
                     setup.eol.join(report.get_tasks_with_fixmes()) + setup.eol)
-                log.info(_("Generated '%s'"), filename)
+                log.info(
+                    _("Generated '%s'" + '. ' + _("Please, check it")), filename
+                )
         if self.options.tasks or self.options.building:
             report.cons_end_stats()
         if self.options.tasks or self.options.building or self.options.address:

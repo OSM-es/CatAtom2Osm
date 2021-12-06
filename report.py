@@ -314,6 +314,8 @@ class Report(object):
                         value = int_format(value)
                     output += title + SEP + value
                     output += setup.eol
+        if 'fixmes' in self.values:
+            output += setup.eol + setup.fixme_doc_url
         return output
 
     def to_file(self, fn):

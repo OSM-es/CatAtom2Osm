@@ -101,6 +101,8 @@ prov_url = {
 
 cadastre_doc_url = 'http://ovc.catastro.meh.es/OVCServWeb/OVCWcfLibres/OVCFotoFachada.svc/RecuperarFotoFachadaGet?ReferenciaCatastral={}'
 
+fixme_doc_url = 'https://wiki.openstreetmap.org/wiki/ES:Catastro_espa%C3%B1ol/Importaci%C3%B3n_de_edificios/Gesti%C3%B3n_de_proyectos#Generar_y_corregir_los_archivos_a_importar'
+
 valid_provinces = ["%02d" % i for i in range(2,57) if i not in (20, 31, 48)]
 
 no_number = 'S-N' # Regular expression to match addresses without number
