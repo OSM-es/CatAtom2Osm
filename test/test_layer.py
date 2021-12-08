@@ -311,7 +311,7 @@ class TestBaseLayer(unittest.TestCase):
         layer = BaseLayer("Polygon", "test", "memory")
         self.assertTrue(layer.isValid())
         self.assertEqual(layer.bounding_box(), None)
-        bbox = "28.23498053,-16.45277255,28.23577298,-16.45146103"
+        bbox = "28.23318053,-16.45457255,28.23757298,-16.44966103"
         layer.append(self.fixture)
         self.assertEqual(layer.bounding_box(), bbox)
 

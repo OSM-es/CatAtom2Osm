@@ -1244,6 +1244,7 @@ class AddressLayer(BaseLayer):
                 highway_names[f['TN_text']].append(f.geometry().asPoint())
             for name, points in highway_names.items():
                 bbox = Geometry.fromMultiPointXY(points).boundingBox()
+                bbox.grow(setup.bbox_buffer * 100000)
                 choices = [features[fid]['name'] for fid in index.intersects(bbox)]
                 highway_names[name] = hgwnames.match(name, choices)
         return highway_names
