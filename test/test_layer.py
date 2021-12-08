@@ -551,7 +551,7 @@ class TestZoningLayer(unittest.TestCase):
     def test_append(self, m_tqdm):
         self.layer1.append(self.fixture, 'M')
         self.layer2.append(self.fixture, 'P')
-        self.assertEqual(
+        self.assertGreater(
             self.layer1.featureCount() + self.layer2.featureCount(),
             self.fixture.featureCount()
         )

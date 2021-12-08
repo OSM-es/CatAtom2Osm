@@ -1104,11 +1104,47 @@ class ZoningLayer(PolygonLayer):
         self.writer.changeAttributeValues(to_change)
 
     def append(self, layer, level=None):
-        if level is None:
-            super(ZoningLayer, self).append(layer)
-        else:
-            query = lambda feat, kwargs: self.check_zone(feat, kwargs['level'])
-            super(ZoningLayer, self).append(layer, query=query, level=level)
+        """Append features. Split multipolygon geometries.
+
+        Args:
+            layer(QgsVectorLayer): cadastralzoning GML source
+            level(str): 'P' (rustic polygon), 'M' (urban block) or None for both
+        """
+        self.setCrs(layer.crs())
+        total = 0
+        to_add = []
+        multi = 0
+        final = 0
+        pbar = self.get_progressbar(_("Append"), layer.featureCount())
+        for feature in layer.getFeatures():
+            if self.check_zone(feature, level):
+                feat = self.copy_feature(feature)
+                geom = feature.geometry()
+                mp = Geometry.get_multipolygon(geom)
+                if len(mp) > 1:
+                    for part in mp:
+                        f = QgsFeature(feat)
+                        f.setGeometry(Geometry.fromPolygonXY(part))
+                        to_add.append(f)
+                        final += 1
+                    multi += 1
+                    total += 1
+                elif len(mp) == 1:
+                    to_add.append(feat)
+                    total += 1
+            if len(to_add) > BUFFER_SIZE:
+                self.writer.addFeatures(to_add)
+                to_add = []
+            pbar.update()
+        pbar.close()
+        if len(to_add) > 0:
+            self.writer.addFeatures(to_add)
+        if total:
+            log.debug (_("Loaded %d features in '%s' from '%s'"), total,
+                self.name(), layer.name())
+        if multi:
+            log.debug(_("%d multi-polygons splitted into %d polygons in "
+                "the '%s' layer"), multi, final, self.name())
 
     def export_poly(self, filename):
         """Export as polygon file for Osmosis"""
