@@ -724,6 +724,8 @@ class CatAtom2Osm(object):
             layer.BaseLayer.delete_shp(path)
 
     def delete_current_osm_files(self):
+        if log.getEffectiveLevel() == logging.DEBUG:
+            return
         for f in ['current_address', 'current_building', 'current_highway']:
             fn = os.path.join(self.path, f + '.osm')
             if os.path.exists(fn):
