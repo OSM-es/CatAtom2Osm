@@ -10,7 +10,7 @@ from collections import Counter
 import logging
 logging.disable(logging.WARNING)
 
-import gdal
+from osgeo import gdal
 from qgis.core import *
 from qgiscompat import *
 
