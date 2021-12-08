@@ -1785,6 +1785,8 @@ class ConsLayer(PolygonLayer):
         Removes from current_bu_osm the buildings that don't have conflicts.
         If delete=False, only mark buildings with conflicts
         """
+        if len(current_bu_osm.elements) == 0:
+            return
         index = self.get_index()
         geometries = {f.id(): QgsGeometry(f.geometry()) for f in self.getFeatures()}
         num_buildings = 0
