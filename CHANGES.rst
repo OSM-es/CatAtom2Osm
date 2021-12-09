@@ -1,6 +1,9 @@
 Change log
 ==========
 
+**2021-12-09 (1.5.1)**
+* Fix zone label in tasks definition files (#65)
+
 **2021-12-08 (1.5.0)**
 * Reorganization of task files (#65)
 

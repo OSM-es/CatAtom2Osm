@@ -1,6 +1,9 @@
 Registro de cambios
 ===================
 
+**09-12-2021 (1.5.1)**
+* Corrige etiqueta de zona en archivos de definición de tareas (#65)
+
 **08-12-2021 (1.5.0)**
 * Reorganización de ficheros de tareas (#65)
 
