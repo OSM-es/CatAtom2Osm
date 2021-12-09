@@ -1097,8 +1097,8 @@ class ZoningLayer(PolygonLayer):
         """Assings a unique task label to each zone by overriding splitted 
         multiparts and merged adjacent zones"""
         to_change = {}
-        for i, zone in enumerate(self.getFeatures()):
-            zone['label'] = self.name()[0] + self.task_pattern.format(i + 1)
+        for zone in self.getFeatures():
+            zone['label'] = self.format_label(zone)
             zone['zipcode'] = zip_code
             to_change[zone.id()] = get_attributes(zone)
         self.writer.changeAttributeValues(to_change)

@@ -614,12 +614,12 @@ class TestZoningLayer(unittest.TestCase):
         self.layer1.append(self.fixture, 'M')
         self.layer2.append(self.fixture, 'P')
         self.layer1.set_tasks('12345')
-        labels = {int(f['label'][1:]) for f in self.layer1.getFeatures()}
-        self.assertEqual(max(labels), len(labels))
-        self.assertEqual(min(labels), 1)
+        labels = {int(f['label']) for f in self.layer1.getFeatures()}
+        self.assertEqual(max(labels), 92409)
+        self.assertEqual(min(labels), 2003)
         self.assertEqual(next(self.layer1.getFeatures())['zipcode'], '12345')
         self.layer2.set_tasks('12345')        
-        labels = {int(f['label'][1:]) for f in self.layer2.getFeatures()}
+        labels = {int(f['label']) for f in self.layer2.getFeatures()}
         self.assertEqual(max(labels), len(labels))
         self.assertEqual(min(labels), 1)
         self.assertEqual(next(self.layer2.getFeatures())['zipcode'], '12345')

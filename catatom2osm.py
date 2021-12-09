@@ -134,23 +134,10 @@ class CatAtom2Osm(object):
             self.address_osm = self.address.to_osm()
             del self.address
             self.delete_shp('address.shp')
-        if self.options.zoning or self.options.tasks:
-            self.output_zoning()
         if self.options.tasks:
             self.process_tasks(self.building)
         if self.options.zoning:
-            self.export_layer(self.urban_zoning, 'urban_zoning.geojson',
-                              'GeoJSON')
-            self.export_layer(self.rustic_zoning, 'rustic_zoning.geojson',
-                              'GeoJSON')
-            self.rustic_zoning.append(self.urban_zoning)
-            self.export_layer(self.rustic_zoning, 'zoning.geojson', 'GeoJSON')
-        if hasattr(self, 'urban_zoning'):
-            del self.urban_zoning
-            self.delete_shp('urban_zoning.shp')
-        if hasattr(self, 'rustic_zoning'):
-            del self.rustic_zoning
-        self.delete_shp('rustic_zoning.shp')
+            self.output_zoning()
         if self.options.building:
             self.output_building()
         elif self.options.tasks:
@@ -317,6 +304,8 @@ class CatAtom2Osm(object):
     def process_zoning(self):
         self.urban_zoning.topology()
         self.urban_zoning.delete_invalid_geometries()
+        self.rustic_zoning.set_tasks(self.cat.zip_code)
+        self.urban_zoning.set_tasks(self.cat.zip_code)
         self.urban_zoning.simplify()
         self.rustic_zoning.clean()
         self.rustic_zoning.difference(self.urban_zoning)
@@ -327,6 +316,18 @@ class CatAtom2Osm(object):
         out_path = os.path.join(self.path, 'boundary.poly')
         self.rustic_zoning.export_poly(out_path)
         log.info(_("Generated '%s'"), out_path)
+        self.export_layer(self.urban_zoning, 'urban_zoning.geojson',
+                          'GeoJSON')
+        self.export_layer(self.rustic_zoning, 'rustic_zoning.geojson',
+                          'GeoJSON')
+        self.rustic_zoning.append(self.urban_zoning)
+        self.export_layer(self.rustic_zoning, 'zoning.geojson', 'GeoJSON')
+        if hasattr(self, 'urban_zoning'):
+            del self.urban_zoning
+            self.delete_shp('urban_zoning.shp')
+        if hasattr(self, 'rustic_zoning'):
+            del self.rustic_zoning
+        self.delete_shp('rustic_zoning.shp')
 
     def process_building(self):
         """Process all buildings dataset"""
