@@ -15,7 +15,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>test.test_hgwnames &#8212; documentación de CatAtom2Osm - 1.1.8</title>
+    <title>test.test_hgwnames &#8212; documentación de CatAtom2Osm - 1.5.0</title>
     
     <link rel="stylesheet" href="../../_static/guzzle.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -23,7 +23,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.1.8',
+        VERSION:     '1.5.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -50,7 +50,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 1.1.8</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 1.5.0</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Código de módulo</a> &#187;</li> 
       </ul>
     </div>
@@ -74,7 +74,6 @@
       <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../readme.html">Léeme</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../install.html">Instalación</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../install.html#configuracion">Configuración</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../changes.html">Registro de cambios</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api.html">Referencia API</a></li>
 </ul>
@@ -114,6 +113,8 @@
             
   <h1>Código fuente para test.test_hgwnames</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">str</span>
 <span class="kn">import</span> <span class="nn">unittest</span>
 <span class="kn">import</span> <span class="nn">mock</span>
 <span class="kn">import</span> <span class="nn">os</span>
@@ -134,52 +135,52 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">fn</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;n&#39;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">choices</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Foobar&#39;</span><span class="p">,</span> <span class="s1">&#39;Foo bar&#39;</span><span class="p">,</span> <span class="s1">&#39;Footaz&#39;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ds2</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="p">{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;n&#39;</span><span class="p">:</span><span class="s1">&#39;Móstoles&#39;</span><span class="p">},</span> 
+            <span class="p">{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;n&#39;</span><span class="p">:</span><span class="s2">&quot;Móstoles&quot;</span><span class="p">},</span> 
             <span class="p">{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;n&#39;</span><span class="p">:</span><span class="s1">&#39;Las Rozas de Madrid&#39;</span><span class="p">},</span>
             <span class="p">{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;n&#39;</span><span class="p">:</span><span class="s1">&#39;Rivas-Vaciamadrid&#39;</span><span class="p">},</span>
             <span class="p">{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span><span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;n&#39;</span><span class="p">:</span><span class="s1">&#39;Madrid&#39;</span><span class="p">}]</span></div>
         
 <div class="viewcode-block" id="TestHgwnames.test_normalize"><a class="viewcode-back" href="../../api/test.test_hgwnames.html#test.test_hgwnames.TestHgwnames.test_normalize">[documentos]</a>    <span class="k">def</span> <span class="nf">test_normalize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">hgwnames</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="s1">&#39;  ABCD  &#39;</span><span class="p">),</span> <span class="s1">&#39;abcd&#39;</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">hgwnames</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="s1">&#39;  ABCD  &#39;</span><span class="p">),</span> <span class="s1">&#39;abcd&#39;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="TestHgwnames.test_parse"><a class="viewcode-back" href="../../api/test.test_hgwnames.html#test.test_hgwnames.TestHgwnames.test_parse">[documentos]</a>    <span class="k">def</span> <span class="nf">test_parse</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">names</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;   CL  FOO BAR  TAZ  &quot;</span><span class="p">:</span> <span class="s2">&quot;Calle Foo Bar Taz&quot;</span><span class="p">,</span>
-            <span class="sa">u</span><span class="s2">&quot;AV DE ESPAÑA&quot;</span><span class="p">:</span> <span class="sa">u</span><span class="s2">&quot;Avenida de España&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;CJ GATA (DE LA)&quot;</span><span class="p">:</span> <span class="sa">u</span><span class="s2">&quot;Calleja/Callejón Gata (de la)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;AV DE ESPAÑA&quot;</span><span class="p">:</span> <span class="s2">&quot;Avenida de España&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;CJ GATA (DE LA)&quot;</span><span class="p">:</span> <span class="s2">&quot;Calleja/Callejón Gata (de la)&quot;</span><span class="p">,</span>
             <span class="s2">&quot;CR CUMBRE,DE LA&quot;</span><span class="p">:</span> <span class="s2">&quot;Carretera/Carrera Cumbre, de la&quot;</span><span class="p">,</span>
             <span class="s2">&quot;CL HILARIO (ERAS LAS)&quot;</span><span class="p">:</span> <span class="s2">&quot;Calle Hilario (Eras las)&quot;</span><span class="p">,</span>
             <span class="s2">&quot;CL BASTIO D&#39;EN SANOGUERA&quot;</span><span class="p">:</span> <span class="s2">&quot;Calle Bastio d&#39;en Sanoguera&quot;</span><span class="p">,</span>
             <span class="s2">&quot;CL BANC DE L&#39;OLI&quot;</span><span class="p">:</span> <span class="s2">&quot;Calle Banc de l&#39;Oli&quot;</span><span class="p">,</span>
             <span class="s2">&quot;DS ARANJASSA,S&#39;&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-            <span class="sa">u</span><span class="s2">&quot;CL AIGUA DOLÇA (L&#39;)&quot;</span><span class="p">:</span> <span class="sa">u</span><span class="s2">&quot;Calle Aigua Dolça (l&#39;)&quot;</span><span class="p">,</span>
-            <span class="sa">u</span><span class="s2">&quot;CL RUL·LAN&quot;</span><span class="p">:</span> <span class="sa">u</span><span class="s2">&quot;Calle Rul·lan&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;CL AIGUA DOLÇA (L&#39;)&quot;</span><span class="p">:</span> <span class="s2">&quot;Calle Aigua Dolça (l&#39;)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;CL RUL·LAN&quot;</span><span class="p">:</span> <span class="s2">&quot;Calle Rul·lan&quot;</span><span class="p">,</span>
             <span class="s2">&quot;CL FONTE&#39;L PILO&quot;</span><span class="p">:</span> <span class="s2">&quot;Calle Fonte&#39;l Pilo&quot;</span><span class="p">,</span>
             <span class="s2">&quot;CL TRENET D&#39;ALCOI&quot;</span><span class="p">:</span> <span class="s2">&quot;Calle Trenet d&#39;Alcoi&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;CL SANT MARCEL.LI&quot;</span><span class="p">:</span> <span class="sa">u</span><span class="s2">&quot;Calle Sant Marcel·li&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;CL SANT MARCEL.LI&quot;</span><span class="p">:</span> <span class="s2">&quot;Calle Sant Marcel·li&quot;</span><span class="p">,</span>
             <span class="s2">&quot;CL O&#39;DONNELL&quot;</span><span class="p">:</span> <span class="s2">&quot;Calle O&#39;Donnell&quot;</span><span class="p">,</span>
             <span class="s2">&quot;XX FooBar&quot;</span><span class="p">:</span> <span class="s2">&quot;Xx Foobar&quot;</span>
         <span class="p">}</span>
-        <span class="k">for</span> <span class="p">(</span><span class="n">inp</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span> <span class="ow">in</span> <span class="n">names</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">hgwnames</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">inp</span><span class="p">),</span> <span class="n">out</span><span class="p">)</span></div>
+        <span class="k">for</span> <span class="p">(</span><span class="n">inp</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">names</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">hgwnames</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">inp</span><span class="p">),</span> <span class="n">out</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="TestHgwnames.test_fuzzy_match"><a class="viewcode-back" href="../../api/test.test_hgwnames.html#test.test_hgwnames.TestHgwnames.test_fuzzy_match">[documentos]</a>    <span class="k">def</span> <span class="nf">test_fuzzy_match</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">hgwnames</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s1">&#39;FOOB&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">choices</span><span class="p">),</span> <span class="s1">&#39;Foobar&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">hgwnames</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s1">&#39;CL FRANCIA&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">choices</span><span class="p">),</span> <span class="s1">&#39;Calle Francia&#39;</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">hgwnames</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s1">&#39;FOOB&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">choices</span><span class="p">),</span> <span class="s1">&#39;Foobar&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">hgwnames</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s1">&#39;CL FRANCIA&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">choices</span><span class="p">),</span> <span class="s1">&#39;Calle Francia&#39;</span><span class="p">)</span></div>
 
     <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;hgwnames.fuzz&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 <div class="viewcode-block" id="TestHgwnames.test_nonfyzzy_match"><a class="viewcode-back" href="../../api/test.test_hgwnames.html#test.test_hgwnames.TestHgwnames.test_nonfyzzy_match">[documentos]</a>    <span class="k">def</span> <span class="nf">test_nonfyzzy_match</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">hgwnames</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s1">&#39;CL FOOBAR&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">choices</span><span class="p">),</span> <span class="s1">&#39;Calle Foobar&#39;</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">hgwnames</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s1">&#39;CL FOOBAR&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">choices</span><span class="p">),</span> <span class="s1">&#39;Calle Foobar&#39;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="TestHgwnames.test_fuzzy_dsmatch"><a class="viewcode-back" href="../../api/test.test_hgwnames.html#test.test_hgwnames.TestHgwnames.test_fuzzy_dsmatch">[documentos]</a>    <span class="k">def</span> <span class="nf">test_fuzzy_dsmatch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">hgwnames</span><span class="o">.</span><span class="n">dsmatch</span><span class="p">(</span><span class="s1">&#39;FOOB&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fn</span><span class="p">)[</span><span class="s1">&#39;id&#39;</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">hgwnames</span><span class="o">.</span><span class="n">dsmatch</span><span class="p">(</span><span class="s1">&#39;MADRID&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ds2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fn</span><span class="p">)[</span><span class="s1">&#39;id&#39;</span><span class="p">],</span> <span class="mi">4</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">hgwnames</span><span class="o">.</span><span class="n">dsmatch</span><span class="p">(</span><span class="s1">&#39;MADRID&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ds2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fn</span><span class="p">)[</span><span class="s1">&#39;n&#39;</span><span class="p">],</span> <span class="s1">&#39;Madrid&#39;</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">hgwnames</span><span class="o">.</span><span class="n">dsmatch</span><span class="p">(</span><span class="s1">&#39;FOOB&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fn</span><span class="p">)[</span><span class="s1">&#39;id&#39;</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">hgwnames</span><span class="o">.</span><span class="n">dsmatch</span><span class="p">(</span><span class="s1">&#39;MADRID&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ds2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fn</span><span class="p">)[</span><span class="s1">&#39;id&#39;</span><span class="p">],</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">hgwnames</span><span class="o">.</span><span class="n">dsmatch</span><span class="p">(</span><span class="s1">&#39;MADRID&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ds2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fn</span><span class="p">)[</span><span class="s1">&#39;n&#39;</span><span class="p">],</span> <span class="s1">&#39;Madrid&#39;</span><span class="p">)</span></div>
 
     <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;hgwnames.fuzz&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 <div class="viewcode-block" id="TestHgwnames.test_nonfuzzy_match"><a class="viewcode-back" href="../../api/test.test_hgwnames.html#test.test_hgwnames.TestHgwnames.test_nonfuzzy_match">[documentos]</a>    <span class="k">def</span> <span class="nf">test_nonfuzzy_match</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">hgwnames</span><span class="o">.</span><span class="n">dsmatch</span><span class="p">(</span><span class="s1">&#39;FOOBAR&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fn</span><span class="p">)[</span><span class="s1">&#39;id&#39;</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">hgwnames</span><span class="o">.</span><span class="n">dsmatch</span><span class="p">(</span><span class="s1">&#39;FOO&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fn</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">hgwnames</span><span class="o">.</span><span class="n">dsmatch</span><span class="p">(</span><span class="s1">&#39;FOOBAR&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fn</span><span class="p">)[</span><span class="s1">&#39;id&#39;</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">hgwnames</span><span class="o">.</span><span class="n">dsmatch</span><span class="p">(</span><span class="s1">&#39;FOO&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fn</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="TestHgwnames.tearDown"><a class="viewcode-back" href="../../api/test.test_hgwnames.html#test.test_hgwnames.TestHgwnames.tearDown">[documentos]</a>    <span class="k">def</span> <span class="nf">tearDown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">hgwnames</span><span class="o">.</span><span class="n">fuzz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">temp_fuzz</span></div></div>
@@ -199,7 +200,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 1.1.8</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 1.5.0</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Código de módulo</a> &#187;</li> 
       </ul>
     </div>
@@ -210,7 +211,7 @@
 </script>
 <script type="text/javascript" src="../../_static/js/bootstrap.js"></script>
   <div class="footer">
-    &copy; Copyright 2017, Javier Sánchez Portero. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+    &copy; Copyright 2017, Javier Sanchez Portero. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
   </div>
   </body>
 </html>

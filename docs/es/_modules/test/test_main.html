@@ -15,7 +15,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>test.test_main &#8212; documentación de CatAtom2Osm - 1.1.8</title>
+    <title>test.test_main &#8212; documentación de CatAtom2Osm - 1.5.0</title>
     
     <link rel="stylesheet" href="../../_static/guzzle.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -23,7 +23,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.1.8',
+        VERSION:     '1.5.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -50,7 +50,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 1.1.8</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 1.5.0</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Código de módulo</a> &#187;</li> 
       </ul>
     </div>
@@ -74,7 +74,6 @@
       <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../readme.html">Léeme</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../install.html">Instalación</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../install.html#configuracion">Configuración</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../changes.html">Registro de cambios</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api.html">Referencia API</a></li>
 </ul>
@@ -114,29 +113,21 @@
             
   <h1>Código fuente para test.test_main</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+<span class="kn">from</span> <span class="nn">future</span> <span class="k">import</span> <span class="n">standard_library</span>
+<span class="n">standard_library</span><span class="o">.</span><span class="n">install_aliases</span><span class="p">()</span>
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">str</span>
 <span class="kn">import</span> <span class="nn">mock</span>
 <span class="kn">import</span> <span class="nn">unittest</span>
-<span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="n">logging</span><span class="o">.</span><span class="n">disable</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
-<span class="kn">from</span> <span class="nn">cStringIO</span> <span class="k">import</span> <span class="n">StringIO</span>
-<span class="kn">import</span> <span class="nn">codecs</span>
-<span class="kn">from</span> <span class="nn">contextlib</span> <span class="k">import</span> <span class="n">contextmanager</span>
 <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;LANGUAGE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;C&#39;</span>
+
 <span class="kn">import</span> <span class="nn">setup</span>
 <span class="kn">import</span> <span class="nn">main</span>
+<span class="kn">from</span> <span class="nn">test.tools</span> <span class="k">import</span> <span class="n">capture</span>
 
-<span class="nd">@contextmanager</span>
-<div class="viewcode-block" id="capture"><a class="viewcode-back" href="../../api/test.test_main.html#test.test_main.capture">[documentos]</a><span class="k">def</span> <span class="nf">capture</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="n">out</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span>
-    <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="n">codecs</span><span class="o">.</span><span class="n">getwriter</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)(</span><span class="n">StringIO</span><span class="p">())</span>
-    <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">encoding</span> <span class="o">=</span> <span class="s1">&#39;utf-8&#39;</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">command</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-        <span class="k">yield</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-    <span class="k">finally</span><span class="p">:</span>
-        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="n">out</span></div>
 
 <div class="viewcode-block" id="raiseIOError"><a class="viewcode-back" href="../../api/test.test_main.html#test.test_main.raiseIOError">[documentos]</a><span class="k">def</span> <span class="nf">raiseIOError</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s1">&#39;bartaz&#39;</span><span class="p">)</span></div>
@@ -150,7 +141,7 @@
     <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;main.sys.argv&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;catatom2osm.py&#39;</span><span class="p">])</span>
 <div class="viewcode-block" id="TestMain.test_no_args"><a class="viewcode-back" href="../../api/test.test_main.html#test.test_main.TestMain.test_no_args">[documentos]</a>    <span class="k">def</span> <span class="nf">test_no_args</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">with</span> <span class="n">capture</span><span class="p">(</span><span class="n">main</span><span class="o">.</span><span class="n">run</span><span class="p">)</span> <span class="k">as</span> <span class="n">output</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s2">&quot;Usage: catatom2osm&quot;</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s2">&quot;usage: catatom2osm&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">output</span><span class="p">))</span></div>
 
     <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;main.sys.argv&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;catatom2osm.py&#39;</span><span class="p">,</span> <span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="s1">&#39;bar&#39;</span><span class="p">])</span>
     <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;main.log.error&#39;</span><span class="p">)</span>
@@ -164,13 +155,12 @@
 <div class="viewcode-block" id="TestMain.test_default"><a class="viewcode-back" href="../../api/test.test_main.html#test.test_main.TestMain.test_default">[documentos]</a>    <span class="k">def</span> <span class="nf">test_default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mockcat</span><span class="p">):</span>
         <span class="n">main</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">mockcat</span><span class="o">.</span><span class="n">called</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">mockcat</span><span class="o">.</span><span class="n">call_args_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;foobar&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">mockcat</span><span class="o">.</span><span class="n">call_args_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;foobar&#39;</span><span class="p">)</span>
         <span class="n">options</span> <span class="o">=</span> <span class="n">mockcat</span><span class="o">.</span><span class="n">call_args_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;building&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;all&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;tasks&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;log_level&#39;</span><span class="p">:</span> <span class="s1">&#39;INFO&#39;</span><span class="p">,</span> 
-            <span class="s1">&#39;parcel&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;list&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;zoning&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;version&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> 
-            <span class="s1">&#39;address&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
-        <span class="k">for</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="n">k</span><span class="p">),</span> <span class="n">v</span><span class="p">)</span></div>
+            <span class="s1">&#39;parcel&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;list&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;zoning&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;address&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="n">k</span><span class="p">),</span> <span class="n">v</span><span class="p">)</span></div>
 
     <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;main.sys.argv&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;catatom2osm.py&#39;</span><span class="p">,</span> <span class="s1">&#39;foobar&#39;</span><span class="p">,</span> <span class="s1">&#39;-a&#39;</span><span class="p">])</span>
     <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.CatAtom2Osm&#39;</span><span class="p">)</span>
@@ -179,10 +169,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">mockcat</span><span class="o">.</span><span class="n">called</span><span class="p">)</span>
         <span class="n">options</span> <span class="o">=</span> <span class="n">mockcat</span><span class="o">.</span><span class="n">call_args_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;building&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;all&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;tasks&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;log_level&#39;</span><span class="p">:</span> <span class="s1">&#39;INFO&#39;</span><span class="p">,</span> 
-            <span class="s1">&#39;parcel&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;list&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;zoning&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;version&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> 
-            <span class="s1">&#39;address&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
-        <span class="k">for</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="n">k</span><span class="p">),</span> <span class="n">v</span><span class="p">)</span></div>
+            <span class="s1">&#39;parcel&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;list&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;zoning&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;address&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="n">k</span><span class="p">),</span> <span class="n">v</span><span class="p">)</span></div>
 
     <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;main.sys.argv&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;catatom2osm.py&#39;</span><span class="p">,</span> <span class="s1">&#39;foobar&#39;</span><span class="p">,</span> <span class="s1">&#39;-b&#39;</span><span class="p">])</span>
     <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.CatAtom2Osm&#39;</span><span class="p">)</span>
@@ -191,27 +180,13 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">mockcat</span><span class="o">.</span><span class="n">called</span><span class="p">)</span>
         <span class="n">options</span> <span class="o">=</span> <span class="n">mockcat</span><span class="o">.</span><span class="n">call_args_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;building&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;all&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;tasks&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;log_level&#39;</span><span class="p">:</span> <span class="s1">&#39;INFO&#39;</span><span class="p">,</span> 
-            <span class="s1">&#39;parcel&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;list&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;zoning&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;version&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> 
-            <span class="s1">&#39;address&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
-        <span class="k">for</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="n">k</span><span class="p">),</span> <span class="n">v</span><span class="p">)</span></div>
-
-    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;main.sys.argv&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;catatom2osm.py&#39;</span><span class="p">,</span> <span class="s1">&#39;foobar&#39;</span><span class="p">,</span> <span class="s1">&#39;--log=foobar&#39;</span><span class="p">])</span>
-    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;main.log.error&#39;</span><span class="p">)</span>
-    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.CatAtom2Osm&#39;</span><span class="p">)</span>
-<div class="viewcode-block" id="TestMain.test_bad_level"><a class="viewcode-back" href="../../api/test.test_main.html#test.test_main.TestMain.test_bad_level">[documentos]</a>    <span class="k">def</span> <span class="nf">test_bad_level</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mockcat</span><span class="p">,</span> <span class="n">mocklog</span><span class="p">):</span>
-        <span class="n">main</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
-        <span class="n">output</span> <span class="o">=</span> <span class="n">mocklog</span><span class="o">.</span><span class="n">call_args_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s2">&quot;Invalid log level&quot;</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span></div>
-
-    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;main.sys.argv&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;catatom2osm.py&#39;</span><span class="p">,</span> <span class="s1">&#39;-v&#39;</span><span class="p">])</span>
-<div class="viewcode-block" id="TestMain.test_version"><a class="viewcode-back" href="../../api/test.test_main.html#test.test_main.TestMain.test_version">[documentos]</a>    <span class="k">def</span> <span class="nf">test_version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">with</span> <span class="n">capture</span><span class="p">(</span><span class="n">main</span><span class="o">.</span><span class="n">run</span><span class="p">)</span> <span class="k">as</span> <span class="n">output</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="n">setup</span><span class="o">.</span><span class="n">app_version</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span></div>
+            <span class="s1">&#39;parcel&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;list&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;zoning&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;address&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="n">k</span><span class="p">),</span> <span class="n">v</span><span class="p">)</span></div>
 
     <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;main.sys.argv&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;catatom2osm.py&#39;</span><span class="p">,</span> <span class="s1">&#39;-w&#39;</span><span class="p">,</span> <span class="s1">&#39;33333&#39;</span><span class="p">])</span>
     <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.catatom.Reader&#39;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">test_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mockcat</span><span class="p">):</span>
+<div class="viewcode-block" id="TestMain.test_list"><a class="viewcode-back" href="../../api/test.test_main.html#test.test_main.TestMain.test_list">[documentos]</a>    <span class="k">def</span> <span class="nf">test_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mockcat</span><span class="p">):</span>
         <span class="n">cat</span> <span class="o">=</span> <span class="n">mock</span><span class="o">.</span><span class="n">MagicMock</span><span class="p">()</span>
         <span class="n">mockcat</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">cat</span>
         <span class="n">main</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
@@ -220,11 +195,11 @@
             <span class="n">mock</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="s1">&#39;address&#39;</span><span class="p">),</span>
             <span class="n">mock</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="s1">&#39;cadastralzoning&#39;</span><span class="p">),</span>
             <span class="n">mock</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="s1">&#39;building&#39;</span><span class="p">),</span>
-        <span class="p">])</span>
+        <span class="p">])</span></div>
 
     <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;main.sys.argv&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;catatom2osm.py&#39;</span><span class="p">,</span> <span class="s1">&#39;-l&#39;</span><span class="p">,</span> <span class="s1">&#39;33&#39;</span><span class="p">])</span>
     <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.catatom.list_municipalities&#39;</span><span class="p">)</span>
-<div class="viewcode-block" id="TestMain.test_list"><a class="viewcode-back" href="../../api/test.test_main.html#test.test_main.TestMain.test_list">[documentos]</a>    <span class="k">def</span> <span class="nf">test_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mocklist</span><span class="p">):</span>
+<div class="viewcode-block" id="TestMain.test_list2"><a class="viewcode-back" href="../../api/test.test_main.html#test.test_main.TestMain.test_list2">[documentos]</a>    <span class="k">def</span> <span class="nf">test_list2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mocklist</span><span class="p">):</span>
         <span class="n">main</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
         <span class="n">mocklist</span><span class="o">.</span><span class="n">assert_called_once_with</span><span class="p">(</span><span class="s1">&#39;33&#39;</span><span class="p">)</span></div>
 
@@ -242,7 +217,7 @@
 <div class="viewcode-block" id="TestMain.test_IOError"><a class="viewcode-back" href="../../api/test.test_main.html#test.test_main.TestMain.test_IOError">[documentos]</a>    <span class="k">def</span> <span class="nf">test_IOError</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mocklog</span><span class="p">):</span>
         <span class="n">main</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
         <span class="n">output</span> <span class="o">=</span> <span class="n">mocklog</span><span class="o">.</span><span class="n">call_args_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="s1">&#39;bartaz&#39;</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="s1">&#39;bartaz&#39;</span><span class="p">)</span></div>
 
     <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;main.sys.argv&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;catatom2osm.py&#39;</span><span class="p">,</span> <span class="s1">&#39;foobar&#39;</span><span class="p">])</span>
     <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.CatAtom2Osm&#39;</span><span class="p">,</span> <span class="n">raiseImportError</span><span class="p">)</span>
@@ -251,7 +226,7 @@
         <span class="n">main</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
         <span class="n">output1</span> <span class="o">=</span> <span class="n">mocklog</span><span class="o">.</span><span class="n">call_args_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">output2</span> <span class="o">=</span> <span class="n">mocklog</span><span class="o">.</span><span class="n">call_args_list</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">output1</span><span class="p">,</span> <span class="s1">&#39;qgis&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">output1</span><span class="p">,</span> <span class="s1">&#39;qgis&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s1">&#39;install QGIS&#39;</span><span class="p">,</span> <span class="n">output2</span><span class="p">)</span></div>
 
     <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;main.sys.argv&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;catatom2osm.py&#39;</span><span class="p">,</span> <span class="s1">&#39;foobar&#39;</span><span class="p">,</span> <span class="s1">&#39;--log=DEBUG&#39;</span><span class="p">])</span>
@@ -262,7 +237,25 @@
         <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="ne">ImportError</span><span class="p">):</span>
             <span class="n">main</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
         <span class="n">mocklog</span><span class="o">.</span><span class="n">setLevel</span><span class="o">.</span><span class="n">assert_called_once_with</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
-        <span class="n">mocklog</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">assert_not_called</span><span class="p">()</span></div></div>
+        <span class="n">mocklog</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">assert_not_called</span><span class="p">()</span></div>
+
+    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span>
+        <span class="s1">&#39;main.sys.argv&#39;</span><span class="p">,</span>
+        <span class="p">[</span><span class="s1">&#39;catatom2osm.py&#39;</span><span class="p">,</span> <span class="s1">&#39;foobar&#39;</span><span class="p">,</span> <span class="s1">&#39;-o&#39;</span><span class="p">,</span> <span class="s1">&#39;123&#39;</span><span class="p">,</span> <span class="s1">&#39;-t&#39;</span><span class="p">,</span> <span class="s1">&#39;-z&#39;</span><span class="p">],</span>
+    <span class="p">)</span>
+    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.CatAtom2Osm&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="TestMain.test_zone"><a class="viewcode-back" href="../../api/test.test_main.html#test.test_main.TestMain.test_zone">[documentos]</a>    <span class="k">def</span> <span class="nf">test_zone</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mockcat</span><span class="p">):</span>
+        <span class="n">main</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">mockcat</span><span class="o">.</span><span class="n">called</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">mockcat</span><span class="o">.</span><span class="n">call_args_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;foobar&#39;</span><span class="p">)</span>
+        <span class="n">options</span> <span class="o">=</span> <span class="n">mockcat</span><span class="o">.</span><span class="n">call_args_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;building&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;all&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;tasks&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;log_level&#39;</span><span class="p">:</span> <span class="s1">&#39;INFO&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;parcel&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;list&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;zoning&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;address&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s1">&#39;zone&#39;</span><span class="p">:</span> <span class="s1">&#39;123&#39;</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="n">k</span><span class="p">),</span> <span class="n">v</span><span class="p">)</span></div></div>
 </pre></div>
 
           </div>
@@ -279,7 +272,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 1.1.8</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 1.5.0</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Código de módulo</a> &#187;</li> 
       </ul>
     </div>
@@ -290,7 +283,7 @@
 </script>
 <script type="text/javascript" src="../../_static/js/bootstrap.js"></script>
   <div class="footer">
-    &copy; Copyright 2017, Javier Sánchez Portero. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+    &copy; Copyright 2017, Javier Sanchez Portero. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
   </div>
   </body>
 </html>

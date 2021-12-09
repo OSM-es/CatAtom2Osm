@@ -6,9 +6,6 @@ Submodules
 
 .. toctree::
 
-   test.benchmark
-   test.check_mun_names
-   test.count_buildings
    test.test_catatom
    test.test_catatom2osm
    test.test_cdau
@@ -23,6 +20,7 @@ Submodules
    test.test_report
    test.test_setup
    test.test_translate
+   test.tools
    test.unittest_main
 
 Module contents

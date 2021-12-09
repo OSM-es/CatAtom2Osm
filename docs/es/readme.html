@@ -15,7 +15,7 @@
   <link rel="stylesheet" type="text/css" href="_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>Léeme &#8212; documentación de CatAtom2Osm - 1.1.8</title>
+    <title>Léeme &#8212; documentación de CatAtom2Osm - 1.5.0</title>
     
     <link rel="stylesheet" href="_static/guzzle.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -23,7 +23,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1.1.8',
+        VERSION:     '1.5.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -58,7 +58,7 @@
         <li class="right" >
           <a href="index.html" title="¡Bienvenido a la documentación de CatAtom2Osm!"
              accesskey="P">anterior</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">documentación de CatAtom2Osm - 1.1.8</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">documentación de CatAtom2Osm - 1.5.0</a> &#187;</li> 
       </ul>
     </div>
     <div class="container-wrapper">
@@ -80,15 +80,14 @@
     
       <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Léeme</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#advertencia">Advertencia</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#requisitos">Requisitos</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#instalacion">Instalación</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#uso">Uso</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#configuracion">Configuración</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#documentacion">Documentación</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="install.html">Instalación</a></li>
-<li class="toctree-l1"><a class="reference internal" href="install.html#configuracion">Configuración</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changes.html">Registro de cambios</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">Referencia API</a></li>
 </ul>
@@ -126,14 +125,11 @@
             
   <div class="section" id="leeme">
 <h1>Léeme<a class="headerlink" href="#leeme" title="Enlazar permanentemente con este título">¶</a></h1>
+<p>![](<a class="reference external" href="https://user-images.githubusercontent.com/1605829/141660065-1ad64b8f-dde9-4946-a4af-b556c270545f.png">https://user-images.githubusercontent.com/1605829/141660065-1ad64b8f-dde9-4946-a4af-b556c270545f.png</a>)</p>
 <p>Herramienta para convertir los conjuntos de datos INSPIRE de los Servicios ATOM
 del Catastro Español (<a class="reference external" href="http://www.catastro.minhap.gob.es/webinspire/index.html">http://www.catastro.minhap.gob.es/webinspire/index.html</a>)
 a archivos OSM. Esto es parte de una propuesta de importación en construcción:</p>
 <p><a class="reference external" href="https://wiki.openstreetmap.org/wiki/ES:Catastro_espa%C3%B1ol/Importaci%C3%B3n_de_edificios">https://wiki.openstreetmap.org/wiki/ES:Catastro_espa%C3%B1ol/Importaci%C3%B3n_de_edificios</a></p>
-<div class="section" id="advertencia">
-<h2>Advertencia<a class="headerlink" href="#advertencia" title="Enlazar permanentemente con este título">¶</a></h2>
-<p>Sólo para fines de prueba. No subas ningún resultado en OSM.</p>
-</div>
 <div class="section" id="requisitos">
 <h2>Requisitos<a class="headerlink" href="#requisitos" title="Enlazar permanentemente con este título">¶</a></h2>
 <ul class="simple">
@@ -150,7 +146,9 @@ instaladores disponibles en <a class="reference external" href="http://qgis.org/
 </div>
 <div class="section" id="instalacion">
 <h2>Instalación<a class="headerlink" href="#instalacion" title="Enlazar permanentemente con este título">¶</a></h2>
-<p>Ver INSTALL.es.md (<a class="reference external" href="https://OSM-es.github.io/CatAtom2Osm/es/install.html">https://OSM-es.github.io/CatAtom2Osm/es/install.html</a>)</p>
+<p>Se recomienda usar la herramienta mediante esta imagen de Docker
+(<a class="reference external" href="https://hub.docker.com/r/egofer/catatom2osm">https://hub.docker.com/r/egofer/catatom2osm</a>).</p>
+<p>Si se desea una instalación sin Docker ver INSTALL.es.md (<a class="reference external" href="https://OSM-es.github.io/CatAtom2Osm/es/install.html">https://OSM-es.github.io/CatAtom2Osm/es/install.html</a>)</p>
 </div>
 <div class="section" id="uso">
 <h2>Uso<a class="headerlink" href="#uso" title="Enlazar permanentemente con este título">¶</a></h2>
@@ -164,18 +162,34 @@ programa no encuentra los archivos de entrada los descargará de los Servicios
 INSPIRE del Catastro Español.</p>
 <p><strong>Opciones</strong>:</p>
 <ul class="simple">
-<li>-h, &#8211;help            Muestra este mensaje de ayuda y termina</li>
-<li>-v, &#8211;version         Imprime la versión de CatAtom2Osm y termina</li>
-<li>-l prov, &#8211;list=prov  Lista los municipios disponibles para el código provincial de dos dígitos</li>
-<li>-t, &#8211;tasks           Reparte las construcciones en archivos de tareas (predeterminada, implica -z)</li>
-<li>-z, &#8211;zoning          Procesa el conjunto de datos de zonificación catastral</li>
-<li>-b, &#8211;building        Procesa los edificios a un archivo individual en lugar de tareas</li>
-<li>-d, &#8211;address         Procesa el conjunto de datos de direcciones</li>
-<li>-p, &#8211;parcel          Procesa el conjunto de datos de parcelas catastrales</li>
-<li>-a, &#8211;all             Procesa todos los conjuntos de datos (equivalente a -bdptz)</li>
-<li>-m, &#8211;manual          Desactiva la combinación con datos OSM</li>
-<li>&#8211;log=log_level       Selecciona el nivel de registro entre DEBUG, INFO, WARNING, ERROR o CRITICAL.</li>
+<li>-h, &#8211;help                Muestra este mensaje de ayuda y termina</li>
+<li>-v, &#8211;version             Imprime la versión de CatAtom2Osm y termina</li>
+<li>-l [prov], &#8211;list [prov]  Lista los municipios disponibles para el código provincial de dos dígitos</li>
+<li>&#8211;list-zones              Lista las etiquetas de las zonas del municipio</li>
+<li>-t, &#8211;tasks               Reparte las construcciones en archivos de tareas (predeterminada, implica -z)</li>
+<li>-b, &#8211;building            Procesa los edificios a un archivo individual en lugar de tareas</li>
+<li>-d, &#8211;address             Procesa el conjunto de datos de direcciones</li>
+<li>-z, &#8211;zoning              Procesa el conjunto de datos de zonificación catastral</li>
+<li>-p, &#8211;parcel              Procesa el conjunto de datos de parcelas catastrales</li>
+<li>-a, &#8211;all                 Procesa todos los conjuntos de datos (equivalente a -bdptz)</li>
+<li>-o label, &#8211;zone label    Procesa una zona dada su etiqueta</li>
+<li>-m, &#8211;manual              Desactiva la combinación con datos OSM</li>
+<li>-w, &#8211;download            Solo descargar</li>
+<li>&#8211;log=log_level           Selecciona el nivel de registro entre DEBUG, INFO, WARNING, ERROR o CRITICAL.</li>
 </ul>
+</div>
+<div class="section" id="configuracion">
+<h2>Configuración<a class="headerlink" href="#configuracion" title="Enlazar permanentemente con este título">¶</a></h2>
+<p>El programa usa la configuración de localización del sistema para seleccionar el idioma en la traducción de los tipos de nombres de viales. Si quieres usar otro, asigna la variable de entorno LANG.</p>
+<blockquote>
+<div>LANG=es_ES.UTF-8; catatom2osm</div></blockquote>
+<p>Para forzar a usar Español.</p>
+<blockquote>
+<div>LANG=cat_ES.UTF-8; catatom2osm</div></blockquote>
+<p>Para forzar a usar Catalán.</p>
+<blockquote>
+<div>LANG=cat_ES.UTF-8; catatom2osm</div></blockquote>
+<p>Para forzar a usar Gallego.</p>
 </div>
 <div class="section" id="documentacion">
 <h2>Documentación<a class="headerlink" href="#documentacion" title="Enlazar permanentemente con este título">¶</a></h2>
@@ -217,7 +231,7 @@ INSPIRE del Catastro Español.</p>
         <li class="right" >
           <a href="index.html" title="¡Bienvenido a la documentación de CatAtom2Osm!"
              >anterior</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">documentación de CatAtom2Osm - 1.1.8</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">documentación de CatAtom2Osm - 1.5.0</a> &#187;</li> 
       </ul>
     </div>
 <script type="text/javascript">
@@ -227,7 +241,7 @@ INSPIRE del Catastro Español.</p>
 </script>
 <script type="text/javascript" src="_static/js/bootstrap.js"></script>
   <div class="footer">
-    &copy; Copyright 2017, Javier Sánchez Portero. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+    &copy; Copyright 2017, Javier Sanchez Portero. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
   </div>
   </body>
 </html>

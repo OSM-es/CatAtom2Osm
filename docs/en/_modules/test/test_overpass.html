@@ -15,7 +15,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>test.test_overpass &#8212; CatAtom2Osm 1.1.8 documentation</title>
+    <title>test.test_overpass &#8212; CatAtom2Osm 1.5.0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/guzzle.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -23,7 +23,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.1.8',
+        VERSION:     '1.5.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -49,7 +49,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 1.1.8 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 1.5.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>
@@ -73,7 +73,6 @@
       <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../readme.html">Read me</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../install.html">Install</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../install.html#settings">Settings</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../changes.html">Change log</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api.html">API reference</a></li>
 </ul>
@@ -112,7 +111,8 @@
           <div class="document clearer body">
             
   <h1>Source code for test.test_overpass</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">unittest</span>
+<span></span><span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">str</span>
+<span class="kn">import</span> <span class="nn">unittest</span>
 <span class="kn">import</span> <span class="nn">mock</span>
 
 <span class="kn">from</span> <span class="nn">overpass</span> <span class="k">import</span> <span class="n">Query</span><span class="p">,</span> <span class="n">api_servers</span>
@@ -123,26 +123,26 @@
     <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="o">.</span><span class="n">object</span><span class="p">(</span><span class="n">Query</span><span class="p">,</span> <span class="s1">&#39;set_search_area&#39;</span><span class="p">)</span>
 <div class="viewcode-block" id="TestQuery.test_init"><a class="viewcode-back" href="../../api/test.test_overpass.html#test.test_overpass.TestQuery.test_init">[docs]</a>    <span class="k">def</span> <span class="nf">test_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m_q</span><span class="p">):</span>
         <span class="n">q</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="s1">&#39;xml&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">down</span><span class="p">,</span> <span class="s1">&#39;(._;&gt;&gt;;);&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">meta</span><span class="p">,</span> <span class="s1">&#39;out meta;&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">area_id</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">bbox</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">statements</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="s1">&#39;xml&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">down</span><span class="p">,</span> <span class="s1">&#39;(._;&gt;&gt;;);&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">meta</span><span class="p">,</span> <span class="s1">&#39;out meta;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">area_id</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">bbox</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">statements</span><span class="p">,</span> <span class="p">[])</span>
         <span class="n">m_q</span><span class="o">.</span><span class="n">assert_called_once_with</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
         <span class="n">q</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="s1">&#39;json&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="s1">&#39;json&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">down</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">meta</span><span class="p">,</span> <span class="s1">&#39;out;&#39;</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="s1">&#39;json&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">down</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">meta</span><span class="p">,</span> <span class="s1">&#39;out;&#39;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="TestQuery.test_set_search_area"><a class="viewcode-back" href="../../api/test.test_overpass.html#test.test_overpass.TestQuery.test_set_search_area">[docs]</a>    <span class="k">def</span> <span class="nf">test_set_search_area</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">q</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="s1">&#39;12345678&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">area_id</span><span class="p">,</span> <span class="s1">&#39;12345678&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">bbox</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">area_id</span><span class="p">,</span> <span class="s1">&#39;12345678&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">bbox</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
         <span class="n">q</span><span class="o">.</span><span class="n">set_search_area</span><span class="p">(</span><span class="s1">&#39;1,-2, 3.1,-4.99&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">bbox</span><span class="p">,</span> <span class="s1">&#39;1,-2, 3.1,-4.99&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">area_id</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">bbox</span><span class="p">,</span> <span class="s1">&#39;1,-2, 3.1,-4.99&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">area_id</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
         <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="ne">TypeError</span><span class="p">):</span>
             <span class="n">q</span><span class="o">.</span><span class="n">set_search_area</span><span class="p">(</span><span class="s1">&#39;123456789&#39;</span><span class="p">)</span>
         <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="ne">TypeError</span><span class="p">):</span>
@@ -159,24 +159,24 @@
 <div class="viewcode-block" id="TestQuery.test_add"><a class="viewcode-back" href="../../api/test.test_overpass.html#test.test_overpass.TestQuery.test_add">[docs]</a>    <span class="k">def</span> <span class="nf">test_add</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">q</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="s1">&#39;1&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;foo;bar;&#39;</span><span class="p">)</span>
         <span class="n">q</span><span class="o">.</span><span class="n">add</span><span class="p">([</span><span class="s1">&#39;taz&#39;</span><span class="p">,</span> <span class="s1">&#39;zap;&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;raz&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">statements</span><span class="p">),</span> <span class="p">{</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="s1">&#39;taz&#39;</span><span class="p">,</span> <span class="s1">&#39;zap&#39;</span><span class="p">,</span> <span class="s1">&#39;raz&#39;</span><span class="p">})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">statements</span><span class="p">),</span> <span class="p">{</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="s1">&#39;taz&#39;</span><span class="p">,</span> <span class="s1">&#39;zap&#39;</span><span class="p">,</span> <span class="s1">&#39;raz&#39;</span><span class="p">})</span>
         <span class="n">q</span><span class="o">.</span><span class="n">statements</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">q</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">statements</span><span class="p">),</span> <span class="p">{</span><span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">})</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">statements</span><span class="p">),</span> <span class="p">{</span><span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">})</span></div>
 
 <div class="viewcode-block" id="TestQuery.test_get_url"><a class="viewcode-back" href="../../api/test.test_overpass.html#test.test_overpass.TestQuery.test_get_url">[docs]</a>    <span class="k">def</span> <span class="nf">test_get_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">q</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="s1">&#39;1234&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">get_url</span><span class="p">(),</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">get_url</span><span class="p">(),</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
         <span class="n">q</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="s1">&#39;bar&#39;</span><span class="p">)</span>
         <span class="n">url</span> <span class="o">=</span> <span class="n">api_servers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;data=[out:xml][timeout:250];(area(3600001234)&quot;</span> \
             <span class="s2">&quot;-&gt;.searchArea;foo(area.searchArea);bar(area.searchArea););&quot;</span> \
             <span class="s2">&quot;(._;&gt;&gt;;);out meta;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">get_url</span><span class="p">(),</span> <span class="n">url</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">get_url</span><span class="p">(),</span> <span class="n">url</span><span class="p">)</span>
         <span class="n">q</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="s1">&#39;1,2,3,4&#39;</span><span class="p">,</span> <span class="s1">&#39;json&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
         <span class="n">q</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="s1">&#39;bar&#39;</span><span class="p">)</span>
         <span class="n">url</span> <span class="o">=</span> <span class="n">api_servers</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;data=[out:json][timeout:250];(foo(1,2,3,4);&quot;</span> \
             <span class="s2">&quot;bar(1,2,3,4););out;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">get_url</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">url</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">get_url</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">url</span><span class="p">)</span></div>
 
     <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;overpass.download&#39;</span><span class="p">)</span>
 <div class="viewcode-block" id="TestQuery.test_download"><a class="viewcode-back" href="../../api/test.test_overpass.html#test.test_overpass.TestQuery.test_download">[docs]</a>    <span class="k">def</span> <span class="nf">test_download</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m_download</span><span class="p">):</span>
@@ -200,7 +200,7 @@
         <span class="n">q</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="s1">&#39;1,2,3,4&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span>
         <span class="n">out</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
         <span class="n">m_download</span><span class="o">.</span><span class="n">get_response</span><span class="o">.</span><span class="n">assert_called_once_with</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">get_url</span><span class="p">())</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="s1">&#39;bar&#39;</span><span class="p">)</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="s1">&#39;bar&#39;</span><span class="p">)</span></div></div>
 
 </pre></div>
 
@@ -218,7 +218,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 1.1.8 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 1.5.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
@@ -229,7 +229,7 @@
 </script>
 <script type="text/javascript" src="../../_static/js/bootstrap.js"></script>
   <div class="footer">
-    &copy; Copyright 2017, Javier Sánchez Portero. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+    &copy; Copyright 2017, Javier Sanchez Portero. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
   </div>
   </body>
 </html>

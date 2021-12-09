@@ -16,6 +16,7 @@ CatAtom2Osm
    osm
    osmxml
    overpass
+   qgiscompat
    report
    setup
    test

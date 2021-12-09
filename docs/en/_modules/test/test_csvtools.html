@@ -15,7 +15,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>test.test_csvtools &#8212; CatAtom2Osm 1.1.8 documentation</title>
+    <title>test.test_csvtools &#8212; CatAtom2Osm 1.5.0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/guzzle.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -23,7 +23,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.1.8',
+        VERSION:     '1.5.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -49,7 +49,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 1.1.8 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 1.5.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>
@@ -73,7 +73,6 @@
       <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../readme.html">Read me</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../install.html">Install</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../install.html#settings">Settings</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../changes.html">Change log</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api.html">API reference</a></li>
 </ul>
@@ -113,11 +112,13 @@
             
   <h1>Source code for test.test_csvtools</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">str</span>
 <span class="kn">import</span> <span class="nn">unittest</span>
 <span class="kn">from</span> <span class="nn">tempfile</span> <span class="k">import</span> <span class="n">mkstemp</span>
 
 <span class="kn">import</span> <span class="nn">csv</span>
-<span class="kn">import</span> <span class="nn">codecs</span>
+<span class="kn">import</span> <span class="nn">io</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;LANGUAGE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;C&#39;</span>
 
@@ -129,32 +130,36 @@
 
 <div class="viewcode-block" id="TestCsvTools.test_csv2dict"><a class="viewcode-back" href="../../api/test.test_csvtools.html#test.test_csvtools.TestCsvTools.test_csv2dict">[docs]</a>    <span class="k">def</span> <span class="nf">test_csv2dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">_</span><span class="p">,</span> <span class="n">tmp_path</span> <span class="o">=</span> <span class="n">mkstemp</span><span class="p">()</span>
-        <span class="k">with</span> <span class="n">codecs</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">tmp_path</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="p">)</span> <span class="k">as</span> <span class="n">csv_file</span><span class="p">:</span>
-            <span class="n">csv_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">u</span><span class="s1">&#39;á</span><span class="si">%s</span><span class="s1">x</span><span class="si">%s</span><span class="s1">é</span><span class="si">%s</span><span class="s1">y</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">delimiter</span><span class="p">,</span> <span class="n">eol</span><span class="p">,</span> <span class="n">delimiter</span><span class="p">,</span> <span class="n">eol</span><span class="p">))</span>
+        <span class="k">with</span> <span class="n">io</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">tmp_path</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">)</span> <span class="k">as</span> <span class="n">csv_file</span><span class="p">:</span>
+            <span class="n">csv_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;á</span><span class="si">%s</span><span class="s2">x</span><span class="se">\n</span><span class="s2">é</span><span class="si">%s</span><span class="s2">y</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">delimiter</span><span class="p">,</span> <span class="n">delimiter</span><span class="p">))</span>
         <span class="n">a_dict</span> <span class="o">=</span> <span class="n">csv2dict</span><span class="p">(</span><span class="n">tmp_path</span><span class="p">,</span> <span class="p">{})</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">a_dict</span><span class="p">,</span> <span class="p">{</span><span class="sa">u</span><span class="s1">&#39;á&#39;</span><span class="p">:</span><span class="sa">u</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;é&#39;</span><span class="p">:</span><span class="sa">u</span><span class="s1">&#39;y&#39;</span><span class="p">})</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">a_dict</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;á&quot;</span><span class="p">:</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;é&quot;</span><span class="p">:</span><span class="s2">&quot;y&quot;</span><span class="p">})</span></div>
 
 <div class="viewcode-block" id="TestCsvTools.test_csv2dict_bad_delimiter"><a class="viewcode-back" href="../../api/test.test_csvtools.html#test.test_csvtools.TestCsvTools.test_csv2dict_bad_delimiter">[docs]</a>    <span class="k">def</span> <span class="nf">test_csv2dict_bad_delimiter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">_</span><span class="p">,</span> <span class="n">tmp_path</span> <span class="o">=</span> <span class="n">mkstemp</span><span class="p">()</span>
-        <span class="k">with</span> <span class="n">codecs</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">tmp_path</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="p">)</span> <span class="k">as</span> <span class="n">csv_file</span><span class="p">:</span>
-            <span class="n">csv_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;a;1</span><span class="si">%s</span><span class="s1">b;2&#39;</span> <span class="o">%</span> <span class="n">eol</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">io</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">tmp_path</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">)</span> <span class="k">as</span> <span class="n">csv_file</span><span class="p">:</span>
+            <span class="n">csv_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;a;1</span><span class="se">\n</span><span class="s1">b;2&#39;</span><span class="p">)</span>
         <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="ne">IOError</span><span class="p">):</span>
             <span class="n">a_dict</span> <span class="o">=</span> <span class="n">csv2dict</span><span class="p">(</span><span class="n">tmp_path</span><span class="p">,</span> <span class="p">{})</span></div>
 
 <div class="viewcode-block" id="TestCsvTools.test_dict2csv"><a class="viewcode-back" href="../../api/test.test_csvtools.html#test.test_csvtools.TestCsvTools.test_dict2csv">[docs]</a>    <span class="k">def</span> <span class="nf">test_dict2csv</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">_</span><span class="p">,</span> <span class="n">tmp_path</span> <span class="o">=</span> <span class="n">mkstemp</span><span class="p">()</span>
-        <span class="n">dict2csv</span><span class="p">(</span><span class="n">tmp_path</span><span class="p">,</span> <span class="p">{</span><span class="sa">u</span><span class="s1">&#39;á&#39;</span><span class="p">:</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;é&#39;</span><span class="p">:</span><span class="s1">&#39;y&#39;</span><span class="p">})</span>
-        <span class="k">with</span> <span class="n">codecs</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">tmp_path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="p">)</span> <span class="k">as</span> <span class="n">csv_file</span><span class="p">:</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;á&quot;</span><span class="p">:</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s2">&quot;é&quot;</span><span class="p">:</span><span class="s1">&#39;y&#39;</span><span class="p">}</span>
+        <span class="n">l</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s%s%s</span><span class="se">\n</span><span class="si">%s%s%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">l</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">delimiter</span><span class="p">,</span> <span class="n">l</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">l</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">delimiter</span><span class="p">,</span> <span class="n">l</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">dict2csv</span><span class="p">(</span><span class="n">tmp_path</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">io</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">tmp_path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">)</span> <span class="k">as</span> <span class="n">csv_file</span><span class="p">:</span>
             <span class="n">text</span> <span class="o">=</span> <span class="n">csv_file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;á</span><span class="si">%s</span><span class="s1">x</span><span class="si">%s</span><span class="s1">é</span><span class="si">%s</span><span class="s1">y</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">delimiter</span><span class="p">,</span> <span class="n">eol</span><span class="p">,</span> <span class="n">delimiter</span><span class="p">,</span> <span class="n">eol</span><span class="p">))</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="TestCsvTools.test_dict2csv_sort"><a class="viewcode-back" href="../../api/test.test_csvtools.html#test.test_csvtools.TestCsvTools.test_dict2csv_sort">[docs]</a>    <span class="k">def</span> <span class="nf">test_dict2csv_sort</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">_</span><span class="p">,</span> <span class="n">tmp_path</span> <span class="o">=</span> <span class="n">mkstemp</span><span class="p">()</span>
         <span class="n">dict2csv</span><span class="p">(</span><span class="n">tmp_path</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;b&#39;</span><span class="p">:</span><span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">:</span><span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="s1">&#39;2&#39;</span><span class="p">},</span> <span class="n">sort</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="k">with</span> <span class="n">codecs</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">tmp_path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="p">)</span> <span class="k">as</span> <span class="n">csv_file</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">io</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">tmp_path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">)</span> <span class="k">as</span> <span class="n">csv_file</span><span class="p">:</span>
             <span class="n">text</span> <span class="o">=</span> <span class="n">csv_file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;b</span><span class="si">%s</span><span class="s1">1</span><span class="si">%s</span><span class="s1">c</span><span class="si">%s</span><span class="s1">2</span><span class="si">%s</span><span class="s1">a</span><span class="si">%s</span><span class="s1">3</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">delimiter</span><span class="p">,</span> <span class="n">eol</span><span class="p">,</span> 
-            <span class="n">delimiter</span><span class="p">,</span> <span class="n">eol</span><span class="p">,</span> <span class="n">delimiter</span><span class="p">,</span> <span class="n">eol</span><span class="p">))</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="s2">&quot;b</span><span class="si">%s</span><span class="s2">1</span><span class="se">\n</span><span class="s2">c</span><span class="si">%s</span><span class="s2">2</span><span class="se">\n</span><span class="s2">a</span><span class="si">%s</span><span class="s2">3</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">delimiter</span><span class="p">,</span> 
+            <span class="n">delimiter</span><span class="p">,</span> <span class="n">delimiter</span><span class="p">))</span></div></div>
 
 
 </pre></div>
@@ -173,7 +178,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 1.1.8 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 1.5.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
@@ -184,7 +189,7 @@
 </script>
 <script type="text/javascript" src="../../_static/js/bootstrap.js"></script>
   <div class="footer">
-    &copy; Copyright 2017, Javier Sánchez Portero. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+    &copy; Copyright 2017, Javier Sanchez Portero. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
   </div>
   </body>
 </html>

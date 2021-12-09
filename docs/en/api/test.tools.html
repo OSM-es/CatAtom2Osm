@@ -2,7 +2,7 @@
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 
-<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
@@ -15,7 +15,7 @@
   <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>test.check_mun_names module &#8212; documentación de CatAtom2Osm - 1.1.8</title>
+    <title>test.tools module &#8212; CatAtom2Osm 1.5.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/guzzle.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -23,7 +23,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.1.8',
+        VERSION:     '1.5.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -33,33 +33,32 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/translations.js"></script>
-    <link rel="index" title="Índice" href="../genindex.html" />
-    <link rel="search" title="Búsqueda" href="../search.html" />
-    <link rel="next" title="test.count_buildings module" href="test.count_buildings.html" />
-    <link rel="prev" title="test.benchmark module" href="test.benchmark.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="test.unittest_main module" href="test.unittest_main.html" />
+    <link rel="prev" title="test.test_translate module" href="test.test_translate.html" />
   
    
 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navegación</h3>
+      <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="Índice General"
-             accesskey="I">índice</a></li>
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../py-modindex.html" title="Índice de Módulos Python"
-             >módulos</a> |</li>
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="right" >
-          <a href="test.count_buildings.html" title="test.count_buildings module"
-             accesskey="N">siguiente</a> |</li>
+          <a href="test.unittest_main.html" title="test.unittest_main module"
+             accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="test.benchmark.html" title="test.benchmark module"
-             accesskey="P">anterior</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">documentación de CatAtom2Osm - 1.1.8</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../api.html" >Referencia API</a> &#187;</li>
+          <a href="test.test_translate.html" title="test.test_translate module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 1.5.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api.html" >API reference</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="modules.html" >CatAtom2Osm</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="test.html" accesskey="U">test package</a> &#187;</li> 
       </ul>
@@ -76,20 +75,19 @@
         
 <div class="sidebar-block">
   <div class="sidebar-wrapper">
-    <h2>Tabla de Contenidos</h2>
+    <h2>Table Of Contents</h2>
   </div>
   <div class="sidebar-toc">
     
     
       <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../readme.html">Léeme</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../install.html">Instalación</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../install.html#configuracion">Configuración</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../changes.html">Registro de cambios</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="../api.html">Referencia API</a><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../readme.html">Read me</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changes.html">Change log</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="modules.html">CatAtom2Osm</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../coverage.html">Cobertura del código</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../genindex.html">Índice</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../coverage.html">Code coverage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../genindex.html">Index</a></li>
 </ul>
 </li>
 </ul>
@@ -119,24 +117,23 @@
             <ol class="breadcrumb">
               <li><a href="../index.html">Docs</a></li>
               
-                <li><a href="../api.html">Referencia API</a></li>
+                <li><a href="../api.html">API reference</a></li>
               
                 <li><a href="modules.html">CatAtom2Osm</a></li>
               
                 <li><a href="test.html">test package</a></li>
               
-              <li>test.check_mun_names module</li>
+              <li>test.tools module</li>
             </ol>
           </div>
           
           <div class="document clearer body">
             
-  <div class="section" id="module-test.check_mun_names">
-<span id="test-check-mun-names-module"></span><h1>test.check_mun_names module<a class="headerlink" href="#module-test.check_mun_names" title="Enlazar permanentemente con este título">¶</a></h1>
-<p>Check municipality name resolution. Put fails in setup.mun_fails</p>
+  <div class="section" id="module-test.tools">
+<span id="test-tools-module"></span><h1>test.tools module<a class="headerlink" href="#module-test.tools" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
-<dt id="test.check_mun_names.run">
-<code class="descclassname">test.check_mun_names.</code><code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/test/check_mun_names.html#run"><span class="viewcode-link">[fuente]</span></a><a class="headerlink" href="#test.check_mun_names.run" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dt id="test.tools.capture">
+<code class="descclassname">test.tools.</code><code class="descname">capture</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwds</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/test/tools.html#capture"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test.tools.capture" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>
@@ -147,11 +144,11 @@
   <div class="footer-relations">
     
       <div class="pull-left">
-        <a class="btn btn-default" href="test.benchmark.html" title="capítulo anterior (use the left arrow)">test.benchmark module</a>
+        <a class="btn btn-default" href="test.test_translate.html" title="previous chapter (use the left arrow)">test.test_translate module</a>
       </div>
     
       <div class="pull-right">
-        <a class="btn btn-default" href="test.count_buildings.html" title="próximo capítulo (use the right arrow)">test.count_buildings module</a>
+        <a class="btn btn-default" href="test.unittest_main.html" title="next chapter (use the right arrow)">test.unittest_main module</a>
       </div>
     </div>
     <div class="clearer"></div>
@@ -160,22 +157,22 @@
         <div class="clearfix"></div>
     </div>
     <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navegación</h3>
+      <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="Índice General"
-             >índice</a></li>
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
         <li class="right" >
-          <a href="../py-modindex.html" title="Índice de Módulos Python"
-             >módulos</a> |</li>
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="right" >
-          <a href="test.count_buildings.html" title="test.count_buildings module"
-             >siguiente</a> |</li>
+          <a href="test.unittest_main.html" title="test.unittest_main module"
+             >next</a> |</li>
         <li class="right" >
-          <a href="test.benchmark.html" title="test.benchmark module"
-             >anterior</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">documentación de CatAtom2Osm - 1.1.8</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../api.html" >Referencia API</a> &#187;</li>
+          <a href="test.test_translate.html" title="test.test_translate module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 1.5.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api.html" >API reference</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="modules.html" >CatAtom2Osm</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="test.html" >test package</a> &#187;</li> 
       </ul>
@@ -187,7 +184,7 @@
 </script>
 <script type="text/javascript" src="../_static/js/bootstrap.js"></script>
   <div class="footer">
-    &copy; Copyright 2017, Javier Sánchez Portero. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+    &copy; Copyright 2017, Javier Sanchez Portero. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
   </div>
   </body>
 </html>

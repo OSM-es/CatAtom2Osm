@@ -15,7 +15,7 @@
   <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom &#8212; CatAtom2Osm 1.1.8 documentation</title>
+    <title>catatom &#8212; CatAtom2Osm 1.5.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/guzzle.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -23,7 +23,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.1.8',
+        VERSION:     '1.5.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -49,7 +49,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 1.1.8 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 1.5.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>
@@ -73,7 +73,6 @@
       <ul>
 <li class="toctree-l1"><a class="reference internal" href="../readme.html">Read me</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Install</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../install.html#settings">Settings</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../changes.html">Change log</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../api.html">API reference</a></li>
 </ul>
@@ -113,12 +112,14 @@
             
   <h1>Source code for catatom</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Reader of Cadastre ATOM GML files&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span><span class="p">,</span> <span class="n">unicode_literals</span>
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">next</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="nb">str</span>
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">zipfile</span>
-<span class="kn">from</span> <span class="nn">qgis.core</span> <span class="k">import</span> <span class="n">QgsCoordinateReferenceSystem</span>
+<span class="kn">from</span> <span class="nn">requests.exceptions</span> <span class="k">import</span> <span class="ne">ConnectionError</span>
 
 <span class="kn">import</span> <span class="nn">download</span>
 <span class="kn">import</span> <span class="nn">hgwnames</span>
@@ -126,9 +127,10 @@
 <span class="kn">import</span> <span class="nn">overpass</span>
 <span class="kn">import</span> <span class="nn">setup</span>
 <span class="kn">from</span> <span class="nn">compat</span> <span class="k">import</span> <span class="n">etree</span>
+<span class="kn">from</span> <span class="nn">qgiscompat</span> <span class="k">import</span> <span class="n">QgsCoordinateReferenceSystem_fromEpsgId</span>
 <span class="kn">from</span> <span class="nn">report</span> <span class="k">import</span> <span class="n">instance</span> <span class="k">as</span> <span class="n">report</span>
+<span class="n">log</span> <span class="o">=</span> <span class="n">setup</span><span class="o">.</span><span class="n">log</span>
 
-<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">setup</span><span class="o">.</span><span class="n">app_name</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="vm">__name__</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Reader"><a class="viewcode-back" href="../api/catatom.html#catatom.Reader">[docs]</a><span class="k">class</span> <span class="nc">Reader</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Class to download and read Cadastre ATOM GML files&quot;&quot;&quot;</span>
@@ -139,7 +141,7 @@
 <span class="sd">            a_path (str): Directory where the source files are located.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">a_path</span>
-        <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;^\d</span><span class="si">{5}</span><span class="s2">$&quot;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">a_path</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^\d</span><span class="si">{5}</span><span class="s2">$&quot;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">a_path</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">m</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Last directory name must be a 5 digits ZIP code&quot;</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">zip_code</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">()</span>
@@ -155,7 +157,8 @@
 <div class="viewcode-block" id="Reader.get_metadata"><a class="viewcode-back" href="../api/catatom.html#catatom.Reader.get_metadata">[docs]</a>    <span class="k">def</span> <span class="nf">get_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">md_path</span><span class="p">,</span> <span class="n">zip_path</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get the metadata of the source file&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">md_path</span><span class="p">):</span>
-            <span class="n">text</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">md_path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">md_path</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">text</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">zf</span> <span class="o">=</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">zip_path</span><span class="p">)</span>
@@ -184,11 +187,11 @@
 <span class="sd">        Given the url of a Cadastre ATOM service, tries to download the ZIP</span>
 <span class="sd">        file for self.zip_code</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">&#39;INSPIRE/(\w+)/&#39;</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;INSPIRE/(\w+)/&#39;</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
         <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Searching the url for the &#39;</span><span class="si">%s</span><span class="s2">&#39; layer of &#39;</span><span class="si">%s</span><span class="s2">&#39;...&quot;</span><span class="p">),</span> 
             <span class="n">s</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">zip_code</span><span class="p">)</span>
         <span class="n">response</span> <span class="o">=</span> <span class="n">download</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">&#39;http.+/</span><span class="si">%s</span><span class="s1">.+zip&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">zip_code</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;http.+/</span><span class="si">%s</span><span class="s1">.+zip&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">zip_code</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">s</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Zip code &#39;</span><span class="si">%s</span><span class="s2">&#39; don&#39;t exists&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">zip_code</span><span class="p">)</span>
         <span class="n">url</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
@@ -208,9 +211,8 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Unknow layer name &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="n">layername</span><span class="p">)</span>
         <span class="n">gml_fn</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span><span class="n">setup</span><span class="o">.</span><span class="n">fn_prefix</span><span class="p">,</span> <span class="n">group</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">zip_code</span><span class="p">,</span> <span class="n">layername</span><span class="p">,</span> <span class="s2">&quot;gml&quot;</span><span class="p">))</span>
-        <span class="k">if</span> <span class="n">group</span> <span class="o">==</span> <span class="s1">&#39;AD&#39;</span><span class="p">:</span>    
-            <span class="n">gml_fn</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span><span class="n">setup</span><span class="o">.</span><span class="n">fn_prefix</span><span class="p">,</span> <span class="n">group</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">zip_code</span><span class="p">,</span> 
-                <span class="s2">&quot;gml|layername=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">layername</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">group</span> <span class="o">==</span> <span class="s1">&#39;AD&#39;</span><span class="p">:</span>
+            <span class="n">gml_fn</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span><span class="n">setup</span><span class="o">.</span><span class="n">fn_prefix</span><span class="p">,</span> <span class="n">group</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">zip_code</span><span class="p">,</span> <span class="s2">&quot;gml&quot;</span><span class="p">))</span>
         <span class="n">md_fn</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span><span class="n">setup</span><span class="o">.</span><span class="n">fn_prefix</span><span class="p">,</span> <span class="n">group</span><span class="p">,</span> <span class="s2">&quot;MD&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">zip_code</span><span class="p">,</span> <span class="s2">&quot;xml&quot;</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">group</span> <span class="o">==</span> <span class="s1">&#39;CP&#39;</span><span class="p">:</span>
             <span class="n">md_fn</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span><span class="n">setup</span><span class="o">.</span><span class="n">fn_prefix</span><span class="p">,</span> <span class="n">group</span><span class="p">,</span> <span class="s2">&quot;MD.&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">zip_code</span><span class="p">,</span> <span class="s2">&quot;xml&quot;</span><span class="p">))</span>
@@ -229,14 +231,16 @@
             <span class="n">gml_fp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_path_from_zip</span><span class="p">(</span><span class="n">zf</span><span class="p">,</span> <span class="n">gml_path</span><span class="p">)</span>
             <span class="n">f</span> <span class="o">=</span> <span class="n">zf</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">gml_fp</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">gml_path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">gml_path</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span>
         <span class="n">context</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">iterparse</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">events</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;end&#39;</span><span class="p">,))</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">event</span><span class="p">,</span> <span class="n">elem</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">next</span><span class="p">()</span> <span class="c1"># &lt;/something&gt;</span>
-            <span class="n">event</span><span class="p">,</span> <span class="n">elem</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">next</span><span class="p">()</span> <span class="c1"># &lt;/featureMember&gt;</span>
-            <span class="n">event</span><span class="p">,</span> <span class="n">elem</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">next</span><span class="p">()</span> <span class="c1"># &lt;/featureCollection&gt;</span>
+            <span class="n">event</span><span class="p">,</span> <span class="n">elem</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">context</span><span class="p">)</span> <span class="c1"># &lt;/something&gt;</span>
+            <span class="n">event</span><span class="p">,</span> <span class="n">elem</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">context</span><span class="p">)</span> <span class="c1"># &lt;/featureMember&gt;</span>
+            <span class="n">event</span><span class="p">,</span> <span class="n">elem</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">context</span><span class="p">)</span> <span class="c1"># &lt;/featureCollection&gt;</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
             <span class="k">return</span> <span class="kc">False</span>
         <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
             <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="Reader.get_path_from_zip"><a class="viewcode-back" href="../api/catatom.html#catatom.Reader.get_path_from_zip">[docs]</a>    <span class="k">def</span> <span class="nf">get_path_from_zip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">zf</span><span class="p">,</span> <span class="n">a_path</span><span class="p">):</span>
@@ -282,7 +286,7 @@
 
 <span class="sd">        Args:</span>
 <span class="sd">            layername (str): Short name of the Cadastre layer. Any of </span>
-<span class="sd">                &#39;building&#39;, &#39;buildingpart&#39;, &#39;otherconstruction&#39;, </span>
+<span class="sd">                &#39;building&#39;, &#39;buildingpart&#39;, &#39;otherconstruction&#39;,</span>
 <span class="sd">                &#39;cadastralparcel&#39;, &#39;cadastralzoning&#39;, &#39;address&#39;, </span>
 <span class="sd">                &#39;thoroughfarename&#39;, &#39;postaldescriptor&#39;, &#39;adminunitname&#39;</span>
 <span class="sd">            allow_empty (bool): If False (default), raise a exception for empty</span>
@@ -308,7 +312,7 @@
             <span class="n">gml</span> <span class="o">=</span> <span class="n">layer</span><span class="o">.</span><span class="n">BaseLayer</span><span class="p">(</span><span class="n">gml_path</span><span class="p">,</span> <span class="n">layername</span><span class="o">+</span><span class="s1">&#39;.gml&#39;</span><span class="p">,</span> <span class="s1">&#39;ogr&#39;</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">gml</span><span class="o">.</span><span class="n">isValid</span><span class="p">():</span>
                 <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Failed to load layer &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="n">gml_path</span><span class="p">)</span>
-        <span class="n">crs</span> <span class="o">=</span> <span class="n">QgsCoordinateReferenceSystem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">crs_ref</span><span class="p">)</span>
+        <span class="n">crs</span> <span class="o">=</span> <span class="n">QgsCoordinateReferenceSystem_fromEpsgId</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">crs_ref</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">crs</span><span class="o">.</span><span class="n">isValid</span><span class="p">():</span>
             <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Could not determine the CRS of &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="n">gml_path</span><span class="p">)</span>
         <span class="n">gml</span><span class="o">.</span><span class="n">setCrs</span><span class="p">(</span><span class="n">crs</span><span class="p">)</span>
@@ -319,6 +323,7 @@
 <div class="viewcode-block" id="Reader.get_boundary"><a class="viewcode-back" href="../api/catatom.html#catatom.Reader.get_boundary">[docs]</a>    <span class="k">def</span> <span class="nf">get_boundary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">zoning</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the id of the OSM administrative boundary from Overpass.</span>
+<span class="sd">        If it fails falls back to the bounding box.</span>
 <span class="sd">        Precondition: called after read any gml (metadata adquired)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">boundary_bbox</span> <span class="o">=</span> <span class="n">zoning</span><span class="o">.</span><span class="n">bounding_box</span><span class="p">()</span>
@@ -335,7 +340,7 @@
             <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">query</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
             <span class="n">matching</span> <span class="o">=</span> <span class="n">hgwnames</span><span class="o">.</span><span class="n">dsmatch</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cat_mun</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;elements&#39;</span><span class="p">],</span> 
                 <span class="k">lambda</span> <span class="n">e</span><span class="p">:</span> <span class="n">e</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
-        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="k">except</span> <span class="ne">ConnectionError</span><span class="p">:</span>
             <span class="k">pass</span>
         <span class="k">if</span> <span class="n">matching</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">boundary_search_area</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">matching</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">])</span>
@@ -351,19 +356,26 @@
 
 <div class="viewcode-block" id="list_municipalities"><a class="viewcode-back" href="../api/catatom.html#catatom.list_municipalities">[docs]</a><span class="k">def</span> <span class="nf">list_municipalities</span><span class="p">(</span><span class="n">prov_code</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Get from the ATOM services a list of municipalities for a given province&quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">prov_code</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">setup</span><span class="o">.</span><span class="n">valid_provinces</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">prov_code</span> <span class="o">==</span> <span class="s1">&#39;99&#39;</span><span class="p">:</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">setup</span><span class="o">.</span><span class="n">serv_url</span><span class="p">[</span><span class="s1">&#39;BU&#39;</span><span class="p">]</span>
+        <span class="n">title</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Territorial office&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">prov_code</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">setup</span><span class="o">.</span><span class="n">valid_provinces</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Province code &#39;</span><span class="si">%s</span><span class="s2">&#39; not valid&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="n">prov_code</span><span class="p">)</span>
-    <span class="n">url</span> <span class="o">=</span> <span class="n">setup</span><span class="o">.</span><span class="n">prov_url</span><span class="p">[</span><span class="s1">&#39;BU&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">code</span><span class="o">=</span><span class="n">prov_code</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">setup</span><span class="o">.</span><span class="n">prov_url</span><span class="p">[</span><span class="s1">&#39;BU&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">code</span><span class="o">=</span><span class="n">prov_code</span><span class="p">)</span>
     <span class="n">response</span> <span class="o">=</span> <span class="n">download</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
     <span class="n">root</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
     <span class="n">ns</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;atom&#39;</span><span class="p">:</span> <span class="s1">&#39;http://www.w3.org/2005/Atom&#39;</span><span class="p">}</span>
-    <span class="n">office</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;atom:title&#39;</span><span class="p">,</span> <span class="n">ns</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;Office &#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
-    <span class="n">title</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Territorial office </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="n">office</span>
-    <span class="nb">print</span> <span class="n">title</span>
-    <span class="nb">print</span> <span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">prov_code</span> <span class="o">!=</span> <span class="s1">&#39;99&#39;</span><span class="p">:</span>
+        <span class="n">office</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;atom:title&#39;</span><span class="p">,</span> <span class="n">ns</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;Office &#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">title</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Territorial office </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="n">office</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">title</span><span class="p">))</span>
     <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">root</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s1">&#39;atom:entry&#39;</span><span class="p">,</span> <span class="n">namespaces</span><span class="o">=</span><span class="n">ns</span><span class="p">):</span>
         <span class="n">row</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;atom:title&#39;</span><span class="p">,</span> <span class="n">ns</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;buildings&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
-        <span class="nb">print</span> <span class="n">row</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">setup</span><span class="o">.</span><span class="n">encoding</span><span class="p">)</span></div>
+        <span class="n">row</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;Territorial office &#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">row</span><span class="p">)</span></div>
+
 </pre></div>
 
           </div>
@@ -380,7 +392,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 1.1.8 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 1.5.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
@@ -391,7 +403,7 @@
 </script>
 <script type="text/javascript" src="../_static/js/bootstrap.js"></script>
   <div class="footer">
-    &copy; Copyright 2017, Javier Sánchez Portero. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+    &copy; Copyright 2017, Javier Sanchez Portero. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
   </div>
   </body>
 </html>

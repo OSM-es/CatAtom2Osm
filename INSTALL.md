@@ -1,13 +1,17 @@
-# Install
+=======
+Install
+=======
 
-## Docker
+Docker
+------
 
 To ensure consistent results across all importers, the recommended procedure is to use the Docker image:
 https://hub.docker.com/r/egofer/catatom2osm
 
 Is not recommended to use the application with the local installation described below only for historical reasons.
 
-## Linux
+Linux
+-----
 
 Install QGIS with the instructions in https://qgis.org
 
@@ -45,7 +49,8 @@ After this, the program is available to run in the terminal.
     catatom2osm
 
 
-## Mac OS X
+Mac OS X
+--------
 
 Install QGIS3 from the QGIS download page
 http://qgis.org
@@ -87,7 +92,8 @@ Notes:
 
 * Ignore the message "ERROR: Opening of authentication db FAILED"
 
-### QGIS 2
+QGIS 2
+======
 
 If you want to install QGIS 2 instead of 3, these are the commands to run::
 
@@ -97,7 +103,8 @@ If you want to install QGIS 2 instead of 3, these are the commands to run::
     sudo make install
 
 
-## Windows
+Windows
+-------
 
 Install QGIS using the OSGeo4W Network Installer (64 bits/ 32 bits) from
 http://qgis.org download page.
@@ -140,7 +147,8 @@ Notes:
 * If during excecution you get error messages similar to "Failed to create file building_packed.shp: Permission denied", run from a simple folder (without special characters) hanging from the root, like: C:\Catastro
 
 
-### QGIS 2
+QGIS 2
+======
 
 If you want to install QGIS 2 instead of 3, select these packages::
 
@@ -155,7 +163,8 @@ Instead of Microsoft Visual C++ 14.0 Build Tools, install Microsoft Visual C++ C
 Open the the terminal with Python QGIS environment using the file pyqgis.bat.
 
 
-## Development requeriments
+Development requeriments
+------------------------
 
 Optionally, if you want to contribute to the program, install the development requeriments. In Linux and Macos:
 
@@ -172,4 +181,3 @@ In Windows::
 And to run the code tests::
 
     python -m unittest discover
-

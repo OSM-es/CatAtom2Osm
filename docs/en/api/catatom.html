@@ -15,7 +15,7 @@
   <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom module &#8212; CatAtom2Osm 1.1.8 documentation</title>
+    <title>catatom module &#8212; CatAtom2Osm 1.5.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/guzzle.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -23,7 +23,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.1.8',
+        VERSION:     '1.5.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -57,7 +57,7 @@
         <li class="right" >
           <a href="modules.html" title="CatAtom2Osm"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 1.1.8 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 1.5.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../api.html" >API reference</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="modules.html" accesskey="U">CatAtom2Osm</a> &#187;</li> 
       </ul>
@@ -82,7 +82,6 @@
       <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../readme.html">Read me</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Install</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../install.html#settings">Settings</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../changes.html">Change log</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">API reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="modules.html">CatAtom2Osm</a></li>
@@ -133,7 +132,7 @@
 <dl class="class">
 <dt id="catatom.Reader">
 <em class="property">class </em><code class="descclassname">catatom.</code><code class="descname">Reader</code><span class="sig-paren">(</span><em>a_path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom.html#Reader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom.Reader" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">future.types.newobject.newobject</span></code></p>
 <p>Class to download and read Cadastre ATOM GML files</p>
 <dl class="method">
 <dt id="catatom.Reader.download">
@@ -161,6 +160,7 @@ file for self.zip_code</p>
 <dt id="catatom.Reader.get_boundary">
 <code class="descname">get_boundary</code><span class="sig-paren">(</span><em>zoning</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom.html#Reader.get_boundary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom.Reader.get_boundary" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the id of the OSM administrative boundary from Overpass.
+If it fails falls back to the bounding box.
 Precondition: called after read any gml (metadata adquired)</p>
 </dd></dl>
 
@@ -177,7 +177,7 @@ Precondition: called after read any gml (metadata adquired)</p>
 
 <dl class="method">
 <dt id="catatom.Reader.get_metadata">
-<code class="descname">get_metadata</code><span class="sig-paren">(</span><em>md_path</em>, <em>zip_path=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom.html#Reader.get_metadata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom.Reader.get_metadata" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_metadata</code><span class="sig-paren">(</span><em>md_path</em>, <em>zip_path=u''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom.html#Reader.get_metadata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom.Reader.get_metadata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the metadata of the source file</p>
 </dd></dl>
 
@@ -269,7 +269,7 @@ layer, else returns None</li>
         <li class="right" >
           <a href="modules.html" title="CatAtom2Osm"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 1.1.8 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 1.5.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../api.html" >API reference</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="modules.html" >CatAtom2Osm</a> &#187;</li> 
       </ul>
@@ -281,7 +281,7 @@ layer, else returns None</li>
 </script>
 <script type="text/javascript" src="../_static/js/bootstrap.js"></script>
   <div class="footer">
-    &copy; Copyright 2017, Javier Sánchez Portero. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+    &copy; Copyright 2017, Javier Sanchez Portero. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
   </div>
   </body>
 </html>

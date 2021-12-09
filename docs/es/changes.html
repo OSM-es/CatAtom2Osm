@@ -15,7 +15,7 @@
   <link rel="stylesheet" type="text/css" href="_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>Registro de cambios &#8212; documentación de CatAtom2Osm - 1.1.8</title>
+    <title>Registro de cambios &#8212; documentación de CatAtom2Osm - 1.5.0</title>
     
     <link rel="stylesheet" href="_static/guzzle.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -23,7 +23,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1.1.8',
+        VERSION:     '1.5.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -58,7 +58,7 @@
         <li class="right" >
           <a href="install.html" title="Instalación"
              accesskey="P">anterior</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">documentación de CatAtom2Osm - 1.1.8</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">documentación de CatAtom2Osm - 1.5.0</a> &#187;</li> 
       </ul>
     </div>
     <div class="container-wrapper">
@@ -81,7 +81,6 @@
       <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="readme.html">Léeme</a></li>
 <li class="toctree-l1"><a class="reference internal" href="install.html">Instalación</a></li>
-<li class="toctree-l1"><a class="reference internal" href="install.html#configuracion">Configuración</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Registro de cambios</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">Referencia API</a></li>
 </ul>
@@ -119,6 +118,59 @@
             
   <div class="section" id="registro-de-cambios">
 <h1>Registro de cambios<a class="headerlink" href="#registro-de-cambios" title="Enlazar permanentemente con este título">¶</a></h1>
+<p><strong>08-12-2021 (1.5.0)</strong>
+* Reorganización de ficheros de tareas (#65)</p>
+<p><strong>03-12-2021 (1.4.0dev)</strong>
+* Opción para dividir municipios grandes por zonas (#58).
+* Opción para listar zonas de un municipio (#58).</p>
+<p><strong>15-11-2021 (1.3.10)</strong>
+* Simplificar configuración de idioma (#60).
+* Añade la configuración del idioma al informe (#60).</p>
+<p><strong>12-06-2021 (1.3.9)</strong>
+* Recomiendación para usar Docker.</p>
+<p><strong>07-06-2021 (1.3.8)</strong>
+* Corrige error de versionado de Docker.</p>
+<p><strong>07-06-2021 (1.3.7)</strong>
+* Añade autenticación de Docker en Travis.</p>
+<p><strong>07-06-2021 (1.3.6)</strong>
+* Corrige error de sintaxis en Python3.</p>
+<p><strong>14-04-2021 (1.3.5)</strong>
+* Añade la etiqueta &#8216;generator&#8217; para identificar la versión en los conjuntos de cambios.</p>
+<p><strong>07-04-2021 (1.3.4)</strong>
+* Evita fallar por archivos de zonificación rotos con zonas faltantes en Catastro.
+* La opcion &#8216;-l&#8217; muestra las oficionas territoriales si no se pasa parámetro.</p>
+<p><strong>09-03-2021 (1.3.3)</strong>
+* Corrige pruebas rotas en d851c4b (#56)</p>
+<p><strong>09-03-2021 (1.3.2)</strong>
+* Actualiza los paquetes recomendados para python3 (#52)
+* Actualiza URL en cdau.py (#54)</p>
+<p><strong>09-03-2021 (1.3.1)</strong>
+* Añade &#8216;fixme&#8217; cuando el área de las partes no coincida con la del edificio (#56).</p>
+<p><strong>08-03-2021 (1.3)</strong>
+* Conserva todas las partes de los edificios para ajustarse mejor al estandar de Edificios 3D Sencillos (#56).</p>
+<p><strong>08-01-2020 (1.2.2)</strong>
+* Corrige TypeError: expected string or bytes-like object #49
+* Corrige Infinite loop deleting invalid geometries #50</p>
+<p><strong>07-01-2020 (1.2.1)</strong>
+* Resuelve referencia circular traduciendo compat.py
+* Añade requisitos de desarrollo que faltaban</p>
+<p><strong>07-01-2020 (1.2)</strong>
+* Versión compatible con Qgis 3.x</p>
+<p><strong>18-12-2019 (1.1.14)</strong>
+* Asigna el dueño de la carpeta de la aplicación en docker</p>
+<p><strong>17-12-2019 (1.1.13)</strong>
+* Corrige el nombre del repositorio Docker</p>
+<p><strong>17-12-2019 (1.1.12)</strong>
+* Corrige el nombre del script de depliegue en docker</p>
+<p><strong>17-12-2019 (1.1.11)</strong>
+* Despliega sólo a versiones etiquetadas
+* Corrige el nombre del repositorio Docker</p>
+<p><strong>17-12-2019 (1.1.10)</strong>
+* Añade contenedor docker e integración contínua con travis</p>
+<p><strong>09-12-2019 (1.1.9)</strong></p>
+<ul class="simple">
+<li>Resuelve error tras actualización de archivos GML de Catastro #47</li>
+</ul>
 <p><strong>09-11-2018 (1.1.8)</strong></p>
 <ul class="simple">
 <li>Resuelve error abriendo los archivos de Catastro más actuales (cuestión #29)</li>
@@ -298,7 +350,7 @@
         <li class="right" >
           <a href="install.html" title="Instalación"
              >anterior</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">documentación de CatAtom2Osm - 1.1.8</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">documentación de CatAtom2Osm - 1.5.0</a> &#187;</li> 
       </ul>
     </div>
 <script type="text/javascript">
@@ -308,7 +360,7 @@
 </script>
 <script type="text/javascript" src="_static/js/bootstrap.js"></script>
   <div class="footer">
-    &copy; Copyright 2017, Javier Sánchez Portero. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+    &copy; Copyright 2017, Javier Sanchez Portero. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
   </div>
   </body>
 </html>

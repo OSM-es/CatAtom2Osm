@@ -15,7 +15,7 @@
   <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>overpass &#8212; documentación de CatAtom2Osm - 1.1.8</title>
+    <title>overpass &#8212; documentación de CatAtom2Osm - 1.5.0</title>
     
     <link rel="stylesheet" href="../_static/guzzle.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -23,7 +23,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.1.8',
+        VERSION:     '1.5.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -50,7 +50,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">documentación de CatAtom2Osm - 1.1.8</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">documentación de CatAtom2Osm - 1.5.0</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Código de módulo</a> &#187;</li> 
       </ul>
     </div>
@@ -74,7 +74,6 @@
       <ul>
 <li class="toctree-l1"><a class="reference internal" href="../readme.html">Léeme</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Instalación</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../install.html#configuracion">Configuración</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../changes.html">Registro de cambios</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../api.html">Referencia API</a></li>
 </ul>
@@ -114,6 +113,8 @@
             
   <h1>Código fuente para overpass</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Minimum Overpass API interface&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">past.builtins</span> <span class="k">import</span> <span class="n">basestring</span>
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">object</span><span class="p">,</span> <span class="nb">range</span>
 <span class="kn">import</span> <span class="nn">re</span>
 
 <span class="kn">import</span> <span class="nn">download</span>
@@ -145,12 +146,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
 
 <div class="viewcode-block" id="Query.set_search_area"><a class="viewcode-back" href="../api/overpass.html#overpass.Query.set_search_area">[documentos]</a>    <span class="k">def</span> <span class="nf">set_search_area</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">search_area</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Set the area to search in. It could either the osm id of a named area</span>
-<span class="sd">           or a bounding box (bottom, left, top, right) clause.&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s1">&#39;^\d{1,8}$&#39;</span><span class="p">,</span> <span class="n">search_area</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the area to search in. It could be either the osm id of a named</span>
+<span class="sd">           area or a bounding box (bottom, left, top, right) clause.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^\d{1,8}$&#39;</span><span class="p">,</span> <span class="n">search_area</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">area_id</span> <span class="o">=</span> <span class="n">search_area</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">bbox</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-        <span class="k">elif</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s1">&#39;^(-?\d{1,3}(\.\d+)?,\s*)</span><span class="si">{3}</span><span class="s1">-?\d{1,3}(\.\d+)?$&#39;</span><span class="p">,</span> <span class="n">search_area</span><span class="p">):</span>
+        <span class="k">elif</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^(-?\d{1,3}(\.\d+)?,\s*)</span><span class="si">{3}</span><span class="s1">-?\d{1,3}(\.\d+)?$&#39;</span><span class="p">,</span> <span class="n">search_area</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">bbox</span> <span class="o">=</span> <span class="n">search_area</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">area_id</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
         <span class="k">else</span><span class="p">:</span>
@@ -162,10 +163,10 @@
 <span class="sd">           or area clauses. Example: node[&quot;name&quot;=&quot;Berlin&quot;]&quot;&quot;&quot;</span>
         <span class="n">rsc</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="n">s</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">s</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;;&#39;</span> <span class="k">else</span> <span class="n">s</span>
         <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="s1">&#39;__iter__&#39;</span><span class="p">):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">statements</span> <span class="o">+=</span> <span class="p">[</span><span class="n">rsc</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">arg</span><span class="p">]</span>
-            <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">statements</span> <span class="o">+=</span> <span class="n">rsc</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">statements</span> <span class="o">+=</span> <span class="p">[</span><span class="n">rsc</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">arg</span><span class="p">]</span>
         <span class="k">return</span> <span class="bp">self</span></div>
     
 <div class="viewcode-block" id="Query.get_url"><a class="viewcode-back" href="../api/overpass.html#overpass.Query.get_url">[documentos]</a>    <span class="k">def</span> <span class="nf">get_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
@@ -190,7 +191,7 @@
                 <span class="k">return</span>
             <span class="k">except</span> <span class="ne">IOError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="k">pass</span>
-        <span class="k">raise</span> <span class="n">e</span></div>
+        <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">&quot;Can&#39;t read from any Overpass server&#39;&quot;</span><span class="p">)</span></div>
     
 <div class="viewcode-block" id="Query.read"><a class="viewcode-back" href="../api/overpass.html#overpass.Query.read">[documentos]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns query result&quot;&quot;&quot;</span>
@@ -213,7 +214,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">documentación de CatAtom2Osm - 1.1.8</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">documentación de CatAtom2Osm - 1.5.0</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Código de módulo</a> &#187;</li> 
       </ul>
     </div>
@@ -224,7 +225,7 @@
 </script>
 <script type="text/javascript" src="../_static/js/bootstrap.js"></script>
   <div class="footer">
-    &copy; Copyright 2017, Javier Sánchez Portero. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+    &copy; Copyright 2017, Javier Sanchez Portero. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
   </div>
   </body>
 </html>

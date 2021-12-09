@@ -7,7 +7,6 @@ import os
 from datetime import datetime
 from collections import defaultdict, Counter
 from qgis.core import *
-from PyQt4.QtCore import QVariant
 from osgeo import gdal
 #gdal.PushErrorHandler('CPLQuietErrorHandler')
 
@@ -16,8 +15,8 @@ import setup
 import layer
 import osmxml
 import osm
-from download import ProgressBar
 from catatom2osm import QgsSingleton
+from qgiscompat import *
 qgs = QgsSingleton()
 
 N = 1
@@ -30,7 +29,7 @@ class BaseTimer(object):
         p = func.__name__
         if p.startswith('test_'): p = p[5:]
         t = timeit.timeit(func, number=N) * MS
-        print self.obj.__class__.__name__ + '.' + p + ': ' + str(t)
+        print(self.obj.__class__.__name__ + '.' + p + ': ' + str(t))
     
     def run(self):
         set_up = None
@@ -202,28 +201,28 @@ class TimerConsLayer(BaseTimer):
         fo = open(osm_path, 'r')
         self.current_bu_osm = osmxml.deserialize(fo)
         self.obj.reproject()
-        print 'Seleccionando {} edificios de {}'.format(len(self.fids), c)
+        print('Seleccionando {} edificios de {}'.format(len(self.fids), c))
         self.test(self.get_fids_by_loop)
         """
         self.test(self.get_features)
         #self.test(self.get_index)
         self.test(self.get_index_shp)
-        print '5 /', self.building_shp.featureCount()
+        print('5 /', self.building_shp.featureCount())
         self.fids = [random.randrange(c) for i in range(5)]
         self.test(self.get_fids_by_dict_mem)
         self.test(self.get_fids_by_filter_shp)
         self.test(self.get_fids_by_filter_mem)
-        print '50 /', self.building_shp.featureCount()
+        print('50 /', self.building_shp.featureCount())
         self.fids = [random.randrange(c) for i in range(50)]
         self.test(self.get_fids_by_dict_mem)
         self.test(self.get_fids_by_filter_shp)
         self.test(self.get_fids_by_filter_mem)
-        print '500 /', self.building_shp.featureCount()
+        print('500 /', self.building_shp.featureCount())
         self.fids = [random.randrange(c) for i in range(500)]
         self.test(self.get_fids_by_dict_mem)
         self.test(self.get_fids_by_filter_shp)
         self.test(self.get_fids_by_filter_mem)
-        print '5000 /', self.building_shp.featureCount()
+        print('5000 /', self.building_shp.featureCount())
         self.fids = [random.randrange(c) for i in range(5000)]
         self.test(self.get_fids_by_dict_mem)
         self.test(self.get_fids_by_filter_shp)
@@ -249,8 +248,8 @@ class TimerConsLayer(BaseTimer):
             for zone in self.zoning_gml.getFeatures(request):
                 fids = index.intersects(zone.geometry().boundingBox())
                 c[t].append(len(fids))
-            print t, min(c[t]), max(c[t])
-            print Counter(c[t])
+            print(t, min(c[t]), max(c[t]))
+            print(Counter(c[t]))
     
     def get_features(self):
         """
@@ -402,25 +401,25 @@ class TimerConsLayer(BaseTimer):
                         to_clean.add(el)
                     if not delete and conflict:
                         el.tags['conflict'] = 'yes'
-        print "Detected {} conflicts in {} buildings from OSM".format(conflicts, num_buildings)
+        print("Detected {} conflicts in {} buildings from OSM".format(conflicts, num_buildings))
 
 
     def _test_conflate(self):
         self.obj.conflate(self.current_bu_osm)
 
     def _test_zoning(self):
-        print 'start', datetime.now()
+        print('start', datetime.now())
         d = time.time()
         #urban_zoning = layer.ZoningLayer(baseName='urbanzoning')
         rustic_zoning = layer.ZoningLayer(baseName='rusticzoning')
         #urban_zoning.append(self.zoning_gml, level='M')
         rustic_zoning.append(self.zoning_gml, level='P')
-        #print 'urban', urban_zoning.featureCount()
-        print 'rustic', rustic_zoning.featureCount()
+        #print('urban', urban_zoning.featureCount())
+        print('rustic', rustic_zoning.featureCount())
         index = QgsSpatialIndex(self.building_gml.getFeatures())
         #indexp = QgsSpatialIndex(self.part_gml.getFeatures())
         #indexo = QgsSpatialIndex(self.other_gml.getFeatures())
-        print 'index', 1000 * (time.time() - d)
+        print('index', 1000 * (time.time() - d))
         d = time.time()
         i = 0
         processed = set()
@@ -429,25 +428,25 @@ class TimerConsLayer(BaseTimer):
             refs = set()
             task = layer.ConsLayer(baseName=zone['label'])
             task.append_zone(self.building_gml, zone, processed, index)
-            print 'zone', 1000 * (time.time() - d), i
+            print('zone', 1000 * (time.time() - d), i)
             d = time.time()
             for feat in task.getFeatures():
                 refs.add(feat['localId'])
-            #print 'refs', 1000 * (time.time() - d)
+            #print('refs', 1000 * (time.time() - d))
             #d = time.time()
             task.append_task(self.part_gml, refs)
             #task.append_zone(self.part_gml, zone, processed, indexp)
-            print 'part', 1000 * (time.time() - d)
+            print('part', 1000 * (time.time() - d))
             d = time.time()
             task.append_task(self.other_gml, refs)
             #task.append_zone(self.other_gml, zone, processed, indexp)
-            print 'other', 1000 * (time.time() - d)
+            print('other', 1000 * (time.time() - d))
             d = time.time()
             processed = processed.union(refs)
             del task
-            print i
+            print(i)
             if i > 0: break
-        print 'end', datetime.now()
+        print('end', datetime.now())
 
 
 class BaseConsTimer(BaseTimer):
@@ -460,8 +459,8 @@ class BaseConsTimer(BaseTimer):
         self.building_gml = QgsVectorLayer(building_fn, 'building', 'ogr')
         self.part_gml = QgsVectorLayer(buildingpart_fn, 'buildingpart', 'ogr')
         self.other_gml = QgsVectorLayer(other_fn, 'otherconstruction', 'ogr')
-        print self.building_gml.featureCount(), self.part_gml.featureCount(), \
-            self.other_gml.featureCount()
+        print(self.building_gml.featureCount(), self.part_gml.featureCount(), \
+            self.other_gml.featureCount())
 
     def create_shp(self, name):
         QgsVectorFileWriter(name, 'UTF-8', QgsFields(), QGis.WKBMultiPolygon, 
@@ -597,7 +596,7 @@ class TimerFixMemUsageAd(BaseTimer):
         QgsVectorFileWriter('address.shp', 'UTF-8', QgsFields(), QGis.WKBPoint, 
             self.address_gml.crs(), 'ESRI Shapefile')
         self.obj = layer.AddressLayer('address.shp', 'address', 'ogr')
-        print self.address_gml.featureCount()
+        print(self.address_gml.featureCount())
 
     @staticmethod
     def join_field(dest_layer, source_layer, target_field_name, join_field_name,
@@ -787,20 +786,20 @@ class TimerShpLayer(ConsTimer):
 class BaseBuildingTimer(BaseConsTimer):
 
     def __init__(self):
-        print 'start', datetime.now()
+        print('start', datetime.now())
         d = time.time()
         super(BaseBuildingTimer, self).__init__()
         self.create_shp('building.shp')
         self.obj = layer.ConsLayer('building.shp', 'building', 'ogr')
         #self.obj = layer.ConsLayer()
         self.obj.append(self.building_gml)
-        print 'building', 1000 * (time.time() - d), self.obj.featureCount()
+        print('building', 1000 * (time.time() - d), self.obj.featureCount())
         d = time.time()
         self.obj.append(self.part_gml)
-        print 'parts', 1000 * (time.time() - d), self.obj.featureCount()
+        print('parts', 1000 * (time.time() - d), self.obj.featureCount())
         d = time.time()
         self.obj.append(self.other_gml)
-        print 'others', 1000 * (time.time() - d), self.obj.featureCount()
+        print('others', 1000 * (time.time() - d), self.obj.featureCount())
 
     def __del__(self):
         QgsVectorFileWriter.deleteShapeFile('building.shp')
@@ -811,11 +810,11 @@ class TimerVertices(BaseBuildingTimer):
         super(TimerVertices, self).__init__()
         d = time.time()
         self.obj_shp = self.obj.get_vertices()
-        print 'vertices_shp', 1000 * (time.time() - d), self.obj_shp.featureCount()
+        print('vertices_shp', 1000 * (time.time() - d), self.obj_shp.featureCount())
         d = time.time()
         self.obj = layer.BaseLayer('Point', 'vertices', 'memory')
         self.obj.append(self.obj_shp)
-        print 'vertices_mem', 1000 * (time.time() - d), self.obj.featureCount()
+        print('vertices_mem', 1000 * (time.time() - d), self.obj.featureCount())
 
     def __del__(self):
         self.obj_shp.delete_shp()
@@ -881,17 +880,17 @@ class AppendZoneTimer(BaseBuildingTimer):
         super(AppendZoneTimer, self).__init__()
         d = time.time()
         self.index = QgsSpatialIndex(self.obj.getFeatures())
-        print 'index', 1000 * (time.time() - d)
+        print('index', 1000 * (time.time() - d))
         d = time.time()
         zoning_fn = BASEPATH + '{0}/A.ES.SDGC.CP.{0}.cadastralzoning.gml'.format(self.mun)
         zoning_gml = QgsVectorLayer(zoning_fn, 'zoning', 'ogr')
         self.urban_zoning = layer.ZoningLayer(baseName='urbanzoning')
         self.rustic_zoning = layer.ZoningLayer(baseName='rusticzoning')
         self.urban_zoning.append(zoning_gml, level='M')
-        print 'urban_zoning', 1000 * (time.time() - d), self.urban_zoning.featureCount()
+        print('urban_zoning', 1000 * (time.time() - d), self.urban_zoning.featureCount())
         d = time.time()
         self.rustic_zoning.append(zoning_gml, level='P')
-        print 'rustic_zoning', 1000 * (time.time() - d), self.rustic_zoning.featureCount()
+        print('rustic_zoning', 1000 * (time.time() - d), self.rustic_zoning.featureCount())
 
     def append_zone(self, dest, source, zone, processed, index):
         query = lambda f, kwargs: not '_' in f['localId'] and f.id() in fids and \
@@ -945,11 +944,11 @@ class AppendZoneTimer(BaseBuildingTimer):
         refs = set()
         for feat in task.getFeatures():
             refs.add(feat['localId'])
-        print 'refs', len(refs)
+        print('refs', len(refs))
         self.append_task(task, self.part_gml, refs)
-        print task.featureCount()
+        print(task.featureCount())
         self.append_task(task, self.other_gml, refs)
-        print task.featureCount()
+        print(task.featureCount())
 
     def test_append_zone_1(self):
         rprocessed = set()
@@ -961,9 +960,9 @@ class AppendZoneTimer(BaseBuildingTimer):
         refs = set()
         for feat in task.getFeatures():
             refs.add(feat['localId'])
-        print 'refs', len(refs)
+        print('refs', len(refs))
         self.append_task(task, self.obj, refs)
-        print task.featureCount()
+        print(task.featureCount())
 
     def test_append_zone2(self):
         rprocessed = set()
@@ -972,9 +971,9 @@ class AppendZoneTimer(BaseBuildingTimer):
         task = layer.ConsLayer(baseName=rzone['label'])
         task.rename = {}
         refs = self.append_zone2(task, self.obj, rzone, rprocessed, rindex)
-        print 'refs', len(refs)
+        print('refs', len(refs))
         self.append_task(task, self.obj, refs)
-        print task.featureCount()
+        print(task.featureCount())
 
     def test_append_zone3(self):
         rprocessed = set()
@@ -983,8 +982,8 @@ class AppendZoneTimer(BaseBuildingTimer):
         task = layer.ConsLayer(baseName=rzone['label'])
         task.rename = {}
         refs = self.append_zone2(task, self.obj, rzone, rprocessed, rindex, True)
-        print 'refs', len(refs)
-        print task.featureCount()
+        print('refs', len(refs))
+        print(task.featureCount())
 
 class TimerOsm(BaseTimer):
 
@@ -1059,11 +1058,11 @@ class TimerZoningLayer(BaseTimer):
         request = QgsFeatureRequest(exp)
         f = fixture.getFeatures(request).next()
         g = f.geometry()
-        print 'multipolygon', [[[len(r)] for r in p] for p in g.asMultiPolygon()]
+        print('multipolygon', [[[len(r)] for r in p] for p in g.asMultiPolygon()])
         urban.writer.addFeatures([f])
         f = urban.getFeatures().next()
         g = f.geometry()
-        print 'to wrong polygon', [len(r) for r in g.asPolygon()]
+        print('to wrong polygon', [len(r) for r in g.asPolygon()])
         QgsVectorFileWriter.deleteShapeFile(fn)
 
 
@@ -1076,13 +1075,13 @@ if __name__ == '__main__':
     TimerConsLayer().run()
     d = time.time()
     TimerMemLayer().run()
-    print 'MEM', 1000 * (time.time() - d)
+    print('MEM', 1000 * (time.time() - d))
     d = time.time()
     #TimerBdLayer().run()
-    #print 'BD', 1000 * (time.time() - d)
+    #print('BD', 1000 * (time.time() - d))
     #d = time.time()
     TimerShpLayer().run()
-    print 'SHP', 1000 * (time.time() - d)
+    print('SHP', 1000 * (time.time() - d))
     d = time.time()
     TimerFixMemUsageAd().run()
     TimerZoningLayer().run()

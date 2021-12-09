@@ -15,7 +15,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>test.test_cdau &#8212; documentación de CatAtom2Osm - 1.1.8</title>
+    <title>test.test_cdau &#8212; documentación de CatAtom2Osm - 1.5.0</title>
     
     <link rel="stylesheet" href="../../_static/guzzle.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -23,7 +23,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.1.8',
+        VERSION:     '1.5.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -50,7 +50,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 1.1.8</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 1.5.0</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Código de módulo</a> &#187;</li> 
       </ul>
     </div>
@@ -74,7 +74,6 @@
       <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../readme.html">Léeme</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../install.html">Instalación</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../install.html#configuracion">Configuración</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../changes.html">Registro de cambios</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api.html">Referencia API</a></li>
 </ul>
@@ -114,6 +113,8 @@
             
   <h1>Código fuente para test.test_cdau</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">str</span>
 <span class="kn">import</span> <span class="nn">unittest</span>
 <span class="kn">import</span> <span class="nn">mock</span>
 <span class="kn">import</span> <span class="nn">os</span>
@@ -125,6 +126,9 @@
 <span class="kn">from</span> <span class="nn">catatom2osm</span> <span class="k">import</span> <span class="n">QgsSingleton</span>
 <span class="n">qgs</span> <span class="o">=</span> <span class="n">QgsSingleton</span><span class="p">()</span>
 
+
+<div class="viewcode-block" id="get_func"><a class="viewcode-back" href="../../api/test.test_cdau.html#test.test_cdau.get_func">[documentos]</a><span class="k">def</span> <span class="nf">get_func</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s1">&#39;__func__&#39;</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="TestCdau"><a class="viewcode-back" href="../../api/test.test_cdau.html#test.test_cdau.TestCdau">[documentos]</a><span class="k">class</span> <span class="nc">TestCdau</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
 
@@ -162,12 +166,12 @@
 
     <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;cdau.os&#39;</span><span class="p">)</span>
 <div class="viewcode-block" id="TestCdau.test_init"><a class="viewcode-back" href="../../api/test.test_cdau.html#test.test_cdau.TestCdau.test_init">[documentos]</a>    <span class="k">def</span> <span class="nf">test_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m_os</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">m_cdau</span><span class="o">.</span><span class="n">init</span> <span class="o">=</span> <span class="n">cdau</span><span class="o">.</span><span class="n">Reader</span><span class="o">.</span><span class="fm">__init__</span><span class="o">.</span><span class="vm">__func__</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">m_cdau</span><span class="o">.</span><span class="n">init</span> <span class="o">=</span> <span class="n">get_func</span><span class="p">(</span><span class="n">cdau</span><span class="o">.</span><span class="n">Reader</span><span class="o">.</span><span class="fm">__init__</span><span class="p">)</span>
         <span class="n">m_os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="n">m_os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="ne">IOError</span><span class="p">)</span> <span class="k">as</span> <span class="n">cm</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">m_cdau</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_cdau</span><span class="p">,</span> <span class="s1">&#39;foobar&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s1">&#39;Not a directory&#39;</span><span class="p">,</span> <span class="n">cm</span><span class="o">.</span><span class="n">exception</span><span class="o">.</span><span class="n">message</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s1">&#39;Not a directory&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">cm</span><span class="o">.</span><span class="n">exception</span><span class="p">))</span>
         <span class="n">m_os</span><span class="o">.</span><span class="n">makedirs</span><span class="o">.</span><span class="n">assert_not_called</span><span class="p">()</span>
         <span class="n">m_os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="n">m_os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="kc">True</span>
@@ -178,10 +182,10 @@
     <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;cdau.layer&#39;</span><span class="p">)</span>
     <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;cdau.download&#39;</span><span class="p">)</span>
 <div class="viewcode-block" id="TestCdau.test_read"><a class="viewcode-back" href="../../api/test.test_cdau.html#test.test_cdau.TestCdau.test_read">[documentos]</a>    <span class="k">def</span> <span class="nf">test_read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m_download</span><span class="p">,</span> <span class="n">m_layer</span><span class="p">,</span> <span class="n">m_os</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">m_cdau</span><span class="o">.</span><span class="n">read</span> <span class="o">=</span> <span class="n">cdau</span><span class="o">.</span><span class="n">Reader</span><span class="o">.</span><span class="n">read</span><span class="o">.</span><span class="vm">__func__</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">m_cdau</span><span class="o">.</span><span class="n">read</span> <span class="o">=</span> <span class="n">get_func</span><span class="p">(</span><span class="n">cdau</span><span class="o">.</span><span class="n">Reader</span><span class="o">.</span><span class="n">read</span><span class="p">)</span>
         <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">)</span> <span class="k">as</span> <span class="n">cm</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">m_cdau</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_cdau</span><span class="p">,</span> <span class="s1">&#39;38&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s1">&#39;Province code&#39;</span><span class="p">,</span> <span class="n">cm</span><span class="o">.</span><span class="n">exception</span><span class="o">.</span><span class="n">message</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s1">&#39;Province code&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">cm</span><span class="o">.</span><span class="n">exception</span><span class="p">))</span>
 
         <span class="n">m_os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span> <span class="o">=</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="s1">&#39;/&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
         <span class="n">m_os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="kc">True</span>
@@ -190,7 +194,7 @@
         <span class="n">csv</span> <span class="o">=</span> <span class="n">mock</span><span class="o">.</span><span class="n">MagicMock</span><span class="p">()</span>
         <span class="n">csv</span><span class="o">.</span><span class="n">isValid</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="n">m_layer</span><span class="o">.</span><span class="n">BaseLayer</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">csv</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_cdau</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_cdau</span><span class="p">,</span> <span class="s1">&#39;29&#39;</span><span class="p">),</span> <span class="n">csv</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_cdau</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_cdau</span><span class="p">,</span> <span class="s1">&#39;29&#39;</span><span class="p">),</span> <span class="n">csv</span><span class="p">)</span>
         <span class="n">m_download</span><span class="o">.</span><span class="n">wget</span><span class="o">.</span><span class="n">assert_not_called</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">csv</span><span class="o">.</span><span class="n">source_date</span><span class="p">,</span> <span class="s1">&#39;taz&#39;</span><span class="p">)</span>
 
@@ -198,7 +202,7 @@
         <span class="n">csv</span><span class="o">.</span><span class="n">isValid</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="ne">IOError</span><span class="p">)</span> <span class="k">as</span> <span class="n">cm</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">m_cdau</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_cdau</span><span class="p">,</span> <span class="s1">&#39;29&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s1">&#39;Failed to load layer&#39;</span><span class="p">,</span> <span class="n">cm</span><span class="o">.</span><span class="n">exception</span><span class="o">.</span><span class="n">message</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s1">&#39;Failed to load layer&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">cm</span><span class="o">.</span><span class="n">exception</span><span class="p">))</span>
         <span class="n">fn</span> <span class="o">=</span> <span class="n">cdau</span><span class="o">.</span><span class="n">csv_name</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;Malaga&#39;</span><span class="p">)</span>
         <span class="n">url</span> <span class="o">=</span> <span class="n">cdau</span><span class="o">.</span><span class="n">cdau_url</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
         <span class="n">m_download</span><span class="o">.</span><span class="n">wget</span><span class="o">.</span><span class="n">assert_called_once_with</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s1">&#39;foobar/&#39;</span><span class="o">+</span><span class="n">fn</span><span class="p">)</span></div>
@@ -213,7 +217,7 @@
         <span class="n">fo</span> <span class="o">=</span> <span class="n">mock</span><span class="o">.</span><span class="n">MagicMock</span><span class="p">()</span>
         <span class="n">m_open</span><span class="o">.</span><span class="n">return_value</span><span class="o">.</span><span class="fm">__enter__</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">fo</span>
         <span class="n">m_os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">m_cdau</span><span class="o">.</span><span class="n">get_metadata</span> <span class="o">=</span> <span class="n">cdau</span><span class="o">.</span><span class="n">Reader</span><span class="o">.</span><span class="n">get_metadata</span><span class="o">.</span><span class="vm">__func__</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">m_cdau</span><span class="o">.</span><span class="n">get_metadata</span> <span class="o">=</span> <span class="n">get_func</span><span class="p">(</span><span class="n">cdau</span><span class="o">.</span><span class="n">Reader</span><span class="o">.</span><span class="n">get_metadata</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">m_cdau</span><span class="o">.</span><span class="n">get_metadata</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_cdau</span><span class="p">,</span> <span class="s1">&#39;xxx&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_cdau</span><span class="o">.</span><span class="n">src_date</span><span class="p">,</span> <span class="s1">&#39;2018-03-05&#39;</span><span class="p">)</span>
         <span class="n">m_open</span><span class="o">.</span><span class="n">assert_called_once_with</span><span class="p">(</span><span class="s1">&#39;xxx&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
@@ -222,7 +226,7 @@
         <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="ne">IOError</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">m_cdau</span><span class="o">.</span><span class="n">get_metadata</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_cdau</span><span class="p">,</span> <span class="s1">&#39;xxx&#39;</span><span class="p">)</span>
         <span class="n">m_open</span><span class="o">.</span><span class="n">reset_mock</span><span class="p">()</span>
-        <span class="n">m_open</span><span class="o">.</span><span class="n">return_value</span><span class="o">.</span><span class="n">read</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="s1">&#39;foobar&#39;</span>
+        <span class="n">m_open</span><span class="o">.</span><span class="n">return_value</span><span class="o">.</span><span class="fm">__enter__</span><span class="o">.</span><span class="n">return_value</span><span class="o">.</span><span class="n">read</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="s1">&#39;foobar&#39;</span>
         <span class="n">m_os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">m_cdau</span><span class="o">.</span><span class="n">get_metadata</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_cdau</span><span class="p">,</span> <span class="s1">&#39;xxx&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_cdau</span><span class="o">.</span><span class="n">src_date</span><span class="p">,</span> <span class="s1">&#39;foobar&#39;</span><span class="p">)</span>
@@ -233,14 +237,14 @@
             <span class="s1">&#39;dgc_via&#39;</span><span class="p">:</span> <span class="s1">&#39;123&#39;</span><span class="p">,</span> 
             <span class="s1">&#39;refcatparc&#39;</span><span class="p">:</span> <span class="s1">&#39;foobar&#39;</span><span class="p">,</span>
             <span class="s1">&#39;nom_tip_via&#39;</span><span class="p">:</span> <span class="s1">&#39;CALLE&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;nom_via&#39;</span><span class="p">:</span> <span class="sa">u</span><span class="s1">&#39;Alegría&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;nom_via&#39;</span><span class="p">:</span> <span class="s2">&quot;Alegría&quot;</span><span class="p">,</span>
             <span class="s1">&#39;cod_postal&#39;</span><span class="p">:</span> <span class="s1">&#39;12345&#39;</span><span class="p">,</span>
             <span class="s1">&#39;num_por_desde&#39;</span><span class="p">:</span> <span class="s1">&#39;10&#39;</span><span class="p">,</span> <span class="s1">&#39;ext_desde&#39;</span><span class="p">:</span> <span class="s1">&#39;A&#39;</span><span class="p">,</span>
             <span class="s1">&#39;num_por_hasta&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;ext_hasta&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span>
         <span class="p">}</span>
         <span class="n">attr</span> <span class="o">=</span> <span class="n">cdau</span><span class="o">.</span><span class="n">get_cat_address</span><span class="p">(</span><span class="n">ad</span><span class="p">,</span> <span class="s1">&#39;29900&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">attr</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">],</span> <span class="s1">&#39;29.900.123.foobar&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">attr</span><span class="p">[</span><span class="s1">&#39;TN_text&#39;</span><span class="p">],</span> <span class="sa">u</span><span class="s1">&#39;CL Alegría&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">attr</span><span class="p">[</span><span class="s1">&#39;TN_text&#39;</span><span class="p">],</span> <span class="s2">&quot;CL Alegría&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">attr</span><span class="p">[</span><span class="s1">&#39;postCode&#39;</span><span class="p">],</span> <span class="s1">&#39;12345&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">attr</span><span class="p">[</span><span class="s1">&#39;spec&#39;</span><span class="p">],</span> <span class="s1">&#39;Entrance&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">attr</span><span class="p">[</span><span class="s1">&#39;designator&#39;</span><span class="p">],</span> <span class="s1">&#39;10A&#39;</span><span class="p">)</span>
@@ -264,7 +268,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 1.1.8</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 1.5.0</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Código de módulo</a> &#187;</li> 
       </ul>
     </div>
@@ -275,7 +279,7 @@
 </script>
 <script type="text/javascript" src="../../_static/js/bootstrap.js"></script>
   <div class="footer">
-    &copy; Copyright 2017, Javier Sánchez Portero. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+    &copy; Copyright 2017, Javier Sanchez Portero. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
   </div>
   </body>
 </html>

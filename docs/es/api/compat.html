@@ -15,7 +15,7 @@
   <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>compat module &#8212; documentación de CatAtom2Osm - 1.1.8</title>
+    <title>compat module &#8212; documentación de CatAtom2Osm - 1.5.0</title>
     
     <link rel="stylesheet" href="../_static/guzzle.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -23,7 +23,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.1.8',
+        VERSION:     '1.5.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -58,7 +58,7 @@
         <li class="right" >
           <a href="cdau.html" title="cdau module"
              accesskey="P">anterior</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">documentación de CatAtom2Osm - 1.1.8</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">documentación de CatAtom2Osm - 1.5.0</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../api.html" >Referencia API</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="modules.html" accesskey="U">CatAtom2Osm</a> &#187;</li> 
       </ul>
@@ -83,7 +83,6 @@
       <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../readme.html">Léeme</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Instalación</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../install.html#configuracion">Configuración</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../changes.html">Registro de cambios</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">Referencia API</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="modules.html">CatAtom2Osm</a></li>
@@ -130,6 +129,41 @@
             
   <div class="section" id="module-compat">
 <span id="compat-module"></span><h1>compat module<a class="headerlink" href="#module-compat" title="Enlazar permanentemente con este título">¶</a></h1>
+<p>Accessory methods for compatibility between different systems</p>
+<dl class="class">
+<dt id="compat.Terminal">
+<em class="property">class </em><code class="descclassname">compat.</code><code class="descname">Terminal</code><span class="sig-paren">(</span><em>encoding</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/compat.html#Terminal"><span class="viewcode-link">[fuente]</span></a><a class="headerlink" href="#compat.Terminal" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="compat.Terminal.decode">
+<code class="descname">decode</code><span class="sig-paren">(</span><em>msg</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/compat.html#Terminal.decode"><span class="viewcode-link">[fuente]</span></a><a class="headerlink" href="#compat.Terminal.decode" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Decode strings from W$ terminal with Python2</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compat.Terminal.encode">
+<code class="descname">encode</code><span class="sig-paren">(</span><em>msg</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/compat.html#Terminal.encode"><span class="viewcode-link">[fuente]</span></a><a class="headerlink" href="#compat.Terminal.encode" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Encode strings to W$ terminal with Python2</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="compat.get_stderr">
+<code class="descclassname">compat.</code><code class="descname">get_stderr</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/compat.html#get_stderr"><span class="viewcode-link">[fuente]</span></a><a class="headerlink" href="#compat.get_stderr" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Return wrapped version of stderr encoded to terminal code page</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="compat.install_gettext">
+<code class="descclassname">compat.</code><code class="descname">install_gettext</code><span class="sig-paren">(</span><em>app_name</em>, <em>localedir</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/compat.html#install_gettext"><span class="viewcode-link">[fuente]</span></a><a class="headerlink" href="#compat.install_gettext" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="compat.set_es_time">
+<code class="descclassname">compat.</code><code class="descname">set_es_time</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/compat.html#set_es_time"><span class="viewcode-link">[fuente]</span></a><a class="headerlink" href="#compat.set_es_time" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
 </div>
 
 
@@ -165,7 +199,7 @@
         <li class="right" >
           <a href="cdau.html" title="cdau module"
              >anterior</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">documentación de CatAtom2Osm - 1.1.8</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">documentación de CatAtom2Osm - 1.5.0</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../api.html" >Referencia API</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="modules.html" >CatAtom2Osm</a> &#187;</li> 
       </ul>
@@ -177,7 +211,7 @@
 </script>
 <script type="text/javascript" src="../_static/js/bootstrap.js"></script>
   <div class="footer">
-    &copy; Copyright 2017, Javier Sánchez Portero. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+    &copy; Copyright 2017, Javier Sanchez Portero. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
   </div>
   </body>
 </html>
