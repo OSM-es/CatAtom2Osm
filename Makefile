@@ -125,5 +125,5 @@ publish:
 	@echo "Pulsa una tecla para continuar"
 	@read
 	@docker tag catatom2osm:latest egofer/catatom2osm:latest
-	@docker tag catatom2osm:latest egofer/catatom2osm:1.3.10
+	@docker tag catatom2osm:latest egofer/catatom2osm:$(VERSION)
 	@docker push -a egofer/catatom2osm
