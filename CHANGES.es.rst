@@ -1,6 +1,9 @@
 Registro de cambios
 ===================
 
+**10-12-2021 (1.6.1)**
+* Deja de crear contorno para partes sin edificio
+
 **10-12-2021 (1.6.0)**
 * Opción para revisar las etiquetas de los changesets (#64)
 

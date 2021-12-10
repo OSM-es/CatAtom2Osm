@@ -1,6 +1,9 @@
 Change log
 ==========
 
+**2021-12-10 (1.6.1)**
+* Don't create outline for parts without associated building
+
 **2021-12-10 (1.6.0)**
 * Option to review changesets tags (#64)
 
