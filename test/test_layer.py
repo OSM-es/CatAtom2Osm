@@ -816,13 +816,7 @@ class TestConsLayer(unittest.TestCase):
             '8742707CS5284S_part2',
             '8742707CS5284S_part6'
         ]
-        exp = QgsExpression("localId = '000902900CS52D'")
-        request = QgsFeatureRequest(exp)
-        with self.assertRaises(StopIteration):
-            next(self.layer.getFeatures(request))
         self.layer.remove_outside_parts()
-        f = next(self.layer.getFeatures(request))
-        self.assertEqual(f['localId'], '000902900CS52D')
         for feat in self.layer.getFeatures():
             self.assertNotIn(feat['localId'], refs)
 

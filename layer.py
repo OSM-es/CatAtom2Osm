@@ -1465,13 +1465,12 @@ class ConsLayer(PolygonLayer):
                 ref = feat['localId'].split('_')[0]
                 if feat['lev_above'] == 0 and feat['lev_below'] != 0:
                     to_clean_b.append(feat.id())
-                elif ref not in buildings:
-                    # TODO remove
-                    parts_for_ref[ref].append(feat)
-                else:
+                elif ref in buildings:
                     bu = buildings[ref]
                     if not is_inside(feat, bu):
                         to_clean_o.append(feat.id())
+                # else:
+                #    parts_for_ref[ref].append(feat)
             pbar.update()
         pbar.close()
         for ref, parts in parts_for_ref.items():
