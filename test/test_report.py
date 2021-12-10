@@ -218,6 +218,7 @@ class TestReport(unittest.TestCase):
         t = (
             "Municipality: foobar\n"
             "Code: 12345\n"
+            "Application version: taz\n"
             "=Addresses=\n"
             "==Input data==\n"
             "Source date: 2021-09-11\n"
@@ -229,5 +230,6 @@ class TestReport(unittest.TestCase):
         r.from_file('')
         self.assertEqual(r.mun_name, 'foobar')
         self.assertEqual(r.mun_code, '12345')
+        self.assertEqual(r.app_version, 'taz')
         self.assertEqual(r.building_date, '2021-06-22')
         self.assertEqual(r.address_date, '2021-09-11')

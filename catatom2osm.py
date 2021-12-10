@@ -87,14 +87,14 @@ class CatAtom2Osm(object):
             msg = _(
                 "Required GDAL version %s or greater") % setup.MIN_GDAL_VERSION
             raise ValueError(msg)
-        self.highway_names_path = os.path.join(self.path, 'highway_names.csv')
-        self.tasks_path = os.path.join(self.path, 'tasks')
+        self.highway_names_path = self.get_path('highway_names.csv')
+        self.tasks_path = self.get_path('tasks')
         if self.label or self.options.tasks:
             if not os.path.exists(self.tasks_path):
                 os.makedirs(self.tasks_path)
         if self.label:
-            self.highway_names_path = os.path.join(
-                self.path, 'tasks', self.label + '_highway_names.csv'
+            self.highway_names_path = self.get_path(
+                'tasks', self.label + '_highway_names.csv'
             )
             self.delete_current_osm_files()
         self.is_new = not os.path.exists(self.highway_names_path)
@@ -103,6 +103,9 @@ class CatAtom2Osm(object):
         """Launches the app"""
         if self.options.list_zones:
             self.list_zones()
+            return
+        elif self.options.comment:
+            self.add_comments()
             return
         log.info(_("Start processing '%s'"), report.mun_code)
         self.get_zoning()
@@ -164,15 +167,43 @@ class CatAtom2Osm(object):
         for label in sorted(labels):
             print(label)
 
+    def add_comments(self):
+        """Recover missing task files metadata after Josm editing."""
+        report.from_file(self.get_path('report.txt'))
+        for fn in os.listdir(self.tasks_path):
+            if fn.endswith('.osm') or fn.endswith('.osm.gz'):
+                label = os.path.basename(fn).split('.')[0]
+                data = self.read_osm('tasks', fn)
+                fixmes = sum([1 for e in data.elements if 'fixme' in e.tags])
+                if fixmes > 0:
+                    log.warning(_("Check %d fixme tags"), fixmes)
+                oldtags = dict(data.tags)
+                data.tags.update(setup.changeset_tags)
+                comment = ' '.join((setup.changeset_tags['comment'],
+                                    report.mun_code, report.mun_name, label))
+                data.tags['comment'] = comment
+                data.tags['generator'] = report.app_version
+                if 'building_date' in report.values:
+                    data.tags['source:date'] = report.building_date
+                if 'address_date' in report.values:
+                    data.tags['source:date:addr'] = report.address_date
+                if data.tags != oldtags:
+                    self.write_osm(data, 'tasks', fn)
+
+
     def zone_query(self, feat, kwargs):
         """Filter feat by zone label if needed."""
         return self.label is None or self.building.get_label(feat) == self.label
+
+    def get_path(self, *paths):
+        """Get path from components relative to self.path"""
+        return os.path.join(self.path, *paths)
 
     def get_building(self):
         """Merge building, parts and pools"""
         building_gml = self.cat.read("building")
         report.building_date = building_gml.source_date
-        fn = os.path.join(self.path, 'building.shp')
+        fn = self.get_path('building.shp')
         layer.ConsLayer.create_shp(fn, building_gml.crs())
         self.building = layer.ConsLayer(
             fn, providerLib='ogr', source_date=building_gml.source_date
@@ -229,7 +260,7 @@ class CatAtom2Osm(object):
             label = zone[0]
             comment = ' '.join((setup.changeset_tags['comment'],
                                 report.mun_code, report.mun_name, label))
-            fn = os.path.join(self.path, 'tasks', label + '.shp')
+            fn = self.get_path('tasks', label + '.shp')
             if os.path.exists(fn):
                 task = layer.ConsLayer(fn, label, 'ogr',
                                        source_date=source.source_date)
@@ -241,8 +272,7 @@ class CatAtom2Osm(object):
                     self.merge_address(task_osm, self.address_osm)
                     report.address_stats(task_osm)
                     report.cons_stats(task_osm, label)
-                    fn = os.path.join('tasks', label + '.osm')
-                    self.write_osm(task_osm, fn, compress=True)
+                    self.write_osm(task_osm, 'tasks', label + '.osm.gz')
                     report.osm_stats(task_osm)
             else:
                 t = 'r' if len(label) == 3 else 'u'
@@ -276,7 +306,7 @@ class CatAtom2Osm(object):
                 if last_task == '':
                     last_task = 'missing'
                     tasks_m += len(to_add)
-                fn = os.path.join(self.path, 'tasks', last_task + '.shp')
+                fn = os.path.join(self.tasks_path, last_task + '.shp')
                 if not os.path.exists(fn):
                     layer.ConsLayer.create_shp(fn, source.crs())
                     if len(last_task or '') == 3:
@@ -313,7 +343,7 @@ class CatAtom2Osm(object):
     def output_zoning(self):
         self.urban_zoning.reproject()
         self.rustic_zoning.reproject()
-        out_path = os.path.join(self.path, 'boundary.poly')
+        out_path = self.get_path('boundary.poly')
         self.rustic_zoning.export_poly(out_path)
         log.info(_("Generated '%s'"), out_path)
         self.export_layer(self.urban_zoning, 'urban_zoning.geojson',
@@ -357,22 +387,18 @@ class CatAtom2Osm(object):
         if not self.options.tasks:
             report.cons_stats(self.building_osm)
         if self.label is None:
-            fn = 'building.osm'
-            compress = False
+            self.write_osm(self.building_osm, 'building.osm')
         else:
-            base_path = os.path.join(self.path, 'tasks')
-            if not os.path.exists(base_path):
-                os.makedirs(base_path)
-            fn = os.path.join('tasks', self.label + '.osm')
-            compress = True
-        self.write_osm(self.building_osm, fn, compress=compress)
+            if not os.path.exists(self.tasks_path):
+                os.makedirs(self.tasks_path)
+            self.write_osm(self.building_osm, 'tasks', self.label + '.osm.gz')
         if not self.options.tasks:
             report.osm_stats(self.building_osm)
         del self.building_osm
 
     def process_parcel(self):
         parcel_gml = self.cat.read("cadastralparcel")
-        fn = os.path.join(self.path, 'parcel.shp')
+        fn = self.get_path('parcel.shp')
         layer.ParcelLayer.create_shp(fn, parcel_gml.crs())
         parcel = layer.ParcelLayer(fn, providerLib='ogr',
                                    source_date=parcel_gml.source_date)
@@ -389,7 +415,7 @@ class CatAtom2Osm(object):
             log.warning(_("Check %d fixme tags"), report.fixme_count)
         if self.options.tasks:
             filename = 'review.txt'
-            with open(os.path.join(self.path, filename), "w") as fo:
+            with open(self.get_path(filename), "w") as fo:
                 fo.write(
                     setup.eol.join(report.get_tasks_with_fixmes()) + setup.eol)
                 log.info(
@@ -398,8 +424,7 @@ class CatAtom2Osm(object):
         if self.options.tasks or self.options.building:
             report.cons_end_stats()
         if self.options.tasks or self.options.building or self.options.address:
-            fn = os.path.join(self.path, 'report.txt')
-            report.to_file(fn)
+            report.to_file(self.get_path('report.txt'))
         if self.is_new:
             msg = (
                 _("Generated '%s'") + '. ' + _("Please, check it and run again")
@@ -427,34 +452,41 @@ class CatAtom2Osm(object):
             driver_name (str): Defaults to ESRI Shapefile.
             target_crs_id (int): Defaults to source CRS.
         """
-        out_path = os.path.join(self.path, filename)
+        out_path = self.get_path(filename)
         if layer.export(out_path, driver_name, target_crs_id=target_crs_id):
             log.info(_("Generated '%s'"), filename)
         else:
             raise IOError(_("Failed to write layer: '%s'") % filename)
 
-    def read_osm(self, ql, filename):
+    def read_osm(self, *paths, **kwargs):
         """
         Reads a OSM data set from a OSM XML file. If the file not exists,
         downloads data from overpass using ql query
 
         Args:
-            ql (str): Query to put in the url
-            filename (str): File to read/write
+            paths (str): input filename components relative to self.path
+            ql (str): Query to put in the url for overpass
 
         Returns
             Osm: OSM data set
         """
-        osm_path = os.path.join(self.path, filename)
+        ql = kwargs.get('ql', False)
+        osm_path = self.get_path(*paths)
+        filename = os.path.basename(osm_path)
         if not os.path.exists(osm_path):
+            if not ql:
+                return None
             log.info(_("Downloading '%s'") % filename)
             query = overpass.Query(self.cat.boundary_search_area).add(ql)
             if log.getEffectiveLevel() == logging.DEBUG:
                 query.download(osm_path, log)
             else:
                 query.download(osm_path)
-        with open(osm_path, 'rb') as fo:
-            data = osmxml.deserialize(fo)
+        if osm_path.endswith('.gz'):
+            fo = gzip.open(osm_path, 'rb')
+        else:
+            fo = open(osm_path, 'rb')
+        data = osmxml.deserialize(fo)
         if len(data.elements) == 0:
             msg = _("No OSM data were obtained from '%s'") % filename
             log.warning(msg)
@@ -465,32 +497,28 @@ class CatAtom2Osm(object):
                      len(data.relations))
         return data
 
-    def write_osm(self, data, filename, **kwargs):
+    def write_osm(self, data, *paths):
         """
         Generates a OSM XML file for a OSM data set.
 
         Args:
             data (Osm): OSM data set
-            filename (str): output filename
-            compress (bool): whether the file is to be compressed
-                Defaults to not compressing the file
+            paths (str): output filename components relative to self.path
+                            (compress if ends with .gz)
         """
-        compress = kwargs.pop('compress', False)
         for e in data.elements:
             if 'ref' in e.tags:
                 del e.tags['ref']
         data.merge_duplicated()
-        if compress:
-            filename += '.gz'
-            osm_path = os.path.join(self.path, filename)
+        osm_path = self.get_path(*paths)
+        if osm_path.endswith('.gz'):
             file_obj = codecs.getwriter("utf-8")(gzip.open(osm_path, "w"))
         else:
-            osm_path = os.path.join(self.path, filename)
             file_obj = io.open(osm_path, "w", encoding="utf-8")
         osmxml.serialize(file_obj, data)
         file_obj.close()
         log.info(_("Generated '%s': %d nodes, %d ways, %d relations"),
-                 filename, len(data.nodes), len(data.ways),
+                 os.path.basename(osm_path), len(data.nodes), len(data.ways),
                  len(data.relations))
 
     def get_zoning(self):
@@ -499,10 +527,10 @@ class CatAtom2Osm(object):
         (rustic)
         """
         zoning_gml = self.cat.read("cadastralzoning")
-        fn = os.path.join(self.path, 'rustic_zoning.shp')
+        fn = self.get_path('rustic_zoning.shp')
         layer.ZoningLayer.create_shp(fn, zoning_gml.crs())
         self.rustic_zoning = layer.ZoningLayer(fn, 'rusticzoning', 'ogr')
-        fn = os.path.join(self.path, 'urban_zoning.shp')
+        fn = self.get_path('urban_zoning.shp')
         layer.ZoningLayer.create_shp(fn, zoning_gml.crs())
         self.urban_zoning = layer.ZoningLayer(fn, 'urbanzoning', 'ogr')
         self.rustic_zoning.append(zoning_gml, level='P')
@@ -546,7 +574,7 @@ class CatAtom2Osm(object):
         report.inp_address_entrance = address_gml.count(
             "specification='Entrance'")
         report.inp_address_parcel = address_gml.count("specification='Parcel'")
-        fn = os.path.join(self.path, 'address.shp')
+        fn = self.get_path('address.shp')
         layer.AddressLayer.create_shp(fn, address_gml.crs())
         self.address = layer.AddressLayer(fn, providerLib='ogr',
                                           source_date=address_gml.source_date)
@@ -570,8 +598,9 @@ class CatAtom2Osm(object):
         for source in list(setup.aux_address.keys()):
             if self.cat.zip_code[:2] in setup.aux_address[source]:
                 aux_source = globals()[source]
-                aux_path = os.path.join(os.path.dirname(self.path),
-                                        setup.aux_path)
+                aux_path = os.path.join(
+                    os.path.dirname(self.path), setup.aux_path
+                )
                 reader = aux_source.Reader(aux_path)
                 aux = reader.read(self.cat.zip_code[:2])
                 aux_source.conflate(aux, self.address, self.cat.zip_code)
@@ -675,7 +704,7 @@ class CatAtom2Osm(object):
               'relation["highway"]["name"]',
               'way["place"="square"]["name"]',
               'relation["place"="square"]["name"]']
-        highway_osm = self.read_osm(ql, 'current_highway.osm')
+        highway_osm = self.read_osm('current_highway.osm', ql=ql)
         highway = layer.HighwayLayer()
         highway.read_from_osm(highway_osm)
         del highway_osm
@@ -689,7 +718,7 @@ class CatAtom2Osm(object):
               'node["addr:place"]["addr:housenumber"]',
               'way["addr:place"]["addr:housenumber"]',
               'relation["addr:place"]["addr:housenumber"]']
-        address_osm = self.read_osm(ql, 'current_address.osm')
+        address_osm = self.read_osm('current_address.osm', ql=ql)
         current_address = set()
         w = 0
         report.osm_addresses = 0
@@ -716,18 +745,18 @@ class CatAtom2Osm(object):
     def get_current_bu_osm(self):
         """Gets OSM buildings for building conflation"""
         ql = 'way[building];relation[building];way[leisure=swimming_pool];relation[leisure=swimming_pool]'
-        current_bu_osm = self.read_osm(ql, 'current_building.osm')
+        current_bu_osm = self.read_osm('current_building.osm', ql=ql)
         return current_bu_osm
 
     def delete_shp(self, name, relative=True):
         if log.getEffectiveLevel() > logging.DEBUG:
-            path = os.path.join(self.path, name) if relative else name
+            path = self.get_path(name) if relative else name
             layer.BaseLayer.delete_shp(path)
 
     def delete_current_osm_files(self):
         if log.getEffectiveLevel() == logging.DEBUG:
             return
         for f in ['current_address', 'current_building', 'current_highway']:
-            fn = os.path.join(self.path, f + '.osm')
+            fn = self.get_path(f + '.osm')
             if os.path.exists(fn):
                 os.remove(fn)

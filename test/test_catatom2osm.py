@@ -43,6 +43,7 @@ class TestCatAtom2Osm(unittest.TestCase):
             'building': False, 'all': False, 'tasks': True, 'list_zones': False,
             'log_level': 'INFO', 'parcel': False, 'list': False, 'zoning': True,
             'version': False, 'address': False, 'manual': False, 'zone': False,
+            'comment': False
         }
         self.m_app = mock.MagicMock()
         self.m_app.options = Values(self.options)
@@ -52,6 +53,7 @@ class TestCatAtom2Osm(unittest.TestCase):
         self.m_app.label = None
         self.m_app.tasks_path = 'foo/tasks'
         self.m_app.is_new = False
+        self.m_app.get_path = lambda *args: self.m_app.path + '/' + '/'.join(args)
 
     @mock.patch('catatom2osm.QgsSingleton')
     @mock.patch('catatom.Reader')
@@ -60,7 +62,6 @@ class TestCatAtom2Osm(unittest.TestCase):
     def test_init(self, m_os, m_report, m_cat, m_qgs):
         m_qgs.return_value = 'foo'
         m_cat.return_value.path = 'foo'
-        m_os.path.join = lambda *args: '/'.join(args)
         m_os.path.exists.return_value = False
         self.m_app.init = get_func(cat.CatAtom2Osm.__init__)
         self.m_app.init(self.m_app, 'xxx/12345', self.m_app.options)
@@ -98,7 +99,7 @@ class TestCatAtom2Osm(unittest.TestCase):
         address = self.m_app.address
         self.m_app.options = Values({'building': True, 'tasks': False,
             'parcel': True, 'zoning': False, 'address': True, 'manual': False,
-            'list_zones': False})
+            'list_zones': False, 'comment': False})
         self.m_app.is_new = False
         building.conflate.return_value = False
         address_osm = self.m_app.address.to_osm.return_value
@@ -137,7 +138,7 @@ class TestCatAtom2Osm(unittest.TestCase):
         self.m_app.run = get_func(cat.CatAtom2Osm.run)
         self.m_app.options = Values({'building': True, 'tasks': False,
             'parcel': False, 'zoning': False, 'address': True, 'manual': True,
-            'list_zones': False})
+            'list_zones': False, 'comment': False})
         self.m_app.is_new = False
         building = self.m_app.building
         self.m_app.run(self.m_app)
@@ -206,7 +207,6 @@ class TestCatAtom2Osm(unittest.TestCase):
     @mock.patch('catatom2osm.layer')
     @mock.patch('catatom2osm.report')
     def test_process_tasks(self, m_report, m_layer, m_os):
-        m_os.path.join = lambda *args: '/'.join(args)
         m_os.path.exists.side_effect = [True, True, True, False, True, True]
         m_report.mun_code = 'AAA'
         m_report.mun_name = 'BBB'
@@ -286,7 +286,6 @@ class TestCatAtom2Osm(unittest.TestCase):
     @mock.patch('catatom2osm.open')
     @mock.patch('catatom2osm.report')
     def test_end_messages(self, m_report, m_open, m_log, m_os):
-        m_os.path.join = lambda *args: '/'.join(args)
         m_fo = mock.MagicMock()
         m_open.return_value = m_fo
         self.m_app.end_messages = get_func(cat.CatAtom2Osm.end_messages)
@@ -316,7 +315,6 @@ class TestCatAtom2Osm(unittest.TestCase):
     @mock.patch('catatom2osm.os')
     @mock.patch('catatom2osm.log')
     def test_export_layer(self, m_log, m_os):
-        m_os.path.join = lambda *args: '/'.join(args)
         m_layer = mock.MagicMock()
         m_layer.export.return_value = True
         self.m_app.export_layer = get_func(cat.CatAtom2Osm.export_layer)
@@ -340,15 +338,15 @@ class TestCatAtom2Osm(unittest.TestCase):
         m_xml.deserialize.return_value.elements = []
         self.m_app.read_osm(self.m_app, 'bar', 'taz')
         m_overpass.Query.assert_not_called()
-        m_open.assert_called_with('foo/taz', 'rb')
-        m_xml.deserialize.assert_called_once_with(m_open().__enter__())
+        m_open.assert_called_with('foo/bar/taz', 'rb')
+        m_xml.deserialize.assert_called_once_with(m_open())
         output = m_log.warning.call_args_list[0][0][0]
         self.assertIn('No OSM data', output)
 
         m_xml.deserialize.return_value.elements = [1]
         self.m_app.cat.boundary_search_area = '123456'
         m_os.path.exists.return_value = False
-        data = self.m_app.read_osm(self.m_app, 'bar', 'taz')
+        data = self.m_app.read_osm(self.m_app, 'taz', ql='bar')
         m_overpass.Query.assert_called_with('123456')
         m_overpass.Query().add.assert_called_once_with('bar')
         self.assertEqual(data.elements, [1])
@@ -361,7 +359,6 @@ class TestCatAtom2Osm(unittest.TestCase):
     @mock.patch('catatom2osm.io')
     @mock.patch('catatom2osm.gzip')
     def test_write_osm(self, m_gz, m_io, m_codecs, m_xml, m_os):
-        m_os.path.join = lambda *args: '/'.join(args)
         m_xml.serialize.return_value = 'taz'
         data = osm.Osm()
         data.Node(0,0, {'ref': '1'})
@@ -374,7 +371,7 @@ class TestCatAtom2Osm(unittest.TestCase):
         file_obj = m_io.open.return_value
         m_xml.serialize.assert_called_once_with(file_obj, data)
         m_xml.reset_mock()
-        self.m_app.write_osm(self.m_app, data, 'bar', compress=True)
+        self.m_app.write_osm(self.m_app, data, 'bar.gz')
         m_gz.open.assert_called_once_with('foo/bar.gz', 'w')
         f_gz = m_gz.open.return_value
         m_codecs.getwriter.return_value.assert_called_once_with(f_gz)
@@ -487,9 +484,9 @@ class TestCatAtom2Osm(unittest.TestCase):
     @mock.patch('catatom2osm.os')
     @mock.patch('catatom2osm.csvtools')
     def test_get_translations(self, m_csv, m_os):
+        m_os.path.join = lambda *args: '/'.join(args)
         self.m_app.get_translations = get_func(cat.CatAtom2Osm.get_translations)
         setup.app_path = 'bar'
-        m_os.path.join = lambda *args: '/'.join(args)
         m_csv.csv2dict.return_value = {'RAZ': ' raz '}
         m_os.path.exists.return_value = True
         address = mock.MagicMock()
