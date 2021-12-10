@@ -49,33 +49,30 @@ def run():
     parser.add_argument("-l", "--list", dest="list", metavar="prov", nargs='?',
         default=False, const=99, help=terminal.encode(_("List available municipalities "
         "given the two digits province code")))
-    parser.add_argument("--list-zones", dest="list_zones", default=False,
-        action="store_true", help=terminal.encode(_("List zone labels in the municipality")))
-    parser.add_argument("-t", "--tasks", dest="tasks", default=False,
-        action="store_true", help=terminal.encode(_("Splits constructions into "
-        "tasks files (default, implies -z)")))
-    parser.add_argument("-b", "--building", dest="building", default=False,
+    parser.add_argument("--list-zones", dest="list_zones", action="store_true",
+        help=terminal.encode(_("List zone labels in the municipality")))
+    parser.add_argument("-t", "--tasks", dest="tasks", action="store_true",
+        help=terminal.encode(_("Splits constructions into tasks files "
+        "(default, implies -z)")))
+    parser.add_argument("-c", "--comment", dest="comment", action="store_true",
+        help=terminal.encode(_("Recovers the comments of the tasks")))
+    parser.add_argument("-b", "--building", dest="building",
         action="store_true", help=terminal.encode(_("Process buildings to a "
         "single file instead of tasks")))
-    parser.add_argument("-z", "--zoning", dest="zoning",
-        default=False, action="store_true", 
+    parser.add_argument("-z", "--zoning", dest="zoning", action="store_true",
         help=terminal.encode(_("Process the cadastral zoning dataset")))
     parser.add_argument("-o", "--zone", dest="zone", metavar="label", nargs=1,
         default=False, type=str, help=terminal.encode(_("Process a zone given "
         "its label")))
-    parser.add_argument("-d", "--address", dest="address",
-        default=False, action="store_true", 
+    parser.add_argument("-d", "--address", dest="address", action="store_true",
         help=terminal.encode(_("Process the address dataset (default)")))
-    parser.add_argument("-p", "--parcel", dest="parcel", 
-        default=False, action="store_true",
+    parser.add_argument("-p", "--parcel", dest="parcel", action="store_true",
         help=terminal.encode(_("Process the cadastral parcel dataset")))
-    parser.add_argument("-a", "--all", dest="all", default=False,
-        action="store_true", help=terminal.encode(_("Process all datasets ("
-        "equivalent to -bdptz)")))
-    parser.add_argument("-m", "--manual", dest="manual",
-        default=False, action="store_true", 
+    parser.add_argument("-a", "--all", dest="all", action="store_true",
+        help=terminal.encode(_("Process all datasets (equivalent to -bdptz)")))
+    parser.add_argument("-m", "--manual", dest="manual", action="store_true",
         help=terminal.encode(_("Dissable conflation with OSM data")))
-    parser.add_argument("-w", "--download", dest="download", default=False,
+    parser.add_argument("-w", "--download", dest="download",
         action="store_true", help=terminal.encode(_("Download only")))
     parser.add_argument("--log", dest="log_level", metavar="log_level",
         choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
