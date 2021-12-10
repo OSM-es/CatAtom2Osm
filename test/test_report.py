@@ -6,8 +6,6 @@ import mock
 import unittest
 import os
 import locale
-import random
-import time
 from collections import Counter
 from datetime import datetime
 
@@ -213,3 +211,23 @@ class TestReport(unittest.TestCase):
         r.fixme_stats()
         self.assertEqual(r.fixme_stats(), 3)
         self.assertEqual(len(r.fixmes), 2)
+
+    @mock.patch('report.io')
+    def test_from_file(self, m_io):
+        r = report.Report()
+        t = (
+            "Municipality: foobar\n"
+            "Code: 12345\n"
+            "=Addresses=\n"
+            "==Input data==\n"
+            "Source date: 2021-09-11\n"
+            "=Buildings=\n"
+            "==Input data==\n"
+            "Source date: 2021-06-22\n"
+        )
+        m_io.open.return_value = io.StringIO(t)
+        r.from_file('')
+        self.assertEqual(r.mun_name, 'foobar')
+        self.assertEqual(r.mun_code, '12345')
+        self.assertEqual(r.building_date, '2021-06-22')
+        self.assertEqual(r.address_date, '2021-09-11')

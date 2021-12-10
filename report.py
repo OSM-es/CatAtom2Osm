@@ -322,5 +322,22 @@ class Report(object):
         with io.open(fn, "w", encoding=setup.encoding) as fo:
             fo.write(self.to_string())
 
+    def from_file(self, fn):
+        keys = {v: k for k, v in self.titles.items()}
+        with io.open(fn, 'r', encoding=setup.encoding) as fo:
+            group = ''
+            for line in fo.readlines():
+                if line.startswith('=') and not line.startswith('=='):
+                    group = line.strip().strip('=')
+                elif line.count(':') == 1:
+                    title, value = line.split(':')
+                    key = keys.get(title, '')
+                    if title == _('Source date'):
+                        if group == _('Addresses'):
+                            key = 'address_date'
+                        elif group == _('Buildings'):
+                            key = 'building_date'
+                    if key:
+                        self.values[key] = value.strip()
 
 instance = Report()
