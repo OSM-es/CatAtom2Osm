@@ -1,6 +1,9 @@
 Change log
 ==========
 
+**2021-12-10 (1.6.0)**
+* Option to review changesets tags (#64)
+
 **2021-12-09 (1.5.1)**
 * Fix zone label in tasks definition files (#65)
 

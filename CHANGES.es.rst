@@ -1,6 +1,9 @@
 Registro de cambios
 ===================
 
+**10-12-2021 (1.6.0)**
+* Opción para revisar las etiquetas de los changesets (#64)
+
 **09-12-2021 (1.5.1)**
 * Corrige etiqueta de zona en archivos de definición de tareas (#65)
 
