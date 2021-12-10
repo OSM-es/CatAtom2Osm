@@ -332,13 +332,14 @@ class CatAtom2Osm(object):
         report.tasks_m = tasks_m
 
     def process_zoning(self):
-        self.urban_zoning.topology()
-        self.urban_zoning.delete_invalid_geometries()
-        self.rustic_zoning.set_tasks(self.cat.zip_code)
-        self.urban_zoning.set_tasks(self.cat.zip_code)
-        self.urban_zoning.simplify()
         self.rustic_zoning.clean()
-        self.rustic_zoning.difference(self.urban_zoning)
+        self.rustic_zoning.set_tasks(self.cat.zip_code)
+        if self.urban_zoning.featureCount() > 0:
+            self.urban_zoning.topology()
+            self.urban_zoning.delete_invalid_geometries()
+            self.urban_zoning.simplify()
+            self.urban_zoning.set_tasks(self.cat.zip_code)
+            self.rustic_zoning.difference(self.urban_zoning)
 
     def output_zoning(self):
         self.urban_zoning.reproject()
