@@ -13,7 +13,7 @@ MSGFMT        = msgfmt
 LOCALE_DIR    = locale/po
 INSTALL_DIR   = /usr/local/bin/
 OS            = $(shell uname)
-VERSION       = $(shell catatom2osm -v 2>&1)
+VERSION       = $(shell ./catatom2osm -v 2>&1)
 
 # Internal variables.
 PAPEROPT_a4     = -D latex_paper_size=a4
