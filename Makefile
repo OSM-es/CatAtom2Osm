@@ -88,8 +88,8 @@ msg:
 .PHONY: install
 install:
 	@chmod +x catatom2osm.sh
-	@ln -sf $(shell pwd)/catatom2osm.sh $(INSTALL_DIR)/catatom2osm
-	@echo "Created symbolic link $(INSTALL_DIR)-->$(shell pwd)/catatom2osm.sh"
+	@ln -sf $(shell pwd)/bin/catatom2osm.sh $(INSTALL_DIR)/catatom2osm
+	@echo "Created symbolic link $(INSTALL_DIR)-->$(shell pwd)/bin/catatom2osm.sh"
 
 .PHONY: uninstall
 uninstall:

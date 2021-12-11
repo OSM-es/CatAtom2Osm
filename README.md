@@ -59,11 +59,11 @@ The software use the system locales to select the language to use translating th
 
 Forces to use Spanish.
 
-	LANG=cat_ES.UTF-8; catatom2osm
+	LANG=ca_ES.UTF-8; catatom2osm
 
 Forces to use Catalan.
 
-	LANG=cat_ES.UTF-8; catatom2osm
+	LANG=gl_ES.UTF-8; catatom2osm
 
 Forces to use Galician
 

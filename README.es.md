@@ -59,11 +59,11 @@ El programa usa la configuración de localización del sistema para seleccionar 
 
 Para forzar a usar Español.
 
-	LANG=cat_ES.UTF-8; catatom2osm
+	LANG=ca_ES.UTF-8; catatom2osm
 
 Para forzar a usar Catalán.
 
-	LANG=cat_ES.UTF-8; catatom2osm
+	LANG=gl_ES.UTF-8; catatom2osm
 
 Para forzar a usar Gallego.
 
