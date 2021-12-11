@@ -1,6 +1,9 @@
 Registro de cambios
 ===================
 
+**11-12-2021 (1.7.0)**
+* Simplifica instalación y uso de la imagen Docker  (#59, #66)
+
 **10-12-2021 (1.6.1)**
 * Deja de crear contorno para partes sin edificio
 

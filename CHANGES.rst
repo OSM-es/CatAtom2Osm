@@ -1,6 +1,9 @@
 Change log
 ==========
 
+**2021-12-11 (1.7.0)**
+* Simplify install and use of docker image (#59, #66)
+
 **2021-12-10 (1.6.1)**
 * Don't create outline for parts without associated building
 
