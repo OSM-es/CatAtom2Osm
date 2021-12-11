@@ -2,7 +2,7 @@ import unittest
 import random
 from collections import Counter
 
-import osm
+from catatom2osm import osm
 
 class OsmTestCase(unittest.TestCase):
 

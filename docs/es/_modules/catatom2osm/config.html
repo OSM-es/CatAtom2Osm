@@ -1,0 +1,616 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+  
+  <!-- Licensed under the Apache 2.0 License -->
+  <link rel="stylesheet" type="text/css" href="../../_static/fonts/open-sans/stylesheet.css" />
+  <!-- Licensed under the SIL Open Font License -->
+  <link rel="stylesheet" type="text/css" href="../../_static/fonts/source-serif-pro/source-serif-pro.css" />
+  <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>catatom2osm.config &#8212; documentación de CatAtom2Osm - 1.7.0</title>
+    
+    <link rel="stylesheet" href="../../_static/guzzle.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.7.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/translations.js"></script>
+    <link rel="index" title="Índice" href="../../genindex.html" />
+    <link rel="search" title="Búsqueda" href="../../search.html" />
+  
+   
+
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navegación</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="Índice General"
+             accesskey="I">índice</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Índice de Módulos Python"
+             >módulos</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 1.7.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Código de módulo</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="container-wrapper">
+
+      <div id="mobile-toggle">
+        <a href="#"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
+      </div>
+  <div id="left-column">
+    <div class="sphinxsidebar">
+        <a href="
+    ../../index.html" class="text-logo">CatAtom2Osm</a>
+        
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Tabla de Contenidos</h2>
+  </div>
+  <div class="sidebar-toc">
+    
+    
+      <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme.html">Léeme</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Instalación</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changes.html">Registro de cambios</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">Referencia API</a></li>
+</ul>
+
+    
+  </div>
+</div>
+        
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <div id="main-search">
+      <form class="form-inline" action="../../search.html" method="GET" role="form">
+        <div class="input-group">
+          <input name="q" type="text" class="form-control" placeholder="Search...">
+        </div>
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div>
+    </div>
+  </div>
+        <div id="right-column">
+          
+          <div role="navigation" aria-label="breadcrumbs navigation">
+            <ol class="breadcrumb">
+              <li><a href="../../index.html">Docs</a></li>
+              
+                <li><a href="../index.html">Código de módulo</a></li>
+              
+              <li>catatom2osm.config</li>
+            </ol>
+          </div>
+          
+          <div class="document clearer body">
+            
+  <h1>Código fuente para catatom2osm.config</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;Application preferences&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">range</span>
+<span class="kn">import</span> <span class="nn">locale</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">from</span> <span class="nn">catatom2osm</span> <span class="k">import</span> <span class="n">compat</span><span class="p">,</span> <span class="n">__version__</span>
+
+<span class="n">app_name</span> <span class="o">=</span> <span class="s1">&#39;CatAtom2Osm&#39;</span>
+<span class="n">app_version</span> <span class="o">=</span> <span class="n">__version__</span>
+<span class="n">app_author</span> <span class="o">=</span> <span class="s1">&#39;Javier Sanchez Portero&#39;</span>
+<span class="n">app_copyright</span> <span class="o">=</span> <span class="s1">&#39;2017, Javier Sanchez Portero&#39;</span>
+<span class="n">app_desc</span> <span class="o">=</span> <span class="s1">&#39;Tool to convert INSPIRE data sets from the Spanish Cadastre ATOM Services to OSM files&#39;</span>
+<span class="n">app_tags</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+
+<span class="n">MIN_QGIS_VERSION_INT</span> <span class="o">=</span> <span class="mi">21001</span>
+<span class="n">MIN_QGIS_VERSION</span> <span class="o">=</span> <span class="s1">&#39;2.10.1&#39;</span>
+<span class="n">MIN_GDAL_VERSION_INT</span> <span class="o">=</span> <span class="mi">11103</span>
+<span class="n">MIN_GDAL_VERSION</span> <span class="o">=</span> <span class="s1">&#39;1.11.3&#39;</span>
+
+<div class="viewcode-block" id="winenv"><a class="viewcode-back" href="../../api/catatom2osm.config.html#catatom2osm.config.winenv">[documentos]</a><span class="k">def</span> <span class="nf">winenv</span><span class="p">():</span>
+    <span class="k">global</span> <span class="n">eol</span><span class="p">,</span> <span class="n">encoding</span>
+    <span class="n">eol</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+    <span class="k">if</span> <span class="n">platform</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;win&#39;</span><span class="p">):</span>
+        <span class="n">eol</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\r\n</span><span class="s1">&#39;</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;LANG&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;LANG&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">language</span></div>
+
+<span class="c1">#locale.setlocale(locale.LC_ALL, &#39;&#39;)</span>
+<span class="n">language</span><span class="p">,</span> <span class="n">encoding</span> <span class="o">=</span> <span class="n">locale</span><span class="o">.</span><span class="n">getdefaultlocale</span><span class="p">()</span>
+<span class="n">terminal</span> <span class="o">=</span> <span class="n">compat</span><span class="o">.</span><span class="n">Terminal</span><span class="p">(</span><span class="n">encoding</span><span class="p">)</span>
+<span class="n">app_path</span> <span class="o">=</span> <span class="n">terminal</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
+<span class="n">localedir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">app_path</span><span class="p">,</span> <span class="s1">&#39;locale&#39;</span><span class="p">,</span> <span class="s1">&#39;po&#39;</span><span class="p">)</span>
+<span class="n">platform</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span>
+<span class="n">winenv</span><span class="p">()</span>
+
+<span class="n">compat</span><span class="o">.</span><span class="n">install_gettext</span><span class="p">(</span><span class="n">app_name</span><span class="p">,</span> <span class="n">localedir</span><span class="p">)</span>
+
+<span class="n">log_level</span> <span class="o">=</span> <span class="s1">&#39;INFO&#39;</span> <span class="c1"># Default log level</span>
+<span class="n">log_file</span> <span class="o">=</span> <span class="s1">&#39;catatom2osm.log&#39;</span>
+<span class="n">log_format</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> - </span><span class="si">%(levelname)s</span><span class="s1"> - </span><span class="si">%(message)s</span><span class="s1">&#39;</span>
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">app_name</span><span class="p">)</span>
+<span class="n">fh</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="p">(</span><span class="n">log_file</span><span class="p">)</span>
+<span class="n">ch</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">(</span><span class="n">compat</span><span class="o">.</span><span class="n">get_stderr</span><span class="p">())</span>
+<span class="n">fh</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+<span class="n">ch</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+<span class="n">formatter</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="n">log_format</span><span class="p">)</span>
+<span class="n">ch</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>
+<span class="n">fh</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>
+<span class="n">log</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">ch</span><span class="p">)</span>
+<span class="n">log</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">fh</span><span class="p">)</span>
+
+<span class="n">fn_prefix</span> <span class="o">=</span> <span class="s1">&#39;A.ES.SDGC&#39;</span> <span class="c1"># Inspire Atom file name prefix</span>
+
+<span class="n">silence_gdal</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="n">delimiter</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span>
+<span class="n">dup_thr</span> <span class="o">=</span> <span class="mf">0.012</span> <span class="c1"># Distance in meters to merge nearest vertexs.</span>
+                <span class="c1"># 0.011 is about 1E-7 degrees in latitude</span>
+<span class="n">dist_thr</span> <span class="o">=</span> <span class="mf">0.02</span> <span class="c1"># Threshold in meters for vertex simplification and topological points.</span>
+<span class="n">straight_thr</span> <span class="o">=</span> <span class="mi">2</span> <span class="c1"># Threshold in degrees from straight angle to delete a vertex</span>
+<span class="n">acute_thr</span> <span class="o">=</span> <span class="mi">10</span> <span class="c1"># Remove vertices with an angle smaller than this value</span>
+<span class="n">min_area</span> <span class="o">=</span> <span class="mf">0.05</span> <span class="c1"># Delete geometries with an area smaller than this value</span>
+<span class="n">addr_thr</span> <span class="o">=</span> <span class="mi">10</span> <span class="c1"># Distance in meters to merge address node with building outline</span>
+<span class="n">acute_inv</span> <span class="o">=</span> <span class="mi">5</span> <span class="c1"># Remove geometries/rings that result invalid after removing any vertex with an angle smaller than this value</span>
+<span class="n">dist_inv</span> <span class="o">=</span> <span class="mf">0.1</span> <span class="c1"># Threshold in meters to filter angles for zig-zag and spikes</span>
+<span class="n">entrance_thr</span> <span class="o">=</span> <span class="mf">0.4</span> <span class="c1"># Minimum distance in meters from a entrance to the nearest corner</span>
+<span class="n">warning_min_area</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1"># Area in m2 for small area warning</span>
+<span class="n">warning_max_area</span> <span class="o">=</span> <span class="mi">30000</span> <span class="c1"># Area in m2 for big area warning</span>
+<span class="n">bbox_buffer</span> <span class="o">=</span> <span class="mf">0.002</span> <span class="c1"># Buffer in degrees around overpass bounding boxes</span>
+
+<span class="n">changeset_tags</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;comment&#39;</span><span class="p">:</span> <span class="s2">&quot;#Spanish_Cadastre_Buildings_Import&quot;</span><span class="p">,</span>
+    <span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="sa">u</span><span class="s2">&quot;Dirección General del Catastro&quot;</span><span class="p">,</span>
+    <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;import&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s2">&quot;https://wiki.openstreetmap.org/wiki/Spanish_Cadastre/Buildings_Import&quot;</span><span class="p">,</span>
+    <span class="s1">&#39;generator&#39;</span><span class="p">:</span>  <span class="n">app_name</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="n">app_version</span>
+<span class="p">}</span>
+
+<span class="n">base_url</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;BU&quot;</span><span class="p">:</span> <span class="s2">&quot;http://www.catastro.minhap.es/INSPIRE/buildings/&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;AD&quot;</span><span class="p">:</span> <span class="s2">&quot;http://www.catastro.minhap.es/INSPIRE/addresses/&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;CP&quot;</span><span class="p">:</span> <span class="s2">&quot;http://www.catastro.minhap.es/INSPIRE/CadastralParcels/&quot;</span>
+<span class="p">}</span>
+
+<span class="n">serv_url</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;BU&quot;</span><span class="p">:</span> <span class="n">base_url</span><span class="p">[</span><span class="s1">&#39;BU&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;ES.SDGC.BU.atom.xml&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;AD&quot;</span><span class="p">:</span> <span class="n">base_url</span><span class="p">[</span><span class="s1">&#39;AD&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;ES.SDGC.AD.atom.xml&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;CP&quot;</span><span class="p">:</span> <span class="n">base_url</span><span class="p">[</span><span class="s1">&#39;CP&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;ES.SDGC.CP.atom.xml&quot;</span>
+<span class="p">}</span>
+
+<span class="n">prov_url</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;BU&quot;</span><span class="p">:</span> <span class="n">base_url</span><span class="p">[</span><span class="s1">&#39;BU&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">{code}</span><span class="s2">/ES.SDGC.bu.atom_</span><span class="si">{code}</span><span class="s2">.xml&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;AD&quot;</span><span class="p">:</span> <span class="n">base_url</span><span class="p">[</span><span class="s1">&#39;AD&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">{code}</span><span class="s2">/ES.SDGC.ad.atom_</span><span class="si">{code}</span><span class="s2">.xml&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;CP&quot;</span><span class="p">:</span> <span class="n">base_url</span><span class="p">[</span><span class="s1">&#39;CP&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">{code}</span><span class="s2">/ES.SDGC.CP.atom_</span><span class="si">{code}</span><span class="s2">.xml&quot;</span>
+<span class="p">}</span>
+
+<span class="n">cadastre_doc_url</span> <span class="o">=</span> <span class="s1">&#39;http://ovc.catastro.meh.es/OVCServWeb/OVCWcfLibres/OVCFotoFachada.svc/RecuperarFotoFachadaGet?ReferenciaCatastral=</span><span class="si">{}</span><span class="s1">&#39;</span>
+
+<span class="n">fixme_doc_url</span> <span class="o">=</span> <span class="s1">&#39;https://wiki.openstreetmap.org/wiki/ES:Catastro_espa%C3%B1ol/Importaci%C3%B3n_de_edificios/Gesti%C3%B3n_de_proyectos#Generar_y_corregir_los_archivos_a_importar&#39;</span>
+
+<span class="n">valid_provinces</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;</span><span class="si">%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">57</span><span class="p">)</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">31</span><span class="p">,</span> <span class="mi">48</span><span class="p">)]</span>
+
+<span class="n">no_number</span> <span class="o">=</span> <span class="s1">&#39;S-N&#39;</span> <span class="c1"># Regular expression to match addresses without number</span>
+
+<span class="n">lowcase_words</span> <span class="o">=</span> <span class="p">[</span> <span class="c1"># Words to exclude from the general Title Case rule for highway names</span>
+    <span class="s1">&#39;DE&#39;</span><span class="p">,</span> <span class="s1">&#39;DEL&#39;</span><span class="p">,</span> <span class="s1">&#39;EL&#39;</span><span class="p">,</span> <span class="s1">&#39;LA&#39;</span><span class="p">,</span> <span class="s1">&#39;LOS&#39;</span><span class="p">,</span> <span class="s1">&#39;LAS&#39;</span><span class="p">,</span> <span class="s1">&#39;Y&#39;</span><span class="p">,</span> <span class="s1">&#39;AL&#39;</span><span class="p">,</span> <span class="s1">&#39;EN&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;A LA&#39;</span><span class="p">,</span> <span class="s1">&#39;A EL&#39;</span><span class="p">,</span> <span class="s1">&#39;A LOS&#39;</span><span class="p">,</span> <span class="s1">&#39;DE LA&#39;</span><span class="p">,</span> <span class="s1">&#39;DE EL&#39;</span><span class="p">,</span> <span class="s1">&#39;DE LOS&#39;</span><span class="p">,</span> <span class="s1">&#39;DE LAS&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;ELS&#39;</span><span class="p">,</span> <span class="s1">&#39;LES&#39;</span><span class="p">,</span> <span class="s2">&quot;L&#39;&quot;</span><span class="p">,</span> <span class="s2">&quot;D&#39;&quot;</span><span class="p">,</span> <span class="s2">&quot;N&#39;&quot;</span><span class="p">,</span> <span class="s2">&quot;S&#39;&quot;</span><span class="p">,</span> <span class="s2">&quot;NA&quot;</span><span class="p">,</span> <span class="s2">&quot;DE NA&quot;</span><span class="p">,</span> <span class="s2">&quot;SES&quot;</span><span class="p">,</span> <span class="s2">&quot;DE SES&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;D&#39;EN&quot;</span><span class="p">,</span> <span class="s2">&quot;D&#39;EL&quot;</span><span class="p">,</span> <span class="s2">&quot;D&#39;ES&quot;</span><span class="p">,</span> <span class="s2">&quot;DE&#39;N&quot;</span><span class="p">,</span> <span class="s2">&quot;DE&#39;L&quot;</span><span class="p">,</span> <span class="s2">&quot;DE&#39;S&quot;</span>
+<span class="p">]</span>
+
+<span class="n">highway_types_d</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;es_ES&#39;</span><span class="p">:</span> <span class="p">{</span> 
+        <span class="s1">&#39;AG&#39;</span><span class="p">:</span> <span class="s1">&#39;Agregado&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;AL&#39;</span><span class="p">:</span> <span class="s1">&#39;Aldea/Alameda&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;AR&#39;</span><span class="p">:</span> <span class="s1">&#39;Área/Arrabal&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;AU&#39;</span><span class="p">:</span> <span class="s1">&#39;Autopista&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;AV&#39;</span><span class="p">:</span> <span class="s1">&#39;Avenida&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;AY&#39;</span><span class="p">:</span> <span class="s1">&#39;Arroyo&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;BJ&#39;</span><span class="p">:</span> <span class="s1">&#39;Bajada&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;BO&#39;</span><span class="p">:</span> <span class="s1">&#39;Barrio&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;BR&#39;</span><span class="p">:</span> <span class="s1">&#39;Barranco&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;CA&#39;</span><span class="p">:</span> <span class="s1">&#39;Cañada&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;CG&#39;</span><span class="p">:</span> <span class="s1">&#39;Colegio/Cigarral&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;CH&#39;</span><span class="p">:</span> <span class="s1">&#39;Chalet&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;CI&#39;</span><span class="p">:</span> <span class="s1">&#39;Cinturón&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;CJ&#39;</span><span class="p">:</span> <span class="s1">&#39;Calleja/Callejón&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;CL&#39;</span><span class="p">:</span> <span class="s1">&#39;Calle&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;CM&#39;</span><span class="p">:</span> <span class="s1">&#39;Camino/Carmen&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;CN&#39;</span><span class="p">:</span> <span class="s1">&#39;Colonia&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;CO&#39;</span><span class="p">:</span> <span class="s1">&#39;Concejo/Colegio&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;CP&#39;</span><span class="p">:</span> <span class="s1">&#39;Campa/Campo&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;CR&#39;</span><span class="p">:</span> <span class="s1">&#39;Carretera/Carrera&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;CS&#39;</span><span class="p">:</span> <span class="s1">&#39;Caserío&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;CT&#39;</span><span class="p">:</span> <span class="s1">&#39;Cuesta/Costanilla&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;CU&#39;</span><span class="p">:</span> <span class="s1">&#39;Conjunto&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;CY&#39;</span><span class="p">:</span> <span class="s1">&#39;Caleya&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;DE&#39;</span><span class="p">:</span> <span class="s1">&#39;Detrás&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;DP&#39;</span><span class="p">:</span> <span class="s1">&#39;Diputación&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;DS&#39;</span><span class="p">:</span> <span class="s1">&#39;Diseminados&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;ED&#39;</span><span class="p">:</span> <span class="s1">&#39;Edificios&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;EM&#39;</span><span class="p">:</span> <span class="s1">&#39;Extramuros&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;EN&#39;</span><span class="p">:</span> <span class="s1">&#39;Entrada/Ensanche&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;ER&#39;</span><span class="p">:</span> <span class="s1">&#39;Extrarradio&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;ES&#39;</span><span class="p">:</span> <span class="s1">&#39;Escalinata&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;EX&#39;</span><span class="p">:</span> <span class="s1">&#39;Explanada&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;FC&#39;</span><span class="p">:</span> <span class="s1">&#39;Ferrocarril/Finca&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;FN&#39;</span><span class="p">:</span> <span class="s1">&#39;Finca&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;GL&#39;</span><span class="p">:</span> <span class="s1">&#39;Glorieta&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;GR&#39;</span><span class="p">:</span> <span class="s1">&#39;Grupo&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;GV&#39;</span><span class="p">:</span> <span class="s1">&#39;Gran Vía&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;HT&#39;</span><span class="p">:</span> <span class="s1">&#39;Huerta/Huerto&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;JR&#39;</span><span class="p">:</span> <span class="s1">&#39;Jardines&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;LD&#39;</span><span class="p">:</span> <span class="s1">&#39;Lado/Ladera&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;LG&#39;</span><span class="p">:</span> <span class="s1">&#39;Lugar&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;MC&#39;</span><span class="p">:</span> <span class="s1">&#39;Mercado&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;ML&#39;</span><span class="p">:</span> <span class="s1">&#39;Muelle&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;MN&#39;</span><span class="p">:</span> <span class="s1">&#39;Município&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;MS&#39;</span><span class="p">:</span> <span class="s1">&#39;Masías&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;MT&#39;</span><span class="p">:</span> <span class="s1">&#39;Monte&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;MZ&#39;</span><span class="p">:</span> <span class="s1">&#39;Manzana&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;PB&#39;</span><span class="p">:</span> <span class="s1">&#39;Poblado&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;PD&#39;</span><span class="p">:</span> <span class="s1">&#39;Partida&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;PJ&#39;</span><span class="p">:</span> <span class="s1">&#39;Pasaje/Pasadizo&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;PL&#39;</span><span class="p">:</span> <span class="s1">&#39;Polígono&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;PM&#39;</span><span class="p">:</span> <span class="s1">&#39;Páramo&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;PQ&#39;</span><span class="p">:</span> <span class="s1">&#39;Parroquia/Parque&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;PR&#39;</span><span class="p">:</span> <span class="s1">&#39;Prolongación/Continuación&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;PS&#39;</span><span class="p">:</span> <span class="s1">&#39;Paseo&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;PT&#39;</span><span class="p">:</span> <span class="s1">&#39;Puente&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;PZ&#39;</span><span class="p">:</span> <span class="s1">&#39;Plaza&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;QT&#39;</span><span class="p">:</span> <span class="s1">&#39;Quinta&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;RB&#39;</span><span class="p">:</span> <span class="s1">&#39;Rambla&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;RC&#39;</span><span class="p">:</span> <span class="s1">&#39;Rincón/Rincona&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;RD&#39;</span><span class="p">:</span> <span class="s1">&#39;Ronda&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;RM&#39;</span><span class="p">:</span> <span class="s1">&#39;Ramal&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;RP&#39;</span><span class="p">:</span> <span class="s1">&#39;Rampa&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;RR&#39;</span><span class="p">:</span> <span class="s1">&#39;Riera&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;RU&#39;</span><span class="p">:</span> <span class="s1">&#39;Rúa&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;SA&#39;</span><span class="p">:</span> <span class="s1">&#39;Salida&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;SD&#39;</span><span class="p">:</span> <span class="s1">&#39;Senda&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;SL&#39;</span><span class="p">:</span> <span class="s1">&#39;Solar&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;SN&#39;</span><span class="p">:</span> <span class="s1">&#39;Salón&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;SU&#39;</span><span class="p">:</span> <span class="s1">&#39;Subida&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;TN&#39;</span><span class="p">:</span> <span class="s1">&#39;Terrenos&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;TO&#39;</span><span class="p">:</span> <span class="s1">&#39;Torrente&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;TR&#39;</span><span class="p">:</span> <span class="s1">&#39;Travesía/Transversal&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;UR&#39;</span><span class="p">:</span> <span class="s1">&#39;Urbanización&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;VR&#39;</span><span class="p">:</span> <span class="s1">&#39;Vereda&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;AC&#39;</span><span class="p">:</span> <span class="s1">&#39;Acceso&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;AD&#39;</span><span class="p">:</span> <span class="s1">&#39;Aldea&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;BV&#39;</span><span class="p">:</span> <span class="s1">&#39;Bulevar&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;CZ&#39;</span><span class="p">:</span> <span class="s1">&#39;Calzada&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;PA&#39;</span><span class="p">:</span> <span class="s1">&#39;Paralela&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;PC&#39;</span><span class="p">:</span> <span class="s1">&#39;Placeta/Plaça&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;PG&#39;</span><span class="p">:</span> <span class="s1">&#39;Polígono&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;PO&#39;</span><span class="p">:</span> <span class="s1">&#39;Polígono&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;SB&#39;</span><span class="p">:</span> <span class="s1">&#39;Subida&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;SC&#39;</span><span class="p">:</span> <span class="s1">&#39;Sector&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;CALLEJON&#39;</span><span class="p">:</span> <span class="s1">&#39;Callejón&#39;</span><span class="p">,</span> <span class="s1">&#39;CANTON&#39;</span><span class="p">:</span> <span class="s1">&#39;Cantón&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;CIRCUNVALACION&#39;</span><span class="p">:</span> <span class="s1">&#39;Circunvalación&#39;</span><span class="p">,</span> <span class="s1">&#39;GENERICA&#39;</span><span class="p">:</span> <span class="s1">&#39;Genérica&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;JARDIN&#39;</span><span class="p">:</span> <span class="s1">&#39;Jardín&#39;</span><span class="p">,</span> <span class="s1">&#39;MALECON&#39;</span><span class="p">:</span> <span class="s1">&#39;Malecón&#39;</span><span class="p">,</span> <span class="s1">&#39;RINCON&#39;</span><span class="p">:</span> <span class="s1">&#39;Rincón&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;PROLONGACION&#39;</span><span class="p">:</span> <span class="s1">&#39;Prolongación&#39;</span><span class="p">,</span> <span class="s1">&#39;TRANSITO&#39;</span><span class="p">:</span> <span class="s1">&#39;Tránsito&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;TRAVESIA&#39;</span><span class="p">:</span> <span class="s1">&#39;Travesía&#39;</span><span class="p">,</span> <span class="s1">&#39;VIA&#39;</span><span class="p">:</span> <span class="s1">&#39;Vía&#39;</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;ca_ES&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;AG&#39;</span><span class="p">:</span> <span class="s1">&#39;Agregat&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;AL&#39;</span><span class="p">:</span> <span class="s1">&#39;Llogaret&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;AR&#39;</span><span class="p">:</span> <span class="s1">&#39;Àrea/Raval&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;AU&#39;</span><span class="p">:</span> <span class="s1">&#39;Autopista&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;AV&#39;</span><span class="p">:</span> <span class="s1">&#39;Avinguda&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;AY&#39;</span><span class="p">:</span> <span class="s1">&#39;Rierol&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;BJ&#39;</span><span class="p">:</span> <span class="s1">&#39;Baixada&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;BO&#39;</span><span class="p">:</span> <span class="s1">&#39;Barri&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;BR&#39;</span><span class="p">:</span> <span class="s1">&#39;Barranc&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;CA&#39;</span><span class="p">:</span> <span class="s1">&#39;Camí ramader&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;CG&#39;</span><span class="p">:</span> <span class="s1">&#39;Col·legi/Cigarral&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;CH&#39;</span><span class="p">:</span> <span class="s1">&#39;Xalet&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;CI&#39;</span><span class="p">:</span> <span class="s1">&#39;Cinturó/Ronda&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;CJ&#39;</span><span class="p">:</span> <span class="s1">&#39;Carreró&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;CL&#39;</span><span class="p">:</span> <span class="s1">&#39;Carrer&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;CM&#39;</span><span class="p">:</span> <span class="s1">&#39;Camí&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;CN&#39;</span><span class="p">:</span> <span class="s1">&#39;Colònia&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;CO&#39;</span><span class="p">:</span> <span class="s1">&#39;Ajuntament/Col·legi&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;CP&#39;</span><span class="p">:</span> <span class="s1">&#39;Camp&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;CR&#39;</span><span class="p">:</span> <span class="s1">&#39;Carretera&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;CS&#39;</span><span class="p">:</span> <span class="s1">&#39;Mas&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;CT&#39;</span><span class="p">:</span> <span class="s1">&#39;Costa/Rost&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;CU&#39;</span><span class="p">:</span> <span class="s1">&#39;Conjunt&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;CY&#39;</span><span class="p">:</span> <span class="s1">&#39;Carreró&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;DE&#39;</span><span class="p">:</span> <span class="s1">&#39;Darrere&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;DP&#39;</span><span class="p">:</span> <span class="s1">&#39;Diputació&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;DS&#39;</span><span class="p">:</span> <span class="s1">&#39;Disseminats&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;ED&#39;</span><span class="p">:</span> <span class="s1">&#39;Edificis&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;EM&#39;</span><span class="p">:</span> <span class="s1">&#39;Extramurs/Raval&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;EN&#39;</span><span class="p">:</span> <span class="s1">&#39;Entrada/Eixample&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;ER&#39;</span><span class="p">:</span> <span class="s1">&#39;Extraradi/Raval&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;ES&#39;</span><span class="p">:</span> <span class="s1">&#39;Escalinata&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;EX&#39;</span><span class="p">:</span> <span class="s1">&#39;Pla&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;FC&#39;</span><span class="p">:</span> <span class="s1">&#39;Ferrocarril&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;FN&#39;</span><span class="p">:</span> <span class="s1">&#39;Finca&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;GL&#39;</span><span class="p">:</span> <span class="s1">&#39;Rotonda/Plaça&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;GR&#39;</span><span class="p">:</span> <span class="s1">&#39;Grup&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;GV&#39;</span><span class="p">:</span> <span class="s1">&#39;Gran Via&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;HT&#39;</span><span class="p">:</span> <span class="s1">&#39;Hort&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;JR&#39;</span><span class="p">:</span> <span class="s1">&#39;Jardins&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;LD&#39;</span><span class="p">:</span> <span class="s1">&#39;Marge/Vessant&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;LG&#39;</span><span class="p">:</span> <span class="s1">&#39;Lloc&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;MC&#39;</span><span class="p">:</span> <span class="s1">&#39;Mercat&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;ML&#39;</span><span class="p">:</span> <span class="s1">&#39;Moll&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;MN&#39;</span><span class="p">:</span> <span class="s1">&#39;Municipi&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;MS&#39;</span><span class="p">:</span> <span class="s1">&#39;Masies&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;MT&#39;</span><span class="p">:</span> <span class="s1">&#39;Muntanya&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;MZ&#39;</span><span class="p">:</span> <span class="s1">&#39;Illa&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;PB&#39;</span><span class="p">:</span> <span class="s1">&#39;Poblat&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;PD&#39;</span><span class="p">:</span> <span class="s1">&#39;Partida&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;PJ&#39;</span><span class="p">:</span> <span class="s1">&#39;Passatge&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;PL&#39;</span><span class="p">:</span> <span class="s1">&#39;Polígon&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;PM&#39;</span><span class="p">:</span> <span class="s1">&#39;Erm&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;PQ&#39;</span><span class="p">:</span> <span class="s1">&#39;Parròquia/Parc&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;PR&#39;</span><span class="p">:</span> <span class="s1">&#39;Prolongació/Continuació&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;PS&#39;</span><span class="p">:</span> <span class="s1">&#39;Passeig&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;PT&#39;</span><span class="p">:</span> <span class="s1">&#39;Pont&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;PZ&#39;</span><span class="p">:</span> <span class="s1">&#39;Plaça&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;QT&#39;</span><span class="p">:</span> <span class="s1">&#39;Quinta&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;RB&#39;</span><span class="p">:</span> <span class="s1">&#39;Rambla&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;RC&#39;</span><span class="p">:</span> <span class="s1">&#39;Racó&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;RD&#39;</span><span class="p">:</span> <span class="s1">&#39;Ronda&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;RM&#39;</span><span class="p">:</span> <span class="s1">&#39;Branc&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;RP&#39;</span><span class="p">:</span> <span class="s1">&#39;Rampa&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;RR&#39;</span><span class="p">:</span> <span class="s1">&#39;Riera&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;RU&#39;</span><span class="p">:</span> <span class="s1">&#39;Rua&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;SA&#39;</span><span class="p">:</span> <span class="s1">&#39;Sortida&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;SD&#39;</span><span class="p">:</span> <span class="s1">&#39;Sender&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;SL&#39;</span><span class="p">:</span> <span class="s1">&#39;Solar&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;SN&#39;</span><span class="p">:</span> <span class="s1">&#39;Saló&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;SU&#39;</span><span class="p">:</span> <span class="s1">&#39;Pujada&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;TN&#39;</span><span class="p">:</span> <span class="s1">&#39;Terrenys&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;TO&#39;</span><span class="p">:</span> <span class="s1">&#39;Torrent&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;TR&#39;</span><span class="p">:</span> <span class="s1">&#39;Travessera&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;UR&#39;</span><span class="p">:</span> <span class="s1">&#39;Urbanització&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;VR&#39;</span><span class="p">:</span> <span class="s1">&#39;Sendera&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;AC&#39;</span><span class="p">:</span> <span class="s1">&#39;Accès&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;AD&#39;</span><span class="p">:</span> <span class="s1">&#39;Llogaret&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;BV&#39;</span><span class="p">:</span> <span class="s1">&#39;Bulevard&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;CZ&#39;</span><span class="p">:</span> <span class="s1">&#39;Calçada&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;PA&#39;</span><span class="p">:</span> <span class="s1">&#39;Paral·lel&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;PC&#39;</span><span class="p">:</span> <span class="s1">&#39;Placeta/plaça&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;PG&#39;</span><span class="p">:</span> <span class="s1">&#39;Polígon&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;PO&#39;</span><span class="p">:</span> <span class="s1">&#39;Polígon&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;SB&#39;</span><span class="p">:</span> <span class="s1">&#39;Pujada&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;SC&#39;</span><span class="p">:</span> <span class="s1">&#39;Sector&#39;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;gl_ES&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;AG&#39;</span><span class="p">:</span> <span class="s1">&#39;Engadido&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;AL&#39;</span><span class="p">:</span> <span class="s1">&#39;Aldea/Alameda&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;AR&#39;</span><span class="p">:</span> <span class="s1">&#39;Área/Arrabalde&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;AU&#39;</span><span class="p">:</span> <span class="s1">&#39;Autoestrada&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;AV&#39;</span><span class="p">:</span> <span class="s1">&#39;Avenida&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;AY&#39;</span><span class="p">:</span> <span class="s1">&#39;Regato&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;BJ&#39;</span><span class="p">:</span> <span class="s1">&#39;Baixada&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;BO&#39;</span><span class="p">:</span> <span class="s1">&#39;Barrio&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;BR&#39;</span><span class="p">:</span> <span class="s1">&#39;Cavorco&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;CA&#39;</span><span class="p">:</span> <span class="s1">&#39;Canella&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;CG&#39;</span><span class="p">:</span> <span class="s1">&#39;Colexio/Cigarreiro&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;CH&#39;</span><span class="p">:</span> <span class="s1">&#39;Chalet&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;CI&#39;</span><span class="p">:</span> <span class="s1">&#39;Cinto&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;CJ&#39;</span><span class="p">:</span> <span class="s1">&#39;Calexa/Quella/Ruela&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;CL&#39;</span><span class="p">:</span> <span class="s1">&#39;Rúa&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;CM&#39;</span><span class="p">:</span> <span class="s1">&#39;Camiño/Carme&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;CN&#39;</span><span class="p">:</span> <span class="s1">&#39;Colonia&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;CO&#39;</span><span class="p">:</span> <span class="s1">&#39;Concello/Colexio&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;CP&#39;</span><span class="p">:</span> <span class="s1">&#39;Campeira/Campo&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;CR&#39;</span><span class="p">:</span> <span class="s1">&#39;Estrada/Carreiro&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;CS&#39;</span><span class="p">:</span> <span class="s1">&#39;Caserío&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;CT&#39;</span><span class="p">:</span> <span class="s1">&#39;Costa/Pendente&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;CU&#39;</span><span class="p">:</span> <span class="s1">&#39;Conxunto&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;CY&#39;</span><span class="p">:</span> <span class="s1">&#39;Caleya&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;DE&#39;</span><span class="p">:</span> <span class="s1">&#39;Detrás&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;DP&#39;</span><span class="p">:</span> <span class="s1">&#39;Deputación&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;DS&#39;</span><span class="p">:</span> <span class="s1">&#39;Espallado&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;ED&#39;</span><span class="p">:</span> <span class="s1">&#39;Edificios&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;EM&#39;</span><span class="p">:</span> <span class="s1">&#39;Extramuros&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;EN&#39;</span><span class="p">:</span> <span class="s1">&#39;Entrada/Ensanche&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;ER&#39;</span><span class="p">:</span> <span class="s1">&#39;Arrabalde&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;ES&#39;</span><span class="p">:</span> <span class="s1">&#39;Escalinata&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;EX&#39;</span><span class="p">:</span> <span class="s1">&#39;Chaira&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;FC&#39;</span><span class="p">:</span> <span class="s1">&#39;Ferrocarril/Finca&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;FN&#39;</span><span class="p">:</span> <span class="s1">&#39;Finca&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;GL&#39;</span><span class="p">:</span> <span class="s1">&#39;Glorieta&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;GR&#39;</span><span class="p">:</span> <span class="s1">&#39;Grupo&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;GV&#39;</span><span class="p">:</span> <span class="s1">&#39;Gran Vía&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;HT&#39;</span><span class="p">:</span> <span class="s1">&#39;Horta/Horto&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;JR&#39;</span><span class="p">:</span> <span class="s1">&#39;Xardíns&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;LD&#39;</span><span class="p">:</span> <span class="s1">&#39;Costado/Ladeira&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;LG&#39;</span><span class="p">:</span> <span class="s1">&#39;Lugar&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;MC&#39;</span><span class="p">:</span> <span class="s1">&#39;Mercado&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;ML&#39;</span><span class="p">:</span> <span class="s1">&#39;Peirao&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;MN&#39;</span><span class="p">:</span> <span class="s1">&#39;Concello&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;MS&#39;</span><span class="p">:</span> <span class="s1">&#39;Masías&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;MT&#39;</span><span class="p">:</span> <span class="s1">&#39;Monte&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;MZ&#39;</span><span class="p">:</span> <span class="s1">&#39;Mazá&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;PB&#39;</span><span class="p">:</span> <span class="s1">&#39;Poboado&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;PD&#39;</span><span class="p">:</span> <span class="s1">&#39;Partida&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;PJ&#39;</span><span class="p">:</span> <span class="s1">&#39;Pasaxe/Pasadizo&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;PL&#39;</span><span class="p">:</span> <span class="s1">&#39;Polígono&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;PM&#39;</span><span class="p">:</span> <span class="s1">&#39;Páramo&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;PQ&#39;</span><span class="p">:</span> <span class="s1">&#39;Parroquia/Parque&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;PR&#39;</span><span class="p">:</span> <span class="s1">&#39;Prolonga/Continuación&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;PS&#39;</span><span class="p">:</span> <span class="s1">&#39;Paseo&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;PT&#39;</span><span class="p">:</span> <span class="s1">&#39;Ponte&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;PZ&#39;</span><span class="p">:</span> <span class="s1">&#39;Praza&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;QT&#39;</span><span class="p">:</span> <span class="s1">&#39;Quinta&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;RB&#39;</span><span class="p">:</span> <span class="s1">&#39;Rambla&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;RC&#39;</span><span class="p">:</span> <span class="s1">&#39;Recuncho/Cornecho&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;RD&#39;</span><span class="p">:</span> <span class="s1">&#39;Rolda&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;RM&#39;</span><span class="p">:</span> <span class="s1">&#39;Ramal&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;RP&#39;</span><span class="p">:</span> <span class="s1">&#39;Rampla&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;RR&#39;</span><span class="p">:</span> <span class="s1">&#39;Riera&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;RU&#39;</span><span class="p">:</span> <span class="s1">&#39;Rúa&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;SA&#39;</span><span class="p">:</span> <span class="s1">&#39;Saída&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;SD&#39;</span><span class="p">:</span> <span class="s1">&#39;Sendeiro&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;SL&#39;</span><span class="p">:</span> <span class="s1">&#39;Soar&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;SN&#39;</span><span class="p">:</span> <span class="s1">&#39;Salón&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;SU&#39;</span><span class="p">:</span> <span class="s1">&#39;Costa&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;TN&#39;</span><span class="p">:</span> <span class="s1">&#39;Terreos&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;TO&#39;</span><span class="p">:</span> <span class="s1">&#39;Torrente&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;TR&#39;</span><span class="p">:</span> <span class="s1">&#39;Travesía/Transversal&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;UR&#39;</span><span class="p">:</span> <span class="s1">&#39;Urbanización&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;VR&#39;</span><span class="p">:</span> <span class="s1">&#39;Carreiro/Verea&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;AC&#39;</span><span class="p">:</span> <span class="s1">&#39;Acceso&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;AD&#39;</span><span class="p">:</span> <span class="s1">&#39;Aldea&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;BV&#39;</span><span class="p">:</span> <span class="s1">&#39;Bulevar&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;CZ&#39;</span><span class="p">:</span> <span class="s1">&#39;Calzada&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;PA&#39;</span><span class="p">:</span> <span class="s1">&#39;Paralela&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;PC&#39;</span><span class="p">:</span> <span class="s1">&#39;Prazola&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;PG&#39;</span><span class="p">:</span> <span class="s1">&#39;Polígono&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;PO&#39;</span><span class="p">:</span> <span class="s1">&#39;Polígono&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;SB&#39;</span><span class="p">:</span> <span class="s1">&#39;Costa&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;SC&#39;</span><span class="p">:</span> <span class="s1">&#39;Sector&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;CALLEJON&#39;</span><span class="p">:</span> <span class="s1">&#39;Quella/Ruela&#39;</span><span class="p">,</span> <span class="s1">&#39;CANTON&#39;</span><span class="p">:</span> <span class="s1">&#39;Cantón&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;CIRCUNVALACION&#39;</span><span class="p">:</span> <span class="s1">&#39;Circunvalación&#39;</span><span class="p">,</span> <span class="s1">&#39;GENERICA&#39;</span><span class="p">:</span> <span class="s1">&#39;Xenérica&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;JARDIN&#39;</span><span class="p">:</span> <span class="s1">&#39;Xardín&#39;</span><span class="p">,</span> <span class="s1">&#39;MALECON&#39;</span><span class="p">:</span> <span class="s1">&#39;Dique&#39;</span><span class="p">,</span> <span class="s1">&#39;RINCON&#39;</span><span class="p">:</span> <span class="s1">&#39;Recuncho&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;PROLONGACION&#39;</span><span class="p">:</span> <span class="s1">&#39;Prolonga&#39;</span><span class="p">,</span> <span class="s1">&#39;TRANSITO&#39;</span><span class="p">:</span> <span class="s1">&#39;Tránsito&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;TRAVESIA&#39;</span><span class="p">:</span> <span class="s1">&#39;Travesía&#39;</span><span class="p">,</span> <span class="s1">&#39;VIA&#39;</span><span class="p">:</span> <span class="s1">&#39;Vía&#39;</span>
+    <span class="p">},</span>
+<span class="p">}</span>
+
+<span class="n">place_types_d</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;es_ES&#39;</span><span class="p">:</span> <span class="p">[</span>
+	    <span class="s1">&#39;Agregado&#39;</span><span class="p">,</span> <span class="s1">&#39;Aldea&#39;</span><span class="p">,</span> <span class="s1">&#39;Área&#39;</span><span class="p">,</span> <span class="s1">&#39;Barrio&#39;</span><span class="p">,</span> <span class="s1">&#39;Barranco&#39;</span><span class="p">,</span> <span class="s1">&#39;Cañada&#39;</span><span class="p">,</span> <span class="s1">&#39;Colegio&#39;</span><span class="p">,</span> 
+	    <span class="s1">&#39;Cigarral&#39;</span><span class="p">,</span> <span class="s1">&#39;Chalet&#39;</span><span class="p">,</span> <span class="s1">&#39;Concejo&#39;</span><span class="p">,</span> <span class="s1">&#39;Campa&#39;</span><span class="p">,</span> <span class="s1">&#39;Campo&#39;</span><span class="p">,</span> <span class="s1">&#39;Caserío&#39;</span><span class="p">,</span> <span class="s1">&#39;Conjunto&#39;</span><span class="p">,</span> 
+	    <span class="s1">&#39;Diputación&#39;</span><span class="p">,</span> <span class="s1">&#39;Diseminados&#39;</span><span class="p">,</span> <span class="s1">&#39;Edificios&#39;</span><span class="p">,</span> <span class="s1">&#39;Extramuros&#39;</span><span class="p">,</span> <span class="s1">&#39;Entrada&#39;</span><span class="p">,</span> 
+	    <span class="s1">&#39;Ensanche&#39;</span><span class="p">,</span> <span class="s1">&#39;Extrarradio&#39;</span><span class="p">,</span> <span class="s1">&#39;Finca&#39;</span><span class="p">,</span> <span class="s1">&#39;Grupo&#39;</span><span class="p">,</span> <span class="s1">&#39;Huerta&#39;</span><span class="p">,</span> <span class="s1">&#39;Huerto&#39;</span><span class="p">,</span> 
+	    <span class="s1">&#39;Jardines&#39;</span><span class="p">,</span> <span class="s1">&#39;Lugar&#39;</span><span class="p">,</span> <span class="s1">&#39;Mercado&#39;</span><span class="p">,</span> <span class="s1">&#39;Muelle&#39;</span><span class="p">,</span> <span class="s1">&#39;Municipio&#39;</span><span class="p">,</span> <span class="s1">&#39;Masías&#39;</span><span class="p">,</span> <span class="s1">&#39;Monte&#39;</span><span class="p">,</span> 
+	    <span class="s1">&#39;Manzana&#39;</span><span class="p">,</span> <span class="s1">&#39;Poblado&#39;</span><span class="p">,</span> <span class="s1">&#39;Partida&#39;</span><span class="p">,</span> <span class="s1">&#39;Polígono&#39;</span><span class="p">,</span> <span class="s1">&#39;Páramo&#39;</span><span class="p">,</span> <span class="s1">&#39;Parroquia&#39;</span><span class="p">,</span> <span class="s1">&#39;Solar&#39;</span><span class="p">,</span> 
+	    <span class="s1">&#39;Terrenos&#39;</span><span class="p">,</span> <span class="s1">&#39;Urbanización&#39;</span><span class="p">,</span> <span class="s1">&#39;Bulevar&#39;</span><span class="p">,</span> <span class="s1">&#39;Sector&#39;</span>
+    <span class="p">],</span>
+    <span class="s1">&#39;ca_ES&#39;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s1">&#39;Agregat&#39;</span><span class="p">,</span> <span class="s1">&#39;Llogaret&#39;</span><span class="p">,</span> <span class="s1">&#39;Àrea&#39;</span><span class="p">,</span> <span class="s1">&#39;Barri&#39;</span><span class="p">,</span> <span class="s1">&#39;Barranc&#39;</span><span class="p">,</span> <span class="s1">&#39;Camí ramader&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Col·legi/Cigarral&#39;</span><span class="p">,</span> <span class="s1">&#39;Xalet&#39;</span><span class="p">,</span> <span class="s1">&#39;Ajuntament/Col·legi&#39;</span><span class="p">,</span> <span class="s1">&#39;Camp&#39;</span><span class="p">,</span> <span class="s1">&#39;Mas&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Conjunt&#39;</span><span class="p">,</span> <span class="s1">&#39;Diputació&#39;</span><span class="p">,</span> <span class="s1">&#39;Disseminats&#39;</span><span class="p">,</span> <span class="s1">&#39;Edificis&#39;</span><span class="p">,</span> <span class="s1">&#39;Extramurs&#39;</span><span class="p">,</span> 
+        <span class="s1">&#39;Entrada&#39;</span><span class="p">,</span> <span class="s1">&#39;Extraradi&#39;</span><span class="p">,</span> <span class="s1">&#39;Finca&#39;</span><span class="p">,</span> <span class="s1">&#39;Grup&#39;</span><span class="p">,</span> <span class="s1">&#39;Hort&#39;</span><span class="p">,</span> <span class="s1">&#39;Jardins&#39;</span><span class="p">,</span> <span class="s1">&#39;Lloc&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Mercat&#39;</span><span class="p">,</span> <span class="s1">&#39;Moll&#39;</span><span class="p">,</span> <span class="s1">&#39;Municipi&#39;</span><span class="p">,</span> <span class="s1">&#39;Masies&#39;</span><span class="p">,</span> <span class="s1">&#39;Muntanya&#39;</span><span class="p">,</span> <span class="s1">&#39;Illa&#39;</span><span class="p">,</span> <span class="s1">&#39;Poblat&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Partida&#39;</span><span class="p">,</span> <span class="s1">&#39;Polígon&#39;</span><span class="p">,</span> <span class="s1">&#39;Erm&#39;</span><span class="p">,</span> <span class="s1">&#39;Parròquia&#39;</span><span class="p">,</span> <span class="s1">&#39;Solar&#39;</span><span class="p">,</span> <span class="s1">&#39;Terrenys&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Urbanització&#39;</span><span class="p">,</span> <span class="s1">&#39;Bulevard&#39;</span><span class="p">,</span> <span class="s1">&#39;Sector&#39;</span>
+    <span class="p">],</span>
+    <span class="s1">&#39;gl_ES&#39;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s1">&#39;Engadido&#39;</span><span class="p">,</span> <span class="s1">&#39;Aldea&#39;</span><span class="p">,</span> <span class="s1">&#39;Área&#39;</span><span class="p">,</span> <span class="s1">&#39;Barrio&#39;</span><span class="p">,</span> <span class="s1">&#39;Cavorco&#39;</span><span class="p">,</span> <span class="s1">&#39;Canella&#39;</span><span class="p">,</span> <span class="s1">&#39;Colexio&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Cigarreiro&#39;</span><span class="p">,</span> <span class="s1">&#39;Chalet&#39;</span><span class="p">,</span> <span class="s1">&#39;Concello&#39;</span><span class="p">,</span> <span class="s1">&#39;Campeira&#39;</span><span class="p">,</span> <span class="s1">&#39;Campo&#39;</span><span class="p">,</span> <span class="s1">&#39;Caserío&#39;</span><span class="p">,</span> <span class="s1">&#39;Conxunto&#39;</span><span class="p">,</span>
+        <span class="sa">u</span><span class="s1">&#39;Deputación&#39;</span><span class="p">,</span> <span class="s1">&#39;Espallados&#39;</span><span class="p">,</span> <span class="s1">&#39;Edificios&#39;</span><span class="p">,</span> <span class="s1">&#39;Extramuros&#39;</span><span class="p">,</span> <span class="s1">&#39;Entrada&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Ensanche&#39;</span><span class="p">,</span> <span class="s1">&#39;Arrabaldes&#39;</span><span class="p">,</span> <span class="s1">&#39;Finca&#39;</span><span class="p">,</span> <span class="s1">&#39;Grupo&#39;</span><span class="p">,</span> <span class="s1">&#39;Horta&#39;</span><span class="p">,</span> <span class="s1">&#39;Horto&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Xardíns&#39;</span><span class="p">,</span> <span class="s1">&#39;Lugar&#39;</span><span class="p">,</span> <span class="s1">&#39;Mercado&#39;</span><span class="p">,</span> <span class="s1">&#39;Peirao&#39;</span><span class="p">,</span> <span class="s1">&#39;Concello&#39;</span><span class="p">,</span> <span class="s1">&#39;Masías&#39;</span><span class="p">,</span> <span class="s1">&#39;Monte&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Mazá&#39;</span><span class="p">,</span> <span class="s1">&#39;Poboado&#39;</span><span class="p">,</span> <span class="s1">&#39;Partida&#39;</span><span class="p">,</span> <span class="s1">&#39;Polígono&#39;</span><span class="p">,</span> <span class="s1">&#39;Páramo&#39;</span><span class="p">,</span> <span class="s1">&#39;Parroquia&#39;</span><span class="p">,</span> <span class="s1">&#39;Soar&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Terreos&#39;</span><span class="p">,</span> <span class="s1">&#39;Urbanización&#39;</span><span class="p">,</span> <span class="s1">&#39;Bulevar&#39;</span><span class="p">,</span> <span class="s1">&#39;Sector&#39;</span>
+    <span class="p">],</span>
+<span class="p">}</span>
+
+<span class="c1"># language is defined in system locales</span>
+<span class="n">available_langs</span> <span class="o">=</span> <span class="n">highway_types_d</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<span class="n">language</span> <span class="o">=</span> <span class="n">language</span> <span class="k">if</span> <span class="n">language</span> <span class="ow">in</span> <span class="n">available_langs</span> <span class="k">else</span> <span class="s1">&#39;es_ES&#39;</span>
+
+<span class="c1"># Dictionary for default &#39;highway_types.csv&#39;</span>
+<span class="n">highway_types</span> <span class="o">=</span> <span class="n">highway_types_d</span><span class="p">[</span><span class="n">language</span><span class="p">]</span>
+
+<span class="c1"># List of highway types to translate as place addresses</span>
+<span class="n">place_types</span> <span class="o">=</span> <span class="n">place_types_d</span><span class="p">[</span><span class="n">language</span><span class="p">]</span>
+
+<span class="c1"># List of place types to remove from the name</span>
+<span class="n">remove_place_from_name</span> <span class="o">=</span> <span class="p">[</span><span class="n">place_types</span><span class="p">[</span><span class="mi">26</span><span class="p">]]</span>
+
+<span class="c1"># List of highway types not to be parsed</span>
+<span class="n">excluded_types</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;DS&#39;</span><span class="p">,</span> <span class="s1">&#39;ER&#39;</span><span class="p">]</span>
+
+<span class="c1"># Dictionary of name and OSM boundary relation id for know municipalities</span>
+<span class="c1"># wich fails in get_boundary method.</span>
+<span class="n">mun_fails</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;07032&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Maó&#39;</span><span class="p">,</span> <span class="s1">&#39;1809102&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;07040&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Palma&#39;</span><span class="p">,</span> <span class="s1">&#39;341321&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;11042&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Zahara&#39;</span><span class="p">,</span> <span class="s1">&#39;343140&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;16176&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Pozorrubio&#39;</span><span class="p">,</span> <span class="s1">&#39;347331&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;19178&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Humanes&#39;</span><span class="p">,</span> <span class="s1">&#39;341781&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;23043&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Hornos&#39;</span><span class="p">,</span> <span class="s1">&#39;344389&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;23086&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Torre del Campo&#39;</span><span class="p">,</span> <span class="s1">&#39;346324&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;26004&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Ajamil&#39;</span><span class="p">,</span> <span class="s1">&#39;348189&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;26093&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Mansilla de la Sierra&#39;</span><span class="p">,</span> <span class="s1">&#39;345202&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;28063&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Gargantilla del Lozoya y Pinilla de Buitrago&#39;</span><span class="p">,</span> <span class="s1">&#39;345009&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;29101&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Montecorto&#39;</span><span class="p">,</span> <span class="s1">&#39;7541639&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;35010&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Santa María de Guía de Gran Canaria&#39;</span><span class="p">,</span> <span class="s1">&#39;345440&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;37252&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Pereña de la Ribera&#39;</span><span class="p">,</span> <span class="s1">&#39;343095&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;37367&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Villarino de los Aires&#39;</span><span class="p">,</span> <span class="s1">&#39;340062&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;38023&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;San Cristóbal de La Laguna&#39;</span><span class="p">,</span> <span class="s1">&#39;345393&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;38039&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Santa Úrsula&#39;</span><span class="p">,</span> <span class="s1">&#39;340717&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;39103&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Mancomunidad de Campoo-Cabuérniga&#39;</span><span class="p">,</span> <span class="s1">&#39;340042&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;44007&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Alba&#39;</span><span class="p">,</span> <span class="s1">&#39;345065&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;47047&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Castroponce&#39;</span><span class="p">,</span> <span class="s1">&#39;340763&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;47101&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Muriel&#39;</span><span class="p">,</span> <span class="s1">&#39;346973&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;47207&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Villafuerte&#39;</span><span class="p">,</span> <span class="s1">&#39;341197&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;50030&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Añón de Moncayo&#39;</span><span class="p">,</span> <span class="s1">&#39;342653&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;50049&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Biel&#39;</span><span class="p">,</span> <span class="s1">&#39;348008&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;51021&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Fuente-Álamo&#39;</span><span class="p">,</span> <span class="s1">&#39;341797&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;52024&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Gijón/Xixón&#39;</span><span class="p">,</span> <span class="s1">&#39;345576&#39;</span><span class="p">],</span>
+<span class="p">}</span>
+
+<span class="n">aux_address</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;cdau&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;04&#39;</span><span class="p">,</span> <span class="s1">&#39;11&#39;</span><span class="p">,</span> <span class="s1">&#39;14&#39;</span><span class="p">,</span> <span class="s1">&#39;18&#39;</span><span class="p">,</span> <span class="s1">&#39;21&#39;</span><span class="p">,</span> <span class="s1">&#39;23&#39;</span><span class="p">,</span> <span class="s1">&#39;29&#39;</span><span class="p">,</span> <span class="s1">&#39;41&#39;</span><span class="p">]}</span>
+<span class="n">aux_path</span> <span class="o">=</span> <span class="s1">&#39;auxsrcs&#39;</span>
+
+</pre></div>
+
+          </div>
+            
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navegación</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="Índice General"
+             >índice</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Índice de Módulos Python"
+             >módulos</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 1.7.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Código de módulo</a> &#187;</li> 
+      </ul>
+    </div>
+<script type="text/javascript">
+  $("#mobile-toggle a").click(function () {
+    $("#left-column").toggle();
+  });
+</script>
+<script type="text/javascript" src="../../_static/js/bootstrap.js"></script>
+  <div class="footer">
+    &copy; Copyright 2017, Javier Sanchez Portero. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  </body>
+</html>

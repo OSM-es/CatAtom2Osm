@@ -2,7 +2,7 @@ from builtins import str
 import unittest
 import mock
 
-from overpass import Query, api_servers
+from catatom2osm.overpass import Query, api_servers
 
 
 class TestQuery(unittest.TestCase):
@@ -65,7 +65,7 @@ class TestQuery(unittest.TestCase):
             "bar(1,2,3,4););out;"
         self.assertEqual(q.get_url(1), url)
 
-    @mock.patch('overpass.download')
+    @mock.patch('catatom2osm.overpass.download')
     def test_download(self, m_download):
         def raises_io(*args):
             raise IOError()
@@ -81,7 +81,7 @@ class TestQuery(unittest.TestCase):
         m_download.wget = raises_io1
         q.download('bar')
 
-    @mock.patch('overpass.download')
+    @mock.patch('catatom2osm.overpass.download')
     def test_read(self, m_download):
         m_download.get_response.return_value.text.encode.return_value = 'bar'
         q = Query('1,2,3,4').add('foo')

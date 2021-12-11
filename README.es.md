@@ -5,32 +5,20 @@ Léeme
 
 Herramienta para convertir los conjuntos de datos INSPIRE de los Servicios ATOM 
 del Catastro Español (http://www.catastro.minhap.gob.es/webinspire/index.html) 
-a archivos OSM. Esto es parte de una propuesta de importación en construcción:
+a archivos OSM. Esto es parte de una importación en curso:
 
 https://wiki.openstreetmap.org/wiki/ES:Catastro_espa%C3%B1ol/Importaci%C3%B3n_de_edificios
 
 Requisitos
 ----------
 
-* fuzzywuzzy\[speedup\]
-* psutil
-* pyqgis
-* requests
-* GDAL
-
-Fuzzywuzzy es necesario para la combinación de nombres de calles.
-Los requisitos principales (pyqgis, GDAL) debe proporcionarlos QGIS usando los 
-instaladores disponibles en http://qgis.org/
-
-Se necestitan QGIS >= 2.10.1, GDAL >= 2.
+Docker https://www.docker.com/get-started
 
 Instalación
 -----------
 
 Se recomienda usar la herramienta mediante esta imagen de Docker 
 (https://hub.docker.com/r/egofer/catatom2osm).
-
-Si se desea una instalación sin Docker ver INSTALL.es.md (https://OSM-es.github.io/CatAtom2Osm/es/install.html) 
 
 Uso
 ---

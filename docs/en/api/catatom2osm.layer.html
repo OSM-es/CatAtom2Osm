@@ -1,0 +1,1006 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+  
+  <!-- Licensed under the Apache 2.0 License -->
+  <link rel="stylesheet" type="text/css" href="../_static/fonts/open-sans/stylesheet.css" />
+  <!-- Licensed under the SIL Open Font License -->
+  <link rel="stylesheet" type="text/css" href="../_static/fonts/source-serif-pro/source-serif-pro.css" />
+  <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap-theme.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>catatom2osm.layer module &#8212; CatAtom2Osm 1.7.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/guzzle.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.7.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="catatom2osm.osm module" href="catatom2osm.osm.html" />
+    <link rel="prev" title="catatom2osm.hgwnames module" href="catatom2osm.hgwnames.html" />
+  
+   
+
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="catatom2osm.osm.html" title="catatom2osm.osm module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="catatom2osm.hgwnames.html" title="catatom2osm.hgwnames module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 1.7.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api.html" >API reference</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="modules.html" >CatAtom2Osm</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="catatom2osm.html" accesskey="U">catatom2osm package</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="container-wrapper">
+
+      <div id="mobile-toggle">
+        <a href="#"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
+      </div>
+  <div id="left-column">
+    <div class="sphinxsidebar">
+        <a href="
+    ../index.html" class="text-logo">CatAtom2Osm</a>
+        
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Table Of Contents</h2>
+  </div>
+  <div class="sidebar-toc">
+    
+    
+      <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../readme.html">Read me</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changes.html">Change log</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="modules.html">CatAtom2Osm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../coverage.html">Code coverage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../genindex.html">Index</a></li>
+</ul>
+</li>
+</ul>
+
+    
+  </div>
+</div>
+        
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <div id="main-search">
+      <form class="form-inline" action="../search.html" method="GET" role="form">
+        <div class="input-group">
+          <input name="q" type="text" class="form-control" placeholder="Search...">
+        </div>
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div>
+    </div>
+  </div>
+        <div id="right-column">
+          
+          <div role="navigation" aria-label="breadcrumbs navigation">
+            <ol class="breadcrumb">
+              <li><a href="../index.html">Docs</a></li>
+              
+                <li><a href="../api.html">API reference</a></li>
+              
+                <li><a href="modules.html">CatAtom2Osm</a></li>
+              
+                <li><a href="catatom2osm.html">catatom2osm package</a></li>
+              
+              <li>catatom2osm.layer module</li>
+            </ol>
+          </div>
+          
+          <div class="document clearer body">
+            
+  <div class="section" id="module-catatom2osm.layer">
+<span id="catatom2osm-layer-module"></span><h1>catatom2osm.layer module<a class="headerlink" href="#module-catatom2osm.layer" title="Permalink to this headline">¶</a></h1>
+<p>Application layers</p>
+<dl class="class">
+<dt id="catatom2osm.layer.AddressLayer">
+<em class="property">class </em><code class="descclassname">catatom2osm.layer.</code><code class="descname">AddressLayer</code><span class="sig-paren">(</span><em>path='Point'</em>, <em>baseName='address'</em>, <em>providerLib='memory'</em>, <em>source_date=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#AddressLayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.AddressLayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#catatom2osm.layer.BaseLayer" title="catatom2osm.layer.BaseLayer"><code class="xref py py-class docutils literal"><span class="pre">catatom2osm.layer.BaseLayer</span></code></a></p>
+<p>Class for address</p>
+<dl class="method">
+<dt id="catatom2osm.layer.AddressLayer.conflate">
+<code class="descname">conflate</code><span class="sig-paren">(</span><em>current_address</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#AddressLayer.conflate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.AddressLayer.conflate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete address existing in current_address</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>current_address</strong> (<em>OSM</em>) &#8211; dataset</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="catatom2osm.layer.AddressLayer.create_shp">
+<em class="property">static </em><code class="descname">create_shp</code><span class="sig-paren">(</span><em>name</em>, <em>crs</em>, <em>fields=&lt;qgis._core.QgsFields object&gt;</em>, <em>geom_type=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#AddressLayer.create_shp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.AddressLayer.create_shp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="catatom2osm.layer.AddressLayer.get_highway_names">
+<code class="descname">get_highway_names</code><span class="sig-paren">(</span><em>highway=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#AddressLayer.get_highway_names"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.AddressLayer.get_highway_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a dictionary with the translation for each street name.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>highway</strong> (<a class="reference internal" href="#catatom2osm.layer.HighwayLayer" title="catatom2osm.layer.HighwayLayer"><em>HighwayLayer</em></a>) &#8211; Current OSM highway data for conflation.</li>
+<li><strong>highway is None</strong><strong>, </strong><strong>only parse names.</strong> (<em>If</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">(dict) highway names translations</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="catatom2osm.layer.AddressLayer.get_image_links">
+<code class="descname">get_image_links</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#AddressLayer.get_image_links"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.AddressLayer.get_image_links" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="catatom2osm.layer.AddressLayer.is_address">
+<em class="property">static </em><code class="descname">is_address</code><span class="sig-paren">(</span><em>feature</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#AddressLayer.is_address"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.AddressLayer.is_address" title="Permalink to this definition">¶</a></dt>
+<dd><p>Address features have &#8216;.&#8217; but not &#8216;_&#8217; in its localId field</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="catatom2osm.layer.AddressLayer.to_osm">
+<code class="descname">to_osm</code><span class="sig-paren">(</span><em>data=None</em>, <em>tags={}</em>, <em>upload='never'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#AddressLayer.to_osm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.AddressLayer.to_osm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export to OSM</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="catatom2osm.layer.BaseLayer">
+<em class="property">class </em><code class="descclassname">catatom2osm.layer.</code><code class="descname">BaseLayer</code><span class="sig-paren">(</span><em>path</em>, <em>baseName</em>, <em>providerLib='ogr'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#BaseLayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.BaseLayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">qgis._core.QgsVectorLayer</span></code></p>
+<p>Base class for application layers</p>
+<dl class="method">
+<dt id="catatom2osm.layer.BaseLayer.append">
+<code class="descname">append</code><span class="sig-paren">(</span><em>layer</em>, <em>rename=None</em>, <em>resolve=None</em>, <em>query=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#BaseLayer.append"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.BaseLayer.append" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copy all features from layer.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>layer</strong> (<em>QgsVectorLayer</em>) &#8211; Source layer</li>
+<li><strong>rename</strong> (<em>dict</em>) &#8211; Translation of attributes names</li>
+<li><strong>resolve</strong> (<em>dict</em>) &#8211; xlink reference fields</li>
+<li><strong>query</strong> (<em>func</em>) &#8211; function with args feature and kwargs that returns
+a boolean deciding if each feature will be included or not</li>
+<li><strong>kwargs</strong> &#8211; aditional arguments for query function</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">query</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">feat</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">:</span> <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;foo&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;bar&#39;</span>
+<span class="go">Will copy only features with a value &#39;bar&#39; in the field &#39;foo&#39;.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">query</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">feat</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">:</span> <span class="n">layer</span><span class="o">.</span><span class="n">is_inside</span><span class="p">(</span><span class="n">feat</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;zone&#39;</span><span class="p">])</span>
+<span class="go">Will copy only features inside zone.</span>
+</pre></div>
+</div>
+<p>See also copy_feature().</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="catatom2osm.layer.BaseLayer.bounding_box">
+<code class="descname">bounding_box</code><span class="sig-paren">(</span><em>expression=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#BaseLayer.bounding_box"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.BaseLayer.bounding_box" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns bounding box of matching features using an expression or all
+features if expression is None. The bounding box is transformed to EPSG
+4326 and expressed in overpass format.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="catatom2osm.layer.BaseLayer.copy_feature">
+<code class="descname">copy_feature</code><span class="sig-paren">(</span><em>feature</em>, <em>rename=None</em>, <em>resolve=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#BaseLayer.copy_feature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.BaseLayer.copy_feature" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a copy of feature renaming attributes or resolving xlink references.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>feature</strong> (<em>QgsFeature</em>) &#8211; Source feature</li>
+<li><strong>rename</strong> (<em>dict</em>) &#8211; Translation of attributes names</li>
+<li><strong>resolve</strong> (<em>dict</em>) &#8211; xlink reference fields</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>With this:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rename</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;spec&#39;</span><span class="p">:</span> <span class="s1">&#39;specification&#39;</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">resolve</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>    <span class="s1">&#39;PD_id&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;component_href&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;[\w\.]+PD[\.0-9]+&#39;</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="s1">&#39;TN_id&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;component_href&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;[\w\.]+TN[\.0-9]+&#39;</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="s1">&#39;AU_id&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;component_href&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;[\w\.]+AU[\.0-9]+&#39;</span><span class="p">)</span>
+<span class="gp">... </span><span class="p">}</span>
+</pre></div>
+</div>
+<p>You get:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">original_attributes</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">,</span> <span class="s1">&#39;specification&#39;</span><span class="p">,</span> <span class="s1">&#39;component_href&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">original_values</span> <span class="o">=</span> <span class="p">[</span>
+<span class="gp">... </span>    <span class="s1">&#39;38.012.1.12.0295603CS6109N&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s1">&#39;Parcel&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s1">&#39;(3:#ES.SDGC.PD.38.012.38570,#ES.SDGC.TN.38.012.1,#ES.SDGC.AU.38.012)&#39;</span>
+<span class="gp">... </span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">final_attributes</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">,</span> <span class="s1">&#39;spec&#39;</span><span class="p">,</span> <span class="s1">&#39;PD_id&#39;</span><span class="p">,</span> <span class="s1">&#39;TN_id&#39;</span><span class="p">,</span> <span class="s1">&#39;AU_id&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">final_values</span> <span class="o">=</span> <span class="p">[</span>
+<span class="gp">... </span>    <span class="s1">&#39;38.012.1.12.0295603CS6109N&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s1">&#39;Parcel&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s1">&#39;ES.SDGC.PD.38.012.38570&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s1">&#39;ES.SDGC.TN.38.012.1&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s1">&#39;ES.SDGC.AU.38.012&#39;</span>
+<span class="gp">... </span><span class="p">]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="catatom2osm.layer.BaseLayer.count">
+<code class="descname">count</code><span class="sig-paren">(</span><em>expression</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#BaseLayer.count"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.BaseLayer.count" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns number of features for this search expression</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="catatom2osm.layer.BaseLayer.create_shp">
+<em class="property">static </em><code class="descname">create_shp</code><span class="sig-paren">(</span><em>name</em>, <em>crs</em>, <em>fields=&lt;qgis._core.QgsFields object&gt;</em>, <em>geom_type=6</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#BaseLayer.create_shp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.BaseLayer.create_shp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="catatom2osm.layer.BaseLayer.delete_shp">
+<em class="property">static </em><code class="descname">delete_shp</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#BaseLayer.delete_shp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.BaseLayer.delete_shp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="catatom2osm.layer.BaseLayer.export">
+<code class="descname">export</code><span class="sig-paren">(</span><em>path</em>, <em>driver_name='ESRI Shapefile'</em>, <em>overwrite=True</em>, <em>target_crs_id=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#BaseLayer.export"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.BaseLayer.export" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write layer to file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>path</strong> (<em>str</em>) &#8211; Path of the output file</li>
+<li><strong>driver_name</strong> (<em>str</em>) &#8211; Defaults to ESRI Shapefile.</li>
+<li><strong>overwrite</strong> (<em>bool</em>) &#8211; Defaults to True</li>
+<li><strong>target_crs_id</strong> (<em>int</em>) &#8211; Defaults to source CRS</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="catatom2osm.layer.BaseLayer.get_index">
+<code class="descname">get_index</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#BaseLayer.get_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.BaseLayer.get_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a QgsSpatialIndex of all features in this layer (overpass
+QGIS exception for void layers)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="catatom2osm.layer.BaseLayer.get_progressbar">
+<code class="descname">get_progressbar</code><span class="sig-paren">(</span><em>description</em>, <em>total=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#BaseLayer.get_progressbar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.BaseLayer.get_progressbar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return progress bar with &#8216;description&#8217; for &#8216;total&#8217; iterations</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="catatom2osm.layer.BaseLayer.join_field">
+<code class="descname">join_field</code><span class="sig-paren">(</span><em>source_layer</em>, <em>target_field_name</em>, <em>join_field_name</em>, <em>field_names_subset</em>, <em>prefix=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#BaseLayer.join_field"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.BaseLayer.join_field" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replaces qgis table join mechanism becouse I&#8217;m not able to work with it
+in standalone script mode (without GUI).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>source_layer</strong> (<em>QgsVectorLayer</em>) &#8211; Source layer.</li>
+<li><strong>target_field_name</strong> (<em>str</em>) &#8211; Join field in the target layer.</li>
+<li><strong>join_fieldsName</strong> (<em>str</em>) &#8211; Join field in the source layer.</li>
+<li><strong>field_names_subset</strong> (<em>list</em>) &#8211; List of field name strings for the target layer.</li>
+<li><strong>prefix</strong> (<em>str</em>) &#8211; An optional prefix to add to the target fields names</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="catatom2osm.layer.BaseLayer.reproject">
+<code class="descname">reproject</code><span class="sig-paren">(</span><em>target_crs=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#BaseLayer.reproject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.BaseLayer.reproject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reproject all features in this layer to a new CRS.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>target_crs</strong> (<em>QgsCoordinateReferenceSystem</em>) &#8211; New CRS to apply.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="catatom2osm.layer.BaseLayer.search">
+<code class="descname">search</code><span class="sig-paren">(</span><em>expression</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#BaseLayer.search"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.BaseLayer.search" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a features iterator for this search expression</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="catatom2osm.layer.BaseLayer.to_osm">
+<code class="descname">to_osm</code><span class="sig-paren">(</span><em>tags_translation=&lt;function all_tags&gt;</em>, <em>data=None</em>, <em>tags={}</em>, <em>upload='never'</em>, <em>comment=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#BaseLayer.to_osm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.BaseLayer.to_osm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export this layer to an Osm data set</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>tags_translation</strong> (<em>function</em>) &#8211; Function to translate fields to tags.
+By defaults convert all fields.</li>
+<li><strong>data</strong> (<a class="reference internal" href="catatom2osm.osm.html#catatom2osm.osm.Osm" title="catatom2osm.osm.Osm"><em>Osm</em></a>) &#8211; OSM data set to append. By default creates a new one.</li>
+<li><strong>upload</strong> (<em>str</em>) &#8211; upload attribute of the osm dataset, default &#8216;never&#8217;</li>
+<li><strong>tags</strong> (<em>dict</em>) &#8211; tags to update config.changeset_tags</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">OSM data set</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="catatom2osm.osm.html#catatom2osm.osm.Osm" title="catatom2osm.osm.Osm">Osm</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="catatom2osm.layer.BaseLayer.translate_field">
+<code class="descname">translate_field</code><span class="sig-paren">(</span><em>field_name</em>, <em>translations</em>, <em>clean=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#BaseLayer.translate_field"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.BaseLayer.translate_field" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transform the values of a field</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>field_name</strong> (<em>str</em>) &#8211; Name of the field to transform</li>
+<li><strong>translations</strong> (<em>dict</em>) &#8211; A dictionary used to transform field values</li>
+<li><strong>clean</strong> (<em>bool</em>) &#8211; If true (default), delete features without translation</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="catatom2osm.layer.ConsLayer">
+<em class="property">class </em><code class="descclassname">catatom2osm.layer.</code><code class="descname">ConsLayer</code><span class="sig-paren">(</span><em>path='Polygon'</em>, <em>baseName='building'</em>, <em>providerLib='memory'</em>, <em>source_date=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#ConsLayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.ConsLayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#catatom2osm.layer.PolygonLayer" title="catatom2osm.layer.PolygonLayer"><code class="xref py py-class docutils literal"><span class="pre">catatom2osm.layer.PolygonLayer</span></code></a></p>
+<p>Class for constructions</p>
+<dl class="method">
+<dt id="catatom2osm.layer.ConsLayer.clean">
+<code class="descname">clean</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#ConsLayer.clean"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.ConsLayer.clean" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete invalid geometries and close vertices, add topological points,
+merge building parts and simplify vertices.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="catatom2osm.layer.ConsLayer.conflate">
+<code class="descname">conflate</code><span class="sig-paren">(</span><em>current_bu_osm</em>, <em>delete=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#ConsLayer.conflate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.ConsLayer.conflate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes from current_bu_osm the buildings that don&#8217;t have conflicts.
+If delete=False, only mark buildings with conflicts</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="catatom2osm.layer.ConsLayer.detect_missing_building_parts">
+<code class="descname">detect_missing_building_parts</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#ConsLayer.detect_missing_building_parts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.ConsLayer.detect_missing_building_parts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a tag to parts without associated building.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="catatom2osm.layer.ConsLayer.explode_multi_parts">
+<code class="descname">explode_multi_parts</code><span class="sig-paren">(</span><em>address=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#ConsLayer.explode_multi_parts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.ConsLayer.explode_multi_parts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="catatom2osm.layer.ConsLayer.get_label">
+<code class="descname">get_label</code><span class="sig-paren">(</span><em>feat</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#ConsLayer.get_label"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.ConsLayer.get_label" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the zone label for this feature from the index</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="catatom2osm.layer.ConsLayer.get_labels">
+<code class="descname">get_labels</code><span class="sig-paren">(</span><em>gml</em>, <em>uzoning</em>, <em>rzoning</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#ConsLayer.get_labels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.ConsLayer.get_labels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Builds a index of localId of features in &#8216;gml&#8217; vs the label of the
+zone in witch the construction is contained. If the construction
+overlaps many zones, take the zone with the largest intersection.
+Building parts are expected to get their key from the localId of the
+building. If they don&#8217;t have an associated building, they get their own
+localId as key.
+If gml is one other constructions layer, the index is persisted to file.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="catatom2osm.layer.ConsLayer.get_parts">
+<code class="descname">get_parts</code><span class="sig-paren">(</span><em>outline</em>, <em>parts</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#ConsLayer.get_parts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.ConsLayer.get_parts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a building outline and its parts, for the parts inside the
+outline returns a dictionary of parts for levels, the maximum and
+minimum levels</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="catatom2osm.layer.ConsLayer.index_of_building_and_parts">
+<code class="descname">index_of_building_and_parts</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#ConsLayer.index_of_building_and_parts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.ConsLayer.index_of_building_and_parts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructs some utility dicts.
+buildings index building by localid (call before explode_multi_parts).
+parts index parts of building by building localid.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="catatom2osm.layer.ConsLayer.index_of_parts">
+<code class="descname">index_of_parts</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#ConsLayer.index_of_parts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.ConsLayer.index_of_parts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Index parts of building by building localid.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="catatom2osm.layer.ConsLayer.index_of_pools">
+<code class="descname">index_of_pools</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#ConsLayer.index_of_pools"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.ConsLayer.index_of_pools" title="Permalink to this definition">¶</a></dt>
+<dd><p>Index pools in building parcel by building localid.</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="catatom2osm.layer.ConsLayer.is_building">
+<em class="property">static </em><code class="descname">is_building</code><span class="sig-paren">(</span><em>feature</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#ConsLayer.is_building"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.ConsLayer.is_building" title="Permalink to this definition">¶</a></dt>
+<dd><p>Building features have not any underscore in its localId field</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="catatom2osm.layer.ConsLayer.is_part">
+<em class="property">static </em><code class="descname">is_part</code><span class="sig-paren">(</span><em>feature</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#ConsLayer.is_part"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.ConsLayer.is_part" title="Permalink to this definition">¶</a></dt>
+<dd><p>Part features have &#8216;_part&#8217; in its localId field</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="catatom2osm.layer.ConsLayer.is_pool">
+<em class="property">static </em><code class="descname">is_pool</code><span class="sig-paren">(</span><em>feature</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#ConsLayer.is_pool"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.ConsLayer.is_pool" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pool features have &#8216;_PI.&#8217; in its localId field</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="catatom2osm.layer.ConsLayer.merge_adjacent_parts">
+<code class="descname">merge_adjacent_parts</code><span class="sig-paren">(</span><em>outline</em>, <em>parts</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#ConsLayer.merge_adjacent_parts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.ConsLayer.merge_adjacent_parts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a building outline and its parts, for the parts inside the
+outline:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Translates the maximum values of number of levels above and below
+ground to the outline and optionally deletes all the parts in
+that level.</li>
+<li>Merges the adjacent parts in each level.</li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="catatom2osm.layer.ConsLayer.merge_building_parts">
+<code class="descname">merge_building_parts</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#ConsLayer.merge_building_parts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.ConsLayer.merge_building_parts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Detect pools contained in a building and assign layer=1.
+Detect buildings/parts with geometry equals to a pool geometry and
+delete them.
+Detect inner rings of buildings/parts with geometry equals to a pool
+geometry and remove them.
+Apply merge_adjacent_parts to each set of building and its parts.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="catatom2osm.layer.ConsLayer.move_address">
+<code class="descname">move_address</code><span class="sig-paren">(</span><em>address</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#ConsLayer.move_address"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.ConsLayer.move_address" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move each address to the nearest point in the outline of its
+associated building (same cadastral reference), but only if:</p>
+<ul class="simple">
+<li>The address specification is Entrance.</li>
+<li>The new position is enough close and is not a corner</li>
+</ul>
+<p>Delete the address if the number of associated buildings is not one.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="catatom2osm.layer.ConsLayer.remove_inner_rings">
+<code class="descname">remove_inner_rings</code><span class="sig-paren">(</span><em>feat1</em>, <em>feat2</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#ConsLayer.remove_inner_rings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.ConsLayer.remove_inner_rings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Auxiliary method to remove feat1 or of its inner rings if equals to feat2
+Returns True if feat1 must be deleted and new geometry if any ring is
+removed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="catatom2osm.layer.ConsLayer.remove_outside_parts">
+<code class="descname">remove_outside_parts</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#ConsLayer.remove_outside_parts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.ConsLayer.remove_outside_parts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove parts without levels above ground.
+Create outline for parts without associated building.
+Remove parts outside the outline of it building.
+Precondition: Called before merge_greatest_part.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="catatom2osm.layer.ConsLayer.set_tasks">
+<code class="descname">set_tasks</code><span class="sig-paren">(</span><em>uzoning</em>, <em>rzoning</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#ConsLayer.set_tasks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.ConsLayer.set_tasks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assings to each building and pool the task label of the zone in witch
+it is contained. Parts receives the label of the building it belongs.
+Parts without associated building are ignored</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="catatom2osm.layer.ConsLayer.to_osm">
+<code class="descname">to_osm</code><span class="sig-paren">(</span><em>data=None</em>, <em>tags={}</em>, <em>upload='never'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#ConsLayer.to_osm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.ConsLayer.to_osm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export to OSM</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="catatom2osm.layer.ConsLayer.validate">
+<code class="descname">validate</code><span class="sig-paren">(</span><em>max_level</em>, <em>min_level</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#ConsLayer.validate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.ConsLayer.validate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Put fixmes to buildings with not valid geometry, too small or big.
+Returns distribution of floors</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="catatom2osm.layer.DebugWriter">
+<em class="property">class </em><code class="descclassname">catatom2osm.layer.</code><code class="descname">DebugWriter</code><span class="sig-paren">(</span><em>filename</em>, <em>layer</em>, <em>driver_name='ESRI Shapefile'</em>, <em>geom_type=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#DebugWriter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.DebugWriter" title="Permalink to this definition">¶</a></dt>
+<dd><p>A QgsVectorFileWriter for debugging purposess.</p>
+<dl class="method">
+<dt id="catatom2osm.layer.DebugWriter.addFeature">
+<code class="descname">addFeature</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#DebugWriter.addFeature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.DebugWriter.addFeature" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="catatom2osm.layer.DebugWriter.add_point">
+<code class="descname">add_point</code><span class="sig-paren">(</span><em>point</em>, <em>note=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#DebugWriter.add_point"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.DebugWriter.add_point" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a point to the layer with the attribute note.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="catatom2osm.layer.Geometry">
+<em class="property">class </em><code class="descclassname">catatom2osm.layer.</code><code class="descname">Geometry</code><a class="reference internal" href="../_modules/catatom2osm/layer.html#Geometry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.Geometry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">future.types.newobject.newobject</span></code></p>
+<p>Methods for QGIS 2-3 compatibility and geometry utilities</p>
+<dl class="staticmethod">
+<dt id="catatom2osm.layer.Geometry.fromMultiPointXY">
+<em class="property">static </em><code class="descname">fromMultiPointXY</code><span class="sig-paren">(</span><em>mp</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#Geometry.fromMultiPointXY"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.Geometry.fromMultiPointXY" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="catatom2osm.layer.Geometry.fromMultiPolygonXY">
+<em class="property">static </em><code class="descname">fromMultiPolygonXY</code><span class="sig-paren">(</span><em>mp</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#Geometry.fromMultiPolygonXY"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.Geometry.fromMultiPolygonXY" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="catatom2osm.layer.Geometry.fromPointXY">
+<em class="property">static </em><code class="descname">fromPointXY</code><span class="sig-paren">(</span><em>point</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#Geometry.fromPointXY"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.Geometry.fromPointXY" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="catatom2osm.layer.Geometry.fromPolygonXY">
+<em class="property">static </em><code class="descname">fromPolygonXY</code><span class="sig-paren">(</span><em>polygon</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#Geometry.fromPolygonXY"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.Geometry.fromPolygonXY" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="catatom2osm.layer.Geometry.get_multipolygon">
+<em class="property">static </em><code class="descname">get_multipolygon</code><span class="sig-paren">(</span><em>feature_or_geometry</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#Geometry.get_multipolygon"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.Geometry.get_multipolygon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns feature geometry always as a multipolygon</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="catatom2osm.layer.Geometry.get_outer_vertices">
+<em class="property">static </em><code class="descname">get_outer_vertices</code><span class="sig-paren">(</span><em>feature</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#Geometry.get_outer_vertices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.Geometry.get_outer_vertices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns list of all distinct vertices in feature geometry outer rings</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="catatom2osm.layer.Geometry.get_vertices_list">
+<em class="property">static </em><code class="descname">get_vertices_list</code><span class="sig-paren">(</span><em>feature</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#Geometry.get_vertices_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.Geometry.get_vertices_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns list of all distinct vertices in feature geometry</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="catatom2osm.layer.Geometry.is_valid">
+<em class="property">static </em><code class="descname">is_valid</code><span class="sig-paren">(</span><em>geom</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#Geometry.is_valid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.Geometry.is_valid" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="catatom2osm.layer.Geometry.merge_adjacent_features">
+<em class="property">static </em><code class="descname">merge_adjacent_features</code><span class="sig-paren">(</span><em>group</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#Geometry.merge_adjacent_features"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.Geometry.merge_adjacent_features" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combine all geometries in group of features</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="catatom2osm.layer.HighwayLayer">
+<em class="property">class </em><code class="descclassname">catatom2osm.layer.</code><code class="descname">HighwayLayer</code><span class="sig-paren">(</span><em>path='LineString'</em>, <em>baseName='highway'</em>, <em>providerLib='memory'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#HighwayLayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.HighwayLayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#catatom2osm.layer.BaseLayer" title="catatom2osm.layer.BaseLayer"><code class="xref py py-class docutils literal"><span class="pre">catatom2osm.layer.BaseLayer</span></code></a></p>
+<p>Class for OSM highways</p>
+<dl class="method">
+<dt id="catatom2osm.layer.HighwayLayer.read_from_osm">
+<code class="descname">read_from_osm</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#HighwayLayer.read_from_osm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.HighwayLayer.read_from_osm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get features from a osm dataset</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="catatom2osm.layer.ParcelLayer">
+<em class="property">class </em><code class="descclassname">catatom2osm.layer.</code><code class="descname">ParcelLayer</code><span class="sig-paren">(</span><em>path='Polygon'</em>, <em>baseName='cadastralparcel'</em>, <em>providerLib='memory'</em>, <em>source_date=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#ParcelLayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.ParcelLayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#catatom2osm.layer.BaseLayer" title="catatom2osm.layer.BaseLayer"><code class="xref py py-class docutils literal"><span class="pre">catatom2osm.layer.BaseLayer</span></code></a></p>
+<p>Class for cadastral parcels</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="catatom2osm.layer.Point">
+<em class="property">class </em><code class="descclassname">catatom2osm.layer.</code><code class="descname">Point</code><span class="sig-paren">(</span><em>arg1</em>, <em>arg2=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#Point"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.Point" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">qgis._core.QgsPoint</span></code></p>
+<p>Extends QgsPoint with some utility methods</p>
+<dl class="method">
+<dt id="catatom2osm.layer.Point.boundingBox">
+<code class="descname">boundingBox</code><span class="sig-paren">(</span><em>radius</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#Point.boundingBox"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.Point.boundingBox" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a bounding box of 2*radius centered in point.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="catatom2osm.layer.Point.get_angle">
+<code class="descname">get_angle</code><span class="sig-paren">(</span><em>geom</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#Point.get_angle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.Point.get_angle" title="Permalink to this definition">¶</a></dt>
+<dd><p>For the vertex in a geometry nearest to this point, give the angle
+between its adjacent vertexs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>geom</strong> (<em>QgsGeometry</em>) &#8211; Geometry to test.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">(float) Angle between the vertex and their adjacents,</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="catatom2osm.layer.Point.get_corner_context">
+<code class="descname">get_corner_context</code><span class="sig-paren">(</span><em>geom</em>, <em>acute_thr=10</em>, <em>straight_thr=2</em>, <em>cath_thr=0.02</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#Point.get_corner_context"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.Point.get_corner_context" title="Permalink to this definition">¶</a></dt>
+<dd><p>For the vertex in a geometry nearest to this point, give context to
+determine if it is a corner (the angle differs by more than straight_thr
+of 180 and if the distance from the vertex to the segment formed by
+their adjacents is greater than cath_thr).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>geom</strong> (<em>QgsGeometry</em>) &#8211; Geometry to test.</li>
+<li><strong>acute_thr</strong> (<em>float</em>) &#8211; Acute angle threshold.</li>
+<li><strong>straight_thr</strong> (<em>float</em>) &#8211; Straight angle threshold.</li>
+<li><strong>cath_thr</strong> (<em>float</em>) &#8211; Cathetus threshold.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">(float) Angle between the vertex and their adjacents.
+(bool)  True if the angle is too low (&lt; acute_thr).
+(bool)  True for a corner
+(float) Distance from the vertex to the segment formed by their adjacents.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="catatom2osm.layer.Point.get_spike_context">
+<code class="descname">get_spike_context</code><span class="sig-paren">(</span><em>geom</em>, <em>acute_thr=5</em>, <em>straight_thr=2</em>, <em>threshold=0.1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#Point.get_spike_context"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.Point.get_spike_context" title="Permalink to this definition">¶</a></dt>
+<dd><p>For the vertex in a geometry nearest to this point, give context to
+determine if its a zig-zag or a spike. It&#8217;s a zig-zag if both the angles
+of this vertex and the closest adjacents are acute. It&#8217;s a spike if the
+angle of this vertex is acute and the angle of the closest vertex is
+not straight.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>geom</strong> (<em>QgsGeometry</em>) &#8211; Geometry to test.</li>
+<li><strong>acute_thr</strong> (<em>float</em>) &#8211; Acute angle threshold.</li>
+<li><strong>straight_thr</strong> (<em>float</em>) &#8211; Straight angle threshold.</li>
+<li><strong>threshold</strong> (<em>float</em>) &#8211; # Filter for angles.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">(float) angle_v = angle between the vertex and their adjacents.
+(float) angle_a = angle between the closest adjacent and their adjacents.
+(int) ndx = index of the vertex
+(int) ndxa = index of the closest adjacent
+(bool) is_acute = True if the angle is too low (&lt; acute_thr).
+(bool) is_zigzag = True if both angle_v and angle_a are acute and
+the distance from va to the segment v-vb is lower than threshold.
+(bool) is_spike = True if is_acute and angle_a is not straight and
+the distance from va to the segment v-vb is lower than threshold.
+(Point) vx = projection of va over the segment v-vb.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="catatom2osm.layer.PolygonLayer">
+<em class="property">class </em><code class="descclassname">catatom2osm.layer.</code><code class="descname">PolygonLayer</code><span class="sig-paren">(</span><em>path</em>, <em>baseName</em>, <em>providerLib='ogr'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#PolygonLayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.PolygonLayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#catatom2osm.layer.BaseLayer" title="catatom2osm.layer.BaseLayer"><code class="xref py py-class docutils literal"><span class="pre">catatom2osm.layer.BaseLayer</span></code></a></p>
+<p>Base class for polygon layers</p>
+<dl class="method">
+<dt id="catatom2osm.layer.PolygonLayer.clean">
+<code class="descname">clean</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#PolygonLayer.clean"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.PolygonLayer.clean" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete invalid geometries and close vertices, add topological points
+and simplify vertices.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="catatom2osm.layer.PolygonLayer.delete_invalid_geometries">
+<code class="descname">delete_invalid_geometries</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#PolygonLayer.delete_invalid_geometries"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.PolygonLayer.delete_invalid_geometries" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete invalid geometries testing if any of it acute angle vertex could
+be deleted.
+Also removes zig-zag and spike vertex (see Point.get_spike_context).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="catatom2osm.layer.PolygonLayer.difference">
+<code class="descname">difference</code><span class="sig-paren">(</span><em>layer</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#PolygonLayer.difference"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.PolygonLayer.difference" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the difference of each geometry with those in layer</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="catatom2osm.layer.PolygonLayer.explode_multi_parts">
+<code class="descname">explode_multi_parts</code><span class="sig-paren">(</span><em>request=&lt;qgis._core.QgsFeatureRequest object&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#PolygonLayer.explode_multi_parts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.PolygonLayer.explode_multi_parts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a new WKBPolygon feature for each part of any WKBMultiPolygon
+feature in request. This avoid relations with many &#8216;outer&#8217; members in
+OSM data set. From this moment, localId will not be a unique identifier
+for buildings.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="catatom2osm.layer.PolygonLayer.get_adjacents_and_geometries">
+<code class="descname">get_adjacents_and_geometries</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#PolygonLayer.get_adjacents_and_geometries"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.PolygonLayer.get_adjacents_and_geometries" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">(list) groups of adjacent polygons</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="catatom2osm.layer.PolygonLayer.get_area">
+<code class="descname">get_area</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#PolygonLayer.get_area"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.PolygonLayer.get_area" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns total area</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="catatom2osm.layer.PolygonLayer.get_parents_per_vertex_and_geometries">
+<code class="descname">get_parents_per_vertex_and_geometries</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#PolygonLayer.get_parents_per_vertex_and_geometries"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.PolygonLayer.get_parents_per_vertex_and_geometries" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">(dict) parent fids for each vertex, (dict) geometry for each fid.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="catatom2osm.layer.PolygonLayer.is_inside">
+<code class="descname">is_inside</code><span class="sig-paren">(</span><em>feature</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#PolygonLayer.is_inside"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.PolygonLayer.is_inside" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns list of features of this layer that have feature inside</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="catatom2osm.layer.PolygonLayer.merge_adjacents">
+<code class="descname">merge_adjacents</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#PolygonLayer.merge_adjacents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.PolygonLayer.merge_adjacents" title="Permalink to this definition">¶</a></dt>
+<dd><p>Merge polygons with shared segments</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="catatom2osm.layer.PolygonLayer.simplify">
+<code class="descname">simplify</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#PolygonLayer.simplify"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.PolygonLayer.simplify" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reduces the number of vertices in a polygon layer according to:</p>
+<ul class="simple">
+<li>Delete vertex if the angle with its adjacents is near of the straight
+angle for less than &#8216;straight_thr&#8217; degrees in all its parents.</li>
+<li>Delete vertex if the distance to the segment formed by its parents is
+less than &#8216;cath_thr&#8217; meters.</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="catatom2osm.layer.PolygonLayer.topology">
+<code class="descname">topology</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#PolygonLayer.topology"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.PolygonLayer.topology" title="Permalink to this definition">¶</a></dt>
+<dd><p>For each vertex in a polygon layer, adds it to nearest segments.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="catatom2osm.layer.ZoningLayer">
+<em class="property">class </em><code class="descclassname">catatom2osm.layer.</code><code class="descname">ZoningLayer</code><span class="sig-paren">(</span><em>path='Polygon'</em>, <em>baseName='cadastralzoning'</em>, <em>providerLib='memory'</em>, <em>source_date=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#ZoningLayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.ZoningLayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#catatom2osm.layer.PolygonLayer" title="catatom2osm.layer.PolygonLayer"><code class="xref py py-class docutils literal"><span class="pre">catatom2osm.layer.PolygonLayer</span></code></a></p>
+<p>Class for cadastral zoning</p>
+<dl class="method">
+<dt id="catatom2osm.layer.ZoningLayer.append">
+<code class="descname">append</code><span class="sig-paren">(</span><em>layer</em>, <em>level=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#ZoningLayer.append"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.ZoningLayer.append" title="Permalink to this definition">¶</a></dt>
+<dd><p>Append features. Split multipolygon geometries.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>layer</strong> (<em>QgsVectorLayer</em>) &#8211; cadastralzoning GML source</li>
+<li><strong>level</strong> (<em>str</em>) &#8211; &#8216;P&#8217; (rustic polygon), &#8216;M&#8217; (urban block) or None for both</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="catatom2osm.layer.ZoningLayer.check_zone">
+<em class="property">static </em><code class="descname">check_zone</code><span class="sig-paren">(</span><em>feat</em>, <em>level=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#ZoningLayer.check_zone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.ZoningLayer.check_zone" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="catatom2osm.layer.ZoningLayer.export_poly">
+<code class="descname">export_poly</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#ZoningLayer.export_poly"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.ZoningLayer.export_poly" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export as polygon file for Osmosis</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="catatom2osm.layer.ZoningLayer.format_label">
+<em class="property">static </em><code class="descname">format_label</code><span class="sig-paren">(</span><em>feature</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#ZoningLayer.format_label"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.ZoningLayer.format_label" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format a zone label</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="catatom2osm.layer.ZoningLayer.rpattern">
+<code class="descname">rpattern</code><em class="property"> = '{:03}'</em><a class="headerlink" href="#catatom2osm.layer.ZoningLayer.rpattern" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="catatom2osm.layer.ZoningLayer.set_tasks">
+<code class="descname">set_tasks</code><span class="sig-paren">(</span><em>zip_code</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#ZoningLayer.set_tasks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.layer.ZoningLayer.set_tasks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assings a unique task label to each zone by overriding splitted
+multiparts and merged adjacent zones</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="catatom2osm.layer.ZoningLayer.upattern">
+<code class="descname">upattern</code><em class="property"> = '{:05}'</em><a class="headerlink" href="#catatom2osm.layer.ZoningLayer.upattern" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="catatom2osm.layer.get_attributes">
+<code class="descclassname">catatom2osm.layer.</code><code class="descname">get_attributes</code><span class="sig-paren">(</span><em>feat</em><span class="sig-paren">)</span><a class="headerlink" href="#catatom2osm.layer.get_attributes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="catatom2osm.layer.is_inside">
+<code class="descclassname">catatom2osm.layer.</code><code class="descname">is_inside</code><span class="sig-paren">(</span><em>f1</em>, <em>f2</em><span class="sig-paren">)</span><a class="headerlink" href="#catatom2osm.layer.is_inside" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+
+
+          </div>
+            
+  <div class="footer-relations">
+    
+      <div class="pull-left">
+        <a class="btn btn-default" href="catatom2osm.hgwnames.html" title="previous chapter (use the left arrow)">catatom2osm.hgwnames module</a>
+      </div>
+    
+      <div class="pull-right">
+        <a class="btn btn-default" href="catatom2osm.osm.html" title="next chapter (use the right arrow)">catatom2osm.osm module</a>
+      </div>
+    </div>
+    <div class="clearer"></div>
+  
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="catatom2osm.osm.html" title="catatom2osm.osm module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="catatom2osm.hgwnames.html" title="catatom2osm.hgwnames module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 1.7.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api.html" >API reference</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="modules.html" >CatAtom2Osm</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="catatom2osm.html" >catatom2osm package</a> &#187;</li> 
+      </ul>
+    </div>
+<script type="text/javascript">
+  $("#mobile-toggle a").click(function () {
+    $("#left-column").toggle();
+  });
+</script>
+<script type="text/javascript" src="../_static/js/bootstrap.js"></script>
+  <div class="footer">
+    &copy; Copyright 2017, Javier Sanchez Portero. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  </body>
+</html>

@@ -4,16 +4,12 @@ from future import standard_library
 standard_library.install_aliases()
 from builtins import bytes, str
 import unittest
-import random
-#from cStringIO import StringIO
 from io import StringIO, BytesIO
 import os
 os.environ['LANGUAGE'] = 'C'
 
-import setup
-import osm
-import osmxml
-from osmxml import etree
+from catatom2osm import osm, osmxml
+from catatom2osm.osmxml import etree
 
 
 class OsmxmlTest(unittest.TestCase):

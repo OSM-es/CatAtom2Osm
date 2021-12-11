@@ -12,13 +12,11 @@ logging.disable(logging.WARNING)
 
 from osgeo import gdal
 from qgis.core import *
-from qgiscompat import *
+from catatom2osm.qgiscompat import *
 
 os.environ['LANGUAGE'] = 'C'
-import setup
-import osm
-from layer import *
-from catatom2osm import QgsSingleton
+from catatom2osm.layer import *
+from catatom2osm.app import QgsSingleton
 qgs = QgsSingleton()
 
 
@@ -216,7 +214,7 @@ class TestBaseLayer(unittest.TestCase):
         self.assertEqual(feature['localId'], new_fet['localId'])
         self.assertTrue(feature.geometry().equals(new_fet.geometry()))
 
-    @mock.patch('layer.tqdm')
+    @mock.patch('catatom2osm.layer.tqdm')
     def test_append_with_rename(self, m_tqdm):
         rename = {"A": "gml_id", "B": "value"}
         self.layer.append(self.fixture, rename)
@@ -225,7 +223,7 @@ class TestBaseLayer(unittest.TestCase):
         new_fet = next(self.layer.getFeatures())
         self.assertEqual(feature['gml_id'], new_fet['A'])
 
-    @mock.patch('layer.tqdm')
+    @mock.patch('catatom2osm.layer.tqdm')
     def test_append_all_fields(self, m_tqdm):
         layer = BaseLayer("Polygon", "test", "memory")
         self.assertTrue(layer.isValid())
@@ -235,7 +233,7 @@ class TestBaseLayer(unittest.TestCase):
         self.assertEqual(feature['gml_id'], new_fet['gml_id'])
         self.assertEqual(feature['localId'], new_fet['localId'])
 
-    @mock.patch('layer.tqdm')
+    @mock.patch('catatom2osm.layer.tqdm')
     def test_append_with_query(self, m_tqdm):
         layer = BaseLayer("Polygon", "test", "memory")
         self.assertTrue(layer.isValid())
@@ -243,7 +241,7 @@ class TestBaseLayer(unittest.TestCase):
         layer.append(self.fixture, query=declined_filter)
         self.assertEqual(layer.featureCount(), 2)
 
-    @mock.patch('layer.tqdm')
+    @mock.patch('catatom2osm.layer.tqdm')
     def test_append_void(self, m_tqdm):
         layer = BaseLayer("Polygon", "test", "memory")
         self.assertTrue(layer.isValid())
@@ -251,8 +249,8 @@ class TestBaseLayer(unittest.TestCase):
         layer.append(self.fixture, query=declined_filter)
         self.assertEqual(layer.featureCount(), 0)
 
-    @mock.patch('layer.tqdm')
-    @mock.patch('layer.Geometry')
+    @mock.patch('catatom2osm.layer.tqdm')
+    @mock.patch('catatom2osm.layer.Geometry')
     def test_append_void_geometry(self, m_geom, m_tqdm):
         m_geom.get_multipolygon.return_value = []
         m_layer = mock.MagicMock()
@@ -279,7 +277,7 @@ class TestBaseLayer(unittest.TestCase):
         # Works in QGIS 2.18.17 but not in 3.16.3
         #self.assertEqual(self.layer.featureCount(), 0)
 
-    @mock.patch('layer.tqdm')
+    @mock.patch('catatom2osm.layer.tqdm')
     def test_translate_field(self, m_tqdm):
         ascii_uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
         feat = next(self.fixture.getFeatures())
@@ -306,7 +304,7 @@ class TestBaseLayer(unittest.TestCase):
         self.layer.translate_field('A', translations, clean=False)
         self.assertGreater(self.layer.featureCount(), 0)
 
-    @mock.patch('layer.tqdm')
+    @mock.patch('catatom2osm.layer.tqdm')
     def test_boundig_box(self, m_tqdm):
         layer = BaseLayer("Polygon", "test", "memory")
         self.assertTrue(layer.isValid())
@@ -315,7 +313,7 @@ class TestBaseLayer(unittest.TestCase):
         layer.append(self.fixture)
         self.assertEqual(layer.bounding_box(), bbox)
 
-    @mock.patch('layer.tqdm')
+    @mock.patch('catatom2osm.layer.tqdm')
     def test_reproject(self, m_tqdm):
         layer = BaseLayer("Polygon", "test", "memory")
         self.assertTrue(layer.isValid())
@@ -339,7 +337,7 @@ class TestBaseLayer(unittest.TestCase):
         self.assertLess(abs(geom_in.area() - geom_out.area()), 1E8)
         self.assertEqual(feature_in.attributes(), feature_out.attributes())
 
-    @mock.patch('layer.QgsSpatialIndex')
+    @mock.patch('catatom2osm.layer.QgsSpatialIndex')
     def test_get_index(self, m_index):
         layer = mock.MagicMock()
         layer.test = BaseLayer.get_index.__func__ if six.PY2 else BaseLayer.get_index
@@ -352,7 +350,7 @@ class TestBaseLayer(unittest.TestCase):
 
     def test_to_osm(self):
         data = self.layer.to_osm(upload='always', tags={'comment': 'tryit'})
-        for (key, value) in setup.changeset_tags.items():
+        for (key, value) in config.changeset_tags.items():
             if key == 'comment':
                 self.assertEqual(data.tags[key], 'tryit')
             else:
@@ -360,9 +358,9 @@ class TestBaseLayer(unittest.TestCase):
 
 class TestBaseLayer2(unittest.TestCase):
 
-    @mock.patch('layer.QgsVectorFileWriter_writeAsVectorFormat')
-    @mock.patch('layer.QgsVectorFileWriter')
-    @mock.patch('layer.os')
+    @mock.patch('catatom2osm.layer.QgsVectorFileWriter_writeAsVectorFormat')
+    @mock.patch('catatom2osm.layer.QgsVectorFileWriter')
+    @mock.patch('catatom2osm.layer.os')
     def test_export_default(self, mock_os, mock_fw, mock_wvf):
         layer = BaseLayer("Polygon", "test", "memory")
         mock_os.path.exists.side_effect = lambda arg: arg=='foobar'
@@ -374,10 +372,10 @@ class TestBaseLayer2(unittest.TestCase):
             layer, 'foobar', layer.crs(), 'ESRI Shapefile'
         )
 
-    @mock.patch('layer.QgsVectorFileWriter_writeAsVectorFormat')
-    @mock.patch('layer.QgsCoordinateReferenceSystem_fromEpsgId')
-    @mock.patch('layer.QgsVectorFileWriter')
-    @mock.patch('layer.os')
+    @mock.patch('catatom2osm.layer.QgsVectorFileWriter_writeAsVectorFormat')
+    @mock.patch('catatom2osm.layer.QgsCoordinateReferenceSystem_fromEpsgId')
+    @mock.patch('catatom2osm.layer.QgsVectorFileWriter')
+    @mock.patch('catatom2osm.layer.os')
     def test_export_other(self, mock_os, mock_fw, mock_crs, mock_wvf):
         layer = BaseLayer("Polygon", "test", "memory")
         mock_os.path.exists.side_effect = lambda arg: arg=='foobar'
@@ -392,7 +390,7 @@ class TestBaseLayer2(unittest.TestCase):
 
 class TestPolygonLayer(unittest.TestCase):
 
-    @mock.patch('layer.tqdm')
+    @mock.patch('catatom2osm.layer.tqdm')
     def setUp(self, m_tqdm):
         self.fixture = QgsVectorLayer('test/cons.shp', 'building', 'ogr')
         self.assertTrue(self.fixture.isValid(), "Loading fixture")
@@ -411,7 +409,7 @@ class TestPolygonLayer(unittest.TestCase):
         area = self.layer.get_area()
         self.assertEqual(round(area, 1), 1140234.8)
 
-    @mock.patch('layer.tqdm')
+    @mock.patch('catatom2osm.layer.tqdm')
     def test_explode_multi_parts(self, m_tqdm):
         multiparts = [f for f in self.layer.getFeatures()
             if len(Geometry.get_multipolygon(f)) > 1]
@@ -475,7 +473,7 @@ class TestPolygonLayer(unittest.TestCase):
         del vertices
         return duplicates
 
-    @mock.patch('layer.tqdm')
+    @mock.patch('catatom2osm.layer.tqdm')
     def test_difference(self, m_tqdm):
         layer1 = PolygonLayer('Polygon', 'test1', 'memory')
         layer2 = PolygonLayer('Polygon', 'test2', 'memory')
@@ -528,7 +526,7 @@ class TestParcelLayer(unittest.TestCase):
 
 class TestZoningLayer(unittest.TestCase):
 
-    @mock.patch('layer.tqdm')
+    @mock.patch('catatom2osm.layer.tqdm')
     def setUp(self, m_tqdm):
         self.fixture = QgsVectorLayer('test/zoning.gml', 'zoning', 'ogr')
         self.assertTrue(self.fixture.isValid(), "Loading fixture")
@@ -547,7 +545,7 @@ class TestZoningLayer(unittest.TestCase):
         del self.layer2
         ZoningLayer.delete_shp('rustic_zoning.shp')
 
-    @mock.patch('layer.tqdm')
+    @mock.patch('catatom2osm.layer.tqdm')
     def test_append(self, m_tqdm):
         self.layer1.append(self.fixture, 'M')
         self.layer2.append(self.fixture, 'P')
@@ -560,7 +558,7 @@ class TestZoningLayer(unittest.TestCase):
         for f in self.layer2.getFeatures():
             self.assertTrue(self.layer1.check_zone(f, level='P'))
 
-    @mock.patch('layer.tqdm')
+    @mock.patch('catatom2osm.layer.tqdm')
     def test_is_inside_full(self, m_tqdm):
         self.layer1.append(self.fixture, 'M')
         zone = Geometry.fromPolygonXY([[
@@ -573,7 +571,7 @@ class TestZoningLayer(unittest.TestCase):
         feat.setGeometry(zone)
         self.assertTrue(self.layer1.is_inside(feat))
 
-    @mock.patch('layer.tqdm')
+    @mock.patch('catatom2osm.layer.tqdm')
     def test_is_inside_part(self, m_tqdm):
         self.layer1.append(self.fixture, 'M')
         feat = QgsFeature(self.layer1.fields())
@@ -586,7 +584,7 @@ class TestZoningLayer(unittest.TestCase):
         feat.setGeometry(zone)
         self.assertTrue(self.layer1.is_inside(feat))
 
-    @mock.patch('layer.tqdm')
+    @mock.patch('catatom2osm.layer.tqdm')
     def test_is_inside_false(self, m_tqdm):
         self.layer1.append(self.fixture, 'M')
         feat = QgsFeature(self.layer1.fields())
@@ -599,7 +597,7 @@ class TestZoningLayer(unittest.TestCase):
         feat.setGeometry(zone)
         self.assertFalse(self.layer1.is_inside(feat))
 
-    @mock.patch('layer.tqdm')
+    @mock.patch('catatom2osm.layer.tqdm')
     def test_get_adjacents_and_geometries(self, m_tqdm):
         self.layer1.append(self.fixture, 'M')
         (groups, geometries) = self.layer1.get_adjacents_and_geometries()
@@ -609,7 +607,7 @@ class TestZoningLayer(unittest.TestCase):
                 if group != other:
                     self.assertTrue(all(p not in other for p in group))
 
-    @mock.patch('layer.tqdm')
+    @mock.patch('catatom2osm.layer.tqdm')
     def test_set_tasks(self, m_tqdm):
         self.layer1.append(self.fixture, 'M')
         self.layer2.append(self.fixture, 'P')
@@ -624,7 +622,7 @@ class TestZoningLayer(unittest.TestCase):
         self.assertEqual(min(labels), 1)
         self.assertEqual(next(self.layer2.getFeatures())['zipcode'], '12345')
 
-    @mock.patch('layer.tqdm')
+    @mock.patch('catatom2osm.layer.tqdm')
     def test_set_cons_tasks(self, m_tqdm):
         self.layer1.append(self.fixture, 'M')
         self.layer2.append(self.fixture, 'P')
@@ -651,7 +649,7 @@ class TestZoningLayer(unittest.TestCase):
                 tasks[feat['task']] += 1
         self.assertEqual(tasks, test)
 
-    @mock.patch('layer.tqdm')
+    @mock.patch('catatom2osm.layer.tqdm')
     def test_get_labels(self, m_tqdm):
         self.layer1.append(self.fixture, 'M')
         self.layer2.append(self.fixture, 'P')
@@ -679,7 +677,7 @@ class TestZoningLayer(unittest.TestCase):
 
 class TestConsLayer(unittest.TestCase):
 
-    @mock.patch('layer.tqdm')
+    @mock.patch('catatom2osm.layer.tqdm')
     def setUp(self, m_tqdm):
         self.fixture = QgsVectorLayer('test/cons.shp', 'building', 'ogr')
         self.assertTrue(self.fixture.isValid(), "Loading fixture")
@@ -714,7 +712,7 @@ class TestConsLayer(unittest.TestCase):
         self.assertGreater(len(Geometry.get_multipolygon(geom)), 0)
         self.assertLess(len(Geometry.get_multipolygon(geom)), len(parts))
 
-    @mock.patch('layer.tqdm')
+    @mock.patch('catatom2osm.layer.tqdm')
     def test_explode_multi_parts(self, m_tqdm):
         mp0 = [f for f in self.layer.getFeatures()
             if len(Geometry.get_multipolygon(f)) > 1]
@@ -731,7 +729,7 @@ class TestConsLayer(unittest.TestCase):
             if len(Geometry.get_multipolygon(f)) > 1]
         self.assertEqual(len(mp1), len(mp2))
 
-    @mock.patch('layer.tqdm')
+    @mock.patch('catatom2osm.layer.tqdm')
     def test_append_building(self, m_tqdm):
         layer = ConsLayer()
         self.assertTrue(layer.isValid(), "Init QGIS")
@@ -743,7 +741,7 @@ class TestConsLayer(unittest.TestCase):
         self.assertEqual(feature['conditionOfConstruction'], new_fet['condition'])
         self.assertEqual(feature['localId'], new_fet['localId'])
 
-    @mock.patch('layer.tqdm')
+    @mock.patch('catatom2osm.layer.tqdm')
     def test_append_buildingpart(self, m_tqdm):
         layer = ConsLayer()
         self.assertTrue(layer.isValid(), "Init QGIS")
@@ -755,7 +753,7 @@ class TestConsLayer(unittest.TestCase):
         self.assertEqual(feature['numberOfFloorsAboveGround'], new_fet['lev_above'])
         self.assertEqual(feature['localId'], new_fet['localId'])
 
-    @mock.patch('layer.tqdm')
+    @mock.patch('catatom2osm.layer.tqdm')
     def test_append_othercons(self, m_tqdm):
         layer = ConsLayer()
         self.assertTrue(layer.isValid(), "Init QGIS")
@@ -767,7 +765,7 @@ class TestConsLayer(unittest.TestCase):
         self.assertEqual(feature['constructionNature'], new_fet['nature'])
         self.assertEqual(feature['localId'], new_fet['localId'])
 
-    @mock.patch('layer.tqdm')
+    @mock.patch('catatom2osm.layer.tqdm')
     def test_append_cons(self, m_tqdm):
         exp = QgsExpression("nature = 'openAirPool'")
         request = QgsFeatureRequest(exp)
@@ -779,7 +777,7 @@ class TestConsLayer(unittest.TestCase):
         feat = next(layer.getFeatures(request))
         self.assertNotEqual(feat, None)
 
-    @mock.patch('layer.tqdm')
+    @mock.patch('catatom2osm.layer.tqdm')
     def test_remove_parts_below_ground(self, m_tqdm):
         to_clean = [f.id() for f in self.layer.search('lev_above=0 and lev_below>0')]
         self.assertGreater(len(to_clean), 0, 'There are parts below ground')
@@ -807,7 +805,7 @@ class TestConsLayer(unittest.TestCase):
         self.assertTrue(all([localid==pa['localid'][0:14]
             for (localid, group) in list(parts.items()) for pa in group]))
 
-    @mock.patch('layer.tqdm')
+    @mock.patch('catatom2osm.layer.tqdm')
     def test_remove_outside_parts(self, m_tqdm):
         refs = [
             '8742721CS5284S_part10',
@@ -820,7 +818,7 @@ class TestConsLayer(unittest.TestCase):
         for feat in self.layer.getFeatures():
             self.assertNotIn(feat['localId'], refs)
 
-    @mock.patch('layer.tqdm')
+    @mock.patch('catatom2osm.layer.tqdm')
     def test_get_parts(self, m_tqdm):
         self.layer.explode_multi_parts()
         parts = [p for p in self.layer.search("localId like '8840501CS5284S_part%%'")]
@@ -835,7 +833,7 @@ class TestConsLayer(unittest.TestCase):
             self.assertEqual(max_level, max_levelc)
             self.assertEqual(min_level, min_levelc)
 
-    @mock.patch('layer.tqdm')
+    @mock.patch('catatom2osm.layer.tqdm')
     def test_merge_adjacent_parts(self, m_tqdm, ref=None):
         if ref == None:
             self.layer.explode_multi_parts()
@@ -861,7 +859,7 @@ class TestConsLayer(unittest.TestCase):
             self.assertEqual(ch[outline.id()][6], max_level)
             self.assertEqual(ch[outline.id()][7], min_level)
 
-    @mock.patch('layer.tqdm')
+    @mock.patch('catatom2osm.layer.tqdm')
     def test_merge_building_parts(self, m_tqdm):
         self.layer.remove_outside_parts()
         self.layer.merge_building_parts()
@@ -869,7 +867,7 @@ class TestConsLayer(unittest.TestCase):
             if self.layer.is_building(ref):
                 self.test_merge_adjacent_parts(ref)
 
-    @mock.patch('layer.tqdm')
+    @mock.patch('catatom2osm.layer.tqdm')
     def test_add_topological_points(self, m_tqdm):
         refs = [
             ('8842708CS5284S', Point(358821.08, 3124205.68), 0),
@@ -887,7 +885,7 @@ class TestConsLayer(unittest.TestCase):
             poly = Geometry.get_multipolygon(building)
             self.assertIn(ref[1], poly[ref[2]][0])
 
-    @mock.patch('layer.tqdm')
+    @mock.patch('catatom2osm.layer.tqdm')
     def test_delete_invalid_geometries(self, m_tqdm):
         f1 = QgsFeature(self.layer.fields())
         g1 = Geometry.fromPolygonXY([[
@@ -974,7 +972,7 @@ class TestConsLayer(unittest.TestCase):
             (357400.00, 3124305.00)]
         self.assertEqual(r, [(round(p.x(), 2), round(p.y(), 2)) for p in mp[0][0]])
 
-    @mock.patch('layer.tqdm')
+    @mock.patch('catatom2osm.layer.tqdm')
     def test_simplify1(self, m_tqdm):
         refs = [
             ('8643326CS5284S', Point(358684.62, 3124377.54), True),
@@ -987,7 +985,7 @@ class TestConsLayer(unittest.TestCase):
             building = next(self.layer.search("localId = '%s'" % ref[0]))
             self.assertEqual(ref[1] in Geometry.get_multipolygon(building)[0][0], ref[2])
 
-    @mock.patch('layer.tqdm')
+    @mock.patch('catatom2osm.layer.tqdm')
     def test_simplify2(self, m_tqdm):
         layer = ConsLayer()
         writer = layer.dataProvider()
@@ -1008,7 +1006,7 @@ class TestConsLayer(unittest.TestCase):
             self.assertTrue(geom.isGeosValid(), feat['localId'])
         layer.merge_building_parts()
 
-    @mock.patch('layer.tqdm')
+    @mock.patch('catatom2osm.layer.tqdm')
     def test_move_address(self, m_tqdm):
         refs = {
             '38.012.10.10.8643403CS5284S': 'Entrance',
@@ -1036,7 +1034,7 @@ class TestConsLayer(unittest.TestCase):
         self.layer.move_address(address)
         self.assertEqual(address.featureCount(), 6)
 
-    @mock.patch('layer.tqdm')
+    @mock.patch('catatom2osm.layer.tqdm')
     def test_validate(self, m_tqdm):
         self.layer.merge_building_parts()
         max_level = {}
@@ -1066,7 +1064,7 @@ class TestConsLayer(unittest.TestCase):
         self.assertEqual(ways, len(data.ways))
         self.assertEqual(rels, len(data.relations))
 
-    @mock.patch('layer.tqdm')
+    @mock.patch('catatom2osm.layer.tqdm')
     def test_conflate(self, m_tqdm):
         self.layer.reproject()
         d = osm.Osm()
@@ -1156,7 +1154,7 @@ class TestAddressLayer(unittest.TestCase):
         del self.layer
         AddressLayer.delete_shp('test_layer.shp')
 
-    @mock.patch('layer.tqdm')
+    @mock.patch('catatom2osm.layer.tqdm')
     def test_append(self, m_tqdm):
         self.layer.append(self.address_gml)
         feat = next(self.layer.getFeatures())
@@ -1166,7 +1164,7 @@ class TestAddressLayer(unittest.TestCase):
         for (attr, value) in zip(attrs, values):
             self.assertEqual(feat[attr], value)
 
-    @mock.patch('layer.tqdm')
+    @mock.patch('catatom2osm.layer.tqdm')
     def test_join_field(self, m_tqdm):
         self.layer.append(self.address_gml)
         self.layer.join_field(self.tn_gml, 'TN_id', 'gml_id', ['text'], 'TN_')
@@ -1178,7 +1176,7 @@ class TestAddressLayer(unittest.TestCase):
         for (attr, value) in zip(attrs, values):
             self.assertEqual(feat[attr], value)
 
-    @mock.patch('layer.tqdm')
+    @mock.patch('catatom2osm.layer.tqdm')
     def test_join_field_size(self, m_tqdm):
         layer = PolygonLayer('Point', 'test', 'memory')
         layer.dataProvider().addAttributes([QgsField('A', QVariant.String, len=255)])
@@ -1187,12 +1185,12 @@ class TestAddressLayer(unittest.TestCase):
         self.layer.join_field(layer, 'TN_id', 'gml_id', ['A'], 'TN_')
         self.assertEqual(self.layer.fields().field('TN_A').length(), 254)
 
-    @mock.patch('layer.tqdm')
+    @mock.patch('catatom2osm.layer.tqdm')
     def test_join_void(self, m_tqdm):
         self.layer.join_field(self.tn_gml, 'TN_id', 'gml_id', ['text'], 'TN_')
         self.assertEqual(self.layer.featureCount(), 0)
 
-    @mock.patch('layer.tqdm')
+    @mock.patch('catatom2osm.layer.tqdm')
     def test_to_osm(self, m_tqdm):
         self.layer.append(self.address_gml)
         self.layer.join_field(self.tn_gml, 'TN_id', 'gml_id', ['text'], 'TN_')
@@ -1211,7 +1209,7 @@ class TestAddressLayer(unittest.TestCase):
             t = address[feat['localId'].split('.')[-1]]
             self.assertEqual(feat['TN_text']+feat['designator'], t)
 
-    @mock.patch('layer.tqdm')
+    @mock.patch('catatom2osm.layer.tqdm')
     def test_conflate(self, m_tqdm):
         self.layer.append(self.address_gml)
         self.layer.join_field(self.tn_gml, 'TN_id', 'gml_id', ['text'], 'TN_')

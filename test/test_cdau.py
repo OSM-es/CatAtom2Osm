@@ -6,10 +6,8 @@ import mock
 import os
 os.environ['LANGUAGE'] = 'C'
 
-import setup
-import cdau
-import layer
-from catatom2osm import QgsSingleton
+from catatom2osm import config, cdau, layer
+from catatom2osm.app import QgsSingleton
 qgs = QgsSingleton()
 
 
@@ -50,7 +48,7 @@ class TestCdau(unittest.TestCase):
         self.assertEqual(cdau.cod_mun_cat2ine('21900'), '21041')
         self.assertEqual(cdau.cod_mun_cat2ine('29900'), '29067')
 
-    @mock.patch('cdau.os')
+    @mock.patch('catatom2osm.cdau.os')
     def test_init(self, m_os):
         self.m_cdau.init = get_func(cdau.Reader.__init__)
         m_os.path.exists.return_value = True
@@ -64,9 +62,9 @@ class TestCdau(unittest.TestCase):
         self.m_cdau.init(self.m_cdau, 'foobar')
         m_os.makedirs.assert_called_with('foobar')
 
-    @mock.patch('cdau.os')
-    @mock.patch('cdau.layer')
-    @mock.patch('cdau.download')
+    @mock.patch('catatom2osm.cdau.os')
+    @mock.patch('catatom2osm.cdau.layer')
+    @mock.patch('catatom2osm.cdau.download')
     def test_read(self, m_download, m_layer, m_os):
         self.m_cdau.read = get_func(cdau.Reader.read)
         with self.assertRaises(ValueError) as cm:
@@ -93,9 +91,9 @@ class TestCdau(unittest.TestCase):
         url = cdau.cdau_url.format(fn)
         m_download.wget.assert_called_once_with(url, 'foobar/'+fn)
 
-    @mock.patch('cdau.os')
-    @mock.patch('cdau.open')
-    @mock.patch('cdau.download')
+    @mock.patch('catatom2osm.cdau.os')
+    @mock.patch('catatom2osm.cdau.open')
+    @mock.patch('catatom2osm.cdau.download')
     def test_get_metadata(self, m_download, m_open, m_os):
         resp = mock.MagicMock()
         resp.text = '<p> La fecha de referencia de los datos de cada uno de los ficheros es el 5 de marzo de 2018.</p> </div> <h3 class="tituloCaja">Enlaces relacionados</h3>'

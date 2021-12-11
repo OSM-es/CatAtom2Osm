@@ -3,24 +3,14 @@ Read me
 
 ![](https://user-images.githubusercontent.com/1605829/141660065-1ad64b8f-dde9-4946-a4af-b556c270545f.png)
 
-Tool to convert INSPIRE data sets from the Spanish Cadastre ATOM Services (http://www.catastro.minhap.gob.es/webinspire/index.html) to OSM files. This is part of an import proposal under construction:
+Tool to convert INSPIRE data sets from the Spanish Cadastre ATOM Services (http://www.catastro.minhap.gob.es/webinspire/index.html) to OSM files. This is part of an ongoing import:
 
 https://wiki.openstreetmap.org/wiki/Spanish_Cadastre/Buildings_Import
 
 Requeriments
 ------------
 
-* fuzzywuzzy[speedup]
-* psutil
-* pyqgis
-* requests
-* GDAL
-
-Fuzzywuzzy is needed for street names conflation. 
-The main requisites (pyqgis, GDAL) should be provided by QGIS using the 
-installers available on http://qgis.org/
-
-QGIS >= 2.10.1, GDAL >= 2 are required.
+Docker https://www.docker.com/get-started
 
 Install
 -------

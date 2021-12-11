@@ -5,13 +5,13 @@ import os
 import random
 
 os.environ['LANGUAGE'] = 'C'
-import setup
-from download import get_response, wget, chunk_size
+from catatom2osm import config
+from catatom2osm.download import get_response, wget, chunk_size
 
 
 class TestGetResponse(unittest.TestCase):
     
-    @mock.patch('download.requests')
+    @mock.patch('catatom2osm.download.requests')
     def test_get_response_ok(self, mock_requests):
         mock_response = mock.MagicMock()
         mock_response.status_code = 200
@@ -21,7 +21,7 @@ class TestGetResponse(unittest.TestCase):
         self.assertEqual(r, mock_response)
         mock_requests.get.assert_called_once_with('foo', stream='bar', timeout=30)
 
-    @mock.patch('download.requests')
+    @mock.patch('catatom2osm.download.requests')
     def test_get_response_bad(self, mock_requests):
         mock_response = mock.MagicMock()
         mock_response.status_code = 404
@@ -34,9 +34,9 @@ class TestGetResponse(unittest.TestCase):
 
 class TestWget(unittest.TestCase):
 
-    @mock.patch('download.get_response')
-    @mock.patch('download.tqdm')
-    @mock.patch('download.open')
+    @mock.patch('catatom2osm.download.get_response')
+    @mock.patch('catatom2osm.download.tqdm')
+    @mock.patch('catatom2osm.download.open')
     def test_wget(self, mock_open, mock_pb, mock_gr):
         mock_gr.return_value = mock.MagicMock()
         mock_gr.return_value.iter_content = range
@@ -49,9 +49,9 @@ class TestWget(unittest.TestCase):
         mock_pb.assert_called_once_with(total=99999, unit='B', 
             unit_scale=True, unit_divisor=chunk_size, leave=False)
     
-    @mock.patch('download.get_response')
-    @mock.patch('download.tqdm')
-    @mock.patch('download.open')
+    @mock.patch('catatom2osm.download.get_response')
+    @mock.patch('catatom2osm.download.tqdm')
+    @mock.patch('catatom2osm.download.open')
     def test_wget0(self, mock_open, mock_pb, mock_gr):
         mock_gr.return_value = mock.MagicMock()
         mock_gr.return_value.iter_content = range

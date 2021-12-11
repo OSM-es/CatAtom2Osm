@@ -15,7 +15,7 @@
   <link rel="stylesheet" type="text/css" href="_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>Instalación &#8212; documentación de CatAtom2Osm - 1.6.1</title>
+    <title>Instalación &#8212; documentación de CatAtom2Osm - 1.7.0</title>
     
     <link rel="stylesheet" href="_static/guzzle.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -23,7 +23,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1.6.1',
+        VERSION:     '1.7.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -58,7 +58,7 @@
         <li class="right" >
           <a href="readme.html" title="Léeme"
              accesskey="P">anterior</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">documentación de CatAtom2Osm - 1.6.1</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">documentación de CatAtom2Osm - 1.7.0</a> &#187;</li> 
       </ul>
     </div>
     <div class="container-wrapper">
@@ -82,10 +82,7 @@
 <li class="toctree-l1"><a class="reference internal" href="readme.html">Léeme</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Instalación</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#docker">Docker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#linux">Linux</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#mac-os-x">Mac OS X</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#windows">Windows</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#entorno-de-pruebas">Entorno de pruebas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#desarrollo">Desarrollo</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="changes.html">Registro de cambios</a></li>
@@ -129,164 +126,10 @@
 <h2>Docker<a class="headerlink" href="#docker" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>Para garantizar resultados homogeneos por todos los importadores, el procedimiento recomendado es usar la imagen Docker:
 <a class="reference external" href="https://hub.docker.com/r/egofer/catatom2osm">https://hub.docker.com/r/egofer/catatom2osm</a></p>
-<p>Se desaconseja utilizar la aplicación con la instalación local que se describe a continuación solo por motivos históricos.</p>
 </div>
-<div class="section" id="linux">
-<h2>Linux<a class="headerlink" href="#linux" title="Enlazar permanentemente con este título">¶</a></h2>
-<p>Instalar QGIS siguiendo las instrucciones de <a class="reference external" href="https://qgis.org">https://qgis.org</a></p>
-<p>Este es un resumen de la secuencia de comandos para instalar QGIS 2.18.24 en Debian Jessie:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">su</span>
-<span class="n">echo</span> <span class="s1">&#39;deb     https://qgis.org/debian-ltr jessie main&#39;</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">apt</span><span class="o">/</span><span class="n">sources</span><span class="o">.</span><span class="n">list</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">qgis</span><span class="o">.</span><span class="n">list</span>
-<span class="n">echo</span> <span class="s1">&#39;deb-src https://qgis.org/debian-ltr jessie main&#39;</span> <span class="o">&gt;&gt;</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">apt</span><span class="o">/</span><span class="n">sources</span><span class="o">.</span><span class="n">list</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">qgis</span><span class="o">.</span><span class="n">list</span>
-<span class="n">apt</span><span class="o">-</span><span class="n">key</span> <span class="n">adv</span> <span class="o">--</span><span class="n">keyserver</span> <span class="n">keyserver</span><span class="o">.</span><span class="n">ubuntu</span><span class="o">.</span><span class="n">com</span> <span class="o">--</span><span class="n">recv</span><span class="o">-</span><span class="n">key</span> <span class="n">CAEB3DC3BDF7FB45</span>
-<span class="n">apt</span> <span class="n">update</span>
-<span class="n">apt</span> <span class="n">install</span> <span class="n">qgis</span>
-</pre></div>
-</div>
-<p>Este para QGIS 3.2.3 en Ubuntu bionic:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">echo</span> <span class="s1">&#39;deb     https://qgis.org/ubuntu bionic main&#39;</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">apt</span><span class="o">/</span><span class="n">sources</span><span class="o">.</span><span class="n">list</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">qgis</span><span class="o">.</span><span class="n">list</span>
-<span class="n">sudo</span> <span class="n">echo</span> <span class="s1">&#39;deb-src https://qgis.org/ubuntu bionic main&#39;</span> <span class="o">&gt;&gt;</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">apt</span><span class="o">/</span><span class="n">sources</span><span class="o">.</span><span class="n">list</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">qgis</span><span class="o">.</span><span class="n">list</span>
-<span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">key</span> <span class="n">adv</span> <span class="o">--</span><span class="n">keyserver</span> <span class="n">keyserver</span><span class="o">.</span><span class="n">ubuntu</span><span class="o">.</span><span class="n">com</span> <span class="o">--</span><span class="n">recv</span><span class="o">-</span><span class="n">key</span> <span class="n">CAEB3DC3BDF7FB45</span>
-<span class="n">sudo</span> <span class="n">apt</span> <span class="n">update</span>
-<span class="n">sudo</span> <span class="n">apt</span> <span class="n">install</span> <span class="n">qgis</span>
-</pre></div>
-</div>
-<p>Clonar el repositorio del programa ejecutando:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span> <span class="n">install</span> <span class="n">git</span> <span class="n">python</span><span class="o">-</span><span class="n">pip</span> <span class="n">python</span><span class="o">-</span><span class="n">dev</span>
-<span class="n">cd</span> <span class="o">~</span>
-<span class="n">mkdir</span> <span class="n">catastro</span>
-<span class="n">cd</span> <span class="n">catastro</span>
-<span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">OSM</span><span class="o">-</span><span class="n">es</span><span class="o">/</span><span class="n">CatAtom2Osm</span><span class="o">.</span><span class="n">git</span>
-<span class="n">cd</span> <span class="n">CatAtom2Osm</span>
-<span class="n">sudo</span> <span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">requisites</span><span class="o">.</span><span class="n">txt</span>
-<span class="n">sudo</span> <span class="n">make</span> <span class="n">install</span>
-</pre></div>
-</div>
-<p>Después de la instalación, el programa está disponible para ejecutar desde la terminal.</p>
-<blockquote>
-<div>catatom2osm</div></blockquote>
-</div>
-<div class="section" id="mac-os-x">
-<h2>Mac OS X<a class="headerlink" href="#mac-os-x" title="Enlazar permanentemente con este título">¶</a></h2>
-<p>Instalar QGIS3 desde la página de descarga de QGIS
-<a class="reference external" href="http://qgis.org">http://qgis.org</a></p>
-<p>Pero antes instalar la versión indicada allí de Python
-<a class="reference external" href="http://python.org">http://python.org</a></p>
-<p>Instalar el programa de escritorio de GitHub desde
-<a class="reference external" href="http://desktop.github.com">http://desktop.github.com</a></p>
-<p>Ejecutarlo y descargar el repositorio
-<a class="reference external" href="https://github.com/OSM-es/CatAtom2Osm.git">https://github.com/OSM-es/CatAtom2Osm.git</a></p>
-<p>Abrir una consola de comandos (información adicional en este enlace)
-<a class="reference external" href="https://www.soydemac.com/abrir-terminal-mac/">https://www.soydemac.com/abrir-terminal-mac/</a></p>
-<p>Ejecutar los comandos:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">Documents</span><span class="o">/</span><span class="n">GitHub</span><span class="o">/</span><span class="n">CatAtom2Osm</span>
-<span class="n">sudo</span> <span class="n">easy_install</span> <span class="n">pip</span>
-<span class="n">sudo</span> <span class="n">pip3</span> <span class="n">install</span> <span class="o">--</span><span class="n">update</span> <span class="n">pip</span>
-<span class="n">sudo</span> <span class="n">pip3</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">requisites</span><span class="o">.</span><span class="n">txt</span>
-<span class="n">sudo</span> <span class="n">make</span> <span class="n">install</span>
-</pre></div>
-</div>
-<p>Durante la instalación de los requisitos pedirá la instalación de las
-herramientas para desarrolladores de la línea de comandos, responde que sí.</p>
-<p>Si tu configuración regional es distinta de es_ES puedes editar el archivo pyqgismac.sh y cambiar las variables LANG, LC_CTYPE y LC_ALL</p>
-<p>Después de la instalación, el programa está disponible para ejecutar desde la terminal.</p>
-<blockquote>
-<div>catatom2osm</div></blockquote>
-<p>Se sugiere ejecutar el programa en una carpeta dedicada, por ejemplo</p>
-<blockquote>
-<div>cd
-mkdir catastro
-cd catastro</div></blockquote>
-<p>Notas:</p>
-<ul>
-<li><p class="first">Ignorar el mensaje &#8220;ERROR: Opening of authentication db FAILED&#8221;</p>
-</li>
-<li><p class="first">Si al instalar pip con easy_install sale un error relacionado con la versión del protocolo SSL, usar este comando</p>
-<blockquote>
-<div><p>curl <a class="reference external" href="https://bootstrap.pypa.io/get-pip.py">https://bootstrap.pypa.io/get-pip.py</a> | python</p>
-</div></blockquote>
-</li>
-</ul>
-<div class="section" id="qgis-2">
-<h3>QGIS 2<a class="headerlink" href="#qgis-2" title="Enlazar permanentemente con este título">¶</a></h3>
-<p>Si se desea instalar QGIS 2 en lugar de 3, los comandos a ejecutar son estos:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">Documents</span><span class="o">/</span><span class="n">GitHub</span><span class="o">/</span><span class="n">CatAtom2Osm</span>
-<span class="n">sudo</span> <span class="n">easy_install</span> <span class="n">pip</span>
-<span class="n">sudo</span> <span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">requisites</span><span class="o">.</span><span class="n">txt</span>
-<span class="n">sudo</span> <span class="n">make</span> <span class="n">install</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="section" id="windows">
-<h2>Windows<a class="headerlink" href="#windows" title="Enlazar permanentemente con este título">¶</a></h2>
-<p>Instalar QGIS usando el instalador OSGeo4W en red (64 bits/ 32 bits) desde la
-página de descarga de <a class="reference external" href="http://qgis.org">http://qgis.org</a></p>
-<ul class="simple">
-<li>Ejecutar el instalador y seleccionar la opción Instalación Avanzada</li>
-<li>Instalar desde Internet</li>
-<li>Seleccionar las opciones por defecto</li>
-<li>En la pantalla de selección de paquetes seleccionar:<ul>
-<li>Desktop -&gt; qgis: QGIS Desktop</li>
-<li>Libs -&gt; msvcrt 2008</li>
-<li>Libs -&gt; python3-devel</li>
-<li>Libs -&gt; python3-pip</li>
-<li>Libs -&gt; python3-setuptools</li>
-</ul>
-</li>
-<li>Aceptar la lista de dependencias sugerida</li>
-</ul>
-<p>Instalar Microsoft Visual C++ 14.0 Build Tools siguiendo las instrucciones de
-<a class="reference external" href="https://www.scivision.co/python-windows-visual-c++-14-required/">https://www.scivision.co/python-windows-visual-c++-14-required/</a></p>
-<p>Instalar el programa de escritorio de GitHub desde desktop.github.com</p>
-<p>Ejecutarlo y descargar el repositorio <a class="reference external" href="https://github.com/OSM-es/CatAtom2Osm.git">https://github.com/OSM-es/CatAtom2Osm.git</a></p>
-<p>En la carpeta CatAtom2Osm descargada lanzar el archivo pyqgis3.bat.
-En la consola resultante ejecutar:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">requisites</span><span class="o">.</span><span class="n">txt</span>
-</pre></div>
-</div>
-<p>Será necesario ejecutar pyqgis3.bat cuando queramos usar el programa para abrir una consola de comandos con el entorno de Python QGIS adecuado. Se sugiere editar el archivo pyqgis3.bat, descomentar la penúltima línea con la orden CD e introducir la ruta de la carpeta donde se van a descargar los archivos de Catastro. Por ejemplo:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">c</span><span class="p">:</span>\<span class="n">Users</span>\<span class="n">TuNombre</span>\<span class="n">Documents</span>\<span class="n">catastro</span>
-</pre></div>
-</div>
-<p>Notas:</p>
-<ul class="simple">
-<li>Si la instalación de QGIS se aborta con el error &#8220;La ejecución de código no puede continuar porque no se encontró zip.dll&#8221;, la única solución encontrada es usar el instalador OSGeo4W de 32 bits en lugar del de 64 bits.</li>
-<li>Si durante la ejecución del programa aparecen mensajes de error similares a &#8220;Failed to create file building_packed.shp: Permission denied&#8221;, ejecutar en un directorio con nombre sencillo (sin caracteres espaciales) colgando del directorio raíz, por ejemplo: C:Catastro</li>
-</ul>
-<div class="section" id="qgis-2-1">
-<h3>QGIS 2<a class="headerlink" href="#qgis-2-1" title="Enlazar permanentemente con este título">¶</a></h3>
-<p>Si se desea instalar QGIS 2 en lugar de 3, seleccionar estos paquetes:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">*</span> <span class="n">Desktop</span> <span class="o">-&gt;</span> <span class="n">qgis</span><span class="o">-</span><span class="n">ltr</span><span class="p">:</span> <span class="n">QGIS</span> <span class="n">Desktop</span>
-<span class="o">*</span> <span class="n">Libs</span> <span class="o">-&gt;</span> <span class="n">msvcrt</span> <span class="mi">2008</span>
-<span class="o">*</span> <span class="n">Libs</span> <span class="o">-&gt;</span> <span class="n">python</span><span class="o">-</span><span class="n">devel</span>
-<span class="o">*</span> <span class="n">Libs</span> <span class="o">-&gt;</span> <span class="n">python</span><span class="o">-</span><span class="n">pip</span>
-<span class="o">*</span> <span class="n">Libs</span> <span class="o">-&gt;</span> <span class="n">setuptools</span>
-</pre></div>
-</div>
-<p>En lugar de Instalar Microsoft Visual C++ 14.0 Build Tools, instalar Microsoft Visual C++ Compiler for Python 2.7 desde <a class="reference external" href="http://aka.ms/vcpython27">http://aka.ms/vcpython27</a></p>
-<p>Abrir la consola con el entorno de Python QGIS usando el archivo pyqgis.bat.</p>
-</div>
-</div>
-<div class="section" id="entorno-de-pruebas">
-<h2>Entorno de pruebas<a class="headerlink" href="#entorno-de-pruebas" title="Enlazar permanentemente con este título">¶</a></h2>
-<p>Opcionalmente, se puede instalar el entorno de pruebas para contribuir en el desarrollo del programa.
-En Linux y Macos:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">requisites</span><span class="o">-</span><span class="n">dev</span><span class="o">.</span><span class="n">txt</span>
-</pre></div>
-</div>
-<p>Y para ejecutar las pruebas del código:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">test</span>
-</pre></div>
-</div>
-<p>En Windows:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">requisites</span><span class="o">-</span><span class="n">dev</span><span class="o">.</span><span class="n">txt</span>
-</pre></div>
-</div>
-<p>Y para ejecutar las pruebas del código:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">unittest</span> <span class="n">discover</span>
-</pre></div>
-</div>
+<div class="section" id="desarrollo">
+<h2>Desarrollo<a class="headerlink" href="#desarrollo" title="Enlazar permanentemente con este título">¶</a></h2>
+<p>Si deseas contribuir al programa revisa CONTRIBUTING.md</p>
 </div>
 </div>
 
@@ -323,7 +166,7 @@ En Linux y Macos:</p>
         <li class="right" >
           <a href="readme.html" title="Léeme"
              >anterior</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">documentación de CatAtom2Osm - 1.6.1</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">documentación de CatAtom2Osm - 1.7.0</a> &#187;</li> 
       </ul>
     </div>
 <script type="text/javascript">

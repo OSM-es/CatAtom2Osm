@@ -4,7 +4,7 @@ import unittest
 import mock
 import random
 
-from translate import *
+from catatom2osm.translate import *
 
 
 class TestTranslate(unittest.TestCase):

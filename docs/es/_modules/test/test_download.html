@@ -15,7 +15,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>test.test_download &#8212; documentación de CatAtom2Osm - 1.6.1</title>
+    <title>test.test_download &#8212; documentación de CatAtom2Osm - 1.7.0</title>
     
     <link rel="stylesheet" href="../../_static/guzzle.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -23,7 +23,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.6.1',
+        VERSION:     '1.7.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -50,7 +50,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 1.6.1</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 1.7.0</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Código de módulo</a> &#187;</li> 
       </ul>
     </div>
@@ -119,13 +119,13 @@
 <span class="kn">import</span> <span class="nn">random</span>
 
 <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;LANGUAGE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;C&#39;</span>
-<span class="kn">import</span> <span class="nn">setup</span>
-<span class="kn">from</span> <span class="nn">download</span> <span class="k">import</span> <span class="n">get_response</span><span class="p">,</span> <span class="n">wget</span><span class="p">,</span> <span class="n">chunk_size</span>
+<span class="kn">from</span> <span class="nn">catatom2osm</span> <span class="k">import</span> <span class="n">config</span>
+<span class="kn">from</span> <span class="nn">catatom2osm.download</span> <span class="k">import</span> <span class="n">get_response</span><span class="p">,</span> <span class="n">wget</span><span class="p">,</span> <span class="n">chunk_size</span>
 
 
 <div class="viewcode-block" id="TestGetResponse"><a class="viewcode-back" href="../../api/test.test_download.html#test.test_download.TestGetResponse">[documentos]</a><span class="k">class</span> <span class="nc">TestGetResponse</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
     
-    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;download.requests&#39;</span><span class="p">)</span>
+    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.download.requests&#39;</span><span class="p">)</span>
 <div class="viewcode-block" id="TestGetResponse.test_get_response_ok"><a class="viewcode-back" href="../../api/test.test_download.html#test.test_download.TestGetResponse.test_get_response_ok">[documentos]</a>    <span class="k">def</span> <span class="nf">test_get_response_ok</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mock_requests</span><span class="p">):</span>
         <span class="n">mock_response</span> <span class="o">=</span> <span class="n">mock</span><span class="o">.</span><span class="n">MagicMock</span><span class="p">()</span>
         <span class="n">mock_response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">=</span> <span class="mi">200</span>
@@ -135,7 +135,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">mock_response</span><span class="p">)</span>
         <span class="n">mock_requests</span><span class="o">.</span><span class="n">get</span><span class="o">.</span><span class="n">assert_called_once_with</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span></div>
 
-    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;download.requests&#39;</span><span class="p">)</span>
+    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.download.requests&#39;</span><span class="p">)</span>
 <div class="viewcode-block" id="TestGetResponse.test_get_response_bad"><a class="viewcode-back" href="../../api/test.test_download.html#test.test_download.TestGetResponse.test_get_response_bad">[documentos]</a>    <span class="k">def</span> <span class="nf">test_get_response_bad</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mock_requests</span><span class="p">):</span>
         <span class="n">mock_response</span> <span class="o">=</span> <span class="n">mock</span><span class="o">.</span><span class="n">MagicMock</span><span class="p">()</span>
         <span class="n">mock_response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">=</span> <span class="mi">404</span>
@@ -148,9 +148,9 @@
 
 <div class="viewcode-block" id="TestWget"><a class="viewcode-back" href="../../api/test.test_download.html#test.test_download.TestWget">[documentos]</a><span class="k">class</span> <span class="nc">TestWget</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
 
-    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;download.get_response&#39;</span><span class="p">)</span>
-    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;download.tqdm&#39;</span><span class="p">)</span>
-    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;download.open&#39;</span><span class="p">)</span>
+    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.download.get_response&#39;</span><span class="p">)</span>
+    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.download.tqdm&#39;</span><span class="p">)</span>
+    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.download.open&#39;</span><span class="p">)</span>
 <div class="viewcode-block" id="TestWget.test_wget"><a class="viewcode-back" href="../../api/test.test_download.html#test.test_download.TestWget.test_wget">[documentos]</a>    <span class="k">def</span> <span class="nf">test_wget</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mock_open</span><span class="p">,</span> <span class="n">mock_pb</span><span class="p">,</span> <span class="n">mock_gr</span><span class="p">):</span>
         <span class="n">mock_gr</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">mock</span><span class="o">.</span><span class="n">MagicMock</span><span class="p">()</span>
         <span class="n">mock_gr</span><span class="o">.</span><span class="n">return_value</span><span class="o">.</span><span class="n">iter_content</span> <span class="o">=</span> <span class="nb">range</span>
@@ -163,9 +163,9 @@
         <span class="n">mock_pb</span><span class="o">.</span><span class="n">assert_called_once_with</span><span class="p">(</span><span class="n">total</span><span class="o">=</span><span class="mi">99999</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;B&#39;</span><span class="p">,</span> 
             <span class="n">unit_scale</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">unit_divisor</span><span class="o">=</span><span class="n">chunk_size</span><span class="p">,</span> <span class="n">leave</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
     
-    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;download.get_response&#39;</span><span class="p">)</span>
-    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;download.tqdm&#39;</span><span class="p">)</span>
-    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;download.open&#39;</span><span class="p">)</span>
+    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.download.get_response&#39;</span><span class="p">)</span>
+    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.download.tqdm&#39;</span><span class="p">)</span>
+    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.download.open&#39;</span><span class="p">)</span>
 <div class="viewcode-block" id="TestWget.test_wget0"><a class="viewcode-back" href="../../api/test.test_download.html#test.test_download.TestWget.test_wget0">[documentos]</a>    <span class="k">def</span> <span class="nf">test_wget0</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mock_open</span><span class="p">,</span> <span class="n">mock_pb</span><span class="p">,</span> <span class="n">mock_gr</span><span class="p">):</span>
         <span class="n">mock_gr</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">mock</span><span class="o">.</span><span class="n">MagicMock</span><span class="p">()</span>
         <span class="n">mock_gr</span><span class="o">.</span><span class="n">return_value</span><span class="o">.</span><span class="n">iter_content</span> <span class="o">=</span> <span class="nb">range</span>
@@ -194,7 +194,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 1.6.1</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 1.7.0</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Código de módulo</a> &#187;</li> 
       </ul>
     </div>

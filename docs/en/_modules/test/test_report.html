@@ -15,7 +15,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>test.test_report &#8212; CatAtom2Osm 1.6.1 documentation</title>
+    <title>test.test_report &#8212; CatAtom2Osm 1.7.0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/guzzle.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -23,7 +23,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.6.1',
+        VERSION:     '1.7.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -49,7 +49,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 1.6.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 1.7.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>
@@ -123,9 +123,7 @@
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span>
 
 <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;LANGUAGE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;C&#39;</span>
-<span class="kn">import</span> <span class="nn">setup</span>
-<span class="kn">import</span> <span class="nn">osm</span>
-<span class="kn">import</span> <span class="nn">report</span>
+<span class="kn">from</span> <span class="nn">catatom2osm</span> <span class="k">import</span> <span class="n">config</span><span class="p">,</span> <span class="n">osm</span><span class="p">,</span> <span class="n">report</span>
 
 
 <div class="viewcode-block" id="TestReport"><a class="viewcode-back" href="../../api/test.test_report.html#test.test_report.TestReport">[docs]</a><span class="k">class</span> <span class="nc">TestReport</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
@@ -222,7 +220,7 @@
 <div class="viewcode-block" id="TestReport.test_to_string0"><a class="viewcode-back" href="../../api/test.test_report.html#test.test_report.TestReport.test_to_string0">[docs]</a>    <span class="k">def</span> <span class="nf">test_to_string0</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">r</span> <span class="o">=</span> <span class="n">report</span><span class="o">.</span><span class="n">Report</span><span class="p">()</span>
         <span class="n">output</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">to_string</span><span class="p">()</span>
-        <span class="n">expected</span> <span class="o">=</span> <span class="s2">&quot;Date: &quot;</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%x</span><span class="s1">&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">setup</span><span class="o">.</span><span class="n">eol</span>
+        <span class="n">expected</span> <span class="o">=</span> <span class="s2">&quot;Date: &quot;</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%x</span><span class="s1">&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">eol</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">expected</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="TestReport.test_to_string1"><a class="viewcode-back" href="../../api/test.test_report.html#test.test_report.TestReport.test_to_string1">[docs]</a>    <span class="k">def</span> <span class="nf">test_to_string1</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -232,12 +230,12 @@
         <span class="n">r</span><span class="o">.</span><span class="n">inp_zip_codes</span> <span class="o">=</span> <span class="mi">1000</span>
         <span class="n">r</span><span class="o">.</span><span class="n">fixmes</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">output</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">to_string</span><span class="p">()</span>
-        <span class="n">expected</span> <span class="o">=</span> <span class="sa">u</span><span class="s2">&quot;Municipality: Foobar&quot;</span> <span class="o">+</span> <span class="n">setup</span><span class="o">.</span><span class="n">eol</span> \
-            <span class="o">+</span> <span class="s2">&quot;Date: &quot;</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%x</span><span class="s1">&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">setup</span><span class="o">.</span><span class="n">eol</span> <span class="o">+</span> <span class="n">setup</span><span class="o">.</span><span class="n">eol</span> \
-            <span class="o">+</span> <span class="s2">&quot;=Addresses=&quot;</span> <span class="o">+</span> <span class="n">setup</span><span class="o">.</span><span class="n">eol</span> <span class="o">+</span> <span class="n">setup</span><span class="o">.</span><span class="n">eol</span> \
-            <span class="o">+</span> <span class="s2">&quot;==Input data==&quot;</span> <span class="o">+</span> <span class="n">setup</span><span class="o">.</span><span class="n">eol</span> \
-            <span class="o">+</span> <span class="s2">&quot;Postal codes: &quot;</span> <span class="o">+</span> <span class="n">report</span><span class="o">.</span><span class="n">int_format</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span> <span class="o">+</span> <span class="n">setup</span><span class="o">.</span><span class="n">eol</span> \
-            <span class="o">+</span> <span class="n">setup</span><span class="o">.</span><span class="n">eol</span> <span class="o">+</span> <span class="n">setup</span><span class="o">.</span><span class="n">fixme_doc_url</span>
+        <span class="n">expected</span> <span class="o">=</span> <span class="sa">u</span><span class="s2">&quot;Municipality: Foobar&quot;</span> <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">eol</span> \
+            <span class="o">+</span> <span class="s2">&quot;Date: &quot;</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%x</span><span class="s1">&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">eol</span> <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">eol</span> \
+            <span class="o">+</span> <span class="s2">&quot;=Addresses=&quot;</span> <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">eol</span> <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">eol</span> \
+            <span class="o">+</span> <span class="s2">&quot;==Input data==&quot;</span> <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">eol</span> \
+            <span class="o">+</span> <span class="s2">&quot;Postal codes: &quot;</span> <span class="o">+</span> <span class="n">report</span><span class="o">.</span><span class="n">int_format</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span> <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">eol</span> \
+            <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">eol</span> <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">fixme_doc_url</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">expected</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="TestReport.test_to_string2"><a class="viewcode-back" href="../../api/test.test_report.html#test.test_report.TestReport.test_to_string2">[docs]</a>    <span class="k">def</span> <span class="nf">test_to_string2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -246,13 +244,13 @@
         <span class="n">r</span><span class="o">.</span><span class="n">fixmes</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;f1&#39;</span><span class="p">,</span> <span class="s1">&#39;f2&#39;</span><span class="p">]</span>
         <span class="n">r</span><span class="o">.</span><span class="n">warnings</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;w1&#39;</span><span class="p">,</span> <span class="s1">&#39;w2&#39;</span><span class="p">]</span>
         <span class="n">output</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">to_string</span><span class="p">()</span>
-        <span class="n">expected</span> <span class="o">=</span> <span class="sa">u</span><span class="s2">&quot;Date: &quot;</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%x</span><span class="s1">&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">setup</span><span class="o">.</span><span class="n">eol</span> \
-            <span class="o">+</span> <span class="n">setup</span><span class="o">.</span><span class="n">eol</span> <span class="o">+</span> <span class="s2">&quot;=Problems=&quot;</span> <span class="o">+</span> <span class="n">setup</span><span class="o">.</span><span class="n">eol</span> \
-            <span class="o">+</span> <span class="s2">&quot;Fixmes: 2&quot;</span> <span class="o">+</span> <span class="n">setup</span><span class="o">.</span><span class="n">eol</span> \
-            <span class="o">+</span> <span class="n">report</span><span class="o">.</span><span class="n">TAB</span> <span class="o">+</span> <span class="s2">&quot;f1&quot;</span> <span class="o">+</span> <span class="n">setup</span><span class="o">.</span><span class="n">eol</span> <span class="o">+</span> <span class="n">report</span><span class="o">.</span><span class="n">TAB</span> <span class="o">+</span> <span class="s2">&quot;f2&quot;</span> <span class="o">+</span> <span class="n">setup</span><span class="o">.</span><span class="n">eol</span> \
-            <span class="o">+</span> <span class="s2">&quot;Warnings: 2&quot;</span> <span class="o">+</span> <span class="n">setup</span><span class="o">.</span><span class="n">eol</span> \
-            <span class="o">+</span> <span class="n">report</span><span class="o">.</span><span class="n">TAB</span> <span class="o">+</span> <span class="s2">&quot;w1&quot;</span> <span class="o">+</span> <span class="n">setup</span><span class="o">.</span><span class="n">eol</span> <span class="o">+</span> <span class="n">report</span><span class="o">.</span><span class="n">TAB</span> <span class="o">+</span> <span class="s2">&quot;w2&quot;</span> <span class="o">+</span> <span class="n">setup</span><span class="o">.</span><span class="n">eol</span> \
-            <span class="o">+</span> <span class="n">setup</span><span class="o">.</span><span class="n">eol</span> <span class="o">+</span> <span class="n">setup</span><span class="o">.</span><span class="n">fixme_doc_url</span>
+        <span class="n">expected</span> <span class="o">=</span> <span class="sa">u</span><span class="s2">&quot;Date: &quot;</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%x</span><span class="s1">&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">eol</span> \
+                   <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">eol</span> <span class="o">+</span> <span class="s2">&quot;=Problems=&quot;</span> <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">eol</span> \
+                   <span class="o">+</span> <span class="s2">&quot;Fixmes: 2&quot;</span> <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">eol</span> \
+                   <span class="o">+</span> <span class="n">report</span><span class="o">.</span><span class="n">TAB</span> <span class="o">+</span> <span class="s2">&quot;f1&quot;</span> <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">eol</span> <span class="o">+</span> <span class="n">report</span><span class="o">.</span><span class="n">TAB</span> <span class="o">+</span> <span class="s2">&quot;f2&quot;</span> <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">eol</span> \
+                   <span class="o">+</span> <span class="s2">&quot;Warnings: 2&quot;</span> <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">eol</span> \
+                   <span class="o">+</span> <span class="n">report</span><span class="o">.</span><span class="n">TAB</span> <span class="o">+</span> <span class="s2">&quot;w1&quot;</span> <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">eol</span> <span class="o">+</span> <span class="n">report</span><span class="o">.</span><span class="n">TAB</span> <span class="o">+</span> <span class="s2">&quot;w2&quot;</span> <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">eol</span> \
+                   <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">eol</span> <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">fixme_doc_url</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">expected</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="TestReport.test_to_string3"><a class="viewcode-back" href="../../api/test.test_report.html#test.test_report.TestReport.test_to_string3">[docs]</a>    <span class="k">def</span> <span class="nf">test_to_string3</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -267,9 +265,9 @@
         <span class="n">output</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">to_string</span><span class="p">()</span>
         <span class="n">fn</span> <span class="o">=</span> <span class="s1">&#39;test_report.txt&#39;</span>
         <span class="n">r</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
-        <span class="k">with</span> <span class="n">io</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">setup</span><span class="o">.</span><span class="n">encoding</span><span class="p">)</span> <span class="k">as</span> <span class="n">fo</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">io</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">encoding</span><span class="p">)</span> <span class="k">as</span> <span class="n">fo</span><span class="p">:</span>
             <span class="n">text</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">fo</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
-            <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">setup</span><span class="o">.</span><span class="n">eol</span><span class="p">)</span>
+            <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">eol</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
             <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span></div>
@@ -325,7 +323,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">fixme_stats</span><span class="p">(),</span> <span class="mi">3</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">fixmes</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span></div>
 
-    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;report.io&#39;</span><span class="p">)</span>
+    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.report.io&#39;</span><span class="p">)</span>
 <div class="viewcode-block" id="TestReport.test_from_file"><a class="viewcode-back" href="../../api/test.test_report.html#test.test_report.TestReport.test_from_file">[docs]</a>    <span class="k">def</span> <span class="nf">test_from_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m_io</span><span class="p">):</span>
         <span class="n">r</span> <span class="o">=</span> <span class="n">report</span><span class="o">.</span><span class="n">Report</span><span class="p">()</span>
         <span class="n">t</span> <span class="o">=</span> <span class="p">(</span>
@@ -362,7 +360,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 1.6.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 1.7.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>

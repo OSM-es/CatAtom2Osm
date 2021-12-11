@@ -6,8 +6,8 @@ import mock
 import os
 os.environ['LANGUAGE'] = 'C'
 
-import hgwnames
-import hgwnames as nonfuzzy_hgwnames
+from catatom2osm import hgwnames
+
 
 class TestHgwnames(unittest.TestCase):
 
@@ -54,7 +54,7 @@ class TestHgwnames(unittest.TestCase):
         self.assertEqual(hgwnames.match('FOOB', self.choices), 'Foobar')
         self.assertEqual(hgwnames.match('CL FRANCIA', self.choices), 'Calle Francia')
 
-    @mock.patch('hgwnames.fuzz', None)
+    @mock.patch('catatom2osm.hgwnames.fuzz', None)
     def test_nonfyzzy_match(self):
         self.assertEqual(hgwnames.match('CL FOOBAR', self.choices), 'Calle Foobar')
 
@@ -63,7 +63,7 @@ class TestHgwnames(unittest.TestCase):
         self.assertEqual(hgwnames.dsmatch('MADRID', self.ds2, self.fn)['id'], 4)
         self.assertEqual(hgwnames.dsmatch('MADRID', self.ds2, self.fn)['n'], 'Madrid')
 
-    @mock.patch('hgwnames.fuzz', None)
+    @mock.patch('catatom2osm.hgwnames.fuzz', None)
     def test_nonfuzzy_match(self):
         self.assertEqual(hgwnames.dsmatch('FOOBAR', self.ds, self.fn)['id'], 1)
         self.assertEqual(hgwnames.dsmatch('FOO', self.ds, self.fn), None)

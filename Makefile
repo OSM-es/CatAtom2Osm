@@ -13,7 +13,7 @@ MSGFMT        = msgfmt
 LOCALE_DIR    = locale/po
 INSTALL_DIR   = /usr/local/bin/
 OS            = $(shell uname)
-VERSION       = $(shell ./catatom2osm -v 2>&1)
+VERSION       = $(shell python setup.py -V)
 
 # Internal variables.
 PAPEROPT_a4     = -D latex_paper_size=a4
@@ -87,17 +87,9 @@ msg:
 
 .PHONY: install
 install:
-ifeq (${OS},$(filter $(OS),Sierra Darwin))
-	@chmod +x pyqgismac.sh
-	@chmod +x pyqgis3mac.sh
-	@chmod +x catatom2osmmac
-	@ln -sf $(shell pwd)/catatom2osmmac $(INSTALL_DIR)/catatom2osm
-	@echo "Created symbolic link $(INSTALL_DIR)-->$(shell pwd)/catatom2osmmac"
-else
-	@chmod +x catatom2osm
-	@ln -sf $(shell pwd)/catatom2osm $(INSTALL_DIR)/catatom2osm
-	@echo "Created symbolic link $(INSTALL_DIR)-->$(shell pwd)/catatom2osm"
-endif
+	@chmod +x catatom2osm.sh
+	@ln -sf $(shell pwd)/catatom2osm.sh $(INSTALL_DIR)/catatom2osm
+	@echo "Created symbolic link $(INSTALL_DIR)-->$(shell pwd)/catatom2osm.sh"
 
 .PHONY: uninstall
 uninstall:

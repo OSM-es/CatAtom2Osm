@@ -4,13 +4,12 @@ from builtins import str
 import unittest
 from tempfile import mkstemp
 
-import csv
 import io
 import os
 os.environ['LANGUAGE'] = 'C'
 
-from csvtools import csv2dict, dict2csv
-from setup import eol, encoding, delimiter
+from catatom2osm.csvtools import csv2dict, dict2csv
+from catatom2osm.config import eol, encoding, delimiter
 
 
 class TestCsvTools(unittest.TestCase):
@@ -47,5 +46,3 @@ class TestCsvTools(unittest.TestCase):
             text = csv_file.read()
         self.assertEqual(text, "b%s1\nc%s2\na%s3\n" % (delimiter, 
             delimiter, delimiter))
-
-

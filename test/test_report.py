@@ -10,9 +10,7 @@ from collections import Counter
 from datetime import datetime
 
 os.environ['LANGUAGE'] = 'C'
-import setup
-import osm
-import report
+from catatom2osm import config, osm, report
 
 
 class TestReport(unittest.TestCase):
@@ -109,7 +107,7 @@ class TestReport(unittest.TestCase):
     def test_to_string0(self):
         r = report.Report()
         output = r.to_string()
-        expected = "Date: " + datetime.now().strftime('%x') + setup.eol
+        expected = "Date: " + datetime.now().strftime('%x') + config.eol
         self.assertEqual(output, expected)
 
     def test_to_string1(self):
@@ -119,12 +117,12 @@ class TestReport(unittest.TestCase):
         r.inp_zip_codes = 1000
         r.fixmes = []
         output = r.to_string()
-        expected = u"Municipality: Foobar" + setup.eol \
-            + "Date: " + datetime.now().strftime('%x') + setup.eol + setup.eol \
-            + "=Addresses=" + setup.eol + setup.eol \
-            + "==Input data==" + setup.eol \
-            + "Postal codes: " + report.int_format(1000) + setup.eol \
-            + setup.eol + setup.fixme_doc_url
+        expected = u"Municipality: Foobar" + config.eol \
+            + "Date: " + datetime.now().strftime('%x') + config.eol + config.eol \
+            + "=Addresses=" + config.eol + config.eol \
+            + "==Input data==" + config.eol \
+            + "Postal codes: " + report.int_format(1000) + config.eol \
+            + config.eol + config.fixme_doc_url
         self.assertEqual(output, expected)
 
     def test_to_string2(self):
@@ -133,13 +131,13 @@ class TestReport(unittest.TestCase):
         r.fixmes = ['f1', 'f2']
         r.warnings = ['w1', 'w2']
         output = r.to_string()
-        expected = u"Date: " + datetime.now().strftime('%x') + setup.eol \
-            + setup.eol + "=Problems=" + setup.eol \
-            + "Fixmes: 2" + setup.eol \
-            + report.TAB + "f1" + setup.eol + report.TAB + "f2" + setup.eol \
-            + "Warnings: 2" + setup.eol \
-            + report.TAB + "w1" + setup.eol + report.TAB + "w2" + setup.eol \
-            + setup.eol + setup.fixme_doc_url
+        expected = u"Date: " + datetime.now().strftime('%x') + config.eol \
+                   + config.eol + "=Problems=" + config.eol \
+                   + "Fixmes: 2" + config.eol \
+                   + report.TAB + "f1" + config.eol + report.TAB + "f2" + config.eol \
+                   + "Warnings: 2" + config.eol \
+                   + report.TAB + "w1" + config.eol + report.TAB + "w2" + config.eol \
+                   + config.eol + config.fixme_doc_url
         self.assertEqual(output, expected)
 
     def test_to_string3(self):
@@ -154,9 +152,9 @@ class TestReport(unittest.TestCase):
         output = r.to_string()
         fn = 'test_report.txt'
         r.to_file(fn)
-        with io.open(fn, 'r', encoding=setup.encoding) as fo:
+        with io.open(fn, 'r', encoding=config.encoding) as fo:
             text = str(fo.read())
-            text = text.replace('\n\n', setup.eol)
+            text = text.replace('\n\n', config.eol)
         self.assertEqual(output, text)
         if os.path.exists(fn):
             os.remove(fn)
@@ -212,7 +210,7 @@ class TestReport(unittest.TestCase):
         self.assertEqual(r.fixme_stats(), 3)
         self.assertEqual(len(r.fixmes), 2)
 
-    @mock.patch('report.io')
+    @mock.patch('catatom2osm.report.io')
     def test_from_file(self, m_io):
         r = report.Report()
         t = (
