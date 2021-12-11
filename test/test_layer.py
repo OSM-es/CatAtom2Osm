@@ -3,7 +3,6 @@ from __future__ import unicode_literals
 from builtins import next, range, str, zip
 import unittest
 import mock
-import os
 import random
 import six
 from collections import Counter
@@ -14,7 +13,6 @@ from osgeo import gdal
 from qgis.core import *
 from catatom2osm.qgiscompat import *
 
-os.environ['LANGUAGE'] = 'C'
 from catatom2osm.layer import *
 from catatom2osm.app import QgsSingleton
 qgs = QgsSingleton()
@@ -1262,6 +1260,9 @@ class TestHighwayLayer(unittest.TestCase):
                 self.assertEqual(f.geometry().asPolyline(), [Point(20, 20), Point(30, 30)])
 
 class TestDebugWriter(unittest.TestCase):
+
+    def tearDown(self):
+        BaseLayer.delete_shp('test')
 
     def test_init(self):
         layer = HighwayLayer()

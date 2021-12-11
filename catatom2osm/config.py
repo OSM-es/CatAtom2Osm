@@ -31,6 +31,8 @@ def winenv():
 
 #locale.setlocale(locale.LC_ALL, '')
 language, encoding = locale.getdefaultlocale()
+language = language or 'es_ES'
+encoding = encoding or 'UTF-8'
 terminal = compat.Terminal(encoding)
 app_path = terminal.decode(os.path.dirname(__file__))
 localedir = os.path.join(os.path.dirname(app_path), 'locale', 'po')

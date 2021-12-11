@@ -5,8 +5,6 @@ standard_library.install_aliases()
 from builtins import bytes, str
 import unittest
 from io import StringIO, BytesIO
-import os
-os.environ['LANGUAGE'] = 'C'
 
 from catatom2osm import osm, osmxml
 from catatom2osm.osmxml import etree

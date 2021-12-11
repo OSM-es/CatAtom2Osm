@@ -5,10 +5,8 @@ standard_library.install_aliases()
 from builtins import str
 import mock
 import unittest
-import os
 import logging
 logging.disable(logging.WARNING)
-os.environ['LANGUAGE'] = 'C'
 
 from catatom2osm import __main__
 from test.tools import capture

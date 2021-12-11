@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import division, unicode_literals
-from builtins import str, bytes
+from builtins import str
 import io
 import mock
 import unittest
@@ -9,7 +9,6 @@ import locale
 from collections import Counter
 from datetime import datetime
 
-os.environ['LANGUAGE'] = 'C'
 from catatom2osm import config, osm, report
 
 

@@ -10,7 +10,7 @@ import logging
 from tqdm import tqdm
 
 from qgis.core import *
-from qgiscompat import *
+from catatom2osm.qgiscompat import *
 
 from catatom2osm import config, csvtools, hgwnames, osm, translate
 from catatom2osm.report import instance as report

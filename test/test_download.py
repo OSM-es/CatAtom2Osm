@@ -1,11 +1,7 @@
 from __future__ import division
 import unittest
 import mock
-import os
-import random
 
-os.environ['LANGUAGE'] = 'C'
-from catatom2osm import config
 from catatom2osm.download import get_response, wget, chunk_size
 
 

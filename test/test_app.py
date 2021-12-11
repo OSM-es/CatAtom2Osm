@@ -3,11 +3,9 @@ from builtins import range
 from past.builtins import reload
 import mock
 import unittest
-import os, sys
-from collections import Counter
+import os
 from optparse import Values
 from qgis.core import QgsVectorLayer
-os.environ['LANGUAGE'] = 'C'
 
 from catatom2osm import config, osm, app
 qgs = app.QgsSingleton()

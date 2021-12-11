@@ -6,7 +6,6 @@ import locale
 import six
 import sys
 
-
 # See http://lxml.de/tutorial.html for the source of the includes
 etreemsg = ""
 try:
@@ -39,6 +38,7 @@ def install_gettext(app_name, localedir):
 def set_es_time():
     try:
         language, encoding = locale.getdefaultlocale()
+        encoding = encoding or 'UTF-8'
         locale.setlocale(locale.LC_TIME, ('es', encoding))
     except locale.Error:
         locale.setlocale(locale.LC_TIME, 'esp')

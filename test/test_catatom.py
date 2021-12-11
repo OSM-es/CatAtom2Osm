@@ -304,8 +304,9 @@ class TestCatAtom(unittest.TestCase):
         m_zip.ZipFile.return_value = zf
         self.m_cat.get_path_from_zip.return_value = 'bar/gml_path'
         self.m_cat.get_gml_from_zip = get_func(catatom.Reader.get_gml_from_zip)
-        gml = self.m_cat.get_gml_from_zip(self.m_cat, 'gml_path', 'foo\zip_path', 
-            'group', 'ln')
+        gml = self.m_cat.get_gml_from_zip(
+            self.m_cat, 'gml_path', 'foo\zip_path', 'group', 'ln'
+        )
         m_zip.ZipFile.assert_called_once_with('foo\zip_path')
         self.m_cat.get_path_from_zip.assert_called_once_with(zf, 'gml_path')
         self.assertEqual(gml, m_layer.BaseLayer.return_value)

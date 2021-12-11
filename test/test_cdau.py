@@ -3,8 +3,6 @@ from __future__ import unicode_literals
 from builtins import str
 import unittest
 import mock
-import os
-os.environ['LANGUAGE'] = 'C'
 
 from catatom2osm import config, cdau, layer
 from catatom2osm.app import QgsSingleton

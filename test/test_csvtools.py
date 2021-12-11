@@ -5,8 +5,6 @@ import unittest
 from tempfile import mkstemp
 
 import io
-import os
-os.environ['LANGUAGE'] = 'C'
 
 from catatom2osm.csvtools import csv2dict, dict2csv
 from catatom2osm.config import eol, encoding, delimiter

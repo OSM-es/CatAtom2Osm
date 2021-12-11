@@ -1,7 +1,6 @@
 from __future__ import unicode_literals
 import unittest
 import os
-os.environ['LANGUAGE'] = 'C'
 
 from catatom2osm import config
 
