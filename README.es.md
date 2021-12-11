@@ -40,6 +40,7 @@ INSPIRE del Catastro Español.
 * \-l [prov], --list [prov]  Lista los municipios disponibles para el código provincial de dos dígitos
 * \--list-zones              Lista las etiquetas de las zonas del municipio
 * \-t, --tasks               Reparte las construcciones en archivos de tareas (predeterminada, implica -z)
+* \-c, --comment             Recupera los metadatos de las tareas
 * \-b, --building            Procesa los edificios a un archivo individual en lugar de tareas
 * \-d, --address             Procesa el conjunto de datos de direcciones
 * \-z, --zoning              Procesa el conjunto de datos de zonificación catastral

@@ -53,7 +53,7 @@ def run():
         help=terminal.encode(_("Splits constructions into tasks files "
         "(default, implies -z)")))
     parser.add_argument("-c", "--comment", dest="comment", action="store_true",
-        help=terminal.encode(_("Recovers the comments of the tasks")))
+        help=terminal.encode(_("Recovers the metadata of the tasks")))
     parser.add_argument("-b", "--building", dest="building",
         action="store_true", help=terminal.encode(_("Process buildings to a "
         "single file instead of tasks")))
@@ -119,4 +119,5 @@ def run():
                 log.error(_("Please, install QGIS"))
 
 if __name__ == "__main__":
-    run()
+    print(_("Directory for input and output files"))
+    #run()

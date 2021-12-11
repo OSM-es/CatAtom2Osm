@@ -33,7 +33,7 @@ def winenv():
 language, encoding = locale.getdefaultlocale()
 terminal = compat.Terminal(encoding)
 app_path = terminal.decode(os.path.dirname(__file__))
-localedir = os.path.join(app_path, 'locale', 'po')
+localedir = os.path.join(os.path.dirname(app_path), 'locale', 'po')
 platform = sys.platform
 winenv()
 

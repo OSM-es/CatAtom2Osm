@@ -414,7 +414,7 @@ class CatAtom2Osm(object):
                 fo.write(
                     config.eol.join(report.get_tasks_with_fixmes()) + config.eol)
                 log.info(
-                    _("Generated '%s'" + '. ' + _("Please, check it")), filename
+                    _("Generated '%s'") + '. ' + _("Please, check it"), filename
                 )
         if self.options.tasks or self.options.building:
             report.cons_end_stats()

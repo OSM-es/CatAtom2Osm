@@ -40,6 +40,7 @@ Cadastre.
 * \-l [prov], --list [prov]  List available municipalities given the two digits province code
 * \--list-zones              List zone labels in the municipality.
 * \-t, --tasks               Splits constructions into tasks files (default, implies -z)
+* \-c, --comment             Recovers the metadata of the tasks
 * \-b, --building            Process buildings to a single file instead of tasks
 * \-d, --address             Process the address dataset
 * \-z, --zoning              Process the cadastral zoning dataset.
