@@ -1,6 +1,9 @@
 Change log
 ==========
 
+**2021-12-12 (1.7.1)**
+* Windows Installer (#59).
+
 **2021-12-11 (1.7.0)**
 * Simplify install and use of docker image (#59, #66)
 

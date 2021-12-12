@@ -17,8 +17,7 @@ Docker https://www.docker.com/get-started
 Instalación
 -----------
 
-Se recomienda usar la herramienta mediante esta imagen de Docker 
-(https://hub.docker.com/r/egofer/catatom2osm).
+Ver INSTALL.es.md (https://OSM-es.github.io/CatAtom2Osm/es/install.html).
 
 Uso
 ---

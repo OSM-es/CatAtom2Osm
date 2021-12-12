@@ -1,6 +1,9 @@
 Registro de cambios
 ===================
 
+**12-12-2021 (1.7.1)**
+* Instalador para Windows (#59).
+
 **11-12-2021 (1.7.0)**
 * Simplifica instalación y uso de la imagen Docker  (#59, #66)
 
