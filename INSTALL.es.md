@@ -19,9 +19,8 @@ https://hub.docker.com/r/egofer/catatom2osm
 * Windows: https://github.com/OSM-es/CatAtom2Osm/raw/master/bin/catatom2osm.exe
 * Linux/Mac OS:
 
-```
-sudo wget https://github.com/OSM-es/CatAtom2Osm/raw/master/bin/catatom2osm.sh -O /usr/local/bin/catatom2osm && sudo chmod +x /usr/local/bin/catatom2osm
-```
+
+    sudo wget https://github.com/OSM-es/CatAtom2Osm/raw/master/bin/catatom2osm.sh -O /usr/local/bin/catatom2osm && sudo chmod +x /usr/local/bin/catatom2osm
 
 Después de este paso, en la terminal de comandos estará disponible el programa:
 
