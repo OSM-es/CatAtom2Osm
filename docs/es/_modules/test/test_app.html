@@ -15,7 +15,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>test.test_app &#8212; documentación de CatAtom2Osm - 1.7.0</title>
+    <title>test.test_app &#8212; documentación de CatAtom2Osm - 1.7.1</title>
     
     <link rel="stylesheet" href="../../_static/guzzle.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -23,7 +23,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.7.0',
+        VERSION:     '1.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -50,7 +50,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 1.7.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 1.7.1</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Código de módulo</a> &#187;</li> 
       </ul>
     </div>
@@ -117,14 +117,15 @@
 <span class="kn">from</span> <span class="nn">past.builtins</span> <span class="k">import</span> <span class="n">reload</span>
 <span class="kn">import</span> <span class="nn">mock</span>
 <span class="kn">import</span> <span class="nn">unittest</span>
-<span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">sys</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">Counter</span>
+<span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">optparse</span> <span class="k">import</span> <span class="n">Values</span>
 <span class="kn">from</span> <span class="nn">qgis.core</span> <span class="k">import</span> <span class="n">QgsVectorLayer</span>
-<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;LANGUAGE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;C&#39;</span>
 
 <span class="kn">from</span> <span class="nn">catatom2osm</span> <span class="k">import</span> <span class="n">config</span><span class="p">,</span> <span class="n">osm</span><span class="p">,</span> <span class="n">app</span>
+<span class="kn">from</span> <span class="nn">catatom2osm.compat</span> <span class="k">import</span> <span class="n">install_gettext</span>
 <span class="n">qgs</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">QgsSingleton</span><span class="p">()</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;LANGUAGE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;C&#39;</span>
+<span class="n">install_gettext</span><span class="p">(</span><span class="s1">&#39;catato2osm&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="get_func"><a class="viewcode-back" href="../../api/test.test_app.html#test.test_app.get_func">[documentos]</a><span class="k">def</span> <span class="nf">get_func</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
@@ -669,7 +670,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 1.7.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 1.7.1</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Código de módulo</a> &#187;</li> 
       </ul>
     </div>

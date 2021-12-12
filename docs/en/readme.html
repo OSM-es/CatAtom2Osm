@@ -15,7 +15,7 @@
   <link rel="stylesheet" type="text/css" href="_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>Read me &#8212; CatAtom2Osm 1.7.0 documentation</title>
+    <title>Read me &#8212; CatAtom2Osm 1.7.1 documentation</title>
     
     <link rel="stylesheet" href="_static/guzzle.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -23,7 +23,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1.7.0',
+        VERSION:     '1.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -57,7 +57,7 @@
         <li class="right" >
           <a href="index.html" title="Welcome to CatAtom2Osm’s documentation!"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">CatAtom2Osm 1.7.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">CatAtom2Osm 1.7.1 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="container-wrapper">
@@ -129,23 +129,11 @@
 <p><a class="reference external" href="https://wiki.openstreetmap.org/wiki/Spanish_Cadastre/Buildings_Import">https://wiki.openstreetmap.org/wiki/Spanish_Cadastre/Buildings_Import</a></p>
 <div class="section" id="requeriments">
 <h2>Requeriments<a class="headerlink" href="#requeriments" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li>fuzzywuzzy[speedup]</li>
-<li>psutil</li>
-<li>pyqgis</li>
-<li>requests</li>
-<li>GDAL</li>
-</ul>
-<p>Fuzzywuzzy is needed for street names conflation.
-The main requisites (pyqgis, GDAL) should be provided by QGIS using the
-installers available on <a class="reference external" href="http://qgis.org/">http://qgis.org/</a></p>
-<p>QGIS &gt;= 2.10.1, GDAL &gt;= 2 are required.</p>
+<p>Docker <a class="reference external" href="https://www.docker.com/get-started">https://www.docker.com/get-started</a></p>
 </div>
 <div class="section" id="install">
 <h2>Install<a class="headerlink" href="#install" title="Permalink to this headline">¶</a></h2>
-<p>We recomend to use this Docker image
-(<a class="reference external" href="https://hub.docker.com/r/egofer/catatom2osm">https://hub.docker.com/r/egofer/catatom2osm</a>).</p>
-<p>If you want to install without Docker see INSTALL.md (<a class="reference external" href="https://OSM-es.github.io/CatAtom2Osm/en/install.html">https://OSM-es.github.io/CatAtom2Osm/en/install.html</a>).</p>
+<p>See INSTALL.md (<a class="reference external" href="https://OSM-es.github.io/CatAtom2Osm/en/install.html">https://OSM-es.github.io/CatAtom2Osm/en/install.html</a>).</p>
 </div>
 <div class="section" id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
@@ -164,6 +152,7 @@ Cadastre.</p>
 <li>-l [prov], &#8211;list [prov]  List available municipalities given the two digits province code</li>
 <li>&#8211;list-zones              List zone labels in the municipality.</li>
 <li>-t, &#8211;tasks               Splits constructions into tasks files (default, implies -z)</li>
+<li>-c, &#8211;comment             Recovers the metadata of the tasks</li>
 <li>-b, &#8211;building            Process buildings to a single file instead of tasks</li>
 <li>-d, &#8211;address             Process the address dataset</li>
 <li>-z, &#8211;zoning              Process the cadastral zoning dataset.</li>
@@ -182,10 +171,10 @@ Cadastre.</p>
 <div>LANG=es_ES.UTF-8; catatom2osm</div></blockquote>
 <p>Forces to use Spanish.</p>
 <blockquote>
-<div>LANG=cat_ES.UTF-8; catatom2osm</div></blockquote>
+<div>LANG=ca_ES.UTF-8; catatom2osm</div></blockquote>
 <p>Forces to use Catalan.</p>
 <blockquote>
-<div>LANG=cat_ES.UTF-8; catatom2osm</div></blockquote>
+<div>LANG=gl_ES.UTF-8; catatom2osm</div></blockquote>
 <p>Forces to use Galician</p>
 </div>
 <div class="section" id="documentation">
@@ -228,7 +217,7 @@ Cadastre.</p>
         <li class="right" >
           <a href="index.html" title="Welcome to CatAtom2Osm’s documentation!"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">CatAtom2Osm 1.7.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">CatAtom2Osm 1.7.1 documentation</a> &#187;</li> 
       </ul>
     </div>
 <script type="text/javascript">

@@ -278,7 +278,7 @@ msgstr "Error al cargar el archivo CSV '%s'"
 
 #: catatom2osm/download.py:28
 msgid "Downloading"
-msgstr "Descargando '%s'"
+msgstr "Descargando"
 
 #: catatom2osm/layer.py:237
 msgid "Error when creating shapefile: '%s'"
