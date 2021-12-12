@@ -10,6 +10,9 @@ from collections import Counter
 from datetime import datetime
 
 from catatom2osm import config, osm, report
+from catatom2osm.compat import install_gettext
+os.environ['LANGUAGE'] = 'C'
+install_gettext('catato2osm', '')
 
 
 class TestReport(unittest.TestCase):

@@ -59,4 +59,3 @@ class TestWget(unittest.TestCase):
         self.assertEqual(file_mock.write.call_count, chunk_size)
         mock_pb.assert_called_once_with(total=0, unit='B', 
             unit_scale=True, unit_divisor=chunk_size, leave=False)
-

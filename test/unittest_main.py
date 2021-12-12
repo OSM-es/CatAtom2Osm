@@ -13,4 +13,3 @@ if __name__ == "__main__":
     from unittest.main import main, TestProgram#, USAGE_AS_MAIN
     #TestProgram.USAGE = USAGE_AS_MAIN
     main(module=None)
-

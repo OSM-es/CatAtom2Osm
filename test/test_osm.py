@@ -162,7 +162,7 @@ class TestOsmElement(OsmTestCase):
         self.assertTrue(e.is_new())
         e.id = -random.randint(0,1000)
         self.assertTrue(e.is_new())
-        e.id = random.randint(0,1000)
+        e.id = random.randint(1,1000)
         self.assertFalse(e.is_new())
 
     def test_attrs(self):

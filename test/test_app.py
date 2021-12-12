@@ -8,7 +8,10 @@ from optparse import Values
 from qgis.core import QgsVectorLayer
 
 from catatom2osm import config, osm, app
+from catatom2osm.compat import install_gettext
 qgs = app.QgsSingleton()
+os.environ['LANGUAGE'] = 'C'
+install_gettext('catato2osm', '')
 
 
 def get_func(f):
