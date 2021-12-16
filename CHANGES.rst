@@ -1,6 +1,9 @@
 Change log
 ==========
 
+**2021-12-15 (1.7.2)**
+* Fix error processing zoning of Madrid (#69)
+
 **2021-12-12 (1.7.1)**
 * Windows Installer (#59).
 

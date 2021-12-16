@@ -333,7 +333,6 @@ class CatAtom2Osm(object):
             self.urban_zoning.delete_invalid_geometries()
             self.urban_zoning.simplify()
             self.urban_zoning.set_tasks(self.cat.zip_code)
-            self.rustic_zoning.difference(self.urban_zoning)
 
     def output_zoning(self):
         self.urban_zoning.reproject()
@@ -341,10 +340,13 @@ class CatAtom2Osm(object):
         out_path = self.get_path('boundary.poly')
         self.rustic_zoning.export_poly(out_path)
         log.info(_("Generated '%s'"), out_path)
-        self.export_layer(self.urban_zoning, 'urban_zoning.geojson',
-                          'GeoJSON')
-        self.export_layer(self.rustic_zoning, 'rustic_zoning.geojson',
-                          'GeoJSON')
+        self.rustic_zoning.difference(self.urban_zoning)
+        self.export_layer(
+            self.urban_zoning, 'urban_zoning.geojson', 'GeoJSON'
+        )
+        self.export_layer(
+            self.rustic_zoning, 'rustic_zoning.geojson', 'GeoJSON'
+        )
         self.rustic_zoning.append(self.urban_zoning)
         self.export_layer(self.rustic_zoning, 'zoning.geojson', 'GeoJSON')
         if hasattr(self, 'urban_zoning'):

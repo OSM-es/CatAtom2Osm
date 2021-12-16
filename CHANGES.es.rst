@@ -1,6 +1,9 @@
 Registro de cambios
 ===================
 
+**15-12-2021 (1.7.2)**
+* Corrige error con zonificación de Madrid (#69).
+
 **12-12-2021 (1.7.1)**
 * Instalador para Windows (#59).
 
