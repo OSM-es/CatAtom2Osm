@@ -1,6 +1,9 @@
 Registro de cambios
 ===================
 
+**16-12-2021 (1.8.1)**
+* Añade aviso para posibles zonas con geometría incorrecta.
+
 **16-12-2021 (1.8.0)**
 * Admite varios municipios o zonas.
 

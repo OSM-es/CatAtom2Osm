@@ -209,9 +209,15 @@ class Geometry(object):
     @staticmethod
     def merge_adjacent_features(group):
         """Combine all geometries in group of features"""
-        geom = group[0].geometry()
-        for p in group[1:]:
-            geom = geom.combine(p.geometry())
+        geom = False
+        for p in group:
+            g = p.geometry()
+            if g.isGeosValid():
+                geom = geom.combine(g) if geom else g
+            else:
+                msg = _("The geometry of zone '%s' is not valid") % p['label']
+                log.warning(msg)
+                report.warnings.append(msg)
         return geom
 
     @staticmethod

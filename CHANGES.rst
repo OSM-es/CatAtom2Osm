@@ -1,6 +1,9 @@
 Change log
 ==========
 
+**2021-12-16 (1.8.1)**
+* Adds warning for possible zones with bad geometry.
+
 **2021-12-16 (1.8.0)**
 * Supports multiple municipalities or zones.
 
