@@ -24,7 +24,7 @@ Uso
 
 Para ejecutar la aplicación:
 
-    catatom2osm <ruta>
+    catatom2osm <rutas>
 
 El argumento ruta indica el directorio para los ficheros de entrada y salida.
 El nombre del directorio debe comenzar con 5 dígitos (GGMMM) correspondientes 
@@ -45,7 +45,7 @@ INSPIRE del Catastro Español.
 * \-z, --zoning              Procesa el conjunto de datos de zonificación catastral
 * \-p, --parcel              Procesa el conjunto de datos de parcelas catastrales
 * \-a, --all                 Procesa todos los conjuntos de datos (equivalente a -bdptz)
-* \-o label, --zone label    Procesa una zona dada su etiqueta
+* \-o labels, --zone labels  Procesa zonas dadas sus etiquetas
 * \-m, --manual              Desactiva la combinación con datos OSM
 * \-w, --download            Solo descargar
 * \--log=log_level           Selecciona el nivel de registro entre DEBUG, INFO, WARNING, ERROR o CRITICAL.

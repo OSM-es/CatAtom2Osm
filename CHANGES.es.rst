@@ -1,6 +1,9 @@
 Registro de cambios
 ===================
 
+**16-12-2021 (1.8.0)**
+* Admite varios municipios o zonas.
+
 **15-12-2021 (1.7.2)**
 * Corrige error con zonificación de Madrid (#69).
 

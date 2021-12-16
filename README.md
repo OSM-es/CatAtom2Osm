@@ -23,7 +23,7 @@ Usage
 
 To run the application:
 
-    catatom2osm <path>
+    catatom2osm <paths>
 
 The argument path states the directory for input and output files. 
 The directory name shall start with 5 digits (GGMMM) matching the Cadastral 
@@ -44,7 +44,7 @@ Cadastre.
 * \-z, --zoning              Process the cadastral zoning dataset.
 * \-p, --parcel              Process the cadastral parcel dataset
 * \-a, --all                 Process all datasets (equivalent to -bdptz)
-* \-o label, --zone label    Process a zone given its label
+* \-o labels, --zone labels  Process zones given its labels
 * \-m, --manual              Dissable conflation with OSM data
 * \-w, --download            Download only
 * \--log=log_level           Select the log level between DEBUG, INFO, WARNING, ERROR or CRITICAL

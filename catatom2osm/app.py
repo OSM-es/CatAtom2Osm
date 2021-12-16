@@ -62,10 +62,9 @@ class CatAtom2Osm(object):
         self.options = options
         self.cat = catatom.Reader(a_path)
         self.path = self.cat.path
-        self.label = options.zone
+        self.label = getattr(options, 'label', None)
         report.mun_code = self.cat.zip_code
         report.sys_info = True
-        self.qgs = QgsSingleton()
         if report.sys_info:
             report.qgs_version = qgis_utils.QGIS_VERSION
             report.gdal_version = gdal.__version__
@@ -92,6 +91,12 @@ class CatAtom2Osm(object):
             )
             self.delete_current_osm_files()
         self.is_new = not os.path.exists(self.highway_names_path)
+
+    @staticmethod
+    def create_and_run(a_path, options):
+        app = CatAtom2Osm(a_path, options)
+        app.run()
+        app.exit()
 
     def run(self):
         """Launches the app"""
@@ -435,8 +440,6 @@ class CatAtom2Osm(object):
         for propname in list(self.__dict__.keys()):
             if isinstance(getattr(self, propname), QgsVectorLayer):
                 delattr(self, propname)
-        if hasattr(self, 'qgs'):
-            self.qgs.exitQgis()
 
     def export_layer(self, layer, filename, driver_name='ESRI Shapefile',
                      target_crs_id=None):

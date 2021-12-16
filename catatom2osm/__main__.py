@@ -27,15 +27,23 @@ def process(options):
         list_municipalities('{:>02}'.format(options.list))
     elif options.download:
         from catatom2osm.catatom import Reader
-        cat = Reader(a_path)
-        cat.download('address')
-        cat.download('cadastralzoning')
-        cat.download('building')
+        for a_path in options.path:
+            cat = Reader(a_path)
+            cat.download('address')
+            cat.download('cadastralzoning')
+            cat.download('building')
     else:
-        from catatom2osm.app import CatAtom2Osm
-        app = CatAtom2Osm(a_path, options)
-        app.run()
-        app.exit()
+        from catatom2osm.app import CatAtom2Osm, QgsSingleton
+        qgs = QgsSingleton()
+        if options.zone:
+            a_path = options.path[0]
+            for label in options.zone:
+                options.label = label
+                CatAtom2Osm.create_and_run(a_path, options)
+        else:
+            for a_path in options.path:
+                CatAtom2Osm.create_and_run(a_path, options)
+        qgs.exitQgis()
 
 def run():
     parser = ArgumentParser(usage=usage)
@@ -59,9 +67,9 @@ def run():
         "single file instead of tasks")))
     parser.add_argument("-z", "--zoning", dest="zoning", action="store_true",
         help=terminal.encode(_("Process the cadastral zoning dataset")))
-    parser.add_argument("-o", "--zone", dest="zone", metavar="label", nargs=1,
-        default=False, type=str, help=terminal.encode(_("Process a zone given "
-        "its label")))
+    parser.add_argument("-o", "--zone", dest="zone", metavar="label", nargs='+',
+        default=[], type=str, help=terminal.encode(_("Process zones given "
+        "its labels")))
     parser.add_argument("-d", "--address", dest="address", action="store_true",
         help=terminal.encode(_("Process the address dataset (default)")))
     parser.add_argument("-p", "--parcel", dest="parcel", action="store_true",
@@ -78,8 +86,10 @@ def run():
         "between DEBUG, INFO, WARNING, ERROR or CRITICAL.")))
     options = parser.parse_args()
     report.options = ' '.join(sys.argv[1:])
-    options.zone = options.zone[0] if options.zone else None
-    if options.zone:
+    if len(options.zone) > 0:
+        if len(options.path) == 0:
+            options.path = [options.zone[-1]]
+            options.zone = options.zone[:-1]
         if not options.building and not options.address:
             options.address = True
         options.building = True
@@ -103,8 +113,10 @@ def run():
     log.setLevel(log_level)
     log.debug(_("Using Python %s.%s.%s"), *sys.version_info[:3])
     log.debug(compat.etreemsg)
-    if len(options.path) > 1:
-        log.error(_("Too many arguments, supply only a directory path."))
+    #if len(options.path) > 1:
+    #    log.error(_("Too many arguments, supply only a directory path."))
+    if len(options.zone) > 1 and len(options.path) > 1:
+        log.error(_("Can't use multiple zones with multiple municipalities"))
     elif len(options.path) == 0 and not options.list:
         parser.print_help()
     elif log.getEffectiveLevel() == logging.DEBUG:

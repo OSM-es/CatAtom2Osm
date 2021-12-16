@@ -15,7 +15,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.app &#8212; CatAtom2Osm 1.7.1 documentation</title>
+    <title>catatom2osm.app &#8212; CatAtom2Osm 1.8.0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/guzzle.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -23,7 +23,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.7.1',
+        VERSION:     '1.8.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -49,7 +49,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 1.7.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 1.8.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>
@@ -175,10 +175,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="n">options</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cat</span> <span class="o">=</span> <span class="n">catatom</span><span class="o">.</span><span class="n">Reader</span><span class="p">(</span><span class="n">a_path</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">path</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">zone</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="s1">&#39;label&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="n">report</span><span class="o">.</span><span class="n">mun_code</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">zip_code</span>
         <span class="n">report</span><span class="o">.</span><span class="n">sys_info</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">qgs</span> <span class="o">=</span> <span class="n">QgsSingleton</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">report</span><span class="o">.</span><span class="n">sys_info</span><span class="p">:</span>
             <span class="n">report</span><span class="o">.</span><span class="n">qgs_version</span> <span class="o">=</span> <span class="n">qgis_utils</span><span class="o">.</span><span class="n">QGIS_VERSION</span>
             <span class="n">report</span><span class="o">.</span><span class="n">gdal_version</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">__version__</span>
@@ -205,6 +204,12 @@
             <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">delete_current_osm_files</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">is_new</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">highway_names_path</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="CatAtom2Osm.create_and_run"><a class="viewcode-back" href="../../api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.create_and_run">[docs]</a>    <span class="k">def</span> <span class="nf">create_and_run</span><span class="p">(</span><span class="n">a_path</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
+        <span class="n">app</span> <span class="o">=</span> <span class="n">CatAtom2Osm</span><span class="p">(</span><span class="n">a_path</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+        <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+        <span class="n">app</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="CatAtom2Osm.run"><a class="viewcode-back" href="../../api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Launches the app&quot;&quot;&quot;</span>
@@ -445,8 +450,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">urban_zoning</span><span class="o">.</span><span class="n">topology</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">urban_zoning</span><span class="o">.</span><span class="n">delete_invalid_geometries</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">urban_zoning</span><span class="o">.</span><span class="n">simplify</span><span class="p">()</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">urban_zoning</span><span class="o">.</span><span class="n">set_tasks</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">zip_code</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">rustic_zoning</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">urban_zoning</span><span class="p">)</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">urban_zoning</span><span class="o">.</span><span class="n">set_tasks</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">zip_code</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="CatAtom2Osm.output_zoning"><a class="viewcode-back" href="../../api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.output_zoning">[docs]</a>    <span class="k">def</span> <span class="nf">output_zoning</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">urban_zoning</span><span class="o">.</span><span class="n">reproject</span><span class="p">()</span>
@@ -454,10 +458,13 @@
         <span class="n">out_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;boundary.poly&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rustic_zoning</span><span class="o">.</span><span class="n">export_poly</span><span class="p">(</span><span class="n">out_path</span><span class="p">)</span>
         <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Generated &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">),</span> <span class="n">out_path</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">export_layer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">urban_zoning</span><span class="p">,</span> <span class="s1">&#39;urban_zoning.geojson&#39;</span><span class="p">,</span>
-                          <span class="s1">&#39;GeoJSON&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">export_layer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rustic_zoning</span><span class="p">,</span> <span class="s1">&#39;rustic_zoning.geojson&#39;</span><span class="p">,</span>
-                          <span class="s1">&#39;GeoJSON&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rustic_zoning</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">urban_zoning</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_layer</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">urban_zoning</span><span class="p">,</span> <span class="s1">&#39;urban_zoning.geojson&#39;</span><span class="p">,</span> <span class="s1">&#39;GeoJSON&#39;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_layer</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rustic_zoning</span><span class="p">,</span> <span class="s1">&#39;rustic_zoning.geojson&#39;</span><span class="p">,</span> <span class="s1">&#39;GeoJSON&#39;</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rustic_zoning</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">urban_zoning</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">export_layer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rustic_zoning</span><span class="p">,</span> <span class="s1">&#39;zoning.geojson&#39;</span><span class="p">,</span> <span class="s1">&#39;GeoJSON&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;urban_zoning&#39;</span><span class="p">):</span>
@@ -545,9 +552,7 @@
         <span class="sd">&quot;&quot;&quot;Ends properly&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">propname</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">propname</span><span class="p">),</span> <span class="n">QgsVectorLayer</span><span class="p">):</span>
-                <span class="nb">delattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">propname</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;qgs&#39;</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">qgs</span><span class="o">.</span><span class="n">exitQgis</span><span class="p">()</span></div>
+                <span class="nb">delattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">propname</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="CatAtom2Osm.export_layer"><a class="viewcode-back" href="../../api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.export_layer">[docs]</a>    <span class="k">def</span> <span class="nf">export_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layer</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">driver_name</span><span class="o">=</span><span class="s1">&#39;ESRI Shapefile&#39;</span><span class="p">,</span>
                      <span class="n">target_crs_id</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -884,7 +889,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 1.7.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 1.8.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>

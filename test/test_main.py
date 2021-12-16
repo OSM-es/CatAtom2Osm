@@ -3,13 +3,18 @@ from __future__ import unicode_literals
 from future import standard_library
 standard_library.install_aliases()
 from builtins import str
-import mock
-import unittest
+from argparse import Namespace
 import logging
+import mock
+import os
+import unittest
 logging.disable(logging.WARNING)
 
 from catatom2osm import __main__
+from catatom2osm.compat import install_gettext
 from test.tools import capture
+os.environ['LANGUAGE'] = 'C'
+install_gettext('catato2osm', '')
 
 
 def raiseIOError(*args, **kwargs):
@@ -26,15 +31,19 @@ class TestMain(unittest.TestCase):
         with capture(__main__.run) as output:
             self.assertIn("usage: catatom2osm", str(output))
 
-    @mock.patch('catatom2osm.__main__.sys.argv', ['catatom2osm.py', 'foo', 'bar'])
+    @mock.patch(
+        'catatom2osm.__main__.sys.argv',
+        ['catatom2osm.py', 'foo', 'bar', '-o', '1', '2']
+    )
     @mock.patch('catatom2osm.__main__.log.error')
     def test_too_many_args(self, mocklog):
         __main__.run()
         output = mocklog.call_args_list[0][0][0]
-        self.assertIn("Too many arguments", output)
+        self.assertIn("Can't use multiple zones", output)
 
     @mock.patch('catatom2osm.__main__.sys.argv', ['catatom2osm.py', 'foobar'])
-    @mock.patch('catatom2osm.app.CatAtom2Osm')
+    @mock.patch('catatom2osm.app.QgsSingleton', mock.MagicMock)
+    @mock.patch('catatom2osm.app.CatAtom2Osm.create_and_run')
     def test_default(self, mockcat):
         __main__.run()
         self.assertTrue(mockcat.called)
@@ -46,7 +55,8 @@ class TestMain(unittest.TestCase):
             self.assertEqual(getattr(options, k), v)
 
     @mock.patch('catatom2osm.__main__.sys.argv', ['catatom2osm.py', 'foobar', '-a'])
-    @mock.patch('catatom2osm.app.CatAtom2Osm')
+    @mock.patch('catatom2osm.app.QgsSingleton', mock.MagicMock)
+    @mock.patch('catatom2osm.app.CatAtom2Osm.create_and_run')
     def test_all(self, mockcat):
         __main__.run()
         self.assertTrue(mockcat.called)
@@ -57,7 +67,8 @@ class TestMain(unittest.TestCase):
             self.assertEqual(getattr(options, k), v)
 
     @mock.patch('catatom2osm.__main__.sys.argv', ['catatom2osm.py', 'foobar', '-b'])
-    @mock.patch('catatom2osm.app.CatAtom2Osm')
+    @mock.patch('catatom2osm.app.QgsSingleton', mock.MagicMock)
+    @mock.patch('catatom2osm.app.CatAtom2Osm.create_and_run')
     def test_building(self, mockcat):
         __main__.run()
         self.assertTrue(mockcat.called)
@@ -95,17 +106,21 @@ class TestMain(unittest.TestCase):
         self.assertTrue(mocklog.called)
 
     @mock.patch('catatom2osm.__main__.sys.argv', ['catatom2osm.py', 'foobar'])
-    @mock.patch('catatom2osm.app.CatAtom2Osm', raiseIOError)
+    @mock.patch('catatom2osm.app.QgsSingleton', mock.MagicMock)
+    @mock.patch('catatom2osm.app.CatAtom2Osm')
     @mock.patch('catatom2osm.__main__.log.error')
-    def test_IOError(self, mocklog):
+    def test_IOError(self, mocklog, mockcat):
+        mockcat.create_and_run = raiseIOError
         __main__.run()
         output = mocklog.call_args_list[0][0][0]
         self.assertEqual(output, 'bartaz')
 
     @mock.patch('catatom2osm.__main__.sys.argv', ['catatom2osm.py', 'foobar'])
-    @mock.patch('catatom2osm.app.CatAtom2Osm', raiseImportError)
+    @mock.patch('catatom2osm.app.QgsSingleton', mock.MagicMock)
+    @mock.patch('catatom2osm.app.CatAtom2Osm')
     @mock.patch('catatom2osm.__main__.log.error')
-    def test_ImportError(self, mocklog):
+    def test_ImportError(self, mocklog, mockcat):
+        mockcat.create_and_run = raiseImportError
         __main__.run()
         output1 = mocklog.call_args_list[0][0][0]
         output2 = mocklog.call_args_list[1][0][0]
@@ -113,9 +128,11 @@ class TestMain(unittest.TestCase):
         self.assertIn('install QGIS', output2)
 
     @mock.patch('catatom2osm.__main__.sys.argv', ['catatom2osm.py', 'foobar', '--log=DEBUG'])
-    @mock.patch('catatom2osm.app.CatAtom2Osm', raiseImportError)
+    @mock.patch('catatom2osm.app.QgsSingleton', mock.MagicMock)
+    @mock.patch('catatom2osm.app.CatAtom2Osm')
     @mock.patch('catatom2osm.__main__.log')
-    def test_debug(self, mocklog):
+    def test_debug(self, mocklog, mockcat):
+        mockcat.create_and_run = raiseImportError
         mocklog.getEffectiveLevel.return_value = logging.DEBUG
         with self.assertRaises(ImportError):
             __main__.run()
@@ -126,7 +143,8 @@ class TestMain(unittest.TestCase):
         'catatom2osm.__main__.sys.argv',
         ['catatom2osm.py', 'foobar', '-o', '123', '-t', '-z'],
     )
-    @mock.patch('catatom2osm.app.CatAtom2Osm')
+    @mock.patch('catatom2osm.app.QgsSingleton', mock.MagicMock)
+    @mock.patch('catatom2osm.app.CatAtom2Osm.create_and_run')
     def test_zone(self, mockcat):
         __main__.run()
         self.assertTrue(mockcat.called)
@@ -135,7 +153,67 @@ class TestMain(unittest.TestCase):
         d = {
             'building': True, 'all': False, 'tasks': False, 'log_level': 'INFO',
             'parcel': False, 'list': False, 'zoning': False, 'address': True,
-            'zone': '123',
+            'zone': ['123'],
         }
         for (k, v) in list(d.items()):
             self.assertEqual(getattr(options, k), v)
+
+    @mock.patch(
+        'catatom2osm.__main__.sys.argv',
+        ['catatom2osm.py', '11111', '22222', '33333'],
+    )
+    @mock.patch('catatom2osm.app.QgsSingleton', mock.MagicMock)
+    @mock.patch('catatom2osm.app.CatAtom2Osm.create_and_run')
+    def test_multi(self, mockcat):
+        options = Namespace(
+            zone=[], all=False, tasks=True, zoning=True, building=False,
+            address=True, comment=False, download=False, list=False,
+            list_zones=False, log_level='INFO', manual=False, parcel=False,
+            path=['11111', '22222', '33333'],
+        )
+        __main__.run()
+        mockcat.assert_has_calls([
+            mock.call('11111', options),
+            mock.call('22222', options),
+            mock.call('33333', options),
+        ])
+
+    @mock.patch(
+        'catatom2osm.__main__.sys.argv',
+        ['catatom2osm.py', '11111', '-o', '1', '2', '3'],
+    )
+    @mock.patch('catatom2osm.app.QgsSingleton', mock.MagicMock)
+    @mock.patch('catatom2osm.app.CatAtom2Osm.create_and_run')
+    def test_zones(self, mockcat):
+        options = Namespace(
+            zone=['1', '2', '3'], all=False, tasks=False, zoning=False,
+            building=True, address=True, comment=False, download=False,
+            list=False, list_zones=False, log_level='INFO', manual=False,
+            parcel=False, path=['11111'], label='3',
+        )
+        __main__.run()
+        mockcat.assert_has_calls([
+            mock.call('11111', options),
+            mock.call('11111', options),
+            mock.call('11111', options),
+        ])
+
+    @mock.patch(
+        'catatom2osm.__main__.sys.argv',
+        ['catatom2osm.py', '-o', '1', '2', '3', '11111'],
+    )
+    @mock.patch('catatom2osm.app.QgsSingleton', mock.MagicMock)
+    @mock.patch('catatom2osm.app.CatAtom2Osm.create_and_run')
+    def test_zones2(self, mockcat):
+        options = Namespace(
+            zone=['1', '2', '3'], all=False, tasks=False, zoning=False,
+            building=True, address=True, comment=False, download=False,
+            list=False, list_zones=False, log_level='INFO', manual=False,
+            parcel=False, path=['11111'], label='3',
+        )
+        __main__.run()
+        mockcat.assert_has_calls([
+            mock.call('11111', options),
+            mock.call('11111', options),
+            mock.call('11111', options),
+        ])

@@ -1,6 +1,9 @@
 Change log
 ==========
 
+**2021-12-16 (1.8.0)**
+* Supports multiple municipalities or zones.
+
 **2021-12-15 (1.7.2)**
 * Fix error processing zoning of Madrid (#69)
 

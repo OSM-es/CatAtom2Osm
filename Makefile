@@ -53,16 +53,10 @@ html:
 
 .PHONY: test
 test:
-ifeq (${OS},$(filter $(OS),Sierra Darwin))
-	@source $(shell pwd)/pyqgismac.sh
-endif
 	$(UNITTEST) discover
 
 .PHONY: coverage
 coverage:
-ifeq (${OS},$(filter $(OS),Sierra Darwin))
-	@source $(shell pwd)/pyqgismac.sh
-endif
 	$(COVERAGE) run --source=. test/unittest_main.py discover
 	$(COVERAGE) report
 	$(COVERAGE) html

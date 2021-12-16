@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: CatAtom2Osm\n"
-"POT-Creation-Date: 2021-12-11 18:35+UTC\n"
+"POT-Creation-Date: 2021-12-16 13:28+UTC\n"
 "PO-Revision-Date: 2017-05-28 19:23+WEST\n"
 "Last-Translator: Javier Sánchez <javiersanp@gmail.com>\n"
 "Language: es\n"
@@ -39,163 +39,163 @@ msgstr ""
 "del \n"
 "Catastro Español."
 
-#: catatom2osm/__main__.py:43 catatom2osm/__main__.py:122
+#: catatom2osm/__main__.py:51 catatom2osm/__main__.py:134
 msgid "Directory for input and output files"
 msgstr "Directorio para los archivos de entrada y salida."
 
-#: catatom2osm/__main__.py:45
+#: catatom2osm/__main__.py:53
 msgid "Show program's version number and exit"
 msgstr "Muestra la versión del programa y sale"
 
-#: catatom2osm/__main__.py:48
+#: catatom2osm/__main__.py:56
 msgid "List available municipalities given the two digits province code"
 msgstr ""
 "Lista los municipios disponibles para el código provincial de dos dígitos"
 
-#: catatom2osm/__main__.py:51
+#: catatom2osm/__main__.py:59
 msgid "List zone labels in the municipality"
 msgstr "Lista las etiquetas de las zonas del municipio"
 
-#: catatom2osm/__main__.py:53
+#: catatom2osm/__main__.py:61
 msgid "Splits constructions into tasks files (default, implies -z)"
 msgstr ""
 "Reparte las construcciones en archivos de tareas (predeterminada, implica -z)"
 
-#: catatom2osm/__main__.py:56
+#: catatom2osm/__main__.py:64
 msgid "Recovers the metadata of the tasks"
 msgstr "Recupera los metadatos de las tareas"
 
-#: catatom2osm/__main__.py:58
+#: catatom2osm/__main__.py:66
 msgid "Process buildings to a single file instead of tasks"
 msgstr "Procesa los edificios a un archivo individual en lugar de tareas"
 
-#: catatom2osm/__main__.py:61
+#: catatom2osm/__main__.py:69
 msgid "Process the cadastral zoning dataset"
 msgstr "Procesa el conjunto de datos de zonificación catastral"
 
-#: catatom2osm/__main__.py:63
-msgid "Process a zone given its label"
-msgstr "Procesa la zona con la etiqueta indicada"
+#: catatom2osm/__main__.py:71
+msgid "Process zones given its labels"
+msgstr "Procesa zonas dadas sus etiquetas"
 
-#: catatom2osm/__main__.py:66
+#: catatom2osm/__main__.py:74
 msgid "Process the address dataset (default)"
 msgstr "Procesa el conjunto de datos de direcciones (predeterminada)"
 
-#: catatom2osm/__main__.py:68
+#: catatom2osm/__main__.py:76
 msgid "Process the cadastral parcel dataset"
 msgstr "Procesa el conjunto de datos de parcelas catastrales"
 
-#: catatom2osm/__main__.py:70
+#: catatom2osm/__main__.py:78
 msgid "Process all datasets (equivalent to -bdptz)"
 msgstr "Procesa todos los conjuntos de datos (equivalente a -bdptz)"
 
-#: catatom2osm/__main__.py:72
+#: catatom2osm/__main__.py:80
 msgid "Dissable conflation with OSM data"
 msgstr "Desactiva la combinación con datos de OSM"
 
-#: catatom2osm/__main__.py:74
+#: catatom2osm/__main__.py:82
 msgid "Download only"
 msgstr "Solo descargar"
 
-#: catatom2osm/__main__.py:77
+#: catatom2osm/__main__.py:85
 msgid "Select the log level between DEBUG, INFO, WARNING, ERROR or CRITICAL."
 msgstr ""
 "Selecciona el nivel de registro entre DEBUG, INFO, WARNING, ERROR o CRITICAL."
 
-#: catatom2osm/__main__.py:104
+#: catatom2osm/__main__.py:114
 msgid "Using Python %s.%s.%s"
 msgstr "Usando Python %s.%s.%s"
 
-#: catatom2osm/__main__.py:107
-msgid "Too many arguments, supply only a directory path."
-msgstr "Demasiados argumentos, proporcione sólo la ruta de un directorio."
-
 #: catatom2osm/__main__.py:119
+msgid "Can't use multiple zones with multiple municipalities"
+msgstr "No se pueden usar varias zonas para varios municipios"
+
+#: catatom2osm/__main__.py:131
 msgid "Please, install QGIS"
 msgstr "Por favor, instala QGIS"
 
-#: catatom2osm/app.py:72
+#: catatom2osm/app.py:71
 msgid "Initialized QGIS %s API"
 msgstr "Inicializada la API de QGIS %s"
 
-#: catatom2osm/app.py:73
+#: catatom2osm/app.py:72
 msgid "Using GDAL %s"
 msgstr "Usando GDAL %s"
 
-#: catatom2osm/app.py:75
+#: catatom2osm/app.py:74
 msgid "Required QGIS version %s or greater"
 msgstr "Se requiere QGIS versión %s o superior"
 
-#: catatom2osm/app.py:81
+#: catatom2osm/app.py:80
 msgid "Required GDAL version %s or greater"
 msgstr "Se requiere GDAL versión %s o superior"
 
-#: catatom2osm/app.py:104
+#: catatom2osm/app.py:109
 msgid "Start processing '%s'"
 msgstr "Comienza el procesado de '%s'"
 
-#: catatom2osm/app.py:173 catatom2osm/app.py:410
+#: catatom2osm/app.py:178 catatom2osm/app.py:417
 msgid "Check %d fixme tags"
 msgstr "Revisa %d etiquetas fixme"
 
-#: catatom2osm/app.py:316
+#: catatom2osm/app.py:321
 msgid "Generated %d rustic and %d urban tasks files"
 msgstr "Generados %d archivos de tareas de rústica y %d de urbana"
 
-#: catatom2osm/app.py:319
+#: catatom2osm/app.py:324
 msgid "There are %d buildings without zone, check tasks/missing.osm"
 msgstr "Existen %d edificios sin zona, compruebe tasks/missing.osm"
 
-#: catatom2osm/app.py:343 catatom2osm/app.py:417 catatom2osm/app.py:425
-#: catatom2osm/app.py:452
+#: catatom2osm/app.py:347 catatom2osm/app.py:424 catatom2osm/app.py:432
+#: catatom2osm/app.py:457
 msgid "Generated '%s'"
 msgstr "Generado '%s'"
 
-#: catatom2osm/app.py:417
+#: catatom2osm/app.py:424
 msgid "Please, check it"
 msgstr "Por favor, compruébelo"
 
-#: catatom2osm/app.py:425
+#: catatom2osm/app.py:432
 msgid "Please, check it and run again"
 msgstr "Por favor, compruébelo y ejecute de nuevo"
 
-#: catatom2osm/app.py:429
+#: catatom2osm/app.py:436
 msgid "Finished!"
 msgstr "¡Terminado!"
 
-#: catatom2osm/app.py:454
+#: catatom2osm/app.py:459
 msgid "Failed to write layer: '%s'"
 msgstr "Error al escribir la capa: '%s'"
 
-#: catatom2osm/app.py:474 catatom2osm/catatom.py:82 catatom2osm/cdau.py:129
+#: catatom2osm/app.py:479 catatom2osm/catatom.py:82 catatom2osm/cdau.py:129
 msgid "Downloading '%s'"
 msgstr "Descargando '%s'"
 
-#: catatom2osm/app.py:486
+#: catatom2osm/app.py:491
 msgid "No OSM data were obtained from '%s'"
 msgstr "No se obtuvieron datos OSM de '%s'"
 
-#: catatom2osm/app.py:490
+#: catatom2osm/app.py:495
 msgid "Read '%s': %d nodes, %d ways, %d relations"
 msgstr "Leído '%s': %d nodos, %d vías, %d relaciones"
 
-#: catatom2osm/app.py:515
+#: catatom2osm/app.py:520
 msgid "Generated '%s': %d nodes, %d ways, %d relations"
 msgstr "Generado '%s': %d nodos, %d vías, %d relaciones"
 
-#: catatom2osm/app.py:561
+#: catatom2osm/app.py:566
 msgid "Could not resolve joined tables for the '%s' layer"
 msgstr "No se pudieron resolver las tablas combinadas para la capa '%s'"
 
-#: catatom2osm/app.py:588
+#: catatom2osm/app.py:593
 msgid "Deleted %d addresses refused by street name"
 msgstr "Eliminadas %d direcciones rechazadas por nombre de vial"
 
-#: catatom2osm/app.py:659
+#: catatom2osm/app.py:664
 msgid "Refused %d 'parcel' addresses not unique for it building"
 msgstr "Rechazadas %d direcciones tipo parcela no únicas para su edificio"
 
-#: catatom2osm/app.py:733
+#: catatom2osm/app.py:738
 msgid "There are %d address without house number in the OSM data"
 msgstr "Existen %d direcciones sin número de portal en OSM"
 

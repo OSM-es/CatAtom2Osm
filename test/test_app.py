@@ -52,12 +52,10 @@ class TestCatAtom2Osm(unittest.TestCase):
         self.m_app.is_new = False
         self.m_app.get_path = lambda *args: self.m_app.path + '/' + '/'.join(args)
 
-    @mock.patch('catatom2osm.app.QgsSingleton')
     @mock.patch('catatom2osm.catatom.Reader')
     @mock.patch('catatom2osm.app.report')
     @mock.patch('catatom2osm.app.os')
-    def test_init(self, m_os, m_report, m_cat, m_qgs):
-        m_qgs.return_value = 'foo'
+    def test_init(self, m_os, m_report, m_cat):
         m_cat.return_value.path = 'foo'
         m_os.path.exists.return_value = False
         self.m_app.init = get_func(app.CatAtom2Osm.__init__)
@@ -65,7 +63,6 @@ class TestCatAtom2Osm(unittest.TestCase):
         m_cat.assert_called_once_with('xxx/12345')
         self.assertEqual(self.m_app.path, m_cat().path)
         self.assertEqual(m_report.mun_code, m_cat().zip_code)
-        self.assertEqual(self.m_app.qgs, 'foo')
         m_os.makedirs.assert_called_once_with('foo/tasks')
 
     @mock.patch('catatom2osm.app.gdal')
@@ -305,7 +302,6 @@ class TestCatAtom2Osm(unittest.TestCase):
         self.m_app.exit(self.m_app)
         self.assertFalse(hasattr(self.m_app, 'test1'))
         self.assertFalse(hasattr(self.m_app, 'test2'))
-        self.m_app.qgs.exitQgis.assert_called_once_with()
         del self.m_app.qgs
         self.m_app.exit(self.m_app)
 
