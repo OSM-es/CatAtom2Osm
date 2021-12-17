@@ -1,6 +1,9 @@
 Registro de cambios
 ===================
 
+**17-12-2021 (1.8.2)**
+* Actualiza documentación de instalación.
+
 **16-12-2021 (1.8.1)**
 * Añade aviso para posibles zonas con geometría incorrecta.
 

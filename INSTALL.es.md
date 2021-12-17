@@ -20,12 +20,15 @@ https://hub.docker.com/r/egofer/catatom2osm
 * Linux/Mac OS:
 
 
-    sudo wget https://github.com/OSM-es/CatAtom2Osm/raw/master/bin/catatom2osm.sh -O /usr/local/bin/catatom2osm && sudo chmod +x /usr/local/bin/catatom2osm
+    sudo curl https://github.com/OSM-es/CatAtom2Osm/raw/master/bin/catatom2osm.sh -o /usr/local/bin/catatom2osm && sudo chmod +x /usr/local/bin/catatom2osm
 
 Después de este paso, en la terminal de comandos estará disponible el programa:
 
     catatom2osm
 
+Para desinstalar simplemente elimina el script:
+
+    sudo rm /usr/local/bin/catatom2osm 
 
 Desarrollo
 ----------

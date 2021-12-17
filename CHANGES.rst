@@ -1,6 +1,9 @@
 Change log
 ==========
 
+**2021-12-17 (1.8.2)**
+* Update install documentation.
+
 **2021-12-16 (1.8.1)**
 * Adds warning for possible zones with bad geometry.
 
