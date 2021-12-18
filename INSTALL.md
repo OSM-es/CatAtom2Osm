@@ -26,9 +26,11 @@ After this, the program will be available in the terminal shell:
 
     catatom2osm
 
-To uninstall just remove the script:
+To uninstall in Linux/Mac just remove the script:
 
     sudo rm /usr/local/bin/catatom2osm 
+
+In Windows, there exists an uninstaller in the installation folder.
 
 Development
 -----------

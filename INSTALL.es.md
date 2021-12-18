@@ -26,9 +26,11 @@ Después de este paso, en la terminal de comandos estará disponible el programa
 
     catatom2osm
 
-Para desinstalar simplemente elimina el script:
+Para desinstalar en Linux simplemente elimina el script:
 
     sudo rm /usr/local/bin/catatom2osm 
+
+En Windows existe un deinstalador en la carpeta de instalación.
 
 Desarrollo
 ----------
