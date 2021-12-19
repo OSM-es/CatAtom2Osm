@@ -201,7 +201,7 @@ class TestCatAtom2Osm(unittest.TestCase):
     @mock.patch('catatom2osm.app.layer')
     @mock.patch('catatom2osm.app.report')
     def test_process_tasks(self, m_report, m_layer, m_os):
-        m_os.path.exists.side_effect = [True, True, True, False, True, True]
+        m_os.path.exists.side_effect = [True, True, False, True, True, True]
         m_report.mun_code = 'AAA'
         m_report.mun_name = 'BBB'
         m_report.tasks_m = 10
@@ -223,13 +223,13 @@ class TestCatAtom2Osm(unittest.TestCase):
         self.m_app.process_tasks = get_func(app.CatAtom2Osm.process_tasks)
         self.m_app.process_tasks(self.m_app, building)
         m_layer.ConsLayer.assert_has_calls([
-            mock.call('foo/tasks/missing.shp', 'missing', 'ogr', source_date=1234),
             mock.call('foo/tasks/001.shp', '001', 'ogr', source_date=1234),
             mock.call('foo/tasks/003.shp', '003', 'ogr', source_date=1234),
             mock.call('foo/tasks/00002.shp', '00002', 'ogr', source_date=1234),
             mock.call('foo/tasks/00004.shp', '00004', 'ogr', source_date=1234),
+            mock.call('foo/tasks/missing.shp', 'missing', 'ogr', source_date=1234),
         ])
-        comment = config.changeset_tags['comment'] + ' AAA BBB 00004'
+        comment = config.changeset_tags['comment'] + ' AAA BBB missing'
         task.to_osm.assert_called_with(upload='yes', tags={'comment': comment})
         self.assertEqual(self.m_app.merge_address.call_count, 5)
         self.m_app.rustic_zoning.writer.deleteFeatures.assert_called_once_with([5])

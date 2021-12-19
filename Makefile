@@ -105,7 +105,7 @@ shell:
 	@docker run --rm -it -v $(PWD):/opt/CatAtom2Osm -v $(PWD)/results:/catastro -w /opt/CatAtom2Osm catatom2osm:dev
 
 .PHONY: publish
-publish:
+publish: test
 	@docker build -t catatom2osm .
 	@echo $(VERSION)
 	@echo "Pulsa una tecla para continuar"
