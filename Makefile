@@ -93,10 +93,13 @@ uninstall:
 all: clean coverage api html msg
 .PHONY: all
 
-.PHONY: run
-run:
-	@mkdir -p results
+.PHONY: build
+build:
 	@docker build -t catatom2osm .
+
+.PHONY: run
+run: build
+	@mkdir -p results
 	@docker run --rm -it -v $(PWD):/opt/CatAtom2Osm -v $(PWD)/results:/catastro catatom2osm
 
 .PHONY: shell
@@ -110,11 +113,12 @@ dtest:
 	@docker run --rm -it -v $(PWD):/opt/CatAtom2Osm -v $(PWD)/results:/catastro -w /opt/CatAtom2Osm catatom2osm:dev make test
 
 .PHONY: publish
-publish: dtest
-	@docker build -t catatom2osm .
+publish: build dtest
 	@echo $(VERSION)
 	@echo "Pulsa una tecla para continuar"
 	@read
+	@git tag -f -a v$(VERSION) -m "Version $(VERSION)"
+	@git push -f origin master v$(VERSION)
 	@docker tag catatom2osm:latest egofer/catatom2osm:latest
 	@docker tag catatom2osm:latest egofer/catatom2osm:$(VERSION)
 	@docker push -a egofer/catatom2osm
