@@ -20,7 +20,7 @@ compat.set_es_time()
 andalucia = {'04': 'Almeria', '11': 'Cadiz', '14': 'Cordova', '18': 'Granada',
     '21': 'Huelva', '23': 'Jaen', '29': 'Malaga', '41': 'Sevilla'}
 
-cdau_url = 'http://www.juntadeandalucia.es/institutodeestadisticaycartografia/cdau/portales/{}'
+cdau_url = 'https://www.juntadeandalucia.es/institutodeestadisticaycartografia/cdau/portales/{}'
 csv_name = 'portal_{}.csv'
 meta_url = 'https://www.callejerodeandalucia.es/portal/informaci%C3%B3n-alfanum%C3%A9rica'
 cdau_crs = 25830
@@ -111,7 +111,7 @@ class Reader(object):
                 self.src_date = fo.read()
         else:
             response = download.get_response(meta_url)
-            s = re.search(r'fecha de referencia.*([0-9]{1,2} de .+ de [0-9]{4})', response.text)
+            s = re.search(r'fecha de referencia.*([0-9]{1,2}\sde\s.+\sde\s[0-9]{4})', response.text)
             try:
                 self.src_date = datetime.strptime(s.group(1), '%d de %B de %Y').strftime('%Y-%m-%d')
             except:
