@@ -245,8 +245,7 @@ class CatAtom2Osm(object):
         Remove zones without buildings (empty tasks).
         """
         self.get_tasks(source)
-        zoning = [] if report.tasks_m == 0 else [('missing', None)]
-        zoning += [
+        zoning = [
             (self.rustic_zoning.format_label(zone), zone.id())
             for zone in self.rustic_zoning.getFeatures()
         ]
@@ -254,6 +253,8 @@ class CatAtom2Osm(object):
             (self.urban_zoning.format_label(zone), zone.id())
             for zone in self.urban_zoning.getFeatures()
         ]
+        if report.tasks_m > 0:
+            zoning.append(('missing', None))
         to_clean = {'r': [], 'u': []}
         for label, fid in zoning:
             comment = ' '.join((config.changeset_tags['comment'],
