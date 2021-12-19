@@ -1,6 +1,9 @@
 Change log
 ==========
 
+**2021-12-19 (1.8.4)**
+* Fix task for buildings without zone (#70).
+
 **2021-12-19 (1.8.3)**
 * Update changes downloading CDAU data.
 

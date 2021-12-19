@@ -1369,10 +1369,7 @@ class ConsLayer(PolygonLayer):
                         if is_inside(feat, rfeatures[fid])
                     ]
                 if len(zones) == 0:
-                    label = 'nozone'
-                    log.warning(
-                        _("Feature '%s' is not in any zone."), feat['localId']
-                    )
+                    label = 'missing'
                 else:
                     label = zoning.format_label(zones[0])
                     geom = feat.geometry()

@@ -255,8 +255,7 @@ class CatAtom2Osm(object):
             for zone in self.urban_zoning.getFeatures()
         ]
         to_clean = {'r': [], 'u': []}
-        for zone in zoning:
-            label = zone[0]
+        for label, fid in zoning:
             comment = ' '.join((config.changeset_tags['comment'],
                                 report.mun_code, report.mun_name, label))
             fn = self.get_path('tasks', label + '.shp')
@@ -275,7 +274,7 @@ class CatAtom2Osm(object):
                     report.osm_stats(task_osm)
             else:
                 t = 'r' if len(label) == 3 else 'u'
-                to_clean[t].append(zone[1])
+                to_clean[t].append(fid)
         if to_clean['r']:
             self.rustic_zoning.writer.deleteFeatures(to_clean['r'])
         if to_clean['u']:
@@ -295,15 +294,14 @@ class CatAtom2Osm(object):
         to_add = []
         fcount = source.featureCount()
         for i, feat in enumerate(source.getFeatures()):
-            label = feat['task'] or ''
+            label = feat['task'] or 'missing'
             f = source.copy_feature(feat, {}, {})
             if i == fcount - 1 or last_task is None or label == last_task:
                 to_add.append(f)
             if i == fcount - 1 or (
                 last_task is not None and label != last_task
             ):
-                if last_task == '':
-                    last_task = 'missing'
+                if last_task == 'missing':
                     tasks_m += len(to_add)
                 fn = os.path.join(self.tasks_path, last_task + '.shp')
                 if not os.path.exists(fn):
@@ -322,8 +320,8 @@ class CatAtom2Osm(object):
                   tasks_u)
         if tasks_m > 0:
             msg = _(
-                "There are %d buildings without zone, check tasks/missing.osm"
-            ) % tasks_m
+                "There are %d buildings without zone, check %s"
+            ) % (tasks_m, 'tasks/missing.osm')
             log.warning(msg)
             report.warnings.append(msg)
         report.tasks_r = tasks_r
