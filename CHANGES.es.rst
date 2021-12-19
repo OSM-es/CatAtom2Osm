@@ -1,6 +1,9 @@
 Registro de cambios
 ===================
 
+**19-12-2021 (1.8.3)**
+* Actualiza cambios para poder descargar datos de CDAU.
+
 **17-12-2021 (1.8.2)**
 * Actualiza documentación de instalación.
 

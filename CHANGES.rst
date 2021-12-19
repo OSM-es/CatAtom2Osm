@@ -1,6 +1,9 @@
 Change log
 ==========
 
+**2021-12-19 (1.8.3)**
+* Update changes downloading CDAU data.
+
 **2021-12-17 (1.8.2)**
 * Update install documentation.
 
