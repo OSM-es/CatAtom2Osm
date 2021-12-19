@@ -36,6 +36,7 @@ help:
 	@echo "  all        clean api coverage html msg"
 	@echo "  run        Run a Docker container for command line"
 	@echo "  shell      Run a Docker container for developing"
+	@echo "  dtest      Run a Docker container for testing"
 	@echo "  publish    Push last version to Docker Hub"
 
 .PHONY: clean
@@ -104,8 +105,12 @@ shell:
 	@docker build -t catatom2osm:dev --build-arg REQUISITES=requisites-dev.txt .
 	@docker run --rm -it -v $(PWD):/opt/CatAtom2Osm -v $(PWD)/results:/catastro -w /opt/CatAtom2Osm catatom2osm:dev
 
+.PHONY: dtest
+dtest:
+	@docker run --rm -it -v $(PWD):/opt/CatAtom2Osm -v $(PWD)/results:/catastro -w /opt/CatAtom2Osm catatom2osm:dev make test
+
 .PHONY: publish
-publish: test
+publish: dtest
 	@docker build -t catatom2osm .
 	@echo $(VERSION)
 	@echo "Pulsa una tecla para continuar"

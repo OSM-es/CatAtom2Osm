@@ -1,6 +1,9 @@
 Registro de cambios
 ===================
 
+**19-12-2021 (1.8.5)**
+* Integra tests en publicación.
+
 **19-12-2021 (1.8.4)**
 * Corrige tarea para edificios sin zonificación (#70).
 
