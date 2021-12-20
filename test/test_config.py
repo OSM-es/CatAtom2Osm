@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
-import unittest
+import mock
 import os
+import unittest
 
 from catatom2osm import config
 

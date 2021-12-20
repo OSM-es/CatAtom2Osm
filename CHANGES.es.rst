@@ -1,6 +1,9 @@
 Registro de cambios
 ===================
 
+**20-12-2021 (1.8.6)**
+*  Considerar bilinguismo y capitalización para asignar lugares #71.
+
 **19-12-2021 (1.8.5)**
 * Integra tests en publicación.
 

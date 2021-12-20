@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 import unittest
 import mock
@@ -112,3 +113,20 @@ class TestTranslate(unittest.TestCase):
         self.assertNotIn('building:levels', tags)
         self.assertNotIn('building:levels:underground', tags)
 
+    def test_places(self):
+        f1 = {
+            'localId': '000',
+            'TN_text': 'Urbanización A',
+            'designator': '1',
+            'postCode': '',
+            'spec': 'Parcel',
+            'image': 'foobar'
+        }
+        t = address_tags(f1)
+        self.assertNotIn('addr:street', t.keys())
+        self.assertEqual(t['addr:place'], 'Urbanización A')
+        f2 = dict(f1)
+        f2['TN_text'] = 'urbanización A'
+        t = address_tags(f2)
+        self.assertNotIn('addr:street', t.keys())
+        self.assertEqual(t['addr:place'], 'urbanización A')

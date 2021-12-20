@@ -19,7 +19,7 @@ def address_tags(feature):
     hgw_name = feature['TN_text'].strip()
     if len(hgw_name) == 0:
     	return tags
-    hgw_type = hgw_name.split(' ')[0]
+    hgw_type = hgw_name.split(' ')[0].lower()
     if hgw_type in config.remove_place_from_name:
         hgw_name = ' '.join(hgw_name.split(' ')[1:])
     if hgw_type in config.place_types:

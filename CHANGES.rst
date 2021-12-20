@@ -1,6 +1,9 @@
 Change log
 ==========
 
+**2021-12-20 (1.8.6)**
+* Consider bilingualism and case to assign places (#71).
+
 **2021-12-19 (1.8.5)**
 * Integrate testing with publishing.
 

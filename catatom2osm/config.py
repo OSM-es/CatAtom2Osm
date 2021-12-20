@@ -392,33 +392,35 @@ highway_types_d = {
     },
 }
 
+# Use lower case
 place_types_d = {
     'es_ES': [
-	    'Agregado', 'Aldea', 'Área', 'Barrio', 'Barranco', 'Cañada', 'Colegio', 
-	    'Cigarral', 'Chalet', 'Concejo', 'Campa', 'Campo', 'Caserío', 'Conjunto', 
-	    'Diputación', 'Diseminados', 'Edificios', 'Extramuros', 'Entrada', 
-	    'Ensanche', 'Extrarradio', 'Finca', 'Grupo', 'Huerta', 'Huerto', 
-	    'Jardines', 'Lugar', 'Mercado', 'Muelle', 'Municipio', 'Masías', 'Monte', 
-	    'Manzana', 'Poblado', 'Partida', 'Polígono', 'Páramo', 'Parroquia', 'Solar', 
-	    'Terrenos', 'Urbanización', 'Bulevar', 'Sector'
+        'agregado', 'aldea', 'área', 'barrio', 'barranco', 'cañada', 'colegio',
+        'cigarral', 'chalet', 'concejo', 'campa', 'campo', 'caserío',
+        'conjunto', 'diputación', 'diseminados', 'edificios', 'extramuros',
+        'entrada', 'ensanche', 'extrarradio', 'finca', 'grupo', 'huerta',
+        'huerto', 'jardines', 'lugar', 'mercado', 'muelle', 'municipio',
+        'masías', 'monte', 'manzana', 'poblado', 'partida', 'polígono',
+        'páramo', 'parroquia', 'solar', 'terrenos', 'urbanización', 'bulevar',
+        'sector',
     ],
     'ca_ES': [
-        'Agregat', 'Llogaret', 'Àrea', 'Barri', 'Barranc', 'Camí ramader',
-        'Col·legi/Cigarral', 'Xalet', 'Ajuntament/Col·legi', 'Camp', 'Mas',
-        'Conjunt', 'Diputació', 'Disseminats', 'Edificis', 'Extramurs', 
-        'Entrada', 'Extraradi', 'Finca', 'Grup', 'Hort', 'Jardins', 'Lloc',
-        'Mercat', 'Moll', 'Municipi', 'Masies', 'Muntanya', 'Illa', 'Poblat',
-        'Partida', 'Polígon', 'Erm', 'Parròquia', 'Solar', 'Terrenys',
-        'Urbanització', 'Bulevard', 'Sector'
+        'agregat', 'llogaret', 'àrea', 'barri', 'barranc', 'camí ramader',
+        'col·legi/cigarral', 'xalet', 'ajuntament/col·legi', 'camp', 'mas',
+        'conjunt', 'diputació', 'disseminats', 'edificis', 'extramurs',
+        'entrada', 'extraradi', 'finca', 'grup', 'hort', 'jardins', 'lloc',
+        'mercat', 'moll', 'municipi', 'masies', 'muntanya', 'illa', 'poblat',
+        'partida', 'polígon', 'erm', 'parròquia', 'solar', 'terrenys',
+        'urbanització', 'bulevard', 'sector',
     ],
     'gl_ES': [
-        'Engadido', 'Aldea', 'Área', 'Barrio', 'Cavorco', 'Canella', 'Colexio',
-        'Cigarreiro', 'Chalet', 'Concello', 'Campeira', 'Campo', 'Caserío', 'Conxunto',
-        u'Deputación', 'Espallados', 'Edificios', 'Extramuros', 'Entrada',
-        'Ensanche', 'Arrabaldes', 'Finca', 'Grupo', 'Horta', 'Horto',
-        'Xardíns', 'Lugar', 'Mercado', 'Peirao', 'Concello', 'Masías', 'Monte',
-        'Mazá', 'Poboado', 'Partida', 'Polígono', 'Páramo', 'Parroquia', 'Soar',
-        'Terreos', 'Urbanización', 'Bulevar', 'Sector'
+        'engadido', 'aldea', 'área', 'barrio', 'cavorco', 'canella', 'colexio',
+        'cigarreiro', 'chalet', 'concello', 'campeira', 'campo', 'caserío',
+        'conxunto', u'deputación', 'espallados', 'edificios', 'extramuros',
+        'entrada', 'ensanche', 'arrabaldes', 'finca', 'grupo', 'horta', 'horto',
+        'xardíns', 'lugar', 'mercado', 'peirao', 'concello', 'masías', 'monte',
+        'mazá', 'poboado', 'partida', 'polígono', 'páramo', 'parroquia', 'soar',
+        'terreos', 'urbanización', 'bulevar', 'sector'
     ],
 }
 
@@ -430,7 +432,9 @@ language = language if language in available_langs else 'es_ES'
 highway_types = highway_types_d[language]
 
 # List of highway types to translate as place addresses
-place_types = place_types_d[language]
+place_types = place_types_d['es_ES']
+if language != 'es_ES':
+    place_types += place_types_d[language]
 
 # List of place types to remove from the name
 remove_place_from_name = [place_types[26]]
