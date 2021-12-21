@@ -36,7 +36,7 @@ RUN pip install -r $REQUISITES
 
 # Install app
 COPY . .
-RUN python setup.py develop
+RUN make install
 RUN chown -R $user:$group $APP_PATH
 
 USER $user

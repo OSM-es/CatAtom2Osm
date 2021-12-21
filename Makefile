@@ -82,13 +82,13 @@ msg:
 
 .PHONY: install
 install:
-	@chmod +x catatom2osm.sh
-	@ln -sf $(shell pwd)/bin/catatom2osm.sh $(INSTALL_DIR)/catatom2osm
-	@echo "Created symbolic link $(INSTALL_DIR)-->$(shell pwd)/bin/catatom2osm.sh"
+	@cp $(shell pwd)/bin/run.sh $(INSTALL_DIR)/catatom2osm
+	@chmod +x $(INSTALL_DIR)/catatom2osm
+	@echo "Created script $(INSTALL_DIR)/catatom2osm"
 
 .PHONY: uninstall
 uninstall:
-	@unlink /usr/local/bin/catatom2osm
+	@rm $(INSTALL_DIR)/catatom2osm
 
 all: clean coverage api html msg
 .PHONY: all
