@@ -1723,11 +1723,13 @@ class ConsLayer(PolygonLayer):
                             for part in it_parts:
                                 pg = part.geometry()
                                 r = Geometry.get_multipolygon(pg)[0][0]
-                                for (i, vpa) in enumerate(r[0:-1]):
-                                    vpb = pg.vertexAt(i+1)
+                                for i in range(len(r) - 1):
+                                    vpa = Point(pg.vertexAt(i))
+                                    vpb = Point(pg.vertexAt(i + 1))
                                     if va in (vpa, vpb) and vb in (vpa, vpb):
                                         pg.insertVertex(closest.x(), closest.y(), i+1)
                                         to_insert[part.id()] = QgsGeometry(pg)
+                                        break
                     else:
                         ad['spec'] = 'remote'
                         to_change[ad.id()] = get_attributes(ad)

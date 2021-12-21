@@ -1,6 +1,9 @@
 Change log
 ==========
 
+**2021-12-21 (1.8.7)**
+* Fixes join entrance to building:part ways (#67).
+
 **2021-12-20 (1.8.6)**
 * Consider bilingualism and case to assign places (#71).
 
