@@ -131,5 +131,4 @@ def run():
                 log.error(_("Please, install QGIS"))
 
 if __name__ == "__main__":
-    print(_("Directory for input and output files"))
-    #run()
+    run()
