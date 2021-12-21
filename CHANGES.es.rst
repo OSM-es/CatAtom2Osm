@@ -2,7 +2,8 @@ Registro de cambios
 ===================
 
 **21-12-2021 (1.8.7)**
-* Resuelve fallo uniendo entradas a vías building:part (#67)
+* Resuelve aviso de ficheros sin cerrar en python3 (#67).
+* Resuelve fallo uniendo entradas a vías building:part with QGIS3 (#67).
 
 **20-12-2021 (1.8.6)**
 *  Considerar bilinguismo y capitalización para asignar lugares #71.
