@@ -7,6 +7,7 @@ Change log
 * Change install method (in docker) due to QGIS3 error (#67).
 * Fixs error accesing __main__.py.
 * Unify simplify results in python2/3 (#67).
+* New utility scripts (for development).
 
 **2021-12-20 (1.8.6)**
 * Consider bilingualism and case to assign places (#71).

@@ -7,6 +7,7 @@ Registro de cambios
 * Cambia método de instalación (en docker) por error en QGIS3 (#67)
 * Corrige error de acceso a __main__.py
 * Iguala resultados simplificación en python2/3 (#67).
+* Nuevos scripts de utilidad (para desarrollo).
 
 **20-12-2021 (1.8.6)**
 *  Considerar bilinguismo y capitalización para asignar lugares #71.
