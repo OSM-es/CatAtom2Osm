@@ -4,6 +4,9 @@ Change log
 **2021-12-21 (1.8.7)**
 * Fixes ResourceWarning unclosed file in Python3 (#67).
 * Fixes join entrance to building:part ways with QGIS3 (#67).
+* Change install method (in docker) due to QGIS3 error (#67).
+* Fixs error accesing __main__.py.
+* Unify simplify results in python2/3 (#67).
 
 **2021-12-20 (1.8.6)**
 * Consider bilingualism and case to assign places (#71).

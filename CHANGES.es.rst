@@ -4,6 +4,9 @@ Registro de cambios
 **21-12-2021 (1.8.7)**
 * Resuelve aviso de ficheros sin cerrar en python3 (#67).
 * Resuelve fallo uniendo entradas a vías building:part with QGIS3 (#67).
+* Cambia método de instalación (en docker) por error en QGIS3 (#67)
+* Corrige error de acceso a __main__.py
+* Iguala resultados simplificación en python2/3 (#67).
 
 **20-12-2021 (1.8.6)**
 *  Considerar bilinguismo y capitalización para asignar lugares #71.

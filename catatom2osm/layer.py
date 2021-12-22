@@ -658,25 +658,31 @@ class PolygonLayer(BaseLayer):
     def get_parents_per_vertex_and_geometries(self):
         """
         Returns:
-            (dict) parent fids for each vertex, (dict) geometry for each fid.
+            (dict) parent fids for each vertex,
+            (list) list of vertexs,
+            (dict) geometry for each fid.
         """
         parents_per_vertex = defaultdict(list)
+        vertexs = []
         geometries = {}
         for feature in self.getFeatures():
             geom = QgsGeometry(feature.geometry())
             geometries[feature.id()] = geom
             for point in Geometry.get_vertices_list(feature):
+                if point not in vertexs:
+                    vertexs.append(point)
                 parents_per_vertex[point].append(feature.id())
-        return (parents_per_vertex, geometries)
+        return (parents_per_vertex, vertexs, geometries)
 
     def get_adjacents_and_geometries(self):
         """
         Returns:
             (list) groups of adjacent polygons
         """
-        parents_per_vertex, geometries = self.get_parents_per_vertex_and_geometries()
+        parents_per_vertex, vertexs, geometries = self.get_parents_per_vertex_and_geometries()
         adjs = []
-        for (point, parents) in parents_per_vertex.items():
+        for point in vertexs:
+            parents = parents_per_vertex[point]
             if len(parents) > 1:
                 for fid in parents:
                     geom = geometries[fid]
@@ -930,16 +936,18 @@ class PolygonLayer(BaseLayer):
         killed = 0
         to_change = {}
         # Clean non corners
-        (parents_per_vertex, geometries) = self.get_parents_per_vertex_and_geometries()
+        (parents_per_vertex, vertexs, geometries) = self.get_parents_per_vertex_and_geometries()
         pbar = self.get_progressbar(_("Simplify"), len(parents_per_vertex))
-        for pnt, parents in parents_per_vertex.items():
-            point = Point(pnt)
+        for pnt in vertexs:
             # Test if this vertex is a 'corner' in any of its parent polygons
+            point = Point(pnt)
+            parents = parents_per_vertex[pnt]
             for fid in parents:
                 geom = geometries[fid]
                 (angle, is_acute, is_corner, cath) = point.get_corner_context(geom)
-                debmsg = "angle=%.1f, is_acute=%s, is_corner=%s, cath=%.4f" % (angle,
-                    is_acute, is_corner, cath)
+                debmsg = "angle=%.1f, is_acute=%s, is_corner=%s, cath=%.4f" % (
+                    angle, is_acute, is_corner, cath
+                )
                 if is_corner: break
             msg = "Keep"
             if not is_corner:
