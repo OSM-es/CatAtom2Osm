@@ -9,6 +9,7 @@ import os
 import io, codecs
 import gzip
 import logging
+import time
 from collections import defaultdict, Counter
 
 from qgis.core import *
@@ -107,20 +108,30 @@ class CatAtom2Osm(object):
             self.add_comments()
             return
         log.info(_("Start processing '%s'"), report.mun_code)
+
         self.get_zoning()
+
+        start = time.time()
         if not self.label:
             self.process_zoning()
+        end = time.time()
+        log.debug("====== process_zoning: %d s.", end - start)
+
         self.address_osm = osm.Osm()
         self.building_osm = osm.Osm()
+
         if self.options.address and self.is_new and not self.label:
             self.options.tasks = False
             self.options.building = False
             self.options.zoning = False
             self.options.parcel = False
+
         if self.options.building or self.options.tasks:
             self.get_building()
             if self.building.featureCount() == 0:
                 return
+
+        start = time.time()
         if self.options.address:
             self.read_address()
             if self.label or (
@@ -128,31 +139,47 @@ class CatAtom2Osm(object):
             ):
                 current_address = self.get_current_ad_osm()
                 self.address.conflate(current_address)
+        end = time.time()
+        log.debug("====== read_address: %d s.", end - start)
+
+        start = time.time()
         if self.options.building or self.options.tasks:
             self.process_building()
             report.building_counter = Counter()
+        end = time.time()
+        log.debug("====== process_building: %d s.", end - start)
+
         if self.options.address:
             self.address.reproject()
             self.address_osm = self.address.to_osm()
             del self.address
             self.delete_shp('address.shp')
+
+        start = time.time()
         if self.options.tasks:
             self.process_tasks(self.building)
+        end = time.time()
+        log.debug("====== process_tasks: %d s.", end - start)
+
         if self.options.zoning:
             self.output_zoning()
+
         if self.options.building:
             self.output_building()
         elif self.options.tasks:
             del self.building
             self.delete_shp('building.shp')
+
         if self.options.address:
             if not self.options.building and not self.options.tasks:
                 report.address_stats(self.address_osm)
             if not self.label:
                 self.write_osm(self.address_osm, 'address.osm')
             del self.address_osm
+
         if self.options.parcel:
             self.process_parcel()
+
         if self.label:
             self.delete_current_osm_files()
         self.end_messages()
@@ -245,6 +272,7 @@ class CatAtom2Osm(object):
         Remove zones without buildings (empty tasks).
         """
         self.get_tasks(source)
+
         zoning = [
             (self.rustic_zoning.format_label(zone), zone.id())
             for zone in self.rustic_zoning.getFeatures()
@@ -256,7 +284,13 @@ class CatAtom2Osm(object):
         if report.tasks_m > 0:
             zoning.append(('missing', None))
         to_clean = {'r': [], 'u': []}
-        for label, fid in zoning:
+
+        if len(self.options.zone) > 0:
+            zoning_filtered = filter(lambda x: x[0] in self.options.zone, zoning)
+        else:
+            zoning_filtered = zoning
+
+        for label, fid in zoning_filtered:
             comment = ' '.join((config.changeset_tags['comment'],
                                 report.mun_code, report.mun_name, label))
             fn = self.get_path('tasks', label + '.shp')
@@ -276,6 +310,9 @@ class CatAtom2Osm(object):
             else:
                 t = 'r' if len(label) == 3 else 'u'
                 to_clean[t].append(fid)
+
+        log.debug(_("Processing %d tasks"), len(zoning_filtered))
+
         if to_clean['r']:
             self.rustic_zoning.writer.deleteFeatures(to_clean['r'])
         if to_clean['u']:
@@ -293,12 +330,27 @@ class CatAtom2Osm(object):
         tasks_m = 0
         last_task = None
         to_add = []
-        fcount = source.featureCount()
-        for i, feat in enumerate(source.getFeatures()):
+
+        filtered = source.getFeatures()
+
+        if len(self.options.zone) > 0:
+            expression = "task in ('" + "','".join(self.options.zone) + "')"
+            request = QgsFeatureRequest().setFilterExpression(expression)
+            filtered = source.getFeatures(request)
+            # https://docs.python.org/3/library/itertools.html#itertools.tee
+            import itertools;
+            filtered_copy = itertools.tee(filtered)
+
+        # https://stackoverflow.com/a/25039377/5020256
+        fcount = len(list(filtered_copy))
+
+        for i, feat in enumerate(filtered):
             label = feat['task'] or 'missing'
+
             f = source.copy_feature(feat, {}, {})
             if i == fcount - 1 or last_task is None or label == last_task:
                 to_add.append(f)
+
             if i == fcount - 1 or (
                 last_task is not None and label != last_task
             ):
@@ -317,6 +369,9 @@ class CatAtom2Osm(object):
                 task.writer.addFeatures(to_add)
                 to_add = [f]
             last_task = label
+
+        log.debug(_("Getting %d tasks"), fcount)
+
         log.debug(_("Generated %d rustic and %d urban tasks files"), tasks_r,
                   tasks_u)
         if tasks_m > 0:

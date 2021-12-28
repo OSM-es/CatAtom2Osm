@@ -14,10 +14,10 @@ terminal = compat.Terminal(config.encoding)
 
 
 usage = terminal.encode(_("""catatom2osm [OPTION]... [PATH]
-The argument path states the directory for input and output files. 
-The directory name shall start with 5 digits (GGMMM) matching the Cadastral 
-Provincial Office and Municipality Code. If the program don't find the input 
-files it will download them for you from the INSPIRE Services of the Spanish 
+The argument path states the directory for input and output files.
+The directory name shall start with 5 digits (GGMMM) matching the Cadastral
+Provincial Office and Municipality Code. If the program don't find the input
+files it will download them for you from the INSPIRE Services of the Spanish
 Cadastre."""))
 
 def process(options):
@@ -35,14 +35,14 @@ def process(options):
     else:
         from catatom2osm.app import CatAtom2Osm, QgsSingleton
         qgs = QgsSingleton()
-        if options.zone:
-            a_path = options.path[0]
-            for label in options.zone:
-                options.label = label
-                CatAtom2Osm.create_and_run(a_path, options)
-        else:
-            for a_path in options.path:
-                CatAtom2Osm.create_and_run(a_path, options)
+        # if options.zone:
+        #     a_path = options.path[0]
+        #     for label in options.zone:
+        #         options.label = label
+        #         CatAtom2Osm.create_and_run(a_path, options)
+        # else:
+        #     for a_path in options.path:
+        CatAtom2Osm.create_and_run(a_path, options)
         qgs.exitQgis()
 
 def run():
@@ -94,7 +94,7 @@ def run():
             options.address = True
         options.building = True
         options.zoning = False
-        options.tasks = False
+        options.tasks = True
         options.parcel = False
         options.all = False
         options.download = False
@@ -103,7 +103,7 @@ def run():
         options.tasks = True
         options.address = True
         options.parcel = True
-    if not (options.tasks or options.zoning or options.building or 
+    if not (options.tasks or options.zoning or options.building or
             options.address or options.parcel): # default options
         options.tasks = True
         options.address = True
