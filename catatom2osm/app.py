@@ -337,11 +337,13 @@ class CatAtom2Osm(object):
             expression = "task in ('" + "','".join(self.options.zone) + "')"
             request = QgsFeatureRequest().setFilterExpression(expression)
             filtered = source.getFeatures(request)
-            # https://docs.python.org/3/library/itertools.html#itertools.tee
-            import itertools;
-            filtered_copy = itertools.tee(filtered)
+
+        # https://docs.python.org/3/library/itertools.html#itertools.tee
+        import itertools;
+        filtered_copy = itertools.tee(filtered)
 
         # https://stackoverflow.com/a/25039377/5020256
+        # An iterator cannot be reused
         fcount = len(list(filtered_copy))
 
         for i, feat in enumerate(filtered):
