@@ -92,9 +92,8 @@ def run():
             options.zone = options.zone[:-1]
         if not options.building and not options.address:
             options.address = True
-        options.building = True
-        options.zoning = False
-        options.tasks = False
+        options.building = False
+        options.tasks = True
         options.parcel = False
         options.all = False
         options.download = False

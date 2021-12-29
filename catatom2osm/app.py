@@ -62,7 +62,7 @@ class CatAtom2Osm(object):
         self.options = options
         self.cat = catatom.Reader(a_path)
         self.path = self.cat.path
-        self.label = getattr(options, 'label', None)
+        self.zone = self.options.zone
         report.mun_code = self.cat.zip_code
         report.sys_info = True
         if report.sys_info:
@@ -82,14 +82,11 @@ class CatAtom2Osm(object):
             raise ValueError(msg)
         self.highway_names_path = self.get_path('highway_names.csv')
         self.tasks_path = self.get_path('tasks')
-        if self.label or self.options.tasks:
+        if self.options.tasks:
             if not os.path.exists(self.tasks_path):
                 os.makedirs(self.tasks_path)
-        if self.label:
-            self.highway_names_path = self.get_path(
-                'tasks', self.label + '_highway_names.csv'
-            )
-            self.delete_current_osm_files()
+        if self.zone:
+             self.delete_current_osm_files()
         self.is_new = not os.path.exists(self.highway_names_path)
 
     @staticmethod
@@ -108,22 +105,17 @@ class CatAtom2Osm(object):
             return
         log.info(_("Start processing '%s'"), report.mun_code)
         self.get_zoning()
-        if not self.label:
+        if not self.zone:
             self.process_zoning()
         self.address_osm = osm.Osm()
         self.building_osm = osm.Osm()
-        if self.options.address and self.is_new and not self.label:
-            self.options.tasks = False
-            self.options.building = False
-            self.options.zoning = False
-            self.options.parcel = False
         if self.options.building or self.options.tasks:
             self.get_building()
             if self.building.featureCount() == 0:
                 return
         if self.options.address:
             self.read_address()
-            if self.label or (
+            if False or (  # QUITAR self.zone or (
                 not self.is_new and not self.options.manual
             ):
                 current_address = self.get_current_ad_osm()
@@ -148,12 +140,11 @@ class CatAtom2Osm(object):
         if self.options.address:
             if not self.options.building and not self.options.tasks:
                 report.address_stats(self.address_osm)
-            if not self.label:
-                self.write_osm(self.address_osm, 'address.osm')
+            self.write_osm(self.address_osm, 'address.osm')
             del self.address_osm
         if self.options.parcel:
             self.process_parcel()
-        if self.label:
+        if self.zone:
             self.delete_current_osm_files()
         self.end_messages()
 
@@ -192,7 +183,7 @@ class CatAtom2Osm(object):
 
     def zone_query(self, feat, kwargs):
         """Filter feat by zone label if needed."""
-        return self.label is None or self.building.get_label(feat) == self.label
+        return len(self.zone) == 0 or self.building.get_label(feat) in self.zone
 
     def get_path(self, *paths):
         """Get path from components relative to self.path"""
@@ -207,7 +198,7 @@ class CatAtom2Osm(object):
         self.building = layer.ConsLayer(
             fn, providerLib='ogr', source_date=building_gml.source_date
         )
-        if self.options.tasks or self.label:
+        if self.options.tasks:
             self.building.get_labels(
                 building_gml, self.urban_zoning, self.rustic_zoning
             )
@@ -215,7 +206,7 @@ class CatAtom2Osm(object):
         report.inp_buildings = self.building.featureCount()
         del building_gml
         part_gml = self.cat.read("buildingpart")
-        if self.options.tasks or self.label:
+        if self.options.tasks:
             self.building.get_labels(
                 part_gml, self.urban_zoning, self.rustic_zoning
             )
@@ -226,7 +217,7 @@ class CatAtom2Osm(object):
         other_gml = self.cat.read("otherconstruction", True)
         report.inp_pools = 0
         if other_gml:
-            if self.options.tasks or self.label:
+            if self.options.tasks:
                 self.building.get_labels(
                     other_gml, self.urban_zoning, self.rustic_zoning
                 )
@@ -245,13 +236,18 @@ class CatAtom2Osm(object):
         Remove zones without buildings (empty tasks).
         """
         self.get_tasks(source)
+        expression = ''
+        if len(self.zone) > 0:
+            expression = "label IN (%s)" % str(self.zone)[1:-1]
+        exp = QgsExpression(expression)
+        request = QgsFeatureRequest(exp)
         zoning = [
             (self.rustic_zoning.format_label(zone), zone.id())
-            for zone in self.rustic_zoning.getFeatures()
+            for zone in self.rustic_zoning.getFeatures(request)
         ]
         zoning += [
             (self.urban_zoning.format_label(zone), zone.id())
-            for zone in self.urban_zoning.getFeatures()
+            for zone in self.urban_zoning.getFeatures(request)
         ]
         if report.tasks_m > 0:
             zoning.append(('missing', None))
@@ -387,12 +383,7 @@ class CatAtom2Osm(object):
                 report.address_stats(self.building_osm)
         if not self.options.tasks:
             report.cons_stats(self.building_osm)
-        if self.label is None:
-            self.write_osm(self.building_osm, 'building.osm')
-        else:
-            if not os.path.exists(self.tasks_path):
-                os.makedirs(self.tasks_path)
-            self.write_osm(self.building_osm, 'tasks', self.label + '.osm.gz')
+        self.write_osm(self.building_osm, 'building.osm')
         if not self.options.tasks:
             report.osm_stats(self.building_osm)
         del self.building_osm
@@ -534,18 +525,18 @@ class CatAtom2Osm(object):
         layer.ZoningLayer.create_shp(fn, zoning_gml.crs())
         self.urban_zoning = layer.ZoningLayer(fn, 'urbanzoning', 'ogr')
         self.rustic_zoning.append(zoning_gml, level='P')
-        if self.options.tasks or self.options.zoning or self.label:
+        if self.options.tasks or self.options.zoning or self.zone:
             self.urban_zoning.append(zoning_gml, level='M')
-        if self.label:
+        if self.zone:
             self.cat.boundary_search_area = zoning_gml.bounding_box(
-                "label = '%s'" % self.label
+                "label IN (%s)" % str(self.zone)[1:-1]
             )
         else:
             self.cat.get_boundary(self.rustic_zoning)
             report.mun_area = round(self.rustic_zoning.get_area() / 1E6, 1)
         del zoning_gml
         report.cat_mun = self.cat.cat_mun
-        report.mun_name = getattr(self.cat, 'boundary_name', None)
+        report.mun_name = getattr(self.cat, 'boundary_name', self.cat.cat_mun)
         if hasattr(self.cat, 'boundary_data'):
             if 'wikipedia' in self.cat.boundary_data:
                 report.mun_wikipedia = self.cat.boundary_data['wikipedia']
