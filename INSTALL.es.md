@@ -20,7 +20,7 @@ https://hub.docker.com/r/egofer/catatom2osm
 * Linux/Mac OS:
 
 
-    sudo curl https://github.com/OSM-es/CatAtom2Osm/raw/master/bin/catatom2osm.sh -o /usr/local/bin/catatom2osm && sudo chmod +x /usr/local/bin/catatom2osm
+    sudo curl https://raw.githubusercontent.com/OSM-es/CatAtom2Osm/master/bin/catatom2osm.sh -o /usr/local/bin/catatom2osm && sudo chmod +x /usr/local/bin/catatom2osm
 
 Después de este paso, en la terminal de comandos estará disponible el programa:
 
