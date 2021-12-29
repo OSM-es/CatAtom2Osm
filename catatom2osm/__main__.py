@@ -35,14 +35,8 @@ def process(options):
     else:
         from catatom2osm.app import CatAtom2Osm, QgsSingleton
         qgs = QgsSingleton()
-        if options.zone:
-            a_path = options.path[0]
-            for label in options.zone:
-                options.label = label
-                CatAtom2Osm.create_and_run(a_path, options)
-        else:
-            for a_path in options.path:
-                CatAtom2Osm.create_and_run(a_path, options)
+        for a_path in options.path:
+            CatAtom2Osm.create_and_run(a_path, options)
         qgs.exitQgis()
 
 def run():
