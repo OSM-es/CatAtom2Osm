@@ -285,7 +285,7 @@ class CatAtom2Osm(object):
             zoning.append(('missing', None))
         to_clean = {'r': [], 'u': []}
 
-        if len(self.options.zone) > 0:
+        if self.options.zone:
             zoning_filtered = filter(lambda x: x[0] in self.options.zone, zoning)
         else:
             zoning_filtered = zoning
@@ -333,7 +333,7 @@ class CatAtom2Osm(object):
 
         filtered = source.getFeatures()
 
-        if len(self.options.zone) > 0:
+        if self.options.zone:
             expression = "task in ('" + "','".join(self.options.zone) + "')"
             request = QgsFeatureRequest().setFilterExpression(expression)
             filtered = source.getFeatures(request)
