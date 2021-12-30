@@ -21,6 +21,7 @@ from osgeo import gdal
 from catatom2osm import config, catatom, csvtools, layer, osm, osmxml, overpass
 from catatom2osm import cdau  # Used in get_auxiliary_addresses
 from catatom2osm.report import instance as report
+from catatom2osm.qgiscompat import *
 
 log = config.log
 if config.silence_gdal:
@@ -180,10 +181,13 @@ class CatAtom2Osm(object):
                 if data.tags != oldtags:
                     self.write_osm(data, 'tasks', fn)
 
-
     def zone_query(self, feat, kwargs):
-        """Filter feat by zone label if needed."""
-        return len(self.zone) == 0 or self.building.get_label(feat) in self.zone
+        if self.zone:
+            """Filter feat by zone label if needed."""
+            return len(self.zone) == 0 or self.building.get_label(feat) in self.zone
+        if self.options.geojson:
+            """Filter feat by geojson """
+            return self.split_geom.contains(feat.geometry())
 
     def get_path(self, *paths):
         """Get path from components relative to self.path"""
@@ -198,6 +202,14 @@ class CatAtom2Osm(object):
         self.building = layer.ConsLayer(
             fn, providerLib='ogr', source_date=building_gml.source_date
         )
+
+        if self.options.geojson:
+            split = QgsVectorLayer(self.options.geojson, 'split', 'ogr')
+            feature = next(split.getFeatures())
+            crs_transform = ggs2coordinate_transform(split.crs(), building_gml.crs())
+            self.split_geom = feature.geometry()
+            self.split_geom.transform(crs_transform)
+        
         if self.options.tasks:
             self.building.get_labels(
                 building_gml, self.urban_zoning, self.rustic_zoning

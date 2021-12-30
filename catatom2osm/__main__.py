@@ -64,6 +64,10 @@ def run():
     parser.add_argument("-o", "--zone", dest="zone", metavar="label", nargs='+',
         default=[], type=str, help=terminal.encode(_("Process zones given "
         "its labels")))
+
+    parser.add_argument("-g", "--geojson", dest="geojson",
+        help=terminal.encode(_("Process zones given a boundary polygon")))
+
     parser.add_argument("-d", "--address", dest="address", action="store_true",
         help=terminal.encode(_("Process the address dataset (default)")))
     parser.add_argument("-p", "--parcel", dest="parcel", action="store_true",
