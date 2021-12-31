@@ -604,6 +604,10 @@ class BaseLayer(QgsVectorLayer):
         pbar.set_postfix(file=os.path.basename(self.source()), refresh=False)
         return pbar
 
+    def remove_outside_features(self, layer):
+        """Remove from self any feature not contained in layer features."""
+        # TODO: implementar
+        pass
 
 class PolygonLayer(BaseLayer):
     """Base class for polygon layers"""

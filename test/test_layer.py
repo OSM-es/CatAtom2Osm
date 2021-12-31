@@ -531,49 +531,49 @@ class TestZoningLayer(unittest.TestCase):
         self.assertTrue(self.fixture.isValid(), "Loading fixture")
         fn = 'urban_zoning.shp'
         ZoningLayer.create_shp(fn, self.fixture.crs())
-        self.layer1 = ZoningLayer(fn, 'urbanzoning', 'ogr')
-        self.assertTrue(self.layer1.isValid(), "Init QGIS")
+        self.ulayer = ZoningLayer(fn, 'urbanzoning', 'ogr')
+        self.assertTrue(self.ulayer.isValid(), "Init QGIS")
         fn = 'rustic_zoning.shp'
         ZoningLayer.create_shp(fn, self.fixture.crs())
-        self.layer2 = ZoningLayer(fn, 'rusticzoning', 'ogr')
-        self.assertTrue(self.layer2.isValid(), "Init QGIS")
+        self.rlayer = ZoningLayer(fn, 'rusticzoning', 'ogr')
+        self.assertTrue(self.rlayer.isValid(), "Init QGIS")
 
     def tearDown(self):
-        del self.layer1
+        del self.ulayer
         ZoningLayer.delete_shp('urban_zoning.shp')
-        del self.layer2
+        del self.rlayer
         ZoningLayer.delete_shp('rustic_zoning.shp')
 
     @mock.patch('catatom2osm.layer.tqdm')
     def test_append(self, m_tqdm):
-        self.layer1.append(self.fixture, 'M')
-        self.layer2.append(self.fixture, 'P')
+        self.ulayer.append(self.fixture, 'M')
+        self.rlayer.append(self.fixture, 'P')
         self.assertGreater(
-            self.layer1.featureCount() + self.layer2.featureCount(),
+            self.ulayer.featureCount() + self.rlayer.featureCount(),
             self.fixture.featureCount()
         )
-        for f in self.layer1.getFeatures():
-            self.assertTrue(self.layer1.check_zone(f, level='M'))
-        for f in self.layer2.getFeatures():
-            self.assertTrue(self.layer1.check_zone(f, level='P'))
+        for f in self.ulayer.getFeatures():
+            self.assertTrue(self.ulayer.check_zone(f, level='M'))
+        for f in self.rlayer.getFeatures():
+            self.assertTrue(self.rlayer.check_zone(f, level='P'))
 
     @mock.patch('catatom2osm.layer.tqdm')
     def test_is_inside_full(self, m_tqdm):
-        self.layer1.append(self.fixture, 'M')
+        self.ulayer.append(self.fixture, 'M')
         zone = Geometry.fromPolygonXY([[
             Point(357275.888, 3123959.765),
             Point(357276.418, 3123950.625),
             Point(357286.220, 3123957.911),
             Point(357275.888, 3123959.765),
         ]])
-        feat = QgsFeature(self.layer1.fields())
+        feat = QgsFeature(self.ulayer.fields())
         feat.setGeometry(zone)
-        self.assertTrue(self.layer1.is_inside(feat))
+        self.assertTrue(self.ulayer.is_inside(feat))
 
     @mock.patch('catatom2osm.layer.tqdm')
     def test_is_inside_part(self, m_tqdm):
-        self.layer1.append(self.fixture, 'M')
-        feat = QgsFeature(self.layer1.fields())
+        self.ulayer.append(self.fixture, 'M')
+        feat = QgsFeature(self.ulayer.fields())
         zone = Geometry.fromPolygonXY([[
             Point(357270.987, 3123924.266),
             Point(357282.643, 3123936.187),
@@ -581,12 +581,12 @@ class TestZoningLayer(unittest.TestCase):
             Point(357270.987, 3123924.266),
         ]])
         feat.setGeometry(zone)
-        self.assertTrue(self.layer1.is_inside(feat))
+        self.assertTrue(self.ulayer.is_inside(feat))
 
     @mock.patch('catatom2osm.layer.tqdm')
     def test_is_inside_false(self, m_tqdm):
-        self.layer1.append(self.fixture, 'M')
-        feat = QgsFeature(self.layer1.fields())
+        self.ulayer.append(self.fixture, 'M')
+        feat = QgsFeature(self.ulayer.fields())
         zone = Geometry.fromPolygonXY([[
             Point(357228.335, 3123901.881),
             Point(357231.779, 3123922.677),
@@ -594,12 +594,12 @@ class TestZoningLayer(unittest.TestCase):
             Point(357228.335, 3123901.881),
         ]])
         feat.setGeometry(zone)
-        self.assertFalse(self.layer1.is_inside(feat))
+        self.assertFalse(self.ulayer.is_inside(feat))
 
     @mock.patch('catatom2osm.layer.tqdm')
     def test_get_adjacents_and_geometries(self, m_tqdm):
-        self.layer1.append(self.fixture, 'M')
-        (groups, geometries) = self.layer1.get_adjacents_and_geometries()
+        self.ulayer.append(self.fixture, 'M')
+        (groups, geometries) = self.ulayer.get_adjacents_and_geometries()
         self.assertTrue(all([len(g) > 1 for g in groups]))
         for group in groups:
             for other in groups:
@@ -608,23 +608,23 @@ class TestZoningLayer(unittest.TestCase):
 
     @mock.patch('catatom2osm.layer.tqdm')
     def test_set_tasks(self, m_tqdm):
-        self.layer1.append(self.fixture, 'M')
-        self.layer2.append(self.fixture, 'P')
-        self.layer1.set_tasks('12345')
-        labels = {int(f['label']) for f in self.layer1.getFeatures()}
+        self.ulayer.append(self.fixture, 'M')
+        self.rlayer.append(self.fixture, 'P')
+        self.ulayer.set_tasks('12345')
+        labels = {int(f['label']) for f in self.ulayer.getFeatures()}
         self.assertEqual(max(labels), 92409)
         self.assertEqual(min(labels), 2003)
-        self.assertEqual(next(self.layer1.getFeatures())['zipcode'], '12345')
-        self.layer2.set_tasks('12345')        
-        labels = {int(f['label']) for f in self.layer2.getFeatures()}
+        self.assertEqual(next(self.ulayer.getFeatures())['zipcode'], '12345')
+        self.rlayer.set_tasks('12345')
+        labels = {int(f['label']) for f in self.rlayer.getFeatures()}
         self.assertEqual(max(labels), len(labels))
         self.assertEqual(min(labels), 1)
-        self.assertEqual(next(self.layer2.getFeatures())['zipcode'], '12345')
+        self.assertEqual(next(self.rlayer.getFeatures())['zipcode'], '12345')
 
     @mock.patch('catatom2osm.layer.tqdm')
     def test_set_cons_tasks(self, m_tqdm):
-        self.layer1.append(self.fixture, 'M')
-        self.layer2.append(self.fixture, 'P')
+        self.ulayer.append(self.fixture, 'M')
+        self.rlayer.append(self.fixture, 'P')
         test = Counter({u'86416': 198, u'84428': 89, u'88423': 86, u'86417': 65,
             u'89423': 61, u'86423': 57, u'87427': 53, u'86439': 45, u'86464': 38,
             u'85426': 34, u'90417': 34, u'86435': 32, u'86434': 28, u'88429': 27,
@@ -637,9 +637,9 @@ class TestZoningLayer(unittest.TestCase):
             u'89415': 2})
         fixture = BaseLayer('test/cons.shp', 'building', 'ogr')
         building = ConsLayer()
-        building.get_labels(fixture, self.layer1, self.layer2)
+        building.get_labels(fixture, self.ulayer, self.rlayer)
         building.append(fixture)
-        building.set_tasks(self.layer1, self.layer2)
+        building.set_tasks(self.ulayer, self.rlayer)
         tasks = Counter()
         for feat in building.getFeatures():
             if feat['task'] is None:
@@ -650,8 +650,8 @@ class TestZoningLayer(unittest.TestCase):
 
     @mock.patch('catatom2osm.layer.tqdm')
     def test_get_labels(self, m_tqdm):
-        self.layer1.append(self.fixture, 'M')
-        self.layer2.append(self.fixture, 'P')
+        self.ulayer.append(self.fixture, 'M')
+        self.rlayer.append(self.fixture, 'P')
         test = Counter({
              u'86416': 56, u'84428': 21, u'88423': 18, u'86423': 18,
              u'89423': 17, u'86439': 17, u'86417': 17, u'90417': 12,
@@ -668,10 +668,34 @@ class TestZoningLayer(unittest.TestCase):
         fn = 'test/cons.shp'
         building_gml = BaseLayer(fn, 'building', 'ogr')
         building = ConsLayer(fn, providerLib='ogr')
-        building.get_labels(building_gml, self.layer1, self.layer2)
+        building.get_labels(building_gml, self.ulayer, self.rlayer)
         self.assertEqual(building.labels['000902900CS52D_part1'], '004')
         labels = Counter(building.labels.values())
         self.assertEqual(labels, test)
+
+    def do_test_split(self, split):
+        splitted = [
+            '83453', '83462', '83469', '84486', '84499', '85490',  '85461',
+            '85462', '85463', '86463', '86464', '86498', '87483', '87484',
+        ]
+        self.ulayer.append(self.fixture, 'M')
+        self.rlayer.append(self.fixture, 'P')
+        self.ulayer.remove_outside_features(split)
+        self.assertEqual(self.ulayer.featureCount(), len(splitted))
+        for feat in self.ulayer.getFeatures():
+            self.assertIn(feat['label'], splitted)
+
+    def test_remove_outside_features1(self):
+        split = BaseLayer('test/split1.geojson', 'splitzoning', 'ogr')
+        self.do_test_split(split)
+
+    def test_remove_outside_features2(self):
+        split = BaseLayer('test/split2.geojson', 'splitzoning', 'ogr')
+        self.do_test_split(split)
+
+    def test_remove_outside_features3(self):
+        split = BaseLayer('test/split3.geojson', 'splitzoning', 'ogr')
+        self.do_test_split(split)
 
 
 class TestConsLayer(unittest.TestCase):
