@@ -190,7 +190,7 @@ class CatAtom2Osm(object):
         """Get path from components relative to self.path"""
         return os.path.join(self.path, *paths)
 
-    def get_labels(self, building_gml, part_gml, other_gml)
+    def get_labels(self, building_gml, part_gml, other_gml):
         """Creates cons_labels index"""
         self.building.get_labels(
             building_gml, self.urban_zoning, self.rustic_zoning
@@ -203,16 +203,33 @@ class CatAtom2Osm(object):
                 other_gml, self.urban_zoning, self.rustic_zoning
             )
         
-    def zoning_split(self, crs):
+    def split_zoning(self, crs):
         """Filter zoning using split."""
         split = QgsVectorLayer(self.options.split, 'zoningsplit', 'ogr')
-        # next es sólo un ejemplo, hay que tener en cuenta que puede haber +
-        feature = next(split.getFeatures())
+
+        split_geom = None
+        for feature in split.getFeatures():
+            if split_geom == None:
+                split_geom = feature.geometry()
+            else:
+                split_geom = split_geom.combine(feature.geometry())
+        
         crs_transform = ggs2coordinate_transform(split.crs(), crs)
-        self.split_geom = feature.geometry()
-        self.split_geom.transform(crs_transform)
-        # para self.urban_zoning y self.rustic_zoning, llamar a un método
-        # (crear en layer.ZoningLayer) que filtre usando la capa split
+        split_geom.transform(crs_transform)
+
+        self.remove_outside_features(split_geom, self.urban_zoning)
+        self.remove_outside_features(split_geom, self.rustic_zoning)
+
+    def remove_outside_features(self, clip, layer):
+        to_clean = []
+        
+        for feat in layer.getFeatures():
+            geom = feat.geometry()
+            if not clip.contains(geom):
+                to_clean.append(feat.id())
+
+        if len(to_clean):
+            layer.writer.deleteFeatures(to_clean)
         
     def get_building(self):
         """Merge building, parts and pools"""
@@ -230,7 +247,7 @@ class CatAtom2Osm(object):
             self.get_labels(building_gml, part_gml, other_gml)
 
         if self.options.split:
-            self.zoning_split(building_gml.crs())
+            self.split_zoning(building_gml.crs())
 
         self.building.append(building_gml, query=self.zone_query)
         report.inp_buildings = self.building.featureCount()
