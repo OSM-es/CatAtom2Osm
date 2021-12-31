@@ -39,15 +39,15 @@ class TestCatAtom2Osm(unittest.TestCase):
         self.options = {
             'building': False, 'all': False, 'tasks': True, 'list_zones': False,
             'log_level': 'INFO', 'parcel': False, 'list': False, 'zoning': True,
-            'version': False, 'address': False, 'manual': False, 'zone': False,
-            'comment': False
+            'version': False, 'address': False, 'manual': False, 'zone': [],
+            'comment': False, 'split': None,
         }
         self.m_app = mock.MagicMock()
         self.m_app.options = Values(self.options)
         self.m_app.get_translations.return_value = ([], False)
         self.m_app.path = 'foo'
         self.m_app.highway_names_path = 'foo/highway_names.csv'
-        self.m_app.label = None
+        self.m_app.zone = self.m_app.options.zone
         self.m_app.tasks_path = 'foo/tasks'
         self.m_app.is_new = False
         self.m_app.get_path = lambda *args: self.m_app.path + '/' + '/'.join(args)

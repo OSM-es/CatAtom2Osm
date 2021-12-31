@@ -26,6 +26,19 @@ def raiseImportError(*args, **kwargs):
 
 class TestMain(unittest.TestCase):
 
+    def setUp(self):
+        self.options = Namespace(
+            zone=[], all=False, tasks=True, zoning=True, building=False,
+            address=True, comment=False, download=False, list=False,
+            list_zones=False, log_level='INFO', manual=False, parcel=False,
+            path=['foobar'], split=None,
+        )
+
+    def compareOptions(self, options):
+        for (k, v2) in self.options.__dict__.items():
+            v1 = getattr(options, k)
+            self.assertEqual(v1, v2, msg='%s != %s in option %s' % (v1, v2, k))
+
     @mock.patch('catatom2osm.__main__.sys.argv', ['catatom2osm.py'])
     def test_no_args(self):
         with capture(__main__.run) as output:
@@ -49,10 +62,7 @@ class TestMain(unittest.TestCase):
         self.assertTrue(mockcat.called)
         self.assertEqual(mockcat.call_args_list[0][0][0], 'foobar')
         options = mockcat.call_args_list[0][0][1]
-        d = {'building': False, 'all': False, 'tasks': True, 'log_level': 'INFO', 
-            'parcel': False, 'list': False, 'zoning': True, 'address': True}
-        for (k, v) in list(d.items()):
-            self.assertEqual(getattr(options, k), v)
+        self.compareOptions(options)
 
     @mock.patch('catatom2osm.__main__.sys.argv', ['catatom2osm.py', 'foobar', '-a'])
     @mock.patch('catatom2osm.app.QgsSingleton', mock.MagicMock)
@@ -61,10 +71,10 @@ class TestMain(unittest.TestCase):
         __main__.run()
         self.assertTrue(mockcat.called)
         options = mockcat.call_args_list[0][0][1]
-        d = {'building': True, 'all': True, 'tasks': True, 'log_level': 'INFO', 
-            'parcel': True, 'list': False, 'zoning': True, 'address': True}
-        for (k, v) in list(d.items()):
-            self.assertEqual(getattr(options, k), v)
+        self.options.building = True
+        self.options.parcel = True
+        self.options.all = True
+        self.compareOptions(options)
 
     @mock.patch('catatom2osm.__main__.sys.argv', ['catatom2osm.py', 'foobar', '-b'])
     @mock.patch('catatom2osm.app.QgsSingleton', mock.MagicMock)
@@ -73,10 +83,11 @@ class TestMain(unittest.TestCase):
         __main__.run()
         self.assertTrue(mockcat.called)
         options = mockcat.call_args_list[0][0][1]
-        d = {'building': True, 'all': False, 'tasks': False, 'log_level': 'INFO', 
-            'parcel': False, 'list': False, 'zoning': False, 'address': False}
-        for (k, v) in list(d.items()):
-            self.assertEqual(getattr(options, k), v)
+        self.options.building = True
+        self.options.tasks = False
+        self.options.zoning = False
+        self.options.address = False
+        self.compareOptions(options)
 
     @mock.patch('catatom2osm.__main__.sys.argv', ['catatom2osm.py', '-w', '33333'])
     @mock.patch('catatom2osm.app.catatom.Reader')
@@ -102,7 +113,6 @@ class TestMain(unittest.TestCase):
     @mock.patch('catatom2osm.__main__.log.error')
     def test_list_error(self, mocklog):
         __main__.run()
-        output = mocklog.call_args_list[0][0][0]
         self.assertTrue(mocklog.called)
 
     @mock.patch('catatom2osm.__main__.sys.argv', ['catatom2osm.py', 'foobar'])
@@ -150,13 +160,8 @@ class TestMain(unittest.TestCase):
         self.assertTrue(mockcat.called)
         self.assertEqual(mockcat.call_args_list[0][0][0], 'foobar')
         options = mockcat.call_args_list[0][0][1]
-        d = {
-            'building': True, 'all': False, 'tasks': False, 'log_level': 'INFO',
-            'parcel': False, 'list': False, 'zoning': False, 'address': True,
-            'zone': ['123'],
-        }
-        for (k, v) in list(d.items()):
-            self.assertEqual(getattr(options, k), v)
+        self.options.zone = ['123']
+        self.compareOptions(options)
 
     @mock.patch(
         'catatom2osm.__main__.sys.argv',
@@ -171,49 +176,32 @@ class TestMain(unittest.TestCase):
             list_zones=False, log_level='INFO', manual=False, parcel=False,
             path=['11111', '22222', '33333'],
         )
+        self.options.path = ['11111', '22222', '33333']
         __main__.run()
         mockcat.assert_has_calls([
-            mock.call('11111', options),
-            mock.call('22222', options),
-            mock.call('33333', options),
+            mock.call('11111', self.options),
+            mock.call('22222', self.options),
+            mock.call('33333', self.options),
         ])
 
     @mock.patch(
         'catatom2osm.__main__.sys.argv',
-        ['catatom2osm.py', '11111', '-o', '1', '2', '3'],
+        ['catatom2osm.py', 'foobar', '-o', '1', '2', '3'],
     )
     @mock.patch('catatom2osm.app.QgsSingleton', mock.MagicMock)
     @mock.patch('catatom2osm.app.CatAtom2Osm.create_and_run')
     def test_zones(self, mockcat):
-        options = Namespace(
-            zone=['1', '2', '3'], all=False, tasks=False, zoning=False,
-            building=True, address=True, comment=False, download=False,
-            list=False, list_zones=False, log_level='INFO', manual=False,
-            parcel=False, path=['11111'], label='3',
-        )
+        self.options.zone = ['1', '2', '3']
         __main__.run()
-        mockcat.assert_has_calls([
-            mock.call('11111', options),
-            mock.call('11111', options),
-            mock.call('11111', options),
-        ])
+        mockcat.assert_called_with('foobar', self.options)
 
     @mock.patch(
         'catatom2osm.__main__.sys.argv',
-        ['catatom2osm.py', '-o', '1', '2', '3', '11111'],
+        ['catatom2osm.py', '-o', '1', '2', '3', 'foobar'],
     )
     @mock.patch('catatom2osm.app.QgsSingleton', mock.MagicMock)
     @mock.patch('catatom2osm.app.CatAtom2Osm.create_and_run')
     def test_zones2(self, mockcat):
-        options = Namespace(
-            zone=['1', '2', '3'], all=False, tasks=False, zoning=False,
-            building=True, address=True, comment=False, download=False,
-            list=False, list_zones=False, log_level='INFO', manual=False,
-            parcel=False, path=['11111'], label='3',
-        )
+        self.options.zone = ['1', '2', '3']
         __main__.run()
-        mockcat.assert_has_calls([
-            mock.call('11111', options),
-            mock.call('11111', options),
-            mock.call('11111', options),
-        ])
+        mockcat.assert_called_with('foobar', self.options)

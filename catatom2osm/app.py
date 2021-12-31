@@ -106,7 +106,7 @@ class CatAtom2Osm(object):
             return
         log.info(_("Start processing '%s'"), report.mun_code)
         self.get_zoning()
-        if not self.zone:
+        if not self.is_new:
             self.process_zoning()
         self.address_osm = osm.Osm()
         self.building_osm = osm.Osm()
@@ -116,9 +116,7 @@ class CatAtom2Osm(object):
                 return
         if self.options.address:
             self.read_address()
-            if False or (  # QUITAR self.zone or (
-                not self.is_new and not self.options.manual
-            ):
+            if not self.is_new and not self.options.manual:
                 current_address = self.get_current_ad_osm()
                 self.address.conflate(current_address)
         if self.options.building or self.options.tasks:
@@ -190,7 +188,7 @@ class CatAtom2Osm(object):
         """Get path from components relative to self.path"""
         return os.path.join(self.path, *paths)
 
-    def get_labels(self, building_gml, part_gml, other_gml)
+    def get_labels(self, building_gml, part_gml, other_gml):
         """Creates cons_labels index"""
         self.building.get_labels(
             building_gml, self.urban_zoning, self.rustic_zoning
