@@ -185,60 +185,68 @@ class CatAtom2Osm(object):
         if self.zone:
             """Filter feat by zone label if needed."""
             return len(self.zone) == 0 or self.building.get_label(feat) in self.zone
-        if self.options.geojson:
-            """Filter feat by geojson """
-            return self.split_geom.contains(feat.geometry())
 
     def get_path(self, *paths):
         """Get path from components relative to self.path"""
         return os.path.join(self.path, *paths)
 
+    def get_labels(self, building_gml, part_gml, other_gml)
+        """Creates cons_labels index"""
+        self.building.get_labels(
+            building_gml, self.urban_zoning, self.rustic_zoning
+        )
+        self.building.get_labels(
+            part_gml, self.urban_zoning, self.rustic_zoning
+        )
+        if other_gml:
+            self.building.get_labels(
+                other_gml, self.urban_zoning, self.rustic_zoning
+            )
+        
+    def zoning_split(self, crs):
+        """Filter zoning using split."""
+        split = QgsVectorLayer(self.options.split, 'zoningsplit', 'ogr')
+        # next es sólo un ejemplo, hay que tener en cuenta que puede haber +
+        feature = next(split.getFeatures())
+        crs_transform = ggs2coordinate_transform(split.crs(), crs)
+        self.split_geom = feature.geometry()
+        self.split_geom.transform(crs_transform)
+        # para self.urban_zoning y self.rustic_zoning, llamar a un método
+        # (crear en layer.ZoningLayer) que filtre usando la capa split
+        
     def get_building(self):
         """Merge building, parts and pools"""
         building_gml = self.cat.read("building")
+        part_gml = self.cat.read("buildingpart")
+        other_gml = self.cat.read("otherconstruction", True)
         report.building_date = building_gml.source_date
         fn = self.get_path('building.shp')
         layer.ConsLayer.create_shp(fn, building_gml.crs())
         self.building = layer.ConsLayer(
             fn, providerLib='ogr', source_date=building_gml.source_date
         )
-
-        if self.options.geojson:
-            split = QgsVectorLayer(self.options.geojson, 'split', 'ogr')
-            feature = next(split.getFeatures())
-            crs_transform = ggs2coordinate_transform(split.crs(), building_gml.crs())
-            self.split_geom = feature.geometry()
-            self.split_geom.transform(crs_transform)
         
         if self.options.tasks:
-            self.building.get_labels(
-                building_gml, self.urban_zoning, self.rustic_zoning
-            )
+            self.get_labels(building_gml, part_gml, other_gml)
+
+        if self.options.split:
+            self.zoning_split(building_gml.crs())
+
         self.building.append(building_gml, query=self.zone_query)
         report.inp_buildings = self.building.featureCount()
-        del building_gml
-        part_gml = self.cat.read("buildingpart")
-        if self.options.tasks:
-            self.building.get_labels(
-                part_gml, self.urban_zoning, self.rustic_zoning
-            )
         self.building.append(part_gml, query=self.zone_query)
         self.building.detect_missing_building_parts()
         report.inp_parts = self.building.featureCount() - report.inp_buildings
-        del part_gml
-        other_gml = self.cat.read("otherconstruction", True)
         report.inp_pools = 0
+        
         if other_gml:
-            if self.options.tasks:
-                self.building.get_labels(
-                    other_gml, self.urban_zoning, self.rustic_zoning
-                )
             self.building.append(other_gml, query=self.zone_query)
             report.inp_pools = (
                 self.building.featureCount()
                 - report.inp_buildings
                 - report.inp_parts
             )
+
         csvtools.dict2csv(self.building.labels_path, self.building.labels)
         report.inp_features = self.building.featureCount()
 

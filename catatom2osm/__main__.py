@@ -65,8 +65,8 @@ def run():
         default=[], type=str, help=terminal.encode(_("Process zones given "
         "its labels")))
 
-    parser.add_argument("-g", "--geojson", dest="geojson",
-        help=terminal.encode(_("Process zones given a boundary polygon")))
+    parser.add_argument("-s", "--split", dest="split",
+        help=terminal.encode(_("Process zones within a boundary polygon")))
 
     parser.add_argument("-d", "--address", dest="address", action="store_true",
         help=terminal.encode(_("Process the address dataset (default)")))
