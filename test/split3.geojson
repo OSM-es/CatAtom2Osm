@@ -7,8 +7,8 @@
             "type": "Feature",
             "properties": null,
             "geometry": {
-                "type": "LineString",
-                "coordinates": [
+                "type": "Polygon",
+                "coordinates": [ [
                     [
                         -16.44352724638,
                         28.24130695059
@@ -45,15 +45,15 @@
                         -16.44352724638,
                         28.24130695059
                     ]
-                ]
+                ] ]
             }
         },
         {
             "type": "Feature",
             "properties": null,
             "geometry": {
-                "type": "LineString",
-                "coordinates": [
+                "type": "Polygon",
+                "coordinates": [ [
                     [
                         -16.44210961617,
                         28.24078748575
@@ -74,7 +74,7 @@
                         -16.44210961617,
                         28.24078748575
                     ]
-                ]
+                ] ]
             }
         }
     ]

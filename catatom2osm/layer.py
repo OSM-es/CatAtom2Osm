@@ -581,10 +581,13 @@ class BaseLayer(QgsVectorLayer):
             len(data.relations) - relations, self.name())
         return data
 
-    def search(self, expression):
+    def search(self, expression=''):
         """Returns a features iterator for this search expression"""
-        exp = QgsExpression(expression)
-        request = QgsFeatureRequest(exp)
+        if expression == '':
+            request = QgsFeatureRequest(exp)
+        else:
+            exp = QgsExpression(expression)
+            request = QgsFeatureRequest(exp)
         return self.getFeatures(request)
 
     def count(self, expression):
@@ -606,22 +609,22 @@ class BaseLayer(QgsVectorLayer):
 
     def remove_outside_features(self, layer):
         """Remove from self any feature not contained in geometry features."""
-        split = Geometry.merge_adjacent_features([f for f in layer.getFeatures()])
-
+        split = Geometry.merge_adjacent_features(
+            [f for f in layer.getFeatures()]
+        )
         if layer.crs() != self.crs():
             crs_transform = ggs2coordinate_transform(layer.crs(), self.crs())
             split.transform(crs_transform)
-        
         to_clean = []
         fcount = self.featureCount()
         for feat in self.getFeatures():
             geom = feat.geometry()
             if not split.contains(geom):
                 to_clean.append(feat.id())
-
         if len(to_clean):
             self.writer.deleteFeatures(to_clean)
-            log.debug(_("%s: Removed %d of %d features."), self.name(), len(to_clean), fcount)
+            msg = _("%s: Removed %d of %d features.")
+            log.debug(msg, self.name(), len(to_clean), fcount)
 
 class PolygonLayer(BaseLayer):
     """Base class for polygon layers"""

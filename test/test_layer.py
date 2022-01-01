@@ -675,10 +675,10 @@ class TestZoningLayer(unittest.TestCase):
 
     def do_test_split(self, split):
         splitted = [
-            '83453', '83462', '83469', '84486', '84499', '85490',  '85461',
-            '85462', '85463', '86463', '86464', '86498', '87483', '87484',
+            '83462', '83462', '83469', '84486', '84499', '85461', '85462',
+            '85463', '85490', '86464', '87483',
         ]
-        self.ulayer.append(self.fixture, 'M')
+            self.ulayer.append(self.fixture, 'M')
         self.rlayer.append(self.fixture, 'P')
         self.ulayer.remove_outside_features(split)
         self.assertEqual(self.ulayer.featureCount(), len(splitted))
@@ -686,14 +686,20 @@ class TestZoningLayer(unittest.TestCase):
             self.assertIn(feat['label'], splitted)
 
     def test_remove_outside_features1(self):
+        """Splits using a polygon geojson created with QGIS"""
         split = BaseLayer('test/split1.geojson', 'splitzoning', 'ogr')
         self.do_test_split(split)
 
     def test_remove_outside_features2(self):
+        """Splits using a multipolygon geojson created with QGIS"""
         split = BaseLayer('test/split2.geojson', 'splitzoning', 'ogr')
         self.do_test_split(split)
 
     def test_remove_outside_features3(self):
+        """
+        Splits using a polygon geojson with different CRS created with JOSM.
+        Manually edited to change MultiString to Polygon
+        """
         split = BaseLayer('test/split3.geojson', 'splitzoning', 'ogr')
         self.do_test_split(split)
 

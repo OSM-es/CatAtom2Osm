@@ -200,22 +200,21 @@ class CatAtom2Osm(object):
                 other_gml, self.urban_zoning, self.rustic_zoning
             )
 
+    def split_zoning(self):
+        """Filter zoning using self.options.split."""
+        split = QgsVectorLayer(self.options.split, 'zoningsplit', 'ogr')
+        if not split.isValid():
+            raise IOError("Can't open %s" % self.options.split)
+        self.urban_zoning.remove_outside_features(split)
+        self.rustic_zoning.remove_outside_features(split)
+        self.zone = [f['label'] for f in self.rustic_zoning.getFeatures()]
+        self.zone += [f['label'] for f in self.urban_zoning.getFeatures()]
+
     def get_building(self):
         """Merge building, parts and pools"""
         building_gml = self.cat.read("building")
         part_gml = self.cat.read("buildingpart")
         other_gml = self.cat.read("otherconstruction", True)
-
-        if self.options.split:
-            """Filter zoning using split."""
-            split = QgsVectorLayer(self.options.split, 'zoningsplit', 'ogr')
-
-            self.urban_zoning.remove_outside_features(split)
-            self.rustic_zoning.remove_outside_features(split)
-            building_gml.remove_outside_features(split)
-            part_gml.remove_outside_features(split)
-            other_gml.remove_outside_features(split)
-
         report.building_date = building_gml.source_date
         fn = self.get_path('building.shp')
         layer.ConsLayer.create_shp(fn, building_gml.crs())
@@ -224,7 +223,8 @@ class CatAtom2Osm(object):
         )
         if self.options.tasks:
             self.get_labels(building_gml, part_gml, other_gml)
-
+        if self.options.split:
+            self.split_zoning()
         self.building.append(building_gml, query=self.zone_query)
         report.inp_buildings = self.building.featureCount()
         self.building.append(part_gml, query=self.zone_query)
@@ -238,7 +238,6 @@ class CatAtom2Osm(object):
                 - report.inp_buildings
                 - report.inp_parts
             )
-
         csvtools.dict2csv(self.building.labels_path, self.building.labels)
         report.inp_features = self.building.featureCount()
 
@@ -248,18 +247,16 @@ class CatAtom2Osm(object):
         Remove zones without buildings (empty tasks).
         """
         self.get_tasks(source)
-        request = QgsFeatureRequest()
+        exp = ''
         if len(self.zone) > 0:
-            expression = "label IN (%s)" % str(self.zone)[1:-1]
-            exp = QgsExpression(expression)
-            request = QgsFeatureRequest(exp)
+            exp = "label IN (%s)" % ', '.join(["'%s'" % z for z in self.zone])
         zoning = [
             (self.rustic_zoning.format_label(zone), zone.id())
-            for zone in self.rustic_zoning.getFeatures(request)
+            for zone in self.rustic_zoning.search(exp)
         ]
         zoning += [
             (self.urban_zoning.format_label(zone), zone.id())
-            for zone in self.urban_zoning.getFeatures(request)
+            for zone in self.urban_zoning.search(exp)
         ]
         if report.tasks_m > 0:
             zoning.append(('missing', None))
@@ -349,23 +346,26 @@ class CatAtom2Osm(object):
     def output_zoning(self):
         self.urban_zoning.reproject()
         self.rustic_zoning.reproject()
-        out_path = self.get_path('boundary.poly')
-        self.rustic_zoning.export_poly(out_path)
-        log.info(_("Generated '%s'"), out_path)
+        if not self.zone:
+            out_path = self.get_path('boundary.poly')
+            self.rustic_zoning.export_poly(out_path)
+            log.info(_("Generated '%s'"), out_path)
         self.rustic_zoning.difference(self.urban_zoning)
-        self.export_layer(
-            self.urban_zoning, 'urban_zoning.geojson', 'GeoJSON'
-        )
-        self.export_layer(
-            self.rustic_zoning, 'rustic_zoning.geojson', 'GeoJSON'
-        )
+        if not self.zone:
+            self.export_layer(
+                self.urban_zoning, 'urban_zoning.geojson', 'GeoJSON'
+            )
+            self.export_layer(
+                self.rustic_zoning, 'rustic_zoning.geojson', 'GeoJSON'
+            )
         self.rustic_zoning.append(self.urban_zoning)
-        self.export_layer(self.rustic_zoning, 'zoning.geojson', 'GeoJSON')
-        if hasattr(self, 'urban_zoning'):
-            del self.urban_zoning
-            self.delete_shp('urban_zoning.shp')
-        if hasattr(self, 'rustic_zoning'):
-            del self.rustic_zoning
+        fn = 'zoning.geojson'
+        if self.options.split:
+            fn = 'zoning_%s.geojson' % os.path.basename(self.options.split).split('.')[0]
+        self.export_layer(self.rustic_zoning, fn, 'GeoJSON')
+        del self.urban_zoning
+        self.delete_shp('urban_zoning.shp')
+        del self.rustic_zoning
         self.delete_shp('rustic_zoning.shp')
 
     def process_building(self):
