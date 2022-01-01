@@ -199,40 +199,23 @@ class CatAtom2Osm(object):
             self.building.get_labels(
                 other_gml, self.urban_zoning, self.rustic_zoning
             )
-        
-    def split_zoning(self, crs):
-        """Filter zoning using split."""
-        split = QgsVectorLayer(self.options.split, 'zoningsplit', 'ogr')
 
-        split_geom = None
-        for feature in split.getFeatures():
-            if split_geom == None:
-                split_geom = feature.geometry()
-            else:
-                split_geom = split_geom.combine(feature.geometry())
-        
-        crs_transform = ggs2coordinate_transform(split.crs(), crs)
-        split_geom.transform(crs_transform)
-
-        self.remove_outside_features(split_geom, self.urban_zoning)
-        self.remove_outside_features(split_geom, self.rustic_zoning)
-
-    def remove_outside_features(self, clip, layer):
-        to_clean = []
-        
-        for feat in layer.getFeatures():
-            geom = feat.geometry()
-            if not clip.contains(geom):
-                to_clean.append(feat.id())
-
-        if len(to_clean):
-            layer.writer.deleteFeatures(to_clean)
-        
     def get_building(self):
         """Merge building, parts and pools"""
         building_gml = self.cat.read("building")
         part_gml = self.cat.read("buildingpart")
         other_gml = self.cat.read("otherconstruction", True)
+
+        if self.options.split:
+            """Filter zoning using split."""
+            split = QgsVectorLayer(self.options.split, 'zoningsplit', 'ogr')
+
+            self.urban_zoning.remove_outside_features(split)
+            self.rustic_zoning.remove_outside_features(split)
+            building_gml.remove_outside_features(split)
+            part_gml.remove_outside_features(split)
+            other_gml.remove_outside_features(split)
+
         report.building_date = building_gml.source_date
         fn = self.get_path('building.shp')
         layer.ConsLayer.create_shp(fn, building_gml.crs())
@@ -241,8 +224,7 @@ class CatAtom2Osm(object):
         )
         if self.options.tasks:
             self.get_labels(building_gml, part_gml, other_gml)
-        if self.options.split:
-            self.split_zoning(building_gml.crs())
+
         self.building.append(building_gml, query=self.zone_query)
         report.inp_buildings = self.building.featureCount()
         self.building.append(part_gml, query=self.zone_query)
@@ -256,6 +238,7 @@ class CatAtom2Osm(object):
                 - report.inp_buildings
                 - report.inp_parts
             )
+
         csvtools.dict2csv(self.building.labels_path, self.building.labels)
         report.inp_features = self.building.featureCount()
 
