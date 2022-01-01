@@ -199,19 +199,23 @@ class CatAtom2Osm(object):
             self.building.get_labels(
                 other_gml, self.urban_zoning, self.rustic_zoning
             )
-        
-    def split_zoning(self):
-        """Filter zoning using split."""
-        split = QgsVectorLayer(self.options.split, 'zoningsplit', 'ogr')
-
-        self.urban_zoning.remove_outside_features(split)
-        self.rustic_zoning.remove_outside_features(split)
 
     def get_building(self):
         """Merge building, parts and pools"""
         building_gml = self.cat.read("building")
         part_gml = self.cat.read("buildingpart")
         other_gml = self.cat.read("otherconstruction", True)
+
+        if self.options.split:
+            """Filter zoning using split."""
+            split = QgsVectorLayer(self.options.split, 'zoningsplit', 'ogr')
+
+            self.urban_zoning.remove_outside_features(split)
+            self.rustic_zoning.remove_outside_features(split)
+            building_gml.remove_outside_features(split)
+            part_gml.remove_outside_features(split)
+            other_gml.remove_outside_features(split)
+
         report.building_date = building_gml.source_date
         fn = self.get_path('building.shp')
         layer.ConsLayer.create_shp(fn, building_gml.crs())
@@ -220,9 +224,6 @@ class CatAtom2Osm(object):
         )
         if self.options.tasks:
             self.get_labels(building_gml, part_gml, other_gml)
-
-        if self.options.split:
-            self.split_zoning()
 
         self.building.append(building_gml, query=self.zone_query)
         report.inp_buildings = self.building.featureCount()
@@ -237,6 +238,7 @@ class CatAtom2Osm(object):
                 - report.inp_buildings
                 - report.inp_parts
             )
+
         csvtools.dict2csv(self.building.labels_path, self.building.labels)
         report.inp_features = self.building.featureCount()
 

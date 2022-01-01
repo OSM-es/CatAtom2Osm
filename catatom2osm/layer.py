@@ -621,7 +621,7 @@ class BaseLayer(QgsVectorLayer):
 
         if len(to_clean):
             self.writer.deleteFeatures(to_clean)
-            log.debug(_("Removed %d of %d features."), len(to_clean), fcount)
+            log.debug(_("%s: Removed %d of %d features."), self.name(), len(to_clean), fcount)
 
 class PolygonLayer(BaseLayer):
     """Base class for polygon layers"""
