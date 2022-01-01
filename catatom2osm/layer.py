@@ -608,8 +608,9 @@ class BaseLayer(QgsVectorLayer):
         """Remove from self any feature not contained in geometry features."""
         split = Geometry.merge_adjacent_features([f for f in layer.getFeatures()])
 
-        crs_transform = ggs2coordinate_transform(layer.crs(), self.crs())
-        split.transform(crs_transform)
+        if layer.crs() != self.crs():
+            crs_transform = ggs2coordinate_transform(layer.crs(), self.crs())
+            split.transform(crs_transform)
         
         to_clean = []
         fcount = self.featureCount()
