@@ -180,9 +180,8 @@ class CatAtom2Osm(object):
                     self.write_osm(data, 'tasks', fn)
 
     def zone_query(self, feat, kwargs):
-        if self.zone:
-            """Filter feat by zone label if needed."""
-            return len(self.zone) == 0 or self.building.get_label(feat) in self.zone
+        """Filter feat by zone label if needed."""
+        return len(self.zone) == 0 or self.building.get_label(feat) in self.zone
 
     def get_path(self, *paths):
         """Get path from components relative to self.path"""
@@ -240,20 +239,16 @@ class CatAtom2Osm(object):
         self.building = layer.ConsLayer(
             fn, providerLib='ogr', source_date=building_gml.source_date
         )
-        
         if self.options.tasks:
             self.get_labels(building_gml, part_gml, other_gml)
-
         if self.options.split:
             self.split_zoning(building_gml.crs())
-
         self.building.append(building_gml, query=self.zone_query)
         report.inp_buildings = self.building.featureCount()
         self.building.append(part_gml, query=self.zone_query)
         self.building.detect_missing_building_parts()
         report.inp_parts = self.building.featureCount() - report.inp_buildings
         report.inp_pools = 0
-        
         if other_gml:
             self.building.append(other_gml, query=self.zone_query)
             report.inp_pools = (
@@ -261,7 +256,6 @@ class CatAtom2Osm(object):
                 - report.inp_buildings
                 - report.inp_parts
             )
-
         csvtools.dict2csv(self.building.labels_path, self.building.labels)
         report.inp_features = self.building.featureCount()
 
@@ -271,11 +265,11 @@ class CatAtom2Osm(object):
         Remove zones without buildings (empty tasks).
         """
         self.get_tasks(source)
-        expression = ''
+        request = QgsFeatureRequest()
         if len(self.zone) > 0:
             expression = "label IN (%s)" % str(self.zone)[1:-1]
-        exp = QgsExpression(expression)
-        request = QgsFeatureRequest(exp)
+            exp = QgsExpression(expression)
+            request = QgsFeatureRequest(exp)
         zoning = [
             (self.rustic_zoning.format_label(zone), zone.id())
             for zone in self.rustic_zoning.getFeatures(request)
