@@ -214,8 +214,8 @@ class TestCatAtom2Osm(unittest.TestCase):
         for i in range(5):
             zones.append(mock.MagicMock())
             zones[i].id.return_value = i + 1
-        self.m_app.urban_zoning.getFeatures.return_value = [zones[1], zones[3]]
-        self.m_app.rustic_zoning.getFeatures.return_value = [
+        self.m_app.urban_zoning.search.return_value = [zones[1], zones[3]]
+        self.m_app.rustic_zoning.search.return_value = [
             zones[0], zones[2], zones[4]
         ]
         self.m_app.rustic_zoning.format_label = lambda f: '00' + str(f.id())

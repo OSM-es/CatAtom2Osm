@@ -673,12 +673,13 @@ class TestZoningLayer(unittest.TestCase):
         labels = Counter(building.labels.values())
         self.assertEqual(labels, test)
 
-    def do_test_split(self, split):
+    @mock.patch('catatom2osm.layer.tqdm')
+    def do_test_split(self, split, m_tqdm):
         splitted = [
             '83462', '83462', '83469', '84486', '84499', '85461', '85462',
             '85463', '85490', '86464', '87483',
         ]
-            self.ulayer.append(self.fixture, 'M')
+        self.ulayer.append(self.fixture, 'M')
         self.rlayer.append(self.fixture, 'P')
         self.ulayer.remove_outside_features(split)
         self.assertEqual(self.ulayer.featureCount(), len(splitted))
