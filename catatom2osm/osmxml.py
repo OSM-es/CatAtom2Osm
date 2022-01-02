@@ -76,18 +76,19 @@ def deserialize(infile, data=None):
         elif elem.tag == 'meta':
             data.meta = dict(elem.attrib)
         elif elem.tag == 'node':
-            n = data.Node(float(elem.get('lon')), float(elem.get('lat')), 
-                attrs=dict(elem.attrib), tags=tags)
+            lon = float(elem.get('lon'))
+            lat = float(elem.get('lat'))
+            n = data.Node(lon, lat, tags=tags, attrs=dict(elem.attrib))
             tags = {}
         elif elem.tag == 'way':
-            w = data.Way(attrs=dict(elem.attrib), tags=tags)
+            w = data.Way(tags=tags, attrs=dict(elem.attrib))
             w.nodes = childs
             childs = []
             tags = {}
         elif elem.tag == 'nd':
             childs.append(elem.get('ref'))
         elif elem.tag == 'relation':
-            r = data.Relation(attrs=dict(elem.attrib), tags=tags)
+            r = data.Relation(tags=tags, attrs=dict(elem.attrib))
             r.members = childs
             childs = []
             tags = {}

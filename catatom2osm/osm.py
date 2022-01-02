@@ -22,7 +22,7 @@ class Osm(object):
         self.tags = {}
         self.note = None
         self.meta = None
-        self.attr_list = ('upload', 'version', 'generator')
+        self._attr_list = ('upload', 'version', 'generator')
 
     @property
     def nodes(self):
@@ -41,9 +41,11 @@ class Osm(object):
 
     @property
     def attrs(self):
-        """Returns dictionary of properties in self.attr_list"""
-        attrs = {k: getattr(self, k, None) for k in self.attr_list \
-            if getattr(self, k, None) is not None}
+        """Returns dictionary of properties in self._attr_list"""
+        attrs = {
+            k: getattr(self, k, None) for k in self._attr_list
+            if getattr(self, k, None) is not None
+        }
         if self.upload in ['yes', 'upload']:
             attrs.pop('upload')
         return attrs
@@ -51,7 +53,8 @@ class Osm(object):
     def get(self, eid, etype='n'):
         """Returns element by its id"""
         eid = str(eid)
-        if eid[0] not in 'nwr': eid = etype[0].lower() + eid
+        if eid[0] not in 'nwr':
+            eid = etype[0].lower() + eid
         return self.index[eid]
 
     def remove(self, el):
@@ -98,6 +101,34 @@ class Osm(object):
         for way in self.ways:
             way.clean_duplicated_nodes()
 
+    def append(self, data, query=None):
+        """
+        Append data elements to this dataset avoiding duplicates.
+        Optionally filter by query.
+
+        Args:
+            data (iterable, Osm or Element ): source data
+            query (func): function to apply to each element and returns a
+                boolean deciding if it will be included or not
+
+        Example:
+            >>> d1 = osm.Osm()
+            >>> n1 = d1.Node(1, 1, tags={'tourism': 'viewpoint'})
+            >>> n2 = d1.Node(2, 2, tags={'amenity': 'cafe'})
+            >>> d2 = osm.Osm()
+            >>> d2.append(d1)  # all
+            >>> d3 = osm.Osm()
+            >>> d3.append(d1, lambda e: 'amenity' in e.tags)  # only amenities
+        """
+        if isinstance(data, Element):
+            if not query or query(data):
+                data.copyto(self)
+        else:
+            if isinstance(data, Osm):
+                data = data.elements
+            for el in data:
+                self.append(el, query)
+
     def __getattr__(self, name):
         """
         Helper to create elements.
@@ -115,7 +146,7 @@ class Osm(object):
 class Element(object):
     """Base class for Osm elements"""
 
-    def __init__(self, container, tags={}, attrs = None):
+    def __init__(self, container, tags={}, attrs={}):
         """Each element must belong to a container OSM dataset"""
         self.container = container
         self.action = 'modify'
@@ -126,11 +157,11 @@ class Element(object):
         self.changeset = None
         self.uid = None
         self.user = None
-        self.attr_list = (
+        self._attr_list = (
             'id', 'action', 'visible', 'version', 
             'timestamp', 'changeset', 'uid', 'user'
         )
-        if attrs is not None: self.attrs = attrs
+        self.attrs = attrs
         if not hasattr(self, 'id'):
             container.counter -= 1
             self.id = container.counter
@@ -142,6 +173,8 @@ class Element(object):
         if isinstance(other, self.__class__):
             a = dict(self.__dict__)
             b = dict(other.__dict__)
+            a.pop('container', None)
+            b.pop('container', None)
             if other.is_new() or self.is_new(): a['id'] = 0
             if other.is_new() or self.is_new(): b['id'] = 0
             if b['tags'] == {}: a['tags'] = {}
@@ -174,18 +207,22 @@ class Element(object):
     @property
     def attrs(self):
         """Returns the element attributes as a dictionary"""
-        attrs = {k: getattr(self, k, None) for k in self.attr_list \
-            if getattr(self, k, None) is not None}
-        if 'id' in attrs: attrs['id'] = str(attrs['id'])
+        attrs = {
+            k: getattr(self, k, None) for k in self._attr_list
+            if getattr(self, k, None) is not None
+        }
+        if 'id' in attrs:
+            attrs['id'] = str(attrs['id'])
         return attrs
 
     @attrs.setter
     def attrs(self, attrs):
         """Sets the element attributes from a dictionary"""
-        for (k, v) in list(attrs.items()):
-            if k == 'id': v = int(v)
-            if k in self.attr_list:
-                setattr(self, k, v)
+        for (k, v) in attrs.items():
+            if k == 'id':
+                v = int(v)
+            if k in self._attr_list:
+               setattr(self, k, v)
 
 
 class Node(Element):
@@ -204,7 +241,7 @@ class Node(Element):
         if COOR_DIGITS:
             self.x = round(self.x, COOR_DIGITS)
             self.y = round(self.y, COOR_DIGITS)
-        self.attr_list = self.attr_list + ('lon', 'lat')
+        self._attr_list = self._attr_list + ('lon', 'lat')
 
     def __getitem__(self, key):
         """n[0], n[1] is equivalent to n.x, n.y"""
@@ -240,7 +277,12 @@ class Node(Element):
     def lat(self, value):
         """Sets latitude from string"""
         self.y = float(value)
-    
+
+    def copyto(self, container):
+        """Copy self in another container"""
+        if self.fid not in container.index.keys():
+            container.Node(self.geometry(), tags=self.tags, attrs=self.attrs)
+
     def __str__(self):
         return str((self.x, self.y))
 
@@ -309,6 +351,8 @@ class Way(Element):
         elif isinstance(other, self.__class__):
             a = dict(self.__dict__)
             b = dict(other.__dict__)
+            a.pop('container', None)
+            b.pop('container', None)
             if other.is_new() or self.is_new(): a['id'] = 0
             if other.is_new() or self.is_new(): b['id'] = 0
             if b['tags'] == {}: a['tags'] = {}
@@ -317,8 +361,9 @@ class Way(Element):
             b['nodes'] = other.geometry()
             return a == b
         elif self.is_new() and self.tags == {}:
-            i = other.index(min(other))
-            return self.geometry() == other[i:] + other[1:i+1]
+            if hasattr(other, 'index'):
+                i = other.index(min(other))
+                return self.geometry() == other[i:] + other[1:i+1]
         return False
 
     def __ne__(self, other):
@@ -354,7 +399,14 @@ class Way(Element):
                 result = n
                 break
         return result
-        
+
+    def copyto(self, container):
+        """Copy self in another container"""
+        if self.fid not in container.index.keys():
+            for n in self.nodes:
+                n.copyto(container)
+            container.Way(nodes=self.nodes, tags=self.tags, attrs=self.attrs)
+
 
 class Relation(Element):
     """A relation is a collection of nodes, ways or relations with a role."""
@@ -434,8 +486,17 @@ class Relation(Element):
             i += 1
         return outer
 
+    def copyto(self, container):
+        """Copy self in another container"""
+        if self.fid not in container.index.keys():
+            for m in self.members:
+                m.element.copyto(container)
+            tags = self.tags
+            attrs = self.attrs
+            container.Relation(members=self.members, tags=tags, attrs=attrs)
+
     class Member(object):
-        """A element is member of a relation with a role."""
+        """An element is member of a relation with a role."""
     
         def __init__(self, element, role=None):
             self.element = element

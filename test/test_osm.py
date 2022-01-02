@@ -2,7 +2,7 @@ import unittest
 import random
 from collections import Counter
 
-from catatom2osm import osm
+from catatom2osm import osm, osmxml
 
 class OsmTestCase(unittest.TestCase):
 
@@ -143,6 +143,65 @@ class TestOsm(OsmTestCase):
         self.assertEqual(self.d.get('w-2'), w)
         self.assertEqual(self.d.get('-3', 'Relation'), r)
 
+    def test_append_node(self):
+        n1 = self.d.Node(2, 2, tags=dict(highway='residential'))
+        n2 = self.d.Node(1, 1, tags=dict(building='yes'), attrs=dict(user='foo'))
+        d2 = osm.Osm()
+        query = lambda el: 'building' in el.tags
+        d2.append(n1, query)
+        self.assertEqual(len(d2.elements), 0)  # n1 is ignored due to query
+        d2.append(n2, query)
+        self.assertEqual(len(d2.elements), 1)  # n2.id is copied
+        self.assertEqual(d2.get(n2.id), n2)  # with all tags and attrs
+        d2.append(n2)
+        self.assertEqual(len(d2.elements), 1)  # don't insert repeated
+
+    def test_append_highway(self):
+        with open('test/current.osm', 'rb') as fo:
+            d1 = osmxml.deserialize(fo)
+        d2 = osm.Osm()
+        query = lambda el: (
+            'highway' in el.tags or el.tags.get('place') == 'square'
+        )
+        d2.append(d1, query)
+        self.assertEquals(len(d2.nodes), 15)
+        self.assertEquals(len(d2.ways), 3)
+        for el in d2.ways:
+            tag = el.tags.get('highway', el.tags.get('place', ''))
+            self.assertNotEqual(tag, '')
+
+    def test_append_addr(self):
+        with open('test/current.osm', 'rb') as fo:
+            d1 = osmxml.deserialize(fo)
+        d2 = osm.Osm()
+        query = lambda el: (
+            'addr:street' in el.tags or 'addr:place' in el.tags
+        )
+        d2.append(d1, query)
+        self.assertEquals(len(d2.nodes), 6)
+        self.assertEquals(len(d2.ways), 1)
+        for el in d2.elements:
+            if el not in d2.parents.keys():
+                tag = el.tags.get('addr:street', el.tags.get('addr:place', ''))
+                self.assertNotEqual(tag, '')
+
+    def test_append_building(self):
+        with open('test/current.osm', 'rb') as fo:
+            d1 = osmxml.deserialize(fo)
+        d2 = osm.Osm()
+        query = lambda el: (
+            'building' in el.tags or el.tags.get('leisure') == 'swimming_pool'
+        )
+        d2.append(d1, query)
+        self.assertEquals(len(d2.nodes), 27)
+        self.assertEquals(len(d2.ways), 5)
+        with open('prueba.osm', 'wb') as fo:
+            osmxml.serialize(fo, d2)
+        for el in d2.elements:
+            if el not in d2.parents.keys():
+                tag = el.tags.get('building', el.tags.get('leisure', ''))
+                self.assertNotEqual(tag, '')
+
 
 class TestOsmElement(OsmTestCase):
 
@@ -277,6 +336,12 @@ class TestOsmNode(OsmTestCase):
         n = self.d.Node(1, 2)
         self.assertEqual(str(n), str((n.x, n.y)))
 
+    def test_clone(self):
+        n = self.d.Node(1, 1, tags=dict(foo='bar'), attrs=dict(user='taz'))
+        d2 = osm.Osm()
+        n.copyto(d2)
+        self.assertEqual(d2.get(n.id), n)
+        self.assertEqual(len(self.d.elements), len(d2.elements))
 
 class TestOsmWay(OsmTestCase):
 
@@ -394,7 +459,22 @@ class TestOsmWay(OsmTestCase):
         w = self.d.Way([(0,0), n, (2,2)])
         self.assertTrue(w.search_node(1, 1) is n)
         self.assertEqual(w.search_node(5, 0), None)
-        
+
+    def test_clone(self):
+        #   * (1,3)     * n2 (2,3)
+        #        w1           w2   * (3,2)
+        #   * (1,1)     * n1 (2,1)
+        n1 = self.d.Node(2, 1, tags={'name': 'n1'})
+        n2 = self.d.Node(2, 3, tags={'name': 'n2'})
+        w1 = self.d.Way([n1, n2, (1, 3), (1, 1), n1], tags={'name': 'w1'})
+        w2 = self.d.Way([n1, (3, 2), n2, n1], tags={'name': 'w2'})
+        d2 = osm.Osm()
+        w1.copyto(d2)
+        w2.copyto(d2)
+        self.assertEqual(len(d2.elements), len(self.d.elements))
+        self.assertEqual(d2.get(w1.fid), w1)
+        self.assertEqual(d2.get(w2.fid), w2)
+
 
 class TestOsmRelation(OsmTestCase):
 
@@ -572,6 +652,15 @@ class TestOsmRelation(OsmTestCase):
         r.append(self.d.Way(w3[2:4]), 'outer')
         r.append(self.d.Way(w3[1:3]), 'outer')
         self.assertEqual(r.outer_geometry(), [w0, w1, w2, w3, w4])
+
+    def test_clone(self):
+        w1 = self.d.Way([(0, 0), (1, 3), (1, 1), (0, 0)], tags={'name': 'w1'})
+        w2 = self.d.Way([(0, 0), (3, 2), (1, 2), (0, 0)], tags={'name': 'w2'})
+        r = self.d.Relation(members=[w1, w2])
+        d2 = osm.Osm()
+        r.copyto(d2)
+        self.assertEqual(d2.get(r.fid), r)
+        self.assertEqual(len(self.d.elements), len(d2.elements))
 
 
 class TestOsmPolygon(OsmTestCase):
