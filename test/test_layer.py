@@ -354,6 +354,13 @@ class TestBaseLayer(unittest.TestCase):
             else:
                 self.assertEqual(data.tags[key], value)
 
+    def test_search(self):
+        layer = BaseLayer('test/building.gml', 'building', 'ogr')
+        count = sum([1 for f in layer.search()])
+        self.assertEqual(count, layer.featureCount())
+        count = sum([1 for f in layer.search("localId LIKE '76407%%'")])
+        self.assertEqual(count, 2)
+
 class TestBaseLayer2(unittest.TestCase):
 
     @mock.patch('catatom2osm.layer.QgsVectorFileWriter_writeAsVectorFormat')

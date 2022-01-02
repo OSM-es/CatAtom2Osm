@@ -584,7 +584,7 @@ class BaseLayer(QgsVectorLayer):
     def search(self, expression=''):
         """Returns a features iterator for this search expression"""
         if expression == '':
-            request = QgsFeatureRequest(exp)
+            request = QgsFeatureRequest()
         else:
             exp = QgsExpression(expression)
             request = QgsFeatureRequest(exp)
