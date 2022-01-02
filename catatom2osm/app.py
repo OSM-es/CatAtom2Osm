@@ -110,6 +110,11 @@ class CatAtom2Osm(object):
             self.process_zoning()
         self.address_osm = osm.Osm()
         self.building_osm = osm.Osm()
+        if self.options.address and self.is_new:
+            self.options.tasks = False
+            self.options.building = False
+            self.options.zoning = False
+            self.options.parcel = False
         if self.options.building or self.options.tasks:
             self.get_building()
             if self.building.featureCount() == 0:
