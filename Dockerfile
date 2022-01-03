@@ -1,13 +1,19 @@
-FROM ubuntu:18.04
+ARG APP_ENV=prod
+ARG user=catastro
+ARG group=catastro
+ARG home=/catastro
+
+FROM ubuntu:18.04 AS base
 
 LABEL maintainer="emilio.gomez.fdez@gmail.com"
 
-ARG REQUISITES="requisites.txt"
-ARG user=catastro
-ARG group=catastro
+ARG APP_ENV
+ARG REQUISITES=requisites-$APP_ENV.txt
+ARG user
+ARG group
+ARG home
 ARG uid=1000
 ARG gid=1000
-ARG home=/catastro
 
 # System deps
 ENV APP_PATH=/opt/CatAtom2Osm
@@ -25,8 +31,9 @@ ENV QT_QPA_PLATFORM=offscreen
 # Create application user and home
 RUN mkdir -p "$home" && chown $uid:$gid "$home" \
   && addgroup --gid $gid $group \
-  && useradd -d "$home" -u $uid -g $group -s /bin/bash $user
-RUN mkdir -p "/tmp/runtime-$user" && chown $uid:$gid "/tmp/runtime-$user"
+  && useradd -d "$home" -u $uid -g $group -s /bin/bash $user \
+  && mkdir -p "/tmp/runtime-$user" \
+  && chown $uid:$gid "/tmp/runtime-$user"
 ENV XDG_RUNTIME_DIR="/tmp/runtime-$user"
 
 # Copy only requirements to cache them in docker layer
@@ -34,9 +41,22 @@ WORKDIR $APP_PATH
 COPY $REQUISITES ./
 RUN pip install -r $REQUISITES
 
-# Install app
-COPY . .
+# Copy install
+COPY bin ./bin/
+COPY Makefile ./
 RUN make install
+
+FROM base AS prod_stage
+ONBUILD COPY . .
+
+FROM base AS dev_stage
+ONBUILD RUN echo "Skip copy"
+
+FROM ${APP_ENV}_stage AS final
+ARG user
+ARG group
+ARG home
+
 RUN chown -R $user:$group $APP_PATH
 
 USER $user

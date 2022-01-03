@@ -1,6 +1,12 @@
 Registro de cambios
 ===================
 
+** 1.9.0.dev
+* Opción para dividir un municipio grande usando un archivo (#78)
+* Mejoras de rendimiento (#73)
+* Revisión del código Python 3 (#67)
+* Mejoras en el Dockerfile
+
 **21-12-2021 (1.8.7)**
 * Resuelve aviso de ficheros sin cerrar en python3 (#67).
 * Resuelve fallo uniendo entradas a vías building:part with QGIS3 (#67).
