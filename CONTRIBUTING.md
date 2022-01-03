@@ -21,3 +21,5 @@ To run the program could be better to use:
 Any way put your municipalities inside /catastro folder ($home). It's linked to the host results folder and ignored by git.
 
 The make command should be installed in Windows (GNUWin32) or Mac OS (Xcode) or review the Makefile for the commands to apply.
+
+A tutorial is available here https://asciinema.org/a/459636

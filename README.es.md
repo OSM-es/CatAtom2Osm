@@ -7,7 +7,7 @@ Herramienta para convertir los conjuntos de datos INSPIRE de los Servicios ATOM
 del Catastro Español (http://www.catastro.minhap.gob.es/webinspire/index.html) 
 a archivos OSM. Esto es parte de una importación en curso:
 
-https://wiki.openstreetmap.org/wiki/ES:Catastro_espa%C3%B1ol/Importaci%C3%B3n_de_edificios
+https://openstreetmap.es/catastro
 
 Requisitos
 ----------

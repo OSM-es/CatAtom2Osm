@@ -1,0 +1,79 @@
+# Clonado del repositorio
+git clone https://github.com/OSM-es/CatAtom2Osm.git
+cd CatAtom2Osm
+# Para modificar el código cambia a la rama `development`
+git checkout development
+# make proporciona varios atajos
+make
+# Disponible en linux. En Windows o Mac hay que instalar esta herramienta GNU
+# Acceso al docker de ejecución
+make run
+# La carpeta $home está conectada con `results` en el host.
+# Los resultados aquí son visibles desde fuera.
+pwd
+# Tenemos acceso al programa.
+catatom2osm
+# El código está en esta ruta conectada al repositorio en el host, 
+# se pueden editar los archivos desde fuera del contenedor.
+ls /opt/CatAtom2Osm
+# Entramos en la consola interactiva de Python
+python
+# Importa módulos
+from qgis.core import *
+from catatom2osm import config, catatom, app, layer
+# Inicializa los recursos de QGIS
+qgs = app.QgsSingleton()
+# Establece la internacionalización de los mensajes
+config.install_gettext('catatom2osm', 'locale')
+# `a_path` es la ruta de trabajo. Opcionalmente la ruta podría ser más larga,
+# pero la última carpeta debe ser el código del municipio a importar
+a_path = '05015'
+# `cat` sirve para descargar archivos del servicio web de Catastro.
+# Si la ruta no existe se crea.
+cat = catatom.Reader(a_path)
+# Aquí se leen los datos. Lee el archivo si existe y si no lo descarga.
+zoning_gml = cat.read("cadastralzoning")
+# Estos son los campos de la capa.
+for field in zoning_gml.fields():
+    print(field.name(), field.typeName())
+
+# Este es el recuento de elementos
+print(zoning_gml.featureCount())
+# Podemos recorrer el contenido
+for feat in zoning_gml.getFeatures():
+    print(
+        feat['label'], feat['LocalisedCharacterString'], feat.geometry().wkbType()
+    )
+
+# QGIS lee archivos GML pero no puede hacer casi nada con ellos.
+print(zoning_gml.dataProvider().capabilitiesString() == '')
+# Por eso se pasan los datos a otro proveedor.
+# Conecto los datos de edificios
+building_gml = cat.read("building")
+# Obtiene la ruta dentro de `a_path`.
+fn = cat.get_path('building.shp')
+fn
+# Creo un shapefile vacío
+layer.ConsLayer.create_shp(fn, building_gml.crs())
+# El módulo layer contiene clases especializadas derivadas de QgsVectorLayer
+# Como ConsLayer para los edificios.
+building = layer.ConsLayer(fn, providerLib='ogr')
+# Recoge la fecha de la fuente del GML
+building.source_date = building_gml.source_date
+# Y se vuelcan los datos. El método append se encarga de renombrar algunos 
+# campos y de hacer join entre tablas
+building.append(building_gml)
+# Si ocurre esto en modo interactivo es necesario reestablecer gettext
+config.install_gettext('catatom2osm', 'locale')
+building.append(building_gml)
+# En un shapefile se pueden hacer muchas más cosas, en particular editar
+# Consulta https://docs.qgis.org/3.22/en/docs/pyqgis_developer_cookbook/
+print(building.dataProvider().capabilitiesString())
+# Ejemplo de acceso a un subconjunto de elementos
+exp = QgsExpression("localId ILIKE '05015A004%'")
+request = QgsFeatureRequest(exp)
+for feat in building.getFeatures(request):
+    print(feat['localId'], feat['currentUse'], feat['condition'])
+
+exit()
+exit
