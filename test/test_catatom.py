@@ -161,29 +161,27 @@ class TestCatAtom(unittest.TestCase):
         ns = m_etree.fromstring().find.call_args_list[0][0][1]
         self.assertEqual(set(ns.keys()), {'gco', 'gmd'})
 
-    @mock.patch('catatom2osm.catatom.os')
     @mock.patch('catatom2osm.catatom.download')
-    def test_get_atom_file(self, m_download, m_os):
+    def test_get_atom_file(self, m_download):
         self.m_cat.get_atom_file = get_func(catatom.Reader.get_atom_file)
-        m_os.path.join = lambda *args: '/'.join(args)
-        url = config.prov_url['BU'].format(code='38')
-        m_download.get_response.return_value.text = "xxxxhttpfobar/38001bartazzipxxx"
         self.m_cat.path = 'lorem'
         self.m_cat.zip_code = '38001'
+        self.m_cat.get_path = lambda x: 'lorem/' + x
+        url = config.prov_url['BU'].format(code='38')
+        m_download.get_response.return_value.text = "xxxxhttpfobar/38001bartazzipxxx"
         self.m_cat.get_atom_file(self.m_cat, url)
         m_download.wget.assert_called_once_with("httpfobar/38001bartazzip", "lorem/38001bartazzip")
         self.m_cat.zip_code = '38002'
         with self.assertRaises(ValueError):
             self.m_cat.get_atom_file(self.m_cat, url)
 
-    @mock.patch('catatom2osm.catatom.os')
-    def test_get_layer_paths(self, m_os):
+    def test_get_layer_paths(self):
         self.m_cat.get_layer_paths = get_func(catatom.Reader.get_layer_paths)
-        m_os.path.join = lambda *args: '/'.join(args)
         with self.assertRaises(ValueError):
             self.m_cat.get_layer_paths(self.m_cat, 'foobar')
         self.m_cat.path = 'foo'
         self.m_cat.zip_code = 'bar'
+        self.m_cat.get_path = lambda x: 'foo/' + x
         ln = random.choice(['building', 'buildingpart', 'otherconstruction'])
         (md_path, gml_path, zip_path, g) = self.m_cat.get_layer_paths(self.m_cat, ln)
         self.assertEqual(g, 'BU')

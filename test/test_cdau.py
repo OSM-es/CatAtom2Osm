@@ -7,10 +7,9 @@ import os
 
 from catatom2osm import config, cdau, layer
 from catatom2osm.app import QgsSingleton
-from catatom2osm.compat import install_gettext
 qgs = QgsSingleton()
 os.environ['LANGUAGE'] = 'C'
-install_gettext('catato2osm', '')
+config.install_gettext('catato2osm', '')
 
 
 def get_func(f):

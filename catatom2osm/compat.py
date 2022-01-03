@@ -27,14 +27,6 @@ except ImportError: # pragma: no cover
                 etreemsg = "Failed to import ElementTree from any known place"
                 raise ImportError(etreemsg)
 
-def install_gettext(app_name, localedir):
-    if six.PY2:
-        gettext.install(app_name.lower(), localedir=localedir, unicode=1)
-    else:
-        gettext.install(app_name.lower(), localedir=localedir)
-    gettext.bindtextdomain('argparse', localedir)
-    gettext.textdomain('argparse')
-
 def set_es_time():
     try:
         language, encoding = locale.getdefaultlocale()

@@ -81,8 +81,8 @@ class CatAtom2Osm(object):
             msg = _(
                 "Required GDAL version %s or greater") % config.MIN_GDAL_VERSION
             raise ValueError(msg)
-        self.highway_names_path = self.get_path('highway_names.csv')
-        self.tasks_path = self.get_path('tasks')
+        self.highway_names_path = self.cat.get_path('highway_names.csv')
+        self.tasks_path = self.cat.get_path('tasks')
         if self.options.tasks:
             if not os.path.exists(self.tasks_path):
                 os.makedirs(self.tasks_path)
@@ -163,7 +163,7 @@ class CatAtom2Osm(object):
 
     def add_comments(self):
         """Recover missing task files metadata after Josm editing."""
-        report.from_file(self.get_path('report.txt'))
+        report.from_file(self.cat.get_path('report.txt'))
         for fn in os.listdir(self.tasks_path):
             if fn.endswith('.osm') or fn.endswith('.osm.gz'):
                 label = os.path.basename(fn).split('.')[0]
@@ -187,10 +187,6 @@ class CatAtom2Osm(object):
     def zone_query(self, feat, kwargs):
         """Filter feat by zone label if needed."""
         return len(self.zone) == 0 or self.building.get_label(feat) in self.zone
-
-    def get_path(self, *paths):
-        """Get path from components relative to self.path"""
-        return os.path.join(self.path, *paths)
 
     def get_labels(self, building_gml, part_gml, other_gml):
         """Creates cons_labels index"""
@@ -221,7 +217,7 @@ class CatAtom2Osm(object):
         part_gml = self.cat.read("buildingpart")
         other_gml = self.cat.read("otherconstruction", True)
         report.building_date = building_gml.source_date
-        fn = self.get_path('building.shp')
+        fn = self.cat.get_path('building.shp')
         layer.ConsLayer.create_shp(fn, building_gml.crs())
         self.building = layer.ConsLayer(
             fn, providerLib='ogr', source_date=building_gml.source_date
@@ -269,7 +265,7 @@ class CatAtom2Osm(object):
         for label, fid in zoning:
             comment = ' '.join((config.changeset_tags['comment'],
                                 report.mun_code, report.mun_name, label))
-            fn = self.get_path('tasks', label + '.shp')
+            fn = self.cat.get_path('tasks', label + '.shp')
             if os.path.exists(fn):
                 task = layer.ConsLayer(fn, label, 'ogr',
                                        source_date=source.source_date)
@@ -352,7 +348,7 @@ class CatAtom2Osm(object):
         self.urban_zoning.reproject()
         self.rustic_zoning.reproject()
         if not self.zone:
-            out_path = self.get_path('boundary.poly')
+            out_path = self.cat.get_path('boundary.poly')
             self.rustic_zoning.export_poly(out_path)
             log.info(_("Generated '%s'"), out_path)
         self.rustic_zoning.difference(self.urban_zoning)
@@ -407,7 +403,7 @@ class CatAtom2Osm(object):
 
     def process_parcel(self):
         parcel_gml = self.cat.read("cadastralparcel")
-        fn = self.get_path('parcel.shp')
+        fn = self.cat.get_path('parcel.shp')
         layer.ParcelLayer.create_shp(fn, parcel_gml.crs())
         parcel = layer.ParcelLayer(fn, providerLib='ogr',
                                    source_date=parcel_gml.source_date)
@@ -424,7 +420,7 @@ class CatAtom2Osm(object):
             log.warning(_("Check %d fixme tags"), report.fixme_count)
         if self.options.tasks:
             filename = 'review.txt'
-            with open(self.get_path(filename), "w") as fo:
+            with open(self.cat.get_path(filename), "w") as fo:
                 fo.write(
                     config.eol.join(report.get_tasks_with_fixmes()) + config.eol)
                 log.info(
@@ -433,7 +429,7 @@ class CatAtom2Osm(object):
         if self.options.tasks or self.options.building:
             report.cons_end_stats()
         if self.options.tasks or self.options.building or self.options.address:
-            report.to_file(self.get_path('report.txt'))
+            report.to_file(self.cat.get_path('report.txt'))
         if self.is_new:
             msg = (
                 _("Generated '%s'") + '. ' + _("Please, check it and run again")
@@ -459,7 +455,7 @@ class CatAtom2Osm(object):
             driver_name (str): Defaults to ESRI Shapefile.
             target_crs_id (int): Defaults to source CRS.
         """
-        out_path = self.get_path(filename)
+        out_path = self.cat.get_path(filename)
         if layer.export(out_path, driver_name, target_crs_id=target_crs_id):
             log.info(_("Generated '%s'"), filename)
         else:
@@ -478,7 +474,7 @@ class CatAtom2Osm(object):
             Osm: OSM data set
         """
         ql = kwargs.get('ql', False)
-        osm_path = self.get_path(*paths)
+        osm_path = self.cat.get_path(*paths)
         filename = os.path.basename(osm_path)
         if not os.path.exists(osm_path):
             if not ql:
@@ -518,7 +514,7 @@ class CatAtom2Osm(object):
             if 'ref' in e.tags:
                 del e.tags['ref']
         data.merge_duplicated()
-        osm_path = self.get_path(*paths)
+        osm_path = self.cat.get_path(*paths)
         if osm_path.endswith('.gz'):
             file_obj = codecs.getwriter("utf-8")(gzip.open(osm_path, "w"))
         else:
@@ -535,10 +531,10 @@ class CatAtom2Osm(object):
         (rustic)
         """
         zoning_gml = self.cat.read("cadastralzoning")
-        fn = self.get_path('rustic_zoning.shp')
+        fn = self.cat.get_path('rustic_zoning.shp')
         layer.ZoningLayer.create_shp(fn, zoning_gml.crs())
         self.rustic_zoning = layer.ZoningLayer(fn, 'rusticzoning', 'ogr')
-        fn = self.get_path('urban_zoning.shp')
+        fn = self.cat.get_path('urban_zoning.shp')
         layer.ZoningLayer.create_shp(fn, zoning_gml.crs())
         self.urban_zoning = layer.ZoningLayer(fn, 'urbanzoning', 'ogr')
         self.rustic_zoning.append(zoning_gml, level='P')
@@ -582,7 +578,7 @@ class CatAtom2Osm(object):
         report.inp_address_entrance = address_gml.count(
             "specification='Entrance'")
         report.inp_address_parcel = address_gml.count("specification='Parcel'")
-        fn = self.get_path('address.shp')
+        fn = self.cat.get_path('address.shp')
         layer.AddressLayer.create_shp(fn, address_gml.crs())
         self.address = layer.AddressLayer(fn, providerLib='ogr',
                                           source_date=address_gml.source_date)
@@ -758,13 +754,13 @@ class CatAtom2Osm(object):
 
     def delete_shp(self, name, relative=True):
         if log.getEffectiveLevel() > logging.DEBUG:
-            path = self.get_path(name) if relative else name
+            path = self.cat.get_path(name) if relative else name
             layer.BaseLayer.delete_shp(path)
 
     def delete_current_osm_files(self):
         if log.getEffectiveLevel() == logging.DEBUG:
             return
         for f in ['current_address', 'current_building', 'current_highway']:
-            fn = self.get_path(f + '.osm')
+            fn = self.cat.get_path(f + '.osm')
             if os.path.exists(fn):
                 os.remove(fn)

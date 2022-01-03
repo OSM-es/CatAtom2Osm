@@ -10,11 +10,10 @@ import os
 import unittest
 logging.disable(logging.WARNING)
 
-from catatom2osm import __main__
-from catatom2osm.compat import install_gettext
+from catatom2osm import __main__, config
 from test.tools import capture
 os.environ['LANGUAGE'] = 'C'
-install_gettext('catato2osm', '')
+config.install_gettext('catato2osm', '')
 
 
 def raiseIOError(*args, **kwargs):

@@ -36,6 +36,10 @@ class Reader(object):
         if not os.path.isdir(a_path):
             raise IOError(_("Not a directory: '%s'") % a_path)
 
+    def get_path(self, *paths):
+        """Get path from components relative to self.path"""
+        return os.path.join(self.path, *paths)
+
     def get_metadata(self, md_path, zip_path=""):
         """Get the metadata of the source file"""
         if os.path.exists(md_path):
@@ -78,7 +82,7 @@ class Reader(object):
             raise ValueError(_("Zip code '%s' don't exists") % self.zip_code)
         url = s.group(0)
         filename = url.split('/')[-1]
-        out_path = os.path.join(self.path, filename)
+        out_path = self.get_path(filename)
         log.info(_("Downloading '%s'"), out_path)
         download.wget(url, out_path)
 
@@ -99,9 +103,9 @@ class Reader(object):
         if group == 'CP':
             md_fn = ".".join((config.fn_prefix, group, "MD.", self.zip_code, "xml"))
         zip_fn = ".".join((config.fn_prefix, group, self.zip_code, "zip"))
-        md_path = os.path.join(self.path, md_fn)
-        gml_path = os.path.join(self.path, gml_fn)
-        zip_path = os.path.join(self.path, zip_fn)
+        md_path = self.get_path(md_fn)
+        gml_path = self.get_path(gml_fn)
+        zip_path = self.get_path(zip_fn)
         return (md_path, gml_path, zip_path, group)
 
     def is_empty(self, gml_path, zip_path):

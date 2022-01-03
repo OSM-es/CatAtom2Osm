@@ -2,6 +2,7 @@
 """Application preferences"""
 from __future__ import unicode_literals
 from builtins import range
+import gettext
 import locale
 import logging
 import os
@@ -29,6 +30,14 @@ def winenv():
         if os.getenv('LANG') is None:
             os.environ['LANG'] = language
 
+def install_gettext(app_name, localedir):
+    try:
+        gettext.install(app_name.lower(), localedir=localedir, unicode=1)
+    except TypeError:
+        gettext.install(app_name.lower(), localedir=localedir)
+    gettext.bindtextdomain('argparse', localedir)
+    gettext.textdomain('argparse')
+
 #locale.setlocale(locale.LC_ALL, '')
 language, encoding = locale.getdefaultlocale()
 language = language or 'es_ES'
@@ -39,7 +48,7 @@ localedir = os.path.join(os.path.dirname(app_path), 'locale', 'po')
 platform = sys.platform
 winenv()
 
-compat.install_gettext(app_name, localedir)
+install_gettext(app_name, localedir)
 
 log_level = 'INFO' # Default log level
 log_file = 'catatom2osm.log'

@@ -8,10 +8,9 @@ from optparse import Values
 from qgis.core import QgsVectorLayer
 
 from catatom2osm import config, osm, app
-from catatom2osm.compat import install_gettext
 qgs = app.QgsSingleton()
 os.environ['LANGUAGE'] = 'C'
-install_gettext('catato2osm', '')
+config.install_gettext('catato2osm', '')
 
 
 def get_func(f):
@@ -50,13 +49,15 @@ class TestCatAtom2Osm(unittest.TestCase):
         self.m_app.zone = self.m_app.options.zone
         self.m_app.tasks_path = 'foo/tasks'
         self.m_app.is_new = False
-        self.m_app.get_path = lambda *args: self.m_app.path + '/' + '/'.join(args)
+        self.m_app.cat.get_path = (
+            lambda *args: self.m_app.path + '/' + '/'.join(args)
+        )
 
     @mock.patch('catatom2osm.catatom.Reader')
     @mock.patch('catatom2osm.app.report')
     @mock.patch('catatom2osm.app.os')
     def test_init(self, m_os, m_report, m_cat):
-        m_cat.return_value.path = 'foo'
+        m_cat.return_value.get_path = lambda x: 'foo/' + x
         m_os.path.exists.return_value = False
         self.m_app.init = get_func(app.CatAtom2Osm.__init__)
         self.m_app.init(self.m_app, 'xxx/12345', self.m_app.options)
