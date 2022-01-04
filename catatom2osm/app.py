@@ -115,7 +115,7 @@ class CatAtom2Osm(object):
             self.options.building = False
             self.options.zoning = False
             self.options.parcel = False
-        if self.options.building or self.options.tasks:
+        if self.options.building or self.options.tasks or self.zone:
             self.get_building()
             if self.building.featureCount() == 0:
                 return
@@ -222,7 +222,7 @@ class CatAtom2Osm(object):
         self.building = layer.ConsLayer(
             fn, providerLib='ogr', source_date=building_gml.source_date
         )
-        if self.options.tasks:
+        if self.options.tasks or self.zone:
             self.get_labels(building_gml, part_gml, other_gml)
         if self.options.split:
             self.split_zoning()
