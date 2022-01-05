@@ -87,7 +87,7 @@ class CatAtom2Osm(object):
             if not os.path.exists(self.tasks_path):
                 os.makedirs(self.tasks_path)
         if self.zone:
-             self.delete_current_osm_files()
+            self.delete_current_osm_files()
         self.is_new = not os.path.exists(self.highway_names_path)
 
     @staticmethod

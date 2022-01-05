@@ -69,7 +69,8 @@ class Osm(object):
                 if self.parents[child] == set([el]):
                     self.remove(child)
                 else:
-                    self.parents[child].remove(el)
+                    if child in self.parents:
+                        self.parents[child].remove(el)
 
     def replace(self, n1, n2):
         """Replaces n1 witn n2 in elements."""
