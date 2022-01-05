@@ -440,9 +440,8 @@ class TestPolygonLayer(unittest.TestCase):
             for f in self.layer.getFeatures()]), m)
 
     def test_get_parents_per_vertex_and_geometries(self):
-        (parents_per_vertex, vertexs, geometries) = self.layer.get_parents_per_vertex_and_geometries()
+        (parents_per_vertex, geometries) = self.layer.get_parents_per_vertex_and_geometries()
         self.assertEqual(len(geometries), self.layer.featureCount())
-        self.assertEqual(len(vertexs), len(parents_per_vertex))
         self.assertTrue(all([Geometry.get_multipolygon(geometries[f.id()]) == \
             Geometry.get_multipolygon(f)
                 for f in self.layer.getFeatures()]))
