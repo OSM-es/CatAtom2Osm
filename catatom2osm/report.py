@@ -21,6 +21,9 @@ int_format = lambda v: locale.format_string('%d', v, True)
 class Report(object):
 
     def __init__(self, **kwargs):
+        self.clear(**kwargs)
+
+    def clear(self, **kwargs):
         self.values = {
             'date': datetime.now().strftime('%x'),
             'fixme_counter': Counter(),
@@ -29,8 +32,6 @@ class Report(object):
             'min_level': {},
             'max_level': {},
         }
-        for k,v in list(kwargs.items()):
-            self.values[k] = v
         self.titles = OrderedDict([
             ('mun_name', _('Municipality')),
             ('cat_mun', _('Cadastre name')),
@@ -67,14 +68,19 @@ class Report(object):
             ('inp_street_names', _('Street names')),
             ('subgroup_ad_process', _('Process')),
             ('ignored_addresses', _('Addresses deleted by street name')),
-            ('addresses_without_number', _('Addresses without house number deleted')),
-            ('orphand_addresses', _('Addresses without associated building deleted')),
-            ('multiple_addresses', _('Addresses belonging to multiple buildings deleted')),
-            ('not_unique_addresses', _("'Parcel' addresses not unique for its building deleted")),
+            ('addresses_without_number',
+             _('Addresses without house number deleted')),
+            ('orphand_addresses',
+             _('Addresses without associated building deleted')),
+            ('multiple_addresses',
+             _('Addresses belonging to multiple buildings deleted')),
+            ('not_unique_addresses',
+             _("'Parcel' addresses not unique for its building deleted")),
             ('subgroup_ad_conflation', _("Conflation")),
             ('osm_addresses', _("OSM addresses ")),
             ('osm_addresses_whithout_number', TAB + _("Without house number")),
-            ('refused_addresses', _("Addresses rejected because they exist in OSM")),
+            ('refused_addresses',
+             _("Addresses rejected because they exist in OSM")),
             ('subgroup_ad_output', _('Output data')),
             ('out_address', _('Addresses')),
             ('out_address_entrance', TAB + _('In entrance nodes')),
@@ -92,11 +98,14 @@ class Report(object):
             ('orphand_parts', _("Parts outside outline deleted")),
             ('underground_parts', _("Parts with no floors above ground")),
             ('new_outlines', _("Building outlines created")),
-            ('multipart_geoms_building', _("Buildings with multipart geometries")),
-            ('exploded_parts_building', _("Buildings resulting from splitting multiparts")),
+            ('multipart_geoms_building',
+             _("Buildings with multipart geometries")),
+            ('exploded_parts_building',
+             _("Buildings resulting from splitting multiparts")),
             ('parts_to_outline', _("Parts merged to the outline")),
             ('adjacent_parts', _("Adjacent parts merged")),
-            ('buildings_in_pools', _("Buildings coincidents with a swimming pool deleted")),
+            ('buildings_in_pools',
+             _("Buildings coincidents with a swimming pool deleted")),
             ('geom_rings_building', _('Invalid geometry rings deleted')),
             ('geom_invalid_building', _('Invalid geometries deleted')),
             ('vertex_zigzag_building', _('Zig-zag vertices deleted')),
@@ -134,12 +143,18 @@ class Report(object):
             'mun_wikipedia': lambda v: 'https://www.wikipedia.org/wiki/' + v,
             'mun_wikidata': lambda v: 'https://www.wikidata.org/wiki/' + v,
             'cpu_freq': lambda v: locale.format_string('%.1f Mhz', v, True),
-            'ex_time': lambda v: locale.format_string('%.1f '+_('seconds'), v, True),
-            'memory': lambda v: locale.format_string('%.2f ', v, True) + MEMORY_LABEL,
-            'rss': lambda v: locale.format_string('%.2f ', v, True) + MEMORY_LABEL,
-            'vms': lambda v: locale.format_string('%.2f ', v, True) + MEMORY_LABEL,
+            'ex_time': lambda v: locale.format_string('%.1f ' + _('seconds'), v,
+                                                      True),
+            'memory': lambda v: locale.format_string('%.2f ', v,
+                                                     True) + MEMORY_LABEL,
+            'rss': lambda v: locale.format_string('%.2f ', v,
+                                                  True) + MEMORY_LABEL,
+            'vms': lambda v: locale.format_string('%.2f ', v,
+                                                  True) + MEMORY_LABEL,
         }
         self.tasks_with_fixmes = set()
+        for k,v in list(kwargs.items()):
+            self.values[k] = v
 
     def __setattr__(self, key, value):
         if key in ['values', 'titles', 'groups']:

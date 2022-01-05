@@ -64,7 +64,7 @@ class CatAtom2Osm(object):
         self.cat = catatom.Reader(a_path)
         self.path = self.cat.path
         self.zone = self.options.zone
-        report.mun_code = self.cat.zip_code
+        report.clear(options=self.options.args, mun_code=self.cat.zip_code)
         report.sys_info = True
         if report.sys_info:
             report.qgs_version = qgis_utils.QGIS_VERSION

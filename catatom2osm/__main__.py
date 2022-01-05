@@ -8,7 +8,6 @@ import sys
 from zipfile import BadZipfile
 
 from catatom2osm import config, compat
-from catatom2osm.report import instance as report
 log = config.log
 terminal = compat.Terminal(config.encoding)
 
@@ -83,7 +82,7 @@ def run():
         default=config.log_level, help=terminal.encode(_("Select the log level "
         "between DEBUG, INFO, WARNING, ERROR or CRITICAL.")))
     options = parser.parse_args()
-    report.options = ' '.join(sys.argv[1:])
+    options.args = ' '.join(sys.argv[1:])
     if len(options.zone) > 0:
         if len(options.path) == 0:
             options.path = [options.zone[-1]]

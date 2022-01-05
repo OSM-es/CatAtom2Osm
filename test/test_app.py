@@ -39,7 +39,7 @@ class TestCatAtom2Osm(unittest.TestCase):
             'building': False, 'all': False, 'tasks': True, 'list_zones': False,
             'log_level': 'INFO', 'parcel': False, 'list': False, 'zoning': True,
             'version': False, 'address': False, 'manual': False, 'zone': [],
-            'comment': False, 'split': None,
+            'comment': False, 'split': None, 'args': '-t'
         }
         self.m_app = mock.MagicMock()
         self.m_app.options = Values(self.options)
@@ -63,7 +63,6 @@ class TestCatAtom2Osm(unittest.TestCase):
         self.m_app.init(self.m_app, 'xxx/12345', self.m_app.options)
         m_cat.assert_called_once_with('xxx/12345')
         self.assertEqual(self.m_app.path, m_cat().path)
-        self.assertEqual(m_report.mun_code, m_cat().zip_code)
         m_os.makedirs.assert_called_once_with('foo/tasks')
 
     @mock.patch('catatom2osm.app.gdal')
