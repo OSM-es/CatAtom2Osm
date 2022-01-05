@@ -1,18 +1,31 @@
 #!/bin/bash
-echo "      OLD NEW"
-old="results/$1/tasks/*.gz"
-new="results/$2/tasks/*.gz"
-exp="<node"
-echo $exp $(zegrep -c $exp $old | cut -d":" -f2 | paste -sd+ | bc) $(zegrep -c $exp $new | cut -d":" -f2 | paste -sd+ | bc)
-exp="<way"
-echo $exp $(zegrep -c $exp $old | cut -d":" -f2 | paste -sd+ | bc) $(zegrep -c $exp $new | cut -d":" -f2 | paste -sd+ | bc)
-exp="<relation"
-echo $exp $(zegrep -c $exp $old | cut -d":" -f2 | paste -sd+ | bc) $(zegrep -c $exp $new | cut -d":" -f2 | paste -sd+ | bc)
-exp='k=".*building"'
-echo $exp $(zegrep -c $exp $old | cut -d":" -f2 | paste -sd+ | bc) $(zegrep -c $exp $new | cut -d":" -f2 | paste -sd+ | bc)
-exp='building:part'
-echo $exp $(zegrep -c $exp $old | cut -d":" -f2 | paste -sd+ | bc) $(zegrep -c $exp $new | cut -d":" -f2 | paste -sd+ | bc)
-exp='swimming_pool'
-echo $exp $(zegrep -c $exp $old | cut -d":" -f2 | paste -sd+ | bc) $(zegrep -c $exp $new | cut -d":" -f2 | paste -sd+ | bc)
-exp="addr:postcode"
-echo $exp $(zegrep -c $exp $old | cut -d":" -f2 | paste -sd+ | bc) $(zegrep -c $exp $new | cut -d":" -f2 | paste -sd+ | bc)
+t1=$1/$3
+t2=$2/$3
+left="results/$1/$3/tasks/*.gz"
+right="results/$2/$3/tasks/*.gz"
+
+function countexp {
+    echo $(zegrep -c $1 $2 | cut -d":" -f2 | paste -sd+ | bc)
+}
+
+function outrow {
+    t="$1"
+    exp="$2"
+    leftcount=$(countexp $exp $left)
+    rightcount=$(count $exp $right)
+    diff=$(($rightcount - $leftcount))
+    echo $t $leftcount $rightcount $diff
+}
+
+function table {
+    echo "exp $t1 $t2 diff"
+    outrow nodos "<node"
+    outrow vías "<way"
+    outrow relaciones "<relation"
+    outrow edificios 'k=".*building"'
+    outrow partes 'building:part'
+    outrow piscinas 'swimming_pool'
+    outrow direcciones "addr:postcode"
+}
+
+table | column -t -s' '
