@@ -656,7 +656,7 @@ class PolygonLayer(BaseLayer):
         """
         to_clean = []
         to_add = []
-        pbar = self.get_progressbar(_("Explode multi pars"), self.featureCount())
+        pbar = self.get_progressbar(_("Explode multi parts"), self.featureCount())
         for feature in self.getFeatures(request):
             mp = Geometry.get_multipolygon(feature)
             if len(mp) > 1:
