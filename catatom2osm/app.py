@@ -210,6 +210,10 @@ class CatAtom2Osm(object):
         self.rustic_zoning.remove_outside_features(split)
         self.zone = [f['label'] for f in self.rustic_zoning.getFeatures()]
         self.zone += [f['label'] for f in self.urban_zoning.getFeatures()]
+        if len(self.zone) == 0:
+            msg = _("'%s' does not include any zone.") % self.options.split
+            raise ValueError(msg)
+
 
     def get_building(self):
         """Merge building, parts and pools"""
