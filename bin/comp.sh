@@ -12,7 +12,7 @@ function outrow {
     t="$1"
     exp="$2"
     leftcount=$(countexp $exp $left)
-    rightcount=$(count $exp $right)
+    rightcount=$(countexp $exp $right)
     diff=$(($rightcount - $leftcount))
     echo $t $leftcount $rightcount $diff
 }

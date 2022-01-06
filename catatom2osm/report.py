@@ -25,6 +25,7 @@ class Report(object):
 
     def clear(self, **kwargs):
         self.values = {
+            'start_time' = time.time(),
             'date': datetime.now().strftime('%x'),
             'fixme_counter': Counter(),
             'warnings': [],
@@ -245,7 +246,7 @@ class Report(object):
             self.memory = psutil.virtual_memory().total / MEMORY_UNIT
             self.rss = p.memory_info().rss / MEMORY_UNIT
             self.vms = p.memory_info().vms / MEMORY_UNIT
-            self.ex_time = time.time() - p.create_time()
+            self.ex_time = time.time() - self.start_time
         except ImportError:
             pass
 
