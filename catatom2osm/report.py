@@ -25,7 +25,7 @@ class Report(object):
 
     def clear(self, **kwargs):
         self.values = {
-            'start_time' = time.time(),
+            'start_time': time.time(),
             'date': datetime.now().strftime('%x'),
             'fixme_counter': Counter(),
             'warnings': [],
