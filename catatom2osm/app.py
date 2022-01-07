@@ -5,11 +5,13 @@ Tool to convert INSPIRE data sets from the Spanish Cadastre ATOM Services to OSM
 from __future__ import division
 from builtins import map, object
 from past.builtins import basestring
-import os
 import io, codecs
 import gzip
 import logging
+import os
+import shutil
 from collections import defaultdict, Counter
+from glob import glob
 
 from qgis.core import *
 import qgis.utils
@@ -26,6 +28,8 @@ from catatom2osm.qgiscompat import *
 log = config.log
 if config.silence_gdal:
     gdal.PushErrorHandler('CPLQuietErrorHandler')
+
+tasks_folder = 'tasks'
 
 
 class QgsSingleton(QgsApplication):
@@ -63,7 +67,7 @@ class CatAtom2Osm(object):
         self.options = options
         self.cat = catatom.Reader(a_path)
         self.path = self.cat.path
-        self.zone = self.options.zone
+        self.zone = list(self.options.zone)
         report.clear(options=self.options.args, mun_code=self.cat.zip_code)
         report.sys_info = True
         if report.sys_info:
@@ -82,12 +86,10 @@ class CatAtom2Osm(object):
                 "Required GDAL version %s or greater") % config.MIN_GDAL_VERSION
             raise ValueError(msg)
         self.highway_names_path = self.cat.get_path('highway_names.csv')
-        self.tasks_path = self.cat.get_path('tasks')
+        self.tasks_path = self.cat.get_path(tasks_folder)
         if self.options.tasks:
             if not os.path.exists(self.tasks_path):
                 os.makedirs(self.tasks_path)
-        if self.zone:
-            self.delete_current_osm_files()
         self.is_new = not os.path.exists(self.highway_names_path)
 
     @staticmethod
@@ -102,7 +104,8 @@ class CatAtom2Osm(object):
             self.list_zones()
             return
         elif self.options.comment:
-            self.add_comments()
+            for folder in glob(self.tasks_path + '*'):
+                self.add_comments(os.path.basename(folder))
             return
         log.info(_("Start processing '%s'"), report.mun_code)
         self.get_zoning()
@@ -135,9 +138,11 @@ class CatAtom2Osm(object):
             self.process_tasks(self.building)
         if self.options.zoning:
             self.output_zoning()
+        self.delete_shp(self.urban_zoning)
+        self.delete_shp(self.rustic_zoning)
         if self.options.building:
             self.output_building()
-        elif self.options.tasks:
+        if hasattr(self, 'building'):
             self.delete_shp(self.building)
         if self.options.address:
             if not self.options.building and not self.options.tasks:
@@ -146,8 +151,8 @@ class CatAtom2Osm(object):
             del self.address_osm
         if self.options.parcel:
             self.process_parcel()
-        if self.zone:
-            self.delete_current_osm_files()
+        if self.options.tasks and not self.is_new:
+            self.move_project()
         self.end_messages()
 
     def list_zones(self):
@@ -159,20 +164,26 @@ class CatAtom2Osm(object):
         for label in sorted(labels):
             print(label)
 
-    def add_comments(self):
+    def add_comments(self, folder):
         """Recover missing task files metadata after Josm editing."""
-        report.from_file(self.cat.get_path('report.txt'))
-        for fn in os.listdir(self.tasks_path):
+        report_path = self.cat.get_path(folder, 'report.txt')
+        if not os.path.exists(report_path):
+            return
+        report.from_file(report_path)
+        for fn in os.listdir(self.cat.get_path(folder)):
             if fn.endswith('.osm') or fn.endswith('.osm.gz'):
                 label = os.path.basename(fn).split('.')[0]
-                data = self.read_osm('tasks', fn)
+                data = self.read_osm(folder, fn)
                 fixmes = sum([1 for e in data.elements if 'fixme' in e.tags])
                 if fixmes > 0:
                     log.warning(_("Check %d fixme tags"), fixmes)
                 oldtags = dict(data.tags)
                 data.tags.update(config.changeset_tags)
-                comment = ' '.join((config.changeset_tags['comment'],
-                                    report.mun_code, report.mun_name, label))
+                comment = ' '.join((
+                    config.changeset_tags['comment'],
+                    report.mun_code,
+                    report.mun_name, label
+                ))
                 data.tags['comment'] = comment
                 data.tags['generator'] = report.app_version
                 if 'building_date' in report.values:
@@ -180,7 +191,8 @@ class CatAtom2Osm(object):
                 if 'address_date' in report.values:
                     data.tags['source:date:addr'] = report.address_date
                 if data.tags != oldtags:
-                    self.write_osm(data, 'tasks', fn)
+                    self.write_osm(data, folder, fn)
+        report.clear()
 
     def zone_query(self, feat, kwargs):
         """Filter feat by zone label if needed."""
@@ -267,7 +279,7 @@ class CatAtom2Osm(object):
         for label, fid in zoning:
             comment = ' '.join((config.changeset_tags['comment'],
                                 report.mun_code, report.mun_name, label))
-            fn = self.cat.get_path('tasks', label + '.shp')
+            fn = self.cat.get_path(tasks_folder, label + '.shp')
             if os.path.exists(fn):
                 task = layer.ConsLayer(
                     fn, label, 'ogr', source_date=source.source_date
@@ -280,7 +292,7 @@ class CatAtom2Osm(object):
                     self.merge_address(task_osm, self.address_osm)
                     report.address_stats(task_osm)
                     report.cons_stats(task_osm, label)
-                    self.write_osm(task_osm, 'tasks', label + '.osm.gz')
+                    self.write_osm(task_osm, tasks_folder, label + '.osm.gz')
                     report.osm_stats(task_osm)
             else:
                 t = 'r' if len(label) == 3 else 'u'
@@ -347,11 +359,9 @@ class CatAtom2Osm(object):
         fn = self.cat.get_path('rustic_zoning.shp')
         layer.ZoningLayer.create_shp(fn, zoning_gml.crs())
         self.rustic_zoning = layer.ZoningLayer(fn, 'rusticzoning', 'ogr')
-        self.rustic_zoning.keep = self.options.split is not None
         fn = self.cat.get_path('urban_zoning.shp')
         layer.ZoningLayer.create_shp(fn, zoning_gml.crs())
         self.urban_zoning = layer.ZoningLayer(fn, 'urbanzoning', 'ogr')
-        self.urban_zoning.keep = self.options.split is not None
         self.rustic_zoning.append(zoning_gml, level='P')
         if self.options.tasks or self.options.zoning or self.zone:
             self.urban_zoning.append(zoning_gml, level='M')
@@ -401,11 +411,7 @@ class CatAtom2Osm(object):
             )
         self.rustic_zoning.append(self.urban_zoning)
         fn = 'zoning.geojson'
-        if self.options.split:
-            fn = 'zoning_%s.geojson' % os.path.basename(self.options.split).split('.')[0]
         self.export_layer(self.rustic_zoning, fn, 'GeoJSON')
-        self.delete_shp(self.urban_zoning)
-        self.delete_shp(self.rustic_zoning)
 
     def process_building(self):
         """Process all buildings dataset"""
@@ -590,8 +596,9 @@ class CatAtom2Osm(object):
                                 'TN_')
         self.get_auxiliary_addresses()
         self.address.get_image_links()
-        self.export_layer(self.address, 'address.geojson', 'GeoJSON',
-                          target_crs_id=4326)
+        self.export_layer(
+            self.address, 'address.geojson', 'GeoJSON', target_crs_id=4326
+        )
         highway_names = self.get_translations(self.address)
         ia = self.address.translate_field('TN_text', highway_names)
         if ia > 0:
@@ -753,18 +760,40 @@ class CatAtom2Osm(object):
         current_bu_osm = self.read_osm('current_building.osm', ql=ql)
         return current_bu_osm
 
-    def delete_shp(self, l):
-        fn = l.writer.dataSourceUri().split('|')[0]
+    def delete_shp(self, lyr):
+        fn = lyr.writer.dataSourceUri().split('|')[0]
         is_shp = str(fn.lower().endswith('.shp'))
         not_debug = log.getEffectiveLevel() > logging.DEBUG
-        log.info(fn + ' ' + str(is_shp and not_debug and not l.keep))
-        if is_shp and not_debug and not l.keep:
+        log.info(fn + ' ' + str(is_shp and not_debug and not lyr.keep))
+        if is_shp and not_debug and not lyr.keep:
             layer.BaseLayer.delete_shp(fn)
 
-    def delete_current_osm_files(self):
-        if log.getEffectiveLevel() == logging.DEBUG:
-            return
-        for f in ['current_address', 'current_building', 'current_highway']:
-            fn = self.cat.get_path(f + '.osm')
+    def move_project(self):
+        """
+        Move to tasks all files needed for the project for backup in the
+        repository. Rename folder if it's a split municipality.
+        """
+        prj_files = [
+            'address.osm', 'address.geojson', 'current_address.osm',
+            'current_building.osm', 'current_highway.osm', 'highway_names.csv',
+            'report.txt', 'review.txt', 'rustic_zoning.geojson',
+            'urban_zoning.geojson', 'zoning.geojson',
+        ]
+        if self.options.split is not None:
+            shutil.copy(self.options.split, self.tasks_path)
+        for f in prj_files:
+            fn = self.cat.get_path(f)
             if os.path.exists(fn):
-                os.remove(fn)
+                os.rename(fn, os.path.join(self.tasks_path, f))
+        if len(self.options.zone) == 0:
+            return
+        if self.options.split is None:
+            prj_dir = hex(hash(str(self.zone)))[-7:]
+        else:
+            prj_dir = os.path.splitext(
+                os.path.basename(self.options.split)
+            )[0]
+        prj_path = self.cat.get_path(tasks_folder + '-' + prj_dir)
+        if os.path.exists(prj_path):
+            shutil.rmtree(prj_path)
+        os.rename(self.tasks_path, prj_path)
