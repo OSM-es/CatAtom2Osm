@@ -607,24 +607,6 @@ class BaseLayer(QgsVectorLayer):
         pbar.set_postfix(file=os.path.basename(self.source()), refresh=False)
         return pbar
 
-    def remove_outside_features(self, layer):
-        """Remove from self any feature not contained in geometry features."""
-        split = Geometry.merge_adjacent_features(
-            [f for f in layer.getFeatures()]
-        )
-        if layer.crs() != self.crs():
-            crs_transform = ggs2coordinate_transform(layer.crs(), self.crs())
-            split.transform(crs_transform)
-        to_clean = []
-        fcount = self.featureCount()
-        for feat in self.getFeatures():
-            geom = feat.geometry()
-            if not split.contains(geom):
-                to_clean.append(feat.id())
-        if len(to_clean):
-            self.writer.deleteFeatures(to_clean)
-            msg = _("%s: Removed %d of %d features.")
-            log.debug(msg, self.name(), len(to_clean), fcount)
 
 class PolygonLayer(BaseLayer):
     """Base class for polygon layers"""
@@ -1186,6 +1168,29 @@ class ZoningLayer(PolygonLayer):
                     fo.write('END\n')
             fo.write('END\n')
         return
+
+    def remove_outside_features(self, layer, skip=[]):
+        """
+        Remove any zone not contained in layer features except if its label
+        is in skip list.
+        """
+        split = Geometry.merge_adjacent_features(
+            [f for f in layer.getFeatures()]
+        )
+        if layer.crs() != self.crs():
+            crs_transform = ggs2coordinate_transform(layer.crs(), self.crs())
+            split.transform(crs_transform)
+        to_clean = []
+        fcount = self.featureCount()
+        for feat in self.getFeatures():
+            geom = feat.geometry()
+            if not split.contains(geom) and feat['label'] not in skip:
+                to_clean.append(feat.id())
+        if len(to_clean):
+            self.writer.deleteFeatures(to_clean)
+            msg = _("%s: Removed %d of %d features.")
+            log.debug(msg, self.name(), len(to_clean), fcount)
+
 
 class AddressLayer(BaseLayer):
     """Class for address"""

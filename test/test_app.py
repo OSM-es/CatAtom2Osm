@@ -536,3 +536,13 @@ class TestCatAtom2Osm(unittest.TestCase):
         self.m_app.read_osm.return_value = d
         address = self.m_app.get_current_ad_osm(self.m_app)
         self.assertEqual(m_report.osm_addresses_whithout_number, 2)
+
+    @mock.patch('catatom2osm.app.layer')
+    def test_split_zoning(self, m_layer):
+        f = lambda x: {'label': x}
+        self.m_app.zone = [1, 2, 3]
+        self.m_app.rustic_zoning.getFeatures.return_value = [f(3), f(4), f(5)]
+        self.m_app.urban_zoning.getFeatures.return_value = [f(2), f(6), f(7)]
+        self.m_app.split_zoning = get_func(app.CatAtom2Osm.split_zoning)
+        self.m_app.split_zoning(self.m_app)
+        self.assertEqual(self.m_app.zone, [1, 2, 3, 4, 5, 6, 7])

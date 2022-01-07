@@ -213,13 +213,21 @@ class CatAtom2Osm(object):
 
     def split_zoning(self):
         """Filter zoning using self.options.split."""
-        split = QgsVectorLayer(self.options.split, 'zoningsplit', 'ogr')
+        split = layer.BaseLayer(self.options.split, 'zoningsplit', 'ogr')
         if not split.isValid():
             raise IOError("Can't open %s" % self.options.split)
-        self.urban_zoning.remove_outside_features(split)
-        self.rustic_zoning.remove_outside_features(split)
-        self.zone = [f['label'] for f in self.rustic_zoning.getFeatures()]
-        self.zone += [f['label'] for f in self.urban_zoning.getFeatures()]
+        self.urban_zoning.remove_outside_features(split, self.zone)
+        self.rustic_zoning.remove_outside_features(split, self.zone)
+        self.zone += [
+            f['label']
+            for f in self.rustic_zoning.getFeatures()
+            if f['label'] not in self.zone
+        ]
+        self.zone += [
+            f['label']
+            for f in self.urban_zoning.getFeatures()
+            if f['label'] not in self.zone
+        ]
         if len(self.zone) == 0:
             msg = _("'%s' does not include any zone.") % self.options.split
             raise ValueError(msg)
@@ -288,12 +296,12 @@ class CatAtom2Osm(object):
                     task_osm = task.to_osm(
                         upload='yes', tags={'comment': comment}
                     )
-                    self.delete_shp(task)
                     self.merge_address(task_osm, self.address_osm)
                     report.address_stats(task_osm)
                     report.cons_stats(task_osm, label)
                     self.write_osm(task_osm, tasks_folder, label + '.osm.gz')
                     report.osm_stats(task_osm)
+                self.delete_shp(task)
             else:
                 t = 'r' if len(label) == 3 else 'u'
                 to_clean[t].append(fid)
