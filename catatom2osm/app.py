@@ -130,8 +130,7 @@ class CatAtom2Osm(object):
         if self.options.address:
             self.address.reproject()
             self.address_osm = self.address.to_osm()
-            del self.address
-            self.delete_shp('address.shp')
+            self.delete_shp(self.address)
         if self.options.tasks:
             self.process_tasks(self.building)
         if self.options.zoning:
@@ -139,8 +138,7 @@ class CatAtom2Osm(object):
         if self.options.building:
             self.output_building()
         elif self.options.tasks:
-            del self.building
-            self.delete_shp('building.shp')
+            self.delete_shp(self.building)
         if self.options.address:
             if not self.options.building and not self.options.tasks:
                 report.address_stats(self.address_osm)
@@ -271,13 +269,14 @@ class CatAtom2Osm(object):
                                 report.mun_code, report.mun_name, label))
             fn = self.cat.get_path('tasks', label + '.shp')
             if os.path.exists(fn):
-                task = layer.ConsLayer(fn, label, 'ogr',
-                                       source_date=source.source_date)
+                task = layer.ConsLayer(
+                    fn, label, 'ogr', source_date=source.source_date
+                )
                 if task.featureCount() > 0:
-                    task_osm = task.to_osm(upload='yes',
-                                           tags={'comment': comment})
-                    del task
-                    self.delete_shp(fn, False)
+                    task_osm = task.to_osm(
+                        upload='yes', tags={'comment': comment}
+                    )
+                    self.delete_shp(task)
                     self.merge_address(task_osm, self.address_osm)
                     report.address_stats(task_osm)
                     report.cons_stats(task_osm, label)
@@ -339,6 +338,43 @@ class CatAtom2Osm(object):
         report.tasks_u = tasks_u
         report.tasks_m = tasks_m
 
+    def get_zoning(self):
+        """
+        Reads cadastralzoning and splits in 'MANZANA' (urban) and 'POLIGONO'
+        (rustic)
+        """
+        zoning_gml = self.cat.read("cadastralzoning")
+        fn = self.cat.get_path('rustic_zoning.shp')
+        layer.ZoningLayer.create_shp(fn, zoning_gml.crs())
+        self.rustic_zoning = layer.ZoningLayer(fn, 'rusticzoning', 'ogr')
+        self.rustic_zoning.keep = self.options.split is not None
+        fn = self.cat.get_path('urban_zoning.shp')
+        layer.ZoningLayer.create_shp(fn, zoning_gml.crs())
+        self.urban_zoning = layer.ZoningLayer(fn, 'urbanzoning', 'ogr')
+        self.urban_zoning.keep = self.options.split is not None
+        self.rustic_zoning.append(zoning_gml, level='P')
+        if self.options.tasks or self.options.zoning or self.zone:
+            self.urban_zoning.append(zoning_gml, level='M')
+        if self.zone:
+            self.cat.boundary_search_area = zoning_gml.bounding_box(
+                "label IN (%s)" % str(self.zone)[1:-1]
+            )
+        else:
+            self.cat.get_boundary(self.rustic_zoning)
+            report.mun_area = round(self.rustic_zoning.get_area() / 1E6, 1)
+        del zoning_gml
+        report.cat_mun = self.cat.cat_mun
+        report.mun_name = getattr(self.cat, 'boundary_name', self.cat.cat_mun)
+        if hasattr(self.cat, 'boundary_data'):
+            if 'wikipedia' in self.cat.boundary_data:
+                report.mun_wikipedia = self.cat.boundary_data['wikipedia']
+            if 'wikidata' in self.cat.boundary_data:
+                report.mun_wikidata = self.cat.boundary_data['wikidata']
+            if 'population' in self.cat.boundary_data:
+                report.mun_population = (self.cat.boundary_data['population'],
+                                         self.cat.boundary_data.get(
+                                             'population:date', '?'))
+
     def process_zoning(self):
         self.rustic_zoning.clean()
         self.rustic_zoning.set_tasks(self.cat.zip_code)
@@ -368,10 +404,8 @@ class CatAtom2Osm(object):
         if self.options.split:
             fn = 'zoning_%s.geojson' % os.path.basename(self.options.split).split('.')[0]
         self.export_layer(self.rustic_zoning, fn, 'GeoJSON')
-        del self.urban_zoning
-        self.delete_shp('urban_zoning.shp')
-        del self.rustic_zoning
-        self.delete_shp('rustic_zoning.shp')
+        self.delete_shp(self.urban_zoning)
+        self.delete_shp(self.rustic_zoning)
 
     def process_building(self):
         """Process all buildings dataset"""
@@ -392,8 +426,7 @@ class CatAtom2Osm(object):
 
     def output_building(self):
         self.building_osm = self.building.to_osm()
-        del self.building
-        self.delete_shp('building.shp')
+        self.delete_shp(self.building)
         if self.options.address:
             self.merge_address(self.building_osm, self.address_osm)
             if not self.options.tasks:
@@ -415,8 +448,7 @@ class CatAtom2Osm(object):
         del parcel_gml
         parcel.reproject()
         parcel_osm = parcel.to_osm()
-        del parcel
-        self.delete_shp('parcel.shp')
+        self.delete_shp(parcel)
         self.write_osm(parcel_osm, "parcel.osm")
 
     def end_messages(self):
@@ -528,41 +560,6 @@ class CatAtom2Osm(object):
         log.info(_("Generated '%s': %d nodes, %d ways, %d relations"),
                  os.path.basename(osm_path), len(data.nodes), len(data.ways),
                  len(data.relations))
-
-    def get_zoning(self):
-        """
-        Reads cadastralzoning and splits in 'MANZANA' (urban) and 'POLIGONO'
-        (rustic)
-        """
-        zoning_gml = self.cat.read("cadastralzoning")
-        fn = self.cat.get_path('rustic_zoning.shp')
-        layer.ZoningLayer.create_shp(fn, zoning_gml.crs())
-        self.rustic_zoning = layer.ZoningLayer(fn, 'rusticzoning', 'ogr')
-        fn = self.cat.get_path('urban_zoning.shp')
-        layer.ZoningLayer.create_shp(fn, zoning_gml.crs())
-        self.urban_zoning = layer.ZoningLayer(fn, 'urbanzoning', 'ogr')
-        self.rustic_zoning.append(zoning_gml, level='P')
-        if self.options.tasks or self.options.zoning or self.zone:
-            self.urban_zoning.append(zoning_gml, level='M')
-        if self.zone:
-            self.cat.boundary_search_area = zoning_gml.bounding_box(
-                "label IN (%s)" % str(self.zone)[1:-1]
-            )
-        else:
-            self.cat.get_boundary(self.rustic_zoning)
-            report.mun_area = round(self.rustic_zoning.get_area() / 1E6, 1)
-        del zoning_gml
-        report.cat_mun = self.cat.cat_mun
-        report.mun_name = getattr(self.cat, 'boundary_name', self.cat.cat_mun)
-        if hasattr(self.cat, 'boundary_data'):
-            if 'wikipedia' in self.cat.boundary_data:
-                report.mun_wikipedia = self.cat.boundary_data['wikipedia']
-            if 'wikidata' in self.cat.boundary_data:
-                report.mun_wikidata = self.cat.boundary_data['wikidata']
-            if 'population' in self.cat.boundary_data:
-                report.mun_population = (self.cat.boundary_data['population'],
-                                         self.cat.boundary_data.get(
-                                             'population:date', '?'))
 
     def read_address(self):
         """Reads Address GML dataset"""
@@ -756,10 +753,13 @@ class CatAtom2Osm(object):
         current_bu_osm = self.read_osm('current_building.osm', ql=ql)
         return current_bu_osm
 
-    def delete_shp(self, name, relative=True):
-        if log.getEffectiveLevel() > logging.DEBUG:
-            path = self.cat.get_path(name) if relative else name
-            layer.BaseLayer.delete_shp(path)
+    def delete_shp(self, l):
+        fn = l.writer.dataSourceUri().split('|')[0]
+        is_shp = str(fn.lower().endswith('.shp'))
+        not_debug = log.getEffectiveLevel() > logging.DEBUG
+        log.info(fn + ' ' + str(is_shp and not_debug and not l.keep))
+        if is_shp and not_debug and not l.keep:
+            layer.BaseLayer.delete_shp(fn)
 
     def delete_current_osm_files(self):
         if log.getEffectiveLevel() == logging.DEBUG:
