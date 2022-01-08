@@ -1,7 +1,11 @@
 Change log
 ==========
 
-** 2021-1-8 (1.9.0.dev)**
+** 2021-1-8 (1.9.1)**
+* Clip polygon includes zones if overlapped area is greater than 50%.
+* Fix error renaming the project.
+
+** 2021-1-8 (1.9.0)**
 * Option to split big municipallities using a file (#78)
 * Fix and perfomance improvement of -o option (#73)
 

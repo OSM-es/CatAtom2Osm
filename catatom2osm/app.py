@@ -772,7 +772,6 @@ class CatAtom2Osm(object):
         fn = lyr.writer.dataSourceUri().split('|')[0]
         is_shp = str(fn.lower().endswith('.shp'))
         not_debug = log.getEffectiveLevel() > logging.DEBUG
-        log.info(fn + ' ' + str(is_shp and not_debug and not lyr.keep))
         if is_shp and not_debug and not lyr.keep:
             layer.BaseLayer.delete_shp(fn)
 
@@ -793,7 +792,7 @@ class CatAtom2Osm(object):
             fn = self.cat.get_path(f)
             if os.path.exists(fn):
                 os.rename(fn, os.path.join(self.tasks_path, f))
-        if len(self.options.zone) == 0:
+        if len(self.options.zone) == 0 and self.options.split is None:
             return
         if self.options.split is None:
             prj_dir = hex(hash(str(self.zone)))[-7:]

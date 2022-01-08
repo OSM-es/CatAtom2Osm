@@ -1,7 +1,11 @@
 Registro de cambios
 ===================
 
-** 8-1-2021 (1.9.0.dev)**
+** 8-1-2021 (1.9.1)**
+* El polígono de recorte incluye zonas si el área superpuesta es mayor que el 50%.
+* Corrige error renombrando proyecto.
+
+** 8-1-2021 (1.9.0)**
 * Opción para dividir un municipio grande usando un archivo (#78)
 * Corrección y mejora de rendimiento de opción -o (#73)
 

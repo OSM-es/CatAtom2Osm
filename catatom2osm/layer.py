@@ -1184,8 +1184,10 @@ class ZoningLayer(PolygonLayer):
         fcount = self.featureCount()
         for feat in self.getFeatures():
             geom = feat.geometry()
-            if not split.contains(geom) and feat['label'] not in skip:
-                to_clean.append(feat.id())
+            if feat['label'] not in skip:
+                inter = split.intersection(geom)
+                if inter.area() / geom.area() < 0.5:
+                    to_clean.append(feat.id())
         if len(to_clean):
             self.writer.deleteFeatures(to_clean)
             msg = _("%s: Removed %d of %d features.")
