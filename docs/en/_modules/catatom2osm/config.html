@@ -15,7 +15,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.config &#8212; CatAtom2Osm 1.8.0 documentation</title>
+    <title>catatom2osm.config &#8212; CatAtom2Osm 1.9.0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/guzzle.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -23,7 +23,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.8.0',
+        VERSION:     '1.9.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -49,7 +49,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 1.8.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 1.9.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>
@@ -115,6 +115,7 @@
 <span class="sd">&quot;&quot;&quot;Application preferences&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
 <span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">range</span>
+<span class="kn">import</span> <span class="nn">gettext</span>
 <span class="kn">import</span> <span class="nn">locale</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">os</span>
@@ -142,6 +143,14 @@
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;LANG&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;LANG&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">language</span></div>
 
+<div class="viewcode-block" id="install_gettext"><a class="viewcode-back" href="../../api/catatom2osm.config.html#catatom2osm.config.install_gettext">[docs]</a><span class="k">def</span> <span class="nf">install_gettext</span><span class="p">(</span><span class="n">app_name</span><span class="p">,</span> <span class="n">localedir</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">gettext</span><span class="o">.</span><span class="n">install</span><span class="p">(</span><span class="n">app_name</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="n">localedir</span><span class="o">=</span><span class="n">localedir</span><span class="p">,</span> <span class="n">unicode</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+        <span class="n">gettext</span><span class="o">.</span><span class="n">install</span><span class="p">(</span><span class="n">app_name</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="n">localedir</span><span class="o">=</span><span class="n">localedir</span><span class="p">)</span>
+    <span class="n">gettext</span><span class="o">.</span><span class="n">bindtextdomain</span><span class="p">(</span><span class="s1">&#39;argparse&#39;</span><span class="p">,</span> <span class="n">localedir</span><span class="p">)</span>
+    <span class="n">gettext</span><span class="o">.</span><span class="n">textdomain</span><span class="p">(</span><span class="s1">&#39;argparse&#39;</span><span class="p">)</span></div>
+
 <span class="c1">#locale.setlocale(locale.LC_ALL, &#39;&#39;)</span>
 <span class="n">language</span><span class="p">,</span> <span class="n">encoding</span> <span class="o">=</span> <span class="n">locale</span><span class="o">.</span><span class="n">getdefaultlocale</span><span class="p">()</span>
 <span class="n">language</span> <span class="o">=</span> <span class="n">language</span> <span class="ow">or</span> <span class="s1">&#39;es_ES&#39;</span>
@@ -152,7 +161,7 @@
 <span class="n">platform</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span>
 <span class="n">winenv</span><span class="p">()</span>
 
-<span class="n">compat</span><span class="o">.</span><span class="n">install_gettext</span><span class="p">(</span><span class="n">app_name</span><span class="p">,</span> <span class="n">localedir</span><span class="p">)</span>
+<span class="n">install_gettext</span><span class="p">(</span><span class="n">app_name</span><span class="p">,</span> <span class="n">localedir</span><span class="p">)</span>
 
 <span class="n">log_level</span> <span class="o">=</span> <span class="s1">&#39;INFO&#39;</span> <span class="c1"># Default log level</span>
 <span class="n">log_file</span> <span class="o">=</span> <span class="s1">&#39;catatom2osm.log&#39;</span>
@@ -505,33 +514,35 @@
     <span class="p">},</span>
 <span class="p">}</span>
 
+<span class="c1"># Use lower case</span>
 <span class="n">place_types_d</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s1">&#39;es_ES&#39;</span><span class="p">:</span> <span class="p">[</span>
-	    <span class="s1">&#39;Agregado&#39;</span><span class="p">,</span> <span class="s1">&#39;Aldea&#39;</span><span class="p">,</span> <span class="s1">&#39;Área&#39;</span><span class="p">,</span> <span class="s1">&#39;Barrio&#39;</span><span class="p">,</span> <span class="s1">&#39;Barranco&#39;</span><span class="p">,</span> <span class="s1">&#39;Cañada&#39;</span><span class="p">,</span> <span class="s1">&#39;Colegio&#39;</span><span class="p">,</span> 
-	    <span class="s1">&#39;Cigarral&#39;</span><span class="p">,</span> <span class="s1">&#39;Chalet&#39;</span><span class="p">,</span> <span class="s1">&#39;Concejo&#39;</span><span class="p">,</span> <span class="s1">&#39;Campa&#39;</span><span class="p">,</span> <span class="s1">&#39;Campo&#39;</span><span class="p">,</span> <span class="s1">&#39;Caserío&#39;</span><span class="p">,</span> <span class="s1">&#39;Conjunto&#39;</span><span class="p">,</span> 
-	    <span class="s1">&#39;Diputación&#39;</span><span class="p">,</span> <span class="s1">&#39;Diseminados&#39;</span><span class="p">,</span> <span class="s1">&#39;Edificios&#39;</span><span class="p">,</span> <span class="s1">&#39;Extramuros&#39;</span><span class="p">,</span> <span class="s1">&#39;Entrada&#39;</span><span class="p">,</span> 
-	    <span class="s1">&#39;Ensanche&#39;</span><span class="p">,</span> <span class="s1">&#39;Extrarradio&#39;</span><span class="p">,</span> <span class="s1">&#39;Finca&#39;</span><span class="p">,</span> <span class="s1">&#39;Grupo&#39;</span><span class="p">,</span> <span class="s1">&#39;Huerta&#39;</span><span class="p">,</span> <span class="s1">&#39;Huerto&#39;</span><span class="p">,</span> 
-	    <span class="s1">&#39;Jardines&#39;</span><span class="p">,</span> <span class="s1">&#39;Lugar&#39;</span><span class="p">,</span> <span class="s1">&#39;Mercado&#39;</span><span class="p">,</span> <span class="s1">&#39;Muelle&#39;</span><span class="p">,</span> <span class="s1">&#39;Municipio&#39;</span><span class="p">,</span> <span class="s1">&#39;Masías&#39;</span><span class="p">,</span> <span class="s1">&#39;Monte&#39;</span><span class="p">,</span> 
-	    <span class="s1">&#39;Manzana&#39;</span><span class="p">,</span> <span class="s1">&#39;Poblado&#39;</span><span class="p">,</span> <span class="s1">&#39;Partida&#39;</span><span class="p">,</span> <span class="s1">&#39;Polígono&#39;</span><span class="p">,</span> <span class="s1">&#39;Páramo&#39;</span><span class="p">,</span> <span class="s1">&#39;Parroquia&#39;</span><span class="p">,</span> <span class="s1">&#39;Solar&#39;</span><span class="p">,</span> 
-	    <span class="s1">&#39;Terrenos&#39;</span><span class="p">,</span> <span class="s1">&#39;Urbanización&#39;</span><span class="p">,</span> <span class="s1">&#39;Bulevar&#39;</span><span class="p">,</span> <span class="s1">&#39;Sector&#39;</span>
+        <span class="s1">&#39;agregado&#39;</span><span class="p">,</span> <span class="s1">&#39;aldea&#39;</span><span class="p">,</span> <span class="s1">&#39;área&#39;</span><span class="p">,</span> <span class="s1">&#39;barrio&#39;</span><span class="p">,</span> <span class="s1">&#39;barranco&#39;</span><span class="p">,</span> <span class="s1">&#39;cañada&#39;</span><span class="p">,</span> <span class="s1">&#39;colegio&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;cigarral&#39;</span><span class="p">,</span> <span class="s1">&#39;chalet&#39;</span><span class="p">,</span> <span class="s1">&#39;concejo&#39;</span><span class="p">,</span> <span class="s1">&#39;campa&#39;</span><span class="p">,</span> <span class="s1">&#39;campo&#39;</span><span class="p">,</span> <span class="s1">&#39;caserío&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;conjunto&#39;</span><span class="p">,</span> <span class="s1">&#39;diputación&#39;</span><span class="p">,</span> <span class="s1">&#39;diseminados&#39;</span><span class="p">,</span> <span class="s1">&#39;edificios&#39;</span><span class="p">,</span> <span class="s1">&#39;extramuros&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;entrada&#39;</span><span class="p">,</span> <span class="s1">&#39;ensanche&#39;</span><span class="p">,</span> <span class="s1">&#39;extrarradio&#39;</span><span class="p">,</span> <span class="s1">&#39;finca&#39;</span><span class="p">,</span> <span class="s1">&#39;grupo&#39;</span><span class="p">,</span> <span class="s1">&#39;huerta&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;huerto&#39;</span><span class="p">,</span> <span class="s1">&#39;jardines&#39;</span><span class="p">,</span> <span class="s1">&#39;lugar&#39;</span><span class="p">,</span> <span class="s1">&#39;mercado&#39;</span><span class="p">,</span> <span class="s1">&#39;muelle&#39;</span><span class="p">,</span> <span class="s1">&#39;municipio&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;masías&#39;</span><span class="p">,</span> <span class="s1">&#39;monte&#39;</span><span class="p">,</span> <span class="s1">&#39;manzana&#39;</span><span class="p">,</span> <span class="s1">&#39;poblado&#39;</span><span class="p">,</span> <span class="s1">&#39;partida&#39;</span><span class="p">,</span> <span class="s1">&#39;polígono&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;páramo&#39;</span><span class="p">,</span> <span class="s1">&#39;parroquia&#39;</span><span class="p">,</span> <span class="s1">&#39;solar&#39;</span><span class="p">,</span> <span class="s1">&#39;terrenos&#39;</span><span class="p">,</span> <span class="s1">&#39;urbanización&#39;</span><span class="p">,</span> <span class="s1">&#39;bulevar&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;sector&#39;</span><span class="p">,</span>
     <span class="p">],</span>
     <span class="s1">&#39;ca_ES&#39;</span><span class="p">:</span> <span class="p">[</span>
-        <span class="s1">&#39;Agregat&#39;</span><span class="p">,</span> <span class="s1">&#39;Llogaret&#39;</span><span class="p">,</span> <span class="s1">&#39;Àrea&#39;</span><span class="p">,</span> <span class="s1">&#39;Barri&#39;</span><span class="p">,</span> <span class="s1">&#39;Barranc&#39;</span><span class="p">,</span> <span class="s1">&#39;Camí ramader&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;Col·legi/Cigarral&#39;</span><span class="p">,</span> <span class="s1">&#39;Xalet&#39;</span><span class="p">,</span> <span class="s1">&#39;Ajuntament/Col·legi&#39;</span><span class="p">,</span> <span class="s1">&#39;Camp&#39;</span><span class="p">,</span> <span class="s1">&#39;Mas&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;Conjunt&#39;</span><span class="p">,</span> <span class="s1">&#39;Diputació&#39;</span><span class="p">,</span> <span class="s1">&#39;Disseminats&#39;</span><span class="p">,</span> <span class="s1">&#39;Edificis&#39;</span><span class="p">,</span> <span class="s1">&#39;Extramurs&#39;</span><span class="p">,</span> 
-        <span class="s1">&#39;Entrada&#39;</span><span class="p">,</span> <span class="s1">&#39;Extraradi&#39;</span><span class="p">,</span> <span class="s1">&#39;Finca&#39;</span><span class="p">,</span> <span class="s1">&#39;Grup&#39;</span><span class="p">,</span> <span class="s1">&#39;Hort&#39;</span><span class="p">,</span> <span class="s1">&#39;Jardins&#39;</span><span class="p">,</span> <span class="s1">&#39;Lloc&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;Mercat&#39;</span><span class="p">,</span> <span class="s1">&#39;Moll&#39;</span><span class="p">,</span> <span class="s1">&#39;Municipi&#39;</span><span class="p">,</span> <span class="s1">&#39;Masies&#39;</span><span class="p">,</span> <span class="s1">&#39;Muntanya&#39;</span><span class="p">,</span> <span class="s1">&#39;Illa&#39;</span><span class="p">,</span> <span class="s1">&#39;Poblat&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;Partida&#39;</span><span class="p">,</span> <span class="s1">&#39;Polígon&#39;</span><span class="p">,</span> <span class="s1">&#39;Erm&#39;</span><span class="p">,</span> <span class="s1">&#39;Parròquia&#39;</span><span class="p">,</span> <span class="s1">&#39;Solar&#39;</span><span class="p">,</span> <span class="s1">&#39;Terrenys&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;Urbanització&#39;</span><span class="p">,</span> <span class="s1">&#39;Bulevard&#39;</span><span class="p">,</span> <span class="s1">&#39;Sector&#39;</span>
+        <span class="s1">&#39;agregat&#39;</span><span class="p">,</span> <span class="s1">&#39;llogaret&#39;</span><span class="p">,</span> <span class="s1">&#39;àrea&#39;</span><span class="p">,</span> <span class="s1">&#39;barri&#39;</span><span class="p">,</span> <span class="s1">&#39;barranc&#39;</span><span class="p">,</span> <span class="s1">&#39;camí ramader&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;col·legi/cigarral&#39;</span><span class="p">,</span> <span class="s1">&#39;xalet&#39;</span><span class="p">,</span> <span class="s1">&#39;ajuntament/col·legi&#39;</span><span class="p">,</span> <span class="s1">&#39;camp&#39;</span><span class="p">,</span> <span class="s1">&#39;mas&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;conjunt&#39;</span><span class="p">,</span> <span class="s1">&#39;diputació&#39;</span><span class="p">,</span> <span class="s1">&#39;disseminats&#39;</span><span class="p">,</span> <span class="s1">&#39;edificis&#39;</span><span class="p">,</span> <span class="s1">&#39;extramurs&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;entrada&#39;</span><span class="p">,</span> <span class="s1">&#39;extraradi&#39;</span><span class="p">,</span> <span class="s1">&#39;finca&#39;</span><span class="p">,</span> <span class="s1">&#39;grup&#39;</span><span class="p">,</span> <span class="s1">&#39;hort&#39;</span><span class="p">,</span> <span class="s1">&#39;jardins&#39;</span><span class="p">,</span> <span class="s1">&#39;lloc&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;mercat&#39;</span><span class="p">,</span> <span class="s1">&#39;moll&#39;</span><span class="p">,</span> <span class="s1">&#39;municipi&#39;</span><span class="p">,</span> <span class="s1">&#39;masies&#39;</span><span class="p">,</span> <span class="s1">&#39;muntanya&#39;</span><span class="p">,</span> <span class="s1">&#39;illa&#39;</span><span class="p">,</span> <span class="s1">&#39;poblat&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;partida&#39;</span><span class="p">,</span> <span class="s1">&#39;polígon&#39;</span><span class="p">,</span> <span class="s1">&#39;erm&#39;</span><span class="p">,</span> <span class="s1">&#39;parròquia&#39;</span><span class="p">,</span> <span class="s1">&#39;solar&#39;</span><span class="p">,</span> <span class="s1">&#39;terrenys&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;urbanització&#39;</span><span class="p">,</span> <span class="s1">&#39;bulevard&#39;</span><span class="p">,</span> <span class="s1">&#39;sector&#39;</span><span class="p">,</span>
     <span class="p">],</span>
     <span class="s1">&#39;gl_ES&#39;</span><span class="p">:</span> <span class="p">[</span>
-        <span class="s1">&#39;Engadido&#39;</span><span class="p">,</span> <span class="s1">&#39;Aldea&#39;</span><span class="p">,</span> <span class="s1">&#39;Área&#39;</span><span class="p">,</span> <span class="s1">&#39;Barrio&#39;</span><span class="p">,</span> <span class="s1">&#39;Cavorco&#39;</span><span class="p">,</span> <span class="s1">&#39;Canella&#39;</span><span class="p">,</span> <span class="s1">&#39;Colexio&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;Cigarreiro&#39;</span><span class="p">,</span> <span class="s1">&#39;Chalet&#39;</span><span class="p">,</span> <span class="s1">&#39;Concello&#39;</span><span class="p">,</span> <span class="s1">&#39;Campeira&#39;</span><span class="p">,</span> <span class="s1">&#39;Campo&#39;</span><span class="p">,</span> <span class="s1">&#39;Caserío&#39;</span><span class="p">,</span> <span class="s1">&#39;Conxunto&#39;</span><span class="p">,</span>
-        <span class="sa">u</span><span class="s1">&#39;Deputación&#39;</span><span class="p">,</span> <span class="s1">&#39;Espallados&#39;</span><span class="p">,</span> <span class="s1">&#39;Edificios&#39;</span><span class="p">,</span> <span class="s1">&#39;Extramuros&#39;</span><span class="p">,</span> <span class="s1">&#39;Entrada&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;Ensanche&#39;</span><span class="p">,</span> <span class="s1">&#39;Arrabaldes&#39;</span><span class="p">,</span> <span class="s1">&#39;Finca&#39;</span><span class="p">,</span> <span class="s1">&#39;Grupo&#39;</span><span class="p">,</span> <span class="s1">&#39;Horta&#39;</span><span class="p">,</span> <span class="s1">&#39;Horto&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;Xardíns&#39;</span><span class="p">,</span> <span class="s1">&#39;Lugar&#39;</span><span class="p">,</span> <span class="s1">&#39;Mercado&#39;</span><span class="p">,</span> <span class="s1">&#39;Peirao&#39;</span><span class="p">,</span> <span class="s1">&#39;Concello&#39;</span><span class="p">,</span> <span class="s1">&#39;Masías&#39;</span><span class="p">,</span> <span class="s1">&#39;Monte&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;Mazá&#39;</span><span class="p">,</span> <span class="s1">&#39;Poboado&#39;</span><span class="p">,</span> <span class="s1">&#39;Partida&#39;</span><span class="p">,</span> <span class="s1">&#39;Polígono&#39;</span><span class="p">,</span> <span class="s1">&#39;Páramo&#39;</span><span class="p">,</span> <span class="s1">&#39;Parroquia&#39;</span><span class="p">,</span> <span class="s1">&#39;Soar&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;Terreos&#39;</span><span class="p">,</span> <span class="s1">&#39;Urbanización&#39;</span><span class="p">,</span> <span class="s1">&#39;Bulevar&#39;</span><span class="p">,</span> <span class="s1">&#39;Sector&#39;</span>
+        <span class="s1">&#39;engadido&#39;</span><span class="p">,</span> <span class="s1">&#39;aldea&#39;</span><span class="p">,</span> <span class="s1">&#39;área&#39;</span><span class="p">,</span> <span class="s1">&#39;barrio&#39;</span><span class="p">,</span> <span class="s1">&#39;cavorco&#39;</span><span class="p">,</span> <span class="s1">&#39;canella&#39;</span><span class="p">,</span> <span class="s1">&#39;colexio&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;cigarreiro&#39;</span><span class="p">,</span> <span class="s1">&#39;chalet&#39;</span><span class="p">,</span> <span class="s1">&#39;concello&#39;</span><span class="p">,</span> <span class="s1">&#39;campeira&#39;</span><span class="p">,</span> <span class="s1">&#39;campo&#39;</span><span class="p">,</span> <span class="s1">&#39;caserío&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;conxunto&#39;</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;deputación&#39;</span><span class="p">,</span> <span class="s1">&#39;espallados&#39;</span><span class="p">,</span> <span class="s1">&#39;edificios&#39;</span><span class="p">,</span> <span class="s1">&#39;extramuros&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;entrada&#39;</span><span class="p">,</span> <span class="s1">&#39;ensanche&#39;</span><span class="p">,</span> <span class="s1">&#39;arrabaldes&#39;</span><span class="p">,</span> <span class="s1">&#39;finca&#39;</span><span class="p">,</span> <span class="s1">&#39;grupo&#39;</span><span class="p">,</span> <span class="s1">&#39;horta&#39;</span><span class="p">,</span> <span class="s1">&#39;horto&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;xardíns&#39;</span><span class="p">,</span> <span class="s1">&#39;lugar&#39;</span><span class="p">,</span> <span class="s1">&#39;mercado&#39;</span><span class="p">,</span> <span class="s1">&#39;peirao&#39;</span><span class="p">,</span> <span class="s1">&#39;concello&#39;</span><span class="p">,</span> <span class="s1">&#39;masías&#39;</span><span class="p">,</span> <span class="s1">&#39;monte&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;mazá&#39;</span><span class="p">,</span> <span class="s1">&#39;poboado&#39;</span><span class="p">,</span> <span class="s1">&#39;partida&#39;</span><span class="p">,</span> <span class="s1">&#39;polígono&#39;</span><span class="p">,</span> <span class="s1">&#39;páramo&#39;</span><span class="p">,</span> <span class="s1">&#39;parroquia&#39;</span><span class="p">,</span> <span class="s1">&#39;soar&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;terreos&#39;</span><span class="p">,</span> <span class="s1">&#39;urbanización&#39;</span><span class="p">,</span> <span class="s1">&#39;bulevar&#39;</span><span class="p">,</span> <span class="s1">&#39;sector&#39;</span>
     <span class="p">],</span>
 <span class="p">}</span>
 
@@ -543,7 +554,9 @@
 <span class="n">highway_types</span> <span class="o">=</span> <span class="n">highway_types_d</span><span class="p">[</span><span class="n">language</span><span class="p">]</span>
 
 <span class="c1"># List of highway types to translate as place addresses</span>
-<span class="n">place_types</span> <span class="o">=</span> <span class="n">place_types_d</span><span class="p">[</span><span class="n">language</span><span class="p">]</span>
+<span class="n">place_types</span> <span class="o">=</span> <span class="n">place_types_d</span><span class="p">[</span><span class="s1">&#39;es_ES&#39;</span><span class="p">]</span>
+<span class="k">if</span> <span class="n">language</span> <span class="o">!=</span> <span class="s1">&#39;es_ES&#39;</span><span class="p">:</span>
+    <span class="n">place_types</span> <span class="o">+=</span> <span class="n">place_types_d</span><span class="p">[</span><span class="n">language</span><span class="p">]</span>
 
 <span class="c1"># List of place types to remove from the name</span>
 <span class="n">remove_place_from_name</span> <span class="o">=</span> <span class="p">[</span><span class="n">place_types</span><span class="p">[</span><span class="mi">26</span><span class="p">]]</span>
@@ -600,7 +613,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 1.8.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 1.9.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>

@@ -77,8 +77,8 @@ install:  ## Create application simbolic link
 uninstall:  ## Remove application simbolic link
 	@rm $(INSTALL_DIR)/catatom2osm
 
-all: clean coverage api html msg
-.PHONY: all  ## clean api coverage html msg
+all: clean coverage api html msg  ## Do clean, api, coverage, html and msg
+.PHONY: all
 
 .PHONY: build
 build:  ## Build docker image

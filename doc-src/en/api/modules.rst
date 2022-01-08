@@ -5,5 +5,4 @@ CatAtom2Osm
    :maxdepth: 4
 
    catatom2osm
-   setup
    test

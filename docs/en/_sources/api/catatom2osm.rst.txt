@@ -8,6 +8,7 @@ Submodules
 
    catatom2osm.app
    catatom2osm.catatom
+   catatom2osm.cbcn
    catatom2osm.cdau
    catatom2osm.compat
    catatom2osm.config

@@ -15,7 +15,7 @@
   <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.osm module &#8212; CatAtom2Osm 1.8.0 documentation</title>
+    <title>catatom2osm.osm module &#8212; CatAtom2Osm 1.9.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/guzzle.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -23,7 +23,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.8.0',
+        VERSION:     '1.9.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -57,7 +57,7 @@
         <li class="right" >
           <a href="catatom2osm.layer.html" title="catatom2osm.layer module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 1.8.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 1.9.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../api.html" >API reference</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="modules.html" >CatAtom2Osm</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="catatom2osm.html" accesskey="U">catatom2osm package</a> &#187;</li> 
@@ -134,7 +134,7 @@
 <p>OpenStreetMap data model</p>
 <dl class="class">
 <dt id="catatom2osm.osm.Element">
-<em class="property">class </em><code class="descclassname">catatom2osm.osm.</code><code class="descname">Element</code><span class="sig-paren">(</span><em>container</em>, <em>tags={}</em>, <em>attrs=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/osm.html#Element"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.osm.Element" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">catatom2osm.osm.</code><code class="descname">Element</code><span class="sig-paren">(</span><em>container</em>, <em>tags={}</em>, <em>attrs={}</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/osm.html#Element"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.osm.Element" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">future.types.newobject.newobject</span></code></p>
 <p>Base class for Osm elements</p>
 <dl class="attribute">
@@ -183,6 +183,12 @@ many inner rings.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="catatom2osm.osm.Node.copyto">
+<code class="descname">copyto</code><span class="sig-paren">(</span><em>container</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/osm.html#Node.copyto"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.osm.Node.copyto" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copy self in another container</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="catatom2osm.osm.Node.geometry">
 <code class="descname">geometry</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/osm.html#Node.geometry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.osm.Node.geometry" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns pair of coordinates</p>
@@ -207,10 +213,40 @@ many inner rings.</p>
 <em class="property">class </em><code class="descclassname">catatom2osm.osm.</code><code class="descname">Osm</code><span class="sig-paren">(</span><em>upload='never'</em>, <em>generator=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/osm.html#Osm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.osm.Osm" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">future.types.newobject.newobject</span></code></p>
 <p>Class to implement a OSM data set.</p>
+<dl class="method">
+<dt id="catatom2osm.osm.Osm.append">
+<code class="descname">append</code><span class="sig-paren">(</span><em>data</em>, <em>query=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/osm.html#Osm.append"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.osm.Osm.append" title="Permalink to this definition">¶</a></dt>
+<dd><p>Append data elements to this dataset avoiding duplicates.
+Optionally filter by query.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>data</strong> (<em>iterable</em><em>, </em><a class="reference internal" href="#catatom2osm.osm.Osm" title="catatom2osm.osm.Osm"><em>Osm</em></a><em> or </em><a class="reference internal" href="#catatom2osm.osm.Element" title="catatom2osm.osm.Element"><em>Element</em></a>) &#8211; source data</li>
+<li><strong>query</strong> (<em>func</em>) &#8211; function to apply to each element and returns a
+boolean deciding if it will be included or not</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Example</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d1</span> <span class="o">=</span> <span class="n">osm</span><span class="o">.</span><span class="n">Osm</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">n1</span> <span class="o">=</span> <span class="n">d1</span><span class="o">.</span><span class="n">Node</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;tourism&#39;</span><span class="p">:</span> <span class="s1">&#39;viewpoint&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">n2</span> <span class="o">=</span> <span class="n">d1</span><span class="o">.</span><span class="n">Node</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;amenity&#39;</span><span class="p">:</span> <span class="s1">&#39;cafe&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d2</span> <span class="o">=</span> <span class="n">osm</span><span class="o">.</span><span class="n">Osm</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">d1</span><span class="p">)</span>  <span class="c1"># all</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d3</span> <span class="o">=</span> <span class="n">osm</span><span class="o">.</span><span class="n">Osm</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d3</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">d1</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">e</span><span class="p">:</span> <span class="s1">&#39;amenity&#39;</span> <span class="ow">in</span> <span class="n">e</span><span class="o">.</span><span class="n">tags</span><span class="p">)</span>  <span class="c1"># only amenities</span>
+</pre></div>
+</div>
+</dd></dl>
+
 <dl class="attribute">
 <dt id="catatom2osm.osm.Osm.attrs">
 <code class="descname">attrs</code><a class="headerlink" href="#catatom2osm.osm.Osm.attrs" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns dictionary of properties in self.attr_list</p>
+<dd><p>Returns dictionary of properties in self._attr_list</p>
 </dd></dl>
 
 <dl class="method">
@@ -274,7 +310,7 @@ many inner rings.</p>
 <dt id="catatom2osm.osm.Relation.Member">
 <em class="property">class </em><code class="descname">Member</code><span class="sig-paren">(</span><em>element</em>, <em>role=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/osm.html#Relation.Member"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.osm.Relation.Member" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">future.types.newobject.newobject</span></code></p>
-<p>A element is member of a relation with a role.</p>
+<p>An element is member of a relation with a role.</p>
 <dl class="attribute">
 <dt id="catatom2osm.osm.Relation.Member.attrs">
 <code class="descname">attrs</code><a class="headerlink" href="#catatom2osm.osm.Relation.Member.attrs" title="Permalink to this definition">¶</a></dt>
@@ -302,6 +338,12 @@ many inner rings.</p>
 <dt id="catatom2osm.osm.Relation.childs">
 <code class="descclassname">Relation.</code><code class="descname">childs</code><a class="headerlink" href="#catatom2osm.osm.Relation.childs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns set of unique members elements</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="catatom2osm.osm.Relation.copyto">
+<code class="descclassname">Relation.</code><code class="descname">copyto</code><span class="sig-paren">(</span><em>container</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/osm.html#Relation.copyto"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.osm.Relation.copyto" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copy self in another container</p>
 </dd></dl>
 
 <dl class="method">
@@ -358,6 +400,12 @@ with every open way conected as areas</p>
 <dt id="catatom2osm.osm.Way.clean_duplicated_nodes">
 <code class="descname">clean_duplicated_nodes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/osm.html#Way.clean_duplicated_nodes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.osm.Way.clean_duplicated_nodes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Removes consecutive duplicate nodes</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="catatom2osm.osm.Way.copyto">
+<code class="descname">copyto</code><span class="sig-paren">(</span><em>container</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/osm.html#Way.copyto"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.osm.Way.copyto" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copy self in another container</p>
 </dd></dl>
 
 <dl class="method">
@@ -439,7 +487,7 @@ with every open way conected as areas</p>
         <li class="right" >
           <a href="catatom2osm.layer.html" title="catatom2osm.layer module"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 1.8.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 1.9.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../api.html" >API reference</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="modules.html" >CatAtom2Osm</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="catatom2osm.html" >catatom2osm package</a> &#187;</li> 

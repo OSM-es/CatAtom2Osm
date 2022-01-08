@@ -195,8 +195,6 @@ class TestOsm(OsmTestCase):
         d2.append(d1, query)
         self.assertEquals(len(d2.nodes), 27)
         self.assertEquals(len(d2.ways), 5)
-        with open('prueba.osm', 'wb') as fo:
-            osmxml.serialize(fo, d2)
         for el in d2.elements:
             if el not in d2.parents.keys():
                 tag = el.tags.get('building', el.tags.get('leisure', ''))

@@ -15,7 +15,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>test.test_translate &#8212; documentación de CatAtom2Osm - 1.8.0</title>
+    <title>test.test_translate &#8212; documentación de CatAtom2Osm - 1.9.0</title>
     
     <link rel="stylesheet" href="../../_static/guzzle.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -23,7 +23,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.8.0',
+        VERSION:     '1.9.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -50,7 +50,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 1.8.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 1.9.0</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Código de módulo</a> &#187;</li> 
       </ul>
     </div>
@@ -112,7 +112,8 @@
           <div class="document clearer body">
             
   <h1>Código fuente para test.test_translate</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
 <span class="kn">import</span> <span class="nn">unittest</span>
 <span class="kn">import</span> <span class="nn">mock</span>
 <span class="kn">import</span> <span class="nn">random</span>
@@ -224,8 +225,25 @@
         <span class="n">tags</span> <span class="o">=</span> <span class="n">building_tags</span><span class="p">(</span><span class="n">feat</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;building:part&#39;</span><span class="p">],</span> <span class="s1">&#39;roof&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertNotIn</span><span class="p">(</span><span class="s1">&#39;building:levels&#39;</span><span class="p">,</span> <span class="n">tags</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertNotIn</span><span class="p">(</span><span class="s1">&#39;building:levels:underground&#39;</span><span class="p">,</span> <span class="n">tags</span><span class="p">)</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertNotIn</span><span class="p">(</span><span class="s1">&#39;building:levels:underground&#39;</span><span class="p">,</span> <span class="n">tags</span><span class="p">)</span></div>
 
+<div class="viewcode-block" id="TestTranslate.test_places"><a class="viewcode-back" href="../../api/test.test_translate.html#test.test_translate.TestTranslate.test_places">[documentos]</a>    <span class="k">def</span> <span class="nf">test_places</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">f1</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;localId&#39;</span><span class="p">:</span> <span class="s1">&#39;000&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;TN_text&#39;</span><span class="p">:</span> <span class="s1">&#39;Urbanización A&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;designator&#39;</span><span class="p">:</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;postCode&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;spec&#39;</span><span class="p">:</span> <span class="s1">&#39;Parcel&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;image&#39;</span><span class="p">:</span> <span class="s1">&#39;foobar&#39;</span>
+        <span class="p">}</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">address_tags</span><span class="p">(</span><span class="n">f1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertNotIn</span><span class="p">(</span><span class="s1">&#39;addr:street&#39;</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="s1">&#39;addr:place&#39;</span><span class="p">],</span> <span class="s1">&#39;Urbanización A&#39;</span><span class="p">)</span>
+        <span class="n">f2</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">f1</span><span class="p">)</span>
+        <span class="n">f2</span><span class="p">[</span><span class="s1">&#39;TN_text&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;urbanización A&#39;</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">address_tags</span><span class="p">(</span><span class="n">f2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertNotIn</span><span class="p">(</span><span class="s1">&#39;addr:street&#39;</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="s1">&#39;addr:place&#39;</span><span class="p">],</span> <span class="s1">&#39;urbanización A&#39;</span><span class="p">)</span></div></div>
 </pre></div>
 
           </div>
@@ -242,7 +260,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 1.8.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 1.9.0</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Código de módulo</a> &#187;</li> 
       </ul>
     </div>

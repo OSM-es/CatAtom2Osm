@@ -229,7 +229,7 @@ class CatAtom2Osm(object):
             if f['label'] not in self.zone
         ]
         if len(self.zone) == 0:
-            msg = _("'%s' does not include any zone.") % self.options.split
+            msg = _("'%s' does not include any zone") % self.options.split
             raise ValueError(msg)
 
 

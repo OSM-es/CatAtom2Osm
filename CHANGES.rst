@@ -1,6 +1,10 @@
 Change log
 ==========
 
+** 2021-1-8 (1.9.0.dev)**
+* Option to split big municipallities using a file (#78)
+* Fix and perfomance improvement of -o option (#73)
+
 **2021-12-21 (1.8.7)**
 * Fixes ResourceWarning unclosed file in Python3 (#67).
 * Fixes join entrance to building:part ways with QGIS3 (#67).

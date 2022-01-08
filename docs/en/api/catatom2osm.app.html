@@ -15,7 +15,7 @@
   <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.app module &#8212; CatAtom2Osm 1.8.0 documentation</title>
+    <title>catatom2osm.app module &#8212; CatAtom2Osm 1.9.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/guzzle.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -23,7 +23,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.8.0',
+        VERSION:     '1.9.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -57,7 +57,7 @@
         <li class="right" >
           <a href="catatom2osm.html" title="catatom2osm package"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 1.8.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 1.9.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../api.html" >API reference</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="modules.html" >CatAtom2Osm</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="catatom2osm.html" accesskey="U">catatom2osm package</a> &#187;</li> 
@@ -140,7 +140,7 @@
 Spanish Cadastre ATOM Services to OSM files.</p>
 <dl class="method">
 <dt id="catatom2osm.app.CatAtom2Osm.add_comments">
-<code class="descname">add_comments</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/app.html#CatAtom2Osm.add_comments"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.app.CatAtom2Osm.add_comments" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add_comments</code><span class="sig-paren">(</span><em>folder</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/app.html#CatAtom2Osm.add_comments"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.app.CatAtom2Osm.add_comments" title="Permalink to this definition">¶</a></dt>
 <dd><p>Recover missing task files metadata after Josm editing.</p>
 </dd></dl>
 
@@ -150,13 +150,8 @@ Spanish Cadastre ATOM Services to OSM files.</p>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="catatom2osm.app.CatAtom2Osm.delete_current_osm_files">
-<code class="descname">delete_current_osm_files</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/app.html#CatAtom2Osm.delete_current_osm_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.app.CatAtom2Osm.delete_current_osm_files" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
 <dt id="catatom2osm.app.CatAtom2Osm.delete_shp">
-<code class="descname">delete_shp</code><span class="sig-paren">(</span><em>name</em>, <em>relative=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/app.html#CatAtom2Osm.delete_shp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.app.CatAtom2Osm.delete_shp" title="Permalink to this definition">¶</a></dt>
+<code class="descname">delete_shp</code><span class="sig-paren">(</span><em>lyr</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/app.html#CatAtom2Osm.delete_shp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.app.CatAtom2Osm.delete_shp" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -221,9 +216,9 @@ Spanish Cadastre ATOM Services to OSM files.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="catatom2osm.app.CatAtom2Osm.get_path">
-<code class="descname">get_path</code><span class="sig-paren">(</span><em>*paths</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/app.html#CatAtom2Osm.get_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.app.CatAtom2Osm.get_path" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get path from components relative to self.path</p>
+<dt id="catatom2osm.app.CatAtom2Osm.get_labels">
+<code class="descname">get_labels</code><span class="sig-paren">(</span><em>building_gml</em>, <em>part_gml</em>, <em>other_gml</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/app.html#CatAtom2Osm.get_labels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.app.CatAtom2Osm.get_labels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates cons_labels index</p>
 </dd></dl>
 
 <dl class="method">
@@ -281,6 +276,13 @@ in the building.</p>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="method">
+<dt id="catatom2osm.app.CatAtom2Osm.move_project">
+<code class="descname">move_project</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/app.html#CatAtom2Osm.move_project"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.app.CatAtom2Osm.move_project" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move to tasks all files needed for the project for backup in the
+repository. Rename folder if it&#8217;s a split municipality.</p>
 </dd></dl>
 
 <dl class="method">
@@ -352,6 +354,12 @@ downloads data from overpass using ql query</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="catatom2osm.app.CatAtom2Osm.split_zoning">
+<code class="descname">split_zoning</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/app.html#CatAtom2Osm.split_zoning"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.app.CatAtom2Osm.split_zoning" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filter zoning using self.options.split.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="catatom2osm.app.CatAtom2Osm.write_osm">
 <code class="descname">write_osm</code><span class="sig-paren">(</span><em>data</em>, <em>*paths</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/app.html#CatAtom2Osm.write_osm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#catatom2osm.app.CatAtom2Osm.write_osm" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates a OSM XML file for a OSM data set.</p>
@@ -420,7 +428,7 @@ downloads data from overpass using ql query</p>
         <li class="right" >
           <a href="catatom2osm.html" title="catatom2osm package"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 1.8.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 1.9.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../api.html" >API reference</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="modules.html" >CatAtom2Osm</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="catatom2osm.html" >catatom2osm package</a> &#187;</li> 

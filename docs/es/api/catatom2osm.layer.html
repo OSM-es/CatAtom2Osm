@@ -15,7 +15,7 @@
   <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.layer module &#8212; documentación de CatAtom2Osm - 1.8.0</title>
+    <title>catatom2osm.layer module &#8212; documentación de CatAtom2Osm - 1.9.0</title>
     
     <link rel="stylesheet" href="../_static/guzzle.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -23,7 +23,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.8.0',
+        VERSION:     '1.9.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -58,7 +58,7 @@
         <li class="right" >
           <a href="catatom2osm.hgwnames.html" title="catatom2osm.hgwnames module"
              accesskey="P">anterior</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">documentación de CatAtom2Osm - 1.8.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">documentación de CatAtom2Osm - 1.9.0</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../api.html" >Referencia API</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="modules.html" >CatAtom2Osm</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="catatom2osm.html" accesskey="U">catatom2osm package</a> &#187;</li> 
@@ -373,7 +373,7 @@ in standalone script mode (without GUI).</p>
 
 <dl class="method">
 <dt id="catatom2osm.layer.BaseLayer.search">
-<code class="descname">search</code><span class="sig-paren">(</span><em>expression</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#BaseLayer.search"><span class="viewcode-link">[fuente]</span></a><a class="headerlink" href="#catatom2osm.layer.BaseLayer.search" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<code class="descname">search</code><span class="sig-paren">(</span><em>expression=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#BaseLayer.search"><span class="viewcode-link">[fuente]</span></a><a class="headerlink" href="#catatom2osm.layer.BaseLayer.search" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>Returns a features iterator for this search expression</p>
 </dd></dl>
 
@@ -925,6 +925,13 @@ less than &#8216;cath_thr&#8217; meters.</li>
 <dd><p>Format a zone label</p>
 </dd></dl>
 
+<dl class="method">
+<dt id="catatom2osm.layer.ZoningLayer.remove_outside_features">
+<code class="descname">remove_outside_features</code><span class="sig-paren">(</span><em>layer</em>, <em>skip=[]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#ZoningLayer.remove_outside_features"><span class="viewcode-link">[fuente]</span></a><a class="headerlink" href="#catatom2osm.layer.ZoningLayer.remove_outside_features" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Remove any zone not contained in layer features except if its label
+is in skip list.</p>
+</dd></dl>
+
 <dl class="attribute">
 <dt id="catatom2osm.layer.ZoningLayer.rpattern">
 <code class="descname">rpattern</code><em class="property"> = '{:03}'</em><a class="headerlink" href="#catatom2osm.layer.ZoningLayer.rpattern" title="Enlazar permanentemente con esta definición">¶</a></dt>
@@ -989,7 +996,7 @@ multiparts and merged adjacent zones</p>
         <li class="right" >
           <a href="catatom2osm.hgwnames.html" title="catatom2osm.hgwnames module"
              >anterior</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">documentación de CatAtom2Osm - 1.8.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">documentación de CatAtom2Osm - 1.9.0</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../api.html" >Referencia API</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="modules.html" >CatAtom2Osm</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="catatom2osm.html" >catatom2osm package</a> &#187;</li> 
