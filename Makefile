@@ -13,7 +13,7 @@ MSGFMT        = msgfmt
 LOCALE_DIR    = locale/po
 INSTALL_DIR   = /usr/local/bin/
 OS            = $(shell uname)
-VERSION       = $(shell python setup.py -V)
+VERSION       = $(shell python -c "import catatom2osm; print(catatom2osm.__version__)")
 
 # Internal variables.
 PAPEROPT_a4     = -D latex_paper_size=a4
