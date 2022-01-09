@@ -164,8 +164,8 @@ class TestOsm(OsmTestCase):
             'highway' in el.tags or el.tags.get('place') == 'square'
         )
         d2.append(d1, query)
-        self.assertEquals(len(d2.nodes), 15)
-        self.assertEquals(len(d2.ways), 3)
+        self.assertEqual(len(d2.nodes), 15)
+        self.assertEqual(len(d2.ways), 3)
         for el in d2.ways:
             tag = el.tags.get('highway', el.tags.get('place', ''))
             self.assertNotEqual(tag, '')
@@ -178,10 +178,10 @@ class TestOsm(OsmTestCase):
             'addr:street' in el.tags or 'addr:place' in el.tags
         )
         d2.append(d1, query)
-        self.assertEquals(len(d2.nodes), 6)
-        self.assertEquals(len(d2.ways), 1)
+        self.assertEqual(len(d2.nodes), 6)
+        self.assertEqual(len(d2.ways), 1)
         for el in d2.elements:
-            if el not in d2.parents.keys():
+            if el not in list(d2.parents.keys()):
                 tag = el.tags.get('addr:street', el.tags.get('addr:place', ''))
                 self.assertNotEqual(tag, '')
 
@@ -196,7 +196,7 @@ class TestOsm(OsmTestCase):
         self.assertEquals(len(d2.nodes), 27)
         self.assertEquals(len(d2.ways), 5)
         for el in d2.elements:
-            if el not in d2.parents.keys():
+            if el not in list(d2.parents.keys()):
                 tag = el.tags.get('building', el.tags.get('leisure', ''))
                 self.assertNotEqual(tag, '')
 
