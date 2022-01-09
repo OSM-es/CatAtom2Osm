@@ -1,6 +1,9 @@
 Change log
 ==========
 
+** 2021-1-9 (1.9.2)**
+* Fix overpass search area for -s option.
+
 ** 2021-1-8 (1.9.1)**
 * Clip polygon includes zones if overlapped area is greater than 50%.
 * Fix error renaming the project.

@@ -373,7 +373,7 @@ class CatAtom2Osm(object):
         self.rustic_zoning.append(zoning_gml, level='P')
         if self.options.tasks or self.options.zoning or self.zone:
             self.urban_zoning.append(zoning_gml, level='M')
-        if self.zone:
+        if self.zone or self.options.split:
             self.cat.boundary_search_area = zoning_gml.bounding_box(
                 "label IN (%s)" % str(self.zone)[1:-1]
             )
