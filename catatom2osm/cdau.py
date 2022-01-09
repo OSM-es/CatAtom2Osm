@@ -1,8 +1,4 @@
-﻿# -*- coding: utf-8 -*-
-"""Reader of CDAU CSV files"""
-from __future__ import unicode_literals
-from builtins import object, range, str
-
+﻿"""Reader of CDAU CSV files"""
 import os
 import re
 from collections import defaultdict

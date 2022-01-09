@@ -1,7 +1,4 @@
-﻿# -*- coding: utf-8 -*-
-"""Application preferences"""
-from __future__ import unicode_literals
-from builtins import range
+﻿"""Application preferences"""
 import gettext
 import locale
 import logging

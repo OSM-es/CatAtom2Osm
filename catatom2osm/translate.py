@@ -1,7 +1,4 @@
-# -*- coding: utf-8 -*-
 """Translations from source fields to OSM tags"""
-from __future__ import unicode_literals
-from builtins import str
 import json
 
 from catatom2osm import config

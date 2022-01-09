@@ -1,6 +1,4 @@
 """Minimum Overpass API interface"""
-from past.builtins import basestring
-from builtins import object, range
 import re
 
 from catatom2osm import download

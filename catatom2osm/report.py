@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """Statistics report"""
 
-from __future__ import division, unicode_literals
-from builtins import int, object, str
 from collections import OrderedDict, Counter
 from datetime import datetime
 import io

@@ -1,7 +1,4 @@
-﻿# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-from builtins import str
-import unittest
+﻿import unittest
 from tempfile import mkstemp
 
 import io

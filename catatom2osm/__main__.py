@@ -1,7 +1,4 @@
-# -*- coding: utf-8 -*-
 """CatAtom2Osm command line entry point"""
-from __future__ import unicode_literals
-from builtins import str
 from argparse import ArgumentParser
 import logging
 import sys

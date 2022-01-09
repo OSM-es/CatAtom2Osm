@@ -1,7 +1,5 @@
-# -*- coding: utf-8 -*-
 """Application layers"""
 
-from builtins import object, str
 import os
 import math
 import re

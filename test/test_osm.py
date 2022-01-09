@@ -157,7 +157,7 @@ class TestOsm(OsmTestCase):
         self.assertEqual(len(d2.elements), 1)  # don't insert repeated
 
     def test_append_highway(self):
-        with open('test/current.osm', 'rb') as fo:
+        with open('test/fixtures/current.osm', 'rb') as fo:
             d1 = osmxml.deserialize(fo)
         d2 = osm.Osm()
         query = lambda el: (
@@ -171,7 +171,7 @@ class TestOsm(OsmTestCase):
             self.assertNotEqual(tag, '')
 
     def test_append_addr(self):
-        with open('test/current.osm', 'rb') as fo:
+        with open('test/fixtures/current.osm', 'rb') as fo:
             d1 = osmxml.deserialize(fo)
         d2 = osm.Osm()
         query = lambda el: (
@@ -186,15 +186,15 @@ class TestOsm(OsmTestCase):
                 self.assertNotEqual(tag, '')
 
     def test_append_building(self):
-        with open('test/current.osm', 'rb') as fo:
+        with open('test/fixtures/current.osm', 'rb') as fo:
             d1 = osmxml.deserialize(fo)
         d2 = osm.Osm()
         query = lambda el: (
             'building' in el.tags or el.tags.get('leisure') == 'swimming_pool'
         )
         d2.append(d1, query)
-        self.assertEquals(len(d2.nodes), 27)
-        self.assertEquals(len(d2.ways), 5)
+        self.assertEqual(len(d2.nodes), 27)
+        self.assertEqual(len(d2.ways), 5)
         for el in d2.elements:
             if el not in list(d2.parents.keys()):
                 tag = el.tags.get('building', el.tags.get('leisure', ''))
