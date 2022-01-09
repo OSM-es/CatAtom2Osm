@@ -8,7 +8,6 @@ from qgis.core import *
 
 from catatom2osm import download, layer, config
 from catatom2osm.report import instance as report
-from catatom2osm.qgiscompat import *
 log = config.log
 
 andalucia = {'04': 'Almeria', '11': 'Cadiz', '14': 'Cordova', '18': 'Granada',
@@ -125,7 +124,7 @@ class Reader(object):
         csv = layer.BaseLayer(csv_path, csv_fn, 'ogr')
         if not csv.isValid():
             raise IOError(_("Failed to load layer '%s'") % csv_path)
-        csv.setCrs(QgsCoordinateReferenceSystem_fromEpsgId(cdau_crs))
+        csv.setCrs(QgsCoordinateReferenceSystem.fromEpsgId(cdau_crs))
         log.info(_("Read %d features in '%s'"), csv.featureCount(), csv_path)
         self.get_metadata(csv_path.replace('.csv', '.txt'))
         csv.source_date = self.src_date

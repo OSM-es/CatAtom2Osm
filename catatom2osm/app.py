@@ -20,7 +20,6 @@ from osgeo import gdal
 from catatom2osm import config, catatom, csvtools, layer, osm, osmxml, overpass
 from catatom2osm import cdau  # Used in get_auxiliary_addresses
 from catatom2osm.report import instance as report
-from catatom2osm.qgiscompat import *
 
 log = config.log
 if config.silence_gdal:

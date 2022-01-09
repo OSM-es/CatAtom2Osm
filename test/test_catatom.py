@@ -213,7 +213,7 @@ class TestCatAtom(unittest.TestCase):
     @mock.patch('catatom2osm.catatom.os')
     @mock.patch('catatom2osm.catatom.log')
     @mock.patch('catatom2osm.catatom.layer')
-    @mock.patch('catatom2osm.catatom.QgsCoordinateReferenceSystem_fromEpsgId')
+    @mock.patch('catatom2osm.catatom.QgsCoordinateReferenceSystem.fromEpsgId')
     def test_read(self, m_qgscrs, m_layer, m_log, m_os):
         self.m_cat.read = get_func(catatom.Reader.read)
         g = random.choice(['BU', 'CP', 'AD'])

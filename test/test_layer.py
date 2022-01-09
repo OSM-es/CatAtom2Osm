@@ -8,7 +8,6 @@ logging.disable(logging.WARNING)
 
 from osgeo import gdal
 from qgis.core import *
-from catatom2osm.qgiscompat import *
 
 from catatom2osm.layer import *
 from catatom2osm.app import QgsSingleton
@@ -321,8 +320,8 @@ class TestBaseLayer(unittest.TestCase):
         layer.reproject()
         feature_out = next(layer.getFeatures())
         self.assertEqual(layer.featureCount(), features_before)
-        self.assertEqual(layer.crs(), QgsCoordinateReferenceSystem_fromEpsgId(4326))
-        crs_transform = ggs2coordinate_transform(layer.crs(), crs_before)
+        self.assertEqual(layer.crs(), QgsCoordinateReferenceSystem.fromEpsgId(4326))
+        crs_transform = layer.get_crs_transform(layer.crs(), crs_before)
         geom_out = feature_out.geometry()
         geom_out.transform(crs_transform)
         self.assertLess(abs(geom_in.area() - geom_out.area()), 1E8)
@@ -362,7 +361,7 @@ class TestBaseLayer(unittest.TestCase):
 
 class TestBaseLayer2(unittest.TestCase):
 
-    @mock.patch('catatom2osm.layer.QgsVectorFileWriter_writeAsVectorFormat')
+    @mock.patch('catatom2osm.layer.QgsVectorFileWriter.writeAsVectorFormat')
     @mock.patch('catatom2osm.layer.QgsVectorFileWriter')
     @mock.patch('catatom2osm.layer.os')
     def test_export_default(self, mock_os, mock_fw, mock_wvf):
@@ -376,8 +375,8 @@ class TestBaseLayer2(unittest.TestCase):
             layer, 'foobar', layer.crs(), 'ESRI Shapefile'
         )
 
-    @mock.patch('catatom2osm.layer.QgsVectorFileWriter_writeAsVectorFormat')
-    @mock.patch('catatom2osm.layer.QgsCoordinateReferenceSystem_fromEpsgId')
+    @mock.patch('catatom2osm.layer.QgsVectorFileWriter.writeAsVectorFormat')
+    @mock.patch('catatom2osm.layer.QgsCoordinateReferenceSystem.fromEpsgId')
     @mock.patch('catatom2osm.layer.QgsVectorFileWriter')
     @mock.patch('catatom2osm.layer.os')
     def test_export_other(self, mock_os, mock_fw, mock_crs, mock_wvf):
