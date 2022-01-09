@@ -1,6 +1,9 @@
 Registro de cambios
 ===================
 
+** 9-1-2021 (1.9.2)**
+* Corrige área de búsqueda de overpass para la opción -s.
+
 ** 8-1-2021 (1.9.1)**
 * El polígono de recorte incluye zonas si el área superpuesta es mayor que el 50%.
 * Corrige error renombrando proyecto.
