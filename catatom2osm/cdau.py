@@ -10,12 +10,10 @@ from datetime import datetime
 
 from qgis.core import *
 
-from catatom2osm import compat, download, layer, config
+from catatom2osm import download, layer, config
 from catatom2osm.report import instance as report
 from catatom2osm.qgiscompat import *
 log = config.log
-compat.set_es_time()
-
 
 andalucia = {'04': 'Almeria', '11': 'Cadiz', '14': 'Cordova', '18': 'Granada',
     '21': 'Huelva', '23': 'Jaen', '29': 'Malaga', '41': 'Sevilla'}

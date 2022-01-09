@@ -5,10 +5,10 @@ import json
 import os
 import re
 import zipfile
+from lxml import etree
 from requests.exceptions import ConnectionError
 
 from catatom2osm import config, download, hgwnames, layer, overpass
-from catatom2osm.compat import etree
 from catatom2osm.qgiscompat import QgsCoordinateReferenceSystem_fromEpsgId
 from catatom2osm.report import instance as report
 log = config.log

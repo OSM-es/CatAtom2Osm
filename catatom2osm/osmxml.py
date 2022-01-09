@@ -4,9 +4,9 @@
 from __future__ import unicode_literals
 from builtins import str
 from past.builtins import basestring
+from lxml import etree
 
 from catatom2osm import config, osm
-from catatom2osm.compat import etree
 log = config.log
 
 
