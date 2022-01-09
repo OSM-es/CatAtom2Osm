@@ -1,0 +1,75 @@
+
+{
+    "type":"FeatureCollection",
+    "generator":"JOSM",
+    "features":[
+        {
+            "type":"Feature",
+            "properties":{
+                "highway":"residential",
+                "name":"Calle San Joaquín"
+            },
+            "geometry":{
+                "type":"LineString",
+                "coordinates":[
+                    [
+                        -16.44071510000,
+                        28.23724530000
+                    ],
+                    [
+                        -16.44056300000,
+                        28.23717510000
+                    ],
+                    [
+                        -16.43989410000,
+                        28.23686600000
+                    ]
+                ]
+            }
+        },
+        {
+            "type":"Feature",
+            "properties":{
+                "highway":"residential",
+                "name":"Calle el Hoyo"
+            },
+            "geometry":{
+                "type":"LineString",
+                "coordinates":[
+                    [
+                        -16.44071510000,
+                        28.23724530000
+                    ],
+                    [
+                        -16.44063540000,
+                        28.23748890000
+                    ]
+                ]
+            }
+        },
+        {
+            "type":"Feature",
+            "properties":{
+                "highway":"residential",
+                "name":"Avenida la Paz"
+            },
+            "geometry":{
+                "type":"LineString",
+                "coordinates":[
+                    [
+                        -16.44098300000,
+                        28.23707490000
+                    ],
+                    [
+                        -16.44076960000,
+                        28.23719310000
+                    ],
+                    [
+                        -16.44071510000,
+                        28.23724530000
+                    ]
+                ]
+            }
+        }
+    ]
+}
