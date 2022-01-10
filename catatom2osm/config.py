@@ -1,14 +1,11 @@
-﻿# -*- coding: utf-8 -*-
-"""Application preferences"""
-from __future__ import unicode_literals
-from builtins import range
+﻿"""Application preferences"""
 import gettext
 import locale
 import logging
 import os
 import sys
 
-from catatom2osm import compat, __version__
+from catatom2osm import __version__
 
 app_name = 'CatAtom2Osm'
 app_version = __version__
@@ -42,8 +39,7 @@ def install_gettext(app_name, localedir):
 language, encoding = locale.getdefaultlocale()
 language = language or 'es_ES'
 encoding = encoding or 'UTF-8'
-terminal = compat.Terminal(encoding)
-app_path = terminal.decode(os.path.dirname(__file__))
+app_path = os.path.dirname(__file__)
 localedir = os.path.join(os.path.dirname(app_path), 'locale', 'po')
 platform = sys.platform
 winenv()
@@ -55,7 +51,7 @@ log_file = 'catatom2osm.log'
 log_format = '%(asctime)s - %(levelname)s - %(message)s'
 log = logging.getLogger(app_name)
 fh = logging.FileHandler(log_file)
-ch = logging.StreamHandler(compat.get_stderr())
+ch = logging.StreamHandler(sys.stderr)
 fh.setLevel(logging.DEBUG)
 ch.setLevel(logging.DEBUG)
 formatter = logging.Formatter(log_format)

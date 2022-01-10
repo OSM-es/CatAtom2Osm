@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from future import standard_library
-standard_library.install_aliases()
 import unittest
 import mock
 from requests.exceptions import ConnectionError
@@ -216,7 +213,7 @@ class TestCatAtom(unittest.TestCase):
     @mock.patch('catatom2osm.catatom.os')
     @mock.patch('catatom2osm.catatom.log')
     @mock.patch('catatom2osm.catatom.layer')
-    @mock.patch('catatom2osm.catatom.QgsCoordinateReferenceSystem_fromEpsgId')
+    @mock.patch('catatom2osm.catatom.QgsCoordinateReferenceSystem.fromEpsgId')
     def test_read(self, m_qgscrs, m_layer, m_log, m_os):
         self.m_cat.read = get_func(catatom.Reader.read)
         g = random.choice(['BU', 'CP', 'AD'])
@@ -275,11 +272,13 @@ class TestCatAtom(unittest.TestCase):
     def test_is_empty(self):
         self.m_cat.is_empty = get_func(catatom.Reader.is_empty)
         self.m_cat.get_path_from_zip.return_value = 'empty.gml'
-        test = self.m_cat.is_empty(self.m_cat, 'test/empty.gml|foo', 'test/empty.zip')
+        fn = 'test/fixtures/empty.gml'
+        test = self.m_cat.is_empty(self.m_cat, fn, 'test/empty.zip')
         self.assertTrue(test)
-        test = self.m_cat.is_empty(self.m_cat, 'test/empty.gml', '')
+        test = self.m_cat.is_empty(self.m_cat, 'test/fixtures/empty.gml', '')
         self.assertTrue(test)
-        test = self.m_cat.is_empty(self.m_cat, 'test/building.gml', '')
+        fn = 'test/fixtures/building.gml'
+        test = self.m_cat.is_empty(self.m_cat, fn, '')
         self.assertFalse(test)
 
     def test_get_path_from_zip(self):

@@ -1,6 +1,9 @@
 Change log
 ==========
 
+** 2021-1-10 (2.0.0)**
+* Update to Ubuntu 20.04 / QGIS3 / python3 #67.
+
 ** 2021-1-11 (1.9.3)**
 * Fix error deleting osm elements.
 

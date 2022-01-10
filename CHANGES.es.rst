@@ -1,6 +1,9 @@
 Registro de cambios
 ===================
 
+** 10-1-2021 (2.0.0)**
+* Actualiza a Ubuntu 20.04 / QGIS3 / python3 #67.
+
 ** 10-1-2021 (1.9.3)**
 * Corrige error eliminando elementos OSM.
 

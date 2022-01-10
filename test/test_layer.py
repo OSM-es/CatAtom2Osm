@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-from builtins import next, range, str, zip
 import unittest
 import mock
 import random
@@ -11,7 +8,6 @@ logging.disable(logging.WARNING)
 
 from osgeo import gdal
 from qgis.core import *
-from catatom2osm.qgiscompat import *
 
 from catatom2osm.layer import *
 from catatom2osm.app import QgsSingleton
@@ -170,7 +166,8 @@ class TestGeometry(unittest.TestCase):
 class TestBaseLayer(unittest.TestCase):
 
     def setUp(self):
-        self.fixture = QgsVectorLayer('test/building.gml', 'building', 'ogr')
+        fn = 'test/fixtures/building.gml'
+        self.fixture = QgsVectorLayer(fn, 'building', 'ogr')
         self.assertTrue(self.fixture.isValid())
         fn = 'test_layer.shp'
         BaseLayer.create_shp(fn, self.fixture.crs())
@@ -323,8 +320,8 @@ class TestBaseLayer(unittest.TestCase):
         layer.reproject()
         feature_out = next(layer.getFeatures())
         self.assertEqual(layer.featureCount(), features_before)
-        self.assertEqual(layer.crs(), QgsCoordinateReferenceSystem_fromEpsgId(4326))
-        crs_transform = ggs2coordinate_transform(layer.crs(), crs_before)
+        self.assertEqual(layer.crs(), QgsCoordinateReferenceSystem.fromEpsgId(4326))
+        crs_transform = layer.get_crs_transform(layer.crs(), crs_before)
         geom_out = feature_out.geometry()
         geom_out.transform(crs_transform)
         self.assertLess(abs(geom_in.area() - geom_out.area()), 1E8)
@@ -355,7 +352,8 @@ class TestBaseLayer(unittest.TestCase):
                 self.assertEqual(data.tags[key], value)
 
     def test_search(self):
-        layer = BaseLayer('test/building.gml', 'building', 'ogr')
+        fn = 'test/fixtures/building.gml'
+        layer = BaseLayer(fn, 'building', 'ogr')
         count = sum([1 for f in layer.search()])
         self.assertEqual(count, layer.featureCount())
         count = sum([1 for f in layer.search("localId LIKE '76407%%'")])
@@ -363,7 +361,7 @@ class TestBaseLayer(unittest.TestCase):
 
 class TestBaseLayer2(unittest.TestCase):
 
-    @mock.patch('catatom2osm.layer.QgsVectorFileWriter_writeAsVectorFormat')
+    @mock.patch('catatom2osm.layer.QgsVectorFileWriter.writeAsVectorFormat')
     @mock.patch('catatom2osm.layer.QgsVectorFileWriter')
     @mock.patch('catatom2osm.layer.os')
     def test_export_default(self, mock_os, mock_fw, mock_wvf):
@@ -377,8 +375,8 @@ class TestBaseLayer2(unittest.TestCase):
             layer, 'foobar', layer.crs(), 'ESRI Shapefile'
         )
 
-    @mock.patch('catatom2osm.layer.QgsVectorFileWriter_writeAsVectorFormat')
-    @mock.patch('catatom2osm.layer.QgsCoordinateReferenceSystem_fromEpsgId')
+    @mock.patch('catatom2osm.layer.QgsVectorFileWriter.writeAsVectorFormat')
+    @mock.patch('catatom2osm.layer.QgsCoordinateReferenceSystem.fromEpsgId')
     @mock.patch('catatom2osm.layer.QgsVectorFileWriter')
     @mock.patch('catatom2osm.layer.os')
     def test_export_other(self, mock_os, mock_fw, mock_crs, mock_wvf):
@@ -397,8 +395,9 @@ class TestPolygonLayer(unittest.TestCase):
 
     @mock.patch('catatom2osm.layer.tqdm')
     def setUp(self, m_tqdm):
-        self.fixture = QgsVectorLayer('test/cons.shp', 'building', 'ogr')
-        self.assertTrue(self.fixture.isValid(), "Loading fixture")
+        fn = 'test/fixtures/cons.shp'
+        self.fixture = QgsVectorLayer(fn, 'building', 'ogr')
+        self.assertTrue(self.fixture.isValid(), f"Loading {fn}")
         fn = 'test_layer.shp'
         PolygonLayer.create_shp(fn, self.fixture.crs())
         self.layer = PolygonLayer(fn, 'building', 'ogr')
@@ -525,7 +524,8 @@ class TestParcelLayer(unittest.TestCase):
         self.assertEqual(layer.rename['localId'], 'inspireId_localId')
 
     def test_not_empty(self):
-        layer = ParcelLayer('test/building.gml', 'building', 'ogr')
+        fn = 'test/fixtures/building.gml'
+        layer = ParcelLayer(fn, 'building', 'ogr')
         self.assertEqual(len(layer.fields().toList()), 23)
 
 
@@ -533,7 +533,8 @@ class TestZoningLayer(unittest.TestCase):
 
     @mock.patch('catatom2osm.layer.tqdm')
     def setUp(self, m_tqdm):
-        self.fixture = QgsVectorLayer('test/zoning.gml', 'zoning', 'ogr')
+        fn = 'test/fixtures/zoning.gml'
+        self.fixture = QgsVectorLayer(fn, 'zoning', 'ogr')
         self.assertTrue(self.fixture.isValid(), "Loading fixture")
         fn = 'urban_zoning.shp'
         ZoningLayer.create_shp(fn, self.fixture.crs())
@@ -641,7 +642,8 @@ class TestZoningLayer(unittest.TestCase):
             u'89414': 6, u'83428': 5, u'87432': 5, u'86459': 4, u'90429': 4,
             u'86427': 4, u'88428': 3, u'86441': 3, u'88393': 3, u'86449': 2,
             u'89415': 2})
-        fixture = BaseLayer('test/cons.shp', 'building', 'ogr')
+        fn = 'test/fixtures/cons.shp'
+        fixture = BaseLayer(fn, 'building', 'ogr')
         building = ConsLayer()
         building.get_labels(fixture, self.ulayer, self.rlayer)
         building.append(fixture)
@@ -671,7 +673,7 @@ class TestZoningLayer(unittest.TestCase):
              u'90429': 1, u'86441': 1, u'86427': 1, u'89415': 1,
              u'89414': 1, u'88393': 1
         })
-        fn = 'test/cons.shp'
+        fn = 'test/fixtures/cons.shp'
         building_gml = BaseLayer(fn, 'building', 'ogr')
         building = ConsLayer(fn, providerLib='ogr')
         building.get_labels(building_gml, self.ulayer, self.rlayer)
@@ -694,12 +696,12 @@ class TestZoningLayer(unittest.TestCase):
 
     def test_remove_outside_features1(self):
         """Splits using a polygon geojson created with QGIS"""
-        split = BaseLayer('test/split1.geojson', 'splitzoning', 'ogr')
+        split = BaseLayer('test/fixtures/split1.geojson', 'splitzoning', 'ogr')
         self.do_test_split(split)
 
     def test_remove_outside_features2(self):
         """Splits using a multipolygon geojson created with QGIS"""
-        split = BaseLayer('test/split2.geojson', 'splitzoning', 'ogr')
+        split = BaseLayer('test/fixtures/split2.geojson', 'splitzoning', 'ogr')
         self.do_test_split(split)
 
     def test_remove_outside_features3(self):
@@ -707,7 +709,7 @@ class TestZoningLayer(unittest.TestCase):
         Splits using a polygon geojson with different CRS created with JOSM.
         Manually edited to change MultiString to Polygon
         """
-        split = BaseLayer('test/split3.geojson', 'splitzoning', 'ogr')
+        split = BaseLayer('test/fixtures/split3.geojson', 'splitzoning', 'ogr')
         self.do_test_split(split)
 
 
@@ -715,7 +717,8 @@ class TestConsLayer(unittest.TestCase):
 
     @mock.patch('catatom2osm.layer.tqdm')
     def setUp(self, m_tqdm):
-        self.fixture = QgsVectorLayer('test/cons.shp', 'building', 'ogr')
+        fn = 'test/fixtures/cons.shp'
+        self.fixture = QgsVectorLayer(fn, 'building', 'ogr')
         self.assertTrue(self.fixture.isValid(), "Loading fixture")
         fn = 'test_layer.shp'
         ConsLayer.create_shp(fn, self.fixture.crs())
@@ -754,7 +757,8 @@ class TestConsLayer(unittest.TestCase):
             if len(Geometry.get_multipolygon(f)) > 1]
         self.assertGreater(len(mp0), 0)
         address = AddressLayer()
-        address_gml = QgsVectorLayer('test/address.gml', 'address', 'ogr')
+        fn = 'test/fixtures/address.gml'
+        address_gml = QgsVectorLayer(fn, 'address', 'ogr')
         address.append(address_gml)
         refs = {ad['localId'].split('.')[-1] for ad in address.getFeatures()}
         mp1 = [f for f in self.layer.getFeatures() if f['localId'] in refs and
@@ -769,7 +773,8 @@ class TestConsLayer(unittest.TestCase):
     def test_append_building(self, m_tqdm):
         layer = ConsLayer()
         self.assertTrue(layer.isValid(), "Init QGIS")
-        fixture = QgsVectorLayer('test/building.gml', 'building', 'ogr')
+        fn = 'test/fixtures/building.gml'
+        fixture = QgsVectorLayer(fn, 'building', 'ogr')
         self.assertTrue(fixture.isValid())
         layer.append(fixture)
         feature = next(fixture.getFeatures())
@@ -781,7 +786,8 @@ class TestConsLayer(unittest.TestCase):
     def test_append_buildingpart(self, m_tqdm):
         layer = ConsLayer()
         self.assertTrue(layer.isValid(), "Init QGIS")
-        fixture = QgsVectorLayer('test/buildingpart.gml', 'building', 'ogr')
+        fn = 'test/fixtures/buildingpart.gml'
+        fixture = QgsVectorLayer(fn, 'building', 'ogr')
         self.assertTrue(fixture.isValid())
         layer.append(fixture)
         feature = next(fixture.getFeatures())
@@ -793,7 +799,8 @@ class TestConsLayer(unittest.TestCase):
     def test_append_othercons(self, m_tqdm):
         layer = ConsLayer()
         self.assertTrue(layer.isValid(), "Init QGIS")
-        fixture = QgsVectorLayer('test/othercons.gml', 'building', 'ogr')
+        fn = 'test/fixtures/othercons.gml'
+        fixture = QgsVectorLayer(fn, 'building', 'ogr')
         self.assertTrue(fixture.isValid())
         layer.append(fixture)
         feature = next(fixture.getFeatures())
@@ -1025,14 +1032,19 @@ class TestConsLayer(unittest.TestCase):
     def test_simplify2(self, m_tqdm):
         layer = ConsLayer()
         writer = layer.dataProvider()
-        fixture1 = QgsVectorLayer('test/38023.buildingpart.gml', 'building', 'ogr')
+        fn = 'test/fixtures/38023.buildingpart.gml'
+        fixture1 = QgsVectorLayer(fn, 'building', 'ogr')
         self.assertTrue(fixture1.isValid(), "Loading fixture")
         layer.append(fixture1, rename='')
         self.assertEqual(layer.featureCount(), fixture1.featureCount())
-        fixture2 = QgsVectorLayer('test/38023.buildingpart.gml', 'buildingpart', 'ogr')
+        fn = 'test/fixtures/38023.buildingpart.gml'
+        fixture2 = QgsVectorLayer(fn, 'buildingpart', 'ogr')
         self.assertTrue(fixture2.isValid(), "Loading fixture")
         layer.append(fixture2, rename='')
-        self.assertEqual(layer.featureCount(), fixture1.featureCount() + fixture2.featureCount())
+        self.assertEqual(
+            layer.featureCount(),
+            fixture1.featureCount() + fixture2.featureCount(),
+        )
         layer.remove_outside_parts()
         layer.explode_multi_parts()
         layer.topology()
@@ -1055,7 +1067,8 @@ class TestConsLayer(unittest.TestCase):
         }
         self.layer.explode_multi_parts()
         address = AddressLayer()
-        address_gml = QgsVectorLayer('test/address.gml', 'address', 'ogr')
+        fn = 'test/fixtures/address.gml'
+        address_gml = QgsVectorLayer(fn, 'address', 'ogr')
         address.append(address_gml)
         self.assertEqual(address.featureCount(), 14)
         self.layer.move_address(address)
@@ -1171,13 +1184,14 @@ class TestConsLayer(unittest.TestCase):
 class TestAddressLayer(unittest.TestCase):
 
     def setUp(self):
-        self.address_gml = QgsVectorLayer('test/address.gml', 'address', 'ogr')
+        fn = 'test/fixtures/address.gml'
+        self.address_gml = QgsVectorLayer(fn, 'address', 'ogr')
         self.assertTrue(self.address_gml.isValid(), "Loading address")
-        self.tn_gml = QgsVectorLayer('test/address.gml|layername=thoroughfarename', 'tn', 'ogr')
+        self.tn_gml = QgsVectorLayer(fn + '|layername=thoroughfarename', 'tn', 'ogr')
         self.assertTrue(self.tn_gml.isValid(), "Loading thoroughfarename")
-        self.pd_gml = QgsVectorLayer('test/address.gml|layername=postaldescriptor', 'pd', 'ogr')
+        self.pd_gml = QgsVectorLayer(fn + '|layername=postaldescriptor', 'pd', 'ogr')
         self.assertTrue(self.pd_gml.isValid(), "Loading address")
-        self.au_gml = QgsVectorLayer('test/address.gml|layername=adminUnitname', 'au', 'ogr')
+        self.au_gml = QgsVectorLayer(fn + '|layername=adminUnitname', 'au', 'ogr')
         self.assertTrue(self.au_gml.isValid(), "Loading address")
         fn = 'test_layer.shp'
         AddressLayer.create_shp(fn, self.address_gml.crs())
@@ -1259,8 +1273,10 @@ class TestAddressLayer(unittest.TestCase):
         self.assertEqual(self.layer.featureCount(), 10)
 
     def test_get_highway_names(self):
-        layer = AddressLayer('test/address.geojson', 'address', 'ogr')
-        highway = HighwayLayer('test/highway.geojson', 'highway', 'ogr')
+        fn = 'test/fixtures/address.geojson'
+        layer = AddressLayer(fn, 'address', 'ogr')
+        fn = 'test/fixtures/highway.geojson'
+        highway = HighwayLayer(fn, 'highway', 'ogr')
         highway_names = layer.get_highway_names(highway)
         test = {
             'AV PAZ (FASNIA)': 'Avenida la Paz',

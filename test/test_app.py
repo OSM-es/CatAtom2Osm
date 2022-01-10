@@ -1,6 +1,4 @@
-# -*- coding: utf-8 -*-
-from builtins import range
-from past.builtins import reload
+from importlib import reload
 import mock
 import unittest
 import os

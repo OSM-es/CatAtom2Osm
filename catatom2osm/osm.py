@@ -1,6 +1,4 @@
-# -*- coding: utf-8 -*-
 """OpenStreetMap data model"""
-from builtins import str, range, object
 from collections import defaultdict, Counter
 
 # Number of significant decimal digits. 0 to cancel rounding. With a value 

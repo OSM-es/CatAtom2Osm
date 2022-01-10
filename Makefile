@@ -2,7 +2,7 @@ SHELL         = /bin/bash
 SPHINXBUILD   = sphinx-build
 APIBUILD      = sphinx-apidoc
 COVERAGE      = coverage
-UNITTEST      = python -m unittest
+UNITTEST      = python3 -m unittest
 DOCSRCDIR     = doc-src
 BUILDDIR      = docs
 COVERAGEDIR   = $(BUILDDIR)/coverage
@@ -13,7 +13,7 @@ MSGFMT        = msgfmt
 LOCALE_DIR    = locale/po
 INSTALL_DIR   = /usr/local/bin/
 OS            = $(shell uname)
-VERSION       = $(shell python -c "import catatom2osm; print(catatom2osm.__version__)")
+VERSION       = $(shell python3 -c "import catatom2osm; print(catatom2osm.__version__)")
 
 # Internal variables.
 PAPEROPT_a4     = -D latex_paper_size=a4

@@ -1,15 +1,14 @@
 """Reader of Cadastre ATOM GML files"""
-from __future__ import print_function, unicode_literals
-from builtins import next, object, str
 import json
 import os
 import re
 import zipfile
+from lxml import etree
 from requests.exceptions import ConnectionError
 
+from qgis.core import QgsCoordinateReferenceSystem
+
 from catatom2osm import config, download, hgwnames, layer, overpass
-from catatom2osm.compat import etree
-from catatom2osm.qgiscompat import QgsCoordinateReferenceSystem_fromEpsgId
 from catatom2osm.report import instance as report
 log = config.log
 
@@ -198,7 +197,7 @@ class Reader(object):
             gml = layer.BaseLayer(gml_path, layername+'.gml', 'ogr')
             if not gml.isValid():
                 raise IOError(_("Failed to load layer '%s'") % gml_path)
-        crs = QgsCoordinateReferenceSystem_fromEpsgId(self.crs_ref)
+        crs = QgsCoordinateReferenceSystem.fromEpsgId(self.crs_ref)
         if not crs.isValid():
             raise IOError(_("Could not determine the CRS of '%s'") % gml_path)
         gml.setCrs(crs)

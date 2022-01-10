@@ -1,15 +1,11 @@
-# -*- coding: utf-8 -*-
 """
 Parsing of highway names
 """
-from __future__ import unicode_literals
-from builtins import str
-
 import re
 from fuzzywuzzy import fuzz
 from fuzzywuzzy import process
 
-from catatom2osm import config, compat
+from catatom2osm import config
 
 MATCH_THR = 60
 

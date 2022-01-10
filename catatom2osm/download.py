@@ -1,5 +1,3 @@
-from __future__ import division
-from builtins import object, range
 import os
 import requests
 from tqdm import tqdm

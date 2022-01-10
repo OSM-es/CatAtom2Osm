@@ -1,11 +1,6 @@
-# -*- coding: utf-8 -*-
 """
 CSV related help functions
 """
-from __future__ import unicode_literals
-oldstr = str
-from builtins import str
-
 import csv
 import io
 import six
@@ -27,7 +22,7 @@ def dict2csv(csv_path, a_dict, sort=None):
 def csv2dict(csv_path, a_dict, encoding=encoding):
     """Read a dictionary from a csv file"""
     with open(csv_path) as csv_file:
-        csv_reader = csv.reader(csv_file, delimiter=oldstr(delimiter))
+        csv_reader = csv.reader(csv_file, delimiter=str(delimiter))
         for row in csv_reader:
             if len(row) < 2:
                 raise IOError(_("Failed to load CSV file '%s'") % csv_file.name)

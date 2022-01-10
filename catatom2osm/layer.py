@@ -1,7 +1,4 @@
-# -*- coding: utf-8 -*-
 """Application layers"""
-
-from builtins import object, str
 import os
 import math
 import re
@@ -10,7 +7,10 @@ import logging
 from tqdm import tqdm
 
 from qgis.core import *
-from catatom2osm.qgiscompat import *
+from qgis.PyQt.QtCore import QVariant
+WKBMultiPolygon = QgsWkbTypes.MultiPolygon
+WKBPolygon = QgsWkbTypes.Polygon
+WKBPoint = QgsWkbTypes.Point
 
 from catatom2osm import config, csvtools, hgwnames, osm, translate
 from catatom2osm.report import instance as report
@@ -27,7 +27,7 @@ is_inside = lambda f1, f2: (
 get_attributes = lambda feat: \
     dict([(i, feat[i]) for i in range(len(feat.fields().toList()))])
 
-class Point(Qgs2DPoint):
+class Point(QgsPointXY):
     """Extends QgsPoint with some utility methods"""
 
     def __init__(self, arg1, arg2=None):
@@ -237,8 +237,18 @@ class BaseLayer(QgsVectorLayer):
         self.keep = False
 
     @staticmethod
+    def get_writer(name, crs, fields=QgsFields(), geom_type=WKBMultiPolygon):
+        transform_context = QgsProject.instance().transformContext()
+        save_options = QgsVectorFileWriter.SaveVectorOptions()
+        save_options.driverName = "ESRI Shapefile"
+        save_options.fileEncoding = "UTF-8"
+        return QgsVectorFileWriter.create(
+            name, fields, geom_type, crs, transform_context, save_options
+        )
+
+    @staticmethod
     def create_shp(name, crs, fields=QgsFields(), geom_type=WKBMultiPolygon):
-        writer = QgsVectorFileWriter_create(name, crs, fields, geom_type)
+        writer = BaseLayer.get_writer(name, crs, fields, geom_type)
         if writer.hasError() != QgsVectorFileWriter.NoError:
             msg = _(
                 "Error when creating shapefile: '%s'"
@@ -252,6 +262,20 @@ class BaseLayer(QgsVectorLayer):
         path = os.path.splitext(path)[0] + '.cpg'
         if os.path.exists(path):
             os.remove(path)
+
+    @staticmethod
+    def get_crs_transform(source_crs, target_crs):
+        prj = QgsProject.instance()
+        return QgsCoordinateTransform(source_crs, target_crs, prj)
+
+    def writeAsVectorFormat(self, name, driver_name):
+        transform_context = QgsProject.instance().transformContext()
+        save_options = QgsVectorFileWriter.SaveVectorOptions()
+        save_options.driverName = driver_name
+        save_options.fileEncoding = "UTF-8"
+        return QgsVectorFileWriter.writeAsVectorFormatV2(
+            self, name, transform_context, save_options
+        )
 
     def copy_feature(self, feature, rename=None, resolve=None):
         r"""
@@ -364,8 +388,8 @@ class BaseLayer(QgsVectorLayer):
             target_crs (QgsCoordinateReferenceSystem): New CRS to apply.
         """
         if target_crs is None:
-            target_crs = QgsCoordinateReferenceSystem_fromEpsgId(4326)
-        crs_transform = ggs2coordinate_transform(self.crs(), target_crs)
+            target_crs = QgsCoordinateReferenceSystem.fromEpsgId(4326)
+        crs_transform = self.get_crs_transform(self.crs(), target_crs)
         to_change = {}
         pbar = self.get_progressbar(_("Reproject"), self.featureCount())
         for feature in self.getFeatures():
@@ -498,8 +522,8 @@ class BaseLayer(QgsVectorLayer):
         else:
             p1 = Geometry.fromPointXY(Point(bbox.xMinimum(), bbox.yMinimum()))
             p2 = Geometry.fromPointXY(Point(bbox.xMaximum(), bbox.yMaximum()))
-            target_crs = QgsCoordinateReferenceSystem_fromEpsgId(4326)
-            crs_transform = ggs2coordinate_transform(self.crs(), target_crs)
+            target_crs = QgsCoordinateReferenceSystem.fromEpsgId(4326)
+            crs_transform = self.get_crs_transform(self.crs(), target_crs)
             p1.transform(crs_transform)
             p2.transform(crs_transform)
             bbox = [
@@ -523,15 +547,13 @@ class BaseLayer(QgsVectorLayer):
         if target_crs_id is None:
             target_crs = self.crs() 
         else:
-             target_crs = QgsCoordinateReferenceSystem_fromEpsgId(target_crs_id)
+             target_crs = QgsCoordinateReferenceSystem.fromEpsgId(target_crs_id)
         if os.path.exists(path) and overwrite:
             if driver_name == 'ESRI Shapefile':
                 QgsVectorFileWriter.deleteShapeFile(path)
             else:
                 os.remove(path)
-        result = QgsVectorFileWriter_writeAsVectorFormat(
-            self, path, target_crs, driver_name
-        )
+        result = self.writeAsVectorFormat(path, driver_name)
         try:
             return result[0] == QgsVectorFileWriter.NoError
         except TypeError:
@@ -1183,7 +1205,7 @@ class ZoningLayer(PolygonLayer):
             [f for f in layer.getFeatures()]
         )
         if layer.crs() != self.crs():
-            crs_transform = ggs2coordinate_transform(layer.crs(), self.crs())
+            crs_transform = self.get_crs_transform(layer.crs(), self.crs())
             split.transform(crs_transform)
         to_clean = []
         fcount = self.featureCount()
@@ -1877,7 +1899,7 @@ class HighwayLayer(BaseLayer):
                 QgsField('name', QVariant.String, len=254),
             ])
             self.updateFields()
-        self.setCrs(QgsCoordinateReferenceSystem_fromEpsgId(4326))
+        self.setCrs(QgsCoordinateReferenceSystem.fromEpsgId(4326))
 
     def read_from_osm(self, data):
         """Get features from a osm dataset"""
@@ -1914,9 +1936,7 @@ class DebugWriter():
         )
         fields = QgsFields()
         fields.append(QgsField("note", QVariant.String, len=100))
-        writer = QgsVectorFileWriter_create(
-            fpath, layer.crs(), fields, geom_type
-        )
+        writer = BaseLayer.get_writer(fpath, layer.crs(), fields, geom_type)
         self.fields = fields
         self.writer = writer
 

@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import division, unicode_literals
-from builtins import str
 import io
 import mock
 import unittest
