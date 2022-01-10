@@ -1,6 +1,9 @@
 Change log
 ==========
 
+** 2021-1-11 (1.9.3)**
+* Fix error deleting osm elements.
+
 ** 2021-1-10 (1.9.2)**
 * Fix overpass search area for -s option.
 

@@ -1,6 +1,9 @@
 Registro de cambios
 ===================
 
+** 10-1-2021 (1.9.3)**
+* Corrige error eliminando elementos OSM.
+
 ** 10-1-2021 (1.9.2)**
 * Corrige área de búsqueda de overpass para la opción -s.
 
