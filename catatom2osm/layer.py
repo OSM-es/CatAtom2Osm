@@ -480,14 +480,19 @@ class BaseLayer(QgsVectorLayer):
             return QgsSpatialIndex()
 
     def bounding_box(self, expression=None):
-        """Returns bounding box of matching features using an expression or all
-        features if expression is None. The bounding box is transformed to EPSG
-        4326 and expressed in overpass format."""
+        """Returns bounding box in overpass format of matching features using
+        an expression or all features if expression is None. """
         if expression is None:
             self.selectAll()
         else:
             self.selectByExpression(expression)
         bbox = self.boundingBoxOfSelected()
+        return self.get_overpass_bbox(bbox)
+
+    def get_overpass_bbox(self, bbox):
+        """
+        bbox is transformed to EPSG 4326 and returns str in overpass format.
+        """
         if bbox.isEmpty():
             bbox = None
         else:

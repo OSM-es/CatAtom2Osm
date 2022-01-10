@@ -1,7 +1,7 @@
 Change log
 ==========
 
-** 2021-1-9 (1.9.2)**
+** 2021-1-10 (1.9.2)**
 * Fix overpass search area for -s option.
 
 ** 2021-1-8 (1.9.1)**

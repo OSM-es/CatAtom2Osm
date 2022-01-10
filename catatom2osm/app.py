@@ -90,6 +90,10 @@ class CatAtom2Osm(object):
         if self.options.tasks:
             if not os.path.exists(self.tasks_path):
                 os.makedirs(self.tasks_path)
+        if self.options.split:
+            self.split = layer.BaseLayer(self.options.split, 'zoningsplit', 'ogr')
+            if not self.split.isValid():
+                raise IOError("Can't open %s" % self.options.split)
         self.is_new = not os.path.exists(self.highway_names_path)
 
     @staticmethod
@@ -122,6 +126,7 @@ class CatAtom2Osm(object):
             self.get_building()
             if self.building.featureCount() == 0:
                 return
+        self.get_boundary()
         if self.options.address:
             self.read_address()
             if not self.is_new and not self.options.manual:
@@ -213,11 +218,8 @@ class CatAtom2Osm(object):
 
     def split_zoning(self):
         """Filter zoning using self.options.split."""
-        split = layer.BaseLayer(self.options.split, 'zoningsplit', 'ogr')
-        if not split.isValid():
-            raise IOError("Can't open %s" % self.options.split)
-        self.urban_zoning.remove_outside_features(split, self.zone)
-        self.rustic_zoning.remove_outside_features(split, self.zone)
+        self.urban_zoning.remove_outside_features(self.split, self.zone)
+        self.rustic_zoning.remove_outside_features(self.split, self.zone)
         self.zone += [
             f['label']
             for f in self.rustic_zoning.getFeatures()
@@ -231,6 +233,7 @@ class CatAtom2Osm(object):
         if len(self.zone) == 0:
             msg = _("'%s' does not include any zone") % self.options.split
             raise ValueError(msg)
+        del self.split
 
 
     def get_building(self):
@@ -373,14 +376,19 @@ class CatAtom2Osm(object):
         self.rustic_zoning.append(zoning_gml, level='P')
         if self.options.tasks or self.options.zoning or self.zone:
             self.urban_zoning.append(zoning_gml, level='M')
+
+    def get_boundary(self):
+        """Get best boundary search area for overpass queries."""
         if self.zone or self.options.split:
-            self.cat.boundary_search_area = zoning_gml.bounding_box(
-                "label IN (%s)" % str(self.zone)[1:-1]
-            )
+            self.rustic_zoning.selectAll()
+            bbox = self.rustic_zoning.boundingBoxOfSelected()
+            self.urban_zoning.selectAll()
+            bbox.combineExtentWith(self.urban_zoning.boundingBoxOfSelected())
+            bbox = self.urban_zoning.get_overpass_bbox(bbox)
+            self.cat.boundary_search_area = bbox
         else:
             self.cat.get_boundary(self.rustic_zoning)
             report.mun_area = round(self.rustic_zoning.get_area() / 1E6, 1)
-        del zoning_gml
         report.cat_mun = self.cat.cat_mun
         report.mun_name = getattr(self.cat, 'boundary_name', self.cat.cat_mun)
         if hasattr(self.cat, 'boundary_data'):
@@ -389,9 +397,10 @@ class CatAtom2Osm(object):
             if 'wikidata' in self.cat.boundary_data:
                 report.mun_wikidata = self.cat.boundary_data['wikidata']
             if 'population' in self.cat.boundary_data:
-                report.mun_population = (self.cat.boundary_data['population'],
-                                         self.cat.boundary_data.get(
-                                             'population:date', '?'))
+                report.mun_population = (
+                    self.cat.boundary_data['population'],
+                    self.cat.boundary_data.get('population:date', '?'),
+                )
 
     def process_zoning(self):
         self.rustic_zoning.clean()

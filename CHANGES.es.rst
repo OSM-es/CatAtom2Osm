@@ -1,7 +1,7 @@
 Registro de cambios
 ===================
 
-** 9-1-2021 (1.9.2)**
+** 10-1-2021 (1.9.2)**
 * Corrige área de búsqueda de overpass para la opción -s.
 
 ** 8-1-2021 (1.9.1)**

@@ -374,7 +374,6 @@ class TestCatAtom2Osm(unittest.TestCase):
     def test_get_zoning1(self, m_report, m_layer):
         self.m_app.options.zoning = False
         self.m_app.options.tasks = False
-        self.m_app.cat.boundary_name = 'foobar'
         m_zoning_gml = mock.MagicMock()
         self.m_app.cat.read.return_value = m_zoning_gml
         m_layer.ZoningLayer.return_value.get_area.return_value = 1
@@ -383,8 +382,6 @@ class TestCatAtom2Osm(unittest.TestCase):
         self.m_app.rustic_zoning.append.assert_called_once_with(
             m_zoning_gml, level='P'
         )
-        self.m_app.cat.get_boundary.assert_called_once_with(self.m_app.rustic_zoning)
-        self.assertEqual(m_report.mun_name, 'foobar')
 
     @mock.patch('catatom2osm.app.layer')
     def test_get_zoning2(self, m_layer):
