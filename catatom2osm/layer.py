@@ -548,7 +548,7 @@ class BaseLayer(QgsVectorLayer):
                 QgsVectorFileWriter.deleteShapeFile(path)
             else:
                 os.remove(path)
-        result = self.writeAsVectorFormat(self, path, target_crs, driver_name)
+        result = self.writeAsVectorFormat(path, driver_name)
         try:
             return result[0] == QgsVectorFileWriter.NoError
         except TypeError:
