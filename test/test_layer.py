@@ -361,7 +361,7 @@ class TestBaseLayer(unittest.TestCase):
 
 class TestBaseLayer2(unittest.TestCase):
 
-    @mock.patch('catatom2osm.layer.QgsVectorFileWriter.writeAsVectorFormat')
+    @mock.patch('catatom2osm.layer.BaseLayer.writeAsVectorFormat')
     @mock.patch('catatom2osm.layer.QgsVectorFileWriter')
     @mock.patch('catatom2osm.layer.os')
     def test_export_default(self, mock_os, mock_fw, mock_wvf):
@@ -371,11 +371,9 @@ class TestBaseLayer2(unittest.TestCase):
         mock_fw.NoError = QgsVectorFileWriter.NoError
         self.assertTrue(layer.export('foobar'))
         mock_fw.deleteShapeFile.assert_called_once_with('foobar')
-        mock_wvf.assert_called_once_with(
-            layer, 'foobar', layer.crs(), 'ESRI Shapefile'
-        )
+        mock_wvf.assert_called_once_with('foobar', 'ESRI Shapefile')
 
-    @mock.patch('catatom2osm.layer.QgsVectorFileWriter.writeAsVectorFormat')
+    @mock.patch('catatom2osm.layer.BaseLayer.writeAsVectorFormat')
     @mock.patch('catatom2osm.layer.QgsCoordinateReferenceSystem.fromEpsgId')
     @mock.patch('catatom2osm.layer.QgsVectorFileWriter')
     @mock.patch('catatom2osm.layer.os')
@@ -385,7 +383,7 @@ class TestBaseLayer2(unittest.TestCase):
         layer.export('foobar', 'foo', target_crs_id=1234)
         crs = mock_crs.return_value
         mock_crs.assert_called_once_with(1234)
-        mock_wvf.assert_called_once_with(layer, 'foobar', crs, 'foo')
+        mock_wvf.assert_called_once_with('foobar', 'foo')
         mock_os.remove.assert_called_once_with('foobar')
         layer.export('foobar', 'foo', overwrite=False)
         mock_os.remove.assert_called_once_with('foobar')
