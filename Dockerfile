@@ -3,7 +3,7 @@ ARG user=catastro
 ARG group=catastro
 ARG home=/catastro
 
-FROM ubuntu:18.04 AS base
+FROM ubuntu:20.04 AS base
 
 LABEL maintainer="emilio.gomez.fdez@gmail.com"
 
@@ -22,7 +22,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update -y \
   && apt-get upgrade -y \
   && apt-get install -y language-pack-es-base language-pack-ca-base \
-    language-pack-gl-base language-pack-eu-base python python-pip git qgis  \
+    language-pack-gl-base language-pack-eu-base python3 python3-pip git qgis  \
     nano gettext
 ENV LANG=es_ES.UTF-8
 ENV PYTHONIOENCODING=utf-8
