@@ -1,3 +1,4 @@
+from past.builtins import basestring
 from importlib import reload
 import mock
 import unittest
@@ -13,6 +14,7 @@ config.install_gettext('catato2osm', '')
 
 def get_func(f):
     return getattr(f, '__func__', f)
+
 
 class TestQgsSingleton(unittest.TestCase):
 
@@ -30,22 +32,23 @@ class TestQgsSingleton(unittest.TestCase):
         self.assertEqual(m_qgsapp.call_count, 1)
         self.assertTrue(q1 is q2)
 
+
 class TestCatAtom2Osm(unittest.TestCase):
 
     def setUp(self):
-        self.options = {
-            'building': False, 'all': False, 'tasks': True, 'list_zones': False,
-            'log_level': 'INFO', 'parcel': False, 'list': False, 'zoning': True,
-            'version': False, 'address': False, 'manual': False, 'zone': [],
-            'comment': False, 'split': None, 'args': '-t'
+        options = {
+            'building': True, 'tasks': True, 'list_zones': False,
+            'log_level': 'INFO', 'list': '', 'zoning': False, 'version': False,
+            'address': True, 'manual': False, 'zone': [], 'task': ['33333'],
+            'comment': False, 'split': None, 'args': '33333',
         }
         self.m_app = mock.MagicMock()
-        self.m_app.options = Values(self.options)
+        self.m_app.options = Values(options)
         self.m_app.get_translations.return_value = ([], False)
-        self.m_app.path = 'foo'
-        self.m_app.highway_names_path = 'foo/highway_names.csv'
+        self.m_app.path = '33333'
+        self.m_app.highway_names_path = '33333/highway_names.csv'
         self.m_app.zone = self.m_app.options.zone
-        self.m_app.tasks_path = 'foo/tasks'
+        self.m_app.tasks_path = '33333/tasks'
         self.m_app.is_new = False
         self.m_app.cat.get_path = (
             lambda *args: self.m_app.path + '/' + '/'.join(args)
@@ -71,129 +74,97 @@ class TestCatAtom2Osm(unittest.TestCase):
         reload(app)
         m_gdal.PushErrorHandler.called_once_with('CPLQuietErrorHandler')
 
-    @mock.patch('catatom2osm.app.report')
-    def test_run1(self, m_report):
+    @mock.patch('catatom2osm.app.report', mock.MagicMock)
+    def test_run_list(self):
         self.m_app.run = get_func(app.CatAtom2Osm.run)
-        self.m_app.is_new = False
-        building = self.m_app.building
+        self.m_app.options.list_zones = True
         self.m_app.run(self.m_app)
-        self.m_app.process_zoning.assert_called_once_with()
-        self.m_app.process_building.assert_called_with()
-        self.m_app.read_address.assert_not_called()
-        self.m_app.address.to_osm.assert_not_called()
-        self.m_app.process_tasks.assert_called_once_with(building)
-        self.m_app.process_parcel.assert_not_called()
+        self.m_app.list_zones.assert_called_once_with()
+        self.m_app.get_zoning.assert_not_called()
 
-    @mock.patch('catatom2osm.app.report')
-    def test_run2(self, m_report):
+    @mock.patch('catatom2osm.app.report', mock.MagicMock)
+    def test_run_default(self):
         self.m_app.run = get_func(app.CatAtom2Osm.run)
         building = self.m_app.building
         address = self.m_app.address
-        self.m_app.options = Values({'building': True, 'tasks': False,
-            'parcel': True, 'zoning': False, 'address': True, 'manual': False,
-            'list_zones': False, 'comment': False})
-        self.m_app.is_new = False
         building.conflate.return_value = False
-        address_osm = self.m_app.address.to_osm.return_value
-        building_osm = building.to_osm.return_value
         self.m_app.run(self.m_app)
-        self.m_app.process_tasks.assert_not_called()
+        self.m_app.process_tasks.assert_called_once_with(building)
         self.m_app.process_building.assert_called_once_with()
         self.m_app.read_address.assert_called_once_with()
         current_address = self.m_app.get_current_ad_osm.return_value
         address.conflate.assert_called_once_with(current_address)
         address.to_osm.assert_called_once_with()
-        self.m_app.write_osm.assert_called_once_with(address_osm, 'address.osm')
-        self.m_app.process_parcel.assert_called_once_with()
 
-    @mock.patch('catatom2osm.app.report')
-    def test_run3(self, m_report):
-        self.m_app.run = get_func(app.CatAtom2Osm.run)
-        self.m_app.is_new = False
-        self.m_app.options.building = False
-        self.m_app.options.tasks = False
-        self.m_app.run(self.m_app)
-        self.m_app.write_osm.assert_not_called()
-
-    @mock.patch('catatom2osm.app.report')
-    def test_run4(self, m_report):
-        del self.m_app.building_gml
+    @mock.patch('catatom2osm.app.report', mock.MagicMock)
+    def test_run_default_new(self):
         self.m_app.is_new = True
-        self.m_app.options.tasks = False
         self.m_app.run = get_func(app.CatAtom2Osm.run)
         self.m_app.run(self.m_app)
+        self.m_app.process_zoning.assert_not_called()
         self.m_app.process_tasks.assert_not_called()
-
-    @mock.patch('catatom2osm.app.report')
-    def test_run5(self, m_report):
-        address = self.m_app.address
-        self.m_app.run = get_func(app.CatAtom2Osm.run)
-        self.m_app.options = Values({'building': True, 'tasks': False,
-            'parcel': False, 'zoning': False, 'address': True, 'manual': True,
-            'list_zones': False, 'comment': False})
-        self.m_app.is_new = False
-        building = self.m_app.building
-        self.m_app.run(self.m_app)
-        address.conflate.assert_not_called()
-        building.conflate.assert_not_called()
+        self.m_app.get_building.assert_not_called()
 
     @mock.patch('catatom2osm.app.layer')
-    def test_get_building1(self, m_layer):
+    def test_get_building(self, m_layer):
         self.m_app.get_building = get_func(app.CatAtom2Osm.get_building)
-        x = mock.MagicMock()
-        x.source_date = 1
-        y = mock.MagicMock()
-        z = mock.MagicMock()
-        self.m_app.cat.read.side_effect = [x, y, z]
+        bugml = mock.MagicMock()
+        bugml.source_date = 1
+        partgml = mock.MagicMock()
+        othergml = mock.MagicMock()
+        self.m_app.cat.read.side_effect = [bugml, partgml, othergml]
         building = m_layer.ConsLayer.return_value
         self.m_app.get_building(self.m_app)
-        fn = os.path.join('foo', 'building.shp')
-        m_layer.ConsLayer.assert_called_once_with(fn, providerLib='ogr', source_date = 1)
+        fn = os.path.join('33333', 'building.shp')
+        m_layer.ConsLayer.assert_called_once_with(
+            fn, providerLib='ogr', source_date = 1
+        )
         building.append.assert_has_calls([
-            mock.call(x, query=self.m_app.zone_query),
-            mock.call(y, query=self.m_app.zone_query),
-            mock.call(z, query=self.m_app.zone_query),
+            mock.call(bugml, query=self.m_app.zone_query),
+            mock.call(partgml, query=self.m_app.zone_query),
+            mock.call(othergml, query=self.m_app.zone_query),
         ])
 
     @mock.patch('catatom2osm.app.layer')
-    @mock.patch('catatom2osm.app.csvtools.dict2csv')
-    def test_get_building2(self, m_csv, m_layer):
+    def test_get_building_no_other(self, m_layer):
         self.m_app.get_building = get_func(app.CatAtom2Osm.get_building)
-        x = mock.MagicMock()
-        y = mock.MagicMock()
-        self.m_app.cat.read.side_effect = [x, y, None]
+        bugml = mock.MagicMock()
+        partgml = mock.MagicMock()
+        self.m_app.cat.read.side_effect = [bugml, partgml, None]
         building = m_layer.ConsLayer.return_value
         self.m_app.get_building(self.m_app)
         building.append.assert_has_calls([
-            mock.call(x, query=self.m_app.zone_query),
-            mock.call(y, query=self.m_app.zone_query),
+            mock.call(bugml, query=self.m_app.zone_query),
+            mock.call(partgml, query=self.m_app.zone_query),
         ])
 
-    @mock.patch('catatom2osm.app.layer')
+    @mock.patch('catatom2osm.app.layer', mock.MagicMock())
     @mock.patch('catatom2osm.app.report')
-    def test_process_building1(self, m_report, m_layer):
+    def test_process_building(self, m_report):
         m_report.values['max_level'] = {}
         m_report.values['min_level'] = {}
         self.m_app.process_building = get_func(app.CatAtom2Osm.process_building)
         self.m_app.process_building(self.m_app)
-        self.m_app.building.remove_outside_parts.assert_called_once_with()
-        self.m_app.building.explode_multi_parts.assert_called_once_with()
-        self.m_app.building.clean.assert_called_once_with()
-        self.m_app.building.validate.assert_called_once_with(m_report.max_level, m_report.min_level)
-
-    @mock.patch('catatom2osm.app.report')
-    def test_process_building2(self, m_report):
-        self.m_app.process_building = get_func(app.CatAtom2Osm.process_building)
-        u = self.m_app.urban_zoning
-        r = self.m_app.rustic_zoning
         building = self.m_app.building
-        self.m_app.is_new = False
-        self.m_app.process_building(self.m_app)
-        building.move_address.assert_not_called()
+        building.remove_outside_parts.assert_called_once_with()
+        building.explode_multi_parts.assert_called_once_with()
+        building.clean.assert_called_once_with()
+        building.validate.assert_called_once()
+        building.move_address.assert_called_once_with(self.m_app.address)
         current_bu_osm = self.m_app.get_current_bu_osm.return_value
         building.conflate.assert_called_once_with(current_bu_osm)
-        self.m_app.write_osm.assert_called_once_with(current_bu_osm, 'current_building.osm')
+        u = self.m_app.urban_zoning
+        r = self.m_app.rustic_zoning
         building.set_tasks.assert_called_once_with(u, r)
+
+    @mock.patch('catatom2osm.app.report', mock.MagicMock())
+    def test_process_building_no_add_no_conf(self):
+        self.m_app.process_building = get_func(app.CatAtom2Osm.process_building)
+        self.m_app.options.address = False
+        self.m_app.options.manual = True
+        self.m_app.process_building(self.m_app)
+        self.m_app.building.move_address.assert_not_called()
+        self.m_app.building.conflate.assert_not_called()
 
     @mock.patch('catatom2osm.app.os')
     @mock.patch('catatom2osm.app.layer')
@@ -221,11 +192,11 @@ class TestCatAtom2Osm(unittest.TestCase):
         self.m_app.process_tasks = get_func(app.CatAtom2Osm.process_tasks)
         self.m_app.process_tasks(self.m_app, building)
         m_layer.ConsLayer.assert_has_calls([
-            mock.call('foo/tasks/001.shp', '001', 'ogr', source_date=1234),
-            mock.call('foo/tasks/003.shp', '003', 'ogr', source_date=1234),
-            mock.call('foo/tasks/00002.shp', '00002', 'ogr', source_date=1234),
-            mock.call('foo/tasks/00004.shp', '00004', 'ogr', source_date=1234),
-            mock.call('foo/tasks/missing.shp', 'missing', 'ogr', source_date=1234),
+            mock.call('33333/tasks/001.shp', '001', 'ogr', source_date=1234),
+            mock.call('33333/tasks/003.shp', '003', 'ogr', source_date=1234),
+            mock.call('33333/tasks/00002.shp', '00002', 'ogr', source_date=1234),
+            mock.call('33333/tasks/00004.shp', '00004', 'ogr', source_date=1234),
+            mock.call('33333/tasks/missing.shp', 'missing', 'ogr', source_date=1234),
         ])
         comment = config.changeset_tags['comment'] + ' AAA BBB missing'
         task.to_osm.assert_called_with(upload='yes', tags={'comment': comment})
@@ -251,12 +222,14 @@ class TestCatAtom2Osm(unittest.TestCase):
         self.m_app.get_tasks = get_func(app.CatAtom2Osm.get_tasks)
         self.m_app.get_tasks(self.m_app, building)
         m_os.remove.assert_has_calls([
-            mock.call('foo/tasks/1'), mock.call('foo/tasks/2'), mock.call('foo/tasks/3')
+            mock.call('33333/tasks/1'),
+            mock.call('33333/tasks/2'),
+            mock.call('33333/tasks/3'),
         ])
         m_layer.ConsLayer.assert_has_calls([
-            mock.call('foo/tasks/001.shp', '001', 'ogr', source_date=1234),
+            mock.call('33333/tasks/001.shp', '001', 'ogr', source_date=1234),
             mock.call().writer.addFeatures([100]),
-            mock.call('foo/tasks/00001.shp', '00001', 'ogr', source_date=1234),
+            mock.call('33333/tasks/00001.shp', '00001', 'ogr', source_date=1234),
             mock.call().writer.addFeatures([101, 102])
         ])
         m_os.path.exists.return_value = False
@@ -273,11 +246,11 @@ class TestCatAtom2Osm(unittest.TestCase):
         parcel_osm = parcel.to_osm.return_value
         self.m_app.write_osm.assert_called_once_with(parcel_osm, "parcel.osm")
 
-    @mock.patch('catatom2osm.app.os')
+    @mock.patch('catatom2osm.app.os', mock.MagicMock())
     @mock.patch('catatom2osm.app.log')
     @mock.patch('catatom2osm.app.open')
     @mock.patch('catatom2osm.app.report')
-    def test_end_messages(self, m_report, m_open, m_log, m_os):
+    def test_end_messages(self, m_report, m_open, m_log):
         m_fo = mock.MagicMock()
         m_open.return_value = m_fo
         self.m_app.end_messages = get_func(app.CatAtom2Osm.end_messages)
@@ -287,11 +260,21 @@ class TestCatAtom2Osm(unittest.TestCase):
         self.assertEqual(m_log.warning.call_args_list[0][0][1], 3)
         self.assertEqual('review.txt', m_log.info.call_args_list[0][0][1])
         self.assertIn('check it', m_log.info.call_args_list[1][0][0])
-        self.m_app.fixmes = 0
-        self.m_app.is_new = False
-        self.m_app.options.tasks = False
+        m_report.cons_end_stats.assert_called_once()
+        self.assertIn('Generated', m_log.info.call_args_list[1][0][0])
+
+    @mock.patch('catatom2osm.app.os', mock.MagicMock())
+    @mock.patch('catatom2osm.app.log')
+    @mock.patch('catatom2osm.app.open')
+    @mock.patch('catatom2osm.app.report')
+    def test_end_messages_finish(self, m_report, m_open, m_log):
+        self.m_app.end_messages = get_func(app.CatAtom2Osm.end_messages)
+        self.m_app.options.building = False
+        m_report.fixme_stats.return_value = False
         self.m_app.end_messages(self.m_app)
-        self.assertEqual(m_log.info.call_args_list[2][0][0], 'Finished!')
+        m_log.warning.assert_not_called()
+        m_report.cons_end_stats.assert_not_called()
+        m_log.info.assert_called_once_with('Finished!')
 
     def test_exit(self):
         self.m_app.exit = get_func(app.CatAtom2Osm.exit)
@@ -310,7 +293,7 @@ class TestCatAtom2Osm(unittest.TestCase):
         m_layer.export.return_value = True
         self.m_app.export_layer = get_func(app.CatAtom2Osm.export_layer)
         self.m_app.export_layer(self.m_app, m_layer, 'bar', 'taz')
-        m_layer.export.assert_called_once_with('foo/bar', 'taz', target_crs_id=None)
+        m_layer.export.assert_called_once_with('33333/bar', 'taz', target_crs_id=None)
         output = m_log.info.call_args_list[0][0][0]
         self.assertIn('Generated', output)
         m_layer.export.return_value = False
@@ -329,7 +312,7 @@ class TestCatAtom2Osm(unittest.TestCase):
         m_xml.deserialize.return_value.elements = []
         self.m_app.read_osm(self.m_app, 'bar', 'taz')
         m_overpass.Query.assert_not_called()
-        m_open.assert_called_with('foo/bar/taz', 'rb')
+        m_open.assert_called_with('33333/bar/taz', 'rb')
         m_xml.deserialize.assert_called_once_with(m_open())
         output = m_log.warning.call_args_list[0][0][0]
         self.assertIn('No OSM data', output)
@@ -358,32 +341,20 @@ class TestCatAtom2Osm(unittest.TestCase):
         self.m_app.write_osm = get_func(app.CatAtom2Osm.write_osm)
         self.m_app.write_osm(self.m_app, data, 'bar')
         self.assertNotIn('ref', [k for el in data.elements for k in list(el.tags.keys())])
-        m_io.open.assert_called_once_with('foo/bar', 'w', encoding='utf-8')
+        m_io.open.assert_called_once_with('33333/bar', 'w', encoding='utf-8')
         file_obj = m_io.open.return_value
         m_xml.serialize.assert_called_once_with(file_obj, data)
         m_xml.reset_mock()
         self.m_app.write_osm(self.m_app, data, 'bar.gz')
-        m_gz.open.assert_called_once_with('foo/bar.gz', 'w')
+        m_gz.open.assert_called_once_with('33333/bar.gz', 'w')
         f_gz = m_gz.open.return_value
         m_codecs.getwriter.return_value.assert_called_once_with(f_gz)
 
+    @mock.patch('catatom2osm.app.report', mock.MagicMock())
     @mock.patch('catatom2osm.app.layer')
-    @mock.patch('catatom2osm.app.report')
-    def test_get_zoning1(self, m_report, m_layer):
+    def test_get_zoning1(self, m_layer):
         self.m_app.options.zoning = False
         self.m_app.options.tasks = False
-        m_zoning_gml = mock.MagicMock()
-        self.m_app.cat.read.return_value = m_zoning_gml
-        m_layer.ZoningLayer.return_value.get_area.return_value = 1
-        self.m_app.get_zoning = get_func(app.CatAtom2Osm.get_zoning)
-        self.m_app.get_zoning(self.m_app)
-        self.m_app.rustic_zoning.append.assert_called_once_with(
-            m_zoning_gml, level='P'
-        )
-
-    @mock.patch('catatom2osm.app.layer')
-    def test_get_zoning2(self, m_layer):
-        self.m_app.options.zoning = True
         m_zoning_gml = mock.MagicMock()
         self.m_app.cat.read.return_value = m_zoning_gml
         mu = mock.MagicMock()
@@ -393,14 +364,12 @@ class TestCatAtom2Osm(unittest.TestCase):
         m_layer.ZoningLayer.side_effect = [mu, mr]
         self.m_app.get_zoning = get_func(app.CatAtom2Osm.get_zoning)
         self.m_app.get_zoning(self.m_app)
+        self.m_app.rustic_zoning.append.assert_called_once_with(
+            m_zoning_gml, level='P'
+        )
         self.m_app.urban_zoning.append.assert_called_once_with(
             m_zoning_gml, level='M'
         )
-        self.m_app.urban_zoning.topology()
-        self.m_app.urban_zoning.clean_duplicated_nodes_in_polygons()
-        self.m_app.urban_zoning.merge_adjacents.called_once_with()
-        self.m_app.urban_zoning.set_tasks.called_once_with()
-        self.m_app.rustic_zoning.set_tasks.called_once_with()
 
     @mock.patch('catatom2osm.app.layer')
     @mock.patch('catatom2osm.app.report')
@@ -474,15 +443,15 @@ class TestCatAtom2Osm(unittest.TestCase):
     def test_get_translations(self, m_csv, m_os):
         m_os.path.join = lambda *args: '/'.join(args)
         self.m_app.get_translations = get_func(app.CatAtom2Osm.get_translations)
-        config.app_path = 'bar'
+        config.app_path = 'foo'
         m_csv.csv2dict.return_value = {'RAZ': ' raz '}
         m_os.path.exists.return_value = True
         address = mock.MagicMock()
         names = self.m_app.get_translations(self.m_app, address)
         m_csv.dict2csv.assert_not_called()
         m_csv.csv2dict.assert_has_calls([
-            mock.call('bar/highway_types.csv', config.highway_types),
-            mock.call('foo/highway_names.csv', {}),
+            mock.call('foo/highway_types.csv', config.highway_types),
+            mock.call('33333/highway_names.csv', {}),
         ])
         self.assertEqual(names, {'RAZ': 'raz'})
         address.get_highway_names.return_value = {'TAZ': ' taz '}
@@ -493,8 +462,8 @@ class TestCatAtom2Osm(unittest.TestCase):
         address.get_highway_names.assert_called_once_with(self.m_app.get_highway.return_value)
         m_csv.csv2dict.assert_not_called()
         m_csv.dict2csv.assert_has_calls([
-            mock.call('bar/highway_types.csv', config.highway_types),
-            mock.call('foo/highway_names.csv', {'TAZ': 'taz'}, sort=1),
+            mock.call('foo/highway_types.csv', config.highway_types),
+            mock.call('33333/highway_names.csv', {'TAZ': 'taz'}, sort=1),
         ])
         self.assertEqual(names, {'TAZ': 'taz'})
         self.m_app.options.manual = True

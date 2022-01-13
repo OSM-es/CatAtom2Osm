@@ -1,7 +1,6 @@
 """
 Tool to convert INSPIRE data sets from the Spanish Cadastre ATOM Services to OSM files
 """
-from past.builtins import basestring
 import io, codecs
 import gzip
 import logging
@@ -83,9 +82,8 @@ class CatAtom2Osm(object):
             raise ValueError(msg)
         self.highway_names_path = self.cat.get_path('highway_names.csv')
         self.tasks_path = self.cat.get_path(tasks_folder)
-        if self.options.tasks:
-            if not os.path.exists(self.tasks_path):
-                os.makedirs(self.tasks_path)
+        if not os.path.exists(self.tasks_path):
+            os.makedirs(self.tasks_path)
         if self.options.split:
             self.split = layer.BaseLayer(self.options.split, 'zoningsplit', 'ogr')
             if not self.split.isValid():
@@ -100,59 +98,55 @@ class CatAtom2Osm(object):
 
     def run(self):
         """Launches the app"""
+        # -l --list
         if self.options.list_zones:
             self.list_zones()
             return
+        # -c --comment
         elif self.options.comment:
             for folder in glob(self.tasks_path + '*'):
                 self.add_comments(os.path.basename(folder))
             return
         log.info(_("Start processing '%s'"), report.mun_code)
         self.get_zoning()
-        if not self.is_new:
+        if self.options.zoning or not self.is_new:
             self.process_zoning()
+        if self.options.zoning:
+            self.output_zoning()
+            self.end_messages()
+            return
+        # main process
         self.address_osm = osm.Osm()
         self.building_osm = osm.Osm()
         if self.options.address and self.is_new:
-            self.options.tasks = False
             self.options.building = False
-            self.options.zoning = False
-            self.options.parcel = False
-        if self.options.building or self.options.tasks or self.zone:
+        if self.options.building:
             self.get_building()
-            if self.building.featureCount() == 0:
-                return
         self.get_boundary()
         if self.options.address:
             self.read_address()
             if not self.is_new and not self.options.manual:
                 current_address = self.get_current_ad_osm()
                 self.address.conflate(current_address)
-        if self.options.building or self.options.tasks:
+        if self.options.building:
             self.process_building()
             report.building_counter = Counter()
         if self.options.address:
             self.address.reproject()
             self.address_osm = self.address.to_osm()
-            self.delete_shp(self.address)
-        if self.options.tasks:
-            self.process_tasks(self.building)
-        if self.options.zoning:
-            self.output_zoning()
-        self.delete_shp(self.urban_zoning)
-        self.delete_shp(self.rustic_zoning)
+            if self.is_new:
+                self.end_messages()
+                return
+
         if self.options.building:
-            self.output_building()
-        if hasattr(self, 'building'):
-            self.delete_shp(self.building)
-        if self.options.address:
-            if not self.options.building and not self.options.tasks:
-                report.address_stats(self.address_osm)
-            self.write_osm(self.address_osm, 'address.osm')
+            self.process_tasks(self.building)
+        else:
+            self.process_tasks(self.address)
+            self.delete_shp('address')
+            report.address_stats(self.address_osm)
             del self.address_osm
-        if self.options.parcel:
-            self.process_parcel()
-        if self.options.tasks and not self.is_new:
+        self.output_zoning()
+        if not self.is_new:
             self.move_project()
         self.end_messages()
 
@@ -211,6 +205,7 @@ class CatAtom2Osm(object):
             self.building.get_labels(
                 other_gml, self.urban_zoning, self.rustic_zoning
             )
+        csvtools.dict2csv(self.building.labels_path, self.building.labels)
 
     def split_zoning(self):
         """Filter zoning using self.options.split."""
@@ -243,8 +238,7 @@ class CatAtom2Osm(object):
         self.building = layer.ConsLayer(
             fn, providerLib='ogr', source_date=building_gml.source_date
         )
-        if self.options.tasks or self.zone:
-            self.get_labels(building_gml, part_gml, other_gml)
+        self.get_labels(building_gml, part_gml, other_gml)
         if self.options.split:
             self.split_zoning()
         self.building.append(building_gml, query=self.zone_query)
@@ -260,7 +254,6 @@ class CatAtom2Osm(object):
                 - report.inp_buildings
                 - report.inp_parts
             )
-        csvtools.dict2csv(self.building.labels_path, self.building.labels)
         report.inp_features = self.building.featureCount()
 
     def process_tasks(self, source):
@@ -370,8 +363,7 @@ class CatAtom2Osm(object):
         layer.ZoningLayer.create_shp(fn, zoning_gml.crs())
         self.urban_zoning = layer.ZoningLayer(fn, 'urbanzoning', 'ogr')
         self.rustic_zoning.append(zoning_gml, level='P')
-        if self.options.tasks or self.options.zoning or self.zone:
-            self.urban_zoning.append(zoning_gml, level='M')
+        self.urban_zoning.append(zoning_gml, level='M')
 
     def get_boundary(self):
         """Get best boundary search area for overpass queries."""
@@ -435,8 +427,7 @@ class CatAtom2Osm(object):
         if self.options.address:
             self.building.move_address(self.address)
         self.building.reproject()
-        if self.options.tasks:
-            self.building.set_tasks(self.urban_zoning, self.rustic_zoning)
+        self.building.set_tasks(self.urban_zoning, self.rustic_zoning)
         if not self.options.manual:
             current_bu_osm = self.get_current_bu_osm()
             if self.building.conflate(current_bu_osm):
@@ -445,24 +436,19 @@ class CatAtom2Osm(object):
 
     def output_building(self):
         self.building_osm = self.building.to_osm()
-        self.delete_shp(self.building)
+        self.delete_shp('building')
         if self.options.address:
             self.merge_address(self.building_osm, self.address_osm)
-            if not self.options.tasks:
-                report.address_stats(self.building_osm)
-        if not self.options.tasks:
-            report.cons_stats(self.building_osm)
         self.write_osm(self.building_osm, 'building.osm')
-        if not self.options.tasks:
-            report.osm_stats(self.building_osm)
         del self.building_osm
 
     def process_parcel(self):
         parcel_gml = self.cat.read("cadastralparcel")
         fn = self.cat.get_path('parcel.shp')
         layer.ParcelLayer.create_shp(fn, parcel_gml.crs())
-        parcel = layer.ParcelLayer(fn, providerLib='ogr',
-                                   source_date=parcel_gml.source_date)
+        parcel = layer.ParcelLayer(
+            fn, providerLib='ogr', source_date=parcel_gml.source_date
+        )
         parcel.append(parcel_gml)
         del parcel_gml
         parcel.reproject()
@@ -471,27 +457,30 @@ class CatAtom2Osm(object):
         self.write_osm(parcel_osm, "parcel.osm")
 
     def end_messages(self):
+        self.delete_shp('urban_zoning')
+        self.delete_shp('rustic_zoning')
+        self.delete_shp('building')
+        options = self.options
         if report.fixme_stats():
             log.warning(_("Check %d fixme tags"), report.fixme_count)
-        if self.options.tasks:
-            filename = 'review.txt'
-            with open(self.cat.get_path(filename), "w") as fo:
-                fo.write(
-                    config.eol.join(report.get_tasks_with_fixmes()) + config.eol)
-                log.info(
-                    _("Generated '%s'") + '. ' + _("Please, check it"), filename
+            fn = 'review.txt'
+            with open(self.cat.get_path(fn), "w") as fo:
+                fixmes = report.get_tasks_with_fixmes()
+                fo.write(config.eol.join(fixmes) + config.eol
                 )
-        if self.options.tasks or self.options.building:
+                log.info(
+                    _("Generated '%s'") + '. ' + _("Please, check it"), fn
+                )
+        if options.building and not self.options.zoning:
             report.cons_end_stats()
-        if self.options.tasks or self.options.building or self.options.address:
-            report.to_file(self.cat.get_path('report.txt'))
-        if self.is_new:
+        report.to_file(self.cat.get_path('report.txt'))
+        if self.options.address and self.is_new and not self.options.zoning:
             msg = (
                 _("Generated '%s'") + '. ' + _("Please, check it and run again")
-            )
-            log.info(msg, self.highway_names_path)
+            ) % self.highway_names_path
         else:
-            log.info(_("Finished!"))
+            msg = _("Finished!")
+        log.info(msg)
 
     def exit(self):
         """Ends properly"""
@@ -773,7 +762,13 @@ class CatAtom2Osm(object):
         current_bu_osm = self.read_osm('current_building.osm', ql=ql)
         return current_bu_osm
 
-    def delete_shp(self, lyr):
+    def delete_shp(self, layer_or_name):
+        if isinstance(layer_or_name, QgsVectorLayer):
+            lyr = layer_or_name
+        elif hasattr(self, layer_or_name):
+            lyr = getattr(self, layer_or_name)
+        else:
+            return
         fn = lyr.writer.dataSourceUri().split('|')[0]
         is_shp = str(fn.lower().endswith('.shp'))
         not_debug = log.getEffectiveLevel() > logging.DEBUG

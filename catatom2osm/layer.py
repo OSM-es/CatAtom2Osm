@@ -1395,7 +1395,6 @@ class ConsLayer(PolygonLayer):
         Building parts are expected to get their key from the localId of the
         building. If they don't have an associated building, they get their own
         localId as key.
-        If gml is one other constructions layer, the index is persisted to file.
         """
         if os.path.exists(self.labels_path):
             return
