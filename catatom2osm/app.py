@@ -1,6 +1,7 @@
 """
 Tool to convert INSPIRE data sets from the Spanish Cadastre ATOM Services to OSM files
 """
+from past.builtins import basestring
 import io, codecs
 import gzip
 import logging
@@ -84,8 +85,11 @@ class CatAtom2Osm(object):
         self.tasks_path = self.cat.get_path(tasks_folder)
         if not os.path.exists(self.tasks_path):
             os.makedirs(self.tasks_path)
+        self.split = None
         if self.options.split:
-            self.split = layer.BaseLayer(self.options.split, 'zoningsplit', 'ogr')
+            self.split = layer.BaseLayer(
+                self.options.split, 'zoningsplit', 'ogr'
+            )
             if not self.split.isValid():
                 raise IOError("Can't open %s" % self.options.split)
         self.is_new = not os.path.exists(self.highway_names_path)
@@ -118,9 +122,12 @@ class CatAtom2Osm(object):
         # main process
         self.address_osm = osm.Osm()
         self.building_osm = osm.Osm()
+        self.building_opt = self.options.building
         if self.options.address and self.is_new:
             self.options.building = False
-        if self.options.building:
+        if self.options.building or (
+            self.building_opt and (self.zone or self.split)
+        ):
             self.get_building()
         self.get_boundary()
         if self.options.address:
@@ -134,16 +141,13 @@ class CatAtom2Osm(object):
         if self.options.address:
             self.address.reproject()
             self.address_osm = self.address.to_osm()
-            if self.is_new:
-                self.end_messages()
-                return
-
-        if self.options.building:
-            self.process_tasks(self.building)
-        else:
-            self.process_tasks(self.address)
+        # task processing
+        if not (self.options.address and self.is_new):
+            self.process_tasks(self.labels_layer)
+        if self.options.address:
             self.delete_shp('address')
             report.address_stats(self.address_osm)
+            self.write_osm(self.address_osm, 'address.osm')
             del self.address_osm
         self.output_zoning()
         if not self.is_new:
@@ -191,20 +195,26 @@ class CatAtom2Osm(object):
 
     def zone_query(self, feat, kwargs):
         """Filter feat by zone label if needed."""
-        return len(self.zone) == 0 or self.building.get_label(feat) in self.zone
+        if len(self.zone) == 0:
+            return True
+        return self.labels_layer.get_label(feat) in self.zone
 
-    def get_labels(self, building_gml, part_gml, other_gml):
-        """Creates cons_labels index"""
-        self.building.get_labels(
-            building_gml, self.urban_zoning, self.rustic_zoning
-        )
-        self.building.get_labels(
-            part_gml, self.urban_zoning, self.rustic_zoning
-        )
+    def get_labels(self, main_gml, part_gml=None, other_gml=None):
+        """Creates labels index"""
+        if part_gml is None:
+            self.labels_layer = self.address
+            self.urban_zoning.get_labels(self.address, main_gml)
+            self.rustic_zoning.get_labels(self.address, main_gml)
+            csvtools.dict2csv(self.address.labels_path, self.address.labels)
+            return
+        self.labels_layer = self.building
+        self.urban_zoning.get_labels(self.building, main_gml)
+        self.rustic_zoning.get_labels(self.building, main_gml)
+        self.urban_zoning.get_labels(self.building, part_gml)
+        self.rustic_zoning.get_labels(self.building, part_gml)
         if other_gml:
-            self.building.get_labels(
-                other_gml, self.urban_zoning, self.rustic_zoning
-            )
+            self.urban_zoning.get_labels(self.building, other_gml)
+            self.rustic_zoning.get_labels(self.building, other_gml)
         csvtools.dict2csv(self.building.labels_path, self.building.labels)
 
     def split_zoning(self):
@@ -275,26 +285,34 @@ class CatAtom2Osm(object):
         ]
         if report.tasks_m > 0:
             zoning.append(('missing', None))
+        if self.building_opt:
+            layer_class = layer.ConsLayer
+        else:
+            layer_class = layer.AddressLayer
         to_clean = {'r': [], 'u': []}
         for label, fid in zoning:
             comment = ' '.join((config.changeset_tags['comment'],
                                 report.mun_code, report.mun_name, label))
             fn = self.cat.get_path(tasks_folder, label + '.shp')
             if os.path.exists(fn):
-                task = layer.ConsLayer(
+                task = layer_class(
                     fn, label, 'ogr', source_date=source.source_date
                 )
                 if task.featureCount() > 0:
                     task_osm = task.to_osm(
                         upload='yes', tags={'comment': comment}
                     )
-                    self.merge_address(task_osm, self.address_osm)
+                    if self.building_opt:
+                        self.merge_address(task_osm, self.address_osm)
                     report.address_stats(task_osm)
                     report.cons_stats(task_osm, label)
                     self.write_osm(task_osm, tasks_folder, label + '.osm.gz')
                     report.osm_stats(task_osm)
+                else:
+                    log.info(_("Zone '%s' is void"), label)
                 self.delete_shp(task)
             else:
+                log.info(_("Zone '%s' is void"), label)
                 t = 'r' if len(label) == 3 else 'u'
                 to_clean[t].append(fid)
         if to_clean['r']:
@@ -315,6 +333,10 @@ class CatAtom2Osm(object):
         last_task = None
         to_add = []
         fcount = source.featureCount()
+        if self.building_opt:
+            layer_class = layer.ConsLayer
+        else:
+            layer_class = layer.AddressLayer
         for i, feat in enumerate(source.getFeatures()):
             label = feat['task'] or 'missing'
             f = source.copy_feature(feat, {}, {})
@@ -327,12 +349,12 @@ class CatAtom2Osm(object):
                     tasks_m += len(to_add)
                 fn = os.path.join(self.tasks_path, last_task + '.shp')
                 if not os.path.exists(fn):
-                    layer.ConsLayer.create_shp(fn, source.crs())
+                    layer_class.create_shp(fn, source.crs())
                     if len(last_task or '') == 3:
                         tasks_r += 1
                     elif len(last_task or '') == 5:
                         tasks_u += 1
-                task = layer.ConsLayer(
+                task = layer_class(
                     fn, last_task, 'ogr', source_date=source.source_date
                 )
                 task.writer.addFeatures(to_add)
@@ -364,6 +386,8 @@ class CatAtom2Osm(object):
         self.urban_zoning = layer.ZoningLayer(fn, 'urbanzoning', 'ogr')
         self.rustic_zoning.append(zoning_gml, level='P')
         self.urban_zoning.append(zoning_gml, level='M')
+        self.rustic_zoning.set_tasks(self.cat.zip_code)
+        self.urban_zoning.set_tasks(self.cat.zip_code)
 
     def get_boundary(self):
         """Get best boundary search area for overpass queries."""
@@ -392,12 +416,10 @@ class CatAtom2Osm(object):
 
     def process_zoning(self):
         self.rustic_zoning.clean()
-        self.rustic_zoning.set_tasks(self.cat.zip_code)
         if self.urban_zoning.featureCount() > 0:
             self.urban_zoning.topology()
             self.urban_zoning.delete_invalid_geometries()
             self.urban_zoning.simplify()
-            self.urban_zoning.set_tasks(self.cat.zip_code)
 
     def output_zoning(self):
         self.urban_zoning.reproject()
@@ -427,7 +449,7 @@ class CatAtom2Osm(object):
         if self.options.address:
             self.building.move_address(self.address)
         self.building.reproject()
-        self.building.set_tasks(self.urban_zoning, self.rustic_zoning)
+        self.building.set_tasks()
         if not self.options.manual:
             current_bu_osm = self.get_current_bu_osm()
             if self.building.conflate(current_bu_osm):
@@ -589,15 +611,24 @@ class CatAtom2Osm(object):
         report.inp_address_parcel = address_gml.count("specification='Parcel'")
         fn = self.cat.get_path('address.shp')
         layer.AddressLayer.create_shp(fn, address_gml.crs())
-        self.address = layer.AddressLayer(fn, providerLib='ogr',
-                                          source_date=address_gml.source_date)
+        self.address = layer.AddressLayer(
+            fn, providerLib='ogr', source_date=address_gml.source_date
+        )
+        if not self.building_opt:
+            self.get_labels(address_gml)
+            if self.options.split:
+                self.split_zoning()
         self.address.append(address_gml, query=self.zone_query)
-        self.address.join_field(postaldescriptor, 'PD_id', 'gml_id',
-                                ['postCode'])
-        self.address.join_field(thoroughfarename, 'TN_id', 'gml_id', ['text'],
-                                'TN_')
+        self.address.join_field(
+            postaldescriptor, 'PD_id', 'gml_id', ['postCode']
+        )
+        self.address.join_field(
+            thoroughfarename, 'TN_id', 'gml_id', ['text'], 'TN_'
+        )
         self.get_auxiliary_addresses()
-        self.address.get_image_links()
+        if self.building_opt:
+            self.address.get_image_links()
+        self.address.set_tasks()
         self.export_layer(
             self.address, 'address.geojson', 'GeoJSON', target_crs_id=4326
         )

@@ -31,7 +31,8 @@ def address_tags(feature):
     if feature['spec'] == 'Entrance':
         tags['entrance'] = 'yes'
     tags['ref'] = feature['localId'].split('.')[-1]
-    tags['image'] = feature['image']
+    if feature['image']:
+        tags['image'] = feature['image']
     return tags
     
 def building_tags(feature):

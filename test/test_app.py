@@ -74,7 +74,7 @@ class TestCatAtom2Osm(unittest.TestCase):
         reload(app)
         m_gdal.PushErrorHandler.called_once_with('CPLQuietErrorHandler')
 
-    @mock.patch('catatom2osm.app.report', mock.MagicMock)
+    @mock.patch('catatom2osm.app.report', mock.MagicMock())
     def test_run_list(self):
         self.m_app.run = get_func(app.CatAtom2Osm.run)
         self.m_app.options.list_zones = True
@@ -82,28 +82,28 @@ class TestCatAtom2Osm(unittest.TestCase):
         self.m_app.list_zones.assert_called_once_with()
         self.m_app.get_zoning.assert_not_called()
 
-    @mock.patch('catatom2osm.app.report', mock.MagicMock)
+    @mock.patch('catatom2osm.app.report', mock.MagicMock())
     def test_run_default(self):
         self.m_app.run = get_func(app.CatAtom2Osm.run)
-        building = self.m_app.building
+        llayer = self.m_app.labels_layer
         address = self.m_app.address
-        building.conflate.return_value = False
+        self.m_app.building.conflate.return_value = False
         self.m_app.run(self.m_app)
-        self.m_app.process_tasks.assert_called_once_with(building)
+        self.m_app.process_tasks.assert_called_once_with(llayer)
         self.m_app.process_building.assert_called_once_with()
         self.m_app.read_address.assert_called_once_with()
         current_address = self.m_app.get_current_ad_osm.return_value
         address.conflate.assert_called_once_with(current_address)
         address.to_osm.assert_called_once_with()
 
-    @mock.patch('catatom2osm.app.report', mock.MagicMock)
+    @mock.patch('catatom2osm.app.report', mock.MagicMock())
     def test_run_default_new(self):
         self.m_app.is_new = True
         self.m_app.run = get_func(app.CatAtom2Osm.run)
         self.m_app.run(self.m_app)
         self.m_app.process_zoning.assert_not_called()
         self.m_app.process_tasks.assert_not_called()
-        self.m_app.get_building.assert_not_called()
+        self.m_app.process_building.assert_not_called()
 
     @mock.patch('catatom2osm.app.layer')
     def test_get_building(self, m_layer):
@@ -153,9 +153,7 @@ class TestCatAtom2Osm(unittest.TestCase):
         building.move_address.assert_called_once_with(self.m_app.address)
         current_bu_osm = self.m_app.get_current_bu_osm.return_value
         building.conflate.assert_called_once_with(current_bu_osm)
-        u = self.m_app.urban_zoning
-        r = self.m_app.rustic_zoning
-        building.set_tasks.assert_called_once_with(u, r)
+        building.set_tasks.assert_called_once_with()
 
     @mock.patch('catatom2osm.app.report', mock.MagicMock())
     def test_process_building_no_add_no_conf(self):

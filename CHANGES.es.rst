@@ -4,6 +4,7 @@ Registro de cambios
 ** 10-1-2021 (2.0.0)**
 * Actualiza a Ubuntu 20.04 / QGIS3 / python3 #67.
 * Simplifica la interfaz de línea de comandos.
+* Permite procesar sólo direcciones por tareas (-d).
 
 ** 10-1-2021 (1.9.3)**
 * Corrige error eliminando elementos OSM.

@@ -1,7 +1,6 @@
 import unittest
 import mock
 import random
-import six
 from collections import Counter
 import logging
 logging.disable(logging.WARNING)
@@ -335,7 +334,7 @@ class TestBaseLayer(unittest.TestCase):
     @mock.patch('catatom2osm.layer.QgsSpatialIndex')
     def test_get_index(self, m_index):
         layer = mock.MagicMock()
-        layer.test = BaseLayer.get_index.__func__ if six.PY2 else BaseLayer.get_index
+        layer.test = BaseLayer.get_index
         layer.featureCount.return_value = 0
         layer.test(layer)
         m_index.assert_called_once_with()
@@ -627,56 +626,34 @@ class TestZoningLayer(unittest.TestCase):
         self.assertEqual(next(self.rlayer.getFeatures())['zipcode'], '12345')
 
     @mock.patch('catatom2osm.layer.tqdm')
-    def test_set_cons_tasks(self, m_tqdm):
-        self.ulayer.append(self.fixture, 'M')
-        self.rlayer.append(self.fixture, 'P')
-        test = Counter({u'86416': 198, u'84428': 89, u'88423': 86, u'86417': 65,
-            u'89423': 61, u'86423': 57, u'87427': 53, u'86439': 45, u'86464': 38,
-            u'85426': 34, u'90417': 34, u'86435': 32, u'86434': 28, u'88429': 27,
-            u'88427': 26, u'89403': 26, u'91441': 26, u'90425': 23, u'85449': 22,
-            u'88405': 19, u'013': 18, u'83424': 17, u'86448': 16, u'83429': 15,
-            u'87459': 14, u'85411': 14, u'87425': 12, u'85439': 12, u'82426': 9,
-            u'88416': 9, u'004': 9, u'90424': 8, u'86433': 7, u'005': 6,
-            u'89414': 6, u'83428': 5, u'87432': 5, u'86459': 4, u'90429': 4,
-            u'86427': 4, u'88428': 3, u'86441': 3, u'88393': 3, u'86449': 2,
-            u'89415': 2})
-        fn = 'test/fixtures/cons.shp'
-        fixture = BaseLayer(fn, 'building', 'ogr')
-        building = ConsLayer()
-        building.get_labels(fixture, self.ulayer, self.rlayer)
-        building.append(fixture)
-        building.set_tasks(self.ulayer, self.rlayer)
-        tasks = Counter()
-        for feat in building.getFeatures():
-            if feat['task'] is None:
-                self.assertEqual(feat['localId'], '000902900CS52D_part1')
-            else:
-                tasks[feat['task']] += 1
-        self.assertEqual(tasks, test)
-
-    @mock.patch('catatom2osm.layer.tqdm')
     def test_get_labels(self, m_tqdm):
         self.ulayer.append(self.fixture, 'M')
         self.rlayer.append(self.fixture, 'P')
         test = Counter({
-             u'86416': 56, u'84428': 21, u'88423': 18, u'86423': 18,
-             u'89423': 17, u'86439': 17, u'86417': 17, u'90417': 12,
-             u'86464': 11, u'88427': 9, u'86435': 9, u'85426': 9,
-             u'85449': 9, u'87427': 9, u'88429': 8, u'89403': 8, u'013': 7,
-             u'90425': 7, u'91441': 7, u'86434': 5, u'83424': 5, u'004': 5,
-             u'87425': 5, u'87459': 4, u'86448': 4, u'83429': 4,
-             u'86433': 3, u'88416': 3, u'90424': 3, u'85439': 3,
-             u'88405': 2, u'005': 2, u'85411': 2, u'86459': 1, u'88428': 1,
-             u'82426': 1, u'83428': 1, u'87432': 1, u'86449': 1,
-             u'90429': 1, u'86441': 1, u'86427': 1, u'89415': 1,
-             u'89414': 1, u'88393': 1
+             '86416': 56, '84428': 21, '88423': 18, '86423': 18,
+             '89423': 17, '86439': 17, '86417': 17, '90417': 12,
+             '86464': 11, '88427': 9, '86435': 9, '85426': 9,
+             '85449': 9, '87427': 9, '88429': 8, '89403': 8, '013': 7,
+             '90425': 7, '91441': 7, '86434': 5, '83424': 5, '004': 5,
+             '87425': 5, '87459': 4, '86448': 4, '83429': 4,
+             '86433': 3, '88416': 3, '90424': 3, '85439': 3,
+             '88405': 2, '005': 2, '85411': 2, '86459': 1, '88428': 1,
+             '82426': 1, '83428': 1, '87432': 1, '86449': 1,
+             '90429': 1, '86441': 1, '86427': 1, '89415': 1,
+             '89414': 1, '88393': 1
         })
         fn = 'test/fixtures/cons.shp'
-        building_gml = BaseLayer(fn, 'building', 'ogr')
-        building = ConsLayer(fn, providerLib='ogr')
-        building.get_labels(building_gml, self.ulayer, self.rlayer)
-        self.assertEqual(building.labels['000902900CS52D_part1'], '004')
-        labels = Counter(building.labels.values())
+        source = ConsLayer(fn, 'building', 'ogr')
+        building = BaseLayer('multipolygon', 'building', providerLib='memory')
+        part = BaseLayer('multipolygon', 'part', providerLib='memory')
+        building.append(source, query=lambda f, kwargs: source.is_building(f))
+        part.append(source, query=lambda f, kwargs: source.is_part(f))
+        self.ulayer.get_labels(source, building)
+        self.rlayer.get_labels(source, building)
+        self.ulayer.get_labels(source, part)
+        self.rlayer.get_labels(source, part)
+        self.assertEqual(source.labels['000902900CS52D_part1'], '004')
+        labels = Counter(source.labels.values())
         self.assertEqual(labels, test)
 
     @mock.patch('catatom2osm.layer.tqdm')

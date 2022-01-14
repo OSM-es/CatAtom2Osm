@@ -1126,8 +1126,7 @@ class ZoningLayer(PolygonLayer):
         return label
 
     def set_tasks(self, zip_code):
-        """Assings a unique task label to each zone by overriding splitted 
-        multiparts and merged adjacent zones"""
+        """Assings a unique task label to each zone"""
         to_change = {}
         for zone in self.getFeatures():
             zone['label'] = self.format_label(zone)
@@ -1220,6 +1219,46 @@ class ZoningLayer(PolygonLayer):
             msg = _("%s: Removed %d of %d features.")
             log.debug(msg, self.name(), len(to_clean), fcount)
 
+    def get_labels(self, layer, gml):
+        """
+        Builds in layer a index of gml features localId vs the label of the
+        zone in witch it is contained. If the feature geometry overlaps many
+        zones, takes the zone with the largest intersection.
+        """
+        if os.path.exists(layer.labels_path) and len(layer.labels) > 0:
+            return
+        index = self.get_index()
+        features = {f.id(): f for f in self.getFeatures()}
+        pbar = gml.get_progressbar(_("Labeling"), gml.featureCount())
+        for feat in gml.getFeatures():
+            if not ConsLayer.is_pool(feat):
+                localid = feat['localId'].split('.')[-1][:14]
+            else:
+                localid = feat['localId'][:14]
+            label = layer.labels.get(localid, None)
+            if label is None or label == 'missing':
+                if ConsLayer.is_part(feat):
+                    localid = feat['localId']
+                fids = index.intersects(feat.geometry().boundingBox())
+                zones = [
+                    features[fid] for fid in fids
+                    if is_inside(feat, features[fid])
+                ]
+                if len(zones) == 0:
+                    label = 'missing'
+                else:
+                    label = self.format_label(zones[0])
+                    geom = feat.geometry()
+                    parea = zones[0].geometry().intersection(geom).area()
+                    for z in zones[1:]:
+                        area = z.geometry().intersection(geom).area()
+                        if area > parea:
+                            parea = area
+                            label = self.format_label(z)
+                layer.labels[localid] = label
+            pbar.update()
+        pbar.close()
+
 
 class AddressLayer(BaseLayer):
     """Class for address"""
@@ -1232,7 +1271,10 @@ class AddressLayer(BaseLayer):
                 QgsField('localId', QVariant.String, len=254),
                 QgsField('spec', QVariant.String, len=254),
                 QgsField('designator', QVariant.String, len=254),
+                QgsField('TN_text', QVariant.String, len=254),
+                QgsField('postCode', QVariant.Int),
                 QgsField('image', QVariant.String, len=254),
+                QgsField('task', QVariant.String, len=254),
                 QgsField('PD_id', QVariant.String, len=254),
                 QgsField('TN_id', QVariant.String, len=254),
                 QgsField('AU_id', QVariant.String, len=254)
@@ -1245,6 +1287,12 @@ class AddressLayer(BaseLayer):
             'AU_id': ('component_href', r'[\w\.]+AU[\.0-9]+')
         }
         self.source_date = source_date
+        self.labels = {}
+        self.labels_path = os.path.join(
+            os.path.dirname(self.writer.dataSourceUri()), 'addr_labels.csv'
+        )
+        if os.path.exists(self.labels_path):
+            csvtools.csv2dict(self.labels_path, self.labels)
 
     @staticmethod
     def create_shp(name, crs, fields=QgsFields(), geom_type=WKBPoint):
@@ -1313,6 +1361,24 @@ class AddressLayer(BaseLayer):
             feat['image'] = url
             to_change[feat.id()] = get_attributes(feat)
         self.writer.changeAttributeValues(to_change)
+
+    def get_label(self, feat):
+        """Get the zone label for this feature from the index"""
+        localid = feat['localId'].split('.')[-1][:14]
+        return self.labels.get(localid, None)
+
+    def set_tasks(self):
+        """Assings to each address the task label of the zone in witch
+        it is contained."""
+        to_change = {}
+        for feat in self.getFeatures():
+            feat['task'] = self.get_label(feat)
+            to_change[feat.id()] = get_attributes(feat)
+            if len(to_change) > BUFFER_SIZE:
+                self.writer.changeAttributeValues(to_change)
+                to_change = {}
+        if len(to_change) > 0:
+            self.writer.changeAttributeValues(to_change)
 
 
 class ConsLayer(PolygonLayer):
@@ -1388,55 +1454,6 @@ class ConsLayer(PolygonLayer):
             label = self.labels.get(feat['localId'], None)
         return label
 
-    def get_labels(self, gml, uzoning, rzoning):
-        """Builds a index of localId of features in 'gml' vs the label of the
-        zone in witch the construction is contained. If the construction
-        overlaps many zones, take the zone with the largest intersection.
-        Building parts are expected to get their key from the localId of the
-        building. If they don't have an associated building, they get their own
-        localId as key.
-        """
-        if os.path.exists(self.labels_path):
-            return
-        uindex = uzoning.get_index()
-        rindex = rzoning.get_index()
-        ufeatures = {f.id(): f for f in uzoning.getFeatures()}
-        rfeatures = {f.id(): f for f in rzoning.getFeatures()}
-        pbar = gml.get_progressbar(_("Labeling"), gml.featureCount())
-        for feat in gml.getFeatures():
-            localid = feat['localId'][:14]
-            label = self.labels.get(localid, None)
-            if label is None:
-                if self.is_part(feat):
-                    localid = feat['localId']
-                fids = uindex.intersects(feat.geometry().boundingBox())
-                zones = [
-                    ufeatures[fid] for fid in fids
-                    if is_inside(feat, ufeatures[fid])
-                ]
-                zoning = uzoning
-                if len(zones) == 0:
-                    zoning = rzoning
-                    fids = rindex.intersects(feat.geometry().boundingBox())
-                    zones = [
-                        rfeatures[fid] for fid in fids
-                        if is_inside(feat, rfeatures[fid])
-                    ]
-                if len(zones) == 0:
-                    label = 'missing'
-                else:
-                    label = zoning.format_label(zones[0])
-                    geom = feat.geometry()
-                    parea = zones[0].geometry().intersection(geom).area()
-                    for z in zones[1:]:
-                        area = z.geometry().intersection(geom).area()
-                        if area > parea:
-                            parea = area
-                            label = zoning.format_label(z)
-                self.labels[localid] = label
-            pbar.update()
-        pbar.close()
-
     def detect_missing_building_parts(self):
         """Add a tag to parts without associated building."""
         to_change = {}
@@ -1447,10 +1464,10 @@ class ConsLayer(PolygonLayer):
         if len(to_change) > 0:
             self.writer.changeAttributeValues(to_change)
 
-    def set_tasks(self, uzoning, rzoning):
+    def set_tasks(self):
         """Assings to each building and pool the task label of the zone in witch
         it is contained. Parts receives the label of the building it belongs.
-        Parts without associated building are ignored"""
+        Parts without associated building gets a fixme"""
         to_change = {}
         for feat in self.getFeatures():
             feat['task'] = self.get_label(feat)
@@ -1503,7 +1520,6 @@ class ConsLayer(PolygonLayer):
     def remove_outside_parts(self):
         """
         Remove parts without levels above ground.
-        Create outline for parts without associated building.
         Remove parts outside the outline of it building.
         Precondition: Called before merge_greatest_part.
         """
@@ -1522,8 +1538,6 @@ class ConsLayer(PolygonLayer):
                     bu = buildings[ref]
                     if not is_inside(feat, bu):
                         to_clean_o.append(feat.id())
-                # else:
-                #    parts_for_ref[ref].append(feat)
             pbar.update()
         pbar.close()
         for ref, parts in parts_for_ref.items():
