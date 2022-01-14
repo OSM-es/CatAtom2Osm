@@ -1,11 +1,10 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<html lang="en">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <!-- Licensed under the Apache 2.0 License -->
   <link rel="stylesheet" type="text/css" href="../../_static/fonts/open-sans/stylesheet.css" />
@@ -15,31 +14,19 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>test.test_osm &#8212; CatAtom2Osm 1.9.0 documentation</title>
-    
-    <link rel="stylesheet" href="../../_static/guzzle.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '1.9.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <title>test.test_osm &#8212; CatAtom2Osm 2.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/guzzle.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
   
    
 
-  </head>
-  <body role="document">
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -49,8 +36,9 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 1.9.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">test.test_osm</a></li> 
       </ul>
     </div>
     <div class="container-wrapper">
@@ -60,27 +48,6 @@
       </div>
   <div id="left-column">
     <div class="sphinxsidebar">
-        <a href="
-    ../../index.html" class="text-logo">CatAtom2Osm</a>
-        
-<div class="sidebar-block">
-  <div class="sidebar-wrapper">
-    <h2>Table Of Contents</h2>
-  </div>
-  <div class="sidebar-toc">
-    
-    
-      <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../readme.html">Read me</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../install.html">Install</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../changes.html">Change log</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api.html">API reference</a></li>
-</ul>
-
-    
-  </div>
-</div>
-        
 <div class="sidebar-block">
   <div class="sidebar-wrapper">
     <div id="main-search">
@@ -94,6 +61,7 @@
     </div>
   </div>
 </div>
+      
     </div>
   </div>
         <div id="right-column">
@@ -270,48 +238,46 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">d2</span><span class="o">.</span><span class="n">elements</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># don&#39;t insert repeated</span></div>
 
 <div class="viewcode-block" id="TestOsm.test_append_highway"><a class="viewcode-back" href="../../api/test.test_osm.html#test.test_osm.TestOsm.test_append_highway">[docs]</a>    <span class="k">def</span> <span class="nf">test_append_highway</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;test/current.osm&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fo</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;test/fixtures/current.osm&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fo</span><span class="p">:</span>
             <span class="n">d1</span> <span class="o">=</span> <span class="n">osmxml</span><span class="o">.</span><span class="n">deserialize</span><span class="p">(</span><span class="n">fo</span><span class="p">)</span>
         <span class="n">d2</span> <span class="o">=</span> <span class="n">osm</span><span class="o">.</span><span class="n">Osm</span><span class="p">()</span>
         <span class="n">query</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">el</span><span class="p">:</span> <span class="p">(</span>
             <span class="s1">&#39;highway&#39;</span> <span class="ow">in</span> <span class="n">el</span><span class="o">.</span><span class="n">tags</span> <span class="ow">or</span> <span class="n">el</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;place&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;square&#39;</span>
         <span class="p">)</span>
         <span class="n">d2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">d1</span><span class="p">,</span> <span class="n">query</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">d2</span><span class="o">.</span><span class="n">nodes</span><span class="p">),</span> <span class="mi">15</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">d2</span><span class="o">.</span><span class="n">ways</span><span class="p">),</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">d2</span><span class="o">.</span><span class="n">nodes</span><span class="p">),</span> <span class="mi">15</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">d2</span><span class="o">.</span><span class="n">ways</span><span class="p">),</span> <span class="mi">3</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">el</span> <span class="ow">in</span> <span class="n">d2</span><span class="o">.</span><span class="n">ways</span><span class="p">:</span>
             <span class="n">tag</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;highway&#39;</span><span class="p">,</span> <span class="n">el</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;place&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">assertNotEqual</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="TestOsm.test_append_addr"><a class="viewcode-back" href="../../api/test.test_osm.html#test.test_osm.TestOsm.test_append_addr">[docs]</a>    <span class="k">def</span> <span class="nf">test_append_addr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;test/current.osm&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fo</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;test/fixtures/current.osm&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fo</span><span class="p">:</span>
             <span class="n">d1</span> <span class="o">=</span> <span class="n">osmxml</span><span class="o">.</span><span class="n">deserialize</span><span class="p">(</span><span class="n">fo</span><span class="p">)</span>
         <span class="n">d2</span> <span class="o">=</span> <span class="n">osm</span><span class="o">.</span><span class="n">Osm</span><span class="p">()</span>
         <span class="n">query</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">el</span><span class="p">:</span> <span class="p">(</span>
             <span class="s1">&#39;addr:street&#39;</span> <span class="ow">in</span> <span class="n">el</span><span class="o">.</span><span class="n">tags</span> <span class="ow">or</span> <span class="s1">&#39;addr:place&#39;</span> <span class="ow">in</span> <span class="n">el</span><span class="o">.</span><span class="n">tags</span>
         <span class="p">)</span>
         <span class="n">d2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">d1</span><span class="p">,</span> <span class="n">query</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">d2</span><span class="o">.</span><span class="n">nodes</span><span class="p">),</span> <span class="mi">6</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">d2</span><span class="o">.</span><span class="n">ways</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">d2</span><span class="o">.</span><span class="n">nodes</span><span class="p">),</span> <span class="mi">6</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">d2</span><span class="o">.</span><span class="n">ways</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">el</span> <span class="ow">in</span> <span class="n">d2</span><span class="o">.</span><span class="n">elements</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">el</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">d2</span><span class="o">.</span><span class="n">parents</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">el</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">d2</span><span class="o">.</span><span class="n">parents</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
                 <span class="n">tag</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;addr:street&#39;</span><span class="p">,</span> <span class="n">el</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;addr:place&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">assertNotEqual</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="TestOsm.test_append_building"><a class="viewcode-back" href="../../api/test.test_osm.html#test.test_osm.TestOsm.test_append_building">[docs]</a>    <span class="k">def</span> <span class="nf">test_append_building</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;test/current.osm&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fo</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;test/fixtures/current.osm&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fo</span><span class="p">:</span>
             <span class="n">d1</span> <span class="o">=</span> <span class="n">osmxml</span><span class="o">.</span><span class="n">deserialize</span><span class="p">(</span><span class="n">fo</span><span class="p">)</span>
         <span class="n">d2</span> <span class="o">=</span> <span class="n">osm</span><span class="o">.</span><span class="n">Osm</span><span class="p">()</span>
         <span class="n">query</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">el</span><span class="p">:</span> <span class="p">(</span>
             <span class="s1">&#39;building&#39;</span> <span class="ow">in</span> <span class="n">el</span><span class="o">.</span><span class="n">tags</span> <span class="ow">or</span> <span class="n">el</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;leisure&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;swimming_pool&#39;</span>
         <span class="p">)</span>
         <span class="n">d2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">d1</span><span class="p">,</span> <span class="n">query</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">d2</span><span class="o">.</span><span class="n">nodes</span><span class="p">),</span> <span class="mi">27</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">d2</span><span class="o">.</span><span class="n">ways</span><span class="p">),</span> <span class="mi">5</span><span class="p">)</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;prueba.osm&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fo</span><span class="p">:</span>
-            <span class="n">osmxml</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">fo</span><span class="p">,</span> <span class="n">d2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">d2</span><span class="o">.</span><span class="n">nodes</span><span class="p">),</span> <span class="mi">27</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">d2</span><span class="o">.</span><span class="n">ways</span><span class="p">),</span> <span class="mi">5</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">el</span> <span class="ow">in</span> <span class="n">d2</span><span class="o">.</span><span class="n">elements</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">el</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">d2</span><span class="o">.</span><span class="n">parents</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">el</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">d2</span><span class="o">.</span><span class="n">parents</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
                 <span class="n">tag</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;building&#39;</span><span class="p">,</span> <span class="n">el</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;leisure&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">assertNotEqual</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span></div></div>
 
@@ -820,8 +786,9 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 1.9.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">test.test_osm</a></li> 
       </ul>
     </div>
 <script type="text/javascript">

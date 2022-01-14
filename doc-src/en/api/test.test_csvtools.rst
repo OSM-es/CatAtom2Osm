@@ -1,7 +1,7 @@
-test.test_csvtools module
-=========================
+test.test\_csvtools module
+==========================
 
 .. automodule:: test.test_csvtools
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:

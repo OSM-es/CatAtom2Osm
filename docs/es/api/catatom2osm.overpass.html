@@ -1,11 +1,11 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<html lang="es">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   
   <!-- Licensed under the Apache 2.0 License -->
   <link rel="stylesheet" type="text/css" href="../_static/fonts/open-sans/stylesheet.css" />
@@ -15,34 +15,22 @@
   <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.overpass module &#8212; documentación de CatAtom2Osm - 1.9.0</title>
-    
-    <link rel="stylesheet" href="../_static/guzzle.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '1.9.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/translations.js"></script>
+    <title>catatom2osm.overpass module &#8212; documentación de CatAtom2Osm - 2.0.0</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/guzzle.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/translations.js"></script>
     <link rel="index" title="Índice" href="../genindex.html" />
     <link rel="search" title="Búsqueda" href="../search.html" />
-    <link rel="next" title="catatom2osm.qgiscompat module" href="catatom2osm.qgiscompat.html" />
+    <link rel="next" title="catatom2osm.report module" href="catatom2osm.report.html" />
     <link rel="prev" title="catatom2osm.osmxml module" href="catatom2osm.osmxml.html" />
   
    
 
-  </head>
-  <body role="document">
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navegación</h3>
       <ul>
@@ -53,15 +41,16 @@
           <a href="../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
         <li class="right" >
-          <a href="catatom2osm.qgiscompat.html" title="catatom2osm.qgiscompat module"
+          <a href="catatom2osm.report.html" title="catatom2osm.report module"
              accesskey="N">siguiente</a> |</li>
         <li class="right" >
           <a href="catatom2osm.osmxml.html" title="catatom2osm.osmxml module"
              accesskey="P">anterior</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">documentación de CatAtom2Osm - 1.9.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">documentación de CatAtom2Osm - 2.0.0</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../api.html" >Referencia API</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="modules.html" >CatAtom2Osm</a> &#187;</li>
-          <li class="nav-item nav-item-3"><a href="catatom2osm.html" accesskey="U">catatom2osm package</a> &#187;</li> 
+          <li class="nav-item nav-item-3"><a href="catatom2osm.html" accesskey="U">catatom2osm package</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">catatom2osm.overpass module</a></li> 
       </ul>
     </div>
     <div class="container-wrapper">
@@ -71,32 +60,19 @@
       </div>
   <div id="left-column">
     <div class="sphinxsidebar">
-        <a href="
-    ../index.html" class="text-logo">CatAtom2Osm</a>
-        
-<div class="sidebar-block">
-  <div class="sidebar-wrapper">
-    <h2>Tabla de Contenidos</h2>
-  </div>
-  <div class="sidebar-toc">
-    
-    
-      <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../readme.html">Léeme</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../install.html">Instalación</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../changes.html">Registro de cambios</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="../api.html">Referencia API</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="modules.html">CatAtom2Osm</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../coverage.html">Cobertura del código</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../genindex.html">Índice</a></li>
-</ul>
-</li>
-</ul>
-
-    
-  </div>
-</div>
-        
+  <h4>Tema anterior</h4>
+  <p class="topless"><a href="catatom2osm.osmxml.html"
+                        title="capítulo anterior">catatom2osm.osmxml module</a></p>
+  <h4>Próximo tema</h4>
+  <p class="topless"><a href="catatom2osm.report.html"
+                        title="próximo capítulo">catatom2osm.report module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>Esta página</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/catatom2osm.overpass.rst.txt"
+            rel="nofollow">Mostrar el código</a></li>
+    </ul>
+   </div>
 <div class="sidebar-block">
   <div class="sidebar-wrapper">
     <div id="main-search">
@@ -110,6 +86,7 @@
     </div>
   </div>
 </div>
+      
     </div>
   </div>
         <div id="right-column">
@@ -130,49 +107,49 @@
           
           <div class="document clearer body">
             
-  <div class="section" id="module-catatom2osm.overpass">
+  <section id="module-catatom2osm.overpass">
 <span id="catatom2osm-overpass-module"></span><h1>catatom2osm.overpass module<a class="headerlink" href="#module-catatom2osm.overpass" title="Enlazar permanentemente con este título">¶</a></h1>
 <p>Minimum Overpass API interface</p>
-<dl class="class">
-<dt id="catatom2osm.overpass.Query">
-<em class="property">class </em><code class="descclassname">catatom2osm.overpass.</code><code class="descname">Query</code><span class="sig-paren">(</span><em>search_area</em>, <em>output='xml'</em>, <em>down=True</em>, <em>meta=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/overpass.html#Query"><span class="viewcode-link">[fuente]</span></a><a class="headerlink" href="#catatom2osm.overpass.Query" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">future.types.newobject.newobject</span></code></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="catatom2osm.overpass.Query">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">catatom2osm.overpass.</span></span><span class="sig-name descname"><span class="pre">Query</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">search_area</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'xml'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">down</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/overpass.html#Query"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.overpass.Query" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Class for a query to Overpass</p>
-<dl class="method">
-<dt id="catatom2osm.overpass.Query.add">
-<code class="descname">add</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/overpass.html#Query.add"><span class="viewcode-link">[fuente]</span></a><a class="headerlink" href="#catatom2osm.overpass.Query.add" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="catatom2osm.overpass.Query.add">
+<span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/overpass.html#Query.add"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.overpass.Query.add" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>Adds a statement to the query. Use QL query statements without bbox
-or area clauses. Example: node[&#8220;name&#8221;=&#8221;Berlin&#8221;]</p>
+or area clauses. Example: node[«name»=»Berlin»]</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="catatom2osm.overpass.Query.download">
-<code class="descname">download</code><span class="sig-paren">(</span><em>filename</em>, <em>log=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/overpass.html#Query.download"><span class="viewcode-link">[fuente]</span></a><a class="headerlink" href="#catatom2osm.overpass.Query.download" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="catatom2osm.overpass.Query.download">
+<span class="sig-name descname"><span class="pre">download</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/overpass.html#Query.download"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.overpass.Query.download" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>Downloads query result to filename</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="catatom2osm.overpass.Query.get_url">
-<code class="descname">get_url</code><span class="sig-paren">(</span><em>n=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/overpass.html#Query.get_url"><span class="viewcode-link">[fuente]</span></a><a class="headerlink" href="#catatom2osm.overpass.Query.get_url" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="catatom2osm.overpass.Query.get_url">
+<span class="sig-name descname"><span class="pre">get_url</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/overpass.html#Query.get_url"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.overpass.Query.get_url" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>Returns url for the query</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="catatom2osm.overpass.Query.read">
-<code class="descname">read</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/overpass.html#Query.read"><span class="viewcode-link">[fuente]</span></a><a class="headerlink" href="#catatom2osm.overpass.Query.read" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="catatom2osm.overpass.Query.read">
+<span class="sig-name descname"><span class="pre">read</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/overpass.html#Query.read"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.overpass.Query.read" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>Returns query result</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="catatom2osm.overpass.Query.set_search_area">
-<code class="descname">set_search_area</code><span class="sig-paren">(</span><em>search_area</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/overpass.html#Query.set_search_area"><span class="viewcode-link">[fuente]</span></a><a class="headerlink" href="#catatom2osm.overpass.Query.set_search_area" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="catatom2osm.overpass.Query.set_search_area">
+<span class="sig-name descname"><span class="pre">set_search_area</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">search_area</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/overpass.html#Query.set_search_area"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.overpass.Query.set_search_area" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>Set the area to search in. It could be either the osm id of a named
 area or a bounding box (bottom, left, top, right) clause.</p>
 </dd></dl>
 
 </dd></dl>
 
-</div>
+</section>
 
 
           </div>
@@ -184,7 +161,7 @@ area or a bounding box (bottom, left, top, right) clause.</p>
       </div>
     
       <div class="pull-right">
-        <a class="btn btn-default" href="catatom2osm.qgiscompat.html" title="próximo capítulo (use the right arrow)">catatom2osm.qgiscompat module</a>
+        <a class="btn btn-default" href="catatom2osm.report.html" title="próximo capítulo (use the right arrow)">catatom2osm.report module</a>
       </div>
     </div>
     <div class="clearer"></div>
@@ -202,15 +179,16 @@ area or a bounding box (bottom, left, top, right) clause.</p>
           <a href="../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
         <li class="right" >
-          <a href="catatom2osm.qgiscompat.html" title="catatom2osm.qgiscompat module"
+          <a href="catatom2osm.report.html" title="catatom2osm.report module"
              >siguiente</a> |</li>
         <li class="right" >
           <a href="catatom2osm.osmxml.html" title="catatom2osm.osmxml module"
              >anterior</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">documentación de CatAtom2Osm - 1.9.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">documentación de CatAtom2Osm - 2.0.0</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../api.html" >Referencia API</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="modules.html" >CatAtom2Osm</a> &#187;</li>
-          <li class="nav-item nav-item-3"><a href="catatom2osm.html" >catatom2osm package</a> &#187;</li> 
+          <li class="nav-item nav-item-3"><a href="catatom2osm.html" >catatom2osm package</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">catatom2osm.overpass module</a></li> 
       </ul>
     </div>
 <script type="text/javascript">

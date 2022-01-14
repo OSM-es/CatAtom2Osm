@@ -1,11 +1,10 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<html lang="en">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <!-- Licensed under the Apache 2.0 License -->
   <link rel="stylesheet" type="text/css" href="../../_static/fonts/open-sans/stylesheet.css" />
@@ -15,31 +14,19 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>test.test_cdau &#8212; CatAtom2Osm 1.9.0 documentation</title>
-    
-    <link rel="stylesheet" href="../../_static/guzzle.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '1.9.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <title>test.test_cdau &#8212; CatAtom2Osm 2.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/guzzle.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
   
    
 
-  </head>
-  <body role="document">
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -49,8 +36,9 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 1.9.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">test.test_cdau</a></li> 
       </ul>
     </div>
     <div class="container-wrapper">
@@ -60,27 +48,6 @@
       </div>
   <div id="left-column">
     <div class="sphinxsidebar">
-        <a href="
-    ../../index.html" class="text-logo">CatAtom2Osm</a>
-        
-<div class="sidebar-block">
-  <div class="sidebar-wrapper">
-    <h2>Table Of Contents</h2>
-  </div>
-  <div class="sidebar-toc">
-    
-    
-      <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../readme.html">Read me</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../install.html">Install</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../changes.html">Change log</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api.html">API reference</a></li>
-</ul>
-
-    
-  </div>
-</div>
-        
 <div class="sidebar-block">
   <div class="sidebar-wrapper">
     <div id="main-search">
@@ -94,6 +61,7 @@
     </div>
   </div>
 </div>
+      
     </div>
   </div>
         <div id="right-column">
@@ -111,10 +79,7 @@
           <div class="document clearer body">
             
   <h1>Source code for test.test_cdau</h1><div class="highlight"><pre>
-<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
-<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">str</span>
-<span class="kn">import</span> <span class="nn">unittest</span>
+<span></span><span class="kn">import</span> <span class="nn">unittest</span>
 <span class="kn">import</span> <span class="nn">mock</span>
 <span class="kn">import</span> <span class="nn">os</span>
 
@@ -162,8 +127,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">cdau</span><span class="o">.</span><span class="n">cod_mun_cat2ine</span><span class="p">(</span><span class="s1">&#39;21900&#39;</span><span class="p">),</span> <span class="s1">&#39;21041&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">cdau</span><span class="o">.</span><span class="n">cod_mun_cat2ine</span><span class="p">(</span><span class="s1">&#39;29900&#39;</span><span class="p">),</span> <span class="s1">&#39;29067&#39;</span><span class="p">)</span></div>
 
-    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.cdau.os&#39;</span><span class="p">)</span>
-<div class="viewcode-block" id="TestCdau.test_init"><a class="viewcode-back" href="../../api/test.test_cdau.html#test.test_cdau.TestCdau.test_init">[docs]</a>    <span class="k">def</span> <span class="nf">test_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m_os</span><span class="p">):</span>
+<div class="viewcode-block" id="TestCdau.test_init"><a class="viewcode-back" href="../../api/test.test_cdau.html#test.test_cdau.TestCdau.test_init">[docs]</a>    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.cdau.os&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">test_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m_os</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">m_cdau</span><span class="o">.</span><span class="n">init</span> <span class="o">=</span> <span class="n">get_func</span><span class="p">(</span><span class="n">cdau</span><span class="o">.</span><span class="n">Reader</span><span class="o">.</span><span class="fm">__init__</span><span class="p">)</span>
         <span class="n">m_os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="n">m_os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="kc">False</span>
@@ -176,10 +141,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">m_cdau</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_cdau</span><span class="p">,</span> <span class="s1">&#39;foobar&#39;</span><span class="p">)</span>
         <span class="n">m_os</span><span class="o">.</span><span class="n">makedirs</span><span class="o">.</span><span class="n">assert_called_with</span><span class="p">(</span><span class="s1">&#39;foobar&#39;</span><span class="p">)</span></div>
 
-    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.cdau.os&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="TestCdau.test_read"><a class="viewcode-back" href="../../api/test.test_cdau.html#test.test_cdau.TestCdau.test_read">[docs]</a>    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.cdau.os&#39;</span><span class="p">)</span>
     <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.cdau.layer&#39;</span><span class="p">)</span>
     <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.cdau.download&#39;</span><span class="p">)</span>
-<div class="viewcode-block" id="TestCdau.test_read"><a class="viewcode-back" href="../../api/test.test_cdau.html#test.test_cdau.TestCdau.test_read">[docs]</a>    <span class="k">def</span> <span class="nf">test_read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m_download</span><span class="p">,</span> <span class="n">m_layer</span><span class="p">,</span> <span class="n">m_os</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">test_read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m_download</span><span class="p">,</span> <span class="n">m_layer</span><span class="p">,</span> <span class="n">m_os</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">m_cdau</span><span class="o">.</span><span class="n">read</span> <span class="o">=</span> <span class="n">get_func</span><span class="p">(</span><span class="n">cdau</span><span class="o">.</span><span class="n">Reader</span><span class="o">.</span><span class="n">read</span><span class="p">)</span>
         <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">)</span> <span class="k">as</span> <span class="n">cm</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">m_cdau</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_cdau</span><span class="p">,</span> <span class="s1">&#39;38&#39;</span><span class="p">)</span>
@@ -205,10 +170,10 @@
         <span class="n">url</span> <span class="o">=</span> <span class="n">cdau</span><span class="o">.</span><span class="n">cdau_url</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
         <span class="n">m_download</span><span class="o">.</span><span class="n">wget</span><span class="o">.</span><span class="n">assert_called_once_with</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s1">&#39;foobar/&#39;</span><span class="o">+</span><span class="n">fn</span><span class="p">)</span></div>
 
-    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.cdau.os&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="TestCdau.test_get_metadata"><a class="viewcode-back" href="../../api/test.test_cdau.html#test.test_cdau.TestCdau.test_get_metadata">[docs]</a>    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.cdau.os&#39;</span><span class="p">)</span>
     <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.cdau.open&#39;</span><span class="p">)</span>
     <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.cdau.download&#39;</span><span class="p">)</span>
-<div class="viewcode-block" id="TestCdau.test_get_metadata"><a class="viewcode-back" href="../../api/test.test_cdau.html#test.test_cdau.TestCdau.test_get_metadata">[docs]</a>    <span class="k">def</span> <span class="nf">test_get_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m_download</span><span class="p">,</span> <span class="n">m_open</span><span class="p">,</span> <span class="n">m_os</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">test_get_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m_download</span><span class="p">,</span> <span class="n">m_open</span><span class="p">,</span> <span class="n">m_os</span><span class="p">):</span>
         <span class="n">resp</span> <span class="o">=</span> <span class="n">mock</span><span class="o">.</span><span class="n">MagicMock</span><span class="p">()</span>
         <span class="n">resp</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;&lt;p&gt; La fecha de referencia de los datos de cada uno de los ficheros es el 5 de marzo de 2018.&lt;/p&gt; &lt;/div&gt; &lt;h3 class=&quot;tituloCaja&quot;&gt;Enlaces relacionados&lt;/h3&gt;&#39;</span>
         <span class="n">m_download</span><span class="o">.</span><span class="n">get_response</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">resp</span>
@@ -266,8 +231,9 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 1.9.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">test.test_cdau</a></li> 
       </ul>
     </div>
 <script type="text/javascript">

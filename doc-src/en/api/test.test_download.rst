@@ -1,7 +1,7 @@
-test.test_download module
-=========================
+test.test\_download module
+==========================
 
 .. automodule:: test.test_download
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:

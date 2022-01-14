@@ -1,11 +1,10 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<html lang="en">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <!-- Licensed under the Apache 2.0 License -->
   <link rel="stylesheet" type="text/css" href="../../_static/fonts/open-sans/stylesheet.css" />
@@ -15,31 +14,19 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>test.test_catatom &#8212; CatAtom2Osm 1.9.0 documentation</title>
-    
-    <link rel="stylesheet" href="../../_static/guzzle.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '1.9.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <title>test.test_catatom &#8212; CatAtom2Osm 2.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/guzzle.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
   
    
 
-  </head>
-  <body role="document">
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -49,8 +36,9 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 1.9.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">test.test_catatom</a></li> 
       </ul>
     </div>
     <div class="container-wrapper">
@@ -60,27 +48,6 @@
       </div>
   <div id="left-column">
     <div class="sphinxsidebar">
-        <a href="
-    ../../index.html" class="text-logo">CatAtom2Osm</a>
-        
-<div class="sidebar-block">
-  <div class="sidebar-wrapper">
-    <h2>Table Of Contents</h2>
-  </div>
-  <div class="sidebar-toc">
-    
-    
-      <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../readme.html">Read me</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../install.html">Install</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../changes.html">Change log</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api.html">API reference</a></li>
-</ul>
-
-    
-  </div>
-</div>
-        
 <div class="sidebar-block">
   <div class="sidebar-wrapper">
     <div id="main-search">
@@ -94,6 +61,7 @@
     </div>
   </div>
 </div>
+      
     </div>
   </div>
         <div id="right-column">
@@ -111,10 +79,7 @@
           <div class="document clearer body">
             
   <h1>Source code for test.test_catatom</h1><div class="highlight"><pre>
-<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="kn">from</span> <span class="nn">future</span> <span class="k">import</span> <span class="n">standard_library</span>
-<span class="n">standard_library</span><span class="o">.</span><span class="n">install_aliases</span><span class="p">()</span>
-<span class="kn">import</span> <span class="nn">unittest</span>
+<span></span><span class="kn">import</span> <span class="nn">unittest</span>
 <span class="kn">import</span> <span class="nn">mock</span>
 <span class="kn">from</span> <span class="nn">requests.exceptions</span> <span class="k">import</span> <span class="ne">ConnectionError</span>
 <span class="kn">import</span> <span class="nn">random</span>
@@ -186,8 +151,8 @@
 <div class="viewcode-block" id="TestCatAtom.setUp"><a class="viewcode-back" href="../../api/test.test_catatom.html#test.test_catatom.TestCatAtom.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">m_cat</span> <span class="o">=</span> <span class="n">mock</span><span class="o">.</span><span class="n">MagicMock</span><span class="p">()</span></div>
 
-    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.catatom.os&#39;</span><span class="p">)</span>
-<div class="viewcode-block" id="TestCatAtom.test_init"><a class="viewcode-back" href="../../api/test.test_catatom.html#test.test_catatom.TestCatAtom.test_init">[docs]</a>    <span class="k">def</span> <span class="nf">test_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m_os</span><span class="p">):</span>
+<div class="viewcode-block" id="TestCatAtom.test_init"><a class="viewcode-back" href="../../api/test.test_catatom.html#test.test_catatom.TestCatAtom.test_init">[docs]</a>    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.catatom.os&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">test_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m_os</span><span class="p">):</span>
         <span class="n">m_os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">m_cat</span><span class="o">.</span><span class="n">init</span> <span class="o">=</span> <span class="n">get_func</span><span class="p">(</span><span class="n">catatom</span><span class="o">.</span><span class="n">Reader</span><span class="o">.</span><span class="fm">__init__</span><span class="p">)</span>
         <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">)</span> <span class="k">as</span> <span class="n">cm</span><span class="p">:</span>
@@ -213,9 +178,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_cat</span><span class="o">.</span><span class="n">zip_code</span><span class="p">,</span> <span class="s1">&#39;12345&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_cat</span><span class="o">.</span><span class="n">prov_code</span><span class="p">,</span> <span class="s1">&#39;12&#39;</span><span class="p">)</span></div>
 
-    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.catatom.os&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="TestCatAtom.test_get_metadata_from_xml"><a class="viewcode-back" href="../../api/test.test_catatom.html#test.test_catatom.TestCatAtom.test_get_metadata_from_xml">[docs]</a>    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.catatom.os&#39;</span><span class="p">)</span>
     <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.catatom.open&#39;</span><span class="p">)</span>
-<div class="viewcode-block" id="TestCatAtom.test_get_metadata_from_xml"><a class="viewcode-back" href="../../api/test.test_catatom.html#test.test_catatom.TestCatAtom.test_get_metadata_from_xml">[docs]</a>    <span class="k">def</span> <span class="nf">test_get_metadata_from_xml</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m_open</span><span class="p">,</span> <span class="n">m_os</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">test_get_metadata_from_xml</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m_open</span><span class="p">,</span> <span class="n">m_os</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">m_cat</span><span class="o">.</span><span class="n">get_metadata</span> <span class="o">=</span> <span class="n">get_func</span><span class="p">(</span><span class="n">catatom</span><span class="o">.</span><span class="n">Reader</span><span class="o">.</span><span class="n">get_metadata</span><span class="p">)</span>
         <span class="n">m_os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="n">m_open</span><span class="o">.</span><span class="n">return_value</span><span class="o">.</span><span class="fm">__enter__</span><span class="o">.</span><span class="n">return_value</span><span class="o">.</span><span class="n">read</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">metadata</span>
@@ -245,10 +210,10 @@
         <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="ne">KeyError</span><span class="p">)</span> <span class="k">as</span> <span class="n">ke</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">m_cat</span><span class="o">.</span><span class="n">get_path_from_zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_cat</span><span class="p">,</span> <span class="n">m_zip</span><span class="p">,</span> <span class="s1">&#39;xxxxx&#39;</span><span class="p">)</span>
 
-    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.catatom.os&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="TestCatAtom.test_get_metadata_from_zip"><a class="viewcode-back" href="../../api/test.test_catatom.html#test.test_catatom.TestCatAtom.test_get_metadata_from_zip">[docs]</a>    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.catatom.os&#39;</span><span class="p">)</span>
     <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.catatom.open&#39;</span><span class="p">)</span>
     <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.catatom.zipfile&#39;</span><span class="p">)</span>
-<div class="viewcode-block" id="TestCatAtom.test_get_metadata_from_zip"><a class="viewcode-back" href="../../api/test.test_catatom.html#test.test_catatom.TestCatAtom.test_get_metadata_from_zip">[docs]</a>    <span class="k">def</span> <span class="nf">test_get_metadata_from_zip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m_zip</span><span class="p">,</span> <span class="n">m_open</span><span class="p">,</span> <span class="n">m_os</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">test_get_metadata_from_zip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m_zip</span><span class="p">,</span> <span class="n">m_open</span><span class="p">,</span> <span class="n">m_os</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">m_cat</span><span class="o">.</span><span class="n">get_metadata</span> <span class="o">=</span> <span class="n">get_func</span><span class="p">(</span><span class="n">catatom</span><span class="o">.</span><span class="n">Reader</span><span class="o">.</span><span class="n">get_metadata</span><span class="p">)</span>
         <span class="n">m_os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="n">m_zip</span><span class="o">.</span><span class="n">ZipFile</span><span class="o">.</span><span class="n">return_value</span><span class="o">.</span><span class="n">read</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">metadata</span>
@@ -259,11 +224,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_cat</span><span class="o">.</span><span class="n">cat_mun</span><span class="p">,</span> <span class="s1">&#39;TAZ&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_cat</span><span class="o">.</span><span class="n">crs_ref</span><span class="p">,</span> <span class="mi">32628</span><span class="p">)</span></div>
 
-    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.catatom.os&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="TestCatAtom.test_get_metadata_empty"><a class="viewcode-back" href="../../api/test.test_catatom.html#test.test_catatom.TestCatAtom.test_get_metadata_empty">[docs]</a>    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.catatom.os&#39;</span><span class="p">)</span>
     <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.catatom.open&#39;</span><span class="p">)</span>
     <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.catatom.etree&#39;</span><span class="p">)</span>
     <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.catatom.hasattr&#39;</span><span class="p">)</span>
-<div class="viewcode-block" id="TestCatAtom.test_get_metadata_empty"><a class="viewcode-back" href="../../api/test.test_catatom.html#test.test_catatom.TestCatAtom.test_get_metadata_empty">[docs]</a>    <span class="k">def</span> <span class="nf">test_get_metadata_empty</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m_has</span><span class="p">,</span> <span class="n">m_etree</span><span class="p">,</span> <span class="n">m_open</span><span class="p">,</span> <span class="n">m_os</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">test_get_metadata_empty</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m_has</span><span class="p">,</span> <span class="n">m_etree</span><span class="p">,</span> <span class="n">m_open</span><span class="p">,</span> <span class="n">m_os</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">m_cat</span><span class="o">.</span><span class="n">get_metadata</span> <span class="o">=</span> <span class="n">get_func</span><span class="p">(</span><span class="n">catatom</span><span class="o">.</span><span class="n">Reader</span><span class="o">.</span><span class="n">get_metadata</span><span class="p">)</span>
         <span class="n">m_os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">del</span> <span class="n">m_etree</span><span class="o">.</span><span class="n">fromstring</span><span class="o">.</span><span class="n">return_value</span><span class="o">.</span><span class="n">root</span>
@@ -274,8 +239,8 @@
         <span class="n">ns</span> <span class="o">=</span> <span class="n">m_etree</span><span class="o">.</span><span class="n">fromstring</span><span class="p">()</span><span class="o">.</span><span class="n">find</span><span class="o">.</span><span class="n">call_args_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">ns</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="p">{</span><span class="s1">&#39;gco&#39;</span><span class="p">,</span> <span class="s1">&#39;gmd&#39;</span><span class="p">})</span></div>
 
-    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.catatom.download&#39;</span><span class="p">)</span>
-<div class="viewcode-block" id="TestCatAtom.test_get_atom_file"><a class="viewcode-back" href="../../api/test.test_catatom.html#test.test_catatom.TestCatAtom.test_get_atom_file">[docs]</a>    <span class="k">def</span> <span class="nf">test_get_atom_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m_download</span><span class="p">):</span>
+<div class="viewcode-block" id="TestCatAtom.test_get_atom_file"><a class="viewcode-back" href="../../api/test.test_catatom.html#test.test_catatom.TestCatAtom.test_get_atom_file">[docs]</a>    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.catatom.download&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">test_get_atom_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m_download</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">m_cat</span><span class="o">.</span><span class="n">get_atom_file</span> <span class="o">=</span> <span class="n">get_func</span><span class="p">(</span><span class="n">catatom</span><span class="o">.</span><span class="n">Reader</span><span class="o">.</span><span class="n">get_atom_file</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">m_cat</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="s1">&#39;lorem&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">m_cat</span><span class="o">.</span><span class="n">zip_code</span> <span class="o">=</span> <span class="s1">&#39;38001&#39;</span>
@@ -314,9 +279,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">gml_path</span><span class="p">,</span> <span class="s1">&#39;foo/A.ES.SDGC.AD.bar.gml&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">zip_path</span><span class="p">,</span> <span class="s1">&#39;foo/A.ES.SDGC.AD.bar.zip&#39;</span><span class="p">)</span></div>
 
-    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.catatom.os&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="TestCatAtom.test_download"><a class="viewcode-back" href="../../api/test.test_catatom.html#test.test_catatom.TestCatAtom.test_download">[docs]</a>    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.catatom.os&#39;</span><span class="p">)</span>
     <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.catatom.log&#39;</span><span class="p">)</span>
-<div class="viewcode-block" id="TestCatAtom.test_download"><a class="viewcode-back" href="../../api/test.test_catatom.html#test.test_catatom.TestCatAtom.test_download">[docs]</a>    <span class="k">def</span> <span class="nf">test_download</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m_log</span><span class="p">,</span> <span class="n">m_os</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">test_download</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m_log</span><span class="p">,</span> <span class="n">m_os</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">m_cat</span><span class="o">.</span><span class="n">download</span> <span class="o">=</span> <span class="n">get_func</span><span class="p">(</span><span class="n">catatom</span><span class="o">.</span><span class="n">Reader</span><span class="o">.</span><span class="n">download</span><span class="p">)</span>
         <span class="n">g</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="s1">&#39;BU&#39;</span><span class="p">,</span> <span class="s1">&#39;CP&#39;</span><span class="p">,</span> <span class="s1">&#39;AD&#39;</span><span class="p">])</span>
         <span class="n">url</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">prov_url</span><span class="p">[</span><span class="n">g</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">code</span><span class="o">=</span><span class="s1">&#39;99&#39;</span><span class="p">)</span>
@@ -326,11 +291,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">m_cat</span><span class="o">.</span><span class="n">get_layer_paths</span><span class="o">.</span><span class="n">assert_called_once_with</span><span class="p">(</span><span class="s1">&#39;foobar&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">m_cat</span><span class="o">.</span><span class="n">get_atom_file</span><span class="o">.</span><span class="n">assert_called_once_with</span><span class="p">(</span><span class="n">url</span><span class="p">)</span></div>
 
-    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.catatom.os&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="TestCatAtom.test_read"><a class="viewcode-back" href="../../api/test.test_catatom.html#test.test_catatom.TestCatAtom.test_read">[docs]</a>    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.catatom.os&#39;</span><span class="p">)</span>
     <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.catatom.log&#39;</span><span class="p">)</span>
     <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.catatom.layer&#39;</span><span class="p">)</span>
-    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.catatom.QgsCoordinateReferenceSystem_fromEpsgId&#39;</span><span class="p">)</span>
-<div class="viewcode-block" id="TestCatAtom.test_read"><a class="viewcode-back" href="../../api/test.test_catatom.html#test.test_catatom.TestCatAtom.test_read">[docs]</a>    <span class="k">def</span> <span class="nf">test_read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m_qgscrs</span><span class="p">,</span> <span class="n">m_layer</span><span class="p">,</span> <span class="n">m_log</span><span class="p">,</span> <span class="n">m_os</span><span class="p">):</span>
+    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.catatom.QgsCoordinateReferenceSystem.fromEpsgId&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">test_read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m_qgscrs</span><span class="p">,</span> <span class="n">m_layer</span><span class="p">,</span> <span class="n">m_log</span><span class="p">,</span> <span class="n">m_os</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">m_cat</span><span class="o">.</span><span class="n">read</span> <span class="o">=</span> <span class="n">get_func</span><span class="p">(</span><span class="n">catatom</span><span class="o">.</span><span class="n">Reader</span><span class="o">.</span><span class="n">read</span><span class="p">)</span>
         <span class="n">g</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="s1">&#39;BU&#39;</span><span class="p">,</span> <span class="s1">&#39;CP&#39;</span><span class="p">,</span> <span class="s1">&#39;AD&#39;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">m_cat</span><span class="o">.</span><span class="n">get_layer_paths</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="n">g</span><span class="p">)</span>
@@ -388,11 +353,13 @@
 <div class="viewcode-block" id="TestCatAtom.test_is_empty"><a class="viewcode-back" href="../../api/test.test_catatom.html#test.test_catatom.TestCatAtom.test_is_empty">[docs]</a>    <span class="k">def</span> <span class="nf">test_is_empty</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">m_cat</span><span class="o">.</span><span class="n">is_empty</span> <span class="o">=</span> <span class="n">get_func</span><span class="p">(</span><span class="n">catatom</span><span class="o">.</span><span class="n">Reader</span><span class="o">.</span><span class="n">is_empty</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">m_cat</span><span class="o">.</span><span class="n">get_path_from_zip</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="s1">&#39;empty.gml&#39;</span>
-        <span class="n">test</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m_cat</span><span class="o">.</span><span class="n">is_empty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_cat</span><span class="p">,</span> <span class="s1">&#39;test/empty.gml|foo&#39;</span><span class="p">,</span> <span class="s1">&#39;test/empty.zip&#39;</span><span class="p">)</span>
+        <span class="n">fn</span> <span class="o">=</span> <span class="s1">&#39;test/fixtures/empty.gml&#39;</span>
+        <span class="n">test</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m_cat</span><span class="o">.</span><span class="n">is_empty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_cat</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="s1">&#39;test/empty.zip&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
-        <span class="n">test</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m_cat</span><span class="o">.</span><span class="n">is_empty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_cat</span><span class="p">,</span> <span class="s1">&#39;test/empty.gml&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">test</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m_cat</span><span class="o">.</span><span class="n">is_empty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_cat</span><span class="p">,</span> <span class="s1">&#39;test/fixtures/empty.gml&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
-        <span class="n">test</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m_cat</span><span class="o">.</span><span class="n">is_empty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_cat</span><span class="p">,</span> <span class="s1">&#39;test/building.gml&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">fn</span> <span class="o">=</span> <span class="s1">&#39;test/fixtures/building.gml&#39;</span>
+        <span class="n">test</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m_cat</span><span class="o">.</span><span class="n">is_empty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_cat</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertFalse</span><span class="p">(</span><span class="n">test</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="TestCatAtom.test_get_path_from_zip"><a class="viewcode-back" href="../../api/test.test_catatom.html#test.test_catatom.TestCatAtom.test_get_path_from_zip">[docs]</a>    <span class="k">def</span> <span class="nf">test_get_path_from_zip</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -407,9 +374,9 @@
             <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m_cat</span><span class="o">.</span><span class="n">get_path_from_zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_cat</span><span class="p">,</span> <span class="n">zf</span><span class="p">,</span> <span class="s1">&#39;taz&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s1">&#39;There is no item&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">cm</span><span class="o">.</span><span class="n">exception</span><span class="p">))</span></div>
 
-    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.catatom.zipfile&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="TestCatAtom.test_get_gml_from_zip"><a class="viewcode-back" href="../../api/test.test_catatom.html#test.test_catatom.TestCatAtom.test_get_gml_from_zip">[docs]</a>    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.catatom.zipfile&#39;</span><span class="p">)</span>
     <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.catatom.layer&#39;</span><span class="p">)</span>
-<div class="viewcode-block" id="TestCatAtom.test_get_gml_from_zip"><a class="viewcode-back" href="../../api/test.test_catatom.html#test.test_catatom.TestCatAtom.test_get_gml_from_zip">[docs]</a>    <span class="k">def</span> <span class="nf">test_get_gml_from_zip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m_layer</span><span class="p">,</span> <span class="n">m_zip</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">test_get_gml_from_zip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m_layer</span><span class="p">,</span> <span class="n">m_zip</span><span class="p">):</span>
         <span class="n">m_layer</span><span class="o">.</span><span class="n">BaseLayer</span><span class="o">.</span><span class="n">return_value</span><span class="o">.</span><span class="n">isValid</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="n">zf</span> <span class="o">=</span> <span class="n">mock</span><span class="o">.</span><span class="n">MagicMock</span><span class="p">()</span>
         <span class="n">m_zip</span><span class="o">.</span><span class="n">ZipFile</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">zf</span>
@@ -424,9 +391,9 @@
         <span class="n">vsizip_path</span> <span class="o">=</span> <span class="s1">&#39;/vsizip/foo/zip_path/bar/gml_path&#39;</span>
         <span class="n">m_layer</span><span class="o">.</span><span class="n">BaseLayer</span><span class="o">.</span><span class="n">assert_called_once_with</span><span class="p">(</span><span class="n">vsizip_path</span><span class="p">,</span> <span class="s1">&#39;ln.gml&#39;</span><span class="p">,</span> <span class="s1">&#39;ogr&#39;</span><span class="p">)</span></div>
 
-    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.catatom.zipfile&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="TestCatAtom.test_get_gml_from_zip_ifs"><a class="viewcode-back" href="../../api/test.test_catatom.html#test.test_catatom.TestCatAtom.test_get_gml_from_zip_ifs">[docs]</a>    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.catatom.zipfile&#39;</span><span class="p">)</span>
     <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.catatom.layer&#39;</span><span class="p">)</span>
-<div class="viewcode-block" id="TestCatAtom.test_get_gml_from_zip_ifs"><a class="viewcode-back" href="../../api/test.test_catatom.html#test.test_catatom.TestCatAtom.test_get_gml_from_zip_ifs">[docs]</a>    <span class="k">def</span> <span class="nf">test_get_gml_from_zip_ifs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m_layer</span><span class="p">,</span> <span class="n">m_zip</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">test_get_gml_from_zip_ifs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m_layer</span><span class="p">,</span> <span class="n">m_zip</span><span class="p">):</span>
         <span class="n">m_layer</span><span class="o">.</span><span class="n">BaseLayer</span><span class="o">.</span><span class="n">return_value</span><span class="o">.</span><span class="n">isValid</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">m_cat</span><span class="o">.</span><span class="n">get_path_from_zip</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="s1">&#39;bar/gml_path&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">m_cat</span><span class="o">.</span><span class="n">get_gml_from_zip</span> <span class="o">=</span> <span class="n">get_func</span><span class="p">(</span><span class="n">catatom</span><span class="o">.</span><span class="n">Reader</span><span class="o">.</span><span class="n">get_gml_from_zip</span><span class="p">)</span>
@@ -436,11 +403,11 @@
         <span class="n">vsizip_path</span> <span class="o">=</span> <span class="s1">&#39;/vsizip/foo/zip_path/bar/gml_path|layername=ln&#39;</span>
         <span class="n">m_layer</span><span class="o">.</span><span class="n">BaseLayer</span><span class="o">.</span><span class="n">assert_called_once_with</span><span class="p">(</span><span class="n">vsizip_path</span><span class="p">,</span> <span class="s1">&#39;ln.gml&#39;</span><span class="p">,</span> <span class="s1">&#39;ogr&#39;</span><span class="p">)</span></div>
 
-    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.catatom.log.warning&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="TestCatAtom.test_get_boundary"><a class="viewcode-back" href="../../api/test.test_catatom.html#test.test_catatom.TestCatAtom.test_get_boundary">[docs]</a>    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.catatom.log.warning&#39;</span><span class="p">)</span>
     <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.catatom.overpass&#39;</span><span class="p">)</span>
     <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.catatom.hgwnames&#39;</span><span class="p">)</span>
     <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.catatom.download&#39;</span><span class="p">)</span>
-<div class="viewcode-block" id="TestCatAtom.test_get_boundary"><a class="viewcode-back" href="../../api/test.test_catatom.html#test.test_catatom.TestCatAtom.test_get_boundary">[docs]</a>    <span class="k">def</span> <span class="nf">test_get_boundary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m_download</span><span class="p">,</span> <span class="n">m_hgw</span><span class="p">,</span> <span class="n">m_overpass</span><span class="p">,</span> <span class="n">m_log</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">test_get_boundary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m_download</span><span class="p">,</span> <span class="n">m_hgw</span><span class="p">,</span> <span class="n">m_overpass</span><span class="p">,</span> <span class="n">m_log</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">m_cat</span><span class="o">.</span><span class="n">get_boundary</span> <span class="o">=</span> <span class="n">get_func</span><span class="p">(</span><span class="n">catatom</span><span class="o">.</span><span class="n">Reader</span><span class="o">.</span><span class="n">get_boundary</span><span class="p">)</span>
         <span class="n">zoning</span> <span class="o">=</span> <span class="n">mock</span><span class="o">.</span><span class="n">MagicMock</span><span class="p">()</span>
         <span class="n">bbox</span> <span class="o">=</span> <span class="s2">&quot;28.0655571972128,-16.7996857087189,28.1788414990302,-16.6878650661333&quot;</span>
@@ -476,8 +443,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">m_cat</span><span class="o">.</span><span class="n">get_boundary</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_cat</span><span class="p">,</span> <span class="n">zoning</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_cat</span><span class="o">.</span><span class="n">boundary_name</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;Maó&#39;</span><span class="p">)</span></div>
 
-    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.catatom.download&#39;</span><span class="p">)</span>
-<div class="viewcode-block" id="TestCatAtom.test_list_municipalities"><a class="viewcode-back" href="../../api/test.test_catatom.html#test.test_catatom.TestCatAtom.test_list_municipalities">[docs]</a>    <span class="k">def</span> <span class="nf">test_list_municipalities</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m_download</span><span class="p">):</span>
+<div class="viewcode-block" id="TestCatAtom.test_list_municipalities"><a class="viewcode-back" href="../../api/test.test_catatom.html#test.test_catatom.TestCatAtom.test_list_municipalities">[docs]</a>    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.catatom.download&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">test_list_municipalities</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m_download</span><span class="p">):</span>
         <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">):</span>
             <span class="n">catatom</span><span class="o">.</span><span class="n">list_municipalities</span><span class="p">(</span><span class="s1">&#39;01&#39;</span><span class="p">)</span>
         <span class="n">url</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">prov_url</span><span class="p">[</span><span class="s1">&#39;BU&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">code</span><span class="o">=</span><span class="s1">&#39;09&#39;</span><span class="p">)</span>
@@ -503,8 +470,9 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 1.9.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">test.test_catatom</a></li> 
       </ul>
     </div>
 <script type="text/javascript">

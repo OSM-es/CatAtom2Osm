@@ -1,11 +1,10 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<html lang="en">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <!-- Licensed under the Apache 2.0 License -->
   <link rel="stylesheet" type="text/css" href="../../_static/fonts/open-sans/stylesheet.css" />
@@ -15,31 +14,19 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.layer &#8212; CatAtom2Osm 1.9.0 documentation</title>
-    
-    <link rel="stylesheet" href="../../_static/guzzle.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '1.9.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <title>catatom2osm.layer &#8212; CatAtom2Osm 2.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/guzzle.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
   
    
 
-  </head>
-  <body role="document">
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -49,8 +36,9 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 1.9.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">catatom2osm.layer</a></li> 
       </ul>
     </div>
     <div class="container-wrapper">
@@ -60,27 +48,6 @@
       </div>
   <div id="left-column">
     <div class="sphinxsidebar">
-        <a href="
-    ../../index.html" class="text-logo">CatAtom2Osm</a>
-        
-<div class="sidebar-block">
-  <div class="sidebar-wrapper">
-    <h2>Table Of Contents</h2>
-  </div>
-  <div class="sidebar-toc">
-    
-    
-      <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../readme.html">Read me</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../install.html">Install</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../changes.html">Change log</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api.html">API reference</a></li>
-</ul>
-
-    
-  </div>
-</div>
-        
 <div class="sidebar-block">
   <div class="sidebar-wrapper">
     <div id="main-search">
@@ -94,6 +61,7 @@
     </div>
   </div>
 </div>
+      
     </div>
   </div>
         <div id="right-column">
@@ -111,10 +79,7 @@
           <div class="document clearer body">
             
   <h1>Source code for catatom2osm.layer</h1><div class="highlight"><pre>
-<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot;Application layers&quot;&quot;&quot;</span>
-
-<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">object</span><span class="p">,</span> <span class="nb">str</span>
+<span></span><span class="sd">&quot;&quot;&quot;Application layers&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">math</span>
 <span class="kn">import</span> <span class="nn">re</span>
@@ -123,7 +88,10 @@
 <span class="kn">from</span> <span class="nn">tqdm</span> <span class="k">import</span> <span class="n">tqdm</span>
 
 <span class="kn">from</span> <span class="nn">qgis.core</span> <span class="k">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">catatom2osm.qgiscompat</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">qgis.PyQt.QtCore</span> <span class="k">import</span> <span class="n">QVariant</span>
+<span class="n">WKBMultiPolygon</span> <span class="o">=</span> <span class="n">QgsWkbTypes</span><span class="o">.</span><span class="n">MultiPolygon</span>
+<span class="n">WKBPolygon</span> <span class="o">=</span> <span class="n">QgsWkbTypes</span><span class="o">.</span><span class="n">Polygon</span>
+<span class="n">WKBPoint</span> <span class="o">=</span> <span class="n">QgsWkbTypes</span><span class="o">.</span><span class="n">Point</span>
 
 <span class="kn">from</span> <span class="nn">catatom2osm</span> <span class="k">import</span> <span class="n">config</span><span class="p">,</span> <span class="n">csvtools</span><span class="p">,</span> <span class="n">hgwnames</span><span class="p">,</span> <span class="n">osm</span><span class="p">,</span> <span class="n">translate</span>
 <span class="kn">from</span> <span class="nn">catatom2osm.report</span> <span class="k">import</span> <span class="n">instance</span> <span class="k">as</span> <span class="n">report</span>
@@ -140,7 +108,7 @@
 <span class="n">get_attributes</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">feat</span><span class="p">:</span> \
     <span class="nb">dict</span><span class="p">([(</span><span class="n">i</span><span class="p">,</span> <span class="n">feat</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">feat</span><span class="o">.</span><span class="n">fields</span><span class="p">()</span><span class="o">.</span><span class="n">toList</span><span class="p">()))])</span>
 
-<div class="viewcode-block" id="Point"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.Point">[docs]</a><span class="k">class</span> <span class="nc">Point</span><span class="p">(</span><span class="n">Qgs2DPoint</span><span class="p">):</span>
+<div class="viewcode-block" id="Point"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.Point">[docs]</a><span class="k">class</span> <span class="nc">Point</span><span class="p">(</span><span class="n">QgsPointXY</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Extends QgsPoint with some utility methods&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -266,38 +234,38 @@
 <div class="viewcode-block" id="Geometry"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.Geometry">[docs]</a><span class="k">class</span> <span class="nc">Geometry</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Methods for QGIS 2-3 compatibility and geometry utilities&quot;&quot;&quot;</span>
 
-    <span class="nd">@staticmethod</span>
-<div class="viewcode-block" id="Geometry.fromPointXY"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.Geometry.fromPointXY">[docs]</a>    <span class="k">def</span> <span class="nf">fromPointXY</span><span class="p">(</span><span class="n">point</span><span class="p">):</span>
+<div class="viewcode-block" id="Geometry.fromPointXY"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.Geometry.fromPointXY">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">fromPointXY</span><span class="p">(</span><span class="n">point</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">QgsGeometry</span><span class="o">.</span><span class="n">fromPointXY</span><span class="p">(</span><span class="n">QgsPointXY</span><span class="p">(</span><span class="n">point</span><span class="p">))</span>
         <span class="k">except</span> <span class="p">(</span><span class="ne">AttributeError</span><span class="p">,</span> <span class="ne">NameError</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">QgsGeometry</span><span class="o">.</span><span class="n">fromPoint</span><span class="p">(</span><span class="n">point</span><span class="p">)</span></div>
 
-    <span class="nd">@staticmethod</span>
-<div class="viewcode-block" id="Geometry.fromMultiPointXY"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.Geometry.fromMultiPointXY">[docs]</a>    <span class="k">def</span> <span class="nf">fromMultiPointXY</span><span class="p">(</span><span class="n">mp</span><span class="p">):</span>
+<div class="viewcode-block" id="Geometry.fromMultiPointXY"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.Geometry.fromMultiPointXY">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">fromMultiPointXY</span><span class="p">(</span><span class="n">mp</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">QgsGeometry</span><span class="o">.</span><span class="n">fromMultiPointXY</span><span class="p">([</span><span class="n">QgsPointXY</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">mp</span><span class="p">])</span>
         <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">QgsGeometry</span><span class="o">.</span><span class="n">fromMultiPoint</span><span class="p">(</span><span class="n">mp</span><span class="p">)</span></div>
 
-    <span class="nd">@staticmethod</span>
-<div class="viewcode-block" id="Geometry.fromPolygonXY"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.Geometry.fromPolygonXY">[docs]</a>    <span class="k">def</span> <span class="nf">fromPolygonXY</span><span class="p">(</span><span class="n">polygon</span><span class="p">):</span>
+<div class="viewcode-block" id="Geometry.fromPolygonXY"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.Geometry.fromPolygonXY">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">fromPolygonXY</span><span class="p">(</span><span class="n">polygon</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">QgsGeometry</span><span class="o">.</span><span class="n">fromPolygonXY</span><span class="p">([[</span><span class="n">QgsPointXY</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">r</span><span class="p">]</span> \
                 <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">polygon</span><span class="p">])</span>
         <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">QgsGeometry</span><span class="o">.</span><span class="n">fromPolygon</span><span class="p">(</span><span class="n">polygon</span><span class="p">)</span></div>
 
-    <span class="nd">@staticmethod</span>
-<div class="viewcode-block" id="Geometry.fromMultiPolygonXY"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.Geometry.fromMultiPolygonXY">[docs]</a>    <span class="k">def</span> <span class="nf">fromMultiPolygonXY</span><span class="p">(</span><span class="n">mp</span><span class="p">):</span>
+<div class="viewcode-block" id="Geometry.fromMultiPolygonXY"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.Geometry.fromMultiPolygonXY">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">fromMultiPolygonXY</span><span class="p">(</span><span class="n">mp</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">QgsGeometry</span><span class="o">.</span><span class="n">fromMultiPolygonXY</span><span class="p">([[[</span><span class="n">QgsPointXY</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">r</span><span class="p">]</span> \
                 <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">t</span><span class="p">]</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">mp</span><span class="p">])</span>
         <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">QgsGeometry</span><span class="o">.</span><span class="n">fromMultiPolygon</span><span class="p">(</span><span class="n">mp</span><span class="p">)</span></div>
 
-    <span class="nd">@staticmethod</span>
-<div class="viewcode-block" id="Geometry.get_multipolygon"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.Geometry.get_multipolygon">[docs]</a>    <span class="k">def</span> <span class="nf">get_multipolygon</span><span class="p">(</span><span class="n">feature_or_geometry</span><span class="p">):</span>
+<div class="viewcode-block" id="Geometry.get_multipolygon"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.Geometry.get_multipolygon">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_multipolygon</span><span class="p">(</span><span class="n">feature_or_geometry</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns feature geometry always as a multipolygon&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">feature_or_geometry</span><span class="p">,</span> <span class="n">QgsFeature</span><span class="p">):</span>
             <span class="n">geom</span> <span class="o">=</span> <span class="n">feature_or_geometry</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span>
@@ -307,20 +275,20 @@
             <span class="k">return</span> <span class="p">[</span><span class="n">geom</span><span class="o">.</span><span class="n">asPolygon</span><span class="p">()]</span>
         <span class="k">return</span> <span class="n">geom</span><span class="o">.</span><span class="n">asMultiPolygon</span><span class="p">()</span></div>
 
-    <span class="nd">@staticmethod</span>
-<div class="viewcode-block" id="Geometry.get_vertices_list"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.Geometry.get_vertices_list">[docs]</a>    <span class="k">def</span> <span class="nf">get_vertices_list</span><span class="p">(</span><span class="n">feature</span><span class="p">):</span>
+<div class="viewcode-block" id="Geometry.get_vertices_list"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.Geometry.get_vertices_list">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_vertices_list</span><span class="p">(</span><span class="n">feature</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns list of all distinct vertices in feature geometry&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">point</span> <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">Geometry</span><span class="o">.</span><span class="n">get_multipolygon</span><span class="p">(</span><span class="n">feature</span><span class="p">)</span> \
             <span class="k">for</span> <span class="n">ring</span> <span class="ow">in</span> <span class="n">part</span> <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">ring</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span></div>
 
-    <span class="nd">@staticmethod</span>
-<div class="viewcode-block" id="Geometry.get_outer_vertices"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.Geometry.get_outer_vertices">[docs]</a>    <span class="k">def</span> <span class="nf">get_outer_vertices</span><span class="p">(</span><span class="n">feature</span><span class="p">):</span>
+<div class="viewcode-block" id="Geometry.get_outer_vertices"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.Geometry.get_outer_vertices">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_outer_vertices</span><span class="p">(</span><span class="n">feature</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns list of all distinct vertices in feature geometry outer rings&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">point</span> <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">Geometry</span><span class="o">.</span><span class="n">get_multipolygon</span><span class="p">(</span><span class="n">feature</span><span class="p">)</span> \
             <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">part</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span></div>
 
-    <span class="nd">@staticmethod</span>
-<div class="viewcode-block" id="Geometry.merge_adjacent_features"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.Geometry.merge_adjacent_features">[docs]</a>    <span class="k">def</span> <span class="nf">merge_adjacent_features</span><span class="p">(</span><span class="n">group</span><span class="p">):</span>
+<div class="viewcode-block" id="Geometry.merge_adjacent_features"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.Geometry.merge_adjacent_features">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">merge_adjacent_features</span><span class="p">(</span><span class="n">group</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Combine all geometries in group of features&quot;&quot;&quot;</span>
         <span class="n">geom</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">group</span><span class="p">:</span>
@@ -333,8 +301,8 @@
                 <span class="n">report</span><span class="o">.</span><span class="n">warnings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">geom</span></div>
 
-    <span class="nd">@staticmethod</span>
-<div class="viewcode-block" id="Geometry.is_valid"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.Geometry.is_valid">[docs]</a>    <span class="k">def</span> <span class="nf">is_valid</span><span class="p">(</span><span class="n">geom</span><span class="p">):</span>
+<div class="viewcode-block" id="Geometry.is_valid"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.Geometry.is_valid">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">is_valid</span><span class="p">(</span><span class="n">geom</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">geom</span><span class="o">.</span><span class="n">isGeosValid</span><span class="p">()</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">Geometry</span><span class="o">.</span><span class="n">get_multipolygon</span><span class="p">(</span><span class="n">geom</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">0</span></div></div>
 
 
@@ -349,9 +317,19 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">reference_matchs</span><span class="o">=</span><span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">keep</span> <span class="o">=</span> <span class="kc">False</span>
 
-    <span class="nd">@staticmethod</span>
-<div class="viewcode-block" id="BaseLayer.create_shp"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.BaseLayer.create_shp">[docs]</a>    <span class="k">def</span> <span class="nf">create_shp</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">crs</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="n">QgsFields</span><span class="p">(),</span> <span class="n">geom_type</span><span class="o">=</span><span class="n">WKBMultiPolygon</span><span class="p">):</span>
-        <span class="n">writer</span> <span class="o">=</span> <span class="n">QgsVectorFileWriter_create</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">crs</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">geom_type</span><span class="p">)</span>
+<div class="viewcode-block" id="BaseLayer.get_writer"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.BaseLayer.get_writer">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_writer</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">crs</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="n">QgsFields</span><span class="p">(),</span> <span class="n">geom_type</span><span class="o">=</span><span class="n">WKBMultiPolygon</span><span class="p">):</span>
+        <span class="n">transform_context</span> <span class="o">=</span> <span class="n">QgsProject</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span><span class="o">.</span><span class="n">transformContext</span><span class="p">()</span>
+        <span class="n">save_options</span> <span class="o">=</span> <span class="n">QgsVectorFileWriter</span><span class="o">.</span><span class="n">SaveVectorOptions</span><span class="p">()</span>
+        <span class="n">save_options</span><span class="o">.</span><span class="n">driverName</span> <span class="o">=</span> <span class="s2">&quot;ESRI Shapefile&quot;</span>
+        <span class="n">save_options</span><span class="o">.</span><span class="n">fileEncoding</span> <span class="o">=</span> <span class="s2">&quot;UTF-8&quot;</span>
+        <span class="k">return</span> <span class="n">QgsVectorFileWriter</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+            <span class="n">name</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">geom_type</span><span class="p">,</span> <span class="n">crs</span><span class="p">,</span> <span class="n">transform_context</span><span class="p">,</span> <span class="n">save_options</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseLayer.create_shp"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.BaseLayer.create_shp">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">create_shp</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">crs</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="n">QgsFields</span><span class="p">(),</span> <span class="n">geom_type</span><span class="o">=</span><span class="n">WKBMultiPolygon</span><span class="p">):</span>
+        <span class="n">writer</span> <span class="o">=</span> <span class="n">BaseLayer</span><span class="o">.</span><span class="n">get_writer</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">crs</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">geom_type</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">writer</span><span class="o">.</span><span class="n">hasError</span><span class="p">()</span> <span class="o">!=</span> <span class="n">QgsVectorFileWriter</span><span class="o">.</span><span class="n">NoError</span><span class="p">:</span>
             <span class="n">msg</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span>
                 <span class="s2">&quot;Error when creating shapefile: &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span>
@@ -359,12 +337,26 @@
             <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">writer</span></div>
 
-    <span class="nd">@staticmethod</span>
-<div class="viewcode-block" id="BaseLayer.delete_shp"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.BaseLayer.delete_shp">[docs]</a>    <span class="k">def</span> <span class="nf">delete_shp</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseLayer.delete_shp"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.BaseLayer.delete_shp">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">delete_shp</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
         <span class="n">QgsVectorFileWriter</span><span class="o">.</span><span class="n">deleteShapeFile</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
         <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">path</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;.cpg&#39;</span>
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
             <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">path</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseLayer.get_crs_transform"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.BaseLayer.get_crs_transform">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_crs_transform</span><span class="p">(</span><span class="n">source_crs</span><span class="p">,</span> <span class="n">target_crs</span><span class="p">):</span>
+        <span class="n">prj</span> <span class="o">=</span> <span class="n">QgsProject</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">QgsCoordinateTransform</span><span class="p">(</span><span class="n">source_crs</span><span class="p">,</span> <span class="n">target_crs</span><span class="p">,</span> <span class="n">prj</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseLayer.writeAsVectorFormat"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.BaseLayer.writeAsVectorFormat">[docs]</a>    <span class="k">def</span> <span class="nf">writeAsVectorFormat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">driver_name</span><span class="p">):</span>
+        <span class="n">transform_context</span> <span class="o">=</span> <span class="n">QgsProject</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span><span class="o">.</span><span class="n">transformContext</span><span class="p">()</span>
+        <span class="n">save_options</span> <span class="o">=</span> <span class="n">QgsVectorFileWriter</span><span class="o">.</span><span class="n">SaveVectorOptions</span><span class="p">()</span>
+        <span class="n">save_options</span><span class="o">.</span><span class="n">driverName</span> <span class="o">=</span> <span class="n">driver_name</span>
+        <span class="n">save_options</span><span class="o">.</span><span class="n">fileEncoding</span> <span class="o">=</span> <span class="s2">&quot;UTF-8&quot;</span>
+        <span class="k">return</span> <span class="n">QgsVectorFileWriter</span><span class="o">.</span><span class="n">writeAsVectorFormatV2</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">transform_context</span><span class="p">,</span> <span class="n">save_options</span>
+        <span class="p">)</span></div>
 
 <div class="viewcode-block" id="BaseLayer.copy_feature"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.BaseLayer.copy_feature">[docs]</a>    <span class="k">def</span> <span class="nf">copy_feature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">feature</span><span class="p">,</span> <span class="n">rename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">resolve</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
@@ -477,8 +469,8 @@
 <span class="sd">            target_crs (QgsCoordinateReferenceSystem): New CRS to apply.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">target_crs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">target_crs</span> <span class="o">=</span> <span class="n">QgsCoordinateReferenceSystem_fromEpsgId</span><span class="p">(</span><span class="mi">4326</span><span class="p">)</span>
-        <span class="n">crs_transform</span> <span class="o">=</span> <span class="n">ggs2coordinate_transform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">(),</span> <span class="n">target_crs</span><span class="p">)</span>
+            <span class="n">target_crs</span> <span class="o">=</span> <span class="n">QgsCoordinateReferenceSystem</span><span class="o">.</span><span class="n">fromEpsgId</span><span class="p">(</span><span class="mi">4326</span><span class="p">)</span>
+        <span class="n">crs_transform</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_crs_transform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">(),</span> <span class="n">target_crs</span><span class="p">)</span>
         <span class="n">to_change</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">pbar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_progressbar</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Reproject&quot;</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">featureCount</span><span class="p">())</span>
         <span class="k">for</span> <span class="n">feature</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">():</span>
@@ -593,21 +585,26 @@
             <span class="k">return</span> <span class="n">QgsSpatialIndex</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="BaseLayer.bounding_box"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.BaseLayer.bounding_box">[docs]</a>    <span class="k">def</span> <span class="nf">bounding_box</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">expression</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Returns bounding box of matching features using an expression or all</span>
-<span class="sd">        features if expression is None. The bounding box is transformed to EPSG</span>
-<span class="sd">        4326 and expressed in overpass format.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Returns bounding box in overpass format of matching features using</span>
+<span class="sd">        an expression or all features if expression is None. &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">expression</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">selectAll</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">selectByExpression</span><span class="p">(</span><span class="n">expression</span><span class="p">)</span>
         <span class="n">bbox</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">boundingBoxOfSelected</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_overpass_bbox</span><span class="p">(</span><span class="n">bbox</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseLayer.get_overpass_bbox"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.BaseLayer.get_overpass_bbox">[docs]</a>    <span class="k">def</span> <span class="nf">get_overpass_bbox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bbox</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        bbox is transformed to EPSG 4326 and returns str in overpass format.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">bbox</span><span class="o">.</span><span class="n">isEmpty</span><span class="p">():</span>
             <span class="n">bbox</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">p1</span> <span class="o">=</span> <span class="n">Geometry</span><span class="o">.</span><span class="n">fromPointXY</span><span class="p">(</span><span class="n">Point</span><span class="p">(</span><span class="n">bbox</span><span class="o">.</span><span class="n">xMinimum</span><span class="p">(),</span> <span class="n">bbox</span><span class="o">.</span><span class="n">yMinimum</span><span class="p">()))</span>
             <span class="n">p2</span> <span class="o">=</span> <span class="n">Geometry</span><span class="o">.</span><span class="n">fromPointXY</span><span class="p">(</span><span class="n">Point</span><span class="p">(</span><span class="n">bbox</span><span class="o">.</span><span class="n">xMaximum</span><span class="p">(),</span> <span class="n">bbox</span><span class="o">.</span><span class="n">yMaximum</span><span class="p">()))</span>
-            <span class="n">target_crs</span> <span class="o">=</span> <span class="n">QgsCoordinateReferenceSystem_fromEpsgId</span><span class="p">(</span><span class="mi">4326</span><span class="p">)</span>
-            <span class="n">crs_transform</span> <span class="o">=</span> <span class="n">ggs2coordinate_transform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">(),</span> <span class="n">target_crs</span><span class="p">)</span>
+            <span class="n">target_crs</span> <span class="o">=</span> <span class="n">QgsCoordinateReferenceSystem</span><span class="o">.</span><span class="n">fromEpsgId</span><span class="p">(</span><span class="mi">4326</span><span class="p">)</span>
+            <span class="n">crs_transform</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_crs_transform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">(),</span> <span class="n">target_crs</span><span class="p">)</span>
             <span class="n">p1</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">crs_transform</span><span class="p">)</span>
             <span class="n">p2</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">crs_transform</span><span class="p">)</span>
             <span class="n">bbox</span> <span class="o">=</span> <span class="p">[</span>
@@ -631,15 +628,13 @@
         <span class="k">if</span> <span class="n">target_crs_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">target_crs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">()</span> 
         <span class="k">else</span><span class="p">:</span>
-             <span class="n">target_crs</span> <span class="o">=</span> <span class="n">QgsCoordinateReferenceSystem_fromEpsgId</span><span class="p">(</span><span class="n">target_crs_id</span><span class="p">)</span>
+             <span class="n">target_crs</span> <span class="o">=</span> <span class="n">QgsCoordinateReferenceSystem</span><span class="o">.</span><span class="n">fromEpsgId</span><span class="p">(</span><span class="n">target_crs_id</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="ow">and</span> <span class="n">overwrite</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">driver_name</span> <span class="o">==</span> <span class="s1">&#39;ESRI Shapefile&#39;</span><span class="p">:</span>
                 <span class="n">QgsVectorFileWriter</span><span class="o">.</span><span class="n">deleteShapeFile</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="n">QgsVectorFileWriter_writeAsVectorFormat</span><span class="p">(</span>
-            <span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">target_crs</span><span class="p">,</span> <span class="n">driver_name</span>
-        <span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">writeAsVectorFormat</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">driver_name</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">QgsVectorFileWriter</span><span class="o">.</span><span class="n">NoError</span>
         <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
@@ -1187,8 +1182,8 @@
         <span class="k">if</span> <span class="n">baseName</span> <span class="o">==</span> <span class="s1">&#39;urbanzoning&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">task_pattern</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">upattern</span>
 
-    <span class="nd">@staticmethod</span>
-<div class="viewcode-block" id="ZoningLayer.check_zone"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.ZoningLayer.check_zone">[docs]</a>    <span class="k">def</span> <span class="nf">check_zone</span><span class="p">(</span><span class="n">feat</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ZoningLayer.check_zone"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.ZoningLayer.check_zone">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">check_zone</span><span class="p">(</span><span class="n">feat</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">level</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">True</span>
         <span class="k">if</span> <span class="n">feat</span><span class="o">.</span><span class="n">fieldNameIndex</span><span class="p">(</span><span class="s1">&#39;levelName&#39;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -1199,8 +1194,8 @@
             <span class="n">zone_type</span> <span class="o">=</span> <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;levelName&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">level</span> <span class="o">==</span> <span class="n">zone_type</span></div>
 
-    <span class="nd">@staticmethod</span>
-<div class="viewcode-block" id="ZoningLayer.format_label"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.ZoningLayer.format_label">[docs]</a>    <span class="k">def</span> <span class="nf">format_label</span><span class="p">(</span><span class="n">feature</span><span class="p">):</span>
+<div class="viewcode-block" id="ZoningLayer.format_label"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.ZoningLayer.format_label">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">format_label</span><span class="p">(</span><span class="n">feature</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Format a zone label&quot;&quot;&quot;</span>
         <span class="n">label</span> <span class="o">=</span> <span class="n">feature</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span>
         <span class="n">level</span> <span class="o">=</span> <span class="n">ZoningLayer</span><span class="o">.</span><span class="n">check_zone</span><span class="p">(</span><span class="n">feature</span><span class="p">,</span> <span class="s1">&#39;M&#39;</span><span class="p">)</span>
@@ -1212,8 +1207,7 @@
         <span class="k">return</span> <span class="n">label</span></div>
 
 <div class="viewcode-block" id="ZoningLayer.set_tasks"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.ZoningLayer.set_tasks">[docs]</a>    <span class="k">def</span> <span class="nf">set_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">zip_code</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Assings a unique task label to each zone by overriding splitted </span>
-<span class="sd">        multiparts and merged adjacent zones&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Assings a unique task label to each zone&quot;&quot;&quot;</span>
         <span class="n">to_change</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">zone</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">():</span>
             <span class="n">zone</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">format_label</span><span class="p">(</span><span class="n">zone</span><span class="p">)</span>
@@ -1291,18 +1285,60 @@
             <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">layer</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">()]</span>
         <span class="p">)</span>
         <span class="k">if</span> <span class="n">layer</span><span class="o">.</span><span class="n">crs</span><span class="p">()</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">():</span>
-            <span class="n">crs_transform</span> <span class="o">=</span> <span class="n">ggs2coordinate_transform</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">crs</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">())</span>
+            <span class="n">crs_transform</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_crs_transform</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">crs</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">())</span>
             <span class="n">split</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">crs_transform</span><span class="p">)</span>
         <span class="n">to_clean</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">fcount</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">featureCount</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">feat</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">():</span>
             <span class="n">geom</span> <span class="o">=</span> <span class="n">feat</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">split</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span> <span class="ow">and</span> <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">skip</span><span class="p">:</span>
-                <span class="n">to_clean</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">feat</span><span class="o">.</span><span class="n">id</span><span class="p">())</span>
+            <span class="k">if</span> <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">skip</span><span class="p">:</span>
+                <span class="n">inter</span> <span class="o">=</span> <span class="n">split</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">inter</span><span class="o">.</span><span class="n">area</span><span class="p">()</span> <span class="o">/</span> <span class="n">geom</span><span class="o">.</span><span class="n">area</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">:</span>
+                    <span class="n">to_clean</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">feat</span><span class="o">.</span><span class="n">id</span><span class="p">())</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_clean</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">deleteFeatures</span><span class="p">(</span><span class="n">to_clean</span><span class="p">)</span>
             <span class="n">msg</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: Removed </span><span class="si">%d</span><span class="s2"> of </span><span class="si">%d</span><span class="s2"> features.&quot;</span><span class="p">)</span>
-            <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">(),</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_clean</span><span class="p">),</span> <span class="n">fcount</span><span class="p">)</span></div></div>
+            <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">(),</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_clean</span><span class="p">),</span> <span class="n">fcount</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ZoningLayer.get_labels"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.ZoningLayer.get_labels">[docs]</a>    <span class="k">def</span> <span class="nf">get_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layer</span><span class="p">,</span> <span class="n">gml</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Builds in layer a index of gml features localId vs the label of the</span>
+<span class="sd">        zone in witch it is contained. If the feature geometry overlaps many</span>
+<span class="sd">        zones, takes the zone with the largest intersection.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">labels_path</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">labels</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_index</span><span class="p">()</span>
+        <span class="n">features</span> <span class="o">=</span> <span class="p">{</span><span class="n">f</span><span class="o">.</span><span class="n">id</span><span class="p">():</span> <span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">()}</span>
+        <span class="n">pbar</span> <span class="o">=</span> <span class="n">gml</span><span class="o">.</span><span class="n">get_progressbar</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Labeling&quot;</span><span class="p">),</span> <span class="n">gml</span><span class="o">.</span><span class="n">featureCount</span><span class="p">())</span>
+        <span class="k">for</span> <span class="n">feat</span> <span class="ow">in</span> <span class="n">gml</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">():</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">ConsLayer</span><span class="o">.</span><span class="n">is_pool</span><span class="p">(</span><span class="n">feat</span><span class="p">):</span>
+                <span class="n">localid</span> <span class="o">=</span> <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">][:</span><span class="mi">14</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">localid</span> <span class="o">=</span> <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">][:</span><span class="mi">14</span><span class="p">]</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="n">layer</span><span class="o">.</span><span class="n">labels</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">localid</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">label</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">label</span> <span class="o">==</span> <span class="s1">&#39;missing&#39;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">ConsLayer</span><span class="o">.</span><span class="n">is_part</span><span class="p">(</span><span class="n">feat</span><span class="p">):</span>
+                    <span class="n">localid</span> <span class="o">=</span> <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">]</span>
+                <span class="n">fids</span> <span class="o">=</span> <span class="n">index</span><span class="o">.</span><span class="n">intersects</span><span class="p">(</span><span class="n">feat</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span><span class="o">.</span><span class="n">boundingBox</span><span class="p">())</span>
+                <span class="n">zones</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="n">features</span><span class="p">[</span><span class="n">fid</span><span class="p">]</span> <span class="k">for</span> <span class="n">fid</span> <span class="ow">in</span> <span class="n">fids</span>
+                    <span class="k">if</span> <span class="n">is_inside</span><span class="p">(</span><span class="n">feat</span><span class="p">,</span> <span class="n">features</span><span class="p">[</span><span class="n">fid</span><span class="p">])</span>
+                <span class="p">]</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">zones</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;missing&#39;</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">label</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">format_label</span><span class="p">(</span><span class="n">zones</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                    <span class="n">geom</span> <span class="o">=</span> <span class="n">feat</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span>
+                    <span class="n">parea</span> <span class="o">=</span> <span class="n">zones</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span><span class="o">.</span><span class="n">area</span><span class="p">()</span>
+                    <span class="k">for</span> <span class="n">z</span> <span class="ow">in</span> <span class="n">zones</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+                        <span class="n">area</span> <span class="o">=</span> <span class="n">z</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span><span class="o">.</span><span class="n">area</span><span class="p">()</span>
+                        <span class="k">if</span> <span class="n">area</span> <span class="o">&gt;</span> <span class="n">parea</span><span class="p">:</span>
+                            <span class="n">parea</span> <span class="o">=</span> <span class="n">area</span>
+                            <span class="n">label</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">format_label</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+                <span class="n">layer</span><span class="o">.</span><span class="n">labels</span><span class="p">[</span><span class="n">localid</span><span class="p">]</span> <span class="o">=</span> <span class="n">label</span>
+            <span class="n">pbar</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+        <span class="n">pbar</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div></div>
 
 
 <div class="viewcode-block" id="AddressLayer"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.AddressLayer">[docs]</a><span class="k">class</span> <span class="nc">AddressLayer</span><span class="p">(</span><span class="n">BaseLayer</span><span class="p">):</span>
@@ -1316,7 +1352,10 @@
                 <span class="n">QgsField</span><span class="p">(</span><span class="s1">&#39;localId&#39;</span><span class="p">,</span> <span class="n">QVariant</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="nb">len</span><span class="o">=</span><span class="mi">254</span><span class="p">),</span>
                 <span class="n">QgsField</span><span class="p">(</span><span class="s1">&#39;spec&#39;</span><span class="p">,</span> <span class="n">QVariant</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="nb">len</span><span class="o">=</span><span class="mi">254</span><span class="p">),</span>
                 <span class="n">QgsField</span><span class="p">(</span><span class="s1">&#39;designator&#39;</span><span class="p">,</span> <span class="n">QVariant</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="nb">len</span><span class="o">=</span><span class="mi">254</span><span class="p">),</span>
+                <span class="n">QgsField</span><span class="p">(</span><span class="s1">&#39;TN_text&#39;</span><span class="p">,</span> <span class="n">QVariant</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="nb">len</span><span class="o">=</span><span class="mi">254</span><span class="p">),</span>
+                <span class="n">QgsField</span><span class="p">(</span><span class="s1">&#39;postCode&#39;</span><span class="p">,</span> <span class="n">QVariant</span><span class="o">.</span><span class="n">Int</span><span class="p">),</span>
                 <span class="n">QgsField</span><span class="p">(</span><span class="s1">&#39;image&#39;</span><span class="p">,</span> <span class="n">QVariant</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="nb">len</span><span class="o">=</span><span class="mi">254</span><span class="p">),</span>
+                <span class="n">QgsField</span><span class="p">(</span><span class="s1">&#39;task&#39;</span><span class="p">,</span> <span class="n">QVariant</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="nb">len</span><span class="o">=</span><span class="mi">254</span><span class="p">),</span>
                 <span class="n">QgsField</span><span class="p">(</span><span class="s1">&#39;PD_id&#39;</span><span class="p">,</span> <span class="n">QVariant</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="nb">len</span><span class="o">=</span><span class="mi">254</span><span class="p">),</span>
                 <span class="n">QgsField</span><span class="p">(</span><span class="s1">&#39;TN_id&#39;</span><span class="p">,</span> <span class="n">QVariant</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="nb">len</span><span class="o">=</span><span class="mi">254</span><span class="p">),</span>
                 <span class="n">QgsField</span><span class="p">(</span><span class="s1">&#39;AU_id&#39;</span><span class="p">,</span> <span class="n">QVariant</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="nb">len</span><span class="o">=</span><span class="mi">254</span><span class="p">)</span>
@@ -1329,13 +1368,19 @@
             <span class="s1">&#39;AU_id&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;component_href&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;[\w\.]+AU[\.0-9]+&#39;</span><span class="p">)</span>
         <span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">source_date</span> <span class="o">=</span> <span class="n">source_date</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">labels</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">labels_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">dataSourceUri</span><span class="p">()),</span> <span class="s1">&#39;addr_labels.csv&#39;</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">labels_path</span><span class="p">):</span>
+            <span class="n">csvtools</span><span class="o">.</span><span class="n">csv2dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">labels_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">)</span>
 
-    <span class="nd">@staticmethod</span>
-<div class="viewcode-block" id="AddressLayer.create_shp"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.AddressLayer.create_shp">[docs]</a>    <span class="k">def</span> <span class="nf">create_shp</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">crs</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="n">QgsFields</span><span class="p">(),</span> <span class="n">geom_type</span><span class="o">=</span><span class="n">WKBPoint</span><span class="p">):</span>
+<div class="viewcode-block" id="AddressLayer.create_shp"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.AddressLayer.create_shp">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">create_shp</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">crs</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="n">QgsFields</span><span class="p">(),</span> <span class="n">geom_type</span><span class="o">=</span><span class="n">WKBPoint</span><span class="p">):</span>
         <span class="n">BaseLayer</span><span class="o">.</span><span class="n">create_shp</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">crs</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">geom_type</span><span class="p">)</span></div>
 
-    <span class="nd">@staticmethod</span>
-<div class="viewcode-block" id="AddressLayer.is_address"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.AddressLayer.is_address">[docs]</a>    <span class="k">def</span> <span class="nf">is_address</span><span class="p">(</span><span class="n">feature</span><span class="p">):</span>
+<div class="viewcode-block" id="AddressLayer.is_address"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.AddressLayer.is_address">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">is_address</span><span class="p">(</span><span class="n">feature</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Address features have &#39;.&#39; but not &#39;_&#39; in its localId field&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="s1">&#39;.&#39;</span> <span class="ow">in</span> <span class="n">feature</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="s1">&#39;_&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">feature</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">]</span></div>
 
@@ -1396,7 +1441,25 @@
             <span class="n">url</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">cadastre_doc_url</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">feat</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">14</span><span class="p">:])</span>
             <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;image&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">url</span>
             <span class="n">to_change</span><span class="p">[</span><span class="n">feat</span><span class="o">.</span><span class="n">id</span><span class="p">()]</span> <span class="o">=</span> <span class="n">get_attributes</span><span class="p">(</span><span class="n">feat</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">changeAttributeValues</span><span class="p">(</span><span class="n">to_change</span><span class="p">)</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">changeAttributeValues</span><span class="p">(</span><span class="n">to_change</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AddressLayer.get_label"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.AddressLayer.get_label">[docs]</a>    <span class="k">def</span> <span class="nf">get_label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">feat</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the zone label for this feature from the index&quot;&quot;&quot;</span>
+        <span class="n">localid</span> <span class="o">=</span> <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">][:</span><span class="mi">14</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">localid</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AddressLayer.set_tasks"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.AddressLayer.set_tasks">[docs]</a>    <span class="k">def</span> <span class="nf">set_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Assings to each address the task label of the zone in witch</span>
+<span class="sd">        it is contained.&quot;&quot;&quot;</span>
+        <span class="n">to_change</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">feat</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">():</span>
+            <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;task&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_label</span><span class="p">(</span><span class="n">feat</span><span class="p">)</span>
+            <span class="n">to_change</span><span class="p">[</span><span class="n">feat</span><span class="o">.</span><span class="n">id</span><span class="p">()]</span> <span class="o">=</span> <span class="n">get_attributes</span><span class="p">(</span><span class="n">feat</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_change</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">BUFFER_SIZE</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">changeAttributeValues</span><span class="p">(</span><span class="n">to_change</span><span class="p">)</span>
+                <span class="n">to_change</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_change</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">changeAttributeValues</span><span class="p">(</span><span class="n">to_change</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="ConsLayer"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.ConsLayer">[docs]</a><span class="k">class</span> <span class="nc">ConsLayer</span><span class="p">(</span><span class="n">PolygonLayer</span><span class="p">):</span>
@@ -1438,18 +1501,18 @@
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">labels_path</span><span class="p">):</span>
             <span class="n">csvtools</span><span class="o">.</span><span class="n">csv2dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">labels_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">)</span>
 
-    <span class="nd">@staticmethod</span>
-<div class="viewcode-block" id="ConsLayer.is_building"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.ConsLayer.is_building">[docs]</a>    <span class="k">def</span> <span class="nf">is_building</span><span class="p">(</span><span class="n">feature</span><span class="p">):</span>
+<div class="viewcode-block" id="ConsLayer.is_building"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.ConsLayer.is_building">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">is_building</span><span class="p">(</span><span class="n">feature</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Building features have not any underscore in its localId field&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="s1">&#39;_&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">feature</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">]</span></div>
 
-    <span class="nd">@staticmethod</span>
-<div class="viewcode-block" id="ConsLayer.is_part"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.ConsLayer.is_part">[docs]</a>    <span class="k">def</span> <span class="nf">is_part</span><span class="p">(</span><span class="n">feature</span><span class="p">):</span>
+<div class="viewcode-block" id="ConsLayer.is_part"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.ConsLayer.is_part">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">is_part</span><span class="p">(</span><span class="n">feature</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Part features have &#39;_part&#39; in its localId field&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="s1">&#39;_part&#39;</span> <span class="ow">in</span> <span class="n">feature</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">]</span></div>
 
-    <span class="nd">@staticmethod</span>
-<div class="viewcode-block" id="ConsLayer.is_pool"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.ConsLayer.is_pool">[docs]</a>    <span class="k">def</span> <span class="nf">is_pool</span><span class="p">(</span><span class="n">feature</span><span class="p">):</span>
+<div class="viewcode-block" id="ConsLayer.is_pool"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.ConsLayer.is_pool">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">is_pool</span><span class="p">(</span><span class="n">feature</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Pool features have &#39;_PI.&#39; in its localId field&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="s1">&#39;_PI.&#39;</span> <span class="ow">in</span> <span class="n">feature</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">]</span></div>
 
@@ -1472,56 +1535,6 @@
             <span class="n">label</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">feat</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">],</span> <span class="kc">None</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">label</span></div>
 
-<div class="viewcode-block" id="ConsLayer.get_labels"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.ConsLayer.get_labels">[docs]</a>    <span class="k">def</span> <span class="nf">get_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gml</span><span class="p">,</span> <span class="n">uzoning</span><span class="p">,</span> <span class="n">rzoning</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Builds a index of localId of features in &#39;gml&#39; vs the label of the</span>
-<span class="sd">        zone in witch the construction is contained. If the construction</span>
-<span class="sd">        overlaps many zones, take the zone with the largest intersection.</span>
-<span class="sd">        Building parts are expected to get their key from the localId of the</span>
-<span class="sd">        building. If they don&#39;t have an associated building, they get their own</span>
-<span class="sd">        localId as key.</span>
-<span class="sd">        If gml is one other constructions layer, the index is persisted to file.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">labels_path</span><span class="p">):</span>
-            <span class="k">return</span>
-        <span class="n">uindex</span> <span class="o">=</span> <span class="n">uzoning</span><span class="o">.</span><span class="n">get_index</span><span class="p">()</span>
-        <span class="n">rindex</span> <span class="o">=</span> <span class="n">rzoning</span><span class="o">.</span><span class="n">get_index</span><span class="p">()</span>
-        <span class="n">ufeatures</span> <span class="o">=</span> <span class="p">{</span><span class="n">f</span><span class="o">.</span><span class="n">id</span><span class="p">():</span> <span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">uzoning</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">()}</span>
-        <span class="n">rfeatures</span> <span class="o">=</span> <span class="p">{</span><span class="n">f</span><span class="o">.</span><span class="n">id</span><span class="p">():</span> <span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">rzoning</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">()}</span>
-        <span class="n">pbar</span> <span class="o">=</span> <span class="n">gml</span><span class="o">.</span><span class="n">get_progressbar</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Labeling&quot;</span><span class="p">),</span> <span class="n">gml</span><span class="o">.</span><span class="n">featureCount</span><span class="p">())</span>
-        <span class="k">for</span> <span class="n">feat</span> <span class="ow">in</span> <span class="n">gml</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">():</span>
-            <span class="n">localid</span> <span class="o">=</span> <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">][:</span><span class="mi">14</span><span class="p">]</span>
-            <span class="n">label</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">localid</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">label</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_part</span><span class="p">(</span><span class="n">feat</span><span class="p">):</span>
-                    <span class="n">localid</span> <span class="o">=</span> <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">]</span>
-                <span class="n">fids</span> <span class="o">=</span> <span class="n">uindex</span><span class="o">.</span><span class="n">intersects</span><span class="p">(</span><span class="n">feat</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span><span class="o">.</span><span class="n">boundingBox</span><span class="p">())</span>
-                <span class="n">zones</span> <span class="o">=</span> <span class="p">[</span>
-                    <span class="n">ufeatures</span><span class="p">[</span><span class="n">fid</span><span class="p">]</span> <span class="k">for</span> <span class="n">fid</span> <span class="ow">in</span> <span class="n">fids</span>
-                    <span class="k">if</span> <span class="n">is_inside</span><span class="p">(</span><span class="n">feat</span><span class="p">,</span> <span class="n">ufeatures</span><span class="p">[</span><span class="n">fid</span><span class="p">])</span>
-                <span class="p">]</span>
-                <span class="n">zoning</span> <span class="o">=</span> <span class="n">uzoning</span>
-                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">zones</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                    <span class="n">zoning</span> <span class="o">=</span> <span class="n">rzoning</span>
-                    <span class="n">fids</span> <span class="o">=</span> <span class="n">rindex</span><span class="o">.</span><span class="n">intersects</span><span class="p">(</span><span class="n">feat</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span><span class="o">.</span><span class="n">boundingBox</span><span class="p">())</span>
-                    <span class="n">zones</span> <span class="o">=</span> <span class="p">[</span>
-                        <span class="n">rfeatures</span><span class="p">[</span><span class="n">fid</span><span class="p">]</span> <span class="k">for</span> <span class="n">fid</span> <span class="ow">in</span> <span class="n">fids</span>
-                        <span class="k">if</span> <span class="n">is_inside</span><span class="p">(</span><span class="n">feat</span><span class="p">,</span> <span class="n">rfeatures</span><span class="p">[</span><span class="n">fid</span><span class="p">])</span>
-                    <span class="p">]</span>
-                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">zones</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                    <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;missing&#39;</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">label</span> <span class="o">=</span> <span class="n">zoning</span><span class="o">.</span><span class="n">format_label</span><span class="p">(</span><span class="n">zones</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-                    <span class="n">geom</span> <span class="o">=</span> <span class="n">feat</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span>
-                    <span class="n">parea</span> <span class="o">=</span> <span class="n">zones</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span><span class="o">.</span><span class="n">area</span><span class="p">()</span>
-                    <span class="k">for</span> <span class="n">z</span> <span class="ow">in</span> <span class="n">zones</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
-                        <span class="n">area</span> <span class="o">=</span> <span class="n">z</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span><span class="o">.</span><span class="n">area</span><span class="p">()</span>
-                        <span class="k">if</span> <span class="n">area</span> <span class="o">&gt;</span> <span class="n">parea</span><span class="p">:</span>
-                            <span class="n">parea</span> <span class="o">=</span> <span class="n">area</span>
-                            <span class="n">label</span> <span class="o">=</span> <span class="n">zoning</span><span class="o">.</span><span class="n">format_label</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">[</span><span class="n">localid</span><span class="p">]</span> <span class="o">=</span> <span class="n">label</span>
-            <span class="n">pbar</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-        <span class="n">pbar</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
-
 <div class="viewcode-block" id="ConsLayer.detect_missing_building_parts"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.ConsLayer.detect_missing_building_parts">[docs]</a>    <span class="k">def</span> <span class="nf">detect_missing_building_parts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Add a tag to parts without associated building.&quot;&quot;&quot;</span>
         <span class="n">to_change</span> <span class="o">=</span> <span class="p">{}</span>
@@ -1532,10 +1545,10 @@
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_change</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">changeAttributeValues</span><span class="p">(</span><span class="n">to_change</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ConsLayer.set_tasks"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.ConsLayer.set_tasks">[docs]</a>    <span class="k">def</span> <span class="nf">set_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">uzoning</span><span class="p">,</span> <span class="n">rzoning</span><span class="p">):</span>
+<div class="viewcode-block" id="ConsLayer.set_tasks"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.ConsLayer.set_tasks">[docs]</a>    <span class="k">def</span> <span class="nf">set_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Assings to each building and pool the task label of the zone in witch</span>
 <span class="sd">        it is contained. Parts receives the label of the building it belongs.</span>
-<span class="sd">        Parts without associated building are ignored&quot;&quot;&quot;</span>
+<span class="sd">        Parts without associated building gets a fixme&quot;&quot;&quot;</span>
         <span class="n">to_change</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">feat</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">():</span>
             <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;task&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_label</span><span class="p">(</span><span class="n">feat</span><span class="p">)</span>
@@ -1588,7 +1601,6 @@
 <div class="viewcode-block" id="ConsLayer.remove_outside_parts"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.ConsLayer.remove_outside_parts">[docs]</a>    <span class="k">def</span> <span class="nf">remove_outside_parts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Remove parts without levels above ground.</span>
-<span class="sd">        Create outline for parts without associated building.</span>
 <span class="sd">        Remove parts outside the outline of it building.</span>
 <span class="sd">        Precondition: Called before merge_greatest_part.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1607,8 +1619,6 @@
                     <span class="n">bu</span> <span class="o">=</span> <span class="n">buildings</span><span class="p">[</span><span class="n">ref</span><span class="p">]</span>
                     <span class="k">if</span> <span class="ow">not</span> <span class="n">is_inside</span><span class="p">(</span><span class="n">feat</span><span class="p">,</span> <span class="n">bu</span><span class="p">):</span>
                         <span class="n">to_clean_o</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">feat</span><span class="o">.</span><span class="n">id</span><span class="p">())</span>
-                <span class="c1"># else:</span>
-                <span class="c1">#    parts_for_ref[ref].append(feat)</span>
             <span class="n">pbar</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
         <span class="n">pbar</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">ref</span><span class="p">,</span> <span class="n">parts</span> <span class="ow">in</span> <span class="n">parts_for_ref</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -1983,7 +1993,7 @@
                 <span class="n">QgsField</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">QVariant</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="nb">len</span><span class="o">=</span><span class="mi">254</span><span class="p">),</span>
             <span class="p">])</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">updateFields</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">setCrs</span><span class="p">(</span><span class="n">QgsCoordinateReferenceSystem_fromEpsgId</span><span class="p">(</span><span class="mi">4326</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setCrs</span><span class="p">(</span><span class="n">QgsCoordinateReferenceSystem</span><span class="o">.</span><span class="n">fromEpsgId</span><span class="p">(</span><span class="mi">4326</span><span class="p">))</span>
 
 <div class="viewcode-block" id="HighwayLayer.read_from_osm"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.HighwayLayer.read_from_osm">[docs]</a>    <span class="k">def</span> <span class="nf">read_from_osm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get features from a osm dataset&quot;&quot;&quot;</span>
@@ -2020,9 +2030,7 @@
         <span class="p">)</span>
         <span class="n">fields</span> <span class="o">=</span> <span class="n">QgsFields</span><span class="p">()</span>
         <span class="n">fields</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">QgsField</span><span class="p">(</span><span class="s2">&quot;note&quot;</span><span class="p">,</span> <span class="n">QVariant</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="nb">len</span><span class="o">=</span><span class="mi">100</span><span class="p">))</span>
-        <span class="n">writer</span> <span class="o">=</span> <span class="n">QgsVectorFileWriter_create</span><span class="p">(</span>
-            <span class="n">fpath</span><span class="p">,</span> <span class="n">layer</span><span class="o">.</span><span class="n">crs</span><span class="p">(),</span> <span class="n">fields</span><span class="p">,</span> <span class="n">geom_type</span>
-        <span class="p">)</span>
+        <span class="n">writer</span> <span class="o">=</span> <span class="n">BaseLayer</span><span class="o">.</span><span class="n">get_writer</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="n">layer</span><span class="o">.</span><span class="n">crs</span><span class="p">(),</span> <span class="n">fields</span><span class="p">,</span> <span class="n">geom_type</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="n">fields</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">writer</span> <span class="o">=</span> <span class="n">writer</span>
 
@@ -2053,8 +2061,9 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 1.9.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">catatom2osm.layer</a></li> 
       </ul>
     </div>
 <script type="text/javascript">

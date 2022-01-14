@@ -1,306 +1,225 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Coverage report</title>
-    <link rel='stylesheet' href='style.css' type='text/css'>
-    
-    <script type='text/javascript' src='jquery.min.js'></script>
-    <script type='text/javascript' src='jquery.tablesorter.min.js'></script>
-    <script type='text/javascript' src='jquery.hotkeys.js'></script>
-    <script type='text/javascript' src='coverage_html.js'></script>
-    <script type='text/javascript' charset='utf-8'>
-        jQuery(document).ready(coverage.index_ready);
-    </script>
+    <link rel="icon" sizes="32x32" href="favicon_32.png">
+    <link rel="stylesheet" href="style.css" type="text/css">
+    <script type="text/javascript" src="coverage_html.js" defer></script>
 </head>
-<body id='indexfile'>
-
-<div id='header'>
-    <div class='content'>
+<body class="indexfile">
+<header>
+    <div class="content">
         <h1>Coverage report:
-            <span class='pc_cov'>88%</span>
+            <span class="pc_cov">86%</span>
         </h1>
-        <img id='keyboard_icon' src='keybd_closed.png'>
+        <div id="help_panel_wrapper">
+            <input id="help_panel_state" type="checkbox">
+            <label for="help_panel_state">
+                <img id="keyboard_icon" src="keybd_closed.png" alt="Show/hide keyboard shortcuts" />
+            </label>
+            <div id="help_panel">
+                <p class="legend">Shortcuts on this page</p>
+                <div>
+                    <p class="keyhelp">
+                        <kbd>n</kbd>
+                        <kbd>s</kbd>
+                        <kbd>m</kbd>
+                        <kbd>x</kbd>
+                        <kbd>b</kbd>
+                        <kbd>p</kbd>
+                        <kbd>c</kbd> &nbsp; change column sorting
+                    </p>
+                </div>
+            </div>
+        </div>
+        <form id="filter_container">
+            <input id="filter" type="text" value="" placeholder="filter..." />
+        </form>
     </div>
-</div>
-
-<div class='help_panel'>
-    <img id='panel_icon' src='keybd_open.png'>
-    <p class='legend'>Hot-keys on this page</p>
-    <div>
-    <p class='keyhelp'>
-        <span class='key'>n</span>
-        <span class='key'>s</span>
-        <span class='key'>m</span>
-        <span class='key'>x</span>
-        
-        <span class='key'>b</span>
-        <span class='key'>p</span>
-        
-        <span class='key'>c</span> &nbsp; change column sorting
-    </p>
-    </div>
-</div>
-
-<div id='index'>
-    <table class='index'>
+</header>
+<main id="index">
+    <table class="index" data-sortable>
         <thead>
-            
-            <tr class='tablehead' title='Click to sort'>
-                <th class='name left headerSortDown shortkey_n'>Module</th>
-                <th class='shortkey_s'>statements</th>
-                <th class='shortkey_m'>missing</th>
-                <th class='shortkey_x'>excluded</th>
-                
-                <th class='shortkey_b'>branches</th>
-                <th class='shortkey_p'>partial</th>
-                
-                <th class='right shortkey_c'>coverage</th>
+            <tr class="tablehead" title="Click to sort">
+                <th class="name left" aria-sort="none" data-shortcut="n">Module</th>
+                <th aria-sort="none" data-default-sort-order="descending" data-shortcut="s">statements</th>
+                <th aria-sort="none" data-default-sort-order="descending" data-shortcut="m">missing</th>
+                <th aria-sort="none" data-default-sort-order="descending" data-shortcut="x">excluded</th>
+                <th aria-sort="none" data-default-sort-order="descending" data-shortcut="b">branches</th>
+                <th aria-sort="none" data-default-sort-order="descending" data-shortcut="p">partial</th>
+                <th class="right" aria-sort="none" data-shortcut="c">coverage</th>
             </tr>
         </thead>
-        
-        <tfoot>
-            <tr class='total'>
-                <td class='name left'>Total</td>
-                <td>3306</td>
-                <td>353</td>
-                <td>42</td>
-                
-                <td>1451</td>
-                <td>138</td>
-                
-                <td class='right'>88%</td>
-            </tr>
-        </tfoot>
         <tbody>
-            
-            <tr class='file'>
-                <td class='name left'><a href='catatom2osm___init__.html'>catatom2osm/__init__</a></td>
+            <tr class="file">
+                <td class="name left"><a href="d_f1c4ef55eb485435___init___py.html">catatom2osm/__init__.py</a></td>
                 <td>2</td>
                 <td>0</td>
                 <td>0</td>
-                
                 <td>0</td>
                 <td>0</td>
-                
-                <td class='right'>100%</td>
+                <td class="right" data-ratio="2 2">100%</td>
             </tr>
-            
-            <tr class='file'>
-                <td class='name left'><a href='catatom2osm___main__.html'>catatom2osm/__main__</a></td>
-                <td>86</td>
+            <tr class="file">
+                <td class="name left"><a href="d_f1c4ef55eb485435___main___py.html">catatom2osm/__main__.py</a></td>
+                <td>70</td>
                 <td>0</td>
                 <td>2</td>
-                
-                <td>30</td>
-                <td>1</td>
-                
-                <td class='right'>99%</td>
-            </tr>
-            
-            <tr class='file'>
-                <td class='name left'><a href='catatom2osm_app.html'>catatom2osm/app</a></td>
-                <td>552</td>
-                <td>127</td>
+                <td>24</td>
                 <td>0</td>
-                
-                <td>259</td>
-                <td>44</td>
-                
-                <td class='right'>73%</td>
+                <td class="right" data-ratio="94 94">100%</td>
             </tr>
-            
-            <tr class='file'>
-                <td class='name left'><a href='catatom2osm_catatom.html'>catatom2osm/catatom</a></td>
-                <td>187</td>
-                <td>7</td>
+            <tr class="file">
+                <td class="name left"><a href="d_f1c4ef55eb485435_app_py.html">catatom2osm/app.py</a></td>
+                <td>571</td>
+                <td>152</td>
                 <td>0</td>
-                
+                <td>266</td>
+                <td>38</td>
+                <td class="right" data-ratio="577 837">69%</td>
+            </tr>
+            <tr class="file">
+                <td class="name left"><a href="d_f1c4ef55eb485435_catatom_py.html">catatom2osm/catatom.py</a></td>
+                <td>185</td>
+                <td>10</td>
+                <td>0</td>
                 <td>62</td>
-                <td>2</td>
-                
-                <td class='right'>96%</td>
+                <td>3</td>
+                <td class="right" data-ratio="234 247">95%</td>
             </tr>
-            
-            <tr class='file'>
-                <td class='name left'><a href='catatom2osm_cbcn.html'>catatom2osm/cbcn</a></td>
+            <tr class="file">
+                <td class="name left"><a href="d_f1c4ef55eb485435_cbcn_py.html">catatom2osm/cbcn.py</a></td>
                 <td>1</td>
                 <td>1</td>
                 <td>0</td>
-                
                 <td>0</td>
                 <td>0</td>
-                
-                <td class='right'>0%</td>
+                <td class="right" data-ratio="0 1">0%</td>
             </tr>
-            
-            <tr class='file'>
-                <td class='name left'><a href='catatom2osm_cdau.html'>catatom2osm/cdau</a></td>
-                <td>146</td>
+            <tr class="file">
+                <td class="name left"><a href="d_f1c4ef55eb485435_cdau_py.html">catatom2osm/cdau.py</a></td>
+                <td>141</td>
                 <td>56</td>
                 <td>0</td>
-                
                 <td>48</td>
                 <td>0</td>
-                
-                <td class='right'>60%</td>
+                <td class="right" data-ratio="111 189">59%</td>
             </tr>
-            
-            <tr class='file'>
-                <td class='name left'><a href='catatom2osm_compat.html'>catatom2osm/compat</a></td>
-                <td>28</td>
-                <td>3</td>
-                <td>15</td>
-                
-                <td>6</td>
-                <td>1</td>
-                
-                <td class='right'>88%</td>
-            </tr>
-            
-            <tr class='file'>
-                <td class='name left'><a href='catatom2osm_config.html'>catatom2osm/config</a></td>
-                <td>91</td>
-                <td>3</td>
-                <td>0</td>
-                
-                <td>6</td>
-                <td>1</td>
-                
-                <td class='right'>96%</td>
-            </tr>
-            
-            <tr class='file'>
-                <td class='name left'><a href='catatom2osm_csvtools.html'>catatom2osm/csvtools</a></td>
-                <td>25</td>
+            <tr class="file">
+                <td class="name left"><a href="d_f1c4ef55eb485435_config_py.html">catatom2osm/config.py</a></td>
+                <td>87</td>
                 <td>1</td>
                 <td>0</td>
-                
+                <td>8</td>
+                <td>1</td>
+                <td class="right" data-ratio="93 95">98%</td>
+            </tr>
+            <tr class="file">
+                <td class="name left"><a href="d_f1c4ef55eb485435_csvtools_py.html">catatom2osm/csvtools.py</a></td>
+                <td>21</td>
+                <td>1</td>
+                <td>0</td>
                 <td>12</td>
                 <td>1</td>
-                
-                <td class='right'>95%</td>
+                <td class="right" data-ratio="31 33">94%</td>
             </tr>
-            
-            <tr class='file'>
-                <td class='name left'><a href='catatom2osm_download.html'>catatom2osm/download</a></td>
-                <td>27</td>
+            <tr class="file">
+                <td class="name left"><a href="d_f1c4ef55eb485435_download_py.html">catatom2osm/download.py</a></td>
+                <td>25</td>
                 <td>0</td>
                 <td>0</td>
-                
                 <td>8</td>
                 <td>0</td>
-                
-                <td class='right'>100%</td>
+                <td class="right" data-ratio="33 33">100%</td>
             </tr>
-            
-            <tr class='file'>
-                <td class='name left'><a href='catatom2osm_hgwnames.html'>catatom2osm/hgwnames</a></td>
-                <td>59</td>
+            <tr class="file">
+                <td class="name left"><a href="d_f1c4ef55eb485435_hgwnames_py.html">catatom2osm/hgwnames.py</a></td>
+                <td>56</td>
                 <td>2</td>
                 <td>0</td>
-                
-                <td>26</td>
+                <td>28</td>
                 <td>0</td>
-                
-                <td class='right'>98%</td>
+                <td class="right" data-ratio="82 84">98%</td>
             </tr>
-            
-            <tr class='file'>
-                <td class='name left'><a href='catatom2osm_layer.html'>catatom2osm/layer</a></td>
-                <td>1284</td>
-                <td>124</td>
+            <tr class="file">
+                <td class="name left"><a href="d_f1c4ef55eb485435_layer_py.html">catatom2osm/layer.py</a></td>
+                <td>1333</td>
+                <td>168</td>
                 <td>23</td>
-                
-                <td>583</td>
+                <td>627</td>
                 <td>66</td>
-                
-                <td class='right'>88%</td>
+                <td class="right" data-ratio="1674 1960">85%</td>
             </tr>
-            
-            <tr class='file'>
-                <td class='name left'><a href='catatom2osm_osm.html'>catatom2osm/osm</a></td>
-                <td>357</td>
+            <tr class="file">
+                <td class="name left"><a href="d_f1c4ef55eb485435_osm_py.html">catatom2osm/osm.py</a></td>
+                <td>375</td>
+                <td>2</td>
                 <td>0</td>
-                <td>0</td>
-                
-                <td>156</td>
-                <td>7</td>
-                
-                <td class='right'>99%</td>
+                <td>174</td>
+                <td>6</td>
+                <td class="right" data-ratio="541 549">99%</td>
             </tr>
-            
-            <tr class='file'>
-                <td class='name left'><a href='catatom2osm_osmxml.html'>catatom2osm/osmxml</a></td>
-                <td>122</td>
+            <tr class="file">
+                <td class="name left"><a href="d_f1c4ef55eb485435_osmxml_py.html">catatom2osm/osmxml.py</a></td>
+                <td>118</td>
                 <td>1</td>
                 <td>2</td>
-                
-                <td>84</td>
+                <td>86</td>
                 <td>3</td>
-                
-                <td class='right'>98%</td>
+                <td class="right" data-ratio="200 204">98%</td>
             </tr>
-            
-            <tr class='file'>
-                <td class='name left'><a href='catatom2osm_overpass.html'>catatom2osm/overpass</a></td>
-                <td>51</td>
-                <td>0</td>
-                <td>0</td>
-                
-                <td>16</td>
-                <td>0</td>
-                
-                <td class='right'>100%</td>
-            </tr>
-            
-            <tr class='file'>
-                <td class='name left'><a href='catatom2osm_qgiscompat.html'>catatom2osm/qgiscompat</a></td>
+            <tr class="file">
+                <td class="name left"><a href="d_f1c4ef55eb485435_overpass_py.html">catatom2osm/overpass.py</a></td>
                 <td>49</td>
-                <td>19</td>
                 <td>0</td>
-                
-                <td>4</td>
-                <td>1</td>
-                
-                <td class='right'>58%</td>
+                <td>0</td>
+                <td>18</td>
+                <td>0</td>
+                <td class="right" data-ratio="67 67">100%</td>
             </tr>
-            
-            <tr class='file'>
-                <td class='name left'><a href='catatom2osm_report.html'>catatom2osm/report</a></td>
-                <td>182</td>
-                <td>9</td>
+            <tr class="file">
+                <td class="name left"><a href="d_f1c4ef55eb485435_report_py.html">catatom2osm/report.py</a></td>
+                <td>180</td>
+                <td>8</td>
                 <td>0</td>
-                
-                <td>119</td>
-                <td>11</td>
-                
-                <td class='right'>93%</td>
+                <td>118</td>
+                <td>6</td>
+                <td class="right" data-ratio="284 298">95%</td>
             </tr>
-            
-            <tr class='file'>
-                <td class='name left'><a href='catatom2osm_translate.html'>catatom2osm/translate</a></td>
-                <td>57</td>
+            <tr class="file">
+                <td class="name left"><a href="d_f1c4ef55eb485435_translate_py.html">catatom2osm/translate.py</a></td>
+                <td>55</td>
                 <td>0</td>
                 <td>0</td>
-                
-                <td>32</td>
+                <td>35</td>
                 <td>0</td>
-                
-                <td class='right'>100%</td>
+                <td class="right" data-ratio="90 90">100%</td>
             </tr>
-            
         </tbody>
+        <tfoot>
+            <tr class="total">
+                <td class="name left">Total</td>
+                <td>3269</td>
+                <td>402</td>
+                <td>27</td>
+                <td>1514</td>
+                <td>124</td>
+                <td class="right" data-ratio="4113 4783">86%</td>
+            </tr>
+        </tfoot>
     </table>
-</div>
-
-<div id='footer'>
-    <div class='content'>
+    <p id="no_rows">
+        No items found using the specified filter.
+    </p>
+</main>
+<footer>
+    <div class="content">
         <p>
-            <a class='nav' href='http://nedbatchelder.com/code/coverage'>coverage.py v3.7.1</a>
+            <a class="nav" href="https://coverage.readthedocs.io">coverage.py v6.1.2</a>,
+            created at 2022-01-14 16:03 +0000
         </p>
     </div>
-</div>
-
+</footer>
 </body>
 </html>

@@ -1,7 +1,7 @@
-test.test_cdau module
-=====================
+test.test\_cdau module
+======================
 
 .. automodule:: test.test_cdau
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:

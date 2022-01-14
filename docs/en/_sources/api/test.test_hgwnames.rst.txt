@@ -1,7 +1,7 @@
-test.test_hgwnames module
-=========================
+test.test\_hgwnames module
+==========================
 
 .. automodule:: test.test_hgwnames
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:

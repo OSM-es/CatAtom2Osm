@@ -1,7 +1,7 @@
-test.test_osm module
-====================
+test.test\_osm module
+=====================
 
 .. automodule:: test.test_osm
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:

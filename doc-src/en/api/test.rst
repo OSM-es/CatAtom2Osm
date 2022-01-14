@@ -5,6 +5,7 @@ Submodules
 ----------
 
 .. toctree::
+   :maxdepth: 4
 
    test.test_app
    test.test_catatom
@@ -27,6 +28,6 @@ Module contents
 ---------------
 
 .. automodule:: test
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
