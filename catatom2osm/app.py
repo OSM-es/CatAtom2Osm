@@ -146,7 +146,6 @@ class CatAtom2Osm(object):
             self.process_tasks(self.labels_layer)
         if self.options.address:
             self.delete_shp('address')
-            report.address_stats(self.address_osm)
             self.write_osm(self.address_osm, 'address.osm')
             del self.address_osm
         self.output_zoning()
@@ -809,7 +808,7 @@ class CatAtom2Osm(object):
     def move_project(self):
         """
         Move to tasks all files needed for the project for backup in the
-        repository. Rename folder if it's a split municipality.
+        repository. Use a subdirectory if it's a split municipality.
         """
         prj_files = [
             'address.osm', 'address.geojson', 'current_address.osm',

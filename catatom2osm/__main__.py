@@ -9,11 +9,11 @@ log = config.log
 
 
 usage = _("""catatom2osm [OPTION]... [PATHS]
-  The argument PATHS states for folders to process municipalities.
-  The last folder in each path shall be 5 digits (GGMMM) matching the Cadastral
-  codes for Provincial Office (GG) and Municipality (MMM). If the program don't
-  find the input files it will download them for you from the INSPIRE Services
-  of the Spanish Cadastre.""")
+  The argument PATHS states for directories to process municipalities. The last 
+  directory in each path shall be 5 digits (GGMMM) matching the Cadastral codes
+  for Provincial Office (GG) and Municipality (MMM). If the program don't find
+  the input files it will download them for you from the INSPIRE Services of
+  the Spanish Cadastre.""")
 
 examples = _("""Examples:
   catatom2osm 05015
