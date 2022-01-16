@@ -370,19 +370,19 @@ class TestBaseLayer2(unittest.TestCase):
         mock_fw.NoError = QgsVectorFileWriter.NoError
         self.assertTrue(layer.export('foobar'))
         mock_fw.deleteShapeFile.assert_called_once_with('foobar')
-        mock_wvf.assert_called_once_with('foobar', 'ESRI Shapefile')
+        mock_wvf.assert_called_once_with('foobar', 'ESRI Shapefile', layer.crs())
 
+    @mock.patch('catatom2osm.layer.QgsVectorFileWriter', mock.MagicMock())
     @mock.patch('catatom2osm.layer.BaseLayer.writeAsVectorFormat')
     @mock.patch('catatom2osm.layer.QgsCoordinateReferenceSystem.fromEpsgId')
-    @mock.patch('catatom2osm.layer.QgsVectorFileWriter')
     @mock.patch('catatom2osm.layer.os')
-    def test_export_other(self, mock_os, mock_fw, mock_crs, mock_wvf):
+    def test_export_other(self, mock_os, mock_crs, mock_wvf):
         layer = BaseLayer("Polygon", "test", "memory")
         mock_os.path.exists.side_effect = lambda arg: arg=='foobar'
         layer.export('foobar', 'foo', target_crs_id=1234)
         crs = mock_crs.return_value
         mock_crs.assert_called_once_with(1234)
-        mock_wvf.assert_called_once_with('foobar', 'foo')
+        mock_wvf.assert_called_once_with('foobar', 'foo', crs)
         mock_os.remove.assert_called_once_with('foobar')
         layer.export('foobar', 'foo', overwrite=False)
         mock_os.remove.assert_called_once_with('foobar')

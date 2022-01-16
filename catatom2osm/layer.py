@@ -268,11 +268,17 @@ class BaseLayer(QgsVectorLayer):
         prj = QgsProject.instance()
         return QgsCoordinateTransform(source_crs, target_crs, prj)
 
-    def writeAsVectorFormat(self, name, driver_name):
+    def writeAsVectorFormat(self, name, driver_name, target_crs=None):
         transform_context = QgsProject.instance().transformContext()
         save_options = QgsVectorFileWriter.SaveVectorOptions()
         save_options.driverName = driver_name
         save_options.fileEncoding = "UTF-8"
+        if target_crs is not None or target_crs != self.crs():
+            save_options.ct = QgsCoordinateTransform(
+                self.crs(),
+                QgsCoordinateReferenceSystem(target_crs),
+                transform_context,
+            )
         return QgsVectorFileWriter.writeAsVectorFormatV2(
             self, name, transform_context, save_options
         )
@@ -545,15 +551,15 @@ class BaseLayer(QgsVectorLayer):
             target_crs_id (int): Defaults to source CRS
         """
         if target_crs_id is None:
-            target_crs = self.crs() 
+            target_crs = self.crs()
         else:
-             target_crs = QgsCoordinateReferenceSystem.fromEpsgId(target_crs_id)
+            target_crs = QgsCoordinateReferenceSystem.fromEpsgId(target_crs_id)
         if os.path.exists(path) and overwrite:
             if driver_name == 'ESRI Shapefile':
                 QgsVectorFileWriter.deleteShapeFile(path)
             else:
                 os.remove(path)
-        result = self.writeAsVectorFormat(path, driver_name)
+        result = self.writeAsVectorFormat(path, driver_name, target_crs)
         try:
             return result[0] == QgsVectorFileWriter.NoError
         except TypeError:
