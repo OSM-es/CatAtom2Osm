@@ -93,6 +93,7 @@ class CatAtom2Osm(object):
             if not self.split.isValid():
                 raise IOError("Can't open %s" % self.options.split)
         self.is_new = not os.path.exists(self.highway_names_path)
+        self.move = False
 
     @staticmethod
     def create_and_run(a_path, options):
@@ -150,7 +151,7 @@ class CatAtom2Osm(object):
             del self.address_osm
         self.output_zoning()
         if not self.is_new:
-            self.move_project()
+            self.move = True
         self.end_messages()
 
     def list_zones(self):
@@ -496,6 +497,8 @@ class CatAtom2Osm(object):
         if options.building and not self.options.zoning:
             report.cons_end_stats()
         report.to_file(self.cat.get_path('report.txt'))
+        if self.move:
+            self.move_project()
         if self.options.address and self.is_new and not self.options.zoning:
             msg = (
                 _("Generated '%s'") + '. ' + _("Please, check it and run again")
