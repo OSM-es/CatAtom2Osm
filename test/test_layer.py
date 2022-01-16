@@ -1047,7 +1047,7 @@ class TestConsLayer(unittest.TestCase):
         address.append(address_gml)
         self.assertEqual(address.featureCount(), 14)
         self.layer.move_address(address)
-        self.assertEqual(address.featureCount(), 6)
+        self.assertEqual(address.featureCount(), 7)
         for ad in address.getFeatures():
             if ad['localId'] in list(refs.keys()):
                 self.assertEqual(ad['spec'], refs[ad['localId']])

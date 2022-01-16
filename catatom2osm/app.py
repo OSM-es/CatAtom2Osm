@@ -306,7 +306,6 @@ class CatAtom2Osm(object):
                         self.merge_address(task_osm, self.address_osm)
                     report.address_stats(task_osm)
                     report.cons_stats(task_osm, label)
-                    print(label, len([el for el in task_osm.elements if 'building' in el.tags]))
                     self.write_osm(task_osm, tasks_folder, label + '.osm.gz')
                     report.osm_stats(task_osm)
                 else:
@@ -691,12 +690,17 @@ class CatAtom2Osm(object):
                 md += address_count
                 continue
             for ad in address_index[ref]:
-                bu = group[0]
                 entrance = False
                 if 'entrance' in ad.tags:
-                    outline = [bu] if isinstance(bu, osm.Way) \
-                        else [m.element for m in bu.members if
-                              m.role == 'outer']
+                    outline = []
+                    for bu in group:
+                        if isinstance(bu, osm.Way):
+                            outline.append(bu)
+                        else:
+                            outline += [
+                                m.element for m in bu.members
+                                if m.role == 'outer'
+                            ]
                     for w in outline:
                         entrance = w.search_node(ad.x, ad.y)
                         if entrance:
@@ -705,8 +709,10 @@ class CatAtom2Osm(object):
                             entrance.tags.pop('image', None)
                             break
                 if not entrance:
+                    bu = group[0]
                     bu.tags.update(ad.tags)
                     bu.tags.pop('image', None)
+
         if md > 0:
             log.debug(
                 _("Refused %d 'parcel' addresses not unique for it building"),

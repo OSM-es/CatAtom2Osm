@@ -397,8 +397,8 @@ class TestCatAtom2Osm(unittest.TestCase):
         self.m_app.get_auxiliary_addresses(self.m_app)
         m_cdau.Reader.assert_called_once_with(os.path.join('/foo', config.aux_path))
 
-    @mock.patch('catatom2osm.app.report')
-    def test_merge_address(self, m_report):
+    @mock.patch('catatom2osm.app.report', mock.MagicMock())
+    def test_merge_address(self):
         address = osm.Osm()
         address.Node(0,0, {'ref': '1', 'addr:street': 'address1', 'image': 'foo'})
         address.Node(2,0, {'ref': '2', 'addr:street': 'address2', 'entrance': 'yes', 'image': 'bar'})

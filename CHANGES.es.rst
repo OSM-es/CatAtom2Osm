@@ -1,7 +1,12 @@
 Registro de cambios
 ===================
 
-** 10-1-2021 (2.0.0)**
+** 2021-1-16 (2.1.0)**
+* Añade direcciones tipo entrada asociadas a varios edificios
+* Corrige error moviendo proyecto
+* Corrige error por mantener shapefiles en modo depuración
+
+** 14-1-2021 (2.0.0)**
 * Actualiza a Ubuntu 20.04 / QGIS3 / python3 #67.
 * Simplifica la interfaz de línea de comandos.
 * Permite procesar sólo direcciones por tareas (-d).

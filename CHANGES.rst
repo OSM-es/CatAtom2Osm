@@ -1,7 +1,12 @@
 Change log
 ==========
 
-** 2021-1-10 (2.0.0)**
+** 16-1-2021 (2.1.0)**
+* Add entrance addresses associated with multiple buildings
+* Fix bug moving the project
+* Fix bug for keeping shapefiles in debug mode
+
+** 2021-1-14 (2.0.0)**
 * Update to Ubuntu 20.04 / QGIS3 / python3 #67.
 * Simplify CLI.
 * Allow to process tasks for addresses only (-d).

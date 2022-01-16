@@ -1745,16 +1745,54 @@ class ConsLayer(PolygonLayer):
         self.merge_building_parts()
         self.simplify()
 
+    def move_entrance(self, ad, ad_buildings, ad_parts, to_move, to_insert):
+        """
+        Auxiliary method to move entrance to the nearest building and part.
+        Don't move and the entrance specification is changed if the new
+        position is not enough close ('remote'), is a corner ('corner') or
+        is in an inner ring ('inner').
+        """
+        point = ad.geometry().asPoint()
+        distance = 9E9
+        for bu in ad_buildings:
+            bg = bu.geometry()
+            d, c, v = bg.closestSegmentWithContext(point)[:3]
+            if d < distance:
+                (building, distance, closest, vertex) = (bu, d, c, v)
+        va = Point(bg.vertexAt(vertex - 1))
+        vb = Point(bg.vertexAt(vertex))
+        if distance > config.addr_thr ** 2:
+            ad['spec'] = 'remote'
+        else:
+            if vertex > len(Geometry.get_multipolygon(bg)[0][0]):
+                ad['spec'] = 'inner'
+            elif closest.sqrDist(va) < config.entrance_thr ** 2 \
+                    or closest.sqrDist(vb) < config.entrance_thr ** 2:
+                ad['spec'] = 'corner'
+            else:
+                dg = Geometry.fromPointXY(closest)
+                to_move[ad.id()] = dg
+                bg = building.geometry()
+                bg.insertVertex(closest.x(), closest.y(), vertex)
+                to_insert[building.id()] = QgsGeometry(bg)
+                for part in ad_parts:
+                    pg = part.geometry()
+                    r = Geometry.get_multipolygon(pg)[0][0]
+                    for i in range(len(r) - 1):
+                        vpa = Point(pg.vertexAt(i))
+                        vpb = Point(pg.vertexAt(i + 1))
+                        if va in (vpa, vpb) and vb in (vpa, vpb):
+                            pg.insertVertex(closest.x(), closest.y(), i + 1)
+                            to_insert[part.id()] = QgsGeometry(pg)
+                            break
+
     def move_address(self, address):
         """
-        Move each address to the nearest point in the outline of its
-        associated building (same cadastral reference), but only if:
-
-        * The address specification is Entrance.
-
-        * The new position is enough close and is not a corner
-        
-        Delete the address if the number of associated buildings is not one.
+        Try to move each entrance address to the nearest point in the outline
+        of its associated building (same cadastral reference). Non entrance
+        addresses ends in the building outline when CatAtom2Osm.merge_address
+        is called. Delete the address if the number of associated buildings
+        is 0 or greater than 1 for non entrance addresses.
         """
         to_change = {}
         to_move = {}
@@ -1766,47 +1804,22 @@ class ConsLayer(PolygonLayer):
         for ad in address.getFeatures():
             refcat = ad['localId'].split('.')[-1]
             building_count = 0 if refcat not in buildings else len(buildings[refcat])
-            if building_count == 1:
-                building = buildings[refcat][0]
-                it_parts = parts[refcat]
-                if ad['spec'] == 'Entrance':
-                    point = ad.geometry().asPoint()
-                    bg = building.geometry()
-                    distance, closest, vertex = bg.closestSegmentWithContext(point)[:3]
-                    va = Point(bg.vertexAt(vertex - 1))
-                    vb = Point(bg.vertexAt(vertex))
-                    if distance < config.addr_thr**2:
-                        if vertex > len(Geometry.get_multipolygon(bg)[0][0]):
-                            ad['spec'] = 'inner'
-                            to_change[ad.id()] = get_attributes(ad)
-                        elif closest.sqrDist(va) < config.entrance_thr**2 \
-                                or closest.sqrDist(vb) < config.entrance_thr**2:
-                            ad['spec'] = 'corner'
-                            to_change[ad.id()] = get_attributes(ad)
-                        else:
-                            dg = Geometry.fromPointXY(closest)
-                            to_move[ad.id()] = dg
-                            bg.insertVertex(closest.x(), closest.y(), vertex)
-                            to_insert[building.id()] = QgsGeometry(bg)
-                            for part in it_parts:
-                                pg = part.geometry()
-                                r = Geometry.get_multipolygon(pg)[0][0]
-                                for i in range(len(r) - 1):
-                                    vpa = Point(pg.vertexAt(i))
-                                    vpb = Point(pg.vertexAt(i + 1))
-                                    if va in (vpa, vpb) and vb in (vpa, vpb):
-                                        pg.insertVertex(closest.x(), closest.y(), i+1)
-                                        to_insert[part.id()] = QgsGeometry(pg)
-                                        break
-                    else:
-                        ad['spec'] = 'remote'
-                        to_change[ad.id()] = get_attributes(ad)
-            else:
+            ad_buildings = buildings[refcat]
+            ad_parts = parts[refcat]
+            if building_count == 0:
                 to_clean.append(ad.id())
-                if building_count == 0:
-                    oa += 1
-                else:
+                oa += 1
+            elif building_count > 1:
+                if ad['spec'] == 'Entrance':
+                    self.move_entrance(ad, ad_buildings, ad_parts, to_move, to_insert)
+                if ad['spec'] != 'Entrance':
+                    to_clean.append(ad.id())
                     mp += 1
+            else:
+                if ad['spec'] == 'Entrance':
+                    self.move_entrance(ad, ad_buildings, ad_parts, to_move, to_insert)
+                if ad['spec'] not in ['Entrance', 'Parcel']:
+                   to_change[ad.id()] = get_attributes(ad)
         address.writer.changeAttributeValues(to_change)
         address.writer.changeGeometryValues(to_move)
         self.writer.changeGeometryValues(to_insert)
