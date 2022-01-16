@@ -1759,6 +1759,7 @@ class ConsLayer(PolygonLayer):
             d, c, v = bg.closestSegmentWithContext(point)[:3]
             if d < distance:
                 (building, distance, closest, vertex) = (bu, d, c, v)
+        bg = building.geometry()
         va = Point(bg.vertexAt(vertex - 1))
         vb = Point(bg.vertexAt(vertex))
         if distance > config.addr_thr ** 2:
@@ -1772,7 +1773,6 @@ class ConsLayer(PolygonLayer):
             else:
                 dg = Geometry.fromPointXY(closest)
                 to_move[ad.id()] = dg
-                bg = building.geometry()
                 bg.insertVertex(closest.x(), closest.y(), vertex)
                 to_insert[building.id()] = QgsGeometry(bg)
                 for part in ad_parts:
