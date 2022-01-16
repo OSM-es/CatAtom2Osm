@@ -305,6 +305,7 @@ class CatAtom2Osm(object):
                         self.merge_address(task_osm, self.address_osm)
                     report.address_stats(task_osm)
                     report.cons_stats(task_osm, label)
+                    print(label, len([el for el in task_osm.elements if 'building' in el.tags]))
                     self.write_osm(task_osm, tasks_folder, label + '.osm.gz')
                     report.osm_stats(task_osm)
                 else:
@@ -801,8 +802,7 @@ class CatAtom2Osm(object):
             return
         fn = lyr.writer.dataSourceUri().split('|')[0]
         is_shp = str(fn.lower().endswith('.shp'))
-        not_debug = log.getEffectiveLevel() > logging.DEBUG
-        if is_shp and not_debug and not lyr.keep:
+        if is_shp and not lyr.keep:
             layer.BaseLayer.delete_shp(fn)
 
     def move_project(self):
