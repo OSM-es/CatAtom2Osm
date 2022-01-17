@@ -19,14 +19,6 @@ MIN_QGIS_VERSION = '2.10.1'
 MIN_GDAL_VERSION_INT = 11103
 MIN_GDAL_VERSION = '1.11.3'
 
-def winenv():
-    global eol, encoding
-    eol = '\n'
-    if platform.startswith('win'):
-        eol = '\r\n'
-        if os.getenv('LANG') is None:
-            os.environ['LANG'] = language
-
 def install_gettext(app_name, localedir):
     try:
         gettext.install(app_name.lower(), localedir=localedir, unicode=1)
@@ -35,14 +27,13 @@ def install_gettext(app_name, localedir):
     gettext.bindtextdomain('argparse', localedir)
     gettext.textdomain('argparse')
 
-#locale.setlocale(locale.LC_ALL, '')
 language, encoding = locale.getdefaultlocale()
 language = language or 'es_ES'
 encoding = encoding or 'UTF-8'
 app_path = os.path.dirname(__file__)
 localedir = os.path.join(os.path.dirname(app_path), 'locale', 'po')
 platform = sys.platform
-winenv()
+eol = '\n'
 
 install_gettext(app_name, localedir)
 

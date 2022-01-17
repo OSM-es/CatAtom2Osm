@@ -3,8 +3,7 @@ CSV related help functions
 """
 import csv
 import io
-import six
-from catatom2osm.config import eol, encoding, delimiter
+from catatom2osm.config import encoding, delimiter
 
 
 def dict2csv(csv_path, a_dict, sort=None):
@@ -26,8 +25,5 @@ def csv2dict(csv_path, a_dict, encoding=encoding):
         for row in csv_reader:
             if len(row) < 2:
                 raise IOError(_("Failed to load CSV file '%s'") % csv_file.name)
-            elif six.PY2:
-                a_dict[row[0].decode(encoding)] = row[1].decode(encoding)
-            else:
-                a_dict[row[0]] = row[1]
+            a_dict[row[0]] = row[1]
     return a_dict
