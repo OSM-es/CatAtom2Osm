@@ -1807,6 +1807,7 @@ class ConsLayer(PolygonLayer):
         mp = 0
         oa = 0
         (buildings, parts) = self.index_of_building_and_parts()
+        pbar = self.get_progressbar(_("Move addresses"), address.featureCount())
         for ad in address.getFeatures():
             refcat = ad['localId'].split('.')[-1]
             building_count = 0 if refcat not in buildings else len(buildings[refcat])
@@ -1826,9 +1827,15 @@ class ConsLayer(PolygonLayer):
                         mp += 1
                     elif ad['spec'] != 'Parcel':
                         to_change[ad.id()] = get_attributes(ad)
+            if len(to_insert) > BUFFER_SIZE:
+                self.writer.changeGeometryValues(to_insert)
+                to_insert = {}
+            pbar.update()
+        pbar.close()
         address.writer.changeAttributeValues(to_change)
         address.writer.changeGeometryValues(to_move)
-        self.writer.changeGeometryValues(to_insert)
+        if len(to_insert) > 0:
+            self.writer.changeGeometryValues(to_insert)
         log.debug(_("Moved %d addresses to entrance, %d changed to parcel"),
             len(to_move), len(to_change))
         if len(to_clean) > 0:
