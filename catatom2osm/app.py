@@ -712,6 +712,7 @@ class CatAtom2Osm(object):
                     bu = group[0]
                     bu.tags.update(ad.tags)
                     bu.tags.pop('image', None)
+                    bu.tags.pop('entrance', None)
 
         if md > 0:
             log.debug(
