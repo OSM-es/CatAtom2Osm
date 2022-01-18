@@ -1817,16 +1817,15 @@ class ConsLayer(PolygonLayer):
                 to_clean.append(ad.id())
                 oa += 1
             else:
-                if ad['spec'] == 'Entrance':
-                    self.move_entrance(
-                        ad, ad_buildings, ad_parts, to_move, to_insert
-                    )
-                if ad['spec'] != 'Entrance':
-                    if building_count > 1:
-                        to_clean.append(ad.id())
-                        mp += 1
-                    elif ad['spec'] != 'Parcel':
-                        to_change[ad.id()] = get_attributes(ad)
+                spec = ad['spec']
+                self.move_entrance(
+                    ad, ad_buildings, ad_parts, to_move, to_insert
+                )
+                if ad['spec'] != 'Entrance' and building_count > 1:
+                    to_clean.append(ad.id())
+                    mp += 1
+                elif ad['spec'] != spec and building_count == 1:
+                    to_change[ad.id()] = get_attributes(ad)
             if len(to_insert) > BUFFER_SIZE:
                 self.writer.changeGeometryValues(to_insert)
                 to_insert = {}
@@ -1836,15 +1835,17 @@ class ConsLayer(PolygonLayer):
         address.writer.changeGeometryValues(to_move)
         if len(to_insert) > 0:
             self.writer.changeGeometryValues(to_insert)
-        log.debug(_("Moved %d addresses to entrance, %d changed to parcel"),
-            len(to_move), len(to_change))
+        msg = _("Moved %d addresses to entrance, %d specification changed")
+        log.debug(msg, len(to_move), len(to_change))
         if len(to_clean) > 0:
             address.writer.deleteFeatures(to_clean)
         if oa > 0:
-            log.debug(_("Deleted %d addresses without associated building"), oa)
+            msg = _("Deleted %d addresses without associated building")
+            log.debug(msg, oa)
             report.orphand_addresses = oa
         if mp > 0:
-            log.debug(_("Refused %d addresses belonging to multiple buildings"), mp)
+            msg = _("Refused %d addresses belonging to multiple buildings")
+            log.debug(msg, mp)
             report.multiple_addresses = mp
 
     def validate(self, max_level, min_level):
