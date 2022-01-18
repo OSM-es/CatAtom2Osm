@@ -680,15 +680,8 @@ class CatAtom2Osm(object):
                 address_index[ad.tags['ref']].append(ad)
         md = 0
         for (ref, group) in list(building_index.items()):
-            address_count = len(address_index[ref])
-            if address_count == 0:
-                continue
-            entrance_count = sum([1 if 'entrance' in ad.tags else 0
-                                  for ad in address_index[ref]])
-            parcel_count = address_count - entrance_count
-            if parcel_count > 1 or (parcel_count == 1 and entrance_count > 0):
-                md += address_count
-                continue
+            parcel_ad = []
+            entrance_count = 0
             for ad in address_index[ref]:
                 entrance = False
                 if 'entrance' in ad.tags:
@@ -708,12 +701,17 @@ class CatAtom2Osm(object):
                             entrance.tags.pop('ref', None)
                             entrance.tags.pop('image', None)
                             break
-                if not entrance:
-                    bu = group[0]
-                    bu.tags.update(ad.tags)
-                    bu.tags.pop('image', None)
-                    bu.tags.pop('entrance', None)
-
+                if entrance:
+                    entrance_count += 1
+                else:
+                    parcel_ad.append(ad)
+            if len(parcel_ad) == 1 and entrance_count == 0:
+                ad = parcel_ad.pop()
+                bu = group[0]
+                bu.tags.update(ad.tags)
+                bu.tags.pop('image', None)
+                bu.tags.pop('entrance', None)
+            md += len(parcel_ad)
         if md > 0:
             log.debug(
                 _("Refused %d 'parcel' addresses not unique for it building"),
