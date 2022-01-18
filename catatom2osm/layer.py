@@ -1815,17 +1815,17 @@ class ConsLayer(PolygonLayer):
             if building_count == 0:
                 to_clean.append(ad.id())
                 oa += 1
-            elif building_count > 1:
-                if ad['spec'] == 'Entrance':
-                    self.move_entrance(ad, ad_buildings, ad_parts, to_move, to_insert)
-                if ad['spec'] != 'Entrance':
-                    to_clean.append(ad.id())
-                    mp += 1
             else:
                 if ad['spec'] == 'Entrance':
-                    self.move_entrance(ad, ad_buildings, ad_parts, to_move, to_insert)
-                if ad['spec'] not in ['Entrance', 'Parcel']:
-                   to_change[ad.id()] = get_attributes(ad)
+                    self.move_entrance(
+                        ad, ad_buildings, ad_parts, to_move, to_insert
+                    )
+                if ad['spec'] != 'Entrance':
+                    if building_count > 1:
+                        to_clean.append(ad.id())
+                        mp += 1
+                    elif ad['spec'] != 'Parcel':
+                        to_change[ad.id()] = get_attributes(ad)
         address.writer.changeAttributeValues(to_change)
         address.writer.changeGeometryValues(to_move)
         self.writer.changeGeometryValues(to_insert)
