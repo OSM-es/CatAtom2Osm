@@ -574,4 +574,3 @@ class MultiPolygon(Polygon):
                 else:
                     self.append(Way(container, ring), role)
                 role = 'inner'
-
