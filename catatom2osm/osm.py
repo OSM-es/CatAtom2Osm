@@ -563,3 +563,14 @@ class MultiPolygon(Polygon):
                 else:
                     self.append(Way(container, ring), role)
                 role = 'inner'
+
+
+def get_outline(elements):
+    """For a set of elements, get all Way and outer ways in MultiPolygon."""
+    outline = []
+    for el in elements:
+        if isinstance(el, Way):
+            outline.append(el)
+        elif isinstance(el, Polygon):
+            outline += [m.element for m in el.members if m.role == 'outer']
+    return outline

@@ -685,16 +685,7 @@ class CatAtom2Osm(object):
             for ad in address_index[ref]:
                 entrance = False
                 if 'entrance' in ad.tags:
-                    outline = []
-                    for bu in group:
-                        if isinstance(bu, osm.Way):
-                            outline.append(bu)
-                        else:
-                            outline += [
-                                m.element for m in bu.members
-                                if m.role == 'outer'
-                            ]
-                    for w in outline:
+                    for w in osm.get_outline(group):
                         entrance = w.search_node(ad.x, ad.y)
                         if entrance:
                             entrance.tags.update(ad.tags)

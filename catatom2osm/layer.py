@@ -1770,27 +1770,28 @@ class ConsLayer(PolygonLayer):
         vb = Point(bg.vertexAt(vertex))
         if distance > config.addr_thr ** 2:
             ad['spec'] = 'remote'
+        elif vertex > len(Geometry.get_multipolygon(bg)[0][0]):
+            ad['spec'] = 'inner'
+        elif (
+            closest.sqrDist(va) < config.entrance_thr ** 2
+            or closest.sqrDist(vb) < config.entrance_thr ** 2
+        ):
+            ad['spec'] = 'corner'
         else:
-            if vertex > len(Geometry.get_multipolygon(bg)[0][0]):
-                ad['spec'] = 'inner'
-            elif closest.sqrDist(va) < config.entrance_thr ** 2 \
-                    or closest.sqrDist(vb) < config.entrance_thr ** 2:
-                ad['spec'] = 'corner'
-            else:
-                dg = Geometry.fromPointXY(closest)
-                to_move[ad.id()] = dg
-                bg.insertVertex(closest.x(), closest.y(), vertex)
-                to_insert[building.id()] = QgsGeometry(bg)
-                for part in ad_parts:
-                    pg = part.geometry()
-                    r = Geometry.get_multipolygon(pg)[0][0]
-                    for i in range(len(r) - 1):
-                        vpa = Point(pg.vertexAt(i))
-                        vpb = Point(pg.vertexAt(i + 1))
-                        if va in (vpa, vpb) and vb in (vpa, vpb):
-                            pg.insertVertex(closest.x(), closest.y(), i + 1)
-                            to_insert[part.id()] = QgsGeometry(pg)
-                            break
+            dg = Geometry.fromPointXY(closest)
+            to_move[ad.id()] = dg
+            bg.insertVertex(closest.x(), closest.y(), vertex)
+            to_insert[building.id()] = QgsGeometry(bg)
+            for part in ad_parts:
+                pg = part.geometry()
+                r = Geometry.get_multipolygon(pg)[0][0]
+                for i in range(len(r) - 1):
+                    vpa = Point(pg.vertexAt(i))
+                    vpb = Point(pg.vertexAt(i + 1))
+                    if va in (vpa, vpb) and vb in (vpa, vpb):
+                        pg.insertVertex(closest.x(), closest.y(), i + 1)
+                        to_insert[part.id()] = QgsGeometry(pg)
+                        break
 
     def move_address(self, address):
         """
@@ -1810,21 +1811,21 @@ class ConsLayer(PolygonLayer):
         pbar = self.get_progressbar(_("Move addresses"), address.featureCount())
         for ad in address.getFeatures():
             refcat = ad['localId'].split('.')[-1]
-            building_count = 0 if refcat not in buildings else len(buildings[refcat])
+            building_count = len(buildings.get(refcat, []))
             ad_buildings = buildings[refcat]
             ad_parts = parts[refcat]
             if building_count == 0:
                 to_clean.append(ad.id())
                 oa += 1
             else:
-                spec = ad['spec']
-                self.move_entrance(
-                    ad, ad_buildings, ad_parts, to_move, to_insert
-                )
+                if ad['spec'] == 'Entrance':
+                    self.move_entrance(
+                        ad, ad_buildings, ad_parts, to_move, to_insert
+                    )
                 if ad['spec'] != 'Entrance' and building_count > 1:
                     to_clean.append(ad.id())
                     mp += 1
-                if ad['spec'] != spec and building_count == 1:
+                if ad['spec'] != 'Parcel' and building_count == 1:
                     to_change[ad.id()] = get_attributes(ad)
             if len(to_insert) > BUFFER_SIZE:
                 self.writer.changeGeometryValues(to_insert)
