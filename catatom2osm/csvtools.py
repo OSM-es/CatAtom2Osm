@@ -27,3 +27,44 @@ def csv2dict(csv_path, a_dict, encoding=encoding):
                 raise IOError(_("Failed to load CSV file '%s'") % csv_file.name)
             a_dict[row[0]] = row[1]
     return a_dict
+
+def filter(csv_path, *args, query=lambda row, args: True, stop=False):
+    """
+    Return csv rows filtered using query
+
+    Args:
+        args: aditional arguments for query function
+        query (func): function with args row and wargs that returns
+                      a boolean deciding if each row will be included or not
+        stop (bool): Stop at first match or get all
+    """
+    output = []
+    with open(csv_path) as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter=str(delimiter))
+        for row in csv_reader:
+            if query(row, args):
+                if stop:
+                    return row
+                output.append(row)
+    return output
+
+def search(csv_path, *args, query=lambda row, args: True):
+    """
+    Return first matched row in csv
+
+    Args:
+        args: aditional arguments for query function
+        query (func): function with args row and wargs that returns
+                      a boolean deciding if each row will be included or not
+    """
+    return filter(csv_path, *args, query=query, stop=True)
+
+def get_key(csv_path, key):
+    """Get a row given first column value"""
+    q = lambda row, args: row[0] == args[0]
+    return search(csv_path, key, query=q)
+
+def startswith(csv_path, key):
+    """Get rows which first column starts with key"""
+    q = lambda row, args: row[0].startswith(args[0])
+    return filter(csv_path, key, query=q)

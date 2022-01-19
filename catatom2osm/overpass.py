@@ -34,13 +34,11 @@ class Query(object):
            area or a bounding box (bottom, left, top, right) clause."""
         if re.match(r'^\d{1,8}$', search_area):
             self.area_id = search_area
-            self.bbox = ''
         elif re.match(r'^(-?\d{1,3}(\.\d+)?,\s*){3}-?\d{1,3}(\.\d+)?$', search_area):
             self.bbox = search_area
-            self.area_id = ''
         else:
-            raise TypeError("Argument expected to be an area id or a bbox "
-                            "clause: %s" % search_area)
+            msg = "Argument expected to be an area id or a bbox clause: %s"
+            raise TypeError(msg % search_area)
 
     def add(self, *args):
         """Adds a statement to the query. Use QL query statements without bbox
@@ -56,14 +54,16 @@ class Query(object):
     def get_url(self, n=0):
         """Returns url for the query"""
         if len(self.statements) > 0:
-            ql = '({s});'.join(self.statements) + '({s});'
+            search_area = ''
+            query = ''
             if self.area_id:
-                query = 'area(36{id:>08})->.searchArea;' + ql
-                query = query.format(id=self.area_id, s='area.searchArea')
-            else:
-                query = ql.format(s=self.bbox)
+                query = 'area(36{id:>08})->.searchArea;'.format(id=self.area_id)
+                search_area = '(area.searchArea)'
+            search_area += f'({self.bbox});' if self.bbox else ';'
+            query += search_area.join(self.statements) + search_area
             self.url = '{u}data=[out:{o}][timeout:250];({q});{d}{m}'.format(
-                u=api_servers[n], q=query, o=self.output, d=self.down, m=self.meta)
+                u=api_servers[n], q=query, o=self.output, d=self.down, m=self.meta
+            )
         return self.url
 
     def download(self, filename, log=False):

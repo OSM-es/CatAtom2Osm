@@ -391,28 +391,19 @@ class CatAtom2Osm(object):
 
     def get_boundary(self):
         """Get best boundary search area for overpass queries."""
+        fn = os.path.join(config.app_path, 'municipalities.csv')
+        __, id, name = csvtools.get_key(fn, self.cat.zip_code)
+        self.boundary_search_area = id
+        report.mun_name = name
+        report.cat_mun = self.cat.cat_mun
+        log.info(_("Municipality: '%s'"), name)
         if self.zone or self.options.split:
             self.rustic_zoning.selectAll()
             bbox = self.rustic_zoning.boundingBoxOfSelected()
             self.urban_zoning.selectAll()
             bbox.combineExtentWith(self.urban_zoning.boundingBoxOfSelected())
             bbox = self.urban_zoning.get_overpass_bbox(bbox)
-            self.cat.boundary_search_area = bbox
-        else:
-            self.cat.get_boundary(self.rustic_zoning)
-            report.mun_area = round(self.rustic_zoning.get_area() / 1E6, 1)
-        report.cat_mun = self.cat.cat_mun
-        report.mun_name = getattr(self.cat, 'boundary_name', self.cat.cat_mun)
-        if hasattr(self.cat, 'boundary_data'):
-            if 'wikipedia' in self.cat.boundary_data:
-                report.mun_wikipedia = self.cat.boundary_data['wikipedia']
-            if 'wikidata' in self.cat.boundary_data:
-                report.mun_wikidata = self.cat.boundary_data['wikidata']
-            if 'population' in self.cat.boundary_data:
-                report.mun_population = (
-                    self.cat.boundary_data['population'],
-                    self.cat.boundary_data.get('population:date', '?'),
-                )
+            self.boundary_bbox = bbox
 
     def process_zoning(self):
         self.rustic_zoning.clean()
@@ -548,7 +539,10 @@ class CatAtom2Osm(object):
             if not ql:
                 return None
             log.info(_("Downloading '%s'") % filename)
-            query = overpass.Query(self.cat.boundary_search_area).add(ql)
+            query = overpass.Query(self.boundary_search_area)
+            if hasattr(self, 'boundary_bbox'):
+                query.set_search_area(self.boundary_bbox)
+            query.add(ql)
             if log.getEffectiveLevel() == logging.DEBUG:
                 query.download(osm_path, log)
             else:

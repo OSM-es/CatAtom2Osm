@@ -8,7 +8,7 @@ from requests.exceptions import ConnectionError
 
 from qgis.core import QgsCoordinateReferenceSystem
 
-from catatom2osm import config, download, hgwnames, layer, overpass
+from catatom2osm import config, csvtools, download, hgwnames, layer, overpass
 from catatom2osm.report import instance as report
 log = config.log
 
@@ -27,7 +27,7 @@ class Reader(object):
             raise ValueError(_("Last directory name must be a 5 digits ZIP code"))
         self.zip_code = m.group()
         self.prov_code = self.zip_code[0:2]
-        if self.prov_code not in config.valid_provinces:
+        if self.prov_code not in config.prov_codes:
             msg = _("Province code '%s' not valid") % self.prov_code
             raise ValueError(msg)
         if not os.path.exists(a_path):
@@ -204,60 +204,3 @@ class Reader(object):
         log.info(_("Read %d features in '%s'"), gml.featureCount(), gml_path)
         gml.source_date = self.src_date
         return gml
-
-    def get_boundary(self, zoning):
-        """
-        Gets the id of the OSM administrative boundary from Overpass.
-        If it fails falls back to the bounding box.
-        Precondition: called after read any gml (metadata adquired)
-        """
-        self.boundary_bbox = zoning.bounding_box()
-        if self.zip_code in config.mun_fails:
-            self.boundary_name = config.mun_fails[self.zip_code][0]
-            self.boundary_search_area = config.mun_fails[self.zip_code][1]
-            query = overpass.Query(self.boundary_bbox, 'json', False, False)
-            query.add('rel({})'.format(self.boundary_search_area))
-        else:
-            query = overpass.Query(self.boundary_bbox, 'json', False, False)
-            query.add('rel["admin_level"="8"]')
-        matching = False
-        try:
-            data = json.loads(query.read())
-            matching = hgwnames.dsmatch(self.cat_mun, data['elements'], 
-                lambda e: e['tags']['name'])
-        except ConnectionError:
-            pass
-        if matching:
-            self.boundary_search_area = str(matching['id'])
-            self.boundary_name = matching['tags']['name']
-            self.boundary_data = matching['tags']
-            log.info(_("Municipality: '%s'"), self.boundary_name)
-        else:
-            self.boundary_search_area = self.boundary_bbox
-            msg = _("Failed to find administrative boundary, falling "
-                "back to bounding box")
-            log.warning(msg)
-            report.warnings.append(msg)
-
-def list_municipalities(prov_code):
-    """Get from the ATOM services a list of municipalities for a given province"""
-    if prov_code == '99':
-        url = config.serv_url['BU']
-        title = _("Territorial office")
-    elif prov_code not in config.valid_provinces:
-        raise ValueError(_("Province code '%s' not valid") % prov_code)
-    else:
-        url = config.prov_url['BU'].format(code=prov_code)
-    response = download.get_response(url)
-    root = etree.fromstring(response.content)
-    ns = {'atom': 'http://www.w3.org/2005/Atom'}
-    if prov_code != '99':
-        office = root.find('atom:title', ns).text.split('Office ')[1]
-        title = _("Territorial office %s") % office
-    print(title)
-    print("=" * len(title))
-    for entry in root.findall('atom:entry', namespaces=ns):
-        row = entry.find('atom:title', ns).text.replace('buildings', '')
-        row = row.replace('Territorial office ', '')
-        print(row)
-

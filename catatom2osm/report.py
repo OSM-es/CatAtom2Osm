@@ -37,10 +37,6 @@ class Report(object):
             ('mun_code', _('Code')),
             ('date', _('Date')),
             ('options', _('Options')),
-            ('mun_area', _("Area")),
-            ('mun_population', _('Population')),
-            ('mun_wikipedia', _('Wikipedia')),
-            ('mun_wikidata', _('Wikidata')),
             ('group_system_info', _('System info')),
             ('app_version', _('Application version')),
             ('platform', _('Platform')),
@@ -137,10 +133,6 @@ class Report(object):
             ('warnings', _("Warnings:")),
         ])
         self.formats = {
-            'mun_area': lambda v: locale.format_string("%.1f km²", v, True),
-            'mun_population': lambda v: '{} hab. ({})'.format(*v),
-            'mun_wikipedia': lambda v: 'https://www.wikipedia.org/wiki/' + v,
-            'mun_wikidata': lambda v: 'https://www.wikidata.org/wiki/' + v,
             'cpu_freq': lambda v: locale.format_string('%.1f Mhz', v, True),
             'ex_time': lambda v: locale.format_string('%.1f ' + _('seconds'), v,
                                                       True),

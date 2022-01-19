@@ -25,10 +25,8 @@ class TestQuery(unittest.TestCase):
     def test_set_search_area(self):
         q = Query('12345678')
         self.assertEqual(q.area_id, '12345678')
-        self.assertEqual(q.bbox, '')
         q.set_search_area('1,-2, 3.1,-4.99')
         self.assertEqual(q.bbox, '1,-2, 3.1,-4.99')
-        self.assertEqual(q.area_id, '')
         with self.assertRaises(TypeError):
             q.set_search_area('123456789')
         with self.assertRaises(TypeError):

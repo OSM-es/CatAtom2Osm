@@ -87,24 +87,9 @@ class TestMain(unittest.TestCase):
             mock.call('building'),
         ])
 
-    @mock.patch('catatom2osm.__main__.sys.argv', ['catatom2osm.py', '-l'])
-    @mock.patch('catatom2osm.app.catatom.list_municipalities')
-    def test_list_prov(self, mocklist):
-        __main__.run()
-        mocklist.assert_called_once_with('99')
-
     @mock.patch(
-        'catatom2osm.__main__.sys.argv', ['catatom2osm.py', '-l', '33']
+        'catatom2osm.__main__.sys.argv', ['catatom2osm.py', '-l', '01']
     )
-    @mock.patch('catatom2osm.app.catatom.list_municipalities')
-    def test_list_mun(self, mocklist):
-        __main__.run()
-        mocklist.assert_called_once_with('33')
-
-    @mock.patch(
-        'catatom2osm.__main__.sys.argv', ['catatom2osm.py', '-l', '33']
-    )
-    @mock.patch('catatom2osm.app.catatom.list_municipalities', raiseIOError)
     @mock.patch('catatom2osm.__main__.log.error')
     def test_list_error(self, mocklog):
         __main__.run()

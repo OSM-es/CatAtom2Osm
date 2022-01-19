@@ -100,8 +100,6 @@ cadastre_doc_url = 'http://ovc.catastro.meh.es/OVCServWeb/OVCWcfLibres/OVCFotoFa
 
 fixme_doc_url = 'https://wiki.openstreetmap.org/wiki/ES:Catastro_espa%C3%B1ol/Importaci%C3%B3n_de_edificios/Gesti%C3%B3n_de_proyectos#Generar_y_corregir_los_archivos_a_importar'
 
-valid_provinces = ["%02d" % i for i in range(2,57) if i not in (20, 31, 48)]
-
 no_number = 'S-N' # Regular expression to match addresses without number
 
 lowcase_words = [ # Words to exclude from the general Title Case rule for highway names
@@ -471,3 +469,57 @@ mun_fails = {
 aux_address = {'cdau': ['04', '11', '14', '18', '21', '23', '29', '41']}
 aux_path = 'auxsrcs'
 
+prov_codes = {
+    '02': 'Albacete',
+    '03': 'Alicante',
+    '04': 'Almería',
+    '05': 'Ávila',
+    '06': 'Badajoz',
+    '07': 'Baleares',
+    '08': 'Barcelona',
+    '09': 'Burgos',
+    '10': 'Cáceres',
+    '11': 'Cádiz',
+    '12': 'Castellón',
+    '13': 'Ciudad Real',
+    '14': 'Córdoba',
+    '15': 'Coruña',
+    '16': 'Cuenca',
+    '17': 'Girona',
+    '18': 'Granada',
+    '19': 'Guadalajara',
+    '21': 'Huelva',
+    '22': 'Huesca',
+    '23': 'Jaén',
+    '24': 'León',
+    '25': 'Lleida',
+    '26': 'La Rioja',
+    '27': 'Lugo',
+    '28': 'Madrid',
+    '29': 'Málaga',
+    '30': 'Murcia',
+    '32': 'Ourense',
+    '33': 'Oviedo',
+    '34': 'Palencia',
+    '35': 'Las Palmas',
+    '36': 'Pontevedra',
+    '37': 'Salamanca',
+    '38': 'Santa Cruz de Tenerife',
+    '39': 'Cantabria',
+    '40': 'Segovia',
+    '41': 'Sevilla',
+    '42': 'Soria',
+    '43': 'Tarragona',
+    '44': 'Teruel',
+    '45': 'Toledo',
+    '46': 'Valencia',
+    '47': 'Valladolid',
+    '49': 'Zamora',
+    '50': 'Zaragoza',
+    '51': 'Cartagena',
+    '52': 'Gijón',
+    '53': 'Jerez de la Frontera',
+    '54': 'Vigo',
+    '55': 'Ceuta',
+    '56': 'Melilla',
+}

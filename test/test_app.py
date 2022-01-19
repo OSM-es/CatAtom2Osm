@@ -314,9 +314,8 @@ class TestCatAtom2Osm(unittest.TestCase):
         m_xml.deserialize.assert_called_once_with(m_open())
         output = m_log.warning.call_args_list[0][0][0]
         self.assertIn('No OSM data', output)
-
         m_xml.deserialize.return_value.elements = [1]
-        self.m_app.cat.boundary_search_area = '123456'
+        self.m_app.boundary_search_area = '123456'
         m_os.path.exists.return_value = False
         data = self.m_app.read_osm(self.m_app, 'taz', ql='bar')
         m_overpass.Query.assert_called_with('123456')
