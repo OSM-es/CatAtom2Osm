@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: CatAtom2Osm\n"
-"POT-Creation-Date: 2022-01-19 09:31+0000\n"
+"POT-Creation-Date: 2022-01-19 23:34+0000\n"
 "PO-Revision-Date: 2017-05-28 19:23+WEST\n"
 "Last-Translator: Javier Sánchez <javiersanp@gmail.com>\n"
 "Language: es\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Generated-By: pygettext.py 1.5\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: catatom2osm/__main__.py:11
+#: catatom2osm/__main__.py:13
 msgid ""
 "catatom2osm [OPTION]... [PATHS]\n"
 "  The argument PATHS states for directories to process municipalities. The "
@@ -36,7 +36,7 @@ msgstr ""
 "  Si el programa no encuentra los archivos de entrada los descargará de los\n"
 "  Servicios INSPIRE del Catastro Español."
 
-#: catatom2osm/__main__.py:18
+#: catatom2osm/__main__.py:20
 msgid ""
 "Examples:\n"
 "  catatom2osm 05015\n"
@@ -70,15 +70,27 @@ msgstr ""
 "    límite administrativo. Entran las zonas que tengan más de un 50% de su\n"
 "    área dentro del límite."
 
-#: catatom2osm/__main__.py:55
+#: catatom2osm/__main__.py:39
+msgid "Territorial office"
+msgstr "Oficina territorial"
+
+#: catatom2osm/__main__.py:47 catatom2osm/catatom.py:31 catatom2osm/cdau.py:117
+msgid "Province code '%s' not valid"
+msgstr "El Código Provincial '%s' no es válido"
+
+#: catatom2osm/__main__.py:49
+msgid "Territorial office %s - %s"
+msgstr "Oficina territorial %s - %s"
+
+#: catatom2osm/__main__.py:72
 msgid "Directories for input and output files"
 msgstr "Directorios para los archivos de entrada y salida."
 
-#: catatom2osm/__main__.py:57
+#: catatom2osm/__main__.py:74
 msgid "Show program's version number and exit"
 msgstr "Muestra la versión del programa y sale"
 
-#: catatom2osm/__main__.py:60
+#: catatom2osm/__main__.py:77
 msgid ""
 "List province codes or municipality codes for PROV (2 digits) or zone labels "
 "for MUN (5 digits) and exit"
@@ -86,52 +98,52 @@ msgstr ""
 "Lista códigos de provincia, de municipios en PROV (2 dígitos) o las "
 "etiquetas de zonas de MUN (5 dígitos) y sale"
 
-#: catatom2osm/__main__.py:65
+#: catatom2osm/__main__.py:82
 msgid "Recovers the metadata of the tasks"
 msgstr "Recupera los metadatos de las tareas"
 
-#: catatom2osm/__main__.py:67
+#: catatom2osm/__main__.py:84
 msgid "Process only the building dataset"
 msgstr "Procesa sólo el conjunto de datos de edificios"
 
-#: catatom2osm/__main__.py:69
+#: catatom2osm/__main__.py:86
 msgid "Process only the address dataset"
 msgstr "Procesa sólo el conjunto de datos de direcciones"
 
-#: catatom2osm/__main__.py:71
+#: catatom2osm/__main__.py:88
 msgid "Process only the cadastral zoning dataset"
 msgstr "Procesa sólo el conjunto de datos de zonificación"
 
-#: catatom2osm/__main__.py:73
+#: catatom2osm/__main__.py:90
 msgid "Process data in these zones"
 msgstr "Procesa los datos en estas zonas"
 
-#: catatom2osm/__main__.py:75
+#: catatom2osm/__main__.py:92
 msgid "Process data in the zones delimited by SPLIT file"
 msgstr "Procesa los datos en las zonas delimitadas por el archivo SPLIT"
 
-#: catatom2osm/__main__.py:77
+#: catatom2osm/__main__.py:94
 msgid "Dissable conflation with OSM data"
 msgstr "Desactiva la combinación con datos de OSM"
 
-#: catatom2osm/__main__.py:79
+#: catatom2osm/__main__.py:96
 msgid "Download only"
 msgstr "Solo descargar"
 
-#: catatom2osm/__main__.py:82
+#: catatom2osm/__main__.py:99
 msgid "Select the log level between DEBUG, INFO, WARNING, ERROR or CRITICAL."
 msgstr ""
 "Selecciona el nivel de registro entre DEBUG, INFO, WARNING, ERROR o CRITICAL."
 
-#: catatom2osm/__main__.py:100
+#: catatom2osm/__main__.py:117
 msgid "Using Python %s.%s.%s"
 msgstr "Usando Python %s.%s.%s"
 
-#: catatom2osm/__main__.py:102
+#: catatom2osm/__main__.py:119
 msgid "Can't use multiple zones with multiple municipalities"
 msgstr "No se pueden usar varias zonas para varios municipios"
 
-#: catatom2osm/__main__.py:116
+#: catatom2osm/__main__.py:133
 msgid "Please, install QGIS"
 msgstr "Por favor, instala QGIS"
 
@@ -155,7 +167,7 @@ msgstr "Se requiere GDAL versión %s o superior"
 msgid "Start processing '%s'"
 msgstr "Comienza el procesado de '%s'"
 
-#: catatom2osm/app.py:178 catatom2osm/app.py:487
+#: catatom2osm/app.py:178 catatom2osm/app.py:478
 msgid "Check %d fixme tags"
 msgstr "Revisa %d etiquetas fixme"
 
@@ -175,66 +187,66 @@ msgstr "Generados %d archivos de tareas de rústica y %d de urbana"
 msgid "There are %d buildings without zone, check %s"
 msgstr "Existen %d edificios sin zona, compruebe %s"
 
-#: catatom2osm/app.py:430 catatom2osm/app.py:494 catatom2osm/app.py:503
-#: catatom2osm/app.py:528
+#: catatom2osm/app.py:399
+msgid "Municipality: '%s'"
+msgstr "Municipio: '%s'"
+
+#: catatom2osm/app.py:421 catatom2osm/app.py:485 catatom2osm/app.py:494
+#: catatom2osm/app.py:519
 msgid "Generated '%s'"
 msgstr "Generado '%s'"
 
-#: catatom2osm/app.py:494
+#: catatom2osm/app.py:485
 msgid "Please, check it"
 msgstr "Por favor, compruébelo"
 
-#: catatom2osm/app.py:503
+#: catatom2osm/app.py:494
 msgid "Please, check it and run again"
 msgstr "Por favor, compruébelo y ejecute de nuevo"
 
-#: catatom2osm/app.py:506
+#: catatom2osm/app.py:497
 msgid "Finished!"
 msgstr "¡Terminado!"
 
-#: catatom2osm/app.py:530
+#: catatom2osm/app.py:521
 msgid "Failed to write layer: '%s'"
 msgstr "Error al escribir la capa: '%s'"
 
-#: catatom2osm/app.py:550 catatom2osm/catatom.py:85 catatom2osm/cdau.py:122
+#: catatom2osm/app.py:541 catatom2osm/catatom.py:85 catatom2osm/cdau.py:122
 msgid "Downloading '%s'"
 msgstr "Descargando '%s'"
 
-#: catatom2osm/app.py:563
+#: catatom2osm/app.py:557
 msgid "No OSM data were obtained from '%s'"
 msgstr "No se obtuvieron datos OSM de '%s'"
 
-#: catatom2osm/app.py:567
+#: catatom2osm/app.py:561
 msgid "Read '%s': %d nodes, %d ways, %d relations"
 msgstr "Leído '%s': %d nodos, %d vías, %d relaciones"
 
-#: catatom2osm/app.py:592
+#: catatom2osm/app.py:586
 msgid "Generated '%s': %d nodes, %d ways, %d relations"
 msgstr "Generado '%s': %d nodos, %d vías, %d relaciones"
 
-#: catatom2osm/app.py:603
+#: catatom2osm/app.py:597
 msgid "Could not resolve joined tables for the '%s' layer"
 msgstr "No se pudieron resolver las tablas combinadas para la capa '%s'"
 
-#: catatom2osm/app.py:640
+#: catatom2osm/app.py:634
 msgid "Deleted %d addresses refused by street name"
 msgstr "Eliminadas %d direcciones rechazadas por nombre de vial"
 
-#: catatom2osm/app.py:708
+#: catatom2osm/app.py:702
 msgid "Refused %d 'parcel' addresses not unique for it building"
 msgstr "Rechazadas %d direcciones tipo parcela no únicas para su edificio"
 
-#: catatom2osm/app.py:782
+#: catatom2osm/app.py:776
 msgid "There are %d address without house number in the OSM data"
 msgstr "Existen %d direcciones sin número de portal en OSM"
 
 #: catatom2osm/catatom.py:27
 msgid "Last directory name must be a 5 digits ZIP code"
 msgstr "El nombre del último directorio debe ser un Código Postal de 5 dígitos"
-
-#: catatom2osm/catatom.py:31 catatom2osm/catatom.py:248 catatom2osm/cdau.py:117
-msgid "Province code '%s' not valid"
-msgstr "El Código Provincial '%s' no es válido"
 
 #: catatom2osm/catatom.py:36 catatom2osm/cdau.py:97
 msgid "Not a directory: '%s'"
@@ -271,23 +283,6 @@ msgstr "No se puede determinar el CRS de '%s'"
 #: catatom2osm/catatom.py:204 catatom2osm/cdau.py:128
 msgid "Read %d features in '%s'"
 msgstr "Leídos %d características en '%s'"
-
-#: catatom2osm/catatom.py:234
-msgid "Municipality: '%s'"
-msgstr "Municipio: '%s'"
-
-#: catatom2osm/catatom.py:237
-msgid "Failed to find administrative boundary, falling back to bounding box"
-msgstr ""
-"No se pudo obtener el límite administrativo, se usará el recuadro delimitador"
-
-#: catatom2osm/catatom.py:246
-msgid "Territorial office"
-msgstr "Oficina territorial"
-
-#: catatom2osm/catatom.py:256
-msgid "Territorial office %s"
-msgstr "Oficina territorial %s"
 
 #: catatom2osm/cdau.py:176
 msgid "Parsed %d addresses from '%s'"
@@ -534,347 +529,331 @@ msgid "Options"
 msgstr "Opciones"
 
 #: catatom2osm/report.py:40
-msgid "Area"
-msgstr "Superficie"
-
-#: catatom2osm/report.py:41
-msgid "Population"
-msgstr "Población"
-
-#: catatom2osm/report.py:42
-msgid "Wikipedia"
-msgstr "Wikipedia"
-
-#: catatom2osm/report.py:43
-msgid "Wikidata"
-msgstr "Wikidata"
-
-#: catatom2osm/report.py:44
 msgid "System info"
 msgstr "Información del sistema"
 
-#: catatom2osm/report.py:45
+#: catatom2osm/report.py:41
 msgid "Application version"
 msgstr "Versión de la aplicación"
 
-#: catatom2osm/report.py:46
+#: catatom2osm/report.py:42
 msgid "Platform"
 msgstr "Plataforma"
 
-#: catatom2osm/report.py:47
+#: catatom2osm/report.py:43
 msgid "Language"
 msgstr "Idioma"
 
-#: catatom2osm/report.py:48
+#: catatom2osm/report.py:44
 msgid "QGIS version"
 msgstr "Versión de QGIS"
 
-#: catatom2osm/report.py:49
+#: catatom2osm/report.py:45
 msgid "GDAL version"
 msgstr "Versión de GDAL"
 
-#: catatom2osm/report.py:50
+#: catatom2osm/report.py:46
 msgid "CPU count"
 msgstr "Número de CPUs"
 
-#: catatom2osm/report.py:51
+#: catatom2osm/report.py:47
 msgid "CPU frequency"
 msgstr "Frecuencia de CPU"
 
-#: catatom2osm/report.py:52
+#: catatom2osm/report.py:48
 msgid "Execution time"
 msgstr "Tiempo de ejecución"
 
-#: catatom2osm/report.py:53
+#: catatom2osm/report.py:49
 msgid "Total memory"
 msgstr "Memoria total"
 
-#: catatom2osm/report.py:54
+#: catatom2osm/report.py:50
 msgid "Physical memory usage"
 msgstr "Memoria física usada"
 
-#: catatom2osm/report.py:55
+#: catatom2osm/report.py:51
 msgid "Virtual memory usage"
 msgstr "Memoria virtual usada"
 
-#: catatom2osm/report.py:56 catatom2osm/report.py:84 catatom2osm/report.py:350
+#: catatom2osm/report.py:52 catatom2osm/report.py:80 catatom2osm/report.py:342
 msgid "Addresses"
 msgstr "Direcciones"
 
-#: catatom2osm/report.py:58 catatom2osm/report.py:63 catatom2osm/report.py:92
-#: catatom2osm/report.py:122
+#: catatom2osm/report.py:54 catatom2osm/report.py:59 catatom2osm/report.py:88
+#: catatom2osm/report.py:118
 msgid "Feature count"
 msgstr "Número de características"
 
-#: catatom2osm/report.py:59
+#: catatom2osm/report.py:55
 msgid "Replaced addresses"
 msgstr "Direcciones reemplazadas"
 
-#: catatom2osm/report.py:60
+#: catatom2osm/report.py:56
 msgid "Added addresses"
 msgstr "Direcciones añadidas"
 
-#: catatom2osm/report.py:61 catatom2osm/report.py:90
+#: catatom2osm/report.py:57 catatom2osm/report.py:86
 msgid "Input data"
 msgstr "Datos de entrada"
 
-#: catatom2osm/report.py:62 catatom2osm/report.py:91 catatom2osm/report.py:349
+#: catatom2osm/report.py:58 catatom2osm/report.py:87 catatom2osm/report.py:341
 msgid "Source date"
 msgstr "Fecha de origen"
 
-#: catatom2osm/report.py:64
+#: catatom2osm/report.py:60
 msgid "Type entrance"
 msgstr "Tipo entrada"
 
-#: catatom2osm/report.py:65
+#: catatom2osm/report.py:61
 msgid "Type parcel"
 msgstr "Tipo parcela"
 
-#: catatom2osm/report.py:66
+#: catatom2osm/report.py:62
 msgid "Postal codes"
 msgstr "Códigos postales"
 
-#: catatom2osm/report.py:67
+#: catatom2osm/report.py:63
 msgid "Street names"
 msgstr "Nombres de viales"
 
-#: catatom2osm/report.py:68 catatom2osm/report.py:96
+#: catatom2osm/report.py:64 catatom2osm/report.py:92
 msgid "Process"
 msgstr "Procesado"
 
-#: catatom2osm/report.py:69
+#: catatom2osm/report.py:65
 msgid "Addresses deleted by street name"
 msgstr "Direcciones eliminadas por nombre de vía"
 
-#: catatom2osm/report.py:71
+#: catatom2osm/report.py:67
 msgid "Addresses without house number deleted"
 msgstr "Direcciones sin número de portal eliminadas"
 
-#: catatom2osm/report.py:73
+#: catatom2osm/report.py:69
 msgid "Addresses without associated building deleted"
 msgstr "Direcciones sin edificio asociado eliminadas"
 
-#: catatom2osm/report.py:75
+#: catatom2osm/report.py:71
 msgid "Addresses belonging to multiple buildings deleted"
 msgstr "Direcciones correspondientes a edificios múltiples eliminadas"
 
-#: catatom2osm/report.py:77
+#: catatom2osm/report.py:73
 msgid "'Parcel' addresses not unique for its building deleted"
 msgstr "Direcciones tipo parcela no únicas para su edificio eliminadas"
 
-#: catatom2osm/report.py:78 catatom2osm/report.py:115
+#: catatom2osm/report.py:74 catatom2osm/report.py:111
 msgid "Conflation"
 msgstr "Combinación"
 
-#: catatom2osm/report.py:79
+#: catatom2osm/report.py:75
 msgid "OSM addresses "
 msgstr "Direcciones OSM"
 
-#: catatom2osm/report.py:80
+#: catatom2osm/report.py:76
 msgid "Without house number"
 msgstr "Sin número de portal"
 
-#: catatom2osm/report.py:82
+#: catatom2osm/report.py:78
 msgid "Addresses rejected because they exist in OSM"
 msgstr "Direcciones rechazadas por existir en OSM"
 
-#: catatom2osm/report.py:83 catatom2osm/report.py:118
+#: catatom2osm/report.py:79 catatom2osm/report.py:114
 msgid "Output data"
 msgstr "Datos de salida"
 
-#: catatom2osm/report.py:85
+#: catatom2osm/report.py:81
 msgid "In entrance nodes"
 msgstr "En nodos de entrada"
 
-#: catatom2osm/report.py:86
+#: catatom2osm/report.py:82
 msgid "In buildings"
 msgstr "En edificios"
 
-#: catatom2osm/report.py:87
+#: catatom2osm/report.py:83
 msgid "Type addr:street"
 msgstr "Tipo addr:street"
 
-#: catatom2osm/report.py:88
+#: catatom2osm/report.py:84
 msgid "Type addr:place"
 msgstr "Tipo addr:place"
 
-#: catatom2osm/report.py:89 catatom2osm/report.py:93 catatom2osm/report.py:123
-#: catatom2osm/report.py:352
+#: catatom2osm/report.py:85 catatom2osm/report.py:89 catatom2osm/report.py:119
+#: catatom2osm/report.py:344
 msgid "Buildings"
 msgstr "Edificios"
 
-#: catatom2osm/report.py:94
+#: catatom2osm/report.py:90
 msgid "Building parts"
 msgstr "Partes de edificios"
 
-#: catatom2osm/report.py:95 catatom2osm/report.py:125
+#: catatom2osm/report.py:91 catatom2osm/report.py:121
 msgid "Swimming pools"
 msgstr "Piscinas"
 
-#: catatom2osm/report.py:97
+#: catatom2osm/report.py:93
 msgid "Parts outside outline deleted"
 msgstr "Partes fuera de contorno eliminadas"
 
-#: catatom2osm/report.py:98
+#: catatom2osm/report.py:94
 msgid "Parts with no floors above ground"
 msgstr "Partes bajo rasante eliminadas"
 
-#: catatom2osm/report.py:99
+#: catatom2osm/report.py:95
 msgid "Building outlines created"
 msgstr "Contornos de edificios creados"
 
-#: catatom2osm/report.py:101
+#: catatom2osm/report.py:97
 msgid "Buildings with multipart geometries"
 msgstr "Edificios con geometrías multiparte"
 
-#: catatom2osm/report.py:103
+#: catatom2osm/report.py:99
 msgid "Buildings resulting from splitting multiparts"
 msgstr "Edificios resultantes de dividir multipartes"
 
-#: catatom2osm/report.py:104
+#: catatom2osm/report.py:100
 msgid "Parts merged to the outline"
 msgstr "Partes fusionadas al contorno"
 
-#: catatom2osm/report.py:105
+#: catatom2osm/report.py:101
 msgid "Adjacent parts merged"
 msgstr "Partes adyacentes fusionadas"
 
-#: catatom2osm/report.py:107
+#: catatom2osm/report.py:103
 msgid "Buildings coincidents with a swimming pool deleted"
 msgstr "Edificios conincidentes con una piscina eliminados"
 
-#: catatom2osm/report.py:108
+#: catatom2osm/report.py:104
 msgid "Invalid geometry rings deleted"
 msgstr "Anillos de geometrías no válidos eliminados"
 
-#: catatom2osm/report.py:109
+#: catatom2osm/report.py:105
 msgid "Invalid geometries deleted"
 msgstr "Geometrías no válidas eliminadas"
 
-#: catatom2osm/report.py:110
+#: catatom2osm/report.py:106
 msgid "Zig-zag vertices deleted"
 msgstr "Vértices en zig-zag eliminados"
 
-#: catatom2osm/report.py:111
+#: catatom2osm/report.py:107
 msgid "Spike vertices deleted"
 msgstr "Vértices en punta eliminados"
 
-#: catatom2osm/report.py:112
+#: catatom2osm/report.py:108
 msgid "Close vertices merged"
 msgstr "Vértices próximos fusionados"
 
-#: catatom2osm/report.py:113
+#: catatom2osm/report.py:109
 msgid "Topological points created"
 msgstr "Puntos topológicos creados"
 
-#: catatom2osm/report.py:114
+#: catatom2osm/report.py:110
 msgid "Simplified vertices"
 msgstr "Vértices simplificados"
 
-#: catatom2osm/report.py:116
+#: catatom2osm/report.py:112
 msgid "Buildings/pools in OSM"
 msgstr "Edificios/piscinas en OSM"
 
-#: catatom2osm/report.py:117
+#: catatom2osm/report.py:113
 msgid "With conflict"
 msgstr "Con conflicto"
 
-#: catatom2osm/report.py:119
+#: catatom2osm/report.py:115
 msgid "Nodes"
 msgstr "Nodos"
 
-#: catatom2osm/report.py:120
+#: catatom2osm/report.py:116
 msgid "Ways"
 msgstr "Vías"
 
-#: catatom2osm/report.py:121
+#: catatom2osm/report.py:117
 msgid "Relations"
 msgstr "Relaciones"
 
-#: catatom2osm/report.py:124
+#: catatom2osm/report.py:120
 msgid "Buildings parts"
 msgstr "Partes de edificios"
 
-#: catatom2osm/report.py:126
+#: catatom2osm/report.py:122
 msgid "Over buildings"
 msgstr "Sobre edificios"
 
-#: catatom2osm/report.py:127
+#: catatom2osm/report.py:123
 msgid "Building types counter"
 msgstr "Recuento de tipos de edificios"
 
-#: catatom2osm/report.py:128
+#: catatom2osm/report.py:124
 msgid "Max. levels above ground (level: # of buildings)"
 msgstr "Plantas sobre rasante (nivel: nº de edificios)"
 
-#: catatom2osm/report.py:129
+#: catatom2osm/report.py:125
 msgid "Min. levels below ground (level: # of buildings)"
 msgstr "Plantas bajo rasante (nivel: nº de edificios)"
 
-#: catatom2osm/report.py:130
+#: catatom2osm/report.py:126
 msgid "Rustic tasks files"
 msgstr "Archivos de tareas de rústica"
 
-#: catatom2osm/report.py:131
+#: catatom2osm/report.py:127
 msgid "Urban tasks files"
 msgstr "Archivos de tareas de urbana"
 
-#: catatom2osm/report.py:132
+#: catatom2osm/report.py:128
 msgid "Buildings without zone"
 msgstr "Edificios sin zona"
 
-#: catatom2osm/report.py:133
+#: catatom2osm/report.py:129
 msgid "Problems"
 msgstr "Problemas"
 
-#: catatom2osm/report.py:134
+#: catatom2osm/report.py:130
 msgid "Report validation:"
 msgstr "Validación del informe:"
 
-#: catatom2osm/report.py:135
+#: catatom2osm/report.py:131
 msgid "Fixmes"
 msgstr "Correcciones (fixmes)"
 
-#: catatom2osm/report.py:137
+#: catatom2osm/report.py:133
 msgid "Warnings:"
 msgstr "Avisos:"
 
-#: catatom2osm/report.py:145
+#: catatom2osm/report.py:137
 msgid "seconds"
 msgstr "segundos"
 
-#: catatom2osm/report.py:254
+#: catatom2osm/report.py:246
 msgid "Sum of address types should be equal to the input addresses"
 msgstr ""
 "La suma de tipos de direcciones debe ser igual a las direcciones de entrada"
 
-#: catatom2osm/report.py:259
+#: catatom2osm/report.py:251
 msgid ""
 "Sum of output and deleted addresses should be equal to the input addresses"
 msgstr ""
 "La suma de las direcciones de salida y las eliminadas debe ser igual a las "
 "direcciones de entrada"
 
-#: catatom2osm/report.py:264
+#: catatom2osm/report.py:256
 msgid ""
 "Sum of entrance and building address should be equal to output addresses"
 msgstr ""
 "La suma de las direcciones en entradas y edificios debe ser igual a las "
 "direcciones de salida"
 
-#: catatom2osm/report.py:268
+#: catatom2osm/report.py:260
 msgid "Sum of street and place addresses should be equal to output addresses"
 msgstr ""
 "La suma de las direcciones tipo calle y lugar debe ser igual a las "
 "direcciones de salida"
 
-#: catatom2osm/report.py:272
+#: catatom2osm/report.py:264
 msgid "Sum of buildings, parts and pools should be equal to the feature count"
 msgstr ""
 "La suma de edificios, partes y piscinas debe ser igual al número de "
 "características"
 
-#: catatom2osm/report.py:279
+#: catatom2osm/report.py:271
 msgid ""
 "Sum of output and deleted minus created building features should be equal to "
 "input features"
@@ -882,7 +861,7 @@ msgstr ""
 "La suma de las características de edificios de salida y las eliminadas menos "
 "las creadas debe ser igual a las características de entrada"
 
-#: catatom2osm/report.py:284
+#: catatom2osm/report.py:276
 msgid "Sum of building types should be equal to the number of buildings"
 msgstr ""
 "La suma de los tipos de edificios debe ser igual al número de edificios"

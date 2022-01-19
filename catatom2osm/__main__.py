@@ -1,10 +1,12 @@
 """CatAtom2Osm command line entry point"""
 import argparse
 import logging
+import os
 import sys
 from zipfile import BadZipfile
 
 from catatom2osm import config
+from catatom2osm import csvtools
 log = config.log
 
 
@@ -33,8 +35,23 @@ examples = _("""Examples:
 
 def process(options):
     if options.list:
-        from catatom2osm.catatom import list_municipalities
-        list_municipalities('{:>02}'.format(options.list))
+        if options.list == '99':
+            title = _("Territorial office")
+            print(title)
+            print("=" * len(title))
+            for code, prov in config.prov_codes.items():
+                print(f"{code} {prov}")
+        else:
+            prov_code = '{:>02}'.format(options.list)
+            if prov_code not in config.prov_codes.keys():
+                raise ValueError(_("Province code '%s' not valid") % prov_code)
+            office = config.prov_codes[prov_code]
+            title = _("Territorial office %s - %s") % (prov_code, office)
+            print(title)
+            print("=" * len(title))
+            fn = os.path.join(config.app_path, 'municipalities.csv')
+            for mun in csvtools.startswith(fn, prov_code):
+                print(f"{mun[0]} {mun[2]}")
     elif options.download:
         from catatom2osm.catatom import Reader
         for a_path in options.path:

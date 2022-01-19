@@ -3,7 +3,7 @@ from tempfile import mkstemp
 
 import io
 
-from catatom2osm.csvtools import csv2dict, dict2csv
+from catatom2osm import csvtools
 from catatom2osm.config import eol, encoding, delimiter
 
 
@@ -13,7 +13,7 @@ class TestCsvTools(unittest.TestCase):
         _, tmp_path = mkstemp()
         with io.open(tmp_path, 'w', encoding=encoding) as csv_file:
             csv_file.write("á%sx\né%sy\n" % (delimiter, delimiter))
-        a_dict = csv2dict(tmp_path, {})
+        a_dict = csvtools.csv2dict(tmp_path, {})
         self.assertEqual(a_dict, {"á":"x", "é":"y"})
 
     def test_csv2dict_bad_delimiter(self):
@@ -21,7 +21,7 @@ class TestCsvTools(unittest.TestCase):
         with io.open(tmp_path, 'w', encoding=encoding) as csv_file:
             csv_file.write('a;1\nb;2')
         with self.assertRaises(IOError):
-            a_dict = csv2dict(tmp_path, {})
+            a_dict = csvtools.csv2dict(tmp_path, {})
 
     def test_dict2csv(self):
         _, tmp_path = mkstemp()
@@ -29,15 +29,28 @@ class TestCsvTools(unittest.TestCase):
         l = list(d.items())
         t = "%s%s%s\n%s%s%s\n" % (l[0][0], delimiter, l[0][1],
             l[1][0], delimiter, l[1][1])
-        dict2csv(tmp_path, d)
+        csvtools.dict2csv(tmp_path, d)
         with io.open(tmp_path, 'r', encoding=encoding) as csv_file:
             text = csv_file.read()
         self.assertEqual(text, t)
 
     def test_dict2csv_sort(self):
         _, tmp_path = mkstemp()
-        dict2csv(tmp_path, {'b':'1', 'a':'3', 'c': '2'}, sort=1)
+        csvtools.dict2csv(tmp_path, {'b':'1', 'a':'3', 'c': '2'}, sort=1)
         with io.open(tmp_path, 'r', encoding=encoding) as csv_file:
             text = csv_file.read()
         self.assertEqual(text, "b%s1\nc%s2\na%s3\n" % (delimiter, 
             delimiter, delimiter))
+
+    def test_search_mun(self):
+        fn = 'test/fixtures/municipalities.csv'
+        q = lambda row, args: row[0] == args[0]
+        output = csvtools.search(fn, '05001', query=q)
+        self.assertEqual(output, ['05001', '339910', 'Adanero'])
+
+    def test_filter_prov(self):
+        fn = 'test/fixtures/municipalities.csv'
+        q = lambda row, args: row[0].startswith(args[0])
+        output = csvtools.filter(fn, '02', query=q)
+        self.assertTrue(all([row[0].startswith('02') for row in output]))
+        self.assertEqual(len(output), 87)
