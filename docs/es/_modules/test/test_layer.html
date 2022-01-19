@@ -14,7 +14,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>test.test_layer &#8212; documentación de CatAtom2Osm - 2.0.0</title>
+    <title>test.test_layer &#8212; documentación de CatAtom2Osm - 2.1.0</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/guzzle.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.0.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.1.0</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Código de módulo</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">test.test_layer</a></li> 
       </ul>
@@ -452,19 +452,19 @@
         <span class="n">mock_fw</span><span class="o">.</span><span class="n">NoError</span> <span class="o">=</span> <span class="n">QgsVectorFileWriter</span><span class="o">.</span><span class="n">NoError</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="s1">&#39;foobar&#39;</span><span class="p">))</span>
         <span class="n">mock_fw</span><span class="o">.</span><span class="n">deleteShapeFile</span><span class="o">.</span><span class="n">assert_called_once_with</span><span class="p">(</span><span class="s1">&#39;foobar&#39;</span><span class="p">)</span>
-        <span class="n">mock_wvf</span><span class="o">.</span><span class="n">assert_called_once_with</span><span class="p">(</span><span class="s1">&#39;foobar&#39;</span><span class="p">,</span> <span class="s1">&#39;ESRI Shapefile&#39;</span><span class="p">)</span></div>
+        <span class="n">mock_wvf</span><span class="o">.</span><span class="n">assert_called_once_with</span><span class="p">(</span><span class="s1">&#39;foobar&#39;</span><span class="p">,</span> <span class="s1">&#39;ESRI Shapefile&#39;</span><span class="p">,</span> <span class="n">layer</span><span class="o">.</span><span class="n">crs</span><span class="p">())</span></div>
 
-<div class="viewcode-block" id="TestBaseLayer2.test_export_other"><a class="viewcode-back" href="../../api/test.test_layer.html#test.test_layer.TestBaseLayer2.test_export_other">[documentos]</a>    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.layer.BaseLayer.writeAsVectorFormat&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="TestBaseLayer2.test_export_other"><a class="viewcode-back" href="../../api/test.test_layer.html#test.test_layer.TestBaseLayer2.test_export_other">[documentos]</a>    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.layer.QgsVectorFileWriter&#39;</span><span class="p">,</span> <span class="n">mock</span><span class="o">.</span><span class="n">MagicMock</span><span class="p">())</span>
+    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.layer.BaseLayer.writeAsVectorFormat&#39;</span><span class="p">)</span>
     <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.layer.QgsCoordinateReferenceSystem.fromEpsgId&#39;</span><span class="p">)</span>
-    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.layer.QgsVectorFileWriter&#39;</span><span class="p">)</span>
     <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.layer.os&#39;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">test_export_other</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mock_os</span><span class="p">,</span> <span class="n">mock_fw</span><span class="p">,</span> <span class="n">mock_crs</span><span class="p">,</span> <span class="n">mock_wvf</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">test_export_other</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mock_os</span><span class="p">,</span> <span class="n">mock_crs</span><span class="p">,</span> <span class="n">mock_wvf</span><span class="p">):</span>
         <span class="n">layer</span> <span class="o">=</span> <span class="n">BaseLayer</span><span class="p">(</span><span class="s2">&quot;Polygon&quot;</span><span class="p">,</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="s2">&quot;memory&quot;</span><span class="p">)</span>
         <span class="n">mock_os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="o">.</span><span class="n">side_effect</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">arg</span><span class="p">:</span> <span class="n">arg</span><span class="o">==</span><span class="s1">&#39;foobar&#39;</span>
         <span class="n">layer</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="s1">&#39;foobar&#39;</span><span class="p">,</span> <span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="n">target_crs_id</span><span class="o">=</span><span class="mi">1234</span><span class="p">)</span>
         <span class="n">crs</span> <span class="o">=</span> <span class="n">mock_crs</span><span class="o">.</span><span class="n">return_value</span>
         <span class="n">mock_crs</span><span class="o">.</span><span class="n">assert_called_once_with</span><span class="p">(</span><span class="mi">1234</span><span class="p">)</span>
-        <span class="n">mock_wvf</span><span class="o">.</span><span class="n">assert_called_once_with</span><span class="p">(</span><span class="s1">&#39;foobar&#39;</span><span class="p">,</span> <span class="s1">&#39;foo&#39;</span><span class="p">)</span>
+        <span class="n">mock_wvf</span><span class="o">.</span><span class="n">assert_called_once_with</span><span class="p">(</span><span class="s1">&#39;foobar&#39;</span><span class="p">,</span> <span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="n">crs</span><span class="p">)</span>
         <span class="n">mock_os</span><span class="o">.</span><span class="n">remove</span><span class="o">.</span><span class="n">assert_called_once_with</span><span class="p">(</span><span class="s1">&#39;foobar&#39;</span><span class="p">)</span>
         <span class="n">layer</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="s1">&#39;foobar&#39;</span><span class="p">,</span> <span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="n">mock_os</span><span class="o">.</span><span class="n">remove</span><span class="o">.</span><span class="n">assert_called_once_with</span><span class="p">(</span><span class="s1">&#39;foobar&#39;</span><span class="p">)</span></div></div>
@@ -1129,7 +1129,7 @@
         <span class="n">address</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">address_gml</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">address</span><span class="o">.</span><span class="n">featureCount</span><span class="p">(),</span> <span class="mi">14</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">layer</span><span class="o">.</span><span class="n">move_address</span><span class="p">(</span><span class="n">address</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">address</span><span class="o">.</span><span class="n">featureCount</span><span class="p">(),</span> <span class="mi">6</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">address</span><span class="o">.</span><span class="n">featureCount</span><span class="p">(),</span> <span class="mi">7</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">ad</span> <span class="ow">in</span> <span class="n">address</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">ad</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">refs</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">ad</span><span class="p">[</span><span class="s1">&#39;spec&#39;</span><span class="p">],</span> <span class="n">refs</span><span class="p">[</span><span class="n">ad</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">]])</span>
@@ -1402,7 +1402,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.0.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.1.0</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Código de módulo</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">test.test_layer</a></li> 
       </ul>

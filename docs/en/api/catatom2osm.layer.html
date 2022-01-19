@@ -15,7 +15,7 @@
   <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.layer module &#8212; CatAtom2Osm 2.0.0 documentation</title>
+    <title>catatom2osm.layer module &#8212; CatAtom2Osm 2.1.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/guzzle.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
@@ -45,7 +45,7 @@
         <li class="right" >
           <a href="catatom2osm.hgwnames.html" title="catatom2osm.hgwnames module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 2.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 2.1.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../api.html" >API reference</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="modules.html" >CatAtom2Osm</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="catatom2osm.html" accesskey="U">catatom2osm package</a> &#187;</li>
@@ -396,7 +396,7 @@ By defaults convert all fields.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.layer.BaseLayer.writeAsVectorFormat">
-<span class="sig-name descname"><span class="pre">writeAsVectorFormat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">driver_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#BaseLayer.writeAsVectorFormat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.layer.BaseLayer.writeAsVectorFormat" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">writeAsVectorFormat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">driver_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_crs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#BaseLayer.writeAsVectorFormat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.layer.BaseLayer.writeAsVectorFormat" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -516,13 +516,20 @@ Apply merge_adjacent_parts to each set of building and its parts.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.layer.ConsLayer.move_address">
 <span class="sig-name descname"><span class="pre">move_address</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">address</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#ConsLayer.move_address"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.layer.ConsLayer.move_address" title="Permalink to this definition">¶</a></dt>
-<dd><p>Move each address to the nearest point in the outline of its
-associated building (same cadastral reference), but only if:</p>
-<ul class="simple">
-<li><p>The address specification is Entrance.</p></li>
-<li><p>The new position is enough close and is not a corner</p></li>
-</ul>
-<p>Delete the address if the number of associated buildings is not one.</p>
+<dd><p>Try to move each entrance address to the nearest point in the outline
+of its associated building (same cadastral reference). Non entrance
+addresses ends in the building outline when CatAtom2Osm.merge_address
+is called. Delete the address if the number of associated buildings
+is 0 or greater than 1 for non entrance addresses.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="catatom2osm.layer.ConsLayer.move_entrance">
+<span class="sig-name descname"><span class="pre">move_entrance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ad_buildings</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ad_parts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_move</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_insert</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#ConsLayer.move_entrance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.layer.ConsLayer.move_entrance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Auxiliary method to move entrance to the nearest building and part.
+Don’t move and the entrance specification is changed if the new
+position is not enough close (‘remote’), is a corner (‘corner’) or
+is in an inner ring (‘inner’).</p>
 </dd></dl>
 
 <dl class="py method">
@@ -974,7 +981,7 @@ For a more advanced concept, see the classmethod builtin.</p>
         <li class="right" >
           <a href="catatom2osm.hgwnames.html" title="catatom2osm.hgwnames module"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 2.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 2.1.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../api.html" >API reference</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="modules.html" >CatAtom2Osm</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="catatom2osm.html" >catatom2osm package</a> &#187;</li>

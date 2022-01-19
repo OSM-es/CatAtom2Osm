@@ -14,7 +14,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.layer &#8212; documentación de CatAtom2Osm - 2.0.0</title>
+    <title>catatom2osm.layer &#8212; documentación de CatAtom2Osm - 2.1.0</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/guzzle.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.0.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.1.0</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Código de módulo</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.layer</a></li> 
       </ul>
@@ -350,11 +350,17 @@
         <span class="n">prj</span> <span class="o">=</span> <span class="n">QgsProject</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">QgsCoordinateTransform</span><span class="p">(</span><span class="n">source_crs</span><span class="p">,</span> <span class="n">target_crs</span><span class="p">,</span> <span class="n">prj</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="BaseLayer.writeAsVectorFormat"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.BaseLayer.writeAsVectorFormat">[documentos]</a>    <span class="k">def</span> <span class="nf">writeAsVectorFormat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">driver_name</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseLayer.writeAsVectorFormat"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.BaseLayer.writeAsVectorFormat">[documentos]</a>    <span class="k">def</span> <span class="nf">writeAsVectorFormat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">driver_name</span><span class="p">,</span> <span class="n">target_crs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="n">transform_context</span> <span class="o">=</span> <span class="n">QgsProject</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span><span class="o">.</span><span class="n">transformContext</span><span class="p">()</span>
         <span class="n">save_options</span> <span class="o">=</span> <span class="n">QgsVectorFileWriter</span><span class="o">.</span><span class="n">SaveVectorOptions</span><span class="p">()</span>
         <span class="n">save_options</span><span class="o">.</span><span class="n">driverName</span> <span class="o">=</span> <span class="n">driver_name</span>
         <span class="n">save_options</span><span class="o">.</span><span class="n">fileEncoding</span> <span class="o">=</span> <span class="s2">&quot;UTF-8&quot;</span>
+        <span class="k">if</span> <span class="n">target_crs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">target_crs</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">():</span>
+            <span class="n">save_options</span><span class="o">.</span><span class="n">ct</span> <span class="o">=</span> <span class="n">QgsCoordinateTransform</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">(),</span>
+                <span class="n">QgsCoordinateReferenceSystem</span><span class="p">(</span><span class="n">target_crs</span><span class="p">),</span>
+                <span class="n">transform_context</span><span class="p">,</span>
+            <span class="p">)</span>
         <span class="k">return</span> <span class="n">QgsVectorFileWriter</span><span class="o">.</span><span class="n">writeAsVectorFormatV2</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">transform_context</span><span class="p">,</span> <span class="n">save_options</span>
         <span class="p">)</span></div>
@@ -627,15 +633,15 @@
 <span class="sd">            target_crs_id (int): Defaults to source CRS</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">target_crs_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">target_crs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">()</span> 
+            <span class="n">target_crs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
-             <span class="n">target_crs</span> <span class="o">=</span> <span class="n">QgsCoordinateReferenceSystem</span><span class="o">.</span><span class="n">fromEpsgId</span><span class="p">(</span><span class="n">target_crs_id</span><span class="p">)</span>
+            <span class="n">target_crs</span> <span class="o">=</span> <span class="n">QgsCoordinateReferenceSystem</span><span class="o">.</span><span class="n">fromEpsgId</span><span class="p">(</span><span class="n">target_crs_id</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="ow">and</span> <span class="n">overwrite</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">driver_name</span> <span class="o">==</span> <span class="s1">&#39;ESRI Shapefile&#39;</span><span class="p">:</span>
                 <span class="n">QgsVectorFileWriter</span><span class="o">.</span><span class="n">deleteShapeFile</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">writeAsVectorFormat</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">driver_name</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">writeAsVectorFormat</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">driver_name</span><span class="p">,</span> <span class="n">target_crs</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">QgsVectorFileWriter</span><span class="o">.</span><span class="n">NoError</span>
         <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
@@ -1827,16 +1833,55 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">merge_building_parts</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">simplify</span><span class="p">()</span></div>
 
+<div class="viewcode-block" id="ConsLayer.move_entrance"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.ConsLayer.move_entrance">[documentos]</a>    <span class="k">def</span> <span class="nf">move_entrance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ad</span><span class="p">,</span> <span class="n">ad_buildings</span><span class="p">,</span> <span class="n">ad_parts</span><span class="p">,</span> <span class="n">to_move</span><span class="p">,</span> <span class="n">to_insert</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Auxiliary method to move entrance to the nearest building and part.</span>
+<span class="sd">        Don&#39;t move and the entrance specification is changed if the new</span>
+<span class="sd">        position is not enough close (&#39;remote&#39;), is a corner (&#39;corner&#39;) or</span>
+<span class="sd">        is in an inner ring (&#39;inner&#39;).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">point</span> <span class="o">=</span> <span class="n">ad</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span><span class="o">.</span><span class="n">asPoint</span><span class="p">()</span>
+        <span class="n">distance</span> <span class="o">=</span> <span class="mf">9E9</span>
+        <span class="k">for</span> <span class="n">bu</span> <span class="ow">in</span> <span class="n">ad_buildings</span><span class="p">:</span>
+            <span class="n">bg</span> <span class="o">=</span> <span class="n">bu</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span>
+            <span class="n">d</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">bg</span><span class="o">.</span><span class="n">closestSegmentWithContext</span><span class="p">(</span><span class="n">point</span><span class="p">)[:</span><span class="mi">3</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">d</span> <span class="o">&lt;</span> <span class="n">distance</span><span class="p">:</span>
+                <span class="p">(</span><span class="n">building</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">closest</span><span class="p">,</span> <span class="n">vertex</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">bu</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+        <span class="n">bg</span> <span class="o">=</span> <span class="n">building</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span>
+        <span class="n">va</span> <span class="o">=</span> <span class="n">Point</span><span class="p">(</span><span class="n">bg</span><span class="o">.</span><span class="n">vertexAt</span><span class="p">(</span><span class="n">vertex</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">vb</span> <span class="o">=</span> <span class="n">Point</span><span class="p">(</span><span class="n">bg</span><span class="o">.</span><span class="n">vertexAt</span><span class="p">(</span><span class="n">vertex</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">distance</span> <span class="o">&gt;</span> <span class="n">config</span><span class="o">.</span><span class="n">addr_thr</span> <span class="o">**</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">ad</span><span class="p">[</span><span class="s1">&#39;spec&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;remote&#39;</span>
+        <span class="k">elif</span> <span class="n">vertex</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">Geometry</span><span class="o">.</span><span class="n">get_multipolygon</span><span class="p">(</span><span class="n">bg</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="n">ad</span><span class="p">[</span><span class="s1">&#39;spec&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;inner&#39;</span>
+        <span class="k">elif</span> <span class="p">(</span>
+            <span class="n">closest</span><span class="o">.</span><span class="n">sqrDist</span><span class="p">(</span><span class="n">va</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">config</span><span class="o">.</span><span class="n">entrance_thr</span> <span class="o">**</span> <span class="mi">2</span>
+            <span class="ow">or</span> <span class="n">closest</span><span class="o">.</span><span class="n">sqrDist</span><span class="p">(</span><span class="n">vb</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">config</span><span class="o">.</span><span class="n">entrance_thr</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="p">):</span>
+            <span class="n">ad</span><span class="p">[</span><span class="s1">&#39;spec&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;corner&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">dg</span> <span class="o">=</span> <span class="n">Geometry</span><span class="o">.</span><span class="n">fromPointXY</span><span class="p">(</span><span class="n">closest</span><span class="p">)</span>
+            <span class="n">to_move</span><span class="p">[</span><span class="n">ad</span><span class="o">.</span><span class="n">id</span><span class="p">()]</span> <span class="o">=</span> <span class="n">dg</span>
+            <span class="n">bg</span><span class="o">.</span><span class="n">insertVertex</span><span class="p">(</span><span class="n">closest</span><span class="o">.</span><span class="n">x</span><span class="p">(),</span> <span class="n">closest</span><span class="o">.</span><span class="n">y</span><span class="p">(),</span> <span class="n">vertex</span><span class="p">)</span>
+            <span class="n">to_insert</span><span class="p">[</span><span class="n">building</span><span class="o">.</span><span class="n">id</span><span class="p">()]</span> <span class="o">=</span> <span class="n">QgsGeometry</span><span class="p">(</span><span class="n">bg</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">ad_parts</span><span class="p">:</span>
+                <span class="n">pg</span> <span class="o">=</span> <span class="n">part</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span>
+                <span class="n">r</span> <span class="o">=</span> <span class="n">Geometry</span><span class="o">.</span><span class="n">get_multipolygon</span><span class="p">(</span><span class="n">pg</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+                    <span class="n">vpa</span> <span class="o">=</span> <span class="n">Point</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">vertexAt</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+                    <span class="n">vpb</span> <span class="o">=</span> <span class="n">Point</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">vertexAt</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+                    <span class="k">if</span> <span class="n">va</span> <span class="ow">in</span> <span class="p">(</span><span class="n">vpa</span><span class="p">,</span> <span class="n">vpb</span><span class="p">)</span> <span class="ow">and</span> <span class="n">vb</span> <span class="ow">in</span> <span class="p">(</span><span class="n">vpa</span><span class="p">,</span> <span class="n">vpb</span><span class="p">):</span>
+                        <span class="n">pg</span><span class="o">.</span><span class="n">insertVertex</span><span class="p">(</span><span class="n">closest</span><span class="o">.</span><span class="n">x</span><span class="p">(),</span> <span class="n">closest</span><span class="o">.</span><span class="n">y</span><span class="p">(),</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                        <span class="n">to_insert</span><span class="p">[</span><span class="n">part</span><span class="o">.</span><span class="n">id</span><span class="p">()]</span> <span class="o">=</span> <span class="n">QgsGeometry</span><span class="p">(</span><span class="n">pg</span><span class="p">)</span>
+                        <span class="k">break</span></div>
+
 <div class="viewcode-block" id="ConsLayer.move_address"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.ConsLayer.move_address">[documentos]</a>    <span class="k">def</span> <span class="nf">move_address</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">address</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Move each address to the nearest point in the outline of its</span>
-<span class="sd">        associated building (same cadastral reference), but only if:</span>
-
-<span class="sd">        * The address specification is Entrance.</span>
-
-<span class="sd">        * The new position is enough close and is not a corner</span>
-<span class="sd">        </span>
-<span class="sd">        Delete the address if the number of associated buildings is not one.</span>
+<span class="sd">        Try to move each entrance address to the nearest point in the outline</span>
+<span class="sd">        of its associated building (same cadastral reference). Non entrance</span>
+<span class="sd">        addresses ends in the building outline when CatAtom2Osm.merge_address</span>
+<span class="sd">        is called. Delete the address if the number of associated buildings</span>
+<span class="sd">        is 0 or greater than 1 for non entrance addresses.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">to_change</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">to_move</span> <span class="o">=</span> <span class="p">{}</span>
@@ -1845,62 +1890,45 @@
         <span class="n">mp</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">oa</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="p">(</span><span class="n">buildings</span><span class="p">,</span> <span class="n">parts</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">index_of_building_and_parts</span><span class="p">()</span>
+        <span class="n">pbar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_progressbar</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Move addresses&quot;</span><span class="p">),</span> <span class="n">address</span><span class="o">.</span><span class="n">featureCount</span><span class="p">())</span>
         <span class="k">for</span> <span class="n">ad</span> <span class="ow">in</span> <span class="n">address</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">():</span>
             <span class="n">refcat</span> <span class="o">=</span> <span class="n">ad</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-            <span class="n">building_count</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">refcat</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">buildings</span> <span class="k">else</span> <span class="nb">len</span><span class="p">(</span><span class="n">buildings</span><span class="p">[</span><span class="n">refcat</span><span class="p">])</span>
-            <span class="k">if</span> <span class="n">building_count</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="n">building</span> <span class="o">=</span> <span class="n">buildings</span><span class="p">[</span><span class="n">refcat</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-                <span class="n">it_parts</span> <span class="o">=</span> <span class="n">parts</span><span class="p">[</span><span class="n">refcat</span><span class="p">]</span>
-                <span class="k">if</span> <span class="n">ad</span><span class="p">[</span><span class="s1">&#39;spec&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Entrance&#39;</span><span class="p">:</span>
-                    <span class="n">point</span> <span class="o">=</span> <span class="n">ad</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span><span class="o">.</span><span class="n">asPoint</span><span class="p">()</span>
-                    <span class="n">bg</span> <span class="o">=</span> <span class="n">building</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span>
-                    <span class="n">distance</span><span class="p">,</span> <span class="n">closest</span><span class="p">,</span> <span class="n">vertex</span> <span class="o">=</span> <span class="n">bg</span><span class="o">.</span><span class="n">closestSegmentWithContext</span><span class="p">(</span><span class="n">point</span><span class="p">)[:</span><span class="mi">3</span><span class="p">]</span>
-                    <span class="n">va</span> <span class="o">=</span> <span class="n">Point</span><span class="p">(</span><span class="n">bg</span><span class="o">.</span><span class="n">vertexAt</span><span class="p">(</span><span class="n">vertex</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
-                    <span class="n">vb</span> <span class="o">=</span> <span class="n">Point</span><span class="p">(</span><span class="n">bg</span><span class="o">.</span><span class="n">vertexAt</span><span class="p">(</span><span class="n">vertex</span><span class="p">))</span>
-                    <span class="k">if</span> <span class="n">distance</span> <span class="o">&lt;</span> <span class="n">config</span><span class="o">.</span><span class="n">addr_thr</span><span class="o">**</span><span class="mi">2</span><span class="p">:</span>
-                        <span class="k">if</span> <span class="n">vertex</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">Geometry</span><span class="o">.</span><span class="n">get_multipolygon</span><span class="p">(</span><span class="n">bg</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]):</span>
-                            <span class="n">ad</span><span class="p">[</span><span class="s1">&#39;spec&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;inner&#39;</span>
-                            <span class="n">to_change</span><span class="p">[</span><span class="n">ad</span><span class="o">.</span><span class="n">id</span><span class="p">()]</span> <span class="o">=</span> <span class="n">get_attributes</span><span class="p">(</span><span class="n">ad</span><span class="p">)</span>
-                        <span class="k">elif</span> <span class="n">closest</span><span class="o">.</span><span class="n">sqrDist</span><span class="p">(</span><span class="n">va</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">config</span><span class="o">.</span><span class="n">entrance_thr</span><span class="o">**</span><span class="mi">2</span> \
-                                <span class="ow">or</span> <span class="n">closest</span><span class="o">.</span><span class="n">sqrDist</span><span class="p">(</span><span class="n">vb</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">config</span><span class="o">.</span><span class="n">entrance_thr</span><span class="o">**</span><span class="mi">2</span><span class="p">:</span>
-                            <span class="n">ad</span><span class="p">[</span><span class="s1">&#39;spec&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;corner&#39;</span>
-                            <span class="n">to_change</span><span class="p">[</span><span class="n">ad</span><span class="o">.</span><span class="n">id</span><span class="p">()]</span> <span class="o">=</span> <span class="n">get_attributes</span><span class="p">(</span><span class="n">ad</span><span class="p">)</span>
-                        <span class="k">else</span><span class="p">:</span>
-                            <span class="n">dg</span> <span class="o">=</span> <span class="n">Geometry</span><span class="o">.</span><span class="n">fromPointXY</span><span class="p">(</span><span class="n">closest</span><span class="p">)</span>
-                            <span class="n">to_move</span><span class="p">[</span><span class="n">ad</span><span class="o">.</span><span class="n">id</span><span class="p">()]</span> <span class="o">=</span> <span class="n">dg</span>
-                            <span class="n">bg</span><span class="o">.</span><span class="n">insertVertex</span><span class="p">(</span><span class="n">closest</span><span class="o">.</span><span class="n">x</span><span class="p">(),</span> <span class="n">closest</span><span class="o">.</span><span class="n">y</span><span class="p">(),</span> <span class="n">vertex</span><span class="p">)</span>
-                            <span class="n">to_insert</span><span class="p">[</span><span class="n">building</span><span class="o">.</span><span class="n">id</span><span class="p">()]</span> <span class="o">=</span> <span class="n">QgsGeometry</span><span class="p">(</span><span class="n">bg</span><span class="p">)</span>
-                            <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">it_parts</span><span class="p">:</span>
-                                <span class="n">pg</span> <span class="o">=</span> <span class="n">part</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span>
-                                <span class="n">r</span> <span class="o">=</span> <span class="n">Geometry</span><span class="o">.</span><span class="n">get_multipolygon</span><span class="p">(</span><span class="n">pg</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-                                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
-                                    <span class="n">vpa</span> <span class="o">=</span> <span class="n">Point</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">vertexAt</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
-                                    <span class="n">vpb</span> <span class="o">=</span> <span class="n">Point</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">vertexAt</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
-                                    <span class="k">if</span> <span class="n">va</span> <span class="ow">in</span> <span class="p">(</span><span class="n">vpa</span><span class="p">,</span> <span class="n">vpb</span><span class="p">)</span> <span class="ow">and</span> <span class="n">vb</span> <span class="ow">in</span> <span class="p">(</span><span class="n">vpa</span><span class="p">,</span> <span class="n">vpb</span><span class="p">):</span>
-                                        <span class="n">pg</span><span class="o">.</span><span class="n">insertVertex</span><span class="p">(</span><span class="n">closest</span><span class="o">.</span><span class="n">x</span><span class="p">(),</span> <span class="n">closest</span><span class="o">.</span><span class="n">y</span><span class="p">(),</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
-                                        <span class="n">to_insert</span><span class="p">[</span><span class="n">part</span><span class="o">.</span><span class="n">id</span><span class="p">()]</span> <span class="o">=</span> <span class="n">QgsGeometry</span><span class="p">(</span><span class="n">pg</span><span class="p">)</span>
-                                        <span class="k">break</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="n">ad</span><span class="p">[</span><span class="s1">&#39;spec&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;remote&#39;</span>
-                        <span class="n">to_change</span><span class="p">[</span><span class="n">ad</span><span class="o">.</span><span class="n">id</span><span class="p">()]</span> <span class="o">=</span> <span class="n">get_attributes</span><span class="p">(</span><span class="n">ad</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
+            <span class="n">building_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">buildings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">refcat</span><span class="p">,</span> <span class="p">[]))</span>
+            <span class="n">ad_buildings</span> <span class="o">=</span> <span class="n">buildings</span><span class="p">[</span><span class="n">refcat</span><span class="p">]</span>
+            <span class="n">ad_parts</span> <span class="o">=</span> <span class="n">parts</span><span class="p">[</span><span class="n">refcat</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">building_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">to_clean</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ad</span><span class="o">.</span><span class="n">id</span><span class="p">())</span>
-                <span class="k">if</span> <span class="n">building_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                    <span class="n">oa</span> <span class="o">+=</span> <span class="mi">1</span>
-                <span class="k">else</span><span class="p">:</span>
+                <span class="n">oa</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">ad</span><span class="p">[</span><span class="s1">&#39;spec&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Entrance&#39;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">move_entrance</span><span class="p">(</span>
+                        <span class="n">ad</span><span class="p">,</span> <span class="n">ad_buildings</span><span class="p">,</span> <span class="n">ad_parts</span><span class="p">,</span> <span class="n">to_move</span><span class="p">,</span> <span class="n">to_insert</span>
+                    <span class="p">)</span>
+                <span class="k">if</span> <span class="n">ad</span><span class="p">[</span><span class="s1">&#39;spec&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;Entrance&#39;</span> <span class="ow">and</span> <span class="n">building_count</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">to_clean</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ad</span><span class="o">.</span><span class="n">id</span><span class="p">())</span>
                     <span class="n">mp</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="n">ad</span><span class="p">[</span><span class="s1">&#39;spec&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;Parcel&#39;</span> <span class="ow">and</span> <span class="n">building_count</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">to_change</span><span class="p">[</span><span class="n">ad</span><span class="o">.</span><span class="n">id</span><span class="p">()]</span> <span class="o">=</span> <span class="n">get_attributes</span><span class="p">(</span><span class="n">ad</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_insert</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">BUFFER_SIZE</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">changeGeometryValues</span><span class="p">(</span><span class="n">to_insert</span><span class="p">)</span>
+                <span class="n">to_insert</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">pbar</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+        <span class="n">pbar</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="n">address</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">changeAttributeValues</span><span class="p">(</span><span class="n">to_change</span><span class="p">)</span>
         <span class="n">address</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">changeGeometryValues</span><span class="p">(</span><span class="n">to_move</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">changeGeometryValues</span><span class="p">(</span><span class="n">to_insert</span><span class="p">)</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Moved </span><span class="si">%d</span><span class="s2"> addresses to entrance, </span><span class="si">%d</span><span class="s2"> changed to parcel&quot;</span><span class="p">),</span>
-            <span class="nb">len</span><span class="p">(</span><span class="n">to_move</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_change</span><span class="p">))</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_insert</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">changeGeometryValues</span><span class="p">(</span><span class="n">to_insert</span><span class="p">)</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Moved </span><span class="si">%d</span><span class="s2"> addresses to entrance, </span><span class="si">%d</span><span class="s2"> specification changed&quot;</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_move</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_change</span><span class="p">))</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_clean</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">address</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">deleteFeatures</span><span class="p">(</span><span class="n">to_clean</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">oa</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Deleted </span><span class="si">%d</span><span class="s2"> addresses without associated building&quot;</span><span class="p">),</span> <span class="n">oa</span><span class="p">)</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Deleted </span><span class="si">%d</span><span class="s2"> addresses without associated building&quot;</span><span class="p">)</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">oa</span><span class="p">)</span>
             <span class="n">report</span><span class="o">.</span><span class="n">orphand_addresses</span> <span class="o">=</span> <span class="n">oa</span>
         <span class="k">if</span> <span class="n">mp</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Refused </span><span class="si">%d</span><span class="s2"> addresses belonging to multiple buildings&quot;</span><span class="p">),</span> <span class="n">mp</span><span class="p">)</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Refused </span><span class="si">%d</span><span class="s2"> addresses belonging to multiple buildings&quot;</span><span class="p">)</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">mp</span><span class="p">)</span>
             <span class="n">report</span><span class="o">.</span><span class="n">multiple_addresses</span> <span class="o">=</span> <span class="n">mp</span></div>
 
 <div class="viewcode-block" id="ConsLayer.validate"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.ConsLayer.validate">[documentos]</a>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_level</span><span class="p">,</span> <span class="n">min_level</span><span class="p">):</span>
@@ -2062,7 +2090,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.0.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.1.0</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Código de módulo</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.layer</a></li> 
       </ul>

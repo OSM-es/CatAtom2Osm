@@ -14,7 +14,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.osm &#8212; CatAtom2Osm 2.0.0 documentation</title>
+    <title>catatom2osm.osm &#8212; CatAtom2Osm 2.1.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/guzzle.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.1.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.osm</a></li> 
       </ul>
@@ -222,7 +222,18 @@
         <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;Node&#39;</span><span class="p">,</span> <span class="s1">&#39;Way&#39;</span><span class="p">,</span> <span class="s1">&#39;Relation&#39;</span><span class="p">,</span> <span class="s1">&#39;Polygon&#39;</span><span class="p">,</span> <span class="s1">&#39;MultiPolygon&#39;</span><span class="p">]:</span>
             <span class="bp">cls</span> <span class="o">=</span> <span class="nb">globals</span><span class="p">()[</span><span class="n">name</span><span class="p">]</span>
             <span class="k">return</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="bp">cls</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="k">raise</span> <span class="ne">AttributeError</span></div>
+        <span class="k">raise</span> <span class="ne">AttributeError</span>
+
+<div class="viewcode-block" id="Osm.get_outline"><a class="viewcode-back" href="../../api/catatom2osm.osm.html#catatom2osm.osm.Osm.get_outline">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_outline</span><span class="p">(</span><span class="n">elements</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;For a set of elements, get all Way and outer ways in MultiPolygon.&quot;&quot;&quot;</span>
+        <span class="n">outline</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">el</span> <span class="ow">in</span> <span class="n">elements</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">el</span><span class="p">,</span> <span class="n">Way</span><span class="p">):</span>
+                <span class="n">outline</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">el</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">el</span><span class="p">,</span> <span class="n">Relation</span><span class="p">):</span>
+                <span class="n">outline</span> <span class="o">+=</span> <span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">element</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">el</span><span class="o">.</span><span class="n">members</span> <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">role</span> <span class="o">==</span> <span class="s1">&#39;outer&#39;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">outline</span></div></div>
 
 
 <div class="viewcode-block" id="Element"><a class="viewcode-back" href="../../api/catatom2osm.osm.html#catatom2osm.osm.Element">[docs]</a><span class="k">class</span> <span class="nc">Element</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -644,6 +655,7 @@
                 <span class="k">else</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Way</span><span class="p">(</span><span class="n">container</span><span class="p">,</span> <span class="n">ring</span><span class="p">),</span> <span class="n">role</span><span class="p">)</span>
                 <span class="n">role</span> <span class="o">=</span> <span class="s1">&#39;inner&#39;</span></div>
+
 </pre></div>
 
           </div>
@@ -660,7 +672,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.1.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.osm</a></li> 
       </ul>

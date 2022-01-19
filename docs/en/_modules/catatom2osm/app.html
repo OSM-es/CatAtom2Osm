@@ -14,7 +14,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.app &#8212; CatAtom2Osm 2.0.0 documentation</title>
+    <title>catatom2osm.app &#8212; CatAtom2Osm 2.1.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/guzzle.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.1.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.app</a></li> 
       </ul>
@@ -174,6 +174,7 @@
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">split</span><span class="o">.</span><span class="n">isValid</span><span class="p">():</span>
                 <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">&quot;Can&#39;t open </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">split</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">is_new</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">highway_names_path</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">move</span> <span class="o">=</span> <span class="kc">False</span>
 
 <div class="viewcode-block" id="CatAtom2Osm.create_and_run"><a class="viewcode-back" href="../../api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.create_and_run">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">create_and_run</span><span class="p">(</span><span class="n">a_path</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
@@ -231,7 +232,7 @@
             <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">address_osm</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">output_zoning</span><span class="p">()</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_new</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">move_project</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">move</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">end_messages</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="CatAtom2Osm.list_zones"><a class="viewcode-back" href="../../api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.list_zones">[docs]</a>    <span class="k">def</span> <span class="nf">list_zones</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -576,6 +577,8 @@
         <span class="k">if</span> <span class="n">options</span><span class="o">.</span><span class="n">building</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">zoning</span><span class="p">:</span>
             <span class="n">report</span><span class="o">.</span><span class="n">cons_end_stats</span><span class="p">()</span>
         <span class="n">report</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;report.txt&#39;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">move</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">move_project</span><span class="p">()</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">address</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_new</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">zoning</span><span class="p">:</span>
             <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Generated &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;. &#39;</span> <span class="o">+</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Please, check it and run again&quot;</span><span class="p">)</span>
@@ -758,32 +761,29 @@
                 <span class="n">address_index</span><span class="p">[</span><span class="n">ad</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;ref&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ad</span><span class="p">)</span>
         <span class="n">md</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">group</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">building_index</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
-            <span class="n">address_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">address_index</span><span class="p">[</span><span class="n">ref</span><span class="p">])</span>
-            <span class="k">if</span> <span class="n">address_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="k">continue</span>
-            <span class="n">entrance_count</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="mi">1</span> <span class="k">if</span> <span class="s1">&#39;entrance&#39;</span> <span class="ow">in</span> <span class="n">ad</span><span class="o">.</span><span class="n">tags</span> <span class="k">else</span> <span class="mi">0</span>
-                                  <span class="k">for</span> <span class="n">ad</span> <span class="ow">in</span> <span class="n">address_index</span><span class="p">[</span><span class="n">ref</span><span class="p">]])</span>
-            <span class="n">parcel_count</span> <span class="o">=</span> <span class="n">address_count</span> <span class="o">-</span> <span class="n">entrance_count</span>
-            <span class="k">if</span> <span class="n">parcel_count</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">or</span> <span class="p">(</span><span class="n">parcel_count</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">entrance_count</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
-                <span class="n">md</span> <span class="o">+=</span> <span class="n">address_count</span>
-                <span class="k">continue</span>
+            <span class="n">parcel_ad</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">entrance_count</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="k">for</span> <span class="n">ad</span> <span class="ow">in</span> <span class="n">address_index</span><span class="p">[</span><span class="n">ref</span><span class="p">]:</span>
-                <span class="n">bu</span> <span class="o">=</span> <span class="n">group</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
                 <span class="n">entrance</span> <span class="o">=</span> <span class="kc">False</span>
                 <span class="k">if</span> <span class="s1">&#39;entrance&#39;</span> <span class="ow">in</span> <span class="n">ad</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span>
-                    <span class="n">outline</span> <span class="o">=</span> <span class="p">[</span><span class="n">bu</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bu</span><span class="p">,</span> <span class="n">osm</span><span class="o">.</span><span class="n">Way</span><span class="p">)</span> \
-                        <span class="k">else</span> <span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">element</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">bu</span><span class="o">.</span><span class="n">members</span> <span class="k">if</span>
-                              <span class="n">m</span><span class="o">.</span><span class="n">role</span> <span class="o">==</span> <span class="s1">&#39;outer&#39;</span><span class="p">]</span>
-                    <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">outline</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">building_osm</span><span class="o">.</span><span class="n">get_outline</span><span class="p">(</span><span class="n">group</span><span class="p">):</span>
                         <span class="n">entrance</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">search_node</span><span class="p">(</span><span class="n">ad</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">ad</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
                         <span class="k">if</span> <span class="n">entrance</span><span class="p">:</span>
                             <span class="n">entrance</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">ad</span><span class="o">.</span><span class="n">tags</span><span class="p">)</span>
                             <span class="n">entrance</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;ref&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
                             <span class="n">entrance</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;image&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
                             <span class="k">break</span>
-                <span class="k">if</span> <span class="ow">not</span> <span class="n">entrance</span><span class="p">:</span>
-                    <span class="n">bu</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">ad</span><span class="o">.</span><span class="n">tags</span><span class="p">)</span>
-                    <span class="n">bu</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;image&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">entrance</span><span class="p">:</span>
+                    <span class="n">entrance_count</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">parcel_ad</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ad</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parcel_ad</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">entrance_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">ad</span> <span class="o">=</span> <span class="n">parcel_ad</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+                <span class="n">bu</span> <span class="o">=</span> <span class="n">group</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">bu</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">ad</span><span class="o">.</span><span class="n">tags</span><span class="p">)</span>
+                <span class="n">bu</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;image&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="n">bu</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;entrance&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="n">md</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">parcel_ad</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">md</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
                 <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Refused </span><span class="si">%d</span><span class="s2"> &#39;parcel&#39; addresses not unique for it building&quot;</span><span class="p">),</span>
@@ -882,8 +882,7 @@
             <span class="k">return</span>
         <span class="n">fn</span> <span class="o">=</span> <span class="n">lyr</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">dataSourceUri</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">is_shp</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">fn</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.shp&#39;</span><span class="p">))</span>
-        <span class="n">not_debug</span> <span class="o">=</span> <span class="n">log</span><span class="o">.</span><span class="n">getEffectiveLevel</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span>
-        <span class="k">if</span> <span class="n">is_shp</span> <span class="ow">and</span> <span class="n">not_debug</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">lyr</span><span class="o">.</span><span class="n">keep</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">is_shp</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">lyr</span><span class="o">.</span><span class="n">keep</span><span class="p">:</span>
             <span class="n">layer</span><span class="o">.</span><span class="n">BaseLayer</span><span class="o">.</span><span class="n">delete_shp</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="CatAtom2Osm.move_project"><a class="viewcode-back" href="../../api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.move_project">[docs]</a>    <span class="k">def</span> <span class="nf">move_project</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -931,7 +930,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.1.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.app</a></li> 
       </ul>

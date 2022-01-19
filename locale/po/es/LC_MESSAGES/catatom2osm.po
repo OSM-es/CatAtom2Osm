@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: CatAtom2Osm\n"
-"POT-Creation-Date: 2022-01-18 22:22+0000\n"
+"POT-Creation-Date: 2022-01-19 09:31+0000\n"
 "PO-Revision-Date: 2017-05-28 19:23+WEST\n"
 "Last-Translator: Javier Sánchez <javiersanp@gmail.com>\n"
 "Language: es\n"
@@ -220,11 +220,11 @@ msgstr "No se pudieron resolver las tablas combinadas para la capa '%s'"
 msgid "Deleted %d addresses refused by street name"
 msgstr "Eliminadas %d direcciones rechazadas por nombre de vial"
 
-#: catatom2osm/app.py:717
+#: catatom2osm/app.py:708
 msgid "Refused %d 'parcel' addresses not unique for it building"
 msgstr "Rechazadas %d direcciones tipo parcela no únicas para su edificio"
 
-#: catatom2osm/app.py:791
+#: catatom2osm/app.py:782
 msgid "There are %d address without house number in the OSM data"
 msgstr "Existen %d direcciones sin número de portal en OSM"
 
@@ -473,43 +473,43 @@ msgstr "Fusionados %d partes de edificios al contorno"
 msgid "Merged %d adjacent parts"
 msgstr "Fusionadas %d partes adyacentes"
 
-#: catatom2osm/layer.py:1810
+#: catatom2osm/layer.py:1811
 msgid "Move addresses"
 msgstr "Mover direcciones"
 
-#: catatom2osm/layer.py:1838
+#: catatom2osm/layer.py:1839
 msgid "Moved %d addresses to entrance, %d specification changed"
 msgstr "Desplazadas %d direcciones a entrada, %d cambiadas de especificación"
 
-#: catatom2osm/layer.py:1843
+#: catatom2osm/layer.py:1844
 msgid "Deleted %d addresses without associated building"
 msgstr "Eliminadas %d direcciones sin edificio asociado"
 
-#: catatom2osm/layer.py:1847
+#: catatom2osm/layer.py:1848
 msgid "Refused %d addresses belonging to multiple buildings"
 msgstr "Eliminadas %d direcciones pertenecientes a edificios múltiples"
 
-#: catatom2osm/layer.py:1859
+#: catatom2osm/layer.py:1860
 msgid "GEOS validation"
 msgstr "Validación GEOS"
 
-#: catatom2osm/layer.py:1871
+#: catatom2osm/layer.py:1872
 msgid "Check, area too small"
 msgstr "Comprobar, área demasiado pequeña"
 
-#: catatom2osm/layer.py:1874
+#: catatom2osm/layer.py:1875
 msgid "Check, area too big"
 msgstr "Comprobar, área demasiado grande"
 
-#: catatom2osm/layer.py:1891
+#: catatom2osm/layer.py:1892
 msgid "Conflate"
 msgstr "Combinación"
 
-#: catatom2osm/layer.py:1904
+#: catatom2osm/layer.py:1905
 msgid "OSM building with id %s is not valid"
 msgstr "El edificio de OSM con id %s no es válido"
 
-#: catatom2osm/layer.py:1925
+#: catatom2osm/layer.py:1926
 msgid "Detected %d conflicts in %d buildings/pools from OSM"
 msgstr "Detectados %d edificios/piscinas con conflicto de %d en OSM"
 
