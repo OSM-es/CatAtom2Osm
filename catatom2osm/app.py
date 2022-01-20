@@ -389,6 +389,19 @@ class CatAtom2Osm(object):
         self.urban_zoning = layer.ZoningLayer(fn, 'urbanzoning', 'ogr')
         self.rustic_zoning.append(zoning_gml, level='P')
         self.urban_zoning.append(zoning_gml, level='M')
+        if len(self.zone) > 0:
+            labels = [
+                self.rustic_zoning.format_label(f)
+                for f in self.rustic_zoning.getFeatures()
+            ]
+            labels += [
+                self.urban_zoning.format_label(f)
+                for f in self.urban_zoning.getFeatures()
+            ]
+            for zone in self.zone:
+                if zone not in labels:
+                    msg = _("Zone '%s' does not exists") % zone
+                    raise ValueError(msg)
         self.rustic_zoning.set_tasks(self.cat.zip_code)
         self.urban_zoning.set_tasks(self.cat.zip_code)
 
