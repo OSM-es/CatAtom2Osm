@@ -1,7 +1,15 @@
 Registro de cambios
 ===================
 
-** 2021-1-16 (2.1.0)**
+** 20-01-2021 (2.2.1)**
+* Lanza error si se pasa una zona -o que no existe
+* Control de flujo cuando no hay datos a procesar
+* Corrige nombre de carpeta para opción -o
+
+** 20-01-2021 (2.2.0)**
+* Almacenar nombres de municipio y áreas de búsqueda #82 #87
+
+** 16-1-2021 (2.1.0)**
 * Añade direcciones tipo entrada asociadas a varios edificios
 * Corrige error moviendo proyecto
 * Corrige error por mantener shapefiles en modo depuración

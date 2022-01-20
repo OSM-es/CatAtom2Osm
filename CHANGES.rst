@@ -1,7 +1,15 @@
 Change log
 ==========
 
-** 16-1-2021 (2.1.0)**
+** 2021-1-20 (2.2.1)**
+* Raises error for non-existing -o zones
+* Flux control for no data to process
+* Fix subdirectory name for -o option
+
+** 2021-1-20 (2.2.0)**
+* Store municipality names and search areas #82 #87
+
+** 2021-1-16 (2.1.0)**
 * Add entrance addresses associated with multiple buildings
 * Fix bug moving the project
 * Fix bug for keeping shapefiles in debug mode
