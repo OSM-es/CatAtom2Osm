@@ -92,8 +92,6 @@ class TestCatAtom2Osm(unittest.TestCase):
         self.m_app.process_tasks.assert_called_once_with(llayer)
         self.m_app.process_building.assert_called_once_with()
         self.m_app.read_address.assert_called_once_with()
-        current_address = self.m_app.get_current_ad_osm.return_value
-        address.conflate.assert_called_once_with(current_address)
         address.to_osm.assert_called_once_with()
 
     @mock.patch('catatom2osm.app.report', mock.MagicMock())

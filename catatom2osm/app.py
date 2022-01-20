@@ -122,6 +122,7 @@ class CatAtom2Osm(object):
             self.end_messages()
             return
         # main process
+        self.get_boundary()
         self.address_osm = osm.Osm()
         self.building_osm = osm.Osm()
         self.building_opt = self.options.building
@@ -131,12 +132,11 @@ class CatAtom2Osm(object):
             self.building_opt and (self.zone or self.split)
         ):
             self.get_building()
-        self.get_boundary()
         if self.options.address:
             self.read_address()
-            if not self.is_new and not self.options.manual:
-                current_address = self.get_current_ad_osm()
-                self.address.conflate(current_address)
+        if report.sum('inp_buildings', 'inp_address') == 0:
+            self.end_messages()
+            return
         if self.options.building:
             self.process_building()
             report.building_counter = Counter()
@@ -147,7 +147,6 @@ class CatAtom2Osm(object):
         if not (self.options.address and self.is_new):
             self.process_tasks(self.labels_layer)
         if self.options.address:
-            self.delete_shp('address')
             self.write_osm(self.address_osm, 'address.osm')
             del self.address_osm
         self.output_zoning()
@@ -254,6 +253,9 @@ class CatAtom2Osm(object):
             self.split_zoning()
         self.building.append(building_gml, query=self.zone_query)
         report.inp_buildings = self.building.featureCount()
+        if report.inp_buildings == 0:
+            log.info(_("No building data"))
+            return
         self.building.append(part_gml, query=self.zone_query)
         self.building.detect_missing_building_parts()
         report.inp_parts = self.building.featureCount() - report.inp_buildings
@@ -473,6 +475,7 @@ class CatAtom2Osm(object):
     def end_messages(self):
         self.delete_shp('urban_zoning')
         self.delete_shp('rustic_zoning')
+        self.delete_shp('address')
         self.delete_shp('building')
         options = self.options
         if report.fixme_stats():
@@ -486,14 +489,16 @@ class CatAtom2Osm(object):
                     _("Generated '%s'") + '. ' + _("Please, check it"), fn
                 )
         if options.building and not self.options.zoning:
-            report.cons_end_stats()
+            if report.get('out_buildings'):
+                report.cons_end_stats()
         report.to_file(self.cat.get_path('report.txt'))
         if self.move:
             self.move_project()
-        if self.options.address and self.is_new and not self.options.zoning:
-            msg = (
-                _("Generated '%s'") + '. ' + _("Please, check it and run again")
-            ) % self.highway_names_path
+        if report.sum('inp_buildings', 'inp_address') == 0:
+            msg = _("No data to process")
+        elif self.options.address and self.is_new and not self.options.zoning:
+            msg = _("Generated '%s'") % self.highway_names_path
+            msg += '. ' + _("Please, check it and run again")
         else:
             msg = _("Finished!")
         log.info(msg)
@@ -598,14 +603,6 @@ class CatAtom2Osm(object):
                 msg = _("Could not resolve joined tables for the "
                         "'%s' layer") % address_gml.name()
                 raise IOError(msg)
-        postaldescriptor = self.cat.read("postaldescriptor")
-        thoroughfarename = self.cat.read("thoroughfarename")
-        report.inp_address = address_gml.featureCount()
-        report.inp_zip_codes = postaldescriptor.featureCount()
-        report.inp_street_names = thoroughfarename.featureCount()
-        report.inp_address_entrance = address_gml.count(
-            "specification='Entrance'")
-        report.inp_address_parcel = address_gml.count("specification='Parcel'")
         fn = self.cat.get_path('address.shp')
         layer.AddressLayer.create_shp(fn, address_gml.crs())
         self.address = layer.AddressLayer(
@@ -616,6 +613,17 @@ class CatAtom2Osm(object):
             if self.options.split:
                 self.split_zoning()
         self.address.append(address_gml, query=self.zone_query)
+        report.inp_address = self.address.featureCount()
+        if report.inp_address == 0:
+            log.info(_("No addresses data"))
+            return
+        postaldescriptor = self.cat.read("postaldescriptor")
+        thoroughfarename = self.cat.read("thoroughfarename")
+        report.inp_zip_codes = postaldescriptor.featureCount()
+        report.inp_street_names = thoroughfarename.featureCount()
+        report.inp_address_entrance = address_gml.count(
+            "specification='Entrance'")
+        report.inp_address_parcel = address_gml.count("specification='Parcel'")
         self.address.join_field(
             postaldescriptor, 'PD_id', 'gml_id', ['postCode']
         )
@@ -634,6 +642,9 @@ class CatAtom2Osm(object):
         if ia > 0:
             log.debug(_("Deleted %d addresses refused by street name"), ia)
             report.values['ignored_addresses'] = ia
+        if not self.is_new and not self.options.manual:
+            current_address = self.get_current_ad_osm()
+            self.address.conflate(current_address)
 
     def get_auxiliary_addresses(self):
         """If exists, reads and conflate an auxiliary addresses data source"""
