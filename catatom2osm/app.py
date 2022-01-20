@@ -3,6 +3,7 @@ Tool to convert INSPIRE data sets from the Spanish Cadastre ATOM Services to OSM
 """
 from past.builtins import basestring
 import io, codecs
+import hashlib
 import gzip
 import logging
 import os
@@ -818,7 +819,9 @@ class CatAtom2Osm(object):
         if len(self.options.zone) == 0 and self.options.split is None:
             return
         if self.options.split is None:
-            prj_dir = hex(hash(str(self.zone)))[-7:]
+            prj_dir = hashlib.sha224(
+                str(self.zone).encode('utf-8')
+            ).hexdigest()[:7]
         else:
             prj_dir = os.path.splitext(
                 os.path.basename(self.options.split)
