@@ -1,35 +1,38 @@
 Registro de cambios
 ===================
 
-** 20-01-2021 (2.2.1)**
+**21-01-2021 (2.2.2)**
+* Mejora la definición de la zona de búsqueda en Overpass
+
+**20-01-2021 (2.2.1)**
 * Lanza error si se pasa una zona -o que no existe
 * Control de flujo cuando no hay datos a procesar
 * Corrige nombre de carpeta para opción -o
 
-** 20-01-2021 (2.2.0)**
+**20-01-2021 (2.2.0)**
 * Almacenar nombres de municipio y áreas de búsqueda #82 #87
 
-** 16-1-2021 (2.1.0)**
+**16-1-2021 (2.1.0)**
 * Añade direcciones tipo entrada asociadas a varios edificios
 * Corrige error moviendo proyecto
 * Corrige error por mantener shapefiles en modo depuración
 
-** 14-1-2021 (2.0.0)**
+**14-1-2021 (2.0.0)**
 * Actualiza a Ubuntu 20.04 / QGIS3 / python3 #67.
 * Simplifica la interfaz de línea de comandos.
 * Permite procesar sólo direcciones por tareas (-d).
 
-** 10-1-2021 (1.9.3)**
+**10-1-2021 (1.9.3)**
 * Corrige error eliminando elementos OSM.
 
-** 10-1-2021 (1.9.2)**
+**10-1-2021 (1.9.2)**
 * Corrige área de búsqueda de overpass para la opción -s.
 
-** 8-1-2021 (1.9.1)**
+**8-1-2021 (1.9.1)**
 * El polígono de recorte incluye zonas si el área superpuesta es mayor que el 50%.
 * Corrige error renombrando proyecto.
 
-** 8-1-2021 (1.9.0)**
+**8-1-2021 (1.9.0)**
 * Opción para dividir un municipio grande usando un archivo (#78)
 * Corrección y mejora de rendimiento de opción -o (#73)
 

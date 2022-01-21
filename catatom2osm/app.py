@@ -251,6 +251,8 @@ class CatAtom2Osm(object):
         self.get_labels(building_gml, part_gml, other_gml)
         if self.options.split:
             self.split_zoning()
+        if self.zone or self.split:
+            self.get_bbox()
         self.building.append(building_gml, query=self.zone_query)
         report.inp_buildings = self.building.featureCount()
         if report.inp_buildings == 0:
@@ -413,13 +415,13 @@ class CatAtom2Osm(object):
         report.mun_name = name
         report.cat_mun = self.cat.cat_mun
         log.info(_("Municipality: '%s'"), name)
-        if self.zone or self.options.split:
-            self.rustic_zoning.selectAll()
-            bbox = self.rustic_zoning.boundingBoxOfSelected()
-            self.urban_zoning.selectAll()
-            bbox.combineExtentWith(self.urban_zoning.boundingBoxOfSelected())
-            bbox = self.urban_zoning.get_overpass_bbox(bbox)
-            self.boundary_bbox = bbox
+
+    def get_bbox(self):
+        self.rustic_zoning.selectByExpression(f"label in ({str(self.zone)[1:-1]})")
+        bbox = self.rustic_zoning.boundingBoxOfSelected()
+        self.urban_zoning.selectByExpression(f"label in ({str(self.zone)[1:-1]})")
+        bbox.combineExtentWith(self.urban_zoning.boundingBoxOfSelected())
+        self.boundary_bbox = self.urban_zoning.get_overpass_bbox(bbox)
 
     def process_zoning(self):
         self.rustic_zoning.clean()
@@ -625,6 +627,8 @@ class CatAtom2Osm(object):
             self.get_labels(address_gml)
             if self.options.split:
                 self.split_zoning()
+            if self.zone or self.split:
+                self.get_bbox()
         self.address.append(address_gml, query=self.zone_query)
         report.inp_address = self.address.featureCount()
         if report.inp_address == 0:
