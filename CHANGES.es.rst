@@ -1,6 +1,9 @@
 Registro de cambios
 ===================
 
+**21-01-2021 (2.2.3)**
+* Corrige error asignando entradas múltiples a edificio
+
 **21-01-2021 (2.2.2)**
 * Mejora la definición de la zona de búsqueda en Overpass
 

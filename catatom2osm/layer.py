@@ -1782,6 +1782,7 @@ class ConsLayer(PolygonLayer):
             to_move[ad.id()] = dg
             bg.insertVertex(closest.x(), closest.y(), vertex)
             to_insert[building.id()] = QgsGeometry(bg)
+            building.setGeometry(bg)
             for part in ad_parts:
                 pg = part.geometry()
                 r = Geometry.get_multipolygon(pg)[0][0]
@@ -1791,6 +1792,7 @@ class ConsLayer(PolygonLayer):
                     if va in (vpa, vpb) and vb in (vpa, vpb):
                         pg.insertVertex(closest.x(), closest.y(), i + 1)
                         to_insert[part.id()] = QgsGeometry(pg)
+                        part.setGeometry(pg)
                         break
 
     def move_address(self, address):

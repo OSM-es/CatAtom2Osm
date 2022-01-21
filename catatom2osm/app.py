@@ -711,6 +711,7 @@ class CatAtom2Osm(object):
                     for w in building_osm.get_outline(group):
                         entrance = w.search_node(ad.x, ad.y)
                         if entrance:
+                            ad.tags['group'] = str(len(group))
                             entrance.tags.update(ad.tags)
                             entrance.tags.pop('ref', None)
                             entrance.tags.pop('image', None)
@@ -851,9 +852,7 @@ class CatAtom2Osm(object):
                 str(self.zone).encode('utf-8')
             ).hexdigest()[:7]
         else:
-            prj_dir = os.path.splitext(
-                os.path.basename(self.options.split)
-            )[0]
+            prj_dir = os.path.splitext(os.path.basename(self.options.split))[0]
         prj_path = self.cat.get_path(tasks_folder + '-' + prj_dir)
         if os.path.exists(prj_path):
             shutil.rmtree(prj_path)
