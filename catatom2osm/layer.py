@@ -623,13 +623,17 @@ class BaseLayer(QgsVectorLayer):
             request = QgsFeatureRequest(exp)
         return self.getFeatures(request)
 
-    def count(self, expression):
+    def count(self, expression='', unique=''):
         """Returns number of features for this search expression"""
-        exp = QgsExpression(expression)
-        request = QgsFeatureRequest(exp)
         count = 0
-        for f in self.getFeatures(request):
-            count += 1
+        exists = set()
+        for f in self.search(expression):
+            if unique:
+                if f[unique] not in exists:
+                    count += 1
+                    exists.add(f[unique])
+            else:
+                count += 1
         return count
 
     def get_progressbar(self, description, total=None):

@@ -637,17 +637,16 @@ class CatAtom2Osm(object):
             return
         postaldescriptor = self.cat.read("postaldescriptor")
         thoroughfarename = self.cat.read("thoroughfarename")
-        report.inp_zip_codes = postaldescriptor.featureCount()
-        report.inp_street_names = thoroughfarename.featureCount()
-        report.inp_address_entrance = address_gml.count(
-            "specification='Entrance'")
-        report.inp_address_parcel = address_gml.count("specification='Parcel'")
         self.address.join_field(
             postaldescriptor, 'PD_id', 'gml_id', ['postCode']
         )
         self.address.join_field(
             thoroughfarename, 'TN_id', 'gml_id', ['text'], 'TN_'
         )
+        report.inp_address_entrance = self.address.count("spec='Entrance'")
+        report.inp_address_parcel = self.address.count("spec='Parcel'")
+        report.inp_zip_codes = self.address.count(unique='postCode')
+        report.inp_street_names = self.address.count(unique='TN_text')
         self.get_auxiliary_addresses()
         if self.building_opt:
             self.address.get_image_links()
