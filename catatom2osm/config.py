@@ -436,36 +436,6 @@ remove_place_from_name = [place_types[26]]
 # List of highway types not to be parsed
 excluded_types = ['DS', 'ER']
 
-# Dictionary of name and OSM boundary relation id for know municipalities
-# wich fails in get_boundary method.
-mun_fails = {
-    '07032': ['Maó', '1809102'],
-    '07040': ['Palma', '341321'],
-    '11042': ['Zahara', '343140'],
-    '16176': ['Pozorrubio', '347331'],
-    '19178': ['Humanes', '341781'],
-    '23043': ['Hornos', '344389'],
-    '23086': ['Torre del Campo', '346324'],
-    '26004': ['Ajamil', '348189'],
-    '26093': ['Mansilla de la Sierra', '345202'],
-    '28063': ['Gargantilla del Lozoya y Pinilla de Buitrago', '345009'],
-    '29101': ['Montecorto', '7541639'],
-    '35010': ['Santa María de Guía de Gran Canaria', '345440'],
-    '37252': ['Pereña de la Ribera', '343095'],
-    '37367': ['Villarino de los Aires', '340062'],
-    '38023': ['San Cristóbal de La Laguna', '345393'],
-    '38039': ['Santa Úrsula', '340717'],
-    '39103': ['Mancomunidad de Campoo-Cabuérniga', '340042'],
-    '44007': ['Alba', '345065'],
-    '47047': ['Castroponce', '340763'],
-    '47101': ['Muriel', '346973'],
-    '47207': ['Villafuerte', '341197'],
-    '50030': ['Añón de Moncayo', '342653'],
-    '50049': ['Biel', '348008'],
-    '51021': ['Fuente-Álamo', '341797'],
-    '52024': ['Gijón/Xixón', '345576'],
-}
-
 aux_address = {'cdau': ['04', '11', '14', '18', '21', '23', '29', '41']}
 aux_path = 'auxsrcs'
 
