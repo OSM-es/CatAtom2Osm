@@ -296,6 +296,11 @@ class CatAtom2Osm(object):
             layer_class = layer.AddressLayer
         to_clean = {'r': [], 'u': []}
         for label, fid in zoning:
+            fn = self.cat.get_path(tasks_folder, label + '.shp')
+            if not os.path.exists(fn):
+                t = 'r' if len(label) == 3 else 'u'
+                to_clean[t].append(fid)
+        for label, fid in zoning:
             comment = ' '.join((config.changeset_tags['comment'],
                                 report.mun_code, report.mun_name, label))
             fn = self.cat.get_path(tasks_folder, label + '.shp')
@@ -303,23 +308,19 @@ class CatAtom2Osm(object):
                 task = layer_class(
                     fn, label, 'ogr', source_date=source.source_date
                 )
-                if task.featureCount() > 0:
-                    task_osm = task.to_osm(
-                        upload='yes', tags={'comment': comment}
-                    )
-                    if self.building_opt:
-                        self.merge_address(task_osm, self.address_osm)
-                    report.address_stats(task_osm)
-                    report.cons_stats(task_osm, label)
-                    self.write_osm(task_osm, tasks_folder, label + '.osm.gz')
-                    report.osm_stats(task_osm)
-                else:
-                    log.info(_("Zone '%s' is void"), label)
+                task_osm = task.to_osm(
+                    upload='yes', tags={'comment': comment}
+                )
+                if self.building_opt:
+                    self.merge_address(task_osm, self.address_osm)
+                report.address_stats(task_osm)
+                report.cons_stats(task_osm, label)
+                self.write_osm(task_osm, tasks_folder, label + '.osm.gz')
+                report.osm_stats(task_osm)
                 self.delete_shp(task)
-            else:
-                log.info(_("Zone '%s' is void"), label)
-                t = 'r' if len(label) == 3 else 'u'
-                to_clean[t].append(fid)
+        no_data = len(to_clean['r']) + len(to_clean['u'])
+        if no_data > 0:
+            log.info(_("Removed %d zones without data"), no_data)
         if to_clean['r']:
             self.rustic_zoning.writer.deleteFeatures(to_clean['r'])
         if to_clean['u']:
