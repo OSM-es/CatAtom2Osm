@@ -249,7 +249,7 @@ class CatAtom2Osm(object):
             fn, providerLib='ogr', source_date=building_gml.source_date
         )
         self.get_labels(building_gml, part_gml, other_gml)
-        if self.options.split:
+        if self.split:
             self.split_zoning()
         if self.zone or self.split:
             self.get_bbox()
@@ -331,7 +331,8 @@ class CatAtom2Osm(object):
         """
         if os.path.exists(self.tasks_path):
             for fn in os.listdir(self.tasks_path):
-                os.remove(os.path.join(self.tasks_path, fn))
+                if os.path.isfile(fn):
+                    os.remove(os.path.join(self.tasks_path, fn))
         tasks_r = 0
         tasks_u = 0
         tasks_m = 0
@@ -625,7 +626,7 @@ class CatAtom2Osm(object):
         )
         if not self.building_opt:
             self.get_labels(address_gml)
-            if self.options.split:
+            if self.split:
                 self.split_zoning()
             if self.zone or self.split:
                 self.get_bbox()
@@ -833,27 +834,28 @@ class CatAtom2Osm(object):
         Move to tasks all files needed for the project for backup in the
         repository. Use a subdirectory if it's a split municipality.
         """
+        bkp_dir = ''
+        if self.options.split:
+            fn = self.options.split
+            bkp_dir = os.path.splitext(os.path.basename(fn))[0]
+        elif len(self.zone) == 1:
+            bkp_dir = self.zone[0]
+        elif self.zone:
+            bkp_dir = hashlib.sha224(
+                str(self.zone).encode('utf-8')
+            ).hexdigest()[:7]
+        bkp_path = self.cat.get_path(tasks_folder, bkp_dir)
+        if not os.path.exists(bkp_path):
+            os.makedirs(bkp_path)
         prj_files = [
             'address.osm', 'address.geojson', 'current_address.osm',
             'current_building.osm', 'current_highway.osm', 'highway_names.csv',
             'report.txt', 'review.txt', 'rustic_zoning.geojson',
             'urban_zoning.geojson', 'zoning.geojson',
         ]
-        if self.options.split is not None:
-            shutil.copy(self.options.split, self.tasks_path)
         for f in prj_files:
             fn = self.cat.get_path(f)
             if os.path.exists(fn):
-                os.rename(fn, os.path.join(self.tasks_path, f))
-        if len(self.options.zone) == 0 and self.options.split is None:
-            return
-        if self.options.split is None:
-            prj_dir = hashlib.sha224(
-                str(self.zone).encode('utf-8')
-            ).hexdigest()[:7]
-        else:
-            prj_dir = os.path.splitext(os.path.basename(self.options.split))[0]
-        prj_path = self.cat.get_path(tasks_folder + '-' + prj_dir)
-        if os.path.exists(prj_path):
-            shutil.rmtree(prj_path)
-        os.rename(self.tasks_path, prj_path)
+                os.rename(fn, os.path.join(bkp_path, f))
+        if self.options.split is not None:
+            shutil.copy(self.options.split, bkp_path)
