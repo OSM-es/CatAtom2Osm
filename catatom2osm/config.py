@@ -40,16 +40,24 @@ install_gettext(app_name, localedir)
 log_level = 'INFO' # Default log level
 log_file = 'catatom2osm.log'
 log_format = '%(asctime)s - %(levelname)s - %(message)s'
-log = logging.getLogger(app_name)
-fh = logging.FileHandler(log_file)
-ch = logging.StreamHandler(sys.stderr)
-fh.setLevel(logging.DEBUG)
-ch.setLevel(logging.DEBUG)
-formatter = logging.Formatter(log_format)
-ch.setFormatter(formatter)
-fh.setFormatter(formatter)
-log.addHandler(ch)
-log.addHandler(fh)
+
+def get_logger():
+    log = logging.getLogger(app_name)
+    formatter = logging.Formatter(log_format)
+    fh = logging.FileHandler(log_file)
+    fh.setLevel(logging.DEBUG)
+    fh.setFormatter(formatter)
+    log.addHandler(fh)
+    return log
+
+def set_log_level(log, log_level):
+    formatter = logging.Formatter(log_format)
+    ch = logging.StreamHandler(sys.stderr)
+    ch.setLevel(log_level)
+    ch.setFormatter(formatter)
+    log.addHandler(ch)
+    log.setLevel(logging.DEBUG)
+    log.app_level = log_level
 
 fn_prefix = 'A.ES.SDGC' # Inspire Atom file name prefix
 

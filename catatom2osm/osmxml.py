@@ -1,9 +1,10 @@
 """OSM XML format serializer"""
 
+import logging
 from lxml import etree
 
 from catatom2osm import config, osm
-log = config.log
+log = logging.getLogger(config.app_name)
 
 
 def write_elem(outfile, e):
@@ -105,7 +106,7 @@ def deserialize(infile, data=None):
     for way in data.ways:
         missing = []
         for i, ref in enumerate(way.nodes):
-            if isinstance(ref, basestring):
+            if isinstance(ref, str):
                 if 'n{}'.format(ref) in data.index:
                     n = data.get(ref)
                     way.nodes[i] = n

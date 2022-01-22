@@ -1,5 +1,6 @@
 """Reader of Cadastre ATOM GML files"""
 import json
+import logging
 import os
 import re
 import zipfile
@@ -10,7 +11,7 @@ from qgis.core import QgsCoordinateReferenceSystem
 
 from catatom2osm import config, csvtools, download, hgwnames, layer, overpass
 from catatom2osm.report import instance as report
-log = config.log
+log = logging.getLogger(config.app_name)
 
 
 class Reader(object):

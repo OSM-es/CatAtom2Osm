@@ -140,7 +140,7 @@ class TestMain(unittest.TestCase):
     @mock.patch('catatom2osm.__main__.log')
     def test_debug(self, mocklog, mockcat):
         mockcat.create_and_run = raiseImportError
-        mocklog.getEffectiveLevel.return_value = logging.DEBUG
+        mocklog.app_level = logging.DEBUG
         with self.assertRaises(ImportError):
             __main__.run()
         mocklog.setLevel.assert_called_once_with(logging.DEBUG)

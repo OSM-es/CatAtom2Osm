@@ -22,7 +22,7 @@ from catatom2osm import config, catatom, csvtools, layer, osm, osmxml, overpass
 from catatom2osm import cdau  # Used in get_auxiliary_addresses
 from catatom2osm.report import instance as report
 
-log = config.log
+log = logging.getLogger(config.app_name)
 if config.silence_gdal:
     gdal.PushErrorHandler('CPLQuietErrorHandler')
 
@@ -566,7 +566,7 @@ class CatAtom2Osm(object):
             if hasattr(self, 'boundary_bbox'):
                 query.set_search_area(self.boundary_bbox)
             query.add(ql)
-            if log.getEffectiveLevel() == logging.DEBUG:
+            if log.app_level == logging.DEBUG:
                 query.download(osm_path, log)
             else:
                 query.download(osm_path)

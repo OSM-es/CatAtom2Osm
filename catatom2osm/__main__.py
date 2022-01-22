@@ -7,7 +7,7 @@ from zipfile import BadZipfile
 
 from catatom2osm import config
 from catatom2osm import csvtools
-log = config.log
+log = config.get_logger()
 
 
 usage = _("""catatom2osm [OPTION]... [PATHS]
@@ -113,7 +113,7 @@ def run():
         options.path = [options.list]
         options.list = ''
     log_level = getattr(logging, options.log_level.upper())
-    log.setLevel(log_level)
+    config.set_log_level(log, log_level)
     log.debug(_("Using Python %s.%s.%s"), *sys.version_info[:3])
     if len(options.zone) > 1 and len(options.path) > 1:
         log.error(_("Can't use multiple zones with multiple municipalities"))
@@ -121,7 +121,7 @@ def run():
         parser.print_help()
         print()
         print(examples)
-    elif log.getEffectiveLevel() == logging.DEBUG:
+    elif log.app_level == logging.DEBUG:
         process(options)
     else:
         try:

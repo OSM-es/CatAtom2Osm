@@ -14,7 +14,7 @@ WKBPoint = QgsWkbTypes.Point
 
 from catatom2osm import config, csvtools, hgwnames, osm, translate
 from catatom2osm.report import instance as report
-log = config.log
+log = logging.getLogger(config.app_name)
 
 BUFFER_SIZE = 512
 SIMPLIFY_BUILDING_PARTS = False
@@ -26,6 +26,9 @@ is_inside = lambda f1, f2: (
 
 get_attributes = lambda feat: \
     dict([(i, feat[i]) for i in range(len(feat.fields().toList()))])
+
+def get_log():
+    return log.ch_level
 
 class Point(QgsPointXY):
     """Extends QgsPoint with some utility methods"""
@@ -638,7 +641,7 @@ class BaseLayer(QgsVectorLayer):
 
     def get_progressbar(self, description, total=None):
         """Return progress bar with 'description' for 'total' iterations"""
-        leave = log.getEffectiveLevel() <= logging.DEBUG
+        leave = log.app_level <= logging.DEBUG
         pbar = tqdm(total=total, leave=leave)
         pbar.set_description(description)
         pbar.set_postfix(file=os.path.basename(self.source()), refresh=False)
@@ -747,7 +750,7 @@ class PolygonLayer(BaseLayer):
         straight_thr = self.straight_thr
         tp = 0
         td = 0
-        if log.getEffectiveLevel() <= logging.DEBUG:
+        if log.app_level <= logging.DEBUG:
             debshp = DebugWriter("debug_topology.shp", self)
         geometries = {f.id(): QgsGeometry(f.geometry()) for f in self.getFeatures()}
         index = self.get_index()
@@ -811,7 +814,7 @@ class PolygonLayer(BaseLayer):
                         if note.startswith('Merge') or note.startswith('Add'):
                             to_change[fid] = g
                             geometries[fid] = g
-                        if note and log.getEffectiveLevel() <= logging.DEBUG:
+                        if note and log.app_level <= logging.DEBUG:
                             debshp.add_point(point, note)
             if len(to_change) > BUFFER_SIZE:
                 self.writer.changeGeometryValues(to_change)
@@ -835,7 +838,7 @@ class PolygonLayer(BaseLayer):
         be deleted. 
         Also removes zig-zag and spike vertex (see Point.get_spike_context).
         """
-        if log.getEffectiveLevel() <= logging.DEBUG:
+        if log.app_level <= logging.DEBUG:
             debshp = DebugWriter(
                 'debug_notvalid.shp', self, QgsFields(), WKBPolygon
             )
@@ -870,13 +873,13 @@ class PolygonLayer(BaseLayer):
                                 geom.deleteRing(i)
                                 to_change[fid] = geom
                                 geometries[fid] = geom
-                                if log.getEffectiveLevel() <= logging.DEBUG:
+                                if log.app_level <= logging.DEBUG:
                                     debshp.addFeature(f)
                             else:
                                 badgeom = True
                                 to_clean.append(fid)
                                 if fid in to_change: del to_change[fid]
-                                if log.getEffectiveLevel() <= logging.DEBUG:
+                                if log.app_level <= logging.DEBUG:
                                     debshp.addFeature(f)
                             break
                         if len(ring) > 4: # (can delete vertexs)
@@ -896,7 +899,7 @@ class PolygonLayer(BaseLayer):
                                     zz += 1
                                     to_change[fid] = g
                                     geometries[fid] = geom
-                                if log.getEffectiveLevel() <= logging.DEBUG:
+                                if log.app_level <= logging.DEBUG:
                                     debshp2.add_point(va, 'zza %d %d %d %f' % (fid, ndx, ndxa, angle_a))
                                     debshp2.add_point(v, 'zz %d %d %d %s' % (fid, ndx, len(ring), valid))
                             elif is_spike:
@@ -911,7 +914,7 @@ class PolygonLayer(BaseLayer):
                                     geom = g
                                     to_change[fid] = g
                                     geometries[fid] = geom
-                                if log.getEffectiveLevel() <= logging.DEBUG:
+                                if log.app_level <= logging.DEBUG:
                                     debshp2.add_point(vx, 'vx %d %d' % (fid, ndx))
                                     debshp2.add_point(va, 'va %d %d %d %f' % (fid, ndx, ndxa, angle_a))
                                     debshp2.add_point(v, 'v %d %d %d %s' % (fid, ndx, len(ring), valid))
@@ -926,7 +929,7 @@ class PolygonLayer(BaseLayer):
                     if v in to_move:
                         g = QgsGeometry(geom)
                         vx = to_move[v]
-                        if log.getEffectiveLevel() <= logging.DEBUG:
+                        if log.app_level <= logging.DEBUG:
                             debshp2.add_point(v, 'mv %d %d' % (fid, n))
                             debshp2.add_point(vx, 'mvx %d %d' % (fid, n))
                         g.moveVertex(vx.x(), vx.y(), n)
@@ -965,7 +968,7 @@ class PolygonLayer(BaseLayer):
         * Delete vertex if the distance to the segment formed by its parents is
           less than 'cath_thr' meters.
         """
-        if log.getEffectiveLevel() <= logging.DEBUG:
+        if log.app_level <= logging.DEBUG:
             debshp = DebugWriter("debug_simplify.shp", self)
         killed = 0
         to_change = {}
@@ -999,7 +1002,7 @@ class PolygonLayer(BaseLayer):
                         geometries[fid] = g
                         to_change[fid] = g
                         msg = "Deleted"
-            if log.getEffectiveLevel() <= logging.DEBUG:
+            if log.app_level <= logging.DEBUG:
                 debshp.add_point(point, msg + ' ' + debmsg)
             if len(to_change) > BUFFER_SIZE:
                 self.writer.changeGeometryValues(to_change)

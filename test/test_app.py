@@ -166,7 +166,10 @@ class TestCatAtom2Osm(unittest.TestCase):
     @mock.patch('catatom2osm.app.layer')
     @mock.patch('catatom2osm.app.report')
     def test_process_tasks(self, m_report, m_layer, m_os):
-        m_os.path.exists.side_effect = [True, True, False, True, True, True]
+        m_os.path.exists.side_effect = [
+            True, True, False, True, True, True,
+            True, True, False, True, True, True,
+        ]
         m_report.mun_code = 'AAA'
         m_report.mun_name = 'BBB'
         m_report.tasks_m = 10

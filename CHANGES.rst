@@ -1,11 +1,12 @@
 Change log
 ==========
 
-**2021-1-21 (2.3.0)**
+**2021-1-22 (2.3.0)**
 * Fix bug assigning multiple entrances to building
 * Creates backup subdirectory for split municipalities
 * Fix addresses stats for split municipalities
 * Fix incorrect detection of void zones
+* Set log file level to DEBUG
 
 **2021-1-21 (2.2.2)**
 * Improves definition of bounding box to search in Overpass

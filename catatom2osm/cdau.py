@@ -1,4 +1,5 @@
 ﻿"""Reader of CDAU CSV files"""
+import logging
 import os
 import re
 from collections import defaultdict
@@ -6,9 +7,9 @@ from datetime import datetime
 
 from qgis.core import *
 
-from catatom2osm import download, layer, config
+from catatom2osm import config, download, layer
 from catatom2osm.report import instance as report
-log = config.log
+log = logging.getLogger(config.app_name)
 
 andalucia = {'04': 'Almeria', '11': 'Cadiz', '14': 'Cordova', '18': 'Granada',
     '21': 'Huelva', '23': 'Jaen', '29': 'Malaga', '41': 'Sevilla'}
