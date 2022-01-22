@@ -1,5 +1,7 @@
 """OSM XML format serializer"""
-
+from __future__ import unicode_literals
+from builtins import str
+from past.builtins import basestring
 import logging
 from lxml import etree
 

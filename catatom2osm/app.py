@@ -1,6 +1,8 @@
 """
 Tool to convert INSPIRE data sets from the Spanish Cadastre ATOM Services to OSM files
 """
+from __future__ import division
+from builtins import map, object
 from past.builtins import basestring
 import io, codecs
 import hashlib

@@ -1,4 +1,6 @@
 """Reader of Cadastre ATOM GML files"""
+from __future__ import print_function, unicode_literals
+from builtins import next, object, str
 import json
 import logging
 import os
