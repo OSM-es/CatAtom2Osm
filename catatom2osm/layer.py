@@ -1208,24 +1208,29 @@ class ZoningLayer(PolygonLayer):
             fo.write('END\n')
         return
 
-    def remove_outside_features(self, layer, skip=[]):
+    def remove_outside_features(self, layer=None, skip=[]):
         """
         Remove any zone not contained in layer features except if its label
         is in skip list.
         """
-        split = Geometry.merge_adjacent_features(
-            [f for f in layer.getFeatures()]
-        )
-        if layer.crs() != self.crs():
-            crs_transform = self.get_crs_transform(layer.crs(), self.crs())
-            split.transform(crs_transform)
+        split = None
+        if layer:
+            split = Geometry.merge_adjacent_features(
+                [f for f in layer.getFeatures()]
+            )
+            if layer.crs() != self.crs():
+                crs_transform = self.get_crs_transform(layer.crs(), self.crs())
+                split.transform(crs_transform)
         to_clean = []
         fcount = self.featureCount()
         for feat in self.getFeatures():
             geom = feat.geometry()
             if feat['label'] not in skip:
-                inter = split.intersection(geom)
-                if inter.area() / geom.area() < 0.5:
+                if split:
+                    inter = split.intersection(geom)
+                    if inter.area() / geom.area() < 0.5:
+                        to_clean.append(feat.id())
+                else:
                     to_clean.append(feat.id())
         if len(to_clean):
             self.writer.deleteFeatures(to_clean)

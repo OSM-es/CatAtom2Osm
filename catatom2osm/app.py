@@ -249,9 +249,9 @@ class CatAtom2Osm(object):
             fn, providerLib='ogr', source_date=building_gml.source_date
         )
         self.get_labels(building_gml, part_gml, other_gml)
-        if self.split:
-            self.split_zoning()
+        #if self.split:
         if self.zone or self.split:
+            self.split_zoning()
             self.get_bbox()
         self.building.append(building_gml, query=self.zone_query)
         report.inp_buildings = self.building.featureCount()
@@ -630,9 +630,9 @@ class CatAtom2Osm(object):
         )
         if not self.building_opt:
             self.get_labels(address_gml)
-            if self.split:
-                self.split_zoning()
+            # if self.split:
             if self.zone or self.split:
+                self.split_zoning()
                 self.get_bbox()
         self.address.append(address_gml, query=self.zone_query)
         report.inp_address = self.address.featureCount()
