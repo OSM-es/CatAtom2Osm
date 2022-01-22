@@ -511,7 +511,10 @@ class CatAtom2Osm(object):
         report.to_file(self.cat.get_path('report.txt'))
         if self.move:
             self.move_project()
-        if report.sum('inp_buildings', 'inp_address') == 0:
+        if (
+            report.sum('inp_buildings', 'inp_address') == 0
+            and not self.options.zoning
+        ):
             msg = _("No data to process")
         elif self.options.address and self.is_new and not self.options.zoning:
             msg = _("Generated '%s'") % self.highway_names_path
