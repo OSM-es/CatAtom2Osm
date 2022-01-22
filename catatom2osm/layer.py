@@ -1545,7 +1545,6 @@ class ConsLayer(PolygonLayer):
         to_clean_o = []
         to_clean_b = []
         to_add = []
-        parts_for_ref = defaultdict(list)
         buildings = {f['localId']: f for f in self.getFeatures() if self.is_building(f)}
         pbar = self.get_progressbar(_("Remove outside parts"), self.featureCount())
         for feat in self.getFeatures():
@@ -1559,12 +1558,6 @@ class ConsLayer(PolygonLayer):
                         to_clean_o.append(feat.id())
             pbar.update()
         pbar.close()
-        for ref, parts in parts_for_ref.items():
-            feat = QgsFeature(QgsFields(self.fields()))
-            feat['localId'] = ref
-            geom = Geometry.merge_adjacent_features(parts)
-            feat.setGeometry(geom)
-            to_add.append(feat)
         if len(to_clean_o) + len(to_clean_b) > 0:
             self.writer.deleteFeatures(to_clean_o + to_clean_b)
         if len(to_clean_o) > 0:
