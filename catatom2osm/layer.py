@@ -1240,7 +1240,7 @@ class ZoningLayer(PolygonLayer):
 
     def get_labels(self, layer, gml):
         """
-        Builds in layer a index of gml features localId vs the label of the
+        Builds in layer an index of gml features localId vs the label of the
         zone in witch it is contained. If the feature geometry overlaps many
         zones, takes the zone with the largest intersection.
         """
@@ -1250,10 +1250,7 @@ class ZoningLayer(PolygonLayer):
         features = {f.id(): f for f in self.getFeatures()}
         pbar = gml.get_progressbar(_("Labeling"), gml.featureCount())
         for feat in gml.getFeatures():
-            if not ConsLayer.is_pool(feat):
-                localid = feat['localId'].split('.')[-1][:14]
-            else:
-                localid = feat['localId'][:14]
+            localid = ConsLayer.get_id(feat)
             label = layer.labels.get(localid, None)
             if label is None or label == 'missing':
                 if ConsLayer.is_part(feat):
@@ -1383,7 +1380,7 @@ class AddressLayer(BaseLayer):
 
     def get_label(self, feat):
         """Get the zone label for this feature from the index"""
-        localid = feat['localId'].split('.')[-1][:14]
+        localid = ConsLayer.get_id(feat)
         return self.labels.get(localid, None)
 
     def set_tasks(self):
@@ -1454,20 +1451,22 @@ class ConsLayer(PolygonLayer):
         """Pool features have '_PI.' in its localId field"""
         return '_PI.' in feature['localId']
 
+    @staticmethod
+    def get_id(feat):
+        """Trim to parcel id"""
+        return feat['localId'].split('_')[0].split('.')[-1]
+
     def explode_multi_parts(self, address=False):
         request = QgsFeatureRequest()
         if address:
-            refs = {ad['localId'].split('.')[-1] for ad in address.getFeatures()}
+            refs = {self.get_id(ad) for ad in address.getFeatures()}
             fids = [f.id() for f in self.getFeatures() if f['localId'] not in refs]
             request.setFilterFids(fids)
         super(ConsLayer, self).explode_multi_parts(request)
 
     def get_label(self, feat):
         """Get the zone label for this feature from the index"""
-        if not self.is_pool(feat):
-            localid = feat['localId'].split('.')[-1][:14]
-        else:
-            localid = feat['localId'][:14]
+        localid = self.get_id(feat)
         label = self.labels.get(localid, None)
         if label is None:
             label = self.labels.get(feat['localId'], None)
@@ -1508,7 +1507,7 @@ class ConsLayer(PolygonLayer):
         """ Index parts of building by building localid. """
         parts = defaultdict(list)
         for part in self.search("regexp_match(localId, '_part')"):
-            localId = part['localId'].split('_')[0]
+            localId = self.get_id(part)
             parts[localId].append(part)
         return parts
 
@@ -1516,7 +1515,7 @@ class ConsLayer(PolygonLayer):
         """ Index pools in building parcel by building localid. """
         pools = defaultdict(list)
         for pool in self.search("regexp_match(localId, '_PI')"):
-            localId = pool['localId'].split('_')[0]
+            localId = self.get_id(pool)
             pools[localId].append(pool)
         return pools
 
@@ -1532,7 +1531,7 @@ class ConsLayer(PolygonLayer):
             if self.is_building(feature):
                 buildings[feature['localId']].append(feature)
             elif self.is_part(feature):
-                localId = feature['localId'].split('_')[0]
+                localId = self.get_id(feature)
                 parts[localId].append(feature)
         return (buildings, parts)
 
@@ -1549,7 +1548,7 @@ class ConsLayer(PolygonLayer):
         pbar = self.get_progressbar(_("Remove outside parts"), self.featureCount())
         for feat in self.getFeatures():
             if self.is_part(feat):
-                ref = feat['localId'].split('_')[0]
+                ref = self.get_id(feat)
                 if feat['lev_above'] == 0 and feat['lev_below'] != 0:
                     to_clean_b.append(feat.id())
                 elif ref in buildings:
@@ -1818,7 +1817,7 @@ class ConsLayer(PolygonLayer):
         (buildings, parts) = self.index_of_building_and_parts()
         pbar = self.get_progressbar(_("Move addresses"), address.featureCount())
         for ad in address.getFeatures():
-            refcat = ad['localId'].split('.')[-1]
+            refcat = self.get_id(ad)
             building_count = len(buildings.get(refcat, []))
             ad_buildings = buildings[refcat]
             ad_parts = parts[refcat]

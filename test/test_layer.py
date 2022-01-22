@@ -712,6 +712,30 @@ class TestZoningLayer(unittest.TestCase):
         self.do_test_split(split)
 
 
+class TestConsLayerSimple(unittest.TestCase):
+
+    def test_is_building(self):
+        self.assertTrue(ConsLayer.is_building({'localId': 'foobar'}))
+        self.assertFalse(ConsLayer.is_building({'localId': 'foo_bar'}))
+
+    def test_is_part(self):
+        self.assertTrue(ConsLayer.is_part({'localId': 'foo_part1'}))
+        self.assertFalse(ConsLayer.is_part({'localId': 'foo_PI.1'}))
+
+    def test_is_pool(self):
+        self.assertTrue(ConsLayer.is_pool({'localId': 'foo_PI.1'}))
+        self.assertFalse(ConsLayer.is_pool({'localId': 'foo_part1'}))
+
+    def test_get_id(self):
+        buil = {'localId': 'XXXXXX14XXXXXX'}
+        part = {'localId': 'XXXXXX14XXXXXX_part9'}
+        pool = {'localId': 'XXXXXX14XXXXXX_PI.99'}
+        addr = {'localId': '99.999.9.9.XXXXXX14XXXXXX'}
+        self.assertTrue(ConsLayer.get_id(part), buil['localId'])
+        self.assertTrue(ConsLayer.get_id(pool), buil['localId'])
+        self.assertTrue(ConsLayer.get_id(addr), buil['localId'])
+
+
 class TestConsLayer(unittest.TestCase):
 
     @mock.patch('catatom2osm.layer.log', m_log)
@@ -730,18 +754,6 @@ class TestConsLayer(unittest.TestCase):
     def tearDown(self):
         del self.layer
         ConsLayer.delete_shp('test_layer.shp')
-
-    def test_is_building(self):
-        self.assertTrue(ConsLayer.is_building({'localId': 'foobar'}))
-        self.assertFalse(ConsLayer.is_building({'localId': 'foo_bar'}))
-
-    def test_is_part(self):
-        self.assertTrue(ConsLayer.is_part({'localId': 'foo_part1'}))
-        self.assertFalse(ConsLayer.is_part({'localId': 'foo_PI.1'}))
-
-    def test_is_pool(self):
-        self.assertTrue(ConsLayer.is_pool({'localId': 'foo_PI.1'}))
-        self.assertFalse(ConsLayer.is_pool({'localId': 'foo_part1'}))
 
     def test_merge_adjacent_features(self):
         parts = [p for p in self.layer.search("localId like '8840501CS5284S_part%%'")]
@@ -1045,7 +1057,6 @@ class TestConsLayer(unittest.TestCase):
     @mock.patch('catatom2osm.layer.tqdm', mock.MagicMock())
     def test_simplify2(self):
         layer = ConsLayer()
-        writer = layer.dataProvider()
         fn = 'test/fixtures/38023.buildingpart.gml'
         fixture1 = QgsVectorLayer(fn, 'building', 'ogr')
         self.assertTrue(fixture1.isValid(), "Loading fixture")
