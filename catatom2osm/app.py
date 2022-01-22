@@ -403,7 +403,7 @@ class CatAtom2Osm(object):
                 for f in self.urban_zoning.getFeatures()
             ]
             for zone in self.zone:
-                if zone not in labels:
+                if zone not in labels and zone !='missing':
                     msg = _("Zone '%s' does not exists") % zone
                     raise ValueError(msg)
         self.rustic_zoning.set_tasks(self.cat.zip_code)
