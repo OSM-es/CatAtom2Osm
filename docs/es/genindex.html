@@ -14,7 +14,7 @@
   <link rel="stylesheet" type="text/css" href="_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>Índice &#8212; documentación de CatAtom2Osm - 2.1.0</title>
+    <title>Índice &#8212; documentación de CatAtom2Osm - 2.3.0</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/guzzle.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">documentación de CatAtom2Osm - 2.1.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">documentación de CatAtom2Osm - 2.3.0</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Índice</a></li> 
       </ul>
     </div>
@@ -409,6 +409,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/catatom2osm.osm.html#catatom2osm.osm.Element.fid">fid (catatom2osm.osm.Element property)</a>
 </li>
+      <li><a href="api/catatom2osm.csvtools.html#catatom2osm.csvtools.filter">filter() (en el módulo catatom2osm.csvtools)</a>
+</li>
       <li><a href="api/catatom2osm.report.html#catatom2osm.report.Report.fixme_stats">fixme_stats() (método de catatom2osm.report.Report)</a>
 </li>
       <li><a href="api/catatom2osm.layer.html#catatom2osm.layer.ZoningLayer.format_label">format_label() (método estático de catatom2osm.layer.ZoningLayer)</a>
@@ -469,12 +471,10 @@
 </li>
       <li><a href="api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.get_auxiliary_addresses">get_auxiliary_addresses() (método de catatom2osm.app.CatAtom2Osm)</a>
 </li>
-      <li><a href="api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.get_boundary">get_boundary() (método de catatom2osm.app.CatAtom2Osm)</a>
-
-      <ul>
-        <li><a href="api/catatom2osm.catatom.html#catatom2osm.catatom.Reader.get_boundary">(método de catatom2osm.catatom.Reader)</a>
+      <li><a href="api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.get_bbox">get_bbox() (método de catatom2osm.app.CatAtom2Osm)</a>
 </li>
-      </ul></li>
+      <li><a href="api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.get_boundary">get_boundary() (método de catatom2osm.app.CatAtom2Osm)</a>
+</li>
       <li><a href="api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.get_building">get_building() (método de catatom2osm.app.CatAtom2Osm)</a>
 </li>
       <li><a href="api/catatom2osm.cdau.html#catatom2osm.cdau.get_cat_address">get_cat_address() (en el módulo catatom2osm.cdau)</a>
@@ -503,11 +503,13 @@
 </li>
       <li><a href="api/catatom2osm.layer.html#catatom2osm.layer.AddressLayer.get_highway_names">get_highway_names() (método de catatom2osm.layer.AddressLayer)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/catatom2osm.layer.html#catatom2osm.layer.AddressLayer.get_image_links">get_image_links() (método de catatom2osm.layer.AddressLayer)</a>
 </li>
       <li><a href="api/catatom2osm.layer.html#catatom2osm.layer.BaseLayer.get_index">get_index() (método de catatom2osm.layer.BaseLayer)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/catatom2osm.csvtools.html#catatom2osm.csvtools.get_key">get_key() (en el módulo catatom2osm.csvtools)</a>
 </li>
       <li><a href="api/catatom2osm.layer.html#catatom2osm.layer.AddressLayer.get_label">get_label() (método de catatom2osm.layer.AddressLayer)</a>
 
@@ -522,6 +524,10 @@
 </li>
       </ul></li>
       <li><a href="api/catatom2osm.catatom.html#catatom2osm.catatom.Reader.get_layer_paths">get_layer_paths() (método de catatom2osm.catatom.Reader)</a>
+</li>
+      <li><a href="api/catatom2osm.layer.html#catatom2osm.layer.get_log">get_log() (en el módulo catatom2osm.layer)</a>
+</li>
+      <li><a href="api/catatom2osm.config.html#catatom2osm.config.get_logger">get_logger() (en el módulo catatom2osm.config)</a>
 </li>
       <li><a href="api/catatom2osm.catatom.html#catatom2osm.catatom.Reader.get_metadata">get_metadata() (método de catatom2osm.catatom.Reader)</a>
 
@@ -636,8 +642,6 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/catatom2osm.osm.html#catatom2osm.osm.Node.lat">lat (catatom2osm.osm.Node property)</a>
-</li>
-      <li><a href="api/catatom2osm.catatom.html#catatom2osm.catatom.list_municipalities">list_municipalities() (en el módulo catatom2osm.catatom)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -894,11 +898,17 @@
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/catatom2osm.layer.html#catatom2osm.layer.BaseLayer.search">search() (método de catatom2osm.layer.BaseLayer)</a>
+      <li><a href="api/catatom2osm.csvtools.html#catatom2osm.csvtools.search">search() (en el módulo catatom2osm.csvtools)</a>
+
+      <ul>
+        <li><a href="api/catatom2osm.layer.html#catatom2osm.layer.BaseLayer.search">(método de catatom2osm.layer.BaseLayer)</a>
 </li>
+      </ul></li>
       <li><a href="api/catatom2osm.osm.html#catatom2osm.osm.Way.search_node">search_node() (método de catatom2osm.osm.Way)</a>
 </li>
       <li><a href="api/catatom2osm.osmxml.html#catatom2osm.osmxml.serialize">serialize() (en el módulo catatom2osm.osmxml)</a>
+</li>
+      <li><a href="api/catatom2osm.config.html#catatom2osm.config.set_log_level">set_log_level() (en el módulo catatom2osm.config)</a>
 </li>
       <li><a href="api/catatom2osm.overpass.html#catatom2osm.overpass.Query.set_search_area">set_search_area() (método de catatom2osm.overpass.Query)</a>
 </li>
@@ -941,6 +951,8 @@
       <li><a href="api/catatom2osm.layer.html#catatom2osm.layer.PolygonLayer.simplify">simplify() (método de catatom2osm.layer.PolygonLayer)</a>
 </li>
       <li><a href="api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.split_zoning">split_zoning() (método de catatom2osm.app.CatAtom2Osm)</a>
+</li>
+      <li><a href="api/catatom2osm.csvtools.html#catatom2osm.csvtools.startswith">startswith() (en el módulo catatom2osm.csvtools)</a>
 </li>
       <li><a href="api/catatom2osm.report.html#catatom2osm.report.Report.sum">sum() (método de catatom2osm.report.Report)</a>
 </li>
@@ -1234,6 +1246,8 @@
 </li>
       <li><a href="api/test.test_layer.html#test.test_layer.TestBaseLayer2.test_export_other">test_export_other() (método de test.test_layer.TestBaseLayer2)</a>
 </li>
+      <li><a href="api/test.test_csvtools.html#test.test_csvtools.TestCsvTools.test_filter_prov">test_filter_prov() (método de test.test_csvtools.TestCsvTools)</a>
+</li>
       <li><a href="api/test.test_report.html#test.test_report.TestReport.test_fixme_stats">test_fixme_stats() (método de test.test_report.TestReport)</a>
 </li>
       <li><a href="api/test.test_report.html#test.test_report.TestReport.test_from_file">test_from_file() (método de test.test_report.TestReport)</a>
@@ -1265,8 +1279,6 @@
       <li><a href="api/test.test_catatom.html#test.test_catatom.TestCatAtom.test_get_atom_file">test_get_atom_file() (método de test.test_catatom.TestCatAtom)</a>
 </li>
       <li><a href="api/test.test_app.html#test.test_app.TestCatAtom2Osm.test_get_auxiliary_addresses">test_get_auxiliary_addresses() (método de test.test_app.TestCatAtom2Osm)</a>
-</li>
-      <li><a href="api/test.test_catatom.html#test.test_catatom.TestCatAtom.test_get_boundary">test_get_boundary() (método de test.test_catatom.TestCatAtom)</a>
 </li>
       <li><a href="api/test.test_app.html#test.test_app.TestCatAtom2Osm.test_get_building">test_get_building() (método de test.test_app.TestCatAtom2Osm)</a>
 </li>
@@ -1340,10 +1352,10 @@
 </li>
       <li><a href="api/test.test_report.html#test.test_report.TestReport.test_inc">test_inc() (método de test.test_report.TestReport)</a>
 </li>
-      <li><a href="api/test.test_osm.html#test.test_osm.TestOsm.test_index">test_index() (método de test.test_osm.TestOsm)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/test.test_osm.html#test.test_osm.TestOsm.test_index">test_index() (método de test.test_osm.TestOsm)</a>
+</li>
       <li><a href="api/test.test_layer.html#test.test_layer.TestConsLayer.test_index_of_building_and_parts">test_index_of_building_and_parts() (método de test.test_layer.TestConsLayer)</a>
 </li>
       <li><a href="api/test.test_layer.html#test.test_layer.TestConsLayer.test_index_of_parts">test_index_of_parts() (método de test.test_layer.TestConsLayer)</a>
@@ -1415,12 +1427,6 @@
       <li><a href="api/test.test_osm.html#test.test_osm.TestOsmNode.test_latlon">test_latlon() (método de test.test_osm.TestOsmNode)</a>
 </li>
       <li><a href="api/test.test_main.html#test.test_main.TestMain.test_list_error">test_list_error() (método de test.test_main.TestMain)</a>
-</li>
-      <li><a href="api/test.test_main.html#test.test_main.TestMain.test_list_mun">test_list_mun() (método de test.test_main.TestMain)</a>
-</li>
-      <li><a href="api/test.test_catatom.html#test.test_catatom.TestCatAtom.test_list_municipalities">test_list_municipalities() (método de test.test_catatom.TestCatAtom)</a>
-</li>
-      <li><a href="api/test.test_main.html#test.test_main.TestMain.test_list_prov">test_list_prov() (método de test.test_main.TestMain)</a>
 </li>
       <li><a href="api/test.test_main.html#test.test_main.TestMain.test_list_zones">test_list_zones() (método de test.test_main.TestMain)</a>
 </li>
@@ -1531,6 +1537,8 @@
       <li><a href="api/test.test_app.html#test.test_app.TestCatAtom2Osm.test_run_list">test_run_list() (método de test.test_app.TestCatAtom2Osm)</a>
 </li>
       <li><a href="api/test.test_layer.html#test.test_layer.TestBaseLayer.test_search">test_search() (método de test.test_layer.TestBaseLayer)</a>
+</li>
+      <li><a href="api/test.test_csvtools.html#test.test_csvtools.TestCsvTools.test_search_mun">test_search_mun() (método de test.test_csvtools.TestCsvTools)</a>
 </li>
       <li><a href="api/test.test_osm.html#test.test_osm.TestOsmWay.test_search_node">test_search_node() (método de test.test_osm.TestOsmWay)</a>
 </li>
@@ -1753,7 +1761,7 @@
         <li class="right" >
           <a href="py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">documentación de CatAtom2Osm - 2.1.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">documentación de CatAtom2Osm - 2.3.0</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Índice</a></li> 
       </ul>
     </div>

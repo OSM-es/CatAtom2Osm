@@ -14,7 +14,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.config &#8212; documentación de CatAtom2Osm - 2.1.0</title>
+    <title>catatom2osm.config &#8212; documentación de CatAtom2Osm - 2.3.0</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/guzzle.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.1.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.3.0</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Código de módulo</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.config</a></li> 
       </ul>
@@ -122,16 +122,24 @@
 <span class="n">log_level</span> <span class="o">=</span> <span class="s1">&#39;INFO&#39;</span> <span class="c1"># Default log level</span>
 <span class="n">log_file</span> <span class="o">=</span> <span class="s1">&#39;catatom2osm.log&#39;</span>
 <span class="n">log_format</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> - </span><span class="si">%(levelname)s</span><span class="s1"> - </span><span class="si">%(message)s</span><span class="s1">&#39;</span>
-<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">app_name</span><span class="p">)</span>
-<span class="n">fh</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="p">(</span><span class="n">log_file</span><span class="p">)</span>
-<span class="n">ch</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
-<span class="n">fh</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
-<span class="n">ch</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
-<span class="n">formatter</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="n">log_format</span><span class="p">)</span>
-<span class="n">ch</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>
-<span class="n">fh</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>
-<span class="n">log</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">ch</span><span class="p">)</span>
-<span class="n">log</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">fh</span><span class="p">)</span>
+
+<div class="viewcode-block" id="get_logger"><a class="viewcode-back" href="../../api/catatom2osm.config.html#catatom2osm.config.get_logger">[documentos]</a><span class="k">def</span> <span class="nf">get_logger</span><span class="p">():</span>
+    <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">app_name</span><span class="p">)</span>
+    <span class="n">formatter</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="n">log_format</span><span class="p">)</span>
+    <span class="n">fh</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="p">(</span><span class="n">log_file</span><span class="p">)</span>
+    <span class="n">fh</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+    <span class="n">fh</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">fh</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">log</span></div>
+
+<div class="viewcode-block" id="set_log_level"><a class="viewcode-back" href="../../api/catatom2osm.config.html#catatom2osm.config.set_log_level">[documentos]</a><span class="k">def</span> <span class="nf">set_log_level</span><span class="p">(</span><span class="n">log</span><span class="p">,</span> <span class="n">log_level</span><span class="p">):</span>
+    <span class="n">formatter</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="n">log_format</span><span class="p">)</span>
+    <span class="n">ch</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+    <span class="n">ch</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">log_level</span><span class="p">)</span>
+    <span class="n">ch</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">ch</span><span class="p">)</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">app_level</span> <span class="o">=</span> <span class="n">log_level</span></div>
 
 <span class="n">fn_prefix</span> <span class="o">=</span> <span class="s1">&#39;A.ES.SDGC&#39;</span> <span class="c1"># Inspire Atom file name prefix</span>
 
@@ -181,8 +189,6 @@
 <span class="n">cadastre_doc_url</span> <span class="o">=</span> <span class="s1">&#39;http://ovc.catastro.meh.es/OVCServWeb/OVCWcfLibres/OVCFotoFachada.svc/RecuperarFotoFachadaGet?ReferenciaCatastral=</span><span class="si">{}</span><span class="s1">&#39;</span>
 
 <span class="n">fixme_doc_url</span> <span class="o">=</span> <span class="s1">&#39;https://wiki.openstreetmap.org/wiki/ES:Catastro_espa%C3%B1ol/Importaci%C3%B3n_de_edificios/Gesti%C3%B3n_de_proyectos#Generar_y_corregir_los_archivos_a_importar&#39;</span>
-
-<span class="n">valid_provinces</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;</span><span class="si">%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">57</span><span class="p">)</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">31</span><span class="p">,</span> <span class="mi">48</span><span class="p">)]</span>
 
 <span class="n">no_number</span> <span class="o">=</span> <span class="s1">&#39;S-N&#39;</span> <span class="c1"># Regular expression to match addresses without number</span>
 
@@ -520,39 +526,63 @@
 <span class="c1"># List of highway types not to be parsed</span>
 <span class="n">excluded_types</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;DS&#39;</span><span class="p">,</span> <span class="s1">&#39;ER&#39;</span><span class="p">]</span>
 
-<span class="c1"># Dictionary of name and OSM boundary relation id for know municipalities</span>
-<span class="c1"># wich fails in get_boundary method.</span>
-<span class="n">mun_fails</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;07032&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Maó&#39;</span><span class="p">,</span> <span class="s1">&#39;1809102&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;07040&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Palma&#39;</span><span class="p">,</span> <span class="s1">&#39;341321&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;11042&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Zahara&#39;</span><span class="p">,</span> <span class="s1">&#39;343140&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;16176&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Pozorrubio&#39;</span><span class="p">,</span> <span class="s1">&#39;347331&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;19178&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Humanes&#39;</span><span class="p">,</span> <span class="s1">&#39;341781&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;23043&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Hornos&#39;</span><span class="p">,</span> <span class="s1">&#39;344389&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;23086&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Torre del Campo&#39;</span><span class="p">,</span> <span class="s1">&#39;346324&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;26004&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Ajamil&#39;</span><span class="p">,</span> <span class="s1">&#39;348189&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;26093&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Mansilla de la Sierra&#39;</span><span class="p">,</span> <span class="s1">&#39;345202&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;28063&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Gargantilla del Lozoya y Pinilla de Buitrago&#39;</span><span class="p">,</span> <span class="s1">&#39;345009&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;29101&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Montecorto&#39;</span><span class="p">,</span> <span class="s1">&#39;7541639&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;35010&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Santa María de Guía de Gran Canaria&#39;</span><span class="p">,</span> <span class="s1">&#39;345440&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;37252&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Pereña de la Ribera&#39;</span><span class="p">,</span> <span class="s1">&#39;343095&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;37367&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Villarino de los Aires&#39;</span><span class="p">,</span> <span class="s1">&#39;340062&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;38023&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;San Cristóbal de La Laguna&#39;</span><span class="p">,</span> <span class="s1">&#39;345393&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;38039&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Santa Úrsula&#39;</span><span class="p">,</span> <span class="s1">&#39;340717&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;39103&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Mancomunidad de Campoo-Cabuérniga&#39;</span><span class="p">,</span> <span class="s1">&#39;340042&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;44007&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Alba&#39;</span><span class="p">,</span> <span class="s1">&#39;345065&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;47047&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Castroponce&#39;</span><span class="p">,</span> <span class="s1">&#39;340763&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;47101&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Muriel&#39;</span><span class="p">,</span> <span class="s1">&#39;346973&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;47207&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Villafuerte&#39;</span><span class="p">,</span> <span class="s1">&#39;341197&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;50030&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Añón de Moncayo&#39;</span><span class="p">,</span> <span class="s1">&#39;342653&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;50049&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Biel&#39;</span><span class="p">,</span> <span class="s1">&#39;348008&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;51021&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Fuente-Álamo&#39;</span><span class="p">,</span> <span class="s1">&#39;341797&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;52024&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Gijón/Xixón&#39;</span><span class="p">,</span> <span class="s1">&#39;345576&#39;</span><span class="p">],</span>
-<span class="p">}</span>
-
 <span class="n">aux_address</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;cdau&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;04&#39;</span><span class="p">,</span> <span class="s1">&#39;11&#39;</span><span class="p">,</span> <span class="s1">&#39;14&#39;</span><span class="p">,</span> <span class="s1">&#39;18&#39;</span><span class="p">,</span> <span class="s1">&#39;21&#39;</span><span class="p">,</span> <span class="s1">&#39;23&#39;</span><span class="p">,</span> <span class="s1">&#39;29&#39;</span><span class="p">,</span> <span class="s1">&#39;41&#39;</span><span class="p">]}</span>
 <span class="n">aux_path</span> <span class="o">=</span> <span class="s1">&#39;auxsrcs&#39;</span>
 
+<span class="n">prov_codes</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;02&#39;</span><span class="p">:</span> <span class="s1">&#39;Albacete&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;03&#39;</span><span class="p">:</span> <span class="s1">&#39;Alicante&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;04&#39;</span><span class="p">:</span> <span class="s1">&#39;Almería&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;05&#39;</span><span class="p">:</span> <span class="s1">&#39;Ávila&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;06&#39;</span><span class="p">:</span> <span class="s1">&#39;Badajoz&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;07&#39;</span><span class="p">:</span> <span class="s1">&#39;Baleares&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;08&#39;</span><span class="p">:</span> <span class="s1">&#39;Barcelona&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;09&#39;</span><span class="p">:</span> <span class="s1">&#39;Burgos&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;10&#39;</span><span class="p">:</span> <span class="s1">&#39;Cáceres&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;11&#39;</span><span class="p">:</span> <span class="s1">&#39;Cádiz&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;12&#39;</span><span class="p">:</span> <span class="s1">&#39;Castellón&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;13&#39;</span><span class="p">:</span> <span class="s1">&#39;Ciudad Real&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;14&#39;</span><span class="p">:</span> <span class="s1">&#39;Córdoba&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;15&#39;</span><span class="p">:</span> <span class="s1">&#39;Coruña&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;16&#39;</span><span class="p">:</span> <span class="s1">&#39;Cuenca&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;17&#39;</span><span class="p">:</span> <span class="s1">&#39;Girona&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;18&#39;</span><span class="p">:</span> <span class="s1">&#39;Granada&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;19&#39;</span><span class="p">:</span> <span class="s1">&#39;Guadalajara&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;21&#39;</span><span class="p">:</span> <span class="s1">&#39;Huelva&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;22&#39;</span><span class="p">:</span> <span class="s1">&#39;Huesca&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;23&#39;</span><span class="p">:</span> <span class="s1">&#39;Jaén&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;24&#39;</span><span class="p">:</span> <span class="s1">&#39;León&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;25&#39;</span><span class="p">:</span> <span class="s1">&#39;Lleida&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;26&#39;</span><span class="p">:</span> <span class="s1">&#39;La Rioja&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;27&#39;</span><span class="p">:</span> <span class="s1">&#39;Lugo&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;28&#39;</span><span class="p">:</span> <span class="s1">&#39;Madrid&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;29&#39;</span><span class="p">:</span> <span class="s1">&#39;Málaga&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;30&#39;</span><span class="p">:</span> <span class="s1">&#39;Murcia&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;32&#39;</span><span class="p">:</span> <span class="s1">&#39;Ourense&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;33&#39;</span><span class="p">:</span> <span class="s1">&#39;Oviedo&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;34&#39;</span><span class="p">:</span> <span class="s1">&#39;Palencia&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;35&#39;</span><span class="p">:</span> <span class="s1">&#39;Las Palmas&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;36&#39;</span><span class="p">:</span> <span class="s1">&#39;Pontevedra&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;37&#39;</span><span class="p">:</span> <span class="s1">&#39;Salamanca&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;38&#39;</span><span class="p">:</span> <span class="s1">&#39;Santa Cruz de Tenerife&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;39&#39;</span><span class="p">:</span> <span class="s1">&#39;Cantabria&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;40&#39;</span><span class="p">:</span> <span class="s1">&#39;Segovia&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;41&#39;</span><span class="p">:</span> <span class="s1">&#39;Sevilla&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;42&#39;</span><span class="p">:</span> <span class="s1">&#39;Soria&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;43&#39;</span><span class="p">:</span> <span class="s1">&#39;Tarragona&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;44&#39;</span><span class="p">:</span> <span class="s1">&#39;Teruel&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;45&#39;</span><span class="p">:</span> <span class="s1">&#39;Toledo&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;46&#39;</span><span class="p">:</span> <span class="s1">&#39;Valencia&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;47&#39;</span><span class="p">:</span> <span class="s1">&#39;Valladolid&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;49&#39;</span><span class="p">:</span> <span class="s1">&#39;Zamora&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;50&#39;</span><span class="p">:</span> <span class="s1">&#39;Zaragoza&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;51&#39;</span><span class="p">:</span> <span class="s1">&#39;Cartagena&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;52&#39;</span><span class="p">:</span> <span class="s1">&#39;Gijón&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;53&#39;</span><span class="p">:</span> <span class="s1">&#39;Jerez de la Frontera&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;54&#39;</span><span class="p">:</span> <span class="s1">&#39;Vigo&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;55&#39;</span><span class="p">:</span> <span class="s1">&#39;Ceuta&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;56&#39;</span><span class="p">:</span> <span class="s1">&#39;Melilla&#39;</span><span class="p">,</span>
+<span class="p">}</span>
 </pre></div>
 
           </div>
@@ -569,7 +599,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.1.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.3.0</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Código de módulo</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.config</a></li> 
       </ul>

@@ -7,6 +7,9 @@ Change log
 * Fix addresses stats for split municipalities
 * Fix incorrect detection of void zones
 * Set log file level to DEBUG
+* Avoids incorrect message for -z option
+* Process of buildings without zone #88
+* Split zoning with -o is used
 
 **2021-1-21 (2.2.2)**
 * Improves definition of bounding box to search in Overpass

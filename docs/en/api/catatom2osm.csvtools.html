@@ -15,7 +15,7 @@
   <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.csvtools module &#8212; CatAtom2Osm 2.1.0 documentation</title>
+    <title>catatom2osm.csvtools module &#8212; CatAtom2Osm 2.3.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/guzzle.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
@@ -45,7 +45,7 @@
         <li class="right" >
           <a href="catatom2osm.config.html" title="catatom2osm.config module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 2.1.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 2.3.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../api.html" >API reference</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="modules.html" >CatAtom2Osm</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="catatom2osm.html" accesskey="U">catatom2osm package</a> &#187;</li>
@@ -122,6 +122,49 @@
 value (sort=1)</p>
 </dd></dl>
 
+<dl class="py function">
+<dt class="sig sig-object py" id="catatom2osm.csvtools.filter">
+<span class="sig-prename descclassname"><span class="pre">catatom2osm.csvtools.</span></span><span class="sig-name descname"><span class="pre">filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">csv_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query=&lt;function</span> <span class="pre">&lt;lambda&gt;&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stop=False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/csvtools.html#filter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.csvtools.filter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return csv rows filtered using query</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> – aditional arguments for query function</p></li>
+<li><p><strong>query</strong> (<em>func</em>) – function with args row and wargs that returns
+a boolean deciding if each row will be included or not</p></li>
+<li><p><strong>stop</strong> (<em>bool</em>) – Stop at first match or get all</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="catatom2osm.csvtools.get_key">
+<span class="sig-prename descclassname"><span class="pre">catatom2osm.csvtools.</span></span><span class="sig-name descname"><span class="pre">get_key</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">csv_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/csvtools.html#get_key"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.csvtools.get_key" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a row given first column value</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="catatom2osm.csvtools.search">
+<span class="sig-prename descclassname"><span class="pre">catatom2osm.csvtools.</span></span><span class="sig-name descname"><span class="pre">search</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">csv_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query=&lt;function</span> <span class="pre">&lt;lambda&gt;&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/csvtools.html#search"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.csvtools.search" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return first matched row in csv</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> – aditional arguments for query function</p></li>
+<li><p><strong>query</strong> (<em>func</em>) – function with args row and wargs that returns
+a boolean deciding if each row will be included or not</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="catatom2osm.csvtools.startswith">
+<span class="sig-prename descclassname"><span class="pre">catatom2osm.csvtools.</span></span><span class="sig-name descname"><span class="pre">startswith</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">csv_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/csvtools.html#startswith"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.csvtools.startswith" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get rows which first column starts with key</p>
+</dd></dl>
+
 </section>
 
 
@@ -157,7 +200,7 @@ value (sort=1)</p>
         <li class="right" >
           <a href="catatom2osm.config.html" title="catatom2osm.config module"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 2.1.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 2.3.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../api.html" >API reference</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="modules.html" >CatAtom2Osm</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="catatom2osm.html" >catatom2osm package</a> &#187;</li>

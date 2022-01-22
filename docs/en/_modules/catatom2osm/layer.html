@@ -14,7 +14,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.layer &#8212; CatAtom2Osm 2.1.0 documentation</title>
+    <title>catatom2osm.layer &#8212; CatAtom2Osm 2.3.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/guzzle.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.1.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.3.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.layer</a></li> 
       </ul>
@@ -95,7 +95,7 @@
 
 <span class="kn">from</span> <span class="nn">catatom2osm</span> <span class="k">import</span> <span class="n">config</span><span class="p">,</span> <span class="n">csvtools</span><span class="p">,</span> <span class="n">hgwnames</span><span class="p">,</span> <span class="n">osm</span><span class="p">,</span> <span class="n">translate</span>
 <span class="kn">from</span> <span class="nn">catatom2osm.report</span> <span class="k">import</span> <span class="n">instance</span> <span class="k">as</span> <span class="n">report</span>
-<span class="n">log</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">log</span>
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">app_name</span><span class="p">)</span>
 
 <span class="n">BUFFER_SIZE</span> <span class="o">=</span> <span class="mi">512</span>
 <span class="n">SIMPLIFY_BUILDING_PARTS</span> <span class="o">=</span> <span class="kc">False</span>
@@ -107,6 +107,9 @@
 
 <span class="n">get_attributes</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">feat</span><span class="p">:</span> \
     <span class="nb">dict</span><span class="p">([(</span><span class="n">i</span><span class="p">,</span> <span class="n">feat</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">feat</span><span class="o">.</span><span class="n">fields</span><span class="p">()</span><span class="o">.</span><span class="n">toList</span><span class="p">()))])</span>
+
+<div class="viewcode-block" id="get_log"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.get_log">[docs]</a><span class="k">def</span> <span class="nf">get_log</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">log</span><span class="o">.</span><span class="n">ch_level</span></div>
 
 <div class="viewcode-block" id="Point"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.Point">[docs]</a><span class="k">class</span> <span class="nc">Point</span><span class="p">(</span><span class="n">QgsPointXY</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Extends QgsPoint with some utility methods&quot;&quot;&quot;</span>
@@ -704,18 +707,22 @@
             <span class="n">request</span> <span class="o">=</span> <span class="n">QgsFeatureRequest</span><span class="p">(</span><span class="n">exp</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">(</span><span class="n">request</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="BaseLayer.count"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.BaseLayer.count">[docs]</a>    <span class="k">def</span> <span class="nf">count</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">expression</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseLayer.count"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.BaseLayer.count">[docs]</a>    <span class="k">def</span> <span class="nf">count</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">expression</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns number of features for this search expression&quot;&quot;&quot;</span>
-        <span class="n">exp</span> <span class="o">=</span> <span class="n">QgsExpression</span><span class="p">(</span><span class="n">expression</span><span class="p">)</span>
-        <span class="n">request</span> <span class="o">=</span> <span class="n">QgsFeatureRequest</span><span class="p">(</span><span class="n">exp</span><span class="p">)</span>
         <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-            <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">exists</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">expression</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">unique</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">f</span><span class="p">[</span><span class="n">unique</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exists</span><span class="p">:</span>
+                    <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="n">exists</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="n">unique</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="k">return</span> <span class="n">count</span></div>
 
 <div class="viewcode-block" id="BaseLayer.get_progressbar"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.BaseLayer.get_progressbar">[docs]</a>    <span class="k">def</span> <span class="nf">get_progressbar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return progress bar with &#39;description&#39; for &#39;total&#39; iterations&quot;&quot;&quot;</span>
-        <span class="n">leave</span> <span class="o">=</span> <span class="n">log</span><span class="o">.</span><span class="n">getEffectiveLevel</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span>
+        <span class="n">leave</span> <span class="o">=</span> <span class="n">log</span><span class="o">.</span><span class="n">app_level</span> <span class="o">&lt;=</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span>
         <span class="n">pbar</span> <span class="o">=</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">total</span><span class="o">=</span><span class="n">total</span><span class="p">,</span> <span class="n">leave</span><span class="o">=</span><span class="n">leave</span><span class="p">)</span>
         <span class="n">pbar</span><span class="o">.</span><span class="n">set_description</span><span class="p">(</span><span class="n">description</span><span class="p">)</span>
         <span class="n">pbar</span><span class="o">.</span><span class="n">set_postfix</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">()),</span> <span class="n">refresh</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -824,7 +831,7 @@
         <span class="n">straight_thr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">straight_thr</span>
         <span class="n">tp</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">td</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">if</span> <span class="n">log</span><span class="o">.</span><span class="n">getEffectiveLevel</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">log</span><span class="o">.</span><span class="n">app_level</span> <span class="o">&lt;=</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">:</span>
             <span class="n">debshp</span> <span class="o">=</span> <span class="n">DebugWriter</span><span class="p">(</span><span class="s2">&quot;debug_topology.shp&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
         <span class="n">geometries</span> <span class="o">=</span> <span class="p">{</span><span class="n">f</span><span class="o">.</span><span class="n">id</span><span class="p">():</span> <span class="n">QgsGeometry</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">geometry</span><span class="p">())</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">()}</span>
         <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_index</span><span class="p">()</span>
@@ -888,7 +895,7 @@
                         <span class="k">if</span> <span class="n">note</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;Merge&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">note</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;Add&#39;</span><span class="p">):</span>
                             <span class="n">to_change</span><span class="p">[</span><span class="n">fid</span><span class="p">]</span> <span class="o">=</span> <span class="n">g</span>
                             <span class="n">geometries</span><span class="p">[</span><span class="n">fid</span><span class="p">]</span> <span class="o">=</span> <span class="n">g</span>
-                        <span class="k">if</span> <span class="n">note</span> <span class="ow">and</span> <span class="n">log</span><span class="o">.</span><span class="n">getEffectiveLevel</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">note</span> <span class="ow">and</span> <span class="n">log</span><span class="o">.</span><span class="n">app_level</span> <span class="o">&lt;=</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">:</span>
                             <span class="n">debshp</span><span class="o">.</span><span class="n">add_point</span><span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="n">note</span><span class="p">)</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_change</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">BUFFER_SIZE</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">changeGeometryValues</span><span class="p">(</span><span class="n">to_change</span><span class="p">)</span>
@@ -912,7 +919,7 @@
 <span class="sd">        be deleted. </span>
 <span class="sd">        Also removes zig-zag and spike vertex (see Point.get_spike_context).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">log</span><span class="o">.</span><span class="n">getEffectiveLevel</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">log</span><span class="o">.</span><span class="n">app_level</span> <span class="o">&lt;=</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">:</span>
             <span class="n">debshp</span> <span class="o">=</span> <span class="n">DebugWriter</span><span class="p">(</span>
                 <span class="s1">&#39;debug_notvalid.shp&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">QgsFields</span><span class="p">(),</span> <span class="n">WKBPolygon</span>
             <span class="p">)</span>
@@ -947,13 +954,13 @@
                                 <span class="n">geom</span><span class="o">.</span><span class="n">deleteRing</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
                                 <span class="n">to_change</span><span class="p">[</span><span class="n">fid</span><span class="p">]</span> <span class="o">=</span> <span class="n">geom</span>
                                 <span class="n">geometries</span><span class="p">[</span><span class="n">fid</span><span class="p">]</span> <span class="o">=</span> <span class="n">geom</span>
-                                <span class="k">if</span> <span class="n">log</span><span class="o">.</span><span class="n">getEffectiveLevel</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">:</span>
+                                <span class="k">if</span> <span class="n">log</span><span class="o">.</span><span class="n">app_level</span> <span class="o">&lt;=</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">:</span>
                                     <span class="n">debshp</span><span class="o">.</span><span class="n">addFeature</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
                             <span class="k">else</span><span class="p">:</span>
                                 <span class="n">badgeom</span> <span class="o">=</span> <span class="kc">True</span>
                                 <span class="n">to_clean</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fid</span><span class="p">)</span>
                                 <span class="k">if</span> <span class="n">fid</span> <span class="ow">in</span> <span class="n">to_change</span><span class="p">:</span> <span class="k">del</span> <span class="n">to_change</span><span class="p">[</span><span class="n">fid</span><span class="p">]</span>
-                                <span class="k">if</span> <span class="n">log</span><span class="o">.</span><span class="n">getEffectiveLevel</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">:</span>
+                                <span class="k">if</span> <span class="n">log</span><span class="o">.</span><span class="n">app_level</span> <span class="o">&lt;=</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">:</span>
                                     <span class="n">debshp</span><span class="o">.</span><span class="n">addFeature</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
                             <span class="k">break</span>
                         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ring</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">4</span><span class="p">:</span> <span class="c1"># (can delete vertexs)</span>
@@ -973,7 +980,7 @@
                                     <span class="n">zz</span> <span class="o">+=</span> <span class="mi">1</span>
                                     <span class="n">to_change</span><span class="p">[</span><span class="n">fid</span><span class="p">]</span> <span class="o">=</span> <span class="n">g</span>
                                     <span class="n">geometries</span><span class="p">[</span><span class="n">fid</span><span class="p">]</span> <span class="o">=</span> <span class="n">geom</span>
-                                <span class="k">if</span> <span class="n">log</span><span class="o">.</span><span class="n">getEffectiveLevel</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">:</span>
+                                <span class="k">if</span> <span class="n">log</span><span class="o">.</span><span class="n">app_level</span> <span class="o">&lt;=</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">:</span>
                                     <span class="n">debshp2</span><span class="o">.</span><span class="n">add_point</span><span class="p">(</span><span class="n">va</span><span class="p">,</span> <span class="s1">&#39;zza </span><span class="si">%d</span><span class="s1"> </span><span class="si">%d</span><span class="s1"> </span><span class="si">%d</span><span class="s1"> </span><span class="si">%f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">fid</span><span class="p">,</span> <span class="n">ndx</span><span class="p">,</span> <span class="n">ndxa</span><span class="p">,</span> <span class="n">angle_a</span><span class="p">))</span>
                                     <span class="n">debshp2</span><span class="o">.</span><span class="n">add_point</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="s1">&#39;zz </span><span class="si">%d</span><span class="s1"> </span><span class="si">%d</span><span class="s1"> </span><span class="si">%d</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">fid</span><span class="p">,</span> <span class="n">ndx</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">ring</span><span class="p">),</span> <span class="n">valid</span><span class="p">))</span>
                             <span class="k">elif</span> <span class="n">is_spike</span><span class="p">:</span>
@@ -988,7 +995,7 @@
                                     <span class="n">geom</span> <span class="o">=</span> <span class="n">g</span>
                                     <span class="n">to_change</span><span class="p">[</span><span class="n">fid</span><span class="p">]</span> <span class="o">=</span> <span class="n">g</span>
                                     <span class="n">geometries</span><span class="p">[</span><span class="n">fid</span><span class="p">]</span> <span class="o">=</span> <span class="n">geom</span>
-                                <span class="k">if</span> <span class="n">log</span><span class="o">.</span><span class="n">getEffectiveLevel</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">:</span>
+                                <span class="k">if</span> <span class="n">log</span><span class="o">.</span><span class="n">app_level</span> <span class="o">&lt;=</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">:</span>
                                     <span class="n">debshp2</span><span class="o">.</span><span class="n">add_point</span><span class="p">(</span><span class="n">vx</span><span class="p">,</span> <span class="s1">&#39;vx </span><span class="si">%d</span><span class="s1"> </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">fid</span><span class="p">,</span> <span class="n">ndx</span><span class="p">))</span>
                                     <span class="n">debshp2</span><span class="o">.</span><span class="n">add_point</span><span class="p">(</span><span class="n">va</span><span class="p">,</span> <span class="s1">&#39;va </span><span class="si">%d</span><span class="s1"> </span><span class="si">%d</span><span class="s1"> </span><span class="si">%d</span><span class="s1"> </span><span class="si">%f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">fid</span><span class="p">,</span> <span class="n">ndx</span><span class="p">,</span> <span class="n">ndxa</span><span class="p">,</span> <span class="n">angle_a</span><span class="p">))</span>
                                     <span class="n">debshp2</span><span class="o">.</span><span class="n">add_point</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="s1">&#39;v </span><span class="si">%d</span><span class="s1"> </span><span class="si">%d</span><span class="s1"> </span><span class="si">%d</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">fid</span><span class="p">,</span> <span class="n">ndx</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">ring</span><span class="p">),</span> <span class="n">valid</span><span class="p">))</span>
@@ -1003,7 +1010,7 @@
                     <span class="k">if</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">to_move</span><span class="p">:</span>
                         <span class="n">g</span> <span class="o">=</span> <span class="n">QgsGeometry</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span>
                         <span class="n">vx</span> <span class="o">=</span> <span class="n">to_move</span><span class="p">[</span><span class="n">v</span><span class="p">]</span>
-                        <span class="k">if</span> <span class="n">log</span><span class="o">.</span><span class="n">getEffectiveLevel</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">log</span><span class="o">.</span><span class="n">app_level</span> <span class="o">&lt;=</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">:</span>
                             <span class="n">debshp2</span><span class="o">.</span><span class="n">add_point</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="s1">&#39;mv </span><span class="si">%d</span><span class="s1"> </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">fid</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
                             <span class="n">debshp2</span><span class="o">.</span><span class="n">add_point</span><span class="p">(</span><span class="n">vx</span><span class="p">,</span> <span class="s1">&#39;mvx </span><span class="si">%d</span><span class="s1"> </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">fid</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
                         <span class="n">g</span><span class="o">.</span><span class="n">moveVertex</span><span class="p">(</span><span class="n">vx</span><span class="o">.</span><span class="n">x</span><span class="p">(),</span> <span class="n">vx</span><span class="o">.</span><span class="n">y</span><span class="p">(),</span> <span class="n">n</span><span class="p">)</span>
@@ -1042,7 +1049,7 @@
 <span class="sd">        * Delete vertex if the distance to the segment formed by its parents is</span>
 <span class="sd">          less than &#39;cath_thr&#39; meters.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">log</span><span class="o">.</span><span class="n">getEffectiveLevel</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">log</span><span class="o">.</span><span class="n">app_level</span> <span class="o">&lt;=</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">:</span>
             <span class="n">debshp</span> <span class="o">=</span> <span class="n">DebugWriter</span><span class="p">(</span><span class="s2">&quot;debug_simplify.shp&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
         <span class="n">killed</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">to_change</span> <span class="o">=</span> <span class="p">{}</span>
@@ -1076,7 +1083,7 @@
                         <span class="n">geometries</span><span class="p">[</span><span class="n">fid</span><span class="p">]</span> <span class="o">=</span> <span class="n">g</span>
                         <span class="n">to_change</span><span class="p">[</span><span class="n">fid</span><span class="p">]</span> <span class="o">=</span> <span class="n">g</span>
                         <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Deleted&quot;</span>
-            <span class="k">if</span> <span class="n">log</span><span class="o">.</span><span class="n">getEffectiveLevel</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">log</span><span class="o">.</span><span class="n">app_level</span> <span class="o">&lt;=</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">:</span>
                 <span class="n">debshp</span><span class="o">.</span><span class="n">add_point</span><span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="n">msg</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="n">debmsg</span><span class="p">)</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_change</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">BUFFER_SIZE</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">changeGeometryValues</span><span class="p">(</span><span class="n">to_change</span><span class="p">)</span>
@@ -1282,24 +1289,29 @@
             <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;END</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
         <span class="k">return</span></div>
 
-<div class="viewcode-block" id="ZoningLayer.remove_outside_features"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.ZoningLayer.remove_outside_features">[docs]</a>    <span class="k">def</span> <span class="nf">remove_outside_features</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layer</span><span class="p">,</span> <span class="n">skip</span><span class="o">=</span><span class="p">[]):</span>
+<div class="viewcode-block" id="ZoningLayer.remove_outside_features"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.ZoningLayer.remove_outside_features">[docs]</a>    <span class="k">def</span> <span class="nf">remove_outside_features</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">skip</span><span class="o">=</span><span class="p">[]):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Remove any zone not contained in layer features except if its label</span>
 <span class="sd">        is in skip list.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">split</span> <span class="o">=</span> <span class="n">Geometry</span><span class="o">.</span><span class="n">merge_adjacent_features</span><span class="p">(</span>
-            <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">layer</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">()]</span>
-        <span class="p">)</span>
-        <span class="k">if</span> <span class="n">layer</span><span class="o">.</span><span class="n">crs</span><span class="p">()</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">():</span>
-            <span class="n">crs_transform</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_crs_transform</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">crs</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">())</span>
-            <span class="n">split</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">crs_transform</span><span class="p">)</span>
+        <span class="n">split</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">layer</span><span class="p">:</span>
+            <span class="n">split</span> <span class="o">=</span> <span class="n">Geometry</span><span class="o">.</span><span class="n">merge_adjacent_features</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">layer</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">()]</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">layer</span><span class="o">.</span><span class="n">crs</span><span class="p">()</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">():</span>
+                <span class="n">crs_transform</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_crs_transform</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">crs</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">crs</span><span class="p">())</span>
+                <span class="n">split</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">crs_transform</span><span class="p">)</span>
         <span class="n">to_clean</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">fcount</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">featureCount</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">feat</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">():</span>
             <span class="n">geom</span> <span class="o">=</span> <span class="n">feat</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span>
             <span class="k">if</span> <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">skip</span><span class="p">:</span>
-                <span class="n">inter</span> <span class="o">=</span> <span class="n">split</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">inter</span><span class="o">.</span><span class="n">area</span><span class="p">()</span> <span class="o">/</span> <span class="n">geom</span><span class="o">.</span><span class="n">area</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">split</span><span class="p">:</span>
+                    <span class="n">inter</span> <span class="o">=</span> <span class="n">split</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">inter</span><span class="o">.</span><span class="n">area</span><span class="p">()</span> <span class="o">/</span> <span class="n">geom</span><span class="o">.</span><span class="n">area</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">:</span>
+                        <span class="n">to_clean</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">feat</span><span class="o">.</span><span class="n">id</span><span class="p">())</span>
+                <span class="k">else</span><span class="p">:</span>
                     <span class="n">to_clean</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">feat</span><span class="o">.</span><span class="n">id</span><span class="p">())</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_clean</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">deleteFeatures</span><span class="p">(</span><span class="n">to_clean</span><span class="p">)</span>
@@ -1863,6 +1875,7 @@
             <span class="n">to_move</span><span class="p">[</span><span class="n">ad</span><span class="o">.</span><span class="n">id</span><span class="p">()]</span> <span class="o">=</span> <span class="n">dg</span>
             <span class="n">bg</span><span class="o">.</span><span class="n">insertVertex</span><span class="p">(</span><span class="n">closest</span><span class="o">.</span><span class="n">x</span><span class="p">(),</span> <span class="n">closest</span><span class="o">.</span><span class="n">y</span><span class="p">(),</span> <span class="n">vertex</span><span class="p">)</span>
             <span class="n">to_insert</span><span class="p">[</span><span class="n">building</span><span class="o">.</span><span class="n">id</span><span class="p">()]</span> <span class="o">=</span> <span class="n">QgsGeometry</span><span class="p">(</span><span class="n">bg</span><span class="p">)</span>
+            <span class="n">building</span><span class="o">.</span><span class="n">setGeometry</span><span class="p">(</span><span class="n">bg</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">ad_parts</span><span class="p">:</span>
                 <span class="n">pg</span> <span class="o">=</span> <span class="n">part</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span>
                 <span class="n">r</span> <span class="o">=</span> <span class="n">Geometry</span><span class="o">.</span><span class="n">get_multipolygon</span><span class="p">(</span><span class="n">pg</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
@@ -1872,6 +1885,7 @@
                     <span class="k">if</span> <span class="n">va</span> <span class="ow">in</span> <span class="p">(</span><span class="n">vpa</span><span class="p">,</span> <span class="n">vpb</span><span class="p">)</span> <span class="ow">and</span> <span class="n">vb</span> <span class="ow">in</span> <span class="p">(</span><span class="n">vpa</span><span class="p">,</span> <span class="n">vpb</span><span class="p">):</span>
                         <span class="n">pg</span><span class="o">.</span><span class="n">insertVertex</span><span class="p">(</span><span class="n">closest</span><span class="o">.</span><span class="n">x</span><span class="p">(),</span> <span class="n">closest</span><span class="o">.</span><span class="n">y</span><span class="p">(),</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
                         <span class="n">to_insert</span><span class="p">[</span><span class="n">part</span><span class="o">.</span><span class="n">id</span><span class="p">()]</span> <span class="o">=</span> <span class="n">QgsGeometry</span><span class="p">(</span><span class="n">pg</span><span class="p">)</span>
+                        <span class="n">part</span><span class="o">.</span><span class="n">setGeometry</span><span class="p">(</span><span class="n">pg</span><span class="p">)</span>
                         <span class="k">break</span></div>
 
 <div class="viewcode-block" id="ConsLayer.move_address"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.ConsLayer.move_address">[docs]</a>    <span class="k">def</span> <span class="nf">move_address</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">address</span><span class="p">):</span>
@@ -2089,7 +2103,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.1.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.3.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.layer</a></li> 
       </ul>

@@ -14,7 +14,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.report &#8212; documentación de CatAtom2Osm - 2.1.0</title>
+    <title>catatom2osm.report &#8212; documentación de CatAtom2Osm - 2.3.0</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/guzzle.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.1.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.3.0</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Código de módulo</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.report</a></li> 
       </ul>
@@ -119,10 +119,6 @@
             <span class="p">(</span><span class="s1">&#39;mun_code&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Code&#39;</span><span class="p">)),</span>
             <span class="p">(</span><span class="s1">&#39;date&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Date&#39;</span><span class="p">)),</span>
             <span class="p">(</span><span class="s1">&#39;options&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Options&#39;</span><span class="p">)),</span>
-            <span class="p">(</span><span class="s1">&#39;mun_area&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Area&quot;</span><span class="p">)),</span>
-            <span class="p">(</span><span class="s1">&#39;mun_population&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Population&#39;</span><span class="p">)),</span>
-            <span class="p">(</span><span class="s1">&#39;mun_wikipedia&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Wikipedia&#39;</span><span class="p">)),</span>
-            <span class="p">(</span><span class="s1">&#39;mun_wikidata&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Wikidata&#39;</span><span class="p">)),</span>
             <span class="p">(</span><span class="s1">&#39;group_system_info&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;System info&#39;</span><span class="p">)),</span>
             <span class="p">(</span><span class="s1">&#39;app_version&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Application version&#39;</span><span class="p">)),</span>
             <span class="p">(</span><span class="s1">&#39;platform&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Platform&#39;</span><span class="p">)),</span>
@@ -219,10 +215,6 @@
             <span class="p">(</span><span class="s1">&#39;warnings&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Warnings:&quot;</span><span class="p">)),</span>
         <span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">formats</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;mun_area&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">locale</span><span class="o">.</span><span class="n">format_string</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%.1f</span><span class="s2"> km²&quot;</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
-            <span class="s1">&#39;mun_population&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> hab. (</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">*</span><span class="n">v</span><span class="p">),</span>
-            <span class="s1">&#39;mun_wikipedia&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="s1">&#39;https://www.wikipedia.org/wiki/&#39;</span> <span class="o">+</span> <span class="n">v</span><span class="p">,</span>
-            <span class="s1">&#39;mun_wikidata&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="s1">&#39;https://www.wikidata.org/wiki/&#39;</span> <span class="o">+</span> <span class="n">v</span><span class="p">,</span>
             <span class="s1">&#39;cpu_freq&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">locale</span><span class="o">.</span><span class="n">format_string</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%.1f</span><span class="s1"> Mhz&#39;</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
             <span class="s1">&#39;ex_time&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">locale</span><span class="o">.</span><span class="n">format_string</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%.1f</span><span class="s1"> &#39;</span> <span class="o">+</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;seconds&#39;</span><span class="p">),</span> <span class="n">v</span><span class="p">,</span>
                                                       <span class="kc">True</span><span class="p">),</span>
@@ -453,7 +445,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.1.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.3.0</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Código de módulo</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.report</a></li> 
       </ul>

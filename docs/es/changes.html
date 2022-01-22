@@ -15,7 +15,7 @@
   <link rel="stylesheet" type="text/css" href="_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>Registro de cambios &#8212; documentación de CatAtom2Osm - 2.1.0</title>
+    <title>Registro de cambios &#8212; documentación de CatAtom2Osm - 2.3.0</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/guzzle.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="install.html" title="Instalación"
              accesskey="P">anterior</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">documentación de CatAtom2Osm - 2.1.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">documentación de CatAtom2Osm - 2.3.0</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Registro de cambios</a></li> 
       </ul>
     </div>
@@ -100,22 +100,39 @@
             
   <section id="registro-de-cambios">
 <h1>Registro de cambios<a class="headerlink" href="#registro-de-cambios" title="Enlazar permanentemente con este título">¶</a></h1>
-<p>** 2021-1-16 (2.1.0)**
+<p><strong>22-01-2021 (2.3.0)</strong>
+* Corrige error asignando entradas múltiples a edificio
+* Crea subdirectorio de salvaguardia para municipios fraccionados
+* Corrige estadísticas de direcciones para municipios fraccionados
+* Corrige detección incorrecta de zonas vacías
+* Fija nivel del archivo de log en DEBUG
+* Evita mensaje incorrecto con -z
+* Procesar edificios sin zona #88
+* Recorta zonificación cuando se usa -o</p>
+<p><strong>21-01-2021 (2.2.2)</strong>
+* Mejora la definición de la zona de búsqueda en Overpass</p>
+<p><strong>20-01-2021 (2.2.1)</strong>
+* Lanza error si se pasa una zona -o que no existe
+* Control de flujo cuando no hay datos a procesar
+* Corrige nombre de carpeta para opción -o</p>
+<p><strong>20-01-2021 (2.2.0)</strong>
+* Almacenar nombres de municipio y áreas de búsqueda #82 #87</p>
+<p><strong>16-1-2021 (2.1.0)</strong>
 * Añade direcciones tipo entrada asociadas a varios edificios
 * Corrige error moviendo proyecto
 * Corrige error por mantener shapefiles en modo depuración</p>
-<p>** 14-1-2021 (2.0.0)**
+<p><strong>14-1-2021 (2.0.0)</strong>
 * Actualiza a Ubuntu 20.04 / QGIS3 / python3 #67.
 * Simplifica la interfaz de línea de comandos.
 * Permite procesar sólo direcciones por tareas (-d).</p>
-<p>** 10-1-2021 (1.9.3)**
+<p><strong>10-1-2021 (1.9.3)</strong>
 * Corrige error eliminando elementos OSM.</p>
-<p>** 10-1-2021 (1.9.2)**
+<p><strong>10-1-2021 (1.9.2)</strong>
 * Corrige área de búsqueda de overpass para la opción -s.</p>
-<p>** 8-1-2021 (1.9.1)**
+<p><strong>8-1-2021 (1.9.1)</strong>
 * El polígono de recorte incluye zonas si el área superpuesta es mayor que el 50%.
 * Corrige error renombrando proyecto.</p>
-<p>** 8-1-2021 (1.9.0)**
+<p><strong>8-1-2021 (1.9.0)</strong>
 * Opción para dividir un municipio grande usando un archivo (#78)
 * Corrección y mejora de rendimiento de opción -o (#73)</p>
 <p><strong>21-12-2021 (1.8.7)</strong>
@@ -383,7 +400,7 @@
         <li class="right" >
           <a href="install.html" title="Instalación"
              >anterior</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">documentación de CatAtom2Osm - 2.1.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">documentación de CatAtom2Osm - 2.3.0</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Registro de cambios</a></li> 
       </ul>
     </div>

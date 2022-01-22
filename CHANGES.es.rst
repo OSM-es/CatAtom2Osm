@@ -7,6 +7,9 @@ Registro de cambios
 * Corrige estadísticas de direcciones para municipios fraccionados
 * Corrige detección incorrecta de zonas vacías
 * Fija nivel del archivo de log en DEBUG
+* Evita mensaje incorrecto con -z
+* Procesar edificios sin zona #88
+* Recorta zonificación cuando se usa -o
 
 **21-01-2021 (2.2.2)**
 * Mejora la definición de la zona de búsqueda en Overpass

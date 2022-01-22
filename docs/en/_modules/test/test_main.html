@@ -14,7 +14,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>test.test_main &#8212; CatAtom2Osm 2.1.0 documentation</title>
+    <title>test.test_main &#8212; CatAtom2Osm 2.3.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/guzzle.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.1.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.3.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">test.test_main</a></li> 
       </ul>
@@ -168,24 +168,9 @@
             <span class="n">mock</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="s1">&#39;building&#39;</span><span class="p">),</span>
         <span class="p">])</span></div>
 
-<div class="viewcode-block" id="TestMain.test_list_prov"><a class="viewcode-back" href="../../api/test.test_main.html#test.test_main.TestMain.test_list_prov">[docs]</a>    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.__main__.sys.argv&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;catatom2osm.py&#39;</span><span class="p">,</span> <span class="s1">&#39;-l&#39;</span><span class="p">])</span>
-    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.app.catatom.list_municipalities&#39;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">test_list_prov</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mocklist</span><span class="p">):</span>
-        <span class="n">__main__</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
-        <span class="n">mocklist</span><span class="o">.</span><span class="n">assert_called_once_with</span><span class="p">(</span><span class="s1">&#39;99&#39;</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="TestMain.test_list_mun"><a class="viewcode-back" href="../../api/test.test_main.html#test.test_main.TestMain.test_list_mun">[docs]</a>    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span>
-        <span class="s1">&#39;catatom2osm.__main__.sys.argv&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;catatom2osm.py&#39;</span><span class="p">,</span> <span class="s1">&#39;-l&#39;</span><span class="p">,</span> <span class="s1">&#39;33&#39;</span><span class="p">]</span>
-    <span class="p">)</span>
-    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.app.catatom.list_municipalities&#39;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">test_list_mun</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mocklist</span><span class="p">):</span>
-        <span class="n">__main__</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
-        <span class="n">mocklist</span><span class="o">.</span><span class="n">assert_called_once_with</span><span class="p">(</span><span class="s1">&#39;33&#39;</span><span class="p">)</span></div>
-
 <div class="viewcode-block" id="TestMain.test_list_error"><a class="viewcode-back" href="../../api/test.test_main.html#test.test_main.TestMain.test_list_error">[docs]</a>    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span>
-        <span class="s1">&#39;catatom2osm.__main__.sys.argv&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;catatom2osm.py&#39;</span><span class="p">,</span> <span class="s1">&#39;-l&#39;</span><span class="p">,</span> <span class="s1">&#39;33&#39;</span><span class="p">]</span>
+        <span class="s1">&#39;catatom2osm.__main__.sys.argv&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;catatom2osm.py&#39;</span><span class="p">,</span> <span class="s1">&#39;-l&#39;</span><span class="p">,</span> <span class="s1">&#39;01&#39;</span><span class="p">]</span>
     <span class="p">)</span>
-    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.app.catatom.list_municipalities&#39;</span><span class="p">,</span> <span class="n">raiseIOError</span><span class="p">)</span>
     <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.__main__.log.error&#39;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">test_list_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mocklog</span><span class="p">):</span>
         <span class="n">__main__</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
@@ -236,7 +221,7 @@
     <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.__main__.log&#39;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">test_debug</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mocklog</span><span class="p">,</span> <span class="n">mockcat</span><span class="p">):</span>
         <span class="n">mockcat</span><span class="o">.</span><span class="n">create_and_run</span> <span class="o">=</span> <span class="n">raiseImportError</span>
-        <span class="n">mocklog</span><span class="o">.</span><span class="n">getEffectiveLevel</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span>
+        <span class="n">mocklog</span><span class="o">.</span><span class="n">app_level</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span>
         <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="ne">ImportError</span><span class="p">):</span>
             <span class="n">__main__</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
         <span class="n">mocklog</span><span class="o">.</span><span class="n">setLevel</span><span class="o">.</span><span class="n">assert_called_once_with</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
@@ -312,7 +297,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.1.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.3.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">test.test_main</a></li> 
       </ul>

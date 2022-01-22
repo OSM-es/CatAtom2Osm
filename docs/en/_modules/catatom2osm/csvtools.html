@@ -14,7 +14,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.csvtools &#8212; CatAtom2Osm 2.1.0 documentation</title>
+    <title>catatom2osm.csvtools &#8212; CatAtom2Osm 2.3.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/guzzle.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.1.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.3.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.csvtools</a></li> 
       </ul>
@@ -108,6 +108,47 @@
                 <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Failed to load CSV file &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="n">csv_file</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
             <span class="n">a_dict</span><span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">a_dict</span></div>
+
+<div class="viewcode-block" id="filter"><a class="viewcode-back" href="../../api/catatom2osm.csvtools.html#catatom2osm.csvtools.filter">[docs]</a><span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="n">csv_path</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="k">lambda</span> <span class="n">row</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return csv rows filtered using query</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        args: aditional arguments for query function</span>
+<span class="sd">        query (func): function with args row and wargs that returns</span>
+<span class="sd">                      a boolean deciding if each row will be included or not</span>
+<span class="sd">        stop (bool): Stop at first match or get all</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">csv_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">csv_file</span><span class="p">:</span>
+        <span class="n">csv_reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">csv_file</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">delimiter</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">csv_reader</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">query</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">stop</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">row</span>
+                <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">output</span></div>
+
+<div class="viewcode-block" id="search"><a class="viewcode-back" href="../../api/catatom2osm.csvtools.html#catatom2osm.csvtools.search">[docs]</a><span class="k">def</span> <span class="nf">search</span><span class="p">(</span><span class="n">csv_path</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="k">lambda</span> <span class="n">row</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return first matched row in csv</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        args: aditional arguments for query function</span>
+<span class="sd">        query (func): function with args row and wargs that returns</span>
+<span class="sd">                      a boolean deciding if each row will be included or not</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">filter</span><span class="p">(</span><span class="n">csv_path</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="n">query</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="get_key"><a class="viewcode-back" href="../../api/catatom2osm.csvtools.html#catatom2osm.csvtools.get_key">[docs]</a><span class="k">def</span> <span class="nf">get_key</span><span class="p">(</span><span class="n">csv_path</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get a row given first column value&quot;&quot;&quot;</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">row</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">search</span><span class="p">(</span><span class="n">csv_path</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="n">q</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="startswith"><a class="viewcode-back" href="../../api/catatom2osm.csvtools.html#catatom2osm.csvtools.startswith">[docs]</a><span class="k">def</span> <span class="nf">startswith</span><span class="p">(</span><span class="n">csv_path</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get rows which first column starts with key&quot;&quot;&quot;</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">row</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">return</span> <span class="nb">filter</span><span class="p">(</span><span class="n">csv_path</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="n">q</span><span class="p">)</span></div>
 </pre></div>
 
           </div>
@@ -124,7 +165,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.1.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.3.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.csvtools</a></li> 
       </ul>
