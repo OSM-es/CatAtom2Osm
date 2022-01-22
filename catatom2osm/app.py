@@ -249,7 +249,6 @@ class CatAtom2Osm(object):
             fn, providerLib='ogr', source_date=building_gml.source_date
         )
         self.get_labels(building_gml, part_gml, other_gml)
-        #if self.split:
         if self.zone or self.split:
             self.split_zoning()
             self.get_bbox()
@@ -423,7 +422,8 @@ class CatAtom2Osm(object):
         bbox = self.rustic_zoning.boundingBoxOfSelected()
         self.urban_zoning.selectByExpression(f"label in ({str(self.zone)[1:-1]})")
         bbox.combineExtentWith(self.urban_zoning.boundingBoxOfSelected())
-        self.boundary_bbox = self.urban_zoning.get_overpass_bbox(bbox)
+        if not bbox.isEmpty():
+            self.boundary_bbox = self.urban_zoning.get_overpass_bbox(bbox)
 
     def process_zoning(self):
         self.rustic_zoning.clean()
@@ -566,7 +566,7 @@ class CatAtom2Osm(object):
                 return None
             log.info(_("Downloading '%s'") % filename)
             query = overpass.Query(self.boundary_search_area)
-            if hasattr(self, 'boundary_bbox'):
+            if hasattr(self, 'boundary_bbox') and self.boundary_bbox:
                 query.set_search_area(self.boundary_bbox)
             query.add(ql)
             if log.app_level == logging.DEBUG:
@@ -630,7 +630,6 @@ class CatAtom2Osm(object):
         )
         if not self.building_opt:
             self.get_labels(address_gml)
-            # if self.split:
             if self.zone or self.split:
                 self.split_zoning()
                 self.get_bbox()
