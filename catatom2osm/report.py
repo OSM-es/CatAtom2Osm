@@ -61,12 +61,12 @@ class Report(object):
             ('inp_address_parcel', TAB + _('Type parcel')),
             ('inp_zip_codes', _('Postal codes')),
             ('inp_street_names', _('Street names')),
+            ('orphand_addresses',
+             _('Addresses without associated building excluded')),
             ('subgroup_ad_process', _('Process')),
             ('ignored_addresses', _('Addresses deleted by street name')),
             ('addresses_without_number',
              _('Addresses without house number deleted')),
-            ('orphand_addresses',
-             _('Addresses without associated building deleted')),
             ('multiple_addresses',
              _('Addresses belonging to multiple buildings deleted')),
             ('not_unique_addresses',
@@ -89,8 +89,10 @@ class Report(object):
             ('inp_buildings', TAB + _('Buildings')),
             ('inp_parts', TAB + _('Building parts')),
             ('inp_pools', TAB + _('Swimming pools')),
+            ('orphand_parts',
+             _('Parts without associated building excluded')),
             ('subgroup_bu_process', _('Process')),
-            ('orphand_parts', _("Parts outside outline deleted")),
+            ('outside_parts', _("Parts outside outline deleted")),
             ('underground_parts', _("Parts with no floors above ground")),
             ('new_outlines', _("Building outlines created")),
             ('multipart_geoms_building',
@@ -245,14 +247,15 @@ class Report(object):
                 self.get('inp_address'):
             self.errors.append(_("Sum of address types should be equal "
                 "to the input addresses"))
-        if self.sum('addresses_without_number', 'orphand_addresses', 
+        if self.sum('addresses_without_number', 'not_unique_addresses',
                 'multiple_addresses', 'refused_addresses', 'ignored_addresses', 
-                'not_unique_addresses', 'out_address') != self.get('inp_address'):
+                'out_address', 'pool_addresses') != self.get('inp_address'):
             self.errors.append(_("Sum of output and deleted addresses "
                 "should be equal to the input addresses"))
-        if self.sum('out_address_entrance', 'out_address_building') > 0 and \
-                self.sum('out_address_entrance', 'out_address_building') != \
-                self.get('out_address'):
+        if (
+            self.sum('out_address_entrance', 'out_address_building') > 0
+            and self.sum('out_address_entrance', 'out_address_building')
+        ) != self.get('out_address'):
             self.errors.append(_("Sum of entrance and building address "
                 "should be equal to output addresses"))
         if self.sum('out_addr_str', 'out_addr_plc') != \
@@ -263,7 +266,7 @@ class Report(object):
                 self.get('inp_features'):
             self.errors.append(_("Sum of buildings, parts and pools should "
                 "be equal to the feature count"))
-        if self.sum('out_features', 'orphand_parts', 'underground_parts', 
+        if self.sum('out_features', 'outside_parts', 'underground_parts',
                 'multipart_geoms_building', 'parts_to_outline',
                 'adjacent_parts', 'geom_invalid_building', 'buildings_in_pools') - \
                 self.sum('new_outlines', 'exploded_parts_building') != \

@@ -14,7 +14,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.report &#8212; CatAtom2Osm 2.3.0 documentation</title>
+    <title>catatom2osm.report &#8212; CatAtom2Osm 2.4.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/guzzle.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.3.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.4.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.report</a></li> 
       </ul>
@@ -142,12 +142,12 @@
             <span class="p">(</span><span class="s1">&#39;inp_address_parcel&#39;</span><span class="p">,</span> <span class="n">TAB</span> <span class="o">+</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Type parcel&#39;</span><span class="p">)),</span>
             <span class="p">(</span><span class="s1">&#39;inp_zip_codes&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Postal codes&#39;</span><span class="p">)),</span>
             <span class="p">(</span><span class="s1">&#39;inp_street_names&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Street names&#39;</span><span class="p">)),</span>
+            <span class="p">(</span><span class="s1">&#39;orphand_addresses&#39;</span><span class="p">,</span>
+             <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Addresses without associated building excluded&#39;</span><span class="p">)),</span>
             <span class="p">(</span><span class="s1">&#39;subgroup_ad_process&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Process&#39;</span><span class="p">)),</span>
             <span class="p">(</span><span class="s1">&#39;ignored_addresses&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Addresses deleted by street name&#39;</span><span class="p">)),</span>
             <span class="p">(</span><span class="s1">&#39;addresses_without_number&#39;</span><span class="p">,</span>
              <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Addresses without house number deleted&#39;</span><span class="p">)),</span>
-            <span class="p">(</span><span class="s1">&#39;orphand_addresses&#39;</span><span class="p">,</span>
-             <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Addresses without associated building deleted&#39;</span><span class="p">)),</span>
             <span class="p">(</span><span class="s1">&#39;multiple_addresses&#39;</span><span class="p">,</span>
              <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Addresses belonging to multiple buildings deleted&#39;</span><span class="p">)),</span>
             <span class="p">(</span><span class="s1">&#39;not_unique_addresses&#39;</span><span class="p">,</span>
@@ -170,8 +170,10 @@
             <span class="p">(</span><span class="s1">&#39;inp_buildings&#39;</span><span class="p">,</span> <span class="n">TAB</span> <span class="o">+</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Buildings&#39;</span><span class="p">)),</span>
             <span class="p">(</span><span class="s1">&#39;inp_parts&#39;</span><span class="p">,</span> <span class="n">TAB</span> <span class="o">+</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Building parts&#39;</span><span class="p">)),</span>
             <span class="p">(</span><span class="s1">&#39;inp_pools&#39;</span><span class="p">,</span> <span class="n">TAB</span> <span class="o">+</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Swimming pools&#39;</span><span class="p">)),</span>
+            <span class="p">(</span><span class="s1">&#39;orphand_parts&#39;</span><span class="p">,</span>
+             <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Parts without associated building excluded&#39;</span><span class="p">)),</span>
             <span class="p">(</span><span class="s1">&#39;subgroup_bu_process&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Process&#39;</span><span class="p">)),</span>
-            <span class="p">(</span><span class="s1">&#39;orphand_parts&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Parts outside outline deleted&quot;</span><span class="p">)),</span>
+            <span class="p">(</span><span class="s1">&#39;outside_parts&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Parts outside outline deleted&quot;</span><span class="p">)),</span>
             <span class="p">(</span><span class="s1">&#39;underground_parts&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Parts with no floors above ground&quot;</span><span class="p">)),</span>
             <span class="p">(</span><span class="s1">&#39;new_outlines&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Building outlines created&quot;</span><span class="p">)),</span>
             <span class="p">(</span><span class="s1">&#39;multipart_geoms_building&#39;</span><span class="p">,</span>
@@ -326,14 +328,15 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;inp_address&#39;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Sum of address types should be equal &quot;</span>
                 <span class="s2">&quot;to the input addresses&quot;</span><span class="p">))</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="s1">&#39;addresses_without_number&#39;</span><span class="p">,</span> <span class="s1">&#39;orphand_addresses&#39;</span><span class="p">,</span> 
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="s1">&#39;addresses_without_number&#39;</span><span class="p">,</span> <span class="s1">&#39;not_unique_addresses&#39;</span><span class="p">,</span>
                 <span class="s1">&#39;multiple_addresses&#39;</span><span class="p">,</span> <span class="s1">&#39;refused_addresses&#39;</span><span class="p">,</span> <span class="s1">&#39;ignored_addresses&#39;</span><span class="p">,</span> 
-                <span class="s1">&#39;not_unique_addresses&#39;</span><span class="p">,</span> <span class="s1">&#39;out_address&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;inp_address&#39;</span><span class="p">):</span>
+                <span class="s1">&#39;out_address&#39;</span><span class="p">,</span> <span class="s1">&#39;pool_addresses&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;inp_address&#39;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Sum of output and deleted addresses &quot;</span>
                 <span class="s2">&quot;should be equal to the input addresses&quot;</span><span class="p">))</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="s1">&#39;out_address_entrance&#39;</span><span class="p">,</span> <span class="s1">&#39;out_address_building&#39;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> \
-                <span class="bp">self</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="s1">&#39;out_address_entrance&#39;</span><span class="p">,</span> <span class="s1">&#39;out_address_building&#39;</span><span class="p">)</span> <span class="o">!=</span> \
-                <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;out_address&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="s1">&#39;out_address_entrance&#39;</span><span class="p">,</span> <span class="s1">&#39;out_address_building&#39;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="s1">&#39;out_address_entrance&#39;</span><span class="p">,</span> <span class="s1">&#39;out_address_building&#39;</span><span class="p">)</span>
+        <span class="p">)</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;out_address&#39;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Sum of entrance and building address &quot;</span>
                 <span class="s2">&quot;should be equal to output addresses&quot;</span><span class="p">))</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="s1">&#39;out_addr_str&#39;</span><span class="p">,</span> <span class="s1">&#39;out_addr_plc&#39;</span><span class="p">)</span> <span class="o">!=</span> \
@@ -344,7 +347,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;inp_features&#39;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Sum of buildings, parts and pools should &quot;</span>
                 <span class="s2">&quot;be equal to the feature count&quot;</span><span class="p">))</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="s1">&#39;out_features&#39;</span><span class="p">,</span> <span class="s1">&#39;orphand_parts&#39;</span><span class="p">,</span> <span class="s1">&#39;underground_parts&#39;</span><span class="p">,</span> 
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="s1">&#39;out_features&#39;</span><span class="p">,</span> <span class="s1">&#39;outside_parts&#39;</span><span class="p">,</span> <span class="s1">&#39;underground_parts&#39;</span><span class="p">,</span>
                 <span class="s1">&#39;multipart_geoms_building&#39;</span><span class="p">,</span> <span class="s1">&#39;parts_to_outline&#39;</span><span class="p">,</span>
                 <span class="s1">&#39;adjacent_parts&#39;</span><span class="p">,</span> <span class="s1">&#39;geom_invalid_building&#39;</span><span class="p">,</span> <span class="s1">&#39;buildings_in_pools&#39;</span><span class="p">)</span> <span class="o">-</span> \
                 <span class="bp">self</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="s1">&#39;new_outlines&#39;</span><span class="p">,</span> <span class="s1">&#39;exploded_parts_building&#39;</span><span class="p">)</span> <span class="o">!=</span> \
@@ -444,7 +447,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.3.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.4.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.report</a></li> 
       </ul>

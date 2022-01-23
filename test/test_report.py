@@ -48,11 +48,11 @@ class TestReport(unittest.TestCase):
         r.orphand_addresses = 2
         r.multiple_addresses = 1
         r.refused_addresses = 2
-        r.out_address_entrance = 2
-        r.out_address_building = 2
-        r.out_addr_str = 3
-        r.out_addr_plc = 1
-        r.out_address = 4
+        r.out_address_entrance = 5
+        r.out_address_building = 1
+        r.out_addr_str = 4
+        r.out_addr_plc = 2
+        r.out_address = 6
         r.inp_features = 6
         r.inp_buildings = 2
         r.inp_parts = 3
@@ -60,7 +60,7 @@ class TestReport(unittest.TestCase):
         r.building_counter = {'a': 1, 'b': 2}
         r.out_buildings = 3
         r.out_features = 8
-        r.orphand_parts = 1
+        r.outside_parts = 1
         r.underground_parts = 1
         r.new_outlines = 2
         r.multipart_geoms_building = 2

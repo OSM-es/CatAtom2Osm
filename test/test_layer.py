@@ -655,7 +655,7 @@ class TestZoningLayer(unittest.TestCase):
              '89423': 17, '86439': 17, '86417': 17, '90417': 12,
              '86464': 11, '88427': 9, '86435': 9, '85426': 9,
              '85449': 9, '87427': 9, '88429': 8, '89403': 8, '013': 7,
-             '90425': 7, '91441': 7, '86434': 5, '83424': 5, '004': 5,
+             '90425': 7, '91441': 7, '86434': 5, '83424': 5, '004': 4,
              '87425': 5, '87459': 4, '86448': 4, '83429': 4,
              '86433': 3, '88416': 3, '90424': 3, '85439': 3,
              '88405': 2, '005': 2, '85411': 2, '86459': 1, '88428': 1,
@@ -673,7 +673,7 @@ class TestZoningLayer(unittest.TestCase):
         self.rlayer.get_labels(source, building)
         self.ulayer.get_labels(source, part)
         self.rlayer.get_labels(source, part)
-        self.assertEqual(source.labels['000902900CS52D_part1'], '004')
+        self.assertFalse('000902900CS52D_part1' in source.labels)
         labels = Counter(source.labels.values())
         self.assertEqual(labels, test)
 

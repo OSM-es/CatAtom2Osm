@@ -14,7 +14,7 @@
   <link rel="stylesheet" type="text/css" href="_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>Index &#8212; CatAtom2Osm 2.3.0 documentation</title>
+    <title>Index &#8212; CatAtom2Osm 2.4.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/guzzle.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">CatAtom2Osm 2.3.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">CatAtom2Osm 2.4.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Index</a></li> 
       </ul>
     </div>
@@ -356,8 +356,6 @@
       </ul></li>
       <li><a href="api/catatom2osm.osmxml.html#catatom2osm.osmxml.deserialize">deserialize() (in module catatom2osm.osmxml)</a>
 </li>
-      <li><a href="api/catatom2osm.layer.html#catatom2osm.layer.ConsLayer.detect_missing_building_parts">detect_missing_building_parts() (catatom2osm.layer.ConsLayer method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/catatom2osm.csvtools.html#catatom2osm.csvtools.dict2csv">dict2csv() (in module catatom2osm.csvtools)</a>
@@ -502,12 +500,14 @@
 </li>
       <li><a href="api/catatom2osm.layer.html#catatom2osm.layer.AddressLayer.get_highway_names">get_highway_names() (catatom2osm.layer.AddressLayer method)</a>
 </li>
-      <li><a href="api/catatom2osm.layer.html#catatom2osm.layer.AddressLayer.get_image_links">get_image_links() (catatom2osm.layer.AddressLayer method)</a>
+      <li><a href="api/catatom2osm.layer.html#catatom2osm.layer.ConsLayer.get_id">get_id() (catatom2osm.layer.ConsLayer static method)</a>
 </li>
-      <li><a href="api/catatom2osm.layer.html#catatom2osm.layer.BaseLayer.get_index">get_index() (catatom2osm.layer.BaseLayer method)</a>
+      <li><a href="api/catatom2osm.layer.html#catatom2osm.layer.AddressLayer.get_image_links">get_image_links() (catatom2osm.layer.AddressLayer method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/catatom2osm.layer.html#catatom2osm.layer.BaseLayer.get_index">get_index() (catatom2osm.layer.BaseLayer method)</a>
+</li>
       <li><a href="api/catatom2osm.csvtools.html#catatom2osm.csvtools.get_key">get_key() (in module catatom2osm.csvtools)</a>
 </li>
       <li><a href="api/catatom2osm.layer.html#catatom2osm.layer.AddressLayer.get_label">get_label() (catatom2osm.layer.AddressLayer method)</a>
@@ -1299,6 +1299,8 @@
 </li>
       <li><a href="api/test.test_layer.html#test.test_layer.TestAddressLayer.test_get_highway_names">test_get_highway_names() (test.test_layer.TestAddressLayer method)</a>
 </li>
+      <li><a href="api/test.test_layer.html#test.test_layer.TestConsLayerSimple.test_get_id">test_get_id() (test.test_layer.TestConsLayerSimple method)</a>
+</li>
       <li><a href="api/test.test_layer.html#test.test_layer.TestBaseLayer.test_get_index">test_get_index() (test.test_layer.TestBaseLayer method)</a>
 </li>
       <li><a href="api/test.test_layer.html#test.test_layer.TestZoningLayer.test_get_labels">test_get_labels() (test.test_layer.TestZoningLayer method)</a>
@@ -1397,7 +1399,7 @@
 </li>
       <li><a href="api/test.test_main.html#test.test_main.TestMain.test_IOError">test_IOError() (test.test_main.TestMain method)</a>
 </li>
-      <li><a href="api/test.test_layer.html#test.test_layer.TestConsLayer.test_is_building">test_is_building() (test.test_layer.TestConsLayer method)</a>
+      <li><a href="api/test.test_layer.html#test.test_layer.TestConsLayerSimple.test_is_building">test_is_building() (test.test_layer.TestConsLayerSimple method)</a>
 </li>
       <li><a href="api/test.test_catatom.html#test.test_catatom.TestCatAtom.test_is_empty">test_is_empty() (test.test_catatom.TestCatAtom method)</a>
 </li>
@@ -1411,9 +1413,9 @@
 </li>
       <li><a href="api/test.test_osm.html#test.test_osm.TestOsmWay.test_is_open">test_is_open() (test.test_osm.TestOsmWay method)</a>
 </li>
-      <li><a href="api/test.test_layer.html#test.test_layer.TestConsLayer.test_is_part">test_is_part() (test.test_layer.TestConsLayer method)</a>
+      <li><a href="api/test.test_layer.html#test.test_layer.TestConsLayerSimple.test_is_part">test_is_part() (test.test_layer.TestConsLayerSimple method)</a>
 </li>
-      <li><a href="api/test.test_layer.html#test.test_layer.TestConsLayer.test_is_pool">test_is_pool() (test.test_layer.TestConsLayer method)</a>
+      <li><a href="api/test.test_layer.html#test.test_layer.TestConsLayerSimple.test_is_pool">test_is_pool() (test.test_layer.TestConsLayerSimple method)</a>
 </li>
       <li><a href="api/test.test_osm.html#test.test_osm.TestOsmRelation.test_is_valid_multipolygon">test_is_valid_multipolygon() (test.test_osm.TestOsmRelation method)</a>
 </li>
@@ -1621,6 +1623,8 @@
 </li>
       <li><a href="api/test.test_layer.html#test.test_layer.TestConsLayer">TestConsLayer (class in test.test_layer)</a>
 </li>
+      <li><a href="api/test.test_layer.html#test.test_layer.TestConsLayerSimple">TestConsLayerSimple (class in test.test_layer)</a>
+</li>
       <li><a href="api/test.test_csvtools.html#test.test_csvtools.TestCsvTools">TestCsvTools (class in test.test_csvtools)</a>
 </li>
       <li><a href="api/test.test_layer.html#test.test_layer.TestDebugWriter">TestDebugWriter (class in test.test_layer)</a>
@@ -1760,7 +1764,7 @@
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">CatAtom2Osm 2.3.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">CatAtom2Osm 2.4.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Index</a></li> 
       </ul>
     </div>

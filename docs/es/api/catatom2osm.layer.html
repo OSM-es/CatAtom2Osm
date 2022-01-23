@@ -15,7 +15,7 @@
   <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.layer module &#8212; documentación de CatAtom2Osm - 2.3.0</title>
+    <title>catatom2osm.layer module &#8212; documentación de CatAtom2Osm - 2.4.0</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/guzzle.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="catatom2osm.hgwnames.html" title="catatom2osm.hgwnames module"
              accesskey="P">anterior</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">documentación de CatAtom2Osm - 2.3.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">documentación de CatAtom2Osm - 2.4.0</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../api.html" >Referencia API</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="modules.html" >CatAtom2Osm</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="catatom2osm.html" accesskey="U">catatom2osm package</a> &#187;</li>
@@ -422,18 +422,18 @@ If delete=False, only mark buildings with conflicts</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="catatom2osm.layer.ConsLayer.detect_missing_building_parts">
-<span class="sig-name descname"><span class="pre">detect_missing_building_parts</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#ConsLayer.detect_missing_building_parts"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.layer.ConsLayer.detect_missing_building_parts" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Add a tag to parts without associated building.</p>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.layer.ConsLayer.explode_multi_parts">
 <span class="sig-name descname"><span class="pre">explode_multi_parts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">address</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#ConsLayer.explode_multi_parts"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.layer.ConsLayer.explode_multi_parts" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>Creates a new WKBPolygon feature for each part of any WKBMultiPolygon
 feature in request. This avoid relations with many “outer” members in
 OSM data set. From this moment, localId will not be a unique identifier
 for buildings.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="catatom2osm.layer.ConsLayer.get_id">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feat</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#ConsLayer.get_id"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.layer.ConsLayer.get_id" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Trim to parcel id</p>
 </dd></dl>
 
 <dl class="py method">
@@ -553,8 +553,7 @@ Precondition: Called before merge_greatest_part.</p>
 <dt class="sig sig-object py" id="catatom2osm.layer.ConsLayer.set_tasks">
 <span class="sig-name descname"><span class="pre">set_tasks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#ConsLayer.set_tasks"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.layer.ConsLayer.set_tasks" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>Assings to each building and pool the task label of the zone in witch
-it is contained. Parts receives the label of the building it belongs.
-Parts without associated building gets a fixme</p>
+it is contained.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -883,7 +882,7 @@ less than “cath_thr” meters.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.layer.ZoningLayer.get_labels">
 <span class="sig-name descname"><span class="pre">get_labels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gml</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/layer.html#ZoningLayer.get_labels"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.layer.ZoningLayer.get_labels" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Builds in layer a index of gml features localId vs the label of the
+<dd><p>Builds in layer an index of gml features localId vs the label of the
 zone in witch it is contained. If the feature geometry overlaps many
 zones, takes the zone with the largest intersection.</p>
 </dd></dl>
@@ -987,7 +986,7 @@ For a more advanced concept, see the classmethod builtin.</p>
         <li class="right" >
           <a href="catatom2osm.hgwnames.html" title="catatom2osm.hgwnames module"
              >anterior</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">documentación de CatAtom2Osm - 2.3.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">documentación de CatAtom2Osm - 2.4.0</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../api.html" >Referencia API</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="modules.html" >CatAtom2Osm</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="catatom2osm.html" >catatom2osm package</a> &#187;</li>

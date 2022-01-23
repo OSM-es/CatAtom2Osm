@@ -14,7 +14,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.app &#8212; CatAtom2Osm 2.3.0 documentation</title>
+    <title>catatom2osm.app &#8212; CatAtom2Osm 2.4.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/guzzle.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.3.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.4.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.app</a></li> 
       </ul>
@@ -82,6 +82,8 @@
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Tool to convert INSPIRE data sets from the Spanish Cadastre ATOM Services to OSM files</span>
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">map</span><span class="p">,</span> <span class="nb">object</span>
 <span class="kn">from</span> <span class="nn">past.builtins</span> <span class="k">import</span> <span class="n">basestring</span>
 <span class="kn">import</span> <span class="nn">io</span><span class="o">,</span> <span class="nn">codecs</span>
 <span class="kn">import</span> <span class="nn">hashlib</span>
@@ -209,9 +211,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">building_opt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">building</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">address</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_new</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">building</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">building</span> <span class="ow">or</span> <span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">building_opt</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">zone</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">split</span><span class="p">)</span>
-        <span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">building_opt</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">get_building</span><span class="p">()</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">address</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">read_address</span><span class="p">()</span>
@@ -276,8 +276,14 @@
 
 <div class="viewcode-block" id="CatAtom2Osm.zone_query"><a class="viewcode-back" href="../../api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.zone_query">[docs]</a>    <span class="k">def</span> <span class="nf">zone_query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">feat</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Filter feat by zone label if needed.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">layer</span><span class="o">.</span><span class="n">AddressLayer</span><span class="o">.</span><span class="n">is_address</span><span class="p">(</span><span class="n">feat</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels_layer</span><span class="o">.</span><span class="n">get_label</span><span class="p">(</span><span class="n">feat</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">report</span><span class="o">.</span><span class="n">inc</span><span class="p">(</span><span class="s1">&#39;orphand_addresses&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">layer</span><span class="o">.</span><span class="n">ConsLayer</span><span class="o">.</span><span class="n">is_part</span><span class="p">(</span><span class="n">feat</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels_layer</span><span class="o">.</span><span class="n">get_label</span><span class="p">(</span><span class="n">feat</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">report</span><span class="o">.</span><span class="n">inc</span><span class="p">(</span><span class="s1">&#39;orphand_parts&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">zone</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">True</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels_layer</span><span class="o">.</span><span class="n">get_label</span><span class="p">(</span><span class="n">feat</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels_layer</span><span class="o">.</span><span class="n">get_label</span><span class="p">(</span><span class="n">feat</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">zone</span></div>
 
 <div class="viewcode-block" id="CatAtom2Osm.get_labels"><a class="viewcode-back" href="../../api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.get_labels">[docs]</a>    <span class="k">def</span> <span class="nf">get_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">main_gml</span><span class="p">,</span> <span class="n">part_gml</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">other_gml</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -339,7 +345,6 @@
             <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;No building data&quot;</span><span class="p">))</span>
             <span class="k">return</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">building</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">part_gml</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">zone_query</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">building</span><span class="o">.</span><span class="n">detect_missing_building_parts</span><span class="p">()</span>
         <span class="n">report</span><span class="o">.</span><span class="n">inp_parts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">building</span><span class="o">.</span><span class="n">featureCount</span><span class="p">()</span> <span class="o">-</span> <span class="n">report</span><span class="o">.</span><span class="n">inp_buildings</span>
         <span class="n">report</span><span class="o">.</span><span class="n">inp_pools</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">if</span> <span class="n">other_gml</span><span class="p">:</span>
@@ -958,7 +963,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.3.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.4.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.app</a></li> 
       </ul>

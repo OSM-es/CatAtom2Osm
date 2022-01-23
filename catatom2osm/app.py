@@ -130,9 +130,7 @@ class CatAtom2Osm(object):
         self.building_opt = self.options.building
         if self.options.address and self.is_new:
             self.options.building = False
-        if self.options.building or (
-            self.building_opt and (self.zone or self.split)
-        ):
+        if self.building_opt:
             self.get_building()
         if self.options.address:
             self.read_address()
@@ -197,8 +195,14 @@ class CatAtom2Osm(object):
 
     def zone_query(self, feat, kwargs):
         """Filter feat by zone label if needed."""
+        if layer.AddressLayer.is_address(feat):
+            if self.labels_layer.get_label(feat) is None:
+                report.inc('orphand_addresses')
+        if layer.ConsLayer.is_part(feat):
+            if self.labels_layer.get_label(feat) is None:
+                report.inc('orphand_parts')
         if len(self.zone) == 0:
-            return True
+            return self.labels_layer.get_label(feat) is not None
         return self.labels_layer.get_label(feat) in self.zone
 
     def get_labels(self, main_gml, part_gml=None, other_gml=None):
@@ -260,7 +264,6 @@ class CatAtom2Osm(object):
             log.info(_("No building data"))
             return
         self.building.append(part_gml, query=self.zone_query)
-        self.building.detect_missing_building_parts()
         report.inp_parts = self.building.featureCount() - report.inp_buildings
         report.inp_pools = 0
         if other_gml:

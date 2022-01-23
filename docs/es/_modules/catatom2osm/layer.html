@@ -14,7 +14,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.layer &#8212; documentación de CatAtom2Osm - 2.3.0</title>
+    <title>catatom2osm.layer &#8212; documentación de CatAtom2Osm - 2.4.0</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/guzzle.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.3.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.4.0</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Código de módulo</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.layer</a></li> 
       </ul>
@@ -81,6 +81,7 @@
             
   <h1>Código fuente para catatom2osm.layer</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Application layers&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">object</span><span class="p">,</span> <span class="nb">str</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">math</span>
 <span class="kn">import</span> <span class="nn">re</span>
@@ -1321,7 +1322,7 @@
 
 <div class="viewcode-block" id="ZoningLayer.get_labels"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.ZoningLayer.get_labels">[documentos]</a>    <span class="k">def</span> <span class="nf">get_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layer</span><span class="p">,</span> <span class="n">gml</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Builds in layer a index of gml features localId vs the label of the</span>
+<span class="sd">        Builds in layer an index of gml features localId vs the label of the</span>
 <span class="sd">        zone in witch it is contained. If the feature geometry overlaps many</span>
 <span class="sd">        zones, takes the zone with the largest intersection.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1331,14 +1332,11 @@
         <span class="n">features</span> <span class="o">=</span> <span class="p">{</span><span class="n">f</span><span class="o">.</span><span class="n">id</span><span class="p">():</span> <span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">()}</span>
         <span class="n">pbar</span> <span class="o">=</span> <span class="n">gml</span><span class="o">.</span><span class="n">get_progressbar</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Labeling&quot;</span><span class="p">),</span> <span class="n">gml</span><span class="o">.</span><span class="n">featureCount</span><span class="p">())</span>
         <span class="k">for</span> <span class="n">feat</span> <span class="ow">in</span> <span class="n">gml</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">():</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">ConsLayer</span><span class="o">.</span><span class="n">is_pool</span><span class="p">(</span><span class="n">feat</span><span class="p">):</span>
-                <span class="n">localid</span> <span class="o">=</span> <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">][:</span><span class="mi">14</span><span class="p">]</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">localid</span> <span class="o">=</span> <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">][:</span><span class="mi">14</span><span class="p">]</span>
+            <span class="n">localid</span> <span class="o">=</span> <span class="n">ConsLayer</span><span class="o">.</span><span class="n">get_id</span><span class="p">(</span><span class="n">feat</span><span class="p">)</span>
             <span class="n">label</span> <span class="o">=</span> <span class="n">layer</span><span class="o">.</span><span class="n">labels</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">localid</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">label</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">label</span> <span class="o">==</span> <span class="s1">&#39;missing&#39;</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">ConsLayer</span><span class="o">.</span><span class="n">is_part</span><span class="p">(</span><span class="n">feat</span><span class="p">):</span>
-                    <span class="n">localid</span> <span class="o">=</span> <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">]</span>
+                    <span class="k">continue</span>  <span class="c1"># exclude parts without building</span>
                 <span class="n">fids</span> <span class="o">=</span> <span class="n">index</span><span class="o">.</span><span class="n">intersects</span><span class="p">(</span><span class="n">feat</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span><span class="o">.</span><span class="n">boundingBox</span><span class="p">())</span>
                 <span class="n">zones</span> <span class="o">=</span> <span class="p">[</span>
                     <span class="n">features</span><span class="p">[</span><span class="n">fid</span><span class="p">]</span> <span class="k">for</span> <span class="n">fid</span> <span class="ow">in</span> <span class="n">fids</span>
@@ -1464,7 +1462,7 @@
 
 <div class="viewcode-block" id="AddressLayer.get_label"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.AddressLayer.get_label">[documentos]</a>    <span class="k">def</span> <span class="nf">get_label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">feat</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get the zone label for this feature from the index&quot;&quot;&quot;</span>
-        <span class="n">localid</span> <span class="o">=</span> <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">][:</span><span class="mi">14</span><span class="p">]</span>
+        <span class="n">localid</span> <span class="o">=</span> <span class="n">ConsLayer</span><span class="o">.</span><span class="n">get_id</span><span class="p">(</span><span class="n">feat</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">localid</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="AddressLayer.set_tasks"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.AddressLayer.set_tasks">[documentos]</a>    <span class="k">def</span> <span class="nf">set_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1535,44 +1533,33 @@
         <span class="sd">&quot;&quot;&quot;Pool features have &#39;_PI.&#39; in its localId field&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="s1">&#39;_PI.&#39;</span> <span class="ow">in</span> <span class="n">feature</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">]</span></div>
 
+<div class="viewcode-block" id="ConsLayer.get_id"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.ConsLayer.get_id">[documentos]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_id</span><span class="p">(</span><span class="n">feat</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Trim to parcel id&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span></div>
+
 <div class="viewcode-block" id="ConsLayer.explode_multi_parts"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.ConsLayer.explode_multi_parts">[documentos]</a>    <span class="k">def</span> <span class="nf">explode_multi_parts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">address</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="n">request</span> <span class="o">=</span> <span class="n">QgsFeatureRequest</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">address</span><span class="p">:</span>
-            <span class="n">refs</span> <span class="o">=</span> <span class="p">{</span><span class="n">ad</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">ad</span> <span class="ow">in</span> <span class="n">address</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">()}</span>
+            <span class="n">refs</span> <span class="o">=</span> <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">get_id</span><span class="p">(</span><span class="n">ad</span><span class="p">)</span> <span class="k">for</span> <span class="n">ad</span> <span class="ow">in</span> <span class="n">address</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">()}</span>
             <span class="n">fids</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">id</span><span class="p">()</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">()</span> <span class="k">if</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">refs</span><span class="p">]</span>
             <span class="n">request</span><span class="o">.</span><span class="n">setFilterFids</span><span class="p">(</span><span class="n">fids</span><span class="p">)</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ConsLayer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">explode_multi_parts</span><span class="p">(</span><span class="n">request</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ConsLayer.get_label"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.ConsLayer.get_label">[documentos]</a>    <span class="k">def</span> <span class="nf">get_label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">feat</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get the zone label for this feature from the index&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_pool</span><span class="p">(</span><span class="n">feat</span><span class="p">):</span>
-            <span class="n">localid</span> <span class="o">=</span> <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">][:</span><span class="mi">14</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">localid</span> <span class="o">=</span> <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">][:</span><span class="mi">14</span><span class="p">]</span>
+        <span class="n">localid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_id</span><span class="p">(</span><span class="n">feat</span><span class="p">)</span>
         <span class="n">label</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">localid</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">label</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">label</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">feat</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">],</span> <span class="kc">None</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">label</span></div>
 
-<div class="viewcode-block" id="ConsLayer.detect_missing_building_parts"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.ConsLayer.detect_missing_building_parts">[documentos]</a>    <span class="k">def</span> <span class="nf">detect_missing_building_parts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Add a tag to parts without associated building.&quot;&quot;&quot;</span>
-        <span class="n">to_change</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">for</span> <span class="n">feat</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;regexp_match(localId, &#39;_part&#39;)&quot;</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">:</span>
-                <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;fixme&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Missing building outline for this part&quot;</span><span class="p">)</span>
-                <span class="n">to_change</span><span class="p">[</span><span class="n">feat</span><span class="o">.</span><span class="n">id</span><span class="p">()]</span> <span class="o">=</span> <span class="n">get_attributes</span><span class="p">(</span><span class="n">feat</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_change</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">changeAttributeValues</span><span class="p">(</span><span class="n">to_change</span><span class="p">)</span></div>
-
 <div class="viewcode-block" id="ConsLayer.set_tasks"><a class="viewcode-back" href="../../api/catatom2osm.layer.html#catatom2osm.layer.ConsLayer.set_tasks">[documentos]</a>    <span class="k">def</span> <span class="nf">set_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Assings to each building and pool the task label of the zone in witch</span>
-<span class="sd">        it is contained. Parts receives the label of the building it belongs.</span>
-<span class="sd">        Parts without associated building gets a fixme&quot;&quot;&quot;</span>
+<span class="sd">        it is contained.&quot;&quot;&quot;</span>
         <span class="n">to_change</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">feat</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">():</span>
             <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;task&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_label</span><span class="p">(</span><span class="n">feat</span><span class="p">)</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_part</span><span class="p">(</span><span class="n">feat</span><span class="p">)</span> <span class="ow">and</span> <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">][:</span><span class="mi">14</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">:</span>
-                <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;fixme&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Missing building outline for this part&quot;</span><span class="p">)</span>
             <span class="n">to_change</span><span class="p">[</span><span class="n">feat</span><span class="o">.</span><span class="n">id</span><span class="p">()]</span> <span class="o">=</span> <span class="n">get_attributes</span><span class="p">(</span><span class="n">feat</span><span class="p">)</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_change</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">BUFFER_SIZE</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">changeAttributeValues</span><span class="p">(</span><span class="n">to_change</span><span class="p">)</span>
@@ -1589,7 +1576,7 @@
         <span class="sd">&quot;&quot;&quot; Index parts of building by building localid. &quot;&quot;&quot;</span>
         <span class="n">parts</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;regexp_match(localId, &#39;_part&#39;)&quot;</span><span class="p">):</span>
-            <span class="n">localId</span> <span class="o">=</span> <span class="n">part</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">localId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_id</span><span class="p">(</span><span class="n">part</span><span class="p">)</span>
             <span class="n">parts</span><span class="p">[</span><span class="n">localId</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">part</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">parts</span></div>
 
@@ -1597,7 +1584,7 @@
         <span class="sd">&quot;&quot;&quot; Index pools in building parcel by building localid. &quot;&quot;&quot;</span>
         <span class="n">pools</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">pool</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;regexp_match(localId, &#39;_PI&#39;)&quot;</span><span class="p">):</span>
-            <span class="n">localId</span> <span class="o">=</span> <span class="n">pool</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">localId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_id</span><span class="p">(</span><span class="n">pool</span><span class="p">)</span>
             <span class="n">pools</span><span class="p">[</span><span class="n">localId</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pool</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">pools</span></div>
 
@@ -1613,7 +1600,7 @@
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_building</span><span class="p">(</span><span class="n">feature</span><span class="p">):</span>
                 <span class="n">buildings</span><span class="p">[</span><span class="n">feature</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">feature</span><span class="p">)</span>
             <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_part</span><span class="p">(</span><span class="n">feature</span><span class="p">):</span>
-                <span class="n">localId</span> <span class="o">=</span> <span class="n">feature</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">localId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_id</span><span class="p">(</span><span class="n">feature</span><span class="p">)</span>
                 <span class="n">parts</span><span class="p">[</span><span class="n">localId</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">feature</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">buildings</span><span class="p">,</span> <span class="n">parts</span><span class="p">)</span></div>
 
@@ -1626,12 +1613,11 @@
         <span class="n">to_clean_o</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">to_clean_b</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">to_add</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">parts_for_ref</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
         <span class="n">buildings</span> <span class="o">=</span> <span class="p">{</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">]:</span> <span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">()</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_building</span><span class="p">(</span><span class="n">f</span><span class="p">)}</span>
         <span class="n">pbar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_progressbar</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Remove outside parts&quot;</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">featureCount</span><span class="p">())</span>
         <span class="k">for</span> <span class="n">feat</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">():</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_part</span><span class="p">(</span><span class="n">feat</span><span class="p">):</span>
-                <span class="n">ref</span> <span class="o">=</span> <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">ref</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_id</span><span class="p">(</span><span class="n">feat</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;lev_above&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;lev_below&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
                     <span class="n">to_clean_b</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">feat</span><span class="o">.</span><span class="n">id</span><span class="p">())</span>
                 <span class="k">elif</span> <span class="n">ref</span> <span class="ow">in</span> <span class="n">buildings</span><span class="p">:</span>
@@ -1640,18 +1626,12 @@
                         <span class="n">to_clean_o</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">feat</span><span class="o">.</span><span class="n">id</span><span class="p">())</span>
             <span class="n">pbar</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
         <span class="n">pbar</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">ref</span><span class="p">,</span> <span class="n">parts</span> <span class="ow">in</span> <span class="n">parts_for_ref</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">feat</span> <span class="o">=</span> <span class="n">QgsFeature</span><span class="p">(</span><span class="n">QgsFields</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">()))</span>
-            <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ref</span>
-            <span class="n">geom</span> <span class="o">=</span> <span class="n">Geometry</span><span class="o">.</span><span class="n">merge_adjacent_features</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span>
-            <span class="n">feat</span><span class="o">.</span><span class="n">setGeometry</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span>
-            <span class="n">to_add</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">feat</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_clean_o</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_clean_b</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">deleteFeatures</span><span class="p">(</span><span class="n">to_clean_o</span> <span class="o">+</span> <span class="n">to_clean_b</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_clean_o</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Removed </span><span class="si">%d</span><span class="s2"> building parts outside the outline&quot;</span><span class="p">),</span> 
                 <span class="nb">len</span><span class="p">(</span><span class="n">to_clean_o</span><span class="p">))</span>
-            <span class="n">report</span><span class="o">.</span><span class="n">orphand_parts</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_clean_o</span><span class="p">)</span>
+            <span class="n">report</span><span class="o">.</span><span class="n">outside_parts</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_clean_o</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_clean_b</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Deleted </span><span class="si">%d</span><span class="s2"> building parts with no floors above ground&quot;</span><span class="p">),</span>
                 <span class="nb">len</span><span class="p">(</span><span class="n">to_clean_b</span><span class="p">))</span>
@@ -1906,7 +1886,7 @@
         <span class="p">(</span><span class="n">buildings</span><span class="p">,</span> <span class="n">parts</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">index_of_building_and_parts</span><span class="p">()</span>
         <span class="n">pbar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_progressbar</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Move addresses&quot;</span><span class="p">),</span> <span class="n">address</span><span class="o">.</span><span class="n">featureCount</span><span class="p">())</span>
         <span class="k">for</span> <span class="n">ad</span> <span class="ow">in</span> <span class="n">address</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">():</span>
-            <span class="n">refcat</span> <span class="o">=</span> <span class="n">ad</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">refcat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_id</span><span class="p">(</span><span class="n">ad</span><span class="p">)</span>
             <span class="n">building_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">buildings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">refcat</span><span class="p">,</span> <span class="p">[]))</span>
             <span class="n">ad_buildings</span> <span class="o">=</span> <span class="n">buildings</span><span class="p">[</span><span class="n">refcat</span><span class="p">]</span>
             <span class="n">ad_parts</span> <span class="o">=</span> <span class="n">parts</span><span class="p">[</span><span class="n">refcat</span><span class="p">]</span>
@@ -1939,7 +1919,7 @@
         <span class="k">if</span> <span class="n">oa</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">msg</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Deleted </span><span class="si">%d</span><span class="s2"> addresses without associated building&quot;</span><span class="p">)</span>
             <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">oa</span><span class="p">)</span>
-            <span class="n">report</span><span class="o">.</span><span class="n">orphand_addresses</span> <span class="o">=</span> <span class="n">oa</span>
+            <span class="n">report</span><span class="o">.</span><span class="n">pool_addresses</span> <span class="o">=</span> <span class="n">oa</span>
         <span class="k">if</span> <span class="n">mp</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">msg</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Refused </span><span class="si">%d</span><span class="s2"> addresses belonging to multiple buildings&quot;</span><span class="p">)</span>
             <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">mp</span><span class="p">)</span>
@@ -2104,7 +2084,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.3.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.4.0</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Código de módulo</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.layer</a></li> 
       </ul>

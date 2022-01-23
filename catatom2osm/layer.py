@@ -1254,7 +1254,7 @@ class ZoningLayer(PolygonLayer):
             label = layer.labels.get(localid, None)
             if label is None or label == 'missing':
                 if ConsLayer.is_part(feat):
-                    localid = feat['localId']
+                    continue  # exclude parts without building
                 fids = index.intersects(feat.geometry().boundingBox())
                 zones = [
                     features[fid] for fid in fids
@@ -1472,25 +1472,12 @@ class ConsLayer(PolygonLayer):
             label = self.labels.get(feat['localId'], None)
         return label
 
-    def detect_missing_building_parts(self):
-        """Add a tag to parts without associated building."""
-        to_change = {}
-        for feat in self.search("regexp_match(localId, '_part')"):
-            if feat['localId'] in self.labels:
-                feat['fixme'] = _("Missing building outline for this part")
-                to_change[feat.id()] = get_attributes(feat)
-        if len(to_change) > 0:
-            self.writer.changeAttributeValues(to_change)
-
     def set_tasks(self):
         """Assings to each building and pool the task label of the zone in witch
-        it is contained. Parts receives the label of the building it belongs.
-        Parts without associated building gets a fixme"""
+        it is contained."""
         to_change = {}
         for feat in self.getFeatures():
             feat['task'] = self.get_label(feat)
-            if self.is_part(feat) and feat['localId'][:14] not in self.labels:
-                feat['fixme'] = _("Missing building outline for this part")
             to_change[feat.id()] = get_attributes(feat)
             if len(to_change) > BUFFER_SIZE:
                 self.writer.changeAttributeValues(to_change)
@@ -1562,7 +1549,7 @@ class ConsLayer(PolygonLayer):
         if len(to_clean_o) > 0:
             log.debug(_("Removed %d building parts outside the outline"), 
                 len(to_clean_o))
-            report.orphand_parts = len(to_clean_o)
+            report.outside_parts = len(to_clean_o)
         if len(to_clean_b) > 0:
             log.debug(_("Deleted %d building parts with no floors above ground"),
                 len(to_clean_b))
@@ -1850,7 +1837,7 @@ class ConsLayer(PolygonLayer):
         if oa > 0:
             msg = _("Deleted %d addresses without associated building")
             log.debug(msg, oa)
-            report.orphand_addresses = oa
+            report.pool_addresses = oa
         if mp > 0:
             msg = _("Refused %d addresses belonging to multiple buildings")
             log.debug(msg, mp)
