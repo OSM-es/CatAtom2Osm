@@ -111,4 +111,5 @@ publish: build dtest  ## Push last version to GitHub and Docker Hub
 	@git push -f origin master v$(VERSION)
 	@docker tag catatom2osm:latest egofer/catatom2osm:latest
 	@docker tag catatom2osm:latest egofer/catatom2osm:$(VERSION)
-	@docker push -a egofer/catatom2osm
+	@docker push egofer/catatom2osm
+	@docker push egofer/catatom2osm:$(VERSION)
