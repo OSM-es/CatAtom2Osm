@@ -181,6 +181,8 @@ class Report(object):
                 self.inc('out_features')
             if 'building' in el.tags:
                 self.inc('out_buildings')
+                if 'building_counter' not in self.values:
+                    self.building_counter = Counter()
                 self.building_counter[el.tags['building']] += 1
                 self.inc('out_features')
             if 'building:part' in el.tags:
@@ -204,6 +206,7 @@ class Report(object):
             list(OrderedDict(Counter(list(self.max_level.values()))).items())])
         self.dlbg = ', '.join(["%d: %d" % (l, c) for (l, c) in \
             list(OrderedDict(Counter(list(self.min_level.values()))).items())])
+        building_counter = self.get('building_counter', Counter())
         self.building_types = ', '.join(['%s: %d' % (b, c) \
             for (b, c) in list(self.building_counter.items())])
 

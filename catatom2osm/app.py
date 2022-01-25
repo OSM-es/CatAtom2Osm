@@ -10,7 +10,7 @@ import gzip
 import logging
 import os
 import shutil
-from collections import defaultdict, Counter
+from collections import defaultdict
 from glob import glob
 
 from qgis.core import *
@@ -139,7 +139,6 @@ class CatAtom2Osm(object):
             return
         if self.options.building:
             self.process_building()
-            report.building_counter = Counter()
         if self.options.address:
             self.address.reproject()
             self.address_osm = self.address.to_osm()
