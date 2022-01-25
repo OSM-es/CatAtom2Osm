@@ -3,7 +3,7 @@ from builtins import object, str
 import os
 import math
 import re
-from collections import defaultdict
+from collections import defaultdict, Counter
 import logging
 from tqdm import tqdm
 
@@ -699,14 +699,25 @@ class PolygonLayer(BaseLayer):
             report.values['multipart_geoms_' + self.name()] = len(to_clean)
             report.values['exploded_parts_' + self.name()] = len(to_add)
 
-    def get_parents_per_vertex_and_geometries(self):
+    @staticmethod
+    def is_shared_segment(parents_per_vx, va, vb, feature_id):
+        """
+        Given a dictionary of parents per vertex check if segment va-vb in
+        geometry of feature with id 'feature_id' is shared with another
+        geometry.
+        """
+        parents = [gid for gid in parents_per_vx[va] if gid != feature_id]
+        parents += [gid for gid in parents_per_vx[vb] if gid != feature_id]
+        return any([c > 1 for c in Counter(parents).values()])
+
+    def get_parents_per_vertex_and_geometries(self, expression=''):
         """
         Returns:
             (dict) parent fids for each vertex, (dict) geometry for each fid.
         """
         parents_per_vertex = defaultdict(list)
         geometries = {}
-        for feature in self.getFeatures():
+        for feature in self.search(expression):
             geom = QgsGeometry(feature.geometry())
             geometries[feature.id()] = geom
             for point in Geometry.get_vertices_list(feature):
@@ -1743,12 +1754,15 @@ class ConsLayer(PolygonLayer):
         self.merge_building_parts()
         self.simplify()
 
-    def move_entrance(self, ad, ad_buildings, ad_parts, to_move, to_insert):
+    def move_entrance(
+        self, ad, ad_buildings, ad_parts, to_move, to_insert, parents_per_vx,
+    ):
         """
         Auxiliary method to move entrance to the nearest building and part.
         Don't move and the entrance specification is changed if the new
-        position is not enough close ('remote'), is a corner ('corner') or
-        is in an inner ring ('inner').
+        position is not enough close ('remote'), is a corner ('corner'),
+        is in an inner ring ('inner') or is in a wall shared with another
+        building ('shared').
         """
         point = ad.geometry().asPoint()
         distance = 9E9
@@ -1758,6 +1772,7 @@ class ConsLayer(PolygonLayer):
             if d < distance:
                 (building, distance, closest, vertex) = (bu, d, c, v)
         bg = building.geometry()
+        bid = building.id()
         va = Point(bg.vertexAt(vertex - 1))
         vb = Point(bg.vertexAt(vertex))
         if distance > config.addr_thr ** 2:
@@ -1769,11 +1784,13 @@ class ConsLayer(PolygonLayer):
             or closest.sqrDist(vb) < config.entrance_thr ** 2
         ):
             ad['spec'] = 'corner'
+        elif PolygonLayer.is_shared_segment(parents_per_vx, va, vb, bid):
+            ad['spec'] = 'shared'
         else:
             dg = Geometry.fromPointXY(closest)
             to_move[ad.id()] = dg
             bg.insertVertex(closest.x(), closest.y(), vertex)
-            to_insert[building.id()] = QgsGeometry(bg)
+            to_insert[bid] = QgsGeometry(bg)
             building.setGeometry(bg)
             for part in ad_parts:
                 pg = part.geometry()
@@ -1802,6 +1819,8 @@ class ConsLayer(PolygonLayer):
         mp = 0
         oa = 0
         (buildings, parts) = self.index_of_building_and_parts()
+        exp = "NOT(localId ~ '_')"
+        ppv, geometries = self.get_parents_per_vertex_and_geometries(exp)
         pbar = self.get_progressbar(_("Move addresses"), address.featureCount())
         for ad in address.getFeatures():
             refcat = self.get_id(ad)
@@ -1814,7 +1833,7 @@ class ConsLayer(PolygonLayer):
             else:
                 if ad['spec'] == 'Entrance':
                     self.move_entrance(
-                        ad, ad_buildings, ad_parts, to_move, to_insert
+                        ad, ad_buildings, ad_parts, to_move, to_insert, ppv,
                     )
                 if ad['spec'] != 'Entrance' and building_count > 1:
                     to_clean.append(ad.id())
