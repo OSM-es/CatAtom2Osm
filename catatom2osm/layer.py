@@ -31,6 +31,21 @@ get_attributes = lambda feat: \
 def get_log():
     return log.ch_level
 
+def merge_groups(adjs):
+    """Merge all lists in adjs with common members."""
+    groups = []
+    while adjs:
+        group = set(adjs.pop())
+        lastlen = -1
+        while len(group) > lastlen:
+            lastlen = len(group)
+            for adj in adjs[:]:
+                if len({p for p in adj if p in group}) > 0:
+                    group |= adj
+                    adjs.remove(adj)
+        groups.append(group)
+    return groups
+
 
 class Point(QgsPointXY):
     """Extends QgsPoint with some utility methods"""
@@ -198,6 +213,11 @@ class Geometry(object):
         if geom.wkbType() == WKBPolygon:
             return [geom.asPolygon()]
         return geom.asMultiPolygon()
+
+    @staticmethod
+    def remove_inner_rings(feature_or_geometry):
+        """Returns feature geometry as a multipolygon without inner rings"""
+        return [p[0] for p in get_multipolygon(feature_or_geometry)]
 
     @staticmethod
     def get_vertices_list(feature):
@@ -746,17 +766,7 @@ class PolygonLayer(BaseLayer):
                     if len(common) > 1:
                         adjs.append(common)
         adjs = list(adjs)
-        groups = []
-        while adjs:
-            group = set(adjs.pop())
-            lastlen = -1
-            while len(group) > lastlen:
-                lastlen = len(group)
-                for adj in adjs[:]:
-                    if len({p for p in adj if p in group}) > 0:
-                        group |= adj
-                        adjs.remove(adj)
-            groups.append(group)
+        groups = merge_groups(adjs)
         return (groups, geometries)
 
     def topology(self):
@@ -1113,6 +1123,29 @@ class ParcelLayer(PolygonLayer):
             self.writer.deleteFeatures(to_clean)
             log.debug(_("Removed %d void parcels"), len(to_clean))
 
+    def create_missing_parcels(self, buildings):
+        """Creates fake parcels for buildings not contained in any."""
+        pa_refs = [f['localId'] for f in self.getFeatures()]
+        to_add = {}
+        exp = "NOT(localId ~ 'part')"
+        for bu in buildings.getFeatures(exp):
+            ref = buildings.get_id(bu)
+            if ref not in pa_refs:
+                if ref in to_add:
+                    parcel = to_add[ref]
+                    geom = Geometry.fromMultiPolygonXY(remove_inner_rings(bu))
+                    geom = geom.combine(parcel.geometry())
+                    parcel.setGeometry(geom)
+                else:
+                    parcel = QgsFeature(self.fields())
+                    parcel['localId'] = ref
+                    geom = Geometry.fromMultiPolygonXY(remove_inner_rings(bu))
+                    parcel.setGeometry(geom)
+                to_add[ref] = parcel
+        if to_add:
+            self.writer.addFeatures(to_add.values())
+            log.debug(_("Added %d missing parcels"), len(to_add))
+
     def get_groups_with_context(self, buildings):
         """
         Get grupos of ids of parcels with buildings sharing walls with
@@ -1135,18 +1168,7 @@ class ParcelLayer(PolygonLayer):
                 ref = bu_refs[bid]
                 pids.add(pa_ids.get(ref, ref))
             adjs.append(pids)
-        groups = []
-        while adjs:
-            group = set(adjs.pop())
-            lastlen = -1
-            while len(group) > lastlen:
-                lastlen = len(group)
-                for adj in adjs[:]:
-                    if len({p for p in adj if p in group}) > 0:
-                        group |= adj
-                        adjs.remove(adj)
-            groups.append(group)
-        pa_groups = groups
+        pa_groups = merge_groups(adjs)
         return pa_groups, pa_refs, geometries
 
     def merge_by_adjacent_buildings(self, buildings):
@@ -1162,9 +1184,7 @@ class ParcelLayer(PolygonLayer):
         to_change = {}
         to_clean = []
         for group in pa_groups:
-            group = [fid for fid in group if isinstance(fid, int)]
-            if len(group) == 0:
-                continue  # TODO: todas las geometrías son inválidas
+            group = list(group)
             count_adj += len(group)
             geom = geometries[group[0]]
             max_area = geom.area()
