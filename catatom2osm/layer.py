@@ -32,7 +32,7 @@ def get_log():
     return log.ch_level
 
 def merge_groups(adjs):
-    """Merge all lists in adjs with common members."""
+    """Merge all sets in adjs with common members."""
     groups = []
     while adjs:
         group = set(adjs.pop())
@@ -41,7 +41,7 @@ def merge_groups(adjs):
             lastlen = len(group)
             for adj in adjs[:]:
                 if len({p for p in adj if p in group}) > 0:
-                    group |= adj
+                    group |= set(adj)
                     adjs.remove(adj)
         groups.append(group)
     return groups
@@ -215,9 +215,10 @@ class Geometry(object):
         return geom.asMultiPolygon()
 
     @staticmethod
-    def remove_inner_rings(feature_or_geometry):
+    def get_outer_rings(feature_or_geometry):
         """Returns feature geometry as a multipolygon without inner rings"""
-        return [p[0] for p in get_multipolygon(feature_or_geometry)]
+        mp = Geometry.get_multipolygon(feature_or_geometry)
+        return [[t[0]] for t in mp]
 
     @staticmethod
     def get_vertices_list(feature):
@@ -1115,9 +1116,9 @@ class ParcelLayer(PolygonLayer):
     def delete_void_parcels(self, buildings):
         """Remove parcels without buildings (or pools)."""
         exp = "NOT(localId ~ 'part')"
-        refs = [ConsLayer.get_id(f) for f in buildings.search(exp)]
+        bu_refs = [ConsLayer.get_id(f) for f in buildings.search(exp)]
         to_clean = [
-            f.id() for f in self.getFeatures() if f['localId'] not in refs
+            f.id() for f in self.getFeatures() if f['localId'] not in bu_refs
         ]
         if to_clean:
             self.writer.deleteFeatures(to_clean)
@@ -1131,16 +1132,16 @@ class ParcelLayer(PolygonLayer):
         for bu in buildings.getFeatures(exp):
             ref = buildings.get_id(bu)
             if ref not in pa_refs:
+                mp = Geometry.get_outer_rings(bu)
+                bu_geom = Geometry.fromMultiPolygonXY(mp)
                 if ref in to_add:
                     parcel = to_add[ref]
-                    geom = Geometry.fromMultiPolygonXY(remove_inner_rings(bu))
-                    geom = geom.combine(parcel.geometry())
-                    parcel.setGeometry(geom)
+                    pa_geom = bu_geom.combine(parcel.geometry())
+                    parcel.setGeometry(pa_geom)
                 else:
                     parcel = QgsFeature(self.fields())
                     parcel['localId'] = ref
-                    geom = Geometry.fromMultiPolygonXY(remove_inner_rings(bu))
-                    parcel.setGeometry(geom)
+                    parcel.setGeometry(bu_geom)
                 to_add[ref] = parcel
         if to_add:
             self.writer.addFeatures(to_add.values())
@@ -1166,7 +1167,7 @@ class ParcelLayer(PolygonLayer):
             pids = set()
             for bid in group:
                 ref = bu_refs[bid]
-                pids.add(pa_ids.get(ref, ref))
+                pids.add(pa_ids[ref])
             adjs.append(pids)
         pa_groups = merge_groups(adjs)
         return pa_groups, pa_refs, geometries
@@ -1752,7 +1753,7 @@ class ConsLayer(PolygonLayer):
 
     def remove_inner_rings(self, feat1, feat2):
         """
-        Auxiliary method to remove feat1 or of its inner rings if equals to feat2
+        Auxiliary method to remove feat1 of its inner rings if equals to feat2
         Returns True if feat1 must be deleted and new geometry if any ring is
         removed.
         """
