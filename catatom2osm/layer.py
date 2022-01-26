@@ -31,6 +31,7 @@ get_attributes = lambda feat: \
 def get_log():
     return log.ch_level
 
+
 class Point(QgsPointXY):
     """Extends QgsPoint with some utility methods"""
 
@@ -621,10 +622,9 @@ class BaseLayer(QgsVectorLayer):
     def search(self, expression=''):
         """Returns a features iterator for this search expression"""
         if expression == '':
-            request = QgsFeatureRequest()
-        else:
-            exp = QgsExpression(expression)
-            request = QgsFeatureRequest(exp)
+            return self.getFeatures()
+        exp = QgsExpression(expression)
+        request = QgsFeatureRequest(exp)
         return self.getFeatures(request)
 
     def count(self, expression='', unique=''):
@@ -714,6 +714,8 @@ class PolygonLayer(BaseLayer):
         """
         Returns:
             (dict) parent fids for each vertex, (dict) geometry for each fid.
+        Precondition:
+            Called before reproject.
         """
         parents_per_vertex = defaultdict(list)
         geometries = {}
@@ -724,12 +726,14 @@ class PolygonLayer(BaseLayer):
                 parents_per_vertex[point].append(feature.id())
         return (parents_per_vertex, geometries)
 
-    def get_adjacents_and_geometries(self):
+    def get_adjacents_and_geometries(self, expression=''):
         """
         Returns:
             (list) groups of adjacent polygons
         """
-        parents_per_vertex, geometries = self.get_parents_per_vertex_and_geometries()
+        parents_per_vertex, geometries = (
+            self.get_parents_per_vertex_and_geometries(expression)
+        )
         adjs = []
         for (point, parents) in parents_per_vertex.items():
             if len(parents) > 1:
@@ -1050,8 +1054,8 @@ class PolygonLayer(BaseLayer):
         if to_clean:
             self.writer.changeGeometryValues(to_change)
             self.writer.deleteFeatures(to_clean)
-            log.debug(_("%d adjacent polygons merged into %d polygons in the '%s' "
-                "layer"), count_adj, count_com, self.name())
+            msg = _("%d adjacent polygons merged into %d polygons in '%s'")
+            log.debug(msg, count_adj, count_com, self.name())
 
     def difference(self, layer):
         """Calculate the difference of each geometry with those in layer"""
@@ -1083,7 +1087,7 @@ class PolygonLayer(BaseLayer):
         self.simplify()
 
 
-class ParcelLayer(BaseLayer):
+class ParcelLayer(PolygonLayer):
     """Class for cadastral parcels"""
 
     def __init__(self, path="Polygon", baseName="cadastralparcel",
@@ -1097,6 +1101,95 @@ class ParcelLayer(BaseLayer):
             self.updateFields()
         self.rename = {'localId': 'inspireId_localId'}
         self.source_date = source_date
+
+    def delete_void_parcels(self, buildings):
+        """Remove parcels without buildings (or pools)."""
+        exp = "NOT(localId ~ 'part')"
+        refs = [ConsLayer.get_id(f) for f in buildings.search(exp)]
+        to_clean = [
+            f.id() for f in self.getFeatures() if f['localId'] not in refs
+        ]
+        if to_clean:
+            self.writer.deleteFeatures(to_clean)
+            log.debug(_("Removed %d void parcels"), len(to_clean))
+
+    def get_groups_with_context(self, buildings):
+        """
+        Get grupos of ids of parcels with buildings sharing walls with
+        buildings of another parcel.
+        """
+        exp = "NOT(localId ~ 'part')"
+        bu_groups, __ = buildings.get_adjacents_and_geometries(exp)
+        bu_refs = {f.id(): ConsLayer.get_id(f) for f in buildings.search(exp)}
+        geometries = {}
+        pa_ids = {}
+        pa_refs = {}
+        for f in self.getFeatures():
+            geometries[f.id()] = QgsGeometry(f.geometry())
+            pa_ids[f['localId']] = f.id()
+            pa_refs[f.id()] = f['localId']
+        adjs = []
+        for group in bu_groups:
+            pids = set()
+            for bid in group:
+                ref = bu_refs[bid]
+                pids.add(pa_ids.get(ref, ref))
+            adjs.append(pids)
+        groups = []
+        while adjs:
+            group = set(adjs.pop())
+            lastlen = -1
+            while len(group) > lastlen:
+                lastlen = len(group)
+                for adj in adjs[:]:
+                    if len({p for p in adj if p in group}) > 0:
+                        group |= adj
+                        adjs.remove(adj)
+            groups.append(group)
+        pa_groups = groups
+        return pa_groups, pa_refs, geometries
+
+    def merge_by_adjacent_buildings(self, buildings):
+        """
+        Merge parcels with buildings sharing walls with buildings of another
+        parcel.
+        """
+        pa_groups, pa_refs, geometries = (
+            self.get_groups_with_context(buildings)
+        )
+        count_adj = 0
+        count_com = 0
+        to_change = {}
+        to_clean = []
+        for group in pa_groups:
+            group = [fid for fid in group if isinstance(fid, int)]
+            if len(group) == 0:
+                continue  # TODO: todas las geometrías son inválidas
+            count_adj += len(group)
+            geom = geometries[group[0]]
+            max_area = geom.area()
+            max_fid = group[0]
+            for fid in group[1:]:
+                geom = geom.combine(geometries[fid])
+                if geom.area() > max_area:
+                    max_area = geom.area()
+                    max_fid = fid
+            to_change[max_fid] = geom
+            count_com += 1
+            to_clean += [fid for fid in group if fid != max_fid]
+        tasks = {}
+        for i, group in enumerate(pa_groups):
+            for fid in group:
+                localid = pa_refs.get(fid, fid)
+                target_id = pa_refs[list(to_change.keys())[i]]
+                if target_id != localid:
+                    tasks[localid] = target_id
+        if to_clean:
+            self.writer.changeGeometryValues(to_change)
+            self.writer.deleteFeatures(to_clean)
+            msg = _("%d adjacent polygons merged into %d polygons in '%s'")
+            log.debug(msg, count_adj, count_com, self.name())
+        return tasks
 
 
 class ZoningLayer(PolygonLayer):
