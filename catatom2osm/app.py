@@ -432,9 +432,7 @@ class CatAtom2Osm(object):
     def process_zoning(self):
         self.rustic_zoning.clean()
         if self.urban_zoning.featureCount() > 0:
-            self.urban_zoning.topology()
-            self.urban_zoning.delete_invalid_geometries()
-            self.urban_zoning.simplify()
+            self.urban_zoning.clean()
 
     def output_zoning(self):
         self.urban_zoning.reproject()
