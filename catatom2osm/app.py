@@ -20,7 +20,7 @@ qgis.utils.uninstallErrorHook()
 qgis_utils = getattr(qgis.utils, 'QGis', getattr(qgis.utils, 'Qgis', None))
 from osgeo import gdal
 
-from catatom2osm import config, catatom, csvtools, layer, osm, osmxml, overpass
+from catatom2osm import config, catatom, csvtools, geo, osm, osmxml, overpass
 from catatom2osm import cdau  # Used in get_auxiliary_addresses
 from catatom2osm.report import instance as report
 
@@ -90,7 +90,7 @@ class CatAtom2Osm(object):
             os.makedirs(self.tasks_path)
         self.split = None
         if self.options.split:
-            self.split = layer.BaseLayer(
+            self.split = geo.BaseLayer(
                 self.options.split, 'zoningsplit', 'ogr'
             )
             if not self.split.isValid():
@@ -156,7 +156,7 @@ class CatAtom2Osm(object):
     def list_zones(self):
         zoning_gml = self.cat.read("cadastralzoning")
         labels = {
-            layer.ZoningLayer.format_label(feat)
+            geo.ZoningLayer.format_label(feat)
             for feat in zoning_gml.getFeatures()
         }
         for label in sorted(labels):
@@ -194,10 +194,10 @@ class CatAtom2Osm(object):
 
     def zone_query(self, feat, kwargs):
         """Filter feat by zone label if needed."""
-        if layer.AddressLayer.is_address(feat):
+        if geo.AddressLayer.is_address(feat):
             if self.labels_layer.get_label(feat) is None:
                 report.inc('orphand_addresses')
-        if layer.ConsLayer.is_part(feat):
+        if geo.ConsLayer.is_part(feat):
             if self.labels_layer.get_label(feat) is None:
                 report.inc('orphand_parts')
         if len(self.zone) == 0:
@@ -249,8 +249,8 @@ class CatAtom2Osm(object):
         other_gml = self.cat.read("otherconstruction", True)
         report.building_date = building_gml.source_date
         fn = self.cat.get_path('building.shp')
-        layer.ConsLayer.create_shp(fn, building_gml.crs())
-        self.building = layer.ConsLayer(
+        geo.ConsLayer.create_shp(fn, building_gml.crs())
+        self.building = geo.ConsLayer(
             fn, providerLib='ogr', source_date=building_gml.source_date
         )
         self.get_labels(building_gml, part_gml, other_gml)
@@ -294,9 +294,9 @@ class CatAtom2Osm(object):
         if report.tasks_m > 0:
             zoning.append(('missing', None))
         if self.building_opt:
-            layer_class = layer.ConsLayer
+            layer_class = geo.ConsLayer
         else:
-            layer_class = layer.AddressLayer
+            layer_class = geo.AddressLayer
         to_clean = {'r': [], 'u': []}
         for label, fid in zoning:
             fn = self.cat.get_path(tasks_folder, label + '.shp')
@@ -344,9 +344,9 @@ class CatAtom2Osm(object):
         to_add = []
         fcount = source.featureCount()
         if self.building_opt:
-            layer_class = layer.ConsLayer
+            layer_class = geo.ConsLayer
         else:
-            layer_class = layer.AddressLayer
+            layer_class = geo.AddressLayer
         for i, feat in enumerate(source.getFeatures()):
             label = feat['task'] or 'missing'
             f = source.copy_feature(feat, {}, {})
@@ -389,11 +389,11 @@ class CatAtom2Osm(object):
         """
         zoning_gml = self.cat.read("cadastralzoning")
         fn = self.cat.get_path('rustic_zoning.shp')
-        layer.ZoningLayer.create_shp(fn, zoning_gml.crs())
-        self.rustic_zoning = layer.ZoningLayer(fn, 'rusticzoning', 'ogr')
+        geo.ZoningLayer.create_shp(fn, zoning_gml.crs())
+        self.rustic_zoning = geo.ZoningLayer(fn, 'rusticzoning', 'ogr')
         fn = self.cat.get_path('urban_zoning.shp')
-        layer.ZoningLayer.create_shp(fn, zoning_gml.crs())
-        self.urban_zoning = layer.ZoningLayer(fn, 'urbanzoning', 'ogr')
+        geo.ZoningLayer.create_shp(fn, zoning_gml.crs())
+        self.urban_zoning = geo.ZoningLayer(fn, 'urbanzoning', 'ogr')
         self.rustic_zoning.append(zoning_gml, level='P')
         self.urban_zoning.append(zoning_gml, level='M')
         if len(self.zone) > 0:
@@ -482,8 +482,8 @@ class CatAtom2Osm(object):
     def process_parcel(self):
         parcel_gml = self.cat.read("cadastralparcel")
         fn = self.cat.get_path('parcel.shp')
-        layer.ParcelLayer.create_shp(fn, parcel_gml.crs())
-        parcel = layer.ParcelLayer(
+        geo.ParcelLayer.create_shp(fn, parcel_gml.crs())
+        parcel = geo.ParcelLayer(
             fn, providerLib='ogr', source_date=parcel_gml.source_date
         )
         parcel.append(parcel_gml)
@@ -628,8 +628,8 @@ class CatAtom2Osm(object):
                         "'%s' layer") % address_gml.name()
                 raise IOError(msg)
         fn = self.cat.get_path('address.shp')
-        layer.AddressLayer.create_shp(fn, address_gml.crs())
-        self.address = layer.AddressLayer(
+        geo.AddressLayer.create_shp(fn, address_gml.crs())
+        self.address = geo.AddressLayer(
             fn, providerLib='ogr', source_date=address_gml.source_date
         )
         if not self.building_opt:
@@ -780,7 +780,7 @@ class CatAtom2Osm(object):
               'way["place"="square"]["name"]',
               'relation["place"="square"]["name"]']
         highway_osm = self.read_osm('current_highway.osm', ql=ql)
-        highway = layer.HighwayLayer()
+        highway = geo.HighwayLayer()
         highway.read_from_osm(highway_osm)
         del highway_osm
         return highway
@@ -833,7 +833,7 @@ class CatAtom2Osm(object):
         fn = lyr.writer.dataSourceUri().split('|')[0]
         is_shp = str(fn.lower().endswith('.shp'))
         if is_shp and not lyr.keep:
-            layer.BaseLayer.delete_shp(fn)
+            geo.BaseLayer.delete_shp(fn)
 
     def move_project(self):
         """

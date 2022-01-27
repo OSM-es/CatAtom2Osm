@@ -11,7 +11,7 @@ from requests.exceptions import ConnectionError
 
 from qgis.core import QgsCoordinateReferenceSystem
 
-from catatom2osm import config, csvtools, download, hgwnames, layer, overpass
+from catatom2osm import config, csvtools, download, hgwnames, geo, overpass
 from catatom2osm.report import instance as report
 log = logging.getLogger(config.app_name)
 
@@ -147,7 +147,7 @@ class Reader(object):
             vsizip_path = "/".join(('/vsizip', zip_path, gml_fp)).replace('\\', '/')
             if group == 'AD':
                 vsizip_path += "|layername=" + layername
-            gml = layer.BaseLayer(vsizip_path, layername+'.gml', 'ogr')
+            gml = geo.BaseLayer(vsizip_path, layername+'.gml', 'ogr')
             if not gml.isValid():
                 gml = None
         except IOError:
@@ -197,7 +197,7 @@ class Reader(object):
                 return None
         gml = self.get_gml_from_zip(gml_path, zip_path, group, layername)
         if gml is None:
-            gml = layer.BaseLayer(gml_path, layername+'.gml', 'ogr')
+            gml = geo.BaseLayer(gml_path, layername+'.gml', 'ogr')
             if not gml.isValid():
                 raise IOError(_("Failed to load layer '%s'") % gml_path)
         crs = QgsCoordinateReferenceSystem.fromEpsgId(self.crs_ref)

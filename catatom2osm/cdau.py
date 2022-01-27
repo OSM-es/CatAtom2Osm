@@ -9,7 +9,7 @@ from datetime import datetime
 
 from qgis.core import *
 
-from catatom2osm import config, download, layer
+from catatom2osm import config, download, geo
 from catatom2osm.report import instance as report
 log = logging.getLogger(config.app_name)
 
@@ -124,7 +124,7 @@ class Reader(object):
         if not os.path.exists(csv_path):
             log.info(_("Downloading '%s'"), csv_path)
             download.wget(url, csv_path)
-        csv = layer.BaseLayer(csv_path, csv_fn, 'ogr')
+        csv = geo.BaseLayer(csv_path, csv_fn, 'ogr')
         if not csv.isValid():
             raise IOError(_("Failed to load layer '%s'") % csv_path)
         csv.setCrs(QgsCoordinateReferenceSystem.fromEpsgId(cdau_crs))
@@ -153,9 +153,9 @@ def conflate(cdau_address, cat_address, cod_mun_cat):
         c += 1
         attr = get_cat_address(ad, cod_mun_cat)
         ref = attr['localId']
-        pt = layer.Point(float(ad['x']), float(ad['y']))
+        pt = geo.Point(float(ad['x']), float(ad['y']))
         if len(addresses[ref]) == 0: # can't resolve cadastral reference
-            area_of_candidates = layer.Point(pt).boundingBox(cdau_thr)
+            area_of_candidates = geo.Point(pt).boundingBox(cdau_thr)
             fids = index.intersects(area_of_candidates)
             if len(fids) == 0: # no close cadastre address
                 feat = QgsFeature(cat_address.fields())
@@ -172,10 +172,10 @@ def conflate(cdau_address, cat_address, cod_mun_cat):
                    min_dist = dist
                    candidate = feat
             if candidate is not None: # update existing
-                to_change_g[candidate.id()] = layer.Geometry.fromPointXY(pt)
+                to_change_g[candidate.id()] = geo.Geometry.fromPointXY(pt)
                 for key, value in list(attr.items()):
                     candidate[key] = value
-                to_change[candidate.id()] = layer.get_attributes(candidate)
+                to_change[candidate.id()] = geo.get_attributes(candidate)
     log.info(_("Parsed %d addresses from '%s'"), c, 'CDAU')
     report.inp_address_cdau = c
     if to_change:

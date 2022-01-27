@@ -103,7 +103,7 @@ class TestCatAtom2Osm(unittest.TestCase):
         self.m_app.process_tasks.assert_not_called()
         self.m_app.process_building.assert_not_called()
 
-    @mock.patch('catatom2osm.app.layer')
+    @mock.patch('catatom2osm.app.geo')
     def test_get_building(self, m_layer):
         self.m_app.get_building = get_func(app.CatAtom2Osm.get_building)
         bugml = mock.MagicMock()
@@ -123,7 +123,7 @@ class TestCatAtom2Osm(unittest.TestCase):
             mock.call(othergml, query=self.m_app.zone_query),
         ])
 
-    @mock.patch('catatom2osm.app.layer')
+    @mock.patch('catatom2osm.app.geo')
     def test_get_building_no_other(self, m_layer):
         self.m_app.get_building = get_func(app.CatAtom2Osm.get_building)
         bugml = mock.MagicMock()
@@ -136,7 +136,7 @@ class TestCatAtom2Osm(unittest.TestCase):
             mock.call(partgml, query=self.m_app.zone_query),
         ])
 
-    @mock.patch('catatom2osm.app.layer', mock.MagicMock())
+    @mock.patch('catatom2osm.app.geo', mock.MagicMock())
     @mock.patch('catatom2osm.app.report')
     def test_process_building(self, m_report):
         m_report.values['max_level'] = {}
@@ -163,7 +163,7 @@ class TestCatAtom2Osm(unittest.TestCase):
         self.m_app.building.conflate.assert_not_called()
 
     @mock.patch('catatom2osm.app.os')
-    @mock.patch('catatom2osm.app.layer')
+    @mock.patch('catatom2osm.app.geo')
     @mock.patch('catatom2osm.app.report')
     def test_process_tasks(self, m_report, m_layer, m_os):
         m_os.path.exists.side_effect = [
@@ -203,7 +203,7 @@ class TestCatAtom2Osm(unittest.TestCase):
         self.m_app.rustic_zoning.writer.deleteFeatures.assert_called_once_with([5])
 
     @mock.patch('catatom2osm.app.os')
-    @mock.patch('catatom2osm.app.layer')
+    @mock.patch('catatom2osm.app.geo')
     @mock.patch('catatom2osm.app.report')
     def test_get_tasks(self, m_report, m_layer, m_os):
         m_os.path.join = lambda *args: '/'.join(args)
@@ -237,7 +237,7 @@ class TestCatAtom2Osm(unittest.TestCase):
         self.assertEqual(m_report.tasks_r, 1)
         self.assertEqual(m_report.tasks_u, 1)
 
-    @mock.patch('catatom2osm.app.layer')
+    @mock.patch('catatom2osm.app.geo')
     def test_process_parcel(self, m_layer):
         self.m_app.process_parcel = get_func(app.CatAtom2Osm.process_parcel)
         self.m_app.process_parcel(self.m_app)
@@ -349,7 +349,7 @@ class TestCatAtom2Osm(unittest.TestCase):
         m_codecs.getwriter.return_value.assert_called_once_with(f_gz)
 
     @mock.patch('catatom2osm.app.report', mock.MagicMock())
-    @mock.patch('catatom2osm.app.layer')
+    @mock.patch('catatom2osm.app.geo')
     def test_get_zoning1(self, m_layer):
         self.m_app.options.zoning = False
         self.m_app.options.tasks = False
@@ -369,7 +369,7 @@ class TestCatAtom2Osm(unittest.TestCase):
             m_zoning_gml, level='M'
         )
 
-    @mock.patch('catatom2osm.app.layer')
+    @mock.patch('catatom2osm.app.geo')
     @mock.patch('catatom2osm.app.report')
     def test_read_address(self, m_report, m_layer):
         self.m_app.read_address = get_func(app.CatAtom2Osm.read_address)
@@ -468,7 +468,7 @@ class TestCatAtom2Osm(unittest.TestCase):
         names = self.m_app.get_translations(self.m_app, address)
         address.get_highway_names.assert_called_with(None)
 
-    @mock.patch('catatom2osm.app.layer')
+    @mock.patch('catatom2osm.app.geo')
     def test_get_highway(self, m_layer):
         self.m_app.read_osm.return_value = 1234
         self.m_app.get_highway = get_func(app.CatAtom2Osm.get_highway)
@@ -499,7 +499,7 @@ class TestCatAtom2Osm(unittest.TestCase):
         address = self.m_app.get_current_ad_osm(self.m_app)
         self.assertEqual(m_report.osm_addresses_whithout_number, 2)
 
-    @mock.patch('catatom2osm.app.layer')
+    @mock.patch('catatom2osm.app.geo')
     def test_split_zoning(self, m_layer):
         f = lambda x: {'label': x}
         self.m_app.zone = [1, 2, 3]

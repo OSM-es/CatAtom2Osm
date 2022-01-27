@@ -2,7 +2,7 @@ import unittest
 import mock
 import os
 
-from catatom2osm import config, cdau, layer
+from catatom2osm import config, cdau, geo
 from catatom2osm.app import QgsSingleton
 qgs = QgsSingleton()
 os.environ['LANGUAGE'] = 'C'
@@ -61,7 +61,7 @@ class TestCdau(unittest.TestCase):
         m_os.makedirs.assert_called_with('foobar')
 
     @mock.patch('catatom2osm.cdau.os')
-    @mock.patch('catatom2osm.cdau.layer')
+    @mock.patch('catatom2osm.cdau.geo')
     @mock.patch('catatom2osm.cdau.download')
     def test_read(self, m_download, m_layer, m_os):
         self.m_cdau.read = get_func(cdau.Reader.read)

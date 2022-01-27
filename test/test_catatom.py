@@ -212,7 +212,7 @@ class TestCatAtom(unittest.TestCase):
 
     @mock.patch('catatom2osm.catatom.os')
     @mock.patch('catatom2osm.catatom.log')
-    @mock.patch('catatom2osm.catatom.layer')
+    @mock.patch('catatom2osm.catatom.geo')
     @mock.patch('catatom2osm.catatom.QgsCoordinateReferenceSystem.fromEpsgId')
     def test_read(self, m_qgscrs, m_layer, m_log, m_os):
         self.m_cat.read = get_func(catatom.Reader.read)
@@ -294,7 +294,7 @@ class TestCatAtom(unittest.TestCase):
         self.assertIn('There is no item', str(cm.exception))
 
     @mock.patch('catatom2osm.catatom.zipfile')
-    @mock.patch('catatom2osm.catatom.layer')
+    @mock.patch('catatom2osm.catatom.geo')
     def test_get_gml_from_zip(self, m_layer, m_zip):
         m_layer.BaseLayer.return_value.isValid.return_value = True
         zf = mock.MagicMock()
@@ -311,7 +311,7 @@ class TestCatAtom(unittest.TestCase):
         m_layer.BaseLayer.assert_called_once_with(vsizip_path, 'ln.gml', 'ogr')
 
     @mock.patch('catatom2osm.catatom.zipfile')
-    @mock.patch('catatom2osm.catatom.layer')
+    @mock.patch('catatom2osm.catatom.geo')
     def test_get_gml_from_zip_ifs(self, m_layer, m_zip):
         m_layer.BaseLayer.return_value.isValid.return_value = False
         self.m_cat.get_path_from_zip.return_value = 'bar/gml_path'
