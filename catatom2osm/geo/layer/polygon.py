@@ -12,6 +12,7 @@ from catatom2osm.geo.debug import DebugWriter
 from catatom2osm.geo.geometry import Geometry
 from catatom2osm.geo.point import Point
 from catatom2osm.geo.layer.base import BaseLayer
+from catatom2osm.geo.types import WKBPolygon
 
 log = logging.getLogger(config.app_name)
 
