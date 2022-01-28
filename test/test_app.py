@@ -151,7 +151,6 @@ class TestCatAtom2Osm(unittest.TestCase):
         building.move_address.assert_called_once_with(self.m_app.address)
         current_bu_osm = self.m_app.get_current_bu_osm.return_value
         building.conflate.assert_called_once_with(current_bu_osm)
-        building.set_tasks.assert_called_once_with()
 
     @mock.patch('catatom2osm.app.report', mock.MagicMock())
     def test_process_building_no_add_no_conf(self):
@@ -210,6 +209,7 @@ class TestCatAtom2Osm(unittest.TestCase):
         m_os.path.exists.return_value = True
         building = mock.MagicMock()
         building.source_date = 1234
+        self.m_app.get_label = lambda feat: feat['task']
         building.getFeatures.return_value = [
             {'task': '001'}, {'task': '00001'}, {'task': '00001'}
         ]

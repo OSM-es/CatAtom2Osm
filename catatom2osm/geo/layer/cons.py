@@ -49,12 +49,6 @@ class ConsLayer(PolygonLayer):
             'nature': 'constructionNature'
         }
         self.source_date = source_date
-        self.labels = {}
-        self.labels_path = os.path.join(
-            os.path.dirname(self.writer.dataSourceUri()), 'cons_labels.csv'
-        )
-        if os.path.exists(self.labels_path):
-            csvtools.csv2dict(self.labels_path, self.labels)
 
     @staticmethod
     def is_building(feature):
@@ -84,27 +78,6 @@ class ConsLayer(PolygonLayer):
                     f['localId'] not in refs]
             request.setFilterFids(fids)
         super(ConsLayer, self).explode_multi_parts(request)
-
-    def get_label(self, feat):
-        """Get the zone label for this feature from the index"""
-        localid = self.get_id(feat)
-        label = self.labels.get(localid, None)
-        if label is None:
-            label = self.labels.get(feat['localId'], None)
-        return label
-
-    def set_tasks(self):
-        """Assings to each building and pool the task label of the zone in witch
-        it is contained."""
-        to_change = {}
-        for feat in self.getFeatures():
-            feat['task'] = self.get_label(feat)
-            to_change[feat.id()] = get_attributes(feat)
-            if len(to_change) > BUFFER_SIZE:
-                self.writer.changeAttributeValues(to_change)
-                to_change = {}
-        if len(to_change) > 0:
-            self.writer.changeAttributeValues(to_change)
 
     def to_osm(self, data=None, tags={}, upload='never'):
         """Export to OSM"""

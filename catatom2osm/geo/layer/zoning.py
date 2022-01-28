@@ -169,20 +169,18 @@ class ZoningLayer(PolygonLayer):
             msg = _("%s: Removed %d of %d features.")
             log.debug(msg, self.name(), len(to_clean), fcount)
 
-    def get_labels(self, layer, gml):
+    def get_labels(self, labels, gml):
         """
-        Builds in layer an index of gml features localId vs the label of the
+        Builds in labels an index of gml features localId vs the label of the
         zone in witch it is contained. If the feature geometry overlaps many
         zones, takes the zone with the largest intersection.
         """
-        if os.path.exists(layer.labels_path) and len(layer.labels) > 0:
-            return
         index = self.get_index()
         features = {f.id(): f for f in self.getFeatures()}
         pbar = gml.get_progressbar(_("Labeling"), gml.featureCount())
         for feat in gml.getFeatures():
             localid = ConsLayer.get_id(feat)
-            label = layer.labels.get(localid, None)
+            label = labels.get(localid, None)
             if label is None or label == 'missing':
                 if ConsLayer.is_part(feat):
                     continue  # exclude parts without building
@@ -202,6 +200,6 @@ class ZoningLayer(PolygonLayer):
                         if area > parea:
                             parea = area
                             label = self.format_label(z)
-                layer.labels[localid] = label
+                labels[localid] = label
             pbar.update()
         pbar.close()

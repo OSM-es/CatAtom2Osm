@@ -127,7 +127,7 @@ class TestZoningLayer(unittest.TestCase):
     def test_get_labels(self):
         self.ulayer.append(self.fixture, 'M')
         self.rlayer.append(self.fixture, 'P')
-        test = Counter({
+        expected = Counter({
              '86416': 56, '84428': 21, '88423': 18, '86423': 18,
              '89423': 17, '86439': 17, '86417': 17, '90417': 12,
              '86464': 11, '88427': 9, '86435': 9, '85426': 9,
@@ -146,13 +146,14 @@ class TestZoningLayer(unittest.TestCase):
         part = BaseLayer('multipolygon', 'part', providerLib='memory')
         building.append(source, query=lambda f, kwargs: source.is_building(f))
         part.append(source, query=lambda f, kwargs: source.is_part(f))
-        self.ulayer.get_labels(source, building)
-        self.rlayer.get_labels(source, building)
-        self.ulayer.get_labels(source, part)
-        self.rlayer.get_labels(source, part)
-        self.assertFalse('000902900CS52D_part1' in source.labels)
-        labels = Counter(source.labels.values())
-        self.assertEqual(labels, test)
+        labels = {}
+        self.ulayer.get_labels(labels, building)
+        self.rlayer.get_labels(labels, building)
+        self.ulayer.get_labels(labels, part)
+        self.rlayer.get_labels(labels, part)
+        self.assertFalse('000902900CS52D_part1' in labels)
+        result = Counter(labels.values())
+        self.assertEqual(result, expected)
 
     @mock.patch('catatom2osm.geo.layer.base.tqdm', mock.MagicMock())
     def do_test_split(self, split):

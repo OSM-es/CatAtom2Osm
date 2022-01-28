@@ -44,12 +44,6 @@ class AddressLayer(BaseLayer):
             'AU_id': ('component_href', r'[\w\.]+AU[\.0-9]+')
         }
         self.source_date = source_date
-        self.labels = {}
-        self.labels_path = os.path.join(
-            os.path.dirname(self.writer.dataSourceUri()), 'addr_labels.csv'
-        )
-        if os.path.exists(self.labels_path):
-            csvtools.csv2dict(self.labels_path, self.labels)
 
     @staticmethod
     def create_shp(name, crs, fields=QgsFields(), geom_type=WKBPoint):
@@ -123,16 +117,3 @@ class AddressLayer(BaseLayer):
         """Get the zone label for this feature from the index"""
         localid = ConsLayer.get_id(feat)
         return self.labels.get(localid, None)
-
-    def set_tasks(self):
-        """Assings to each address the task label of the zone in witch
-        it is contained."""
-        to_change = {}
-        for feat in self.getFeatures():
-            feat['task'] = self.get_label(feat)
-            to_change[feat.id()] = get_attributes(feat)
-            if len(to_change) > BUFFER_SIZE:
-                self.writer.changeAttributeValues(to_change)
-                to_change = {}
-        if len(to_change) > 0:
-            self.writer.changeAttributeValues(to_change)

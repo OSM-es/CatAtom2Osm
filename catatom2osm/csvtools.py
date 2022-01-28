@@ -3,6 +3,7 @@ CSV related help functions
 """
 import csv
 import io
+import os
 from catatom2osm.config import encoding, delimiter
 
 
@@ -18,14 +19,17 @@ def dict2csv(csv_path, a_dict, sort=None):
         for (k, v) in dictitems:
             csv_file.write("%s%s%s%s" % (k, delimiter, v, '\n'))
 
-def csv2dict(csv_path, a_dict, encoding=encoding):
+def csv2dict(csv_path, a_dict={}, encoding=encoding):
     """Read a dictionary from a csv file"""
-    with open(csv_path) as csv_file:
-        csv_reader = csv.reader(csv_file, delimiter=str(delimiter))
-        for row in csv_reader:
-            if len(row) < 2:
-                raise IOError(_("Failed to load CSV file '%s'") % csv_file.name)
-            a_dict[row[0]] = row[1]
+    if os.path.exists(csv_path):
+        with open(csv_path) as csv_file:
+            csv_reader = csv.reader(csv_file, delimiter=str(delimiter))
+            for row in csv_reader:
+                if len(row) < 2:
+                    raise IOError(
+                        _("Failed to load CSV file '%s'") % csv_file.name
+                    )
+                a_dict[row[0]] = row[1]
     return a_dict
 
 def filter(csv_path, *args, query=lambda row, args: True, stop=False):

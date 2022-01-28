@@ -194,33 +194,44 @@ class CatAtom2Osm(object):
 
     def zone_query(self, feat, kwargs):
         """Filter feat by zone label if needed."""
+        label = self.get_label(feat)
         if geo.AddressLayer.is_address(feat):
-            if self.labels_layer.get_label(feat) is None:
+            if label is None:
                 report.inc('orphand_addresses')
         if geo.ConsLayer.is_part(feat):
-            if self.labels_layer.get_label(feat) is None:
+            if label is None:
                 report.inc('orphand_parts')
         if len(self.zone) == 0:
-            return self.labels_layer.get_label(feat) is not None
-        return self.labels_layer.get_label(feat) in self.zone
+            return label is not None
+        return label in self.zone
+
+    def get_label(self, feat):
+        """Get the zone label for this feature from the index"""
+        localid = geo.ConsLayer.get_id(feat)
+        label = self.labels.get(localid, None)
+        if label is None and self.labels_layer == self.building:
+            label = self.labels.get(feat['localId'], None)
+        return label
+
 
     def get_labels(self, main_gml, part_gml=None, other_gml=None):
         """Creates labels index"""
-        if part_gml is None:
-            self.labels_layer = self.address
-            self.urban_zoning.get_labels(self.address, main_gml)
-            self.rustic_zoning.get_labels(self.address, main_gml)
-            csvtools.dict2csv(self.address.labels_path, self.address.labels)
+        fn = 'addr_labels.csv' if part_gml is None else 'cons_labels.csv'
+        self.labels_layer = self.address if part_gml is None else self.building
+        self.labels_path = self.cat.get_path(fn)
+        self.labels = labels = csvtools.csv2dict(self.labels_path)
+        if len(self.labels) > 0:
             return
-        self.labels_layer = self.building
-        self.urban_zoning.get_labels(self.building, main_gml)
-        self.rustic_zoning.get_labels(self.building, main_gml)
-        self.urban_zoning.get_labels(self.building, part_gml)
-        self.rustic_zoning.get_labels(self.building, part_gml)
-        if other_gml:
-            self.urban_zoning.get_labels(self.building, other_gml)
-            self.rustic_zoning.get_labels(self.building, other_gml)
-        csvtools.dict2csv(self.building.labels_path, self.building.labels)
+        self.urban_zoning.get_labels(labels, main_gml)
+        self.rustic_zoning.get_labels(labels, main_gml)
+        if part_gml is not None:
+            self.labels_layer = self.building
+            self.urban_zoning.get_labels(labels, part_gml)
+            self.rustic_zoning.get_labels(labels, part_gml)
+            if other_gml:
+                self.urban_zoning.get_labels(labels, other_gml)
+                self.rustic_zoning.get_labels(labels, other_gml)
+        csvtools.dict2csv(self.labels_path, labels)
 
     def split_zoning(self):
         """Filter zoning using self.options.split."""
@@ -348,7 +359,7 @@ class CatAtom2Osm(object):
         else:
             layer_class = geo.AddressLayer
         for i, feat in enumerate(source.getFeatures()):
-            label = feat['task'] or 'missing'
+            label = self.get_label(feat) or 'missing'
             f = source.copy_feature(feat, {}, {})
             if i == fcount - 1 or last_task is None or label == last_task:
                 to_add.append(f)
@@ -462,7 +473,6 @@ class CatAtom2Osm(object):
         if self.options.address:
             self.building.move_address(self.address)
         self.building.reproject()
-        self.building.set_tasks()
         if not self.options.manual:
             current_bu_osm = self.get_current_bu_osm()
             if self.building.conflate(current_bu_osm):
@@ -655,7 +665,6 @@ class CatAtom2Osm(object):
         self.get_auxiliary_addresses()
         if self.building_opt:
             self.address.get_image_links()
-        self.address.set_tasks()
         self.export_layer(
             self.address, 'address.geojson', 'GeoJSON', target_crs_id=4326
         )
