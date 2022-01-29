@@ -1,8 +1,8 @@
 #!/bin/bash
 t1=$1/$3
 t2=$2/$3
-left="results/$1/$3/tasks/*.gz"
-right="results/$2/$3/tasks/*.gz"
+left="$1/$3/tasks/*.gz"
+right="$2/$3/tasks/*.gz"
 
 function countexp {
     echo $(zegrep -c "$1" $2 | cut -d":" -f2 | paste -sd+ | bc)
