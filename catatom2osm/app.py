@@ -350,10 +350,7 @@ class CatAtom2Osm(object):
         last_task = None
         to_add = []
         fcount = source.featureCount()
-        if self.building_opt:
-            layer_class = geo.ConsLayer
-        else:
-            layer_class = geo.AddressLayer
+        layer_class = type(self.labels_layer)
         for i, feat in enumerate(source.getFeatures()):
             label = self.get_label(feat) or 'missing'
             f = source.copy_feature(feat, {}, {})
@@ -362,6 +359,8 @@ class CatAtom2Osm(object):
             if i == fcount - 1 or (
                 last_task is not None and label != last_task
             ):
+                if last_task is None:
+                    last_task = label
                 if last_task == 'missing':
                     tasks_m += len(to_add)
                 fn = os.path.join(self.tasks_path, last_task + '.shp')
