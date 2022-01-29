@@ -22,7 +22,7 @@ class ZoningLayer(PolygonLayer):
 
     def __init__(
         self,
-        path="Polygon",
+        path="MultiPolygon",
         baseName="cadastralzoning",
         providerLib="memory",
         source_date=None

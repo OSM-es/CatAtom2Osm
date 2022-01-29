@@ -114,9 +114,7 @@ class TestCatAtom2Osm(unittest.TestCase):
         building = m_layer.ConsLayer.return_value
         self.m_app.get_building(self.m_app)
         fn = os.path.join('33333', 'building.shp')
-        m_layer.ConsLayer.assert_called_once_with(
-            fn, providerLib='ogr', source_date = 1
-        )
+        m_layer.ConsLayer.assert_called_once_with(source_date = 1)
         building.append.assert_has_calls([
             mock.call(bugml, query=self.m_app.zone_query),
             mock.call(partgml, query=self.m_app.zone_query),

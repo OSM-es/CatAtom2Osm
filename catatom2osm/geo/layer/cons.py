@@ -20,7 +20,7 @@ log = logging.getLogger(config.app_name)
 class ConsLayer(PolygonLayer):
     """Class for constructions"""
 
-    def __init__(self, path="Polygon", baseName="building",
+    def __init__(self, path="MultiPolygon", baseName="building",
                  providerLib="memory", source_date=None):
         super(ConsLayer, self).__init__(path, baseName, providerLib)
         if self.fields().isEmpty():

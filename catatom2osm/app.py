@@ -259,11 +259,7 @@ class CatAtom2Osm(object):
         part_gml = self.cat.read("buildingpart")
         other_gml = self.cat.read("otherconstruction", True)
         report.building_date = building_gml.source_date
-        fn = self.cat.get_path('building.shp')
-        geo.ConsLayer.create_shp(fn, building_gml.crs())
-        self.building = geo.ConsLayer(
-            fn, providerLib='ogr', source_date=building_gml.source_date
-        )
+        self.building = geo.ConsLayer(source_date=building_gml.source_date)
         self.get_labels(building_gml, part_gml, other_gml)
         if self.zone or self.split:
             self.split_zoning()
@@ -399,12 +395,8 @@ class CatAtom2Osm(object):
         (rustic)
         """
         zoning_gml = self.cat.read("cadastralzoning")
-        fn = self.cat.get_path('rustic_zoning.shp')
-        geo.ZoningLayer.create_shp(fn, zoning_gml.crs())
-        self.rustic_zoning = geo.ZoningLayer(fn, 'rusticzoning', 'ogr')
-        fn = self.cat.get_path('urban_zoning.shp')
-        geo.ZoningLayer.create_shp(fn, zoning_gml.crs())
-        self.urban_zoning = geo.ZoningLayer(fn, 'urbanzoning', 'ogr')
+        self.rustic_zoning = geo.ZoningLayer(baseName='rusticzoning')
+        self.urban_zoning = geo.ZoningLayer(baseName='urbanzoning')
         self.rustic_zoning.append(zoning_gml, level='P')
         self.urban_zoning.append(zoning_gml, level='M')
         if len(self.zone) > 0:
@@ -635,11 +627,7 @@ class CatAtom2Osm(object):
                 msg = _("Could not resolve joined tables for the "
                         "'%s' layer") % address_gml.name()
                 raise IOError(msg)
-        fn = self.cat.get_path('address.shp')
-        geo.AddressLayer.create_shp(fn, address_gml.crs())
-        self.address = geo.AddressLayer(
-            fn, providerLib='ogr', source_date=address_gml.source_date
-        )
+        self.address = geo.AddressLayer(source_date=address_gml.source_date)
         if not self.building_opt:
             self.get_labels(address_gml)
             if self.zone or self.split:
