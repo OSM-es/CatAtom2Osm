@@ -465,11 +465,6 @@ class CatAtom2Osm(object):
         if self.options.address:
             self.building.move_address(self.address)
         self.building.reproject()
-        if not self.options.manual:
-            current_bu_osm = self.get_current_bu_osm()
-            if self.building.conflate(current_bu_osm):
-                self.write_osm(current_bu_osm, 'current_building.osm')
-            del current_bu_osm
 
     def output_building(self):
         self.building_osm = self.building.to_osm()

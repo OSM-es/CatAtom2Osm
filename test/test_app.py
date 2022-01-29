@@ -87,7 +87,6 @@ class TestCatAtom2Osm(unittest.TestCase):
         self.m_app.run = get_func(app.CatAtom2Osm.run)
         llayer = self.m_app.labels_layer
         address = self.m_app.address
-        self.m_app.building.conflate.return_value = False
         self.m_app.run(self.m_app)
         self.m_app.process_tasks.assert_called_once_with(llayer)
         self.m_app.process_building.assert_called_once_with()
@@ -147,8 +146,6 @@ class TestCatAtom2Osm(unittest.TestCase):
         building.clean.assert_called_once_with()
         building.validate.assert_called_once()
         building.move_address.assert_called_once_with(self.m_app.address)
-        current_bu_osm = self.m_app.get_current_bu_osm.return_value
-        building.conflate.assert_called_once_with(current_bu_osm)
 
     @mock.patch('catatom2osm.app.report', mock.MagicMock())
     def test_process_building_no_add_no_conf(self):
@@ -157,7 +154,6 @@ class TestCatAtom2Osm(unittest.TestCase):
         self.m_app.options.manual = True
         self.m_app.process_building(self.m_app)
         self.m_app.building.move_address.assert_not_called()
-        self.m_app.building.conflate.assert_not_called()
 
     @mock.patch('catatom2osm.app.os')
     @mock.patch('catatom2osm.app.geo')
