@@ -173,7 +173,7 @@ class Element(object):
             'id', 'action', 'visible', 'version', 
             'timestamp', 'changeset', 'uid', 'user'
         )
-        self.attrs = attrs
+        self.attrs = dict((k,v) for (k,v) in list(attrs.items()))
         if not hasattr(self, 'id'):
             container.counter -= 1
             self.id = container.counter

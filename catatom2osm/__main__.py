@@ -65,7 +65,8 @@ def process(options):
         from catatom2osm.app import CatAtom2Osm, QgsSingleton
         qgs = QgsSingleton()
         for a_path in options.path:
-            CatAtom2Osm.create_and_run(a_path, options)
+            o = argparse.Namespace(**options.__dict__)
+            CatAtom2Osm.create_and_run(a_path, o)
         qgs.exitQgis()
 
 def run():

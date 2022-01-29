@@ -19,8 +19,9 @@ def dict2csv(csv_path, a_dict, sort=None):
         for (k, v) in dictitems:
             csv_file.write("%s%s%s%s" % (k, delimiter, v, '\n'))
 
-def csv2dict(csv_path, a_dict={}, encoding=encoding):
+def csv2dict(csv_path, a_dict=None):
     """Read a dictionary from a csv file"""
+    a_dict = {} if a_dict is None else a_dict
     if os.path.exists(csv_path):
         with open(csv_path) as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=str(delimiter))

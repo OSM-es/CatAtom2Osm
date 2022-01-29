@@ -209,7 +209,7 @@ class CatAtom2Osm(object):
         """Get the zone label for this feature from the index"""
         localid = geo.ConsLayer.get_id(feat)
         label = self.labels.get(localid, None)
-        if label is None and self.labels_layer == self.building:
+        if label is None and not geo.AddressLayer.is_address(feat):
             label = self.labels.get(feat['localId'], None)
         return label
 
@@ -219,13 +219,13 @@ class CatAtom2Osm(object):
         fn = 'addr_labels.csv' if part_gml is None else 'cons_labels.csv'
         self.labels_layer = self.address if part_gml is None else self.building
         self.labels_path = self.cat.get_path(fn)
-        self.labels = labels = csvtools.csv2dict(self.labels_path)
+        labels = csvtools.csv2dict(self.labels_path)
+        self.labels = labels
         if len(self.labels) > 0:
             return
         self.urban_zoning.get_labels(labels, main_gml)
         self.rustic_zoning.get_labels(labels, main_gml)
         if part_gml is not None:
-            self.labels_layer = self.building
             self.urban_zoning.get_labels(labels, part_gml)
             self.rustic_zoning.get_labels(labels, part_gml)
             if other_gml:
