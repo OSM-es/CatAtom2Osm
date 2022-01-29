@@ -453,7 +453,10 @@ class BaseLayer(QgsVectorLayer):
     def get_progressbar(self, description, total=None):
         """Return progress bar with 'description' for 'total' iterations"""
         leave = log.app_level <= logging.DEBUG
+        fn = os.path.basename(self.source())
+        if self.writer.name() == 'memory':
+            fn = self.name()
         pbar = tqdm(total=total, leave=leave)
         pbar.set_description(description)
-        pbar.set_postfix(file=os.path.basename(self.source()), refresh=False)
+        pbar.set_postfix(file=fn, refresh=False)
         return pbar
