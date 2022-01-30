@@ -286,7 +286,7 @@ class CatAtom2Osm(object):
         Convert shp to osm for each task.
         Remove zones without buildings (empty tasks).
         """
-        self.get_tasks(source)
+        tasks = self.get_tasks(source)
         exp = ''
         if len(self.zone) > 0:
             exp = "label IN (%s)" % ', '.join(["'%s'" % z for z in self.zone])
@@ -300,34 +300,26 @@ class CatAtom2Osm(object):
         ]
         if report.tasks_m > 0:
             zoning.append(('missing', None))
-        if self.building_opt:
-            layer_class = geo.ConsLayer
-        else:
-            layer_class = geo.AddressLayer
         to_clean = {'r': [], 'u': []}
         for label, fid in zoning:
-            fn = self.cat.get_path(tasks_folder, label + '.shp')
-            if not os.path.exists(fn):
+            if label not in tasks:
                 t = 'r' if len(label) == 3 else 'u'
                 to_clean[t].append(fid)
-        for label, fid in zoning:
-            comment = ' '.join((config.changeset_tags['comment'],
-                                report.mun_code, report.mun_name, label))
-            fn = self.cat.get_path(tasks_folder, label + '.shp')
-            if os.path.exists(fn):
-                task = layer_class(
-                    fn, label, 'ogr', source_date=source.source_date
-                )
-                task_osm = task.to_osm(
-                    upload='yes', tags={'comment': comment}
-                )
-                if self.building_opt:
-                    self.merge_address(task_osm, self.address_osm)
-                report.address_stats(task_osm)
-                report.cons_stats(task_osm, label)
-                self.write_osm(task_osm, tasks_folder, label + '.osm.gz')
-                report.osm_stats(task_osm)
-                self.delete_shp(task)
+        for label, task in tasks.items():
+            comment = ' '.join((
+                config.changeset_tags['comment'],
+                report.mun_code,
+                report.mun_name,
+                label
+            ))
+            task.source_date = self.labels_layer.source_date
+            task_osm = task.to_osm(upload='yes', tags={'comment': comment})
+            if self.building_opt:
+                self.merge_address(task_osm, self.address_osm)
+            report.address_stats(task_osm)
+            report.cons_stats(task_osm, label)
+            self.write_osm(task_osm, tasks_folder, label + '.osm.gz')
+            report.osm_stats(task_osm)
         no_data = len(to_clean['r']) + len(to_clean['u'])
         if no_data > 0:
             log.info(_("Removed %d zones without data"), no_data)
@@ -344,40 +336,31 @@ class CatAtom2Osm(object):
             for fn in os.listdir(self.tasks_path):
                 if os.path.isfile(fn):
                     os.remove(os.path.join(self.tasks_path, fn))
-        tasks_r = 0
-        tasks_u = 0
         tasks_m = 0
         last_task = None
+        tasks = {}
         to_add = []
         fcount = source.featureCount()
         layer_class = type(self.labels_layer)
         for i, feat in enumerate(source.getFeatures()):
             label = self.get_label(feat) or 'missing'
+            if i == 0:
+                last_task = label
             f = source.copy_feature(feat, {}, {})
-            if i == fcount - 1 or last_task is None or label == last_task:
+            if i == fcount - 1 or label == last_task:
                 to_add.append(f)
-            if i == fcount - 1 or (
-                last_task is not None and label != last_task
-            ):
-                if last_task is None:
-                    last_task = label
+            if i == fcount - 1 or label != last_task:
                 if last_task == 'missing':
                     tasks_m += len(to_add)
-                fn = os.path.join(self.tasks_path, last_task + '.shp')
-                if not os.path.exists(fn):
-                    layer_class.create_shp(fn, source.crs())
-                    if len(last_task or '') == 3:
-                        tasks_r += 1
-                    elif len(last_task or '') == 5:
-                        tasks_u += 1
-                task = layer_class(
-                    fn, last_task, 'ogr', source_date=source.source_date
-                )
-                task.writer.addFeatures(to_add)
+                if last_task not in tasks:
+                    tasks[last_task] = layer_class(baseName=last_task)
+                tasks[last_task].writer.addFeatures(to_add)
                 to_add = [f]
             last_task = label
-        log.debug(_("Generated %d rustic and %d urban tasks files"), tasks_r,
-                  tasks_u)
+        msg = _("Generated %d rustic and %d urban tasks files")
+        tasks_r = len([l for l in tasks.keys() if len(l) == 3])
+        tasks_u = len([l for l in tasks.keys() if len(l) == 5])
+        log.debug(msg, tasks_r, tasks_u)
         if tasks_m > 0:
             msg = _(
                 "There are %d buildings without zone, check %s"
@@ -387,6 +370,7 @@ class CatAtom2Osm(object):
         report.tasks_r = tasks_r
         report.tasks_u = tasks_u
         report.tasks_m = tasks_m
+        return tasks
 
     def get_zoning(self):
         """

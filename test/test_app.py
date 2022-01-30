@@ -155,20 +155,18 @@ class TestCatAtom2Osm(unittest.TestCase):
         self.m_app.process_building(self.m_app)
         self.m_app.building.move_address.assert_not_called()
 
-    @mock.patch('catatom2osm.app.os')
-    @mock.patch('catatom2osm.app.geo')
     @mock.patch('catatom2osm.app.report')
-    def test_process_tasks(self, m_report, m_layer, m_os):
-        m_os.path.exists.side_effect = [
-            True, True, False, True, True, True,
-            True, True, False, True, True, True,
-        ]
+    def test_process_tasks(self, m_report):
+        self.m_app.get_tasks.return_value = {
+            '001': mock.MagicMock(),
+            '003': mock.MagicMock(),
+            '00002': mock.MagicMock(),
+            '00004': mock.MagicMock(),
+            'missing': mock.MagicMock(),
+        }
         m_report.mun_code = 'AAA'
         m_report.mun_name = 'BBB'
         m_report.tasks_m = 10
-        task = mock.MagicMock()
-        task.featureCount.return_value = 999
-        m_layer.ConsLayer.side_effect = [task, task, task, task, task]
         building = mock.MagicMock()
         building.source_date = 1234
         zones = []
@@ -183,24 +181,20 @@ class TestCatAtom2Osm(unittest.TestCase):
         self.m_app.urban_zoning.format_label = lambda f: '0000' + str(f.id())
         self.m_app.process_tasks = get_func(app.CatAtom2Osm.process_tasks)
         self.m_app.process_tasks(self.m_app, building)
-        m_layer.ConsLayer.assert_has_calls([
-            mock.call('33333/tasks/001.shp', '001', 'ogr', source_date=1234),
-            mock.call('33333/tasks/003.shp', '003', 'ogr', source_date=1234),
-            mock.call('33333/tasks/00002.shp', '00002', 'ogr', source_date=1234),
-            mock.call('33333/tasks/00004.shp', '00004', 'ogr', source_date=1234),
-            mock.call('33333/tasks/missing.shp', 'missing', 'ogr', source_date=1234),
-        ])
-        comment = config.changeset_tags['comment'] + ' AAA BBB missing'
-        task.to_osm.assert_called_with(upload='yes', tags={'comment': comment})
+        for label, task in self.m_app.get_tasks.return_value.items():
+            comment = config.changeset_tags['comment'] + ' AAA BBB ' + label
+            task.to_osm.assert_called_with(upload='yes', tags={'comment': comment})
         self.assertEqual(self.m_app.merge_address.call_count, 5)
         self.m_app.rustic_zoning.writer.deleteFeatures.assert_called_once_with([5])
 
     @mock.patch('catatom2osm.app.os')
-    @mock.patch('catatom2osm.app.geo')
+    @mock.patch('catatom2osm.app.type')
     @mock.patch('catatom2osm.app.report')
-    def test_get_tasks(self, m_report, m_layer, m_os):
+    def test_get_tasks(self, m_report, m_type, m_os):
         m_os.path.join = lambda *args: '/'.join(args)
-        m_os.path.exists.return_value = True
+        m_os.listdir.return_value = ['1', '2', '3']
+        layer_class = mock.MagicMock()
+        m_type.return_value = layer_class
         building = mock.MagicMock()
         building.source_date = 1234
         self.m_app.get_label = lambda feat: feat['task']
@@ -209,7 +203,6 @@ class TestCatAtom2Osm(unittest.TestCase):
         ]
         building.featureCount.return_value = 3
         building.copy_feature.side_effect = [100, 101, 102]
-        m_os.listdir.return_value = ['1', '2', '3']
         m_report.tasks_r = 0
         m_report.tasks_u = 0
         self.m_app.get_tasks = get_func(app.CatAtom2Osm.get_tasks)
@@ -219,15 +212,12 @@ class TestCatAtom2Osm(unittest.TestCase):
             mock.call('33333/tasks/2'),
             mock.call('33333/tasks/3'),
         ])
-        m_layer.ConsLayer.assert_has_calls([
-            mock.call('33333/tasks/001.shp', '001', 'ogr', source_date=1234),
+        layer_class.assert_has_calls([
+            mock.call(baseName='001'),
             mock.call().writer.addFeatures([100]),
-            mock.call('33333/tasks/00001.shp', '00001', 'ogr', source_date=1234),
+            mock.call(baseName='00001'),
             mock.call().writer.addFeatures([101, 102])
         ])
-        m_os.path.exists.return_value = False
-        building.copy_feature.side_effect = [100, 101, 102]
-        self.m_app.get_tasks(self.m_app, building)
         self.assertEqual(m_report.tasks_r, 1)
         self.assertEqual(m_report.tasks_u, 1)
 
