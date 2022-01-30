@@ -1,0 +1,191 @@
+
+<!DOCTYPE html>
+
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- Licensed under the Apache 2.0 License -->
+  <link rel="stylesheet" type="text/css" href="../../../../_static/fonts/open-sans/stylesheet.css" />
+  <!-- Licensed under the SIL Open Font License -->
+  <link rel="stylesheet" type="text/css" href="../../../../_static/fonts/source-serif-pro/source-serif-pro.css" />
+  <link rel="stylesheet" type="text/css" href="../../../../_static/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="../../../../_static/css/bootstrap-theme.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>test.geo.layer.test_parcel &#8212; documentación de CatAtom2Osm - 2.5.0</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/guzzle.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/translations.js"></script>
+    <link rel="index" title="Índice" href="../../../../genindex.html" />
+    <link rel="search" title="Búsqueda" href="../../../../search.html" />
+  
+   
+
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navegación</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="Índice General"
+             accesskey="I">índice</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Índice de Módulos Python"
+             >módulos</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">documentación de CatAtom2Osm - 2.5.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Código de módulo</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">test.geo.layer.test_parcel</a></li> 
+      </ul>
+    </div>
+    <div class="container-wrapper">
+
+      <div id="mobile-toggle">
+        <a href="#"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
+      </div>
+  <div id="left-column">
+    <div class="sphinxsidebar">
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <div id="main-search">
+      <form class="form-inline" action="../../../../search.html" method="GET" role="form">
+        <div class="input-group">
+          <input name="q" type="text" class="form-control" placeholder="Search...">
+        </div>
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+        <div id="right-column">
+          
+          <div role="navigation" aria-label="breadcrumbs navigation">
+            <ol class="breadcrumb">
+              <li><a href="../../../../index.html">Docs</a></li>
+              
+                <li><a href="../../../index.html">Código de módulo</a></li>
+              
+              <li>test.geo.layer.test_parcel</li>
+            </ol>
+          </div>
+          
+          <div class="document clearer body">
+            
+  <h1>Código fuente para test.geo.layer.test_parcel</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">mock</span>
+<span class="kn">import</span> <span class="nn">unittest</span>
+
+<span class="kn">from</span> <span class="nn">qgis.core</span> <span class="k">import</span> <span class="n">QgsFeature</span><span class="p">,</span> <span class="n">QgsVectorLayer</span>
+
+<span class="kn">from</span> <span class="nn">catatom2osm.app</span> <span class="k">import</span> <span class="n">QgsSingleton</span>
+<span class="kn">from</span> <span class="nn">catatom2osm.geo.geometry</span> <span class="k">import</span> <span class="n">Geometry</span>
+<span class="kn">from</span> <span class="nn">catatom2osm.geo.layer.cons</span> <span class="k">import</span> <span class="n">ConsLayer</span>
+<span class="kn">from</span> <span class="nn">catatom2osm.geo.layer.parcel</span> <span class="k">import</span> <span class="n">ParcelLayer</span>
+
+<span class="n">qgs</span> <span class="o">=</span> <span class="n">QgsSingleton</span><span class="p">()</span>
+<span class="n">m_log</span> <span class="o">=</span> <span class="n">mock</span><span class="o">.</span><span class="n">MagicMock</span><span class="p">()</span>
+<span class="n">m_log</span><span class="o">.</span><span class="n">app_level</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">INFO</span>
+
+
+<div class="viewcode-block" id="TestParcelLayer"><a class="viewcode-back" href="../../../../api/test.geo.layer.test_parcel.html#test.geo.layer.test_parcel.TestParcelLayer">[documentos]</a><span class="k">class</span> <span class="nc">TestParcelLayer</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TestParcelLayer.setUp"><a class="viewcode-back" href="../../../../api/test.geo.layer.test_parcel.html#test.geo.layer.test_parcel.TestParcelLayer.setUp">[documentos]</a>    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.geo.layer.base.tqdm&#39;</span><span class="p">,</span> <span class="n">mock</span><span class="o">.</span><span class="n">MagicMock</span><span class="p">())</span>
+    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.geo.layer.base.log&#39;</span><span class="p">,</span> <span class="n">m_log</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">fn</span> <span class="o">=</span> <span class="s1">&#39;test/fixtures/parcel.gpkg|layername=parcel&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span> <span class="o">=</span> <span class="n">ParcelLayer</span><span class="p">(</span><span class="s1">&#39;MultiPolygon&#39;</span><span class="p">,</span> <span class="s1">&#39;parcel&#39;</span><span class="p">,</span> <span class="s1">&#39;memory&#39;</span><span class="p">)</span>
+        <span class="n">fixture</span> <span class="o">=</span> <span class="n">QgsVectorLayer</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="s1">&#39;parcel&#39;</span><span class="p">,</span> <span class="s1">&#39;ogr&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">fixture</span><span class="o">.</span><span class="n">isValid</span><span class="p">(),</span> <span class="s2">&quot;Loading fixture&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fixture</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">featureCount</span><span class="p">(),</span> <span class="mi">186</span><span class="p">)</span>
+        <span class="n">fn</span> <span class="o">=</span> <span class="s1">&#39;test/fixtures/cons.gpkg|layername=cons&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">building</span> <span class="o">=</span> <span class="n">ConsLayer</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="s1">&#39;cons&#39;</span><span class="p">,</span> <span class="s1">&#39;ogr&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">building</span><span class="o">.</span><span class="n">isValid</span><span class="p">(),</span> <span class="s2">&quot;Loading fixture&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TestParcelLayer.test_init"><a class="viewcode-back" href="../../../../api/test.geo.layer.test_parcel.html#test.geo.layer.test_parcel.TestParcelLayer.test_init">[documentos]</a>    <span class="k">def</span> <span class="nf">test_init</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">layer</span> <span class="o">=</span> <span class="n">ParcelLayer</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">fields</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">(),</span> <span class="s1">&#39;localId&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">fields</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">(),</span> <span class="s1">&#39;label&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">rename</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">],</span> <span class="s1">&#39;inspireId_localId&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TestParcelLayer.test_not_empty"><a class="viewcode-back" href="../../../../api/test.geo.layer.test_parcel.html#test.geo.layer.test_parcel.TestParcelLayer.test_not_empty">[documentos]</a>    <span class="k">def</span> <span class="nf">test_not_empty</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">layer</span> <span class="o">=</span> <span class="n">ParcelLayer</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">fields</span><span class="p">()</span><span class="o">.</span><span class="n">toList</span><span class="p">()),</span> <span class="mi">2</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TestParcelLayer.test_delete_void_parcels"><a class="viewcode-back" href="../../../../api/test.geo.layer.test_parcel.html#test.geo.layer.test_parcel.TestParcelLayer.test_delete_void_parcels">[documentos]</a>    <span class="k">def</span> <span class="nf">test_delete_void_parcels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">delete_void_parcels</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">building</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">featureCount</span><span class="p">(),</span> <span class="mi">111</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TestParcelLayer.test_create_missing_parcels"><a class="viewcode-back" href="../../../../api/test.geo.layer.test_parcel.html#test.geo.layer.test_parcel.TestParcelLayer.test_create_missing_parcels">[documentos]</a>    <span class="k">def</span> <span class="nf">test_create_missing_parcels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">create_missing_parcels</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">building</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">featureCount</span><span class="p">(),</span> <span class="mi">188</span><span class="p">)</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;localId = &#39;8642317CS5284S&#39;&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">Geometry</span><span class="o">.</span><span class="n">get_multipolygon</span><span class="p">(</span><span class="n">p</span><span class="p">)[</span><span class="mi">0</span><span class="p">]),</span> <span class="mi">1</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TestParcelLayer.test_get_groups_with_context"><a class="viewcode-back" href="../../../../api/test.geo.layer.test_parcel.html#test.geo.layer.test_parcel.TestParcelLayer.test_get_groups_with_context">[documentos]</a>    <span class="k">def</span> <span class="nf">test_get_groups_with_context</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">create_missing_parcels</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">building</span><span class="p">)</span>
+        <span class="n">pa_groups</span><span class="p">,</span> <span class="n">__</span><span class="p">,</span> <span class="n">__</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">get_groups_with_context</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">building</span><span class="p">)</span>
+        <span class="n">expected</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">{</span><span class="mi">48</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">},</span> <span class="p">{</span><span class="mi">14</span><span class="p">,</span> <span class="mi">15</span><span class="p">},</span> <span class="p">{</span><span class="mi">16</span><span class="p">,</span> <span class="mi">17</span><span class="p">},</span> <span class="p">{</span><span class="mi">18</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">23</span><span class="p">},</span>
+            <span class="p">{</span><span class="mi">34</span><span class="p">,</span> <span class="mi">35</span><span class="p">,</span> <span class="mi">55</span><span class="p">},</span> <span class="p">{</span><span class="mi">56</span><span class="p">,</span> <span class="mi">36</span><span class="p">,</span> <span class="mi">37</span><span class="p">},</span> <span class="p">{</span><span class="mi">32</span><span class="p">,</span> <span class="mi">33</span><span class="p">,</span> <span class="mi">38</span><span class="p">,</span> <span class="mi">39</span><span class="p">},</span>
+            <span class="p">{</span><span class="mi">40</span><span class="p">,</span> <span class="mi">41</span><span class="p">,</span> <span class="mi">42</span><span class="p">,</span> <span class="mi">43</span><span class="p">,</span> <span class="mi">44</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="mi">27</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">26</span><span class="p">,</span> <span class="mi">187</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">29</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">31</span><span class="p">},</span>
+            <span class="p">{</span><span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">46</span><span class="p">,</span> <span class="mi">47</span><span class="p">},</span> <span class="p">{</span><span class="mi">8</span><span class="p">,</span> <span class="mi">49</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">7</span><span class="p">},</span> <span class="p">{</span><span class="mi">51</span><span class="p">,</span> <span class="mi">52</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">},</span> <span class="p">{</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">53</span><span class="p">,</span> <span class="mi">54</span><span class="p">},</span>
+            <span class="p">{</span><span class="mi">57</span><span class="p">,</span> <span class="mi">58</span><span class="p">},</span> <span class="p">{</span><span class="mi">64</span><span class="p">,</span> <span class="mi">65</span><span class="p">,</span> <span class="mi">66</span><span class="p">,</span> <span class="mi">71</span><span class="p">,</span> <span class="mi">59</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">61</span><span class="p">,</span> <span class="mi">62</span><span class="p">,</span> <span class="mi">63</span><span class="p">},</span> <span class="p">{</span><span class="mi">81</span><span class="p">,</span> <span class="mi">77</span><span class="p">,</span> <span class="mi">78</span><span class="p">},</span>
+            <span class="p">{</span><span class="mi">80</span><span class="p">,</span> <span class="mi">79</span><span class="p">},</span> <span class="p">{</span><span class="mi">84</span><span class="p">,</span> <span class="mi">85</span><span class="p">},</span> <span class="p">{</span><span class="mi">86</span><span class="p">,</span> <span class="mi">87</span><span class="p">},</span> <span class="p">{</span><span class="mi">91</span><span class="p">,</span> <span class="mi">92</span><span class="p">},</span> <span class="p">{</span><span class="mi">107</span><span class="p">,</span> <span class="mi">99</span><span class="p">,</span> <span class="mi">100</span><span class="p">}</span>
+        <span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">pa_groups</span><span class="p">,</span> <span class="n">expected</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TestParcelLayer.test_merge_by_adjacent_buildings"><a class="viewcode-back" href="../../../../api/test.geo.layer.test_parcel.html#test.geo.layer.test_parcel.TestParcelLayer.test_merge_by_adjacent_buildings">[documentos]</a>    <span class="k">def</span> <span class="nf">test_merge_by_adjacent_buildings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">delete_void_parcels</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">building</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">create_missing_parcels</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">building</span><span class="p">)</span>
+        <span class="n">tasks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">merge_by_adjacent_buildings</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">building</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">featureCount</span><span class="p">(),</span> <span class="mi">55</span><span class="p">)</span>
+        <span class="n">pa_refs</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">()]</span>
+        <span class="n">merged</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">bu</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">building</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">():</span>
+            <span class="n">ref</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">building</span><span class="o">.</span><span class="n">get_id</span><span class="p">(</span><span class="n">bu</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">ref</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">pa_refs</span><span class="p">:</span>
+                <span class="n">merged</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ref</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">merged</span><span class="p">),</span> <span class="mi">58</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">all</span><span class="p">([</span><span class="n">tasks</span><span class="p">[</span><span class="n">ref</span><span class="p">]</span> <span class="o">!=</span> <span class="n">ref</span> <span class="k">for</span> <span class="n">ref</span> <span class="ow">in</span> <span class="n">merged</span><span class="p">]))</span></div></div>
+</pre></div>
+
+          </div>
+            
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navegación</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="Índice General"
+             >índice</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Índice de Módulos Python"
+             >módulos</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">documentación de CatAtom2Osm - 2.5.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Código de módulo</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">test.geo.layer.test_parcel</a></li> 
+      </ul>
+    </div>
+<script type="text/javascript">
+  $("#mobile-toggle a").click(function () {
+    $("#left-column").toggle();
+  });
+</script>
+<script type="text/javascript" src="../../../../_static/js/bootstrap.js"></script>
+  <div class="footer">
+    &copy; Copyright 2017, Javier Sanchez Portero. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  </body>
+</html>

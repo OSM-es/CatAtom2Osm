@@ -14,7 +14,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>test.test_catatom &#8212; documentación de CatAtom2Osm - 2.4.0</title>
+    <title>test.test_catatom &#8212; documentación de CatAtom2Osm - 2.5.0</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/guzzle.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.4.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.5.0</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Código de módulo</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">test.test_catatom</a></li> 
       </ul>
@@ -294,7 +294,7 @@
 
 <div class="viewcode-block" id="TestCatAtom.test_read"><a class="viewcode-back" href="../../api/test.test_catatom.html#test.test_catatom.TestCatAtom.test_read">[documentos]</a>    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.catatom.os&#39;</span><span class="p">)</span>
     <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.catatom.log&#39;</span><span class="p">)</span>
-    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.catatom.layer&#39;</span><span class="p">)</span>
+    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.catatom.geo&#39;</span><span class="p">)</span>
     <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.catatom.QgsCoordinateReferenceSystem.fromEpsgId&#39;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">test_read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m_qgscrs</span><span class="p">,</span> <span class="n">m_layer</span><span class="p">,</span> <span class="n">m_log</span><span class="p">,</span> <span class="n">m_os</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">m_cat</span><span class="o">.</span><span class="n">read</span> <span class="o">=</span> <span class="n">get_func</span><span class="p">(</span><span class="n">catatom</span><span class="o">.</span><span class="n">Reader</span><span class="o">.</span><span class="n">read</span><span class="p">)</span>
@@ -376,7 +376,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s1">&#39;There is no item&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">cm</span><span class="o">.</span><span class="n">exception</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="TestCatAtom.test_get_gml_from_zip"><a class="viewcode-back" href="../../api/test.test_catatom.html#test.test_catatom.TestCatAtom.test_get_gml_from_zip">[documentos]</a>    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.catatom.zipfile&#39;</span><span class="p">)</span>
-    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.catatom.layer&#39;</span><span class="p">)</span>
+    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.catatom.geo&#39;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">test_get_gml_from_zip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m_layer</span><span class="p">,</span> <span class="n">m_zip</span><span class="p">):</span>
         <span class="n">m_layer</span><span class="o">.</span><span class="n">BaseLayer</span><span class="o">.</span><span class="n">return_value</span><span class="o">.</span><span class="n">isValid</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="n">zf</span> <span class="o">=</span> <span class="n">mock</span><span class="o">.</span><span class="n">MagicMock</span><span class="p">()</span>
@@ -393,7 +393,7 @@
         <span class="n">m_layer</span><span class="o">.</span><span class="n">BaseLayer</span><span class="o">.</span><span class="n">assert_called_once_with</span><span class="p">(</span><span class="n">vsizip_path</span><span class="p">,</span> <span class="s1">&#39;ln.gml&#39;</span><span class="p">,</span> <span class="s1">&#39;ogr&#39;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="TestCatAtom.test_get_gml_from_zip_ifs"><a class="viewcode-back" href="../../api/test.test_catatom.html#test.test_catatom.TestCatAtom.test_get_gml_from_zip_ifs">[documentos]</a>    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.catatom.zipfile&#39;</span><span class="p">)</span>
-    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.catatom.layer&#39;</span><span class="p">)</span>
+    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.catatom.geo&#39;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">test_get_gml_from_zip_ifs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m_layer</span><span class="p">,</span> <span class="n">m_zip</span><span class="p">):</span>
         <span class="n">m_layer</span><span class="o">.</span><span class="n">BaseLayer</span><span class="o">.</span><span class="n">return_value</span><span class="o">.</span><span class="n">isValid</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">m_cat</span><span class="o">.</span><span class="n">get_path_from_zip</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="s1">&#39;bar/gml_path&#39;</span>
@@ -419,7 +419,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.4.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.5.0</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Código de módulo</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">test.test_catatom</a></li> 
       </ul>

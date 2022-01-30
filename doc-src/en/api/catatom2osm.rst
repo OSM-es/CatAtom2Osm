@@ -1,6 +1,14 @@
 catatom2osm package
 ===================
 
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   catatom2osm.geo
+
 Submodules
 ----------
 
@@ -15,7 +23,6 @@ Submodules
    catatom2osm.csvtools
    catatom2osm.download
    catatom2osm.hgwnames
-   catatom2osm.layer
    catatom2osm.osm
    catatom2osm.osmxml
    catatom2osm.overpass

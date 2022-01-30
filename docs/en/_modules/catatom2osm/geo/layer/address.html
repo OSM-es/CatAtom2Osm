@@ -1,0 +1,232 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- Licensed under the Apache 2.0 License -->
+  <link rel="stylesheet" type="text/css" href="../../../../_static/fonts/open-sans/stylesheet.css" />
+  <!-- Licensed under the SIL Open Font License -->
+  <link rel="stylesheet" type="text/css" href="../../../../_static/fonts/source-serif-pro/source-serif-pro.css" />
+  <link rel="stylesheet" type="text/css" href="../../../../_static/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="../../../../_static/css/bootstrap-theme.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>catatom2osm.geo.layer.address &#8212; CatAtom2Osm 2.5.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/guzzle.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+  
+   
+
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">CatAtom2Osm 2.5.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">catatom2osm.geo.layer.address</a></li> 
+      </ul>
+    </div>
+    <div class="container-wrapper">
+
+      <div id="mobile-toggle">
+        <a href="#"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
+      </div>
+  <div id="left-column">
+    <div class="sphinxsidebar">
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <div id="main-search">
+      <form class="form-inline" action="../../../../search.html" method="GET" role="form">
+        <div class="input-group">
+          <input name="q" type="text" class="form-control" placeholder="Search...">
+        </div>
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+        <div id="right-column">
+          
+          <div role="navigation" aria-label="breadcrumbs navigation">
+            <ol class="breadcrumb">
+              <li><a href="../../../../index.html">Docs</a></li>
+              
+                <li><a href="../../../index.html">Module code</a></li>
+              
+              <li>catatom2osm.geo.layer.address</li>
+            </ol>
+          </div>
+          
+          <div class="document clearer body">
+            
+  <h1>Source code for catatom2osm.geo.layer.address</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">defaultdict</span>
+
+<span class="kn">from</span> <span class="nn">qgis.core</span> <span class="k">import</span> <span class="n">QgsField</span><span class="p">,</span> <span class="n">QgsFields</span>
+<span class="kn">from</span> <span class="nn">qgis.PyQt.QtCore</span> <span class="k">import</span> <span class="n">QVariant</span>
+
+<span class="kn">from</span> <span class="nn">catatom2osm</span> <span class="k">import</span> <span class="n">csvtools</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">hgwnames</span><span class="p">,</span> <span class="n">translate</span>
+<span class="kn">from</span> <span class="nn">catatom2osm.geo</span> <span class="k">import</span> <span class="n">BUFFER_SIZE</span>
+<span class="kn">from</span> <span class="nn">catatom2osm.geo.aux</span> <span class="k">import</span> <span class="n">get_attributes</span>
+<span class="kn">from</span> <span class="nn">catatom2osm.geo.geometry</span> <span class="k">import</span> <span class="n">Geometry</span>
+<span class="kn">from</span> <span class="nn">catatom2osm.geo.layer.base</span> <span class="k">import</span> <span class="n">BaseLayer</span>
+<span class="kn">from</span> <span class="nn">catatom2osm.geo.layer.cons</span> <span class="k">import</span> <span class="n">ConsLayer</span>
+<span class="kn">from</span> <span class="nn">catatom2osm.geo.types</span> <span class="k">import</span> <span class="n">WKBPoint</span>
+<span class="kn">from</span> <span class="nn">catatom2osm.report</span> <span class="k">import</span> <span class="n">instance</span> <span class="k">as</span> <span class="n">report</span>
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">app_name</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="AddressLayer"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.address.html#catatom2osm.geo.layer.address.AddressLayer">[docs]</a><span class="k">class</span> <span class="nc">AddressLayer</span><span class="p">(</span><span class="n">BaseLayer</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Class for address&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;Point&quot;</span><span class="p">,</span> <span class="n">baseName</span><span class="o">=</span><span class="s2">&quot;address&quot;</span><span class="p">,</span> <span class="n">providerLib</span><span class="o">=</span><span class="s2">&quot;memory&quot;</span><span class="p">,</span>
+            <span class="n">source_date</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">AddressLayer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">baseName</span><span class="p">,</span> <span class="n">providerLib</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">()</span><span class="o">.</span><span class="n">isEmpty</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">addAttributes</span><span class="p">([</span>
+                <span class="n">QgsField</span><span class="p">(</span><span class="s1">&#39;localId&#39;</span><span class="p">,</span> <span class="n">QVariant</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="nb">len</span><span class="o">=</span><span class="mi">254</span><span class="p">),</span>
+                <span class="n">QgsField</span><span class="p">(</span><span class="s1">&#39;spec&#39;</span><span class="p">,</span> <span class="n">QVariant</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="nb">len</span><span class="o">=</span><span class="mi">254</span><span class="p">),</span>
+                <span class="n">QgsField</span><span class="p">(</span><span class="s1">&#39;designator&#39;</span><span class="p">,</span> <span class="n">QVariant</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="nb">len</span><span class="o">=</span><span class="mi">254</span><span class="p">),</span>
+                <span class="n">QgsField</span><span class="p">(</span><span class="s1">&#39;TN_text&#39;</span><span class="p">,</span> <span class="n">QVariant</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="nb">len</span><span class="o">=</span><span class="mi">254</span><span class="p">),</span>
+                <span class="n">QgsField</span><span class="p">(</span><span class="s1">&#39;postCode&#39;</span><span class="p">,</span> <span class="n">QVariant</span><span class="o">.</span><span class="n">Int</span><span class="p">),</span>
+                <span class="n">QgsField</span><span class="p">(</span><span class="s1">&#39;image&#39;</span><span class="p">,</span> <span class="n">QVariant</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="nb">len</span><span class="o">=</span><span class="mi">254</span><span class="p">),</span>
+                <span class="n">QgsField</span><span class="p">(</span><span class="s1">&#39;task&#39;</span><span class="p">,</span> <span class="n">QVariant</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="nb">len</span><span class="o">=</span><span class="mi">254</span><span class="p">),</span>
+                <span class="n">QgsField</span><span class="p">(</span><span class="s1">&#39;PD_id&#39;</span><span class="p">,</span> <span class="n">QVariant</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="nb">len</span><span class="o">=</span><span class="mi">254</span><span class="p">),</span>
+                <span class="n">QgsField</span><span class="p">(</span><span class="s1">&#39;TN_id&#39;</span><span class="p">,</span> <span class="n">QVariant</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="nb">len</span><span class="o">=</span><span class="mi">254</span><span class="p">),</span>
+                <span class="n">QgsField</span><span class="p">(</span><span class="s1">&#39;AU_id&#39;</span><span class="p">,</span> <span class="n">QVariant</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="nb">len</span><span class="o">=</span><span class="mi">254</span><span class="p">)</span>
+            <span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">updateFields</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rename</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;spec&#39;</span><span class="p">:</span> <span class="s1">&#39;specification&#39;</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resolve</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;PD_id&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;component_href&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;[\w\.]+PD[\.0-9]+&#39;</span><span class="p">),</span>
+            <span class="s1">&#39;TN_id&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;component_href&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;[\w\.]+TN[\.0-9]+&#39;</span><span class="p">),</span>
+            <span class="s1">&#39;AU_id&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;component_href&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;[\w\.]+AU[\.0-9]+&#39;</span><span class="p">)</span>
+        <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">source_date</span> <span class="o">=</span> <span class="n">source_date</span>
+
+<div class="viewcode-block" id="AddressLayer.create_shp"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.address.html#catatom2osm.geo.layer.address.AddressLayer.create_shp">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">create_shp</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">crs</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="n">QgsFields</span><span class="p">(),</span> <span class="n">geom_type</span><span class="o">=</span><span class="n">WKBPoint</span><span class="p">):</span>
+        <span class="n">BaseLayer</span><span class="o">.</span><span class="n">create_shp</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">crs</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">geom_type</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AddressLayer.is_address"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.address.html#catatom2osm.geo.layer.address.AddressLayer.is_address">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">is_address</span><span class="p">(</span><span class="n">feature</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Address features have &#39;.&#39; but not &#39;_&#39; in its localId field&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s1">&#39;.&#39;</span> <span class="ow">in</span> <span class="n">feature</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="s1">&#39;_&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">feature</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="AddressLayer.to_osm"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.address.html#catatom2osm.geo.layer.address.AddressLayer.to_osm">[docs]</a>    <span class="k">def</span> <span class="nf">to_osm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">{},</span> <span class="n">upload</span><span class="o">=</span><span class="s1">&#39;never&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Export to OSM&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">AddressLayer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">to_osm</span><span class="p">(</span><span class="n">translate</span><span class="o">.</span><span class="n">address_tags</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span>
+            <span class="n">tags</span><span class="o">=</span><span class="n">tags</span><span class="p">,</span> <span class="n">upload</span><span class="o">=</span><span class="n">upload</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AddressLayer.conflate"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.address.html#catatom2osm.geo.layer.address.AddressLayer.conflate">[docs]</a>    <span class="k">def</span> <span class="nf">conflate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">current_address</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Delete address existing in current_address</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            current_address (OSM): dataset</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">to_clean</span> <span class="o">=</span> <span class="p">[</span><span class="n">feat</span><span class="o">.</span><span class="n">id</span><span class="p">()</span> <span class="k">for</span> <span class="n">feat</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">()</span> \
+            <span class="k">if</span> <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;TN_text&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;designator&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">current_address</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">to_clean</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">deleteFeatures</span><span class="p">(</span><span class="n">to_clean</span><span class="p">)</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Refused </span><span class="si">%d</span><span class="s2"> addresses because they exist in OSM&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_clean</span><span class="p">))</span>
+            <span class="n">report</span><span class="o">.</span><span class="n">refused_addresses</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_clean</span><span class="p">)</span>
+        <span class="n">to_clean</span> <span class="o">=</span> <span class="p">[</span><span class="n">feat</span><span class="o">.</span><span class="n">id</span><span class="p">()</span> <span class="k">for</span> <span class="n">feat</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;designator = &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> \
+                                                      <span class="o">%</span> <span class="n">config</span><span class="o">.</span><span class="n">no_number</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="n">to_clean</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">deleteFeatures</span><span class="p">(</span><span class="n">to_clean</span><span class="p">)</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Deleted </span><span class="si">%d</span><span class="s2"> addresses without house number&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_clean</span><span class="p">))</span>
+            <span class="n">report</span><span class="o">.</span><span class="n">addresses_without_number</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_clean</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AddressLayer.get_highway_names"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.address.html#catatom2osm.geo.layer.address.AddressLayer.get_highway_names">[docs]</a>    <span class="k">def</span> <span class="nf">get_highway_names</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">highway</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a dictionary with the translation for each street name.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            highway (HighwayLayer): Current OSM highway data for conflation.</span>
+<span class="sd">            If highway is None, only parse names.</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            (dict) highway names translations</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">highway</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">highway</span><span class="o">.</span><span class="n">featureCount</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">highway_names</span> <span class="o">=</span> <span class="p">{</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;TN_text&#39;</span><span class="p">]:</span> <span class="n">hgwnames</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;TN_text&#39;</span><span class="p">])</span> \
+                <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">()}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">highway_names</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="n">highway</span><span class="o">.</span><span class="n">get_index</span><span class="p">()</span>
+            <span class="n">features</span> <span class="o">=</span> <span class="p">{</span><span class="n">feat</span><span class="o">.</span><span class="n">id</span><span class="p">():</span> <span class="n">feat</span> <span class="k">for</span> <span class="n">feat</span> <span class="ow">in</span> <span class="n">highway</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">()}</span>
+            <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">():</span>
+                <span class="n">highway_names</span><span class="p">[</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;TN_text&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span><span class="o">.</span><span class="n">asPoint</span><span class="p">())</span>
+            <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">points</span> <span class="ow">in</span> <span class="n">highway_names</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">bbox</span> <span class="o">=</span> <span class="n">Geometry</span><span class="o">.</span><span class="n">fromMultiPointXY</span><span class="p">(</span><span class="n">points</span><span class="p">)</span><span class="o">.</span><span class="n">boundingBox</span><span class="p">()</span>
+                <span class="n">bbox</span><span class="o">.</span><span class="n">grow</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">bbox_buffer</span> <span class="o">*</span> <span class="mi">100000</span><span class="p">)</span>
+                <span class="n">choices</span> <span class="o">=</span> <span class="p">[</span><span class="n">features</span><span class="p">[</span><span class="n">fid</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">fid</span> <span class="ow">in</span> <span class="n">index</span><span class="o">.</span><span class="n">intersects</span><span class="p">(</span><span class="n">bbox</span><span class="p">)]</span>
+                <span class="n">highway_names</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">hgwnames</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">choices</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">highway_names</span></div>
+
+<div class="viewcode-block" id="AddressLayer.get_image_links"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.address.html#catatom2osm.geo.layer.address.AddressLayer.get_image_links">[docs]</a>    <span class="k">def</span> <span class="nf">get_image_links</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">to_change</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">feat</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">():</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">cadastre_doc_url</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">feat</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">14</span><span class="p">:])</span>
+            <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;image&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">url</span>
+            <span class="n">to_change</span><span class="p">[</span><span class="n">feat</span><span class="o">.</span><span class="n">id</span><span class="p">()]</span> <span class="o">=</span> <span class="n">get_attributes</span><span class="p">(</span><span class="n">feat</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">changeAttributeValues</span><span class="p">(</span><span class="n">to_change</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AddressLayer.get_label"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.address.html#catatom2osm.geo.layer.address.AddressLayer.get_label">[docs]</a>    <span class="k">def</span> <span class="nf">get_label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">feat</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the zone label for this feature from the index&quot;&quot;&quot;</span>
+        <span class="n">localid</span> <span class="o">=</span> <span class="n">ConsLayer</span><span class="o">.</span><span class="n">get_id</span><span class="p">(</span><span class="n">feat</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">localid</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+            
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">CatAtom2Osm 2.5.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">catatom2osm.geo.layer.address</a></li> 
+      </ul>
+    </div>
+<script type="text/javascript">
+  $("#mobile-toggle a").click(function () {
+    $("#left-column").toggle();
+  });
+</script>
+<script type="text/javascript" src="../../../../_static/js/bootstrap.js"></script>
+  <div class="footer">
+    &copy; Copyright 2017, Javier Sanchez Portero. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  </body>
+</html>

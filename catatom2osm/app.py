@@ -760,12 +760,11 @@ class CatAtom2Osm(object):
 
     def get_current_ad_osm(self):
         """Gets OSM address for address conflation"""
-        ql = ['node["addr:street"]["addr:housenumber"]',
-              'way["addr:street"]["addr:housenumber"]',
-              'relation["addr:street"]["addr:housenumber"]',
-              'node["addr:place"]["addr:housenumber"]',
-              'way["addr:place"]["addr:housenumber"]',
-              'relation["addr:place"]["addr:housenumber"]']
+        ql = [
+            'node["addr:street"]["addr:housenumber"]["entrance"]',
+            'wr["addr:street"]["addr:housenumber"][~"building"~".*"]',
+            'nwr["addr:place"]["addr:housenumber"]',
+        ]
         address_osm = self.read_osm('current_address.osm', ql=ql)
         current_address = set()
         w = 0

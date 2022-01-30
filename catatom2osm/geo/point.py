@@ -56,8 +56,7 @@ class Point(QgsPointXY):
             (float) Angle between the vertex and their adjacents.
             (bool)  True if the angle is too low (< acute_thr).
             (bool)  True for a corner
-            (float) Distance from the vertex to the segment formed by their
-                    adjacents.
+            (float) Distance to the nearest segment.
         """
         (point, ndx, ndxa, ndxb, dist) = geom.closestVertex(Point(self))
         va = Point(geom.vertexAt(ndxa)) # previous vertex

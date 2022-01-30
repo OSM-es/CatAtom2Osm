@@ -1,0 +1,142 @@
+
+<!DOCTYPE html>
+
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- Licensed under the Apache 2.0 License -->
+  <link rel="stylesheet" type="text/css" href="../../../_static/fonts/open-sans/stylesheet.css" />
+  <!-- Licensed under the SIL Open Font License -->
+  <link rel="stylesheet" type="text/css" href="../../../_static/fonts/source-serif-pro/source-serif-pro.css" />
+  <link rel="stylesheet" type="text/css" href="../../../_static/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="../../../_static/css/bootstrap-theme.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>test.geo.test_debug &#8212; documentación de CatAtom2Osm - 2.5.0</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/guzzle.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/translations.js"></script>
+    <link rel="index" title="Índice" href="../../../genindex.html" />
+    <link rel="search" title="Búsqueda" href="../../../search.html" />
+  
+   
+
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navegación</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="Índice General"
+             accesskey="I">índice</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Índice de Módulos Python"
+             >módulos</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">documentación de CatAtom2Osm - 2.5.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Código de módulo</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">test.geo.test_debug</a></li> 
+      </ul>
+    </div>
+    <div class="container-wrapper">
+
+      <div id="mobile-toggle">
+        <a href="#"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
+      </div>
+  <div id="left-column">
+    <div class="sphinxsidebar">
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <div id="main-search">
+      <form class="form-inline" action="../../../search.html" method="GET" role="form">
+        <div class="input-group">
+          <input name="q" type="text" class="form-control" placeholder="Search...">
+        </div>
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+        <div id="right-column">
+          
+          <div role="navigation" aria-label="breadcrumbs navigation">
+            <ol class="breadcrumb">
+              <li><a href="../../../index.html">Docs</a></li>
+              
+                <li><a href="../../index.html">Código de módulo</a></li>
+              
+              <li>test.geo.test_debug</li>
+            </ol>
+          </div>
+          
+          <div class="document clearer body">
+            
+  <h1>Código fuente para test.geo.test_debug</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">mock</span>
+<span class="kn">import</span> <span class="nn">unittest</span>
+
+<span class="kn">from</span> <span class="nn">catatom2osm.app</span> <span class="k">import</span> <span class="n">QgsSingleton</span>
+<span class="kn">from</span> <span class="nn">catatom2osm.geo.debug</span> <span class="k">import</span> <span class="n">DebugWriter</span>
+<span class="kn">from</span> <span class="nn">catatom2osm.geo.point</span> <span class="k">import</span> <span class="n">Point</span>
+<span class="kn">from</span> <span class="nn">catatom2osm.geo.layer.base</span> <span class="k">import</span> <span class="n">BaseLayer</span>
+<span class="kn">from</span> <span class="nn">catatom2osm.geo.layer.highway</span> <span class="k">import</span> <span class="n">HighwayLayer</span>
+
+<span class="n">qgs</span> <span class="o">=</span> <span class="n">QgsSingleton</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="TestDebugWriter"><a class="viewcode-back" href="../../../api/test.geo.test_debug.html#test.geo.test_debug.TestDebugWriter">[documentos]</a><span class="k">class</span> <span class="nc">TestDebugWriter</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TestDebugWriter.tearDown"><a class="viewcode-back" href="../../../api/test.geo.test_debug.html#test.geo.test_debug.TestDebugWriter.tearDown">[documentos]</a>    <span class="k">def</span> <span class="nf">tearDown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">BaseLayer</span><span class="o">.</span><span class="n">delete_shp</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TestDebugWriter.test_init"><a class="viewcode-back" href="../../../api/test.geo.test_debug.html#test.geo.test_debug.TestDebugWriter.test_init">[documentos]</a>    <span class="k">def</span> <span class="nf">test_init</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">layer</span> <span class="o">=</span> <span class="n">HighwayLayer</span><span class="p">()</span>
+        <span class="n">db</span> <span class="o">=</span> <span class="n">DebugWriter</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="n">layer</span><span class="p">,</span> <span class="s1">&#39;memory&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">(),</span> <span class="s1">&#39;note&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">hasError</span><span class="p">(),</span> <span class="mi">0</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TestDebugWriter.test_add_point"><a class="viewcode-back" href="../../../api/test.geo.test_debug.html#test.geo.test_debug.TestDebugWriter.test_add_point">[documentos]</a>    <span class="k">def</span> <span class="nf">test_add_point</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">layer</span> <span class="o">=</span> <span class="n">HighwayLayer</span><span class="p">()</span>
+        <span class="n">db</span> <span class="o">=</span> <span class="n">DebugWriter</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="n">layer</span><span class="p">,</span> <span class="s1">&#39;memory&#39;</span><span class="p">)</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">add_point</span><span class="p">(</span><span class="n">Point</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="s1">&#39;foobar&#39;</span><span class="p">)</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">add_point</span><span class="p">(</span><span class="n">Point</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span></div></div>
+</pre></div>
+
+          </div>
+            
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navegación</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="Índice General"
+             >índice</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Índice de Módulos Python"
+             >módulos</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">documentación de CatAtom2Osm - 2.5.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Código de módulo</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">test.geo.test_debug</a></li> 
+      </ul>
+    </div>
+<script type="text/javascript">
+  $("#mobile-toggle a").click(function () {
+    $("#left-column").toggle();
+  });
+</script>
+<script type="text/javascript" src="../../../_static/js/bootstrap.js"></script>
+  <div class="footer">
+    &copy; Copyright 2017, Javier Sanchez Portero. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  </body>
+</html>

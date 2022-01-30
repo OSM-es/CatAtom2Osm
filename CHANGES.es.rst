@@ -1,6 +1,14 @@
 Registro de cambios
 ===================
 
+**30-01-2021 (2.5.0)**
+* Procesa con capas en memoria mucho más rápido.
+* Evita mover entradas a paredes compartidas con otro edificio.
+* Deja de generar salida para visualizar combinación de edificios.
+
+**23-1-2021 (2.4.0)**
+* Elimina partes sin edificio asociado #86
+
 **22-01-2021 (2.3.0)**
 * Corrige error asignando entradas múltiples a edificio
 * Crea subdirectorio de salvaguardia para municipios fraccionados

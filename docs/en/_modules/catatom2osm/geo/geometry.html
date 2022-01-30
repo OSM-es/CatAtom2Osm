@@ -1,0 +1,205 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- Licensed under the Apache 2.0 License -->
+  <link rel="stylesheet" type="text/css" href="../../../_static/fonts/open-sans/stylesheet.css" />
+  <!-- Licensed under the SIL Open Font License -->
+  <link rel="stylesheet" type="text/css" href="../../../_static/fonts/source-serif-pro/source-serif-pro.css" />
+  <link rel="stylesheet" type="text/css" href="../../../_static/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="../../../_static/css/bootstrap-theme.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>catatom2osm.geo.geometry &#8212; CatAtom2Osm 2.5.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/guzzle.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  
+   
+
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CatAtom2Osm 2.5.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">catatom2osm.geo.geometry</a></li> 
+      </ul>
+    </div>
+    <div class="container-wrapper">
+
+      <div id="mobile-toggle">
+        <a href="#"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
+      </div>
+  <div id="left-column">
+    <div class="sphinxsidebar">
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <div id="main-search">
+      <form class="form-inline" action="../../../search.html" method="GET" role="form">
+        <div class="input-group">
+          <input name="q" type="text" class="form-control" placeholder="Search...">
+        </div>
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+        <div id="right-column">
+          
+          <div role="navigation" aria-label="breadcrumbs navigation">
+            <ol class="breadcrumb">
+              <li><a href="../../../index.html">Docs</a></li>
+              
+                <li><a href="../../index.html">Module code</a></li>
+              
+              <li>catatom2osm.geo.geometry</li>
+            </ol>
+          </div>
+          
+          <div class="document clearer body">
+            
+  <h1>Source code for catatom2osm.geo.geometry</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">qgis.core</span> <span class="k">import</span> <span class="n">QgsFeature</span><span class="p">,</span> <span class="n">QgsGeometry</span><span class="p">,</span> <span class="n">QgsPointXY</span>
+
+<span class="kn">from</span> <span class="nn">catatom2osm.geo.types</span> <span class="k">import</span> <span class="n">WKBPolygon</span>
+
+
+<div class="viewcode-block" id="Geometry"><a class="viewcode-back" href="../../../api/catatom2osm.geo.geometry.html#catatom2osm.geo.geometry.Geometry">[docs]</a><span class="k">class</span> <span class="nc">Geometry</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Methods for QGIS 2-3 compatibility and geometry utilities&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Geometry.fromPointXY"><a class="viewcode-back" href="../../../api/catatom2osm.geo.geometry.html#catatom2osm.geo.geometry.Geometry.fromPointXY">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">fromPointXY</span><span class="p">(</span><span class="n">point</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">QgsGeometry</span><span class="o">.</span><span class="n">fromPointXY</span><span class="p">(</span><span class="n">QgsPointXY</span><span class="p">(</span><span class="n">point</span><span class="p">))</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">AttributeError</span><span class="p">,</span> <span class="ne">NameError</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">QgsGeometry</span><span class="o">.</span><span class="n">fromPoint</span><span class="p">(</span><span class="n">point</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Geometry.fromMultiPointXY"><a class="viewcode-back" href="../../../api/catatom2osm.geo.geometry.html#catatom2osm.geo.geometry.Geometry.fromMultiPointXY">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">fromMultiPointXY</span><span class="p">(</span><span class="n">mp</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">QgsGeometry</span><span class="o">.</span><span class="n">fromMultiPointXY</span><span class="p">([</span><span class="n">QgsPointXY</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">mp</span><span class="p">])</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">QgsGeometry</span><span class="o">.</span><span class="n">fromMultiPoint</span><span class="p">(</span><span class="n">mp</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Geometry.fromPolygonXY"><a class="viewcode-back" href="../../../api/catatom2osm.geo.geometry.html#catatom2osm.geo.geometry.Geometry.fromPolygonXY">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">fromPolygonXY</span><span class="p">(</span><span class="n">polygon</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">QgsGeometry</span><span class="o">.</span><span class="n">fromPolygonXY</span><span class="p">(</span>
+                 <span class="p">[[</span><span class="n">QgsPointXY</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">r</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">polygon</span><span class="p">]</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">QgsGeometry</span><span class="o">.</span><span class="n">fromPolygon</span><span class="p">(</span><span class="n">polygon</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Geometry.fromMultiPolygonXY"><a class="viewcode-back" href="../../../api/catatom2osm.geo.geometry.html#catatom2osm.geo.geometry.Geometry.fromMultiPolygonXY">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">fromMultiPolygonXY</span><span class="p">(</span><span class="n">mp</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">QgsGeometry</span><span class="o">.</span><span class="n">fromMultiPolygonXY</span><span class="p">(</span>
+                <span class="p">[[[</span><span class="n">QgsPointXY</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">r</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">t</span><span class="p">]</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">mp</span><span class="p">]</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">QgsGeometry</span><span class="o">.</span><span class="n">fromMultiPolygon</span><span class="p">(</span><span class="n">mp</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Geometry.get_multipolygon"><a class="viewcode-back" href="../../../api/catatom2osm.geo.geometry.html#catatom2osm.geo.geometry.Geometry.get_multipolygon">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_multipolygon</span><span class="p">(</span><span class="n">feature_or_geometry</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns feature geometry always as a multipolygon&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">feature_or_geometry</span><span class="p">,</span> <span class="n">QgsFeature</span><span class="p">):</span>
+            <span class="n">geom</span> <span class="o">=</span> <span class="n">feature_or_geometry</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">geom</span> <span class="o">=</span> <span class="n">feature_or_geometry</span>
+        <span class="k">if</span> <span class="n">geom</span><span class="o">.</span><span class="n">wkbType</span><span class="p">()</span> <span class="o">==</span> <span class="n">WKBPolygon</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">geom</span><span class="o">.</span><span class="n">asPolygon</span><span class="p">()]</span>
+        <span class="k">return</span> <span class="n">geom</span><span class="o">.</span><span class="n">asMultiPolygon</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Geometry.get_outer_rings"><a class="viewcode-back" href="../../../api/catatom2osm.geo.geometry.html#catatom2osm.geo.geometry.Geometry.get_outer_rings">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_outer_rings</span><span class="p">(</span><span class="n">feature_or_geometry</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns feature geometry as a multipolygon without inner rings&quot;&quot;&quot;</span>
+        <span class="n">mp</span> <span class="o">=</span> <span class="n">Geometry</span><span class="o">.</span><span class="n">get_multipolygon</span><span class="p">(</span><span class="n">feature_or_geometry</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[[</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">mp</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Geometry.get_vertices_list"><a class="viewcode-back" href="../../../api/catatom2osm.geo.geometry.html#catatom2osm.geo.geometry.Geometry.get_vertices_list">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_vertices_list</span><span class="p">(</span><span class="n">feature</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns list of all distinct vertices in feature geometry&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="n">point</span> <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">Geometry</span><span class="o">.</span><span class="n">get_multipolygon</span><span class="p">(</span><span class="n">feature</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">ring</span> <span class="ow">in</span> <span class="n">part</span> <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">ring</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="p">]</span></div>
+
+<div class="viewcode-block" id="Geometry.get_outer_vertices"><a class="viewcode-back" href="../../../api/catatom2osm.geo.geometry.html#catatom2osm.geo.geometry.Geometry.get_outer_vertices">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_outer_vertices</span><span class="p">(</span><span class="n">feature</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns list of all distinct vertices in feature geometry outer rings</span>
+<span class="sd">        s&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="n">point</span> <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">Geometry</span><span class="o">.</span><span class="n">get_multipolygon</span><span class="p">(</span><span class="n">feature</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">part</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="p">]</span></div>
+
+<div class="viewcode-block" id="Geometry.merge_adjacent_features"><a class="viewcode-back" href="../../../api/catatom2osm.geo.geometry.html#catatom2osm.geo.geometry.Geometry.merge_adjacent_features">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">merge_adjacent_features</span><span class="p">(</span><span class="n">group</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Combine all geometries in group of features&quot;&quot;&quot;</span>
+        <span class="n">geom</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">group</span><span class="p">:</span>
+            <span class="n">g</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">g</span><span class="o">.</span><span class="n">isGeosValid</span><span class="p">():</span>
+                <span class="n">geom</span> <span class="o">=</span> <span class="n">geom</span><span class="o">.</span><span class="n">combine</span><span class="p">(</span><span class="n">g</span><span class="p">)</span> <span class="k">if</span> <span class="n">geom</span> <span class="k">else</span> <span class="n">g</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;The geometry of zone &#39;</span><span class="si">%s</span><span class="s2">&#39; is not valid&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="n">p</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+                <span class="n">report</span><span class="o">.</span><span class="n">warnings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">geom</span></div>
+
+<div class="viewcode-block" id="Geometry.is_valid"><a class="viewcode-back" href="../../../api/catatom2osm.geo.geometry.html#catatom2osm.geo.geometry.Geometry.is_valid">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">is_valid</span><span class="p">(</span><span class="n">geom</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">geom</span><span class="o">.</span><span class="n">isGeosValid</span><span class="p">()</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">Geometry</span><span class="o">.</span><span class="n">get_multipolygon</span><span class="p">(</span><span class="n">geom</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">0</span></div></div>
+</pre></div>
+
+          </div>
+            
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CatAtom2Osm 2.5.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">catatom2osm.geo.geometry</a></li> 
+      </ul>
+    </div>
+<script type="text/javascript">
+  $("#mobile-toggle a").click(function () {
+    $("#left-column").toggle();
+  });
+</script>
+<script type="text/javascript" src="../../../_static/js/bootstrap.js"></script>
+  <div class="footer">
+    &copy; Copyright 2017, Javier Sanchez Portero. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  </body>
+</html>

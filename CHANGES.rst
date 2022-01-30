@@ -1,6 +1,14 @@
 Change log
 ==========
 
+**2021-1-30 (2.5.0)**
+* Process much faster unsing in memory layers.
+* Avoids to move entrances to shared wall between buildings.
+* Don't generate output to view building conflation.
+
+**2021-1-23 (2.4.0)**
+* Remove parts without associated building #86
+
 **2021-1-22 (2.3.0)**
 * Fix bug assigning multiple entrances to building
 * Creates backup subdirectory for split municipalities

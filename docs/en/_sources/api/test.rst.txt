@@ -1,6 +1,14 @@
 test package
 ============
 
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   test.geo
+
 Submodules
 ----------
 
@@ -13,7 +21,6 @@ Submodules
    test.test_csvtools
    test.test_download
    test.test_hgwnames
-   test.test_layer
    test.test_main
    test.test_osm
    test.test_osmxml

@@ -1,0 +1,17 @@
+# Por defecto, los resultados del programa se generan en la carpeta actual.
+# Asi que la primera vez es conveniente crear una carpeta para ello.
+md catastro
+# Luego entrar en esa carpeta.
+cd catastro
+# El programa sin opciones visualiza una ayuda.
+catatom2osm
+# Necesitamos conocer el código de un municipio.
+# Averiguamos el código provincial.
+catatom2osm -l
+# Entonces podemos listar los municipios de la provincia
+catatom2osm -l 05
+# El proceso normal no usa opciones. Se pasa como argumento el código del municipio
+catatom2osm 05015
+# Se crea la carpeta 05015
+dir 05015
+# Dentro de ella, el archivo highway_names.csv 

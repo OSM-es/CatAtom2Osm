@@ -1,0 +1,246 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- Licensed under the Apache 2.0 License -->
+  <link rel="stylesheet" type="text/css" href="../../../_static/fonts/open-sans/stylesheet.css" />
+  <!-- Licensed under the SIL Open Font License -->
+  <link rel="stylesheet" type="text/css" href="../../../_static/fonts/source-serif-pro/source-serif-pro.css" />
+  <link rel="stylesheet" type="text/css" href="../../../_static/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="../../../_static/css/bootstrap-theme.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>catatom2osm.geo.point &#8212; CatAtom2Osm 2.5.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/guzzle.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  
+   
+
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CatAtom2Osm 2.5.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">catatom2osm.geo.point</a></li> 
+      </ul>
+    </div>
+    <div class="container-wrapper">
+
+      <div id="mobile-toggle">
+        <a href="#"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
+      </div>
+  <div id="left-column">
+    <div class="sphinxsidebar">
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <div id="main-search">
+      <form class="form-inline" action="../../../search.html" method="GET" role="form">
+        <div class="input-group">
+          <input name="q" type="text" class="form-control" placeholder="Search...">
+        </div>
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+        <div id="right-column">
+          
+          <div role="navigation" aria-label="breadcrumbs navigation">
+            <ol class="breadcrumb">
+              <li><a href="../../../index.html">Docs</a></li>
+              
+                <li><a href="../../index.html">Module code</a></li>
+              
+              <li>catatom2osm.geo.point</li>
+            </ol>
+          </div>
+          
+          <div class="document clearer body">
+            
+  <h1>Source code for catatom2osm.geo.point</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">math</span>
+
+<span class="kn">from</span> <span class="nn">qgis.core</span> <span class="k">import</span> <span class="n">QgsPoint</span><span class="p">,</span> <span class="n">QgsPointXY</span><span class="p">,</span> <span class="n">QgsRectangle</span>
+
+<span class="kn">from</span> <span class="nn">catatom2osm</span> <span class="k">import</span> <span class="n">config</span>
+
+
+<div class="viewcode-block" id="Point"><a class="viewcode-back" href="../../../api/catatom2osm.geo.point.html#catatom2osm.geo.point.Point">[docs]</a><span class="k">class</span> <span class="nc">Point</span><span class="p">(</span><span class="n">QgsPointXY</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Extends QgsPoint with some utility methods&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">arg1</span><span class="p">)</span> <span class="ow">is</span> <span class="n">QgsPoint</span><span class="p">:</span>
+            <span class="nb">super</span><span class="p">(</span><span class="n">Point</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">arg1</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">arg2</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">super</span><span class="p">(</span><span class="n">Point</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">arg1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">arg1</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">super</span><span class="p">(</span><span class="n">Point</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Point.boundingBox"><a class="viewcode-back" href="../../../api/catatom2osm.geo.point.html#catatom2osm.geo.point.Point.boundingBox">[docs]</a>    <span class="k">def</span> <span class="nf">boundingBox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radius</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a bounding box of 2*radius centered in point.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">QgsRectangle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">()</span> <span class="o">-</span> <span class="n">radius</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">()</span> <span class="o">-</span> <span class="n">radius</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">()</span> <span class="o">+</span> <span class="n">radius</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">()</span> <span class="o">+</span> <span class="n">radius</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Point.get_angle"><a class="viewcode-back" href="../../../api/catatom2osm.geo.point.html#catatom2osm.geo.point.Point.get_angle">[docs]</a>    <span class="k">def</span> <span class="nf">get_angle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">geom</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        For the vertex in a geometry nearest to this point, give the angle</span>
+<span class="sd">        between its adjacent vertexs.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            geom (QgsGeometry): Geometry to test.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            (float) Angle between the vertex and their adjacents,</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="n">ndx</span><span class="p">,</span> <span class="n">ndxa</span><span class="p">,</span> <span class="n">ndxb</span><span class="p">,</span> <span class="n">dist</span><span class="p">)</span> <span class="o">=</span> <span class="n">geom</span><span class="o">.</span><span class="n">closestVertex</span><span class="p">(</span><span class="n">Point</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+        <span class="n">va</span> <span class="o">=</span> <span class="n">Point</span><span class="p">(</span><span class="n">geom</span><span class="o">.</span><span class="n">vertexAt</span><span class="p">(</span><span class="n">ndxa</span><span class="p">))</span> <span class="c1"># previous vertex</span>
+        <span class="n">vb</span> <span class="o">=</span> <span class="n">Point</span><span class="p">(</span><span class="n">geom</span><span class="o">.</span><span class="n">vertexAt</span><span class="p">(</span><span class="n">ndxb</span><span class="p">))</span> <span class="c1"># next vertex</span>
+        <span class="n">angle</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">point</span><span class="o">.</span><span class="n">azimuth</span><span class="p">(</span><span class="n">va</span><span class="p">)</span> <span class="o">-</span> <span class="n">point</span><span class="o">.</span><span class="n">azimuth</span><span class="p">(</span><span class="n">vb</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">angle</span></div>
+
+<div class="viewcode-block" id="Point.get_corner_context"><a class="viewcode-back" href="../../../api/catatom2osm.geo.point.html#catatom2osm.geo.point.Point.get_corner_context">[docs]</a>    <span class="k">def</span> <span class="nf">get_corner_context</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">geom</span><span class="p">,</span> <span class="n">acute_thr</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">acute_thr</span><span class="p">,</span>
+            <span class="n">straight_thr</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">straight_thr</span><span class="p">,</span> <span class="n">cath_thr</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">dist_thr</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        For the vertex in a geometry nearest to this point, give context to</span>
+<span class="sd">        determine if it is a corner (the angle differs by more than straight_thr</span>
+<span class="sd">        of 180 and if the distance from the vertex to the segment formed by</span>
+<span class="sd">        their adjacents is greater than cath_thr).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            geom (QgsGeometry): Geometry to test.</span>
+<span class="sd">            acute_thr (float): Acute angle threshold.</span>
+<span class="sd">            straight_thr (float): Straight angle threshold.</span>
+<span class="sd">            cath_thr (float): Cathetus threshold.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            (float) Angle between the vertex and their adjacents.</span>
+<span class="sd">            (bool)  True if the angle is too low (&lt; acute_thr).</span>
+<span class="sd">            (bool)  True for a corner</span>
+<span class="sd">            (float) Distance from the vertex to the segment formed by their adjacents.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="n">ndx</span><span class="p">,</span> <span class="n">ndxa</span><span class="p">,</span> <span class="n">ndxb</span><span class="p">,</span> <span class="n">dist</span><span class="p">)</span> <span class="o">=</span> <span class="n">geom</span><span class="o">.</span><span class="n">closestVertex</span><span class="p">(</span><span class="n">Point</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+        <span class="n">va</span> <span class="o">=</span> <span class="n">Point</span><span class="p">(</span><span class="n">geom</span><span class="o">.</span><span class="n">vertexAt</span><span class="p">(</span><span class="n">ndxa</span><span class="p">))</span> <span class="c1"># previous vertex</span>
+        <span class="n">vb</span> <span class="o">=</span> <span class="n">Point</span><span class="p">(</span><span class="n">geom</span><span class="o">.</span><span class="n">vertexAt</span><span class="p">(</span><span class="n">ndxb</span><span class="p">))</span> <span class="c1"># next vertex</span>
+        <span class="n">angle</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">point</span><span class="o">.</span><span class="n">azimuth</span><span class="p">(</span><span class="n">va</span><span class="p">)</span> <span class="o">-</span> <span class="n">point</span><span class="o">.</span><span class="n">azimuth</span><span class="p">(</span><span class="n">vb</span><span class="p">))</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">va</span><span class="o">.</span><span class="n">azimuth</span><span class="p">(</span><span class="n">point</span><span class="p">)</span> <span class="o">-</span> <span class="n">va</span><span class="o">.</span><span class="n">azimuth</span><span class="p">(</span><span class="n">vb</span><span class="p">))</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">va</span><span class="o">.</span><span class="n">sqrDist</span><span class="p">(</span><span class="n">point</span><span class="p">))</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">h</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">a</span><span class="p">)))</span>
+        <span class="n">is_corner</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="mi">180</span> <span class="o">-</span> <span class="n">angle</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">straight_thr</span> <span class="ow">and</span> <span class="n">c</span> <span class="o">&gt;</span> <span class="n">cath_thr</span>
+        <span class="n">is_acute</span> <span class="o">=</span> <span class="n">angle</span> <span class="o">&lt;</span> <span class="n">acute_thr</span> <span class="k">if</span> <span class="n">angle</span> <span class="o">&lt;</span> <span class="mi">180</span> <span class="k">else</span> <span class="mi">360</span> <span class="o">-</span> <span class="n">angle</span> <span class="o">&lt;</span> <span class="n">acute_thr</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">angle</span><span class="p">,</span> <span class="n">is_acute</span><span class="p">,</span> <span class="n">is_corner</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Point.get_spike_context"><a class="viewcode-back" href="../../../api/catatom2osm.geo.point.html#catatom2osm.geo.point.Point.get_spike_context">[docs]</a>    <span class="k">def</span> <span class="nf">get_spike_context</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">geom</span><span class="p">,</span> <span class="n">acute_thr</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">acute_inv</span><span class="p">,</span>
+                          <span class="n">straight_thr</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">straight_thr</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">dist_inv</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        For the vertex in a geometry nearest to this point, give context to</span>
+<span class="sd">        determine if its a zig-zag or a spike. It&#39;s a zig-zag if both the angles</span>
+<span class="sd">        of this vertex and the closest adjacents are acute. It&#39;s a spike if the</span>
+<span class="sd">        angle of this vertex is acute and the angle of the closest vertex is</span>
+<span class="sd">        not straight.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            geom (QgsGeometry): Geometry to test.</span>
+<span class="sd">            acute_thr (float): Acute angle threshold.</span>
+<span class="sd">            straight_thr (float): Straight angle threshold.</span>
+<span class="sd">            threshold (float): # Filter for angles.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            (float) angle_v = angle between the vertex and their adjacents.</span>
+<span class="sd">            (float) angle_a = angle between the closest adjacent and their adjacents.</span>
+<span class="sd">            (int) ndx = index of the vertex</span>
+<span class="sd">            (int) ndxa = index of the closest adjacent</span>
+<span class="sd">            (bool) is_acute = True if the angle is too low (&lt; acute_thr).</span>
+<span class="sd">            (bool) is_zigzag = True if both angle_v and angle_a are acute and</span>
+<span class="sd">            the distance from va to the segment v-vb is lower than threshold.</span>
+<span class="sd">            (bool) is_spike = True if is_acute and angle_a is not straight and</span>
+<span class="sd">            the distance from va to the segment v-vb is lower than threshold.</span>
+<span class="sd">            (Point) vx = projection of va over the segment v-vb.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">ndx</span><span class="p">,</span> <span class="n">ndxa</span><span class="p">,</span> <span class="n">ndxb</span><span class="p">,</span> <span class="n">dist</span><span class="p">)</span> <span class="o">=</span> <span class="n">geom</span><span class="o">.</span><span class="n">closestVertex</span><span class="p">(</span><span class="n">Point</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+        <span class="n">va</span> <span class="o">=</span> <span class="n">Point</span><span class="p">(</span><span class="n">geom</span><span class="o">.</span><span class="n">vertexAt</span><span class="p">(</span><span class="n">ndxa</span><span class="p">))</span> <span class="c1"># previous vertex</span>
+        <span class="n">vb</span> <span class="o">=</span> <span class="n">Point</span><span class="p">(</span><span class="n">geom</span><span class="o">.</span><span class="n">vertexAt</span><span class="p">(</span><span class="n">ndxb</span><span class="p">))</span> <span class="c1"># next vertex</span>
+        <span class="n">angle_v</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">azimuth</span><span class="p">(</span><span class="n">va</span><span class="p">)</span> <span class="o">-</span> <span class="n">v</span><span class="o">.</span><span class="n">azimuth</span><span class="p">(</span><span class="n">vb</span><span class="p">))</span>
+        <span class="n">na</span> <span class="o">=</span> <span class="n">angle_v</span> <span class="k">if</span> <span class="n">angle_v</span> <span class="o">&lt;</span> <span class="mi">180</span> <span class="k">else</span> <span class="mi">360</span> <span class="o">-</span> <span class="n">angle_v</span>
+        <span class="n">is_acute</span> <span class="o">=</span> <span class="n">na</span> <span class="o">&lt;</span> <span class="n">acute_thr</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">is_acute</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">angle_v</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">ndx</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">is_acute</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">None</span>
+        <span class="n">dist_a</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">va</span><span class="o">.</span><span class="n">sqrDist</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+        <span class="n">dist_b</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">vb</span><span class="o">.</span><span class="n">sqrDist</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">dist_a</span> <span class="o">&gt;</span> <span class="n">dist_b</span><span class="p">:</span> <span class="c1"># set va as the closest adjacent</span>
+            <span class="n">vc</span> <span class="o">=</span> <span class="n">va</span>
+            <span class="n">dist_c</span> <span class="o">=</span> <span class="n">dist_a</span>
+            <span class="n">va</span> <span class="o">=</span> <span class="n">vb</span>
+            <span class="n">dist_a</span> <span class="o">=</span> <span class="n">dist_b</span>
+            <span class="n">ndxa</span> <span class="o">=</span> <span class="n">ndxb</span>
+            <span class="n">vb</span> <span class="o">=</span> <span class="n">vc</span>
+            <span class="n">dist_b</span> <span class="o">=</span> <span class="n">dist_c</span>
+        <span class="n">angle_a</span> <span class="o">=</span> <span class="n">Point</span><span class="p">(</span><span class="n">va</span><span class="p">)</span><span class="o">.</span><span class="n">get_angle</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">angle_v</span><span class="p">)))</span> <span class="o">*</span> <span class="n">dist_a</span>
+        <span class="n">is_zigzag</span> <span class="o">=</span> <span class="n">angle_a</span> <span class="o">&lt;</span> <span class="n">acute_thr</span> <span class="ow">and</span> <span class="n">c</span> <span class="o">&lt;</span> <span class="n">threshold</span>
+        <span class="n">is_spike</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="mi">180</span> <span class="o">-</span> <span class="n">angle_a</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">straight_thr</span> <span class="ow">and</span> <span class="n">c</span> <span class="o">&lt;</span> <span class="n">threshold</span>
+        <span class="k">if</span> <span class="n">is_zigzag</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span>
+                <span class="n">angle_v</span><span class="p">,</span> <span class="n">angle_a</span><span class="p">,</span> <span class="n">ndx</span><span class="p">,</span> <span class="n">ndxa</span><span class="p">,</span>
+                <span class="n">is_acute</span><span class="p">,</span> <span class="n">is_zigzag</span><span class="p">,</span> <span class="n">is_spike</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="n">gamma</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="mi">90</span> <span class="o">+</span> <span class="n">angle_v</span> <span class="o">-</span> <span class="n">angle_a</span><span class="p">)</span>
+        <span class="n">dx</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">dist_a</span> <span class="o">*</span> <span class="p">(</span>
+            <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">angle_v</span><span class="p">))</span> <span class="o">+</span> <span class="n">math</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">gamma</span><span class="p">)</span>
+        <span class="p">)</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">angle_v</span><span class="p">))))</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">x</span><span class="p">()</span> <span class="o">+</span> <span class="p">(</span><span class="n">vb</span><span class="o">.</span><span class="n">x</span><span class="p">()</span> <span class="o">-</span> <span class="n">v</span><span class="o">.</span><span class="n">x</span><span class="p">())</span> <span class="o">*</span> <span class="n">dx</span> <span class="o">/</span> <span class="n">dist_b</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">y</span><span class="p">()</span> <span class="o">+</span> <span class="p">(</span><span class="n">vb</span><span class="o">.</span><span class="n">y</span><span class="p">()</span> <span class="o">-</span> <span class="n">v</span><span class="o">.</span><span class="n">y</span><span class="p">())</span> <span class="o">*</span> <span class="n">dx</span> <span class="o">/</span> <span class="n">dist_b</span>
+        <span class="n">vx</span> <span class="o">=</span> <span class="n">Point</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">angle_v</span><span class="p">,</span> <span class="n">angle_a</span><span class="p">,</span> <span class="n">ndx</span><span class="p">,</span> <span class="n">ndxa</span><span class="p">,</span> <span class="n">is_acute</span><span class="p">,</span> <span class="n">is_zigzag</span><span class="p">,</span> <span class="n">is_spike</span><span class="p">,</span> <span class="n">vx</span></div></div>
+</pre></div>
+
+          </div>
+            
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CatAtom2Osm 2.5.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">catatom2osm.geo.point</a></li> 
+      </ul>
+    </div>
+<script type="text/javascript">
+  $("#mobile-toggle a").click(function () {
+    $("#left-column").toggle();
+  });
+</script>
+<script type="text/javascript" src="../../../_static/js/bootstrap.js"></script>
+  <div class="footer">
+    &copy; Copyright 2017, Javier Sanchez Portero. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  </body>
+</html>

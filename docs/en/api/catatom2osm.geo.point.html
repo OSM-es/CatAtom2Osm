@@ -1,0 +1,252 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  
+  <!-- Licensed under the Apache 2.0 License -->
+  <link rel="stylesheet" type="text/css" href="../_static/fonts/open-sans/stylesheet.css" />
+  <!-- Licensed under the SIL Open Font License -->
+  <link rel="stylesheet" type="text/css" href="../_static/fonts/source-serif-pro/source-serif-pro.css" />
+  <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap-theme.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>catatom2osm.geo.point module &#8212; CatAtom2Osm 2.5.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/guzzle.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="catatom2osm.geo.types module" href="catatom2osm.geo.types.html" />
+    <link rel="prev" title="catatom2osm.geo.geometry module" href="catatom2osm.geo.geometry.html" />
+  
+   
+
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="catatom2osm.geo.types.html" title="catatom2osm.geo.types module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="catatom2osm.geo.geometry.html" title="catatom2osm.geo.geometry module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 2.5.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api.html" >API reference</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="modules.html" >CatAtom2Osm</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="catatom2osm.html" >catatom2osm package</a> &#187;</li>
+          <li class="nav-item nav-item-4"><a href="catatom2osm.geo.html" accesskey="U">catatom2osm.geo package</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">catatom2osm.geo.point module</a></li> 
+      </ul>
+    </div>
+    <div class="container-wrapper">
+
+      <div id="mobile-toggle">
+        <a href="#"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
+      </div>
+  <div id="left-column">
+    <div class="sphinxsidebar">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="catatom2osm.geo.geometry.html"
+                        title="previous chapter">catatom2osm.geo.geometry module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="catatom2osm.geo.types.html"
+                        title="next chapter">catatom2osm.geo.types module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/catatom2osm.geo.point.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <div id="main-search">
+      <form class="form-inline" action="../search.html" method="GET" role="form">
+        <div class="input-group">
+          <input name="q" type="text" class="form-control" placeholder="Search...">
+        </div>
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+        <div id="right-column">
+          
+          <div role="navigation" aria-label="breadcrumbs navigation">
+            <ol class="breadcrumb">
+              <li><a href="../index.html">Docs</a></li>
+              
+                <li><a href="../api.html">API reference</a></li>
+              
+                <li><a href="modules.html">CatAtom2Osm</a></li>
+              
+                <li><a href="catatom2osm.html">catatom2osm package</a></li>
+              
+                <li><a href="catatom2osm.geo.html">catatom2osm.geo package</a></li>
+              
+              <li>catatom2osm.geo.point module</li>
+            </ol>
+          </div>
+          
+          <div class="document clearer body">
+            
+  <section id="module-catatom2osm.geo.point">
+<span id="catatom2osm-geo-point-module"></span><h1>catatom2osm.geo.point module<a class="headerlink" href="#module-catatom2osm.geo.point" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="catatom2osm.geo.point.Point">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">catatom2osm.geo.point.</span></span><span class="sig-name descname"><span class="pre">Point</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/point.html#Point"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.geo.point.Point" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">qgis._core.QgsPointXY</span></code></p>
+<p>Extends QgsPoint with some utility methods</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="catatom2osm.geo.point.Point.boundingBox">
+<span class="sig-name descname"><span class="pre">boundingBox</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radius</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/point.html#Point.boundingBox"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.geo.point.Point.boundingBox" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a bounding box of 2*radius centered in point.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="catatom2osm.geo.point.Point.get_angle">
+<span class="sig-name descname"><span class="pre">get_angle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">geom</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/point.html#Point.get_angle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.geo.point.Point.get_angle" title="Permalink to this definition">¶</a></dt>
+<dd><p>For the vertex in a geometry nearest to this point, give the angle
+between its adjacent vertexs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>geom</strong> (<em>QgsGeometry</em>) – Geometry to test.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(float) Angle between the vertex and their adjacents,</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="catatom2osm.geo.point.Point.get_corner_context">
+<span class="sig-name descname"><span class="pre">get_corner_context</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">geom</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acute_thr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">straight_thr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cath_thr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.02</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/point.html#Point.get_corner_context"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.geo.point.Point.get_corner_context" title="Permalink to this definition">¶</a></dt>
+<dd><p>For the vertex in a geometry nearest to this point, give context to
+determine if it is a corner (the angle differs by more than straight_thr
+of 180 and if the distance from the vertex to the segment formed by
+their adjacents is greater than cath_thr).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>geom</strong> (<em>QgsGeometry</em>) – Geometry to test.</p></li>
+<li><p><strong>acute_thr</strong> (<em>float</em>) – Acute angle threshold.</p></li>
+<li><p><strong>straight_thr</strong> (<em>float</em>) – Straight angle threshold.</p></li>
+<li><p><strong>cath_thr</strong> (<em>float</em>) – Cathetus threshold.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(float) Angle between the vertex and their adjacents.
+(bool)  True if the angle is too low (&lt; acute_thr).
+(bool)  True for a corner
+(float) Distance from the vertex to the segment formed by their adjacents.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="catatom2osm.geo.point.Point.get_spike_context">
+<span class="sig-name descname"><span class="pre">get_spike_context</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">geom</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acute_thr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">straight_thr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/point.html#Point.get_spike_context"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.geo.point.Point.get_spike_context" title="Permalink to this definition">¶</a></dt>
+<dd><p>For the vertex in a geometry nearest to this point, give context to
+determine if its a zig-zag or a spike. It’s a zig-zag if both the angles
+of this vertex and the closest adjacents are acute. It’s a spike if the
+angle of this vertex is acute and the angle of the closest vertex is
+not straight.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>geom</strong> (<em>QgsGeometry</em>) – Geometry to test.</p></li>
+<li><p><strong>acute_thr</strong> (<em>float</em>) – Acute angle threshold.</p></li>
+<li><p><strong>straight_thr</strong> (<em>float</em>) – Straight angle threshold.</p></li>
+<li><p><strong>threshold</strong> (<em>float</em>) – # Filter for angles.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(float) angle_v = angle between the vertex and their adjacents.
+(float) angle_a = angle between the closest adjacent and their adjacents.
+(int) ndx = index of the vertex
+(int) ndxa = index of the closest adjacent
+(bool) is_acute = True if the angle is too low (&lt; acute_thr).
+(bool) is_zigzag = True if both angle_v and angle_a are acute and
+the distance from va to the segment v-vb is lower than threshold.
+(bool) is_spike = True if is_acute and angle_a is not straight and
+the distance from va to the segment v-vb is lower than threshold.
+(Point) vx = projection of va over the segment v-vb.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+          </div>
+            
+  <div class="footer-relations">
+    
+      <div class="pull-left">
+        <a class="btn btn-default" href="catatom2osm.geo.geometry.html" title="previous chapter (use the left arrow)">catatom2osm.geo.geometry module</a>
+      </div>
+    
+      <div class="pull-right">
+        <a class="btn btn-default" href="catatom2osm.geo.types.html" title="next chapter (use the right arrow)">catatom2osm.geo.types module</a>
+      </div>
+    </div>
+    <div class="clearer"></div>
+  
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="catatom2osm.geo.types.html" title="catatom2osm.geo.types module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="catatom2osm.geo.geometry.html" title="catatom2osm.geo.geometry module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 2.5.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api.html" >API reference</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="modules.html" >CatAtom2Osm</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="catatom2osm.html" >catatom2osm package</a> &#187;</li>
+          <li class="nav-item nav-item-4"><a href="catatom2osm.geo.html" >catatom2osm.geo package</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">catatom2osm.geo.point module</a></li> 
+      </ul>
+    </div>
+<script type="text/javascript">
+  $("#mobile-toggle a").click(function () {
+    $("#left-column").toggle();
+  });
+</script>
+<script type="text/javascript" src="../_static/js/bootstrap.js"></script>
+  <div class="footer">
+    &copy; Copyright 2017, Javier Sanchez Portero. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  </body>
+</html>
