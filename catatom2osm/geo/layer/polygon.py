@@ -103,6 +103,7 @@ class PolygonLayer(BaseLayer):
         """
         Returns:
             (list) groups of adjacent polygons
+            (dict) feature id: geometry
         """
         parents_per_vertex, geometries = (
             self.get_parents_per_vertex_and_geometries(expression)
@@ -409,30 +410,54 @@ class PolygonLayer(BaseLayer):
                 self.name())
             report.values['vertex_simplify_' + self.name()] = killed
 
-    def merge_adjacents(self):
-        """Merge polygons with shared segments"""
-        (groups, geometries) = self.get_adjacents_and_geometries()
+    def merge_geometries(
+        self, groups, geometries, sort=None, reverse=False, split=True
+    ):
+        """
+        Merge groups of fids from geometries.
+
+        Args:
+            groups (list): groups of adjacent polygons
+            geometries (dict): feature id: geometry
+            sort (lambda or None): key to sort group
+            reverse (bool): reverse sort if True
+            split (bool): split multipart geometries if True
+
+        Returns:
+            (dict): feature id: geometry changed geometries
+        """
         to_clean = []
         to_change = {}
         count_adj = 0
         count_com = 0
         for group in groups:
-            group = list(group)
+            group = sorted(group, key=sort, reverse=reverse)
             count_adj += len(group)
             geom = geometries[group[0]]
             for fid in group[1:]:
                 geom = geom.combine(geometries[fid])
-            mp = Geometry.get_multipolygon(geom)
-            for i, part in enumerate(mp):
-                g = Geometry.fromPolygonXY(part)
-                to_change[group[i]] = g
+            if split:
+                mp = Geometry.get_multipolygon(geom)
+                for i, part in enumerate(mp):
+                    g = Geometry.fromPolygonXY(part)
+                    to_change[group[i]] = g
+                    count_com += 1
+                to_clean += group[i + 1:]
+            else:
+                to_change[group[0]] = geom
                 count_com += 1
-            to_clean += group[i+1:]
+                to_clean += group[1:]
         if to_clean:
             self.writer.changeGeometryValues(to_change)
             self.writer.deleteFeatures(to_clean)
-            msg = _("%d adjacent polygons merged into %d polygons in '%s'")
+            msg = _("%d polygons merged into %d polygons in '%s'")
             log.debug(msg, count_adj, count_com, self.name())
+        return to_change
+
+    def merge_adjacents(self):
+        """Merge polygons with shared segments"""
+        (groups, geometries) = self.get_adjacents_and_geometries()
+        merge_geometries(groups, geometries)
 
     def difference(self, layer):
         """Calculate the difference of each geometry with those in layer"""

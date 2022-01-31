@@ -1,4 +1,5 @@
 import logging
+from collections import defaultdict
 
 from qgis.core import QgsFeature, QgsFeatureRequest, QgsField, QgsGeometry
 from qgis.PyQt.QtCore import QVariant
@@ -66,7 +67,7 @@ class ParcelLayer(PolygonLayer):
             self.writer.addFeatures(to_add.values())
             log.debug(_("Added %d missing parcels"), len(to_add))
 
-    def get_groups_with_context(self, buildings):
+    def get_groups_by_adjacent_buildings(self, buildings):
         """
         Get grupos of ids of parcels with buildings sharing walls with
         buildings of another parcel.
@@ -97,26 +98,12 @@ class ParcelLayer(PolygonLayer):
         parcel.
         """
         pa_groups, pa_refs, geometries = (
-            self.get_groups_with_context(buildings)
+            self.get_groups_by_adjacent_buildings(buildings)
         )
-        count_adj = 0
-        count_com = 0
-        to_change = {}
-        to_clean = []
-        for group in pa_groups:
-            group = list(group)
-            count_adj += len(group)
-            geom = geometries[group[0]]
-            max_area = geom.area()
-            max_fid = group[0]
-            for fid in group[1:]:
-                geom = geom.combine(geometries[fid])
-                if geom.area() > max_area:
-                    max_area = geom.area()
-                    max_fid = fid
-            to_change[max_fid] = geom
-            count_com += 1
-            to_clean += [fid for fid in group if fid != max_fid]
+        area = lambda fid: geometries[fid].area()
+        to_change = self.merge_geometries(
+            pa_groups, geometries, area, True, False
+        )
         tasks = {}
         for i, group in enumerate(pa_groups):
             for fid in group:
@@ -124,9 +111,4 @@ class ParcelLayer(PolygonLayer):
                 target_id = pa_refs[list(to_change.keys())[i]]
                 if target_id != localid:
                     tasks[localid] = target_id
-        if to_clean:
-            self.writer.changeGeometryValues(to_change)
-            self.writer.deleteFeatures(to_clean)
-            msg = _("%d adjacent polygons merged into %d polygons in '%s'")
-            log.debug(msg, count_adj, count_com, self.name())
         return tasks

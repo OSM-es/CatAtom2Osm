@@ -49,9 +49,11 @@ class TestParcelLayer(unittest.TestCase):
         p = next(self.parcel.search("localId = '8642317CS5284S'"))
         self.assertEqual(len(Geometry.get_multipolygon(p)[0]), 1)
 
-    def test_get_groups_with_context(self):
+    def test_get_groups_by_adjacent_buildings(self):
         self.parcel.create_missing_parcels(self.building)
-        pa_groups, __, __ = self.parcel.get_groups_with_context(self.building)
+        pa_groups, __, __ = self.parcel.get_groups_by_adjacent_buildings(
+            self.building
+        )
         expected = [
             {48, 9, 10}, {14, 15}, {16, 17}, {18, 19, 20, 22, 23},
             {34, 35, 55}, {56, 36, 37}, {32, 33, 38, 39},
@@ -66,12 +68,39 @@ class TestParcelLayer(unittest.TestCase):
         self.parcel.delete_void_parcels(self.building)
         self.parcel.create_missing_parcels(self.building)
         tasks = self.parcel.merge_by_adjacent_buildings(self.building)
-        self.assertEqual(self.parcel.featureCount(), 55)
         pa_refs = [f['localId'] for f in self.parcel.getFeatures()]
+        expected = [
+            '001000300CS52D', '001000400CS52D', '8641608CS5284S',
+            '8641612CS5284S', '8641613CS5284S', '8641616CS5284S',
+            '8641620CS5284S', '8641621CS5284S', '8641632CS5284S',
+            '8641636CS5284S', '8641638CS5284S', '8641649CS5284S',
+            '8641653CS5284S', '8641655CS5284S', '8641658CS5284S',
+            '8641660CS5284S', '8642302CS5284S', '8642310CS5284S',
+            '8642312CS5284S', '8642313CS5284S', '8642314CS5284S',
+            '8642317CS5284S', '8642321CS5284S', '8642322CS5284S',
+            '8642325CS5484N', '8642701CS5284S', '8742701CS5284S',
+            '8742707CS5284S', '8742711CS5284S', '8742721CS5284S',
+            '8839301CS5283N', '8840501CS5284S', '8841602CS5284S',
+            '8841603CS5284S', '8844121CS5284S', '8940301CS5284S',
+            '8940302CS5284S', '8940305CS5284S', '8940306CS5284S',
+            '8940307CS5284S', '8940309CS5284S', '8940311CS5284S',
+            '8941505CS5284S', '9041701CS5284S', '9041703CS5294S',
+            '9041704CS5294S', '9041705CS5294S', '9041715CS5284S',
+            '9041716CS5294S', '9041719CS5294S', '9042401CS5294S',
+            '9042402CS5294S', '9042404CS5294S', '8742702CS5284S',
+        ]
+        self.assertEqual(pa_refs, expected)
         merged = []
         for bu in self.building.getFeatures():
-            ref = self.building.get_id(bu)
-            if ref not in pa_refs:
-                merged.append(ref)
+            if self.building.is_building(bu):
+                ref = self.building.get_id(bu)
+                if ref not in pa_refs:
+                    merged.append(ref)
         self.assertEqual(len(merged), 58)
         self.assertTrue(all([tasks[ref] != ref for ref in merged]))
+
+    def test_merge_by_parts_count(self):
+        self.parcel.delete_void_parcels(self.building)
+        self.parcel.create_missing_parcels(self.building)
+        self.parcel.merge_by_adjacent_buildings(self.building)
+        self.parcel.merge_by_parts_count(self.building, 10)
