@@ -5,7 +5,7 @@ from qgis.core import QgsFeature, QgsFeatureRequest, QgsField, QgsGeometry
 from qgis.PyQt.QtCore import QVariant
 
 from catatom2osm import config
-from catatom2osm.geo.aux import merge_groups
+from catatom2osm.geo.aux import get_attributes, merge_groups
 from catatom2osm.geo.geometry import Geometry
 from catatom2osm.geo.layer.cons import ConsLayer
 from catatom2osm.geo.layer.polygon import PolygonLayer
@@ -27,7 +27,7 @@ class ParcelLayer(PolygonLayer):
         if self.fields().isEmpty():
             self.writer.addAttributes([
                 QgsField('localId', QVariant.String, len=254),
-                QgsField('label', QVariant.String, len=254),
+                QgsField('parts', QVariant.Int),
             ])
             self.updateFields()
         self.rename = {'localId': 'inspireId_localId'}
@@ -101,14 +101,30 @@ class ParcelLayer(PolygonLayer):
             self.get_groups_by_adjacent_buildings(buildings)
         )
         area = lambda fid: geometries[fid].area()
-        to_change = self.merge_geometries(
-            pa_groups, geometries, area, True, False
-        )
+        self.merge_geometries(pa_groups, geometries, area, True, False)
         tasks = {}
-        for i, group in enumerate(pa_groups):
-            for fid in group:
-                localid = pa_refs.get(fid, fid)
-                target_id = pa_refs[list(to_change.keys())[i]]
-                if target_id != localid:
-                    tasks[localid] = target_id
+        for group in pa_groups:
+            for i, fid in enumerate(group):
+                targetid = pa_refs[group[0]]
+                localid = pa_refs[fid]
+                tasks[localid] = targetid
         return tasks
+
+    def count_parts(self, buildings):
+        """Adds count of parts in parcel field"""
+        parts = []
+        parts_count = defaultdict(int)
+        exp = "localId ~ '_'"
+        for f in buildings.getFeatures(exp):
+            parts_count[buildings.get_id(f)] += 1
+            parts.append(buildings.get_id(f))
+        for f in buildings.getFeatures():
+            if buildings.get_id(f) not in parts:
+                parts_count[buildings.get_id(f)] += 1
+        parts_count = dict(parts_count)
+        to_change = {}
+        for f in self.getFeatures():
+            f['parts'] = parts_count[f['localId']]
+            to_change[f.id()] = get_attributes(f)
+        self.writer.changeAttributeValues(to_change)
+        return parts_count

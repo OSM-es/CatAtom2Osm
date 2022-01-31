@@ -26,7 +26,9 @@ class TestParcelLayer(unittest.TestCase):
         self.parcel.append(fixture)
         self.assertEqual(self.parcel.featureCount(), 186)
         fn = 'test/fixtures/cons.gpkg|layername=cons'
-        self.building = ConsLayer(fn, 'cons', 'ogr')
+        fixture2 = QgsVectorLayer(fn, 'cons', 'ogr')
+        self.building = ConsLayer('MultiPolygon', 'cons', 'memory')
+        self.building.append(fixture2)
         self.assertTrue(self.building.isValid(), "Loading fixture")
 
     def test_init(self):
@@ -56,15 +58,21 @@ class TestParcelLayer(unittest.TestCase):
         )
         expected = [
             {48, 9, 10}, {14, 15}, {16, 17}, {18, 19, 20, 22, 23},
-            {34, 35, 55}, {56, 36, 37}, {32, 33, 38, 39},
-            {40, 41, 42, 43, 44, 45, 27, 24, 25, 26, 187, 28, 29, 30, 31},
-            {11, 12, 46, 47}, {8, 49, 50, 7}, {51, 52, 5, 6}, {3, 4, 53, 54},
-            {57, 58}, {64, 65, 66, 71, 59, 60, 61, 62, 63}, {81, 77, 78},
-            {80, 79}, {84, 85}, {86, 87}, {91, 92}, {107, 99, 100}
+            {27, 40, 41, 42, 43, 44, 45, 24, 25, 26, 187, 28, 29, 30, 31},
+            {34, 35, 55}, {56, 36, 37}, {32, 33, 38, 39}, {11, 12, 46, 47},
+            {8, 49, 50, 7}, {51, 52, 5, 6}, {3, 4, 53, 54}, {57, 58},
+            {64, 65, 66, 71, 59, 60, 61, 62, 63}, {81, 77, 78}, {80, 79},
+            {84, 85}, {86, 87}, {91, 92}, {107, 99, 100},
         ]
         self.assertEqual(pa_groups, expected)
 
+    @mock.patch('catatom2osm.geo.layer.base.tqdm', mock.MagicMock())
+    @mock.patch('catatom2osm.geo.layer.base.log', m_log)
+    @mock.patch('catatom2osm.geo.layer.polygon.log', m_log)
     def test_merge_by_adjacent_buildings(self):
+        self.building.remove_outside_parts()
+        self.building.explode_multi_parts()
+        self.building.clean()
         self.parcel.delete_void_parcels(self.building)
         self.parcel.create_missing_parcels(self.building)
         tasks = self.parcel.merge_by_adjacent_buildings(self.building)
@@ -74,20 +82,18 @@ class TestParcelLayer(unittest.TestCase):
             '8641612CS5284S', '8641613CS5284S', '8641616CS5284S',
             '8641620CS5284S', '8641621CS5284S', '8641632CS5284S',
             '8641636CS5284S', '8641638CS5284S', '8641649CS5284S',
-            '8641653CS5284S', '8641655CS5284S', '8641658CS5284S',
-            '8641660CS5284S', '8642302CS5284S', '8642310CS5284S',
-            '8642312CS5284S', '8642313CS5284S', '8642314CS5284S',
-            '8642317CS5284S', '8642321CS5284S', '8642322CS5284S',
-            '8642325CS5484N', '8642701CS5284S', '8742701CS5284S',
-            '8742707CS5284S', '8742711CS5284S', '8742721CS5284S',
-            '8839301CS5283N', '8840501CS5284S', '8841602CS5284S',
-            '8841603CS5284S', '8844121CS5284S', '8940301CS5284S',
-            '8940302CS5284S', '8940305CS5284S', '8940306CS5284S',
-            '8940307CS5284S', '8940309CS5284S', '8940311CS5284S',
-            '8941505CS5284S', '9041701CS5284S', '9041703CS5294S',
-            '9041704CS5294S', '9041705CS5294S', '9041715CS5284S',
-            '9041716CS5294S', '9041719CS5294S', '9042401CS5294S',
-            '9042402CS5294S', '9042404CS5294S', '8742702CS5284S',
+            '8641653CS5284S', '8641658CS5284S', '8641660CS5284S',
+            '8642302CS5284S', '8642310CS5284S', '8642312CS5284S',
+            '8642313CS5284S', '8642314CS5284S', '8642317CS5284S',
+            '8642321CS5284S', '8642325CS5484N', '8642701CS5284S',
+            '8742701CS5284S', '8742707CS5284S', '8742711CS5284S',
+            '8742721CS5284S', '8839301CS5283N', '8840501CS5284S',
+            '8841602CS5284S', '8841603CS5284S', '8844121CS5284S',
+            '8940301CS5284S', '8940302CS5284S', '8940305CS5284S',
+            '8940306CS5284S', '8940307CS5284S', '8940309CS5284S',
+            '8941505CS5284S', '9041703CS5294S', '9041704CS5294S',
+            '9041705CS5294S', '9041716CS5294S', '9041719CS5294S',
+            '9042401CS5294S', '9042402CS5294S', '9042404CS5294S',
         ]
         self.assertEqual(pa_refs, expected)
         merged = []
@@ -96,11 +102,24 @@ class TestParcelLayer(unittest.TestCase):
                 ref = self.building.get_id(bu)
                 if ref not in pa_refs:
                     merged.append(ref)
-        self.assertEqual(len(merged), 58)
+        self.assertEqual(len(merged), 71)
         self.assertTrue(all([tasks[ref] != ref for ref in merged]))
 
-    def test_merge_by_parts_count(self):
+    @mock.patch('catatom2osm.geo.layer.base.tqdm', mock.MagicMock())
+    @mock.patch('catatom2osm.geo.layer.base.log', m_log)
+    @mock.patch('catatom2osm.geo.layer.polygon.log', m_log)
+    def test_count_parts(self):
+        self.building.remove_outside_parts()
+        self.building.explode_multi_parts()
+        self.building.clean()
         self.parcel.delete_void_parcels(self.building)
         self.parcel.create_missing_parcels(self.building)
-        self.parcel.merge_by_adjacent_buildings(self.building)
-        self.parcel.merge_by_parts_count(self.building, 10)
+        parts_count = self.parcel.count_parts(self.building)
+        self.assertEqual(sum(parts_count.values()), 255)
+        self.assertEqual(len(parts_count), self.parcel.featureCount())
+        f = next(self.parcel.search("localId = '8840501CS5284S'"))
+        self.assertEqual(f['parts'], 7)
+        f = next(self.parcel.search("localId = '8840502CS5284S'"))
+        self.assertEqual(f['parts'], 3)
+        self.parcel.reproject()
+        self.parcel.export('parcel.geojson', 'GeoJSON')

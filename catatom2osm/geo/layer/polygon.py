@@ -430,19 +430,20 @@ class PolygonLayer(BaseLayer):
         to_change = {}
         count_adj = 0
         count_com = 0
-        for group in groups:
+        for i, group in enumerate(groups):
             group = sorted(group, key=sort, reverse=reverse)
+            groups[i] = group
             count_adj += len(group)
             geom = geometries[group[0]]
             for fid in group[1:]:
                 geom = geom.combine(geometries[fid])
             if split:
                 mp = Geometry.get_multipolygon(geom)
-                for i, part in enumerate(mp):
+                for j, part in enumerate(mp):
                     g = Geometry.fromPolygonXY(part)
-                    to_change[group[i]] = g
+                    to_change[group[j]] = g
                     count_com += 1
-                to_clean += group[i + 1:]
+                to_clean += group[j + 1:]
             else:
                 to_change[group[0]] = geom
                 count_com += 1
@@ -452,7 +453,7 @@ class PolygonLayer(BaseLayer):
             self.writer.deleteFeatures(to_clean)
             msg = _("%d polygons merged into %d polygons in '%s'")
             log.debug(msg, count_adj, count_com, self.name())
-        return to_change
+        return to_change, to_clean
 
     def merge_adjacents(self):
         """Merge polygons with shared segments"""
