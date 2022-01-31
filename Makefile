@@ -60,7 +60,7 @@ html:  ## Make documentation html files
 
 .PHONY: msg
 msg:  ## Build translations file
-	$(GETTEXT) -o $(LOCALE_DIR)/messages.pot catatom2osm/*.py
+	$(GETTEXT) -o $(LOCALE_DIR)/messages.pot catatom2osm
 	$(MSGMERGE) -U $(LOCALE_DIR)/es/LC_MESSAGES/catatom2osm.po $(LOCALE_DIR)/messages.pot
 	$(MSGFMT) $(LOCALE_DIR)/es/LC_MESSAGES/catatom2osm.po -o $(LOCALE_DIR)/es/LC_MESSAGES/catatom2osm.mo
 	$(MSGFMT) $(LOCALE_DIR)/es/LC_MESSAGES/argparse.po -o $(LOCALE_DIR)/es/LC_MESSAGES/argparse.mo
