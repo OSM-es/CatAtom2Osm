@@ -1,6 +1,7 @@
 from qgis.core import QgsFeature, QgsGeometry, QgsPointXY
 
 from catatom2osm.geo.types import WKBPolygon
+from catatom2osm.report import instance as report
 
 
 class Geometry(object):

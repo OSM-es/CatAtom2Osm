@@ -15,6 +15,7 @@ from catatom2osm.geo.geometry import Geometry
 from catatom2osm.geo.point import Point
 from catatom2osm.geo.aux import get_attributes
 from catatom2osm.geo.types import WKBPoint, WKBPolygon, WKBMultiPolygon
+from catatom2osm.report import instance as report
 
 log = logging.getLogger(config.app_name)
 

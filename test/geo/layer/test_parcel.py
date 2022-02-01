@@ -77,7 +77,15 @@ class TestParcelLayer(unittest.TestCase):
         self.building.clean()
         self.parcel.delete_void_parcels(self.building)
         self.parcel.create_missing_parcels(self.building)
+        self.parcel.count_parts(self.building)
+        pca = sum([f['parts'] for f in self.parcel.getFeatures()])
+        la = self.parcel.featureCount()
         tasks = self.parcel.merge_by_adjacent_buildings(self.building)
+        pcd = sum([f['parts'] for f in self.parcel.getFeatures()])
+        ld = self.parcel.featureCount()
+        cl = len([k for k, v in tasks.items() if k != v])
+        self.assertEqual(ld, la - cl)
+        self.assertEqual(pca, pcd)
         pa_refs = [f['localId'] for f in self.parcel.getFeatures()]
         expected = [
             '001000300CS52D', '001000400CS52D', '8641608CS5284S',
@@ -141,13 +149,13 @@ class TestParcelLayer(unittest.TestCase):
         self.parcel.create_missing_parcels(self.building)
         self.parcel.count_parts(self.building)
         self.parcel.merge_by_adjacent_buildings(self.building)
-        pa_groups, geometries, parts_count = (
+        pa_groups, pa_refs, geometries, parts_count = (
             self.parcel.get_groups_by_parts_count(self.building, 10, 100)
         )
         self.assertEqual(len(parts_count), 48)
-        self.assertEqual(len(pa_groups), 10)
+        self.assertEqual(len(pa_groups), 9)
         self.assertTrue(all([
-            sum([parts_count[fid] for fid in group]) <= 10
+            sum([parts_count[pa_refs[fid]] for fid in group]) <= 10
             for group in pa_groups
         ]))
 
@@ -169,11 +177,12 @@ class TestParcelLayer(unittest.TestCase):
         self.building.clean()
         self.parcel.delete_void_parcels(self.building)
         self.parcel.create_missing_parcels(self.building)
-        self.parcel.count_parts(self.building)
         self.parcel.merge_by_adjacent_buildings(self.building)
-        self.parcel.merge_by_parts_count(self.building, 20, 30)
-        #self.assertEqual(self.parcel.featureCount(), 30)
-        self.parcel.reproject()
-        self.parcel.export('parcel_pc.geojson', 'GeoJSON')
-        parcel_osm = self.parcel.to_osm()
-        self.write_osm(parcel_osm, "parcel.osm")
+        pca = sum([f['parts'] for f in self.parcel.getFeatures()])
+        la = self.parcel.featureCount()
+        tasks = self.parcel.merge_by_parts_count(self.building, 20, 30)
+        pcd = sum([f['parts'] for f in self.parcel.getFeatures()])
+        ld = self.parcel.featureCount()
+        cl = len([k for k, v in tasks.items() if k != v])
+        self.assertEqual(ld, la - cl)
+        self.assertEqual(pca, pcd)

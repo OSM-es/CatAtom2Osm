@@ -18,7 +18,7 @@ class ParcelLayer(PolygonLayer):
 
     def __init__(
         self,
-        path="Polygon",
+        path="MultiPolygon",
         baseName="cadastralparcel",
         providerLib="memory",
         source_date=None,
@@ -92,6 +92,21 @@ class ParcelLayer(PolygonLayer):
         pa_groups = merge_groups(adjs)
         return pa_groups, pa_refs, geometries
 
+    def update_parts_count(self, pa_groups, pa_refs, parts_count):
+        tasks = {}
+        self.startEditing()
+        for group in pa_groups:
+            pc = 0
+            targetid = pa_refs[group[0]]
+            for fid in group:
+                localid = pa_refs[fid]
+                tasks[localid] = targetid
+                pc += parts_count[localid]
+            fnx = self.writer.fieldNameIndex('parts')
+            self.changeAttributeValue(group[0], fnx, pc)
+        self.commitChanges()
+        return tasks
+
     def merge_by_adjacent_buildings(self, buildings):
         """
         Merge parcels with buildings sharing walls with buildings of another
@@ -103,18 +118,7 @@ class ParcelLayer(PolygonLayer):
         )
         area = lambda fid: geometries[fid].area()
         self.merge_geometries(pa_groups, geometries, area, True, False)
-        tasks = {}
-        self.startEditing()
-        for group in pa_groups:
-            pc = 0
-            targetid = pa_refs[group[0]]
-            for i, fid in enumerate(group):
-                localid = pa_refs[fid]
-                tasks[localid] = targetid
-                pc += parts_count[localid]
-            fnx = self.writer.fieldNameIndex('parts')
-            self.changeAttributeValue(group[0], fnx, pc)
-        self.commitChanges()
+        tasks = self.update_parts_count(pa_groups, pa_refs, parts_count)
         return tasks
 
     def count_parts(self, buildings):
@@ -142,20 +146,24 @@ class ParcelLayer(PolygonLayer):
         """
         parts_count = {}
         geometries = {}
-        for f in self.getFeatures():
-            geometries[f.id()] = QgsGeometry(f.geometry())
-            parts_count[f.id()] = f['parts']
-        groups = []
+        pa_refs = {}
+        for pa in self.getFeatures():
+            geometries[pa.id()] = QgsGeometry(pa.geometry())
+            parts_count[pa['localId']] = pa['parts']
+            pa_refs[pa.id()] = pa['localId']
+        pa_groups = []
         visited = []
         index = self.get_index()
         for pa in self.getFeatures():
+            if pa.id() in visited:
+                continue
             pc = pa['parts']
             geom = geometries[pa.id()]
             bbox = geom.boundingBox().buffered(buffer)
             fids = index.intersects(bbox)
             candidates = [
                 fid for fid in fids
-                if parts_count[fid] <= max_parts - pc
+                if parts_count[pa_refs[fid]] <= max_parts - pc
             ]
             centro = geom.centroid()
             distance = lambda fid: centro.distance(geometries[fid].centroid())
@@ -163,28 +171,20 @@ class ParcelLayer(PolygonLayer):
             group = []
             pcsum = 0
             for fid in candidates:
-                pc = parts_count[fid]
-                if pcsum + pc > max_parts:
-                    groups.append(group)
-                    group = []
-                    pcsum = 0
-                if fid not in visited:
+                pc = parts_count[pa_refs[fid]]
+                if pcsum + pc <= max_parts and fid not in visited:
                     visited.append(fid)
                     group.append(fid)
                     pcsum += pc
-        return groups, geometries, parts_count
+            if group:
+                pa_groups.append(group)
+        return pa_groups, pa_refs, geometries, parts_count
 
     def merge_by_parts_count(self, buildings, max_parts, buffer):
         """Merge parcels in groups with less than max_parts"""
-        parts_count = {f.id(): f['parts'] for f in self.getFeatures()}
-        pa_groups, geometries, parts_count = (
+        pa_groups, pa_refs, geometries, parts_count = (
             self.get_groups_by_parts_count(buildings, max_parts, buffer)
         )
-        area = lambda fid: geometries[fid].area()
-        self.merge_geometries(pa_groups, geometries, area, False, False)
-        self.startEditing()
-        for group in pa_groups:
-            pc = sum([parts_count[fid] for fid in group])
-            fnx = self.writer.fieldNameIndex('parts')
-            self.changeAttributeValue(group[0], fnx, pc)
-        self.commitChanges()
+        self.merge_geometries(pa_groups, geometries, None, False, False)
+        tasks = self.update_parts_count(pa_groups, pa_refs, parts_count)
+        return tasks
