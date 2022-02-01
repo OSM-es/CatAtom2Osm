@@ -1,9 +1,11 @@
+import io
 import logging
 import mock
 import unittest
 
 from qgis.core import QgsFeature, QgsVectorLayer
 
+from catatom2osm import osmxml
 from catatom2osm.app import QgsSingleton
 from catatom2osm.geo.geometry import Geometry
 from catatom2osm.geo.layer.cons import ConsLayer
@@ -34,7 +36,7 @@ class TestParcelLayer(unittest.TestCase):
     def test_init(self):
         layer = ParcelLayer()
         self.assertEqual(layer.fields()[0].name(), 'localId')
-        self.assertEqual(layer.fields()[1].name(), 'label')
+        self.assertEqual(layer.fields()[1].name(), 'parts')
         self.assertEqual(layer.rename['localId'], 'inspireId_localId')
 
     def test_not_empty(self):
@@ -43,7 +45,7 @@ class TestParcelLayer(unittest.TestCase):
 
     def test_delete_void_parcels(self):
         self.parcel.delete_void_parcels(self.building)
-        self.assertEqual(self.parcel.featureCount(), 111)
+        self.assertEqual(self.parcel.featureCount(), 110)
 
     def test_create_missing_parcels(self):
         self.parcel.create_missing_parcels(self.building)
@@ -96,6 +98,8 @@ class TestParcelLayer(unittest.TestCase):
             '9042401CS5294S', '9042402CS5294S', '9042404CS5294S',
         ]
         self.assertEqual(pa_refs, expected)
+        f = next(self.parcel.search("localId = '8840501CS5284S'"))
+        self.assertEqual(f['parts'], 10)
         merged = []
         for bu in self.building.getFeatures():
             if self.building.is_building(bu):
@@ -104,6 +108,8 @@ class TestParcelLayer(unittest.TestCase):
                     merged.append(ref)
         self.assertEqual(len(merged), 71)
         self.assertTrue(all([tasks[ref] != ref for ref in merged]))
+        self.parcel.reproject()
+        self.parcel.export('parcel_adj.geojson', 'GeoJSON')
 
     @mock.patch('catatom2osm.geo.layer.base.tqdm', mock.MagicMock())
     @mock.patch('catatom2osm.geo.layer.base.log', m_log)
@@ -119,7 +125,55 @@ class TestParcelLayer(unittest.TestCase):
         self.assertEqual(len(parts_count), self.parcel.featureCount())
         f = next(self.parcel.search("localId = '8840501CS5284S'"))
         self.assertEqual(f['parts'], 7)
+        self.assertEqual(parts_count['8840501CS5284S'], 7)
         f = next(self.parcel.search("localId = '8840502CS5284S'"))
         self.assertEqual(f['parts'], 3)
+        self.assertEqual(parts_count['8840502CS5284S'], 3)
+
+    @mock.patch('catatom2osm.geo.layer.base.tqdm', mock.MagicMock())
+    @mock.patch('catatom2osm.geo.layer.base.log', m_log)
+    @mock.patch('catatom2osm.geo.layer.polygon.log', m_log)
+    def test_get_groups_by_parts_count(self):
+        self.building.remove_outside_parts()
+        self.building.explode_multi_parts()
+        self.building.clean()
+        self.parcel.delete_void_parcels(self.building)
+        self.parcel.create_missing_parcels(self.building)
+        self.parcel.count_parts(self.building)
+        self.parcel.merge_by_adjacent_buildings(self.building)
+        pa_groups, geometries, parts_count = (
+            self.parcel.get_groups_by_parts_count(self.building, 10, 100)
+        )
+        self.assertEqual(len(parts_count), 48)
+        self.assertEqual(len(pa_groups), 10)
+        self.assertTrue(all([
+            sum([parts_count[fid] for fid in group]) <= 10
+            for group in pa_groups
+        ]))
+
+    def write_osm(self, data, osm_path):
+        for e in data.elements:
+            if 'ref' in e.tags:
+                del e.tags['ref']
+        data.merge_duplicated()
+        file_obj = io.open(osm_path, "w", encoding="utf-8")
+        osmxml.serialize(file_obj, data)
+        file_obj.close()
+
+    @mock.patch('catatom2osm.geo.layer.base.tqdm', mock.MagicMock())
+    @mock.patch('catatom2osm.geo.layer.base.log', m_log)
+    @mock.patch('catatom2osm.geo.layer.polygon.log', m_log)
+    def test_merge_by_parts_count(self):
+        self.building.remove_outside_parts()
+        self.building.explode_multi_parts()
+        self.building.clean()
+        self.parcel.delete_void_parcels(self.building)
+        self.parcel.create_missing_parcels(self.building)
+        self.parcel.count_parts(self.building)
+        self.parcel.merge_by_adjacent_buildings(self.building)
+        self.parcel.merge_by_parts_count(self.building, 20, 30)
+        #self.assertEqual(self.parcel.featureCount(), 30)
         self.parcel.reproject()
-        self.parcel.export('parcel.geojson', 'GeoJSON')
+        self.parcel.export('parcel_pc.geojson', 'GeoJSON')
+        parcel_osm = self.parcel.to_osm()
+        self.write_osm(parcel_osm, "parcel.osm")

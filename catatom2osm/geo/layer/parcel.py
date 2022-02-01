@@ -97,17 +97,24 @@ class ParcelLayer(PolygonLayer):
         Merge parcels with buildings sharing walls with buildings of another
         parcel.
         """
+        parts_count = self.count_parts(buildings)
         pa_groups, pa_refs, geometries = (
             self.get_groups_by_adjacent_buildings(buildings)
         )
         area = lambda fid: geometries[fid].area()
         self.merge_geometries(pa_groups, geometries, area, True, False)
         tasks = {}
+        self.startEditing()
         for group in pa_groups:
+            pc = 0
+            targetid = pa_refs[group[0]]
             for i, fid in enumerate(group):
-                targetid = pa_refs[group[0]]
                 localid = pa_refs[fid]
                 tasks[localid] = targetid
+                pc += parts_count[localid]
+            fnx = self.writer.fieldNameIndex('parts')
+            self.changeAttributeValue(group[0], fnx, pc)
+        self.commitChanges()
         return tasks
 
     def count_parts(self, buildings):
@@ -128,3 +135,56 @@ class ParcelLayer(PolygonLayer):
             to_change[f.id()] = get_attributes(f)
         self.writer.changeAttributeValues(to_change)
         return parts_count
+
+    def get_groups_by_parts_count(self, buildings, max_parts, buffer):
+        """
+        Get groups of ids of near parcels with less than max_parts
+        """
+        parts_count = {}
+        geometries = {}
+        for f in self.getFeatures():
+            geometries[f.id()] = QgsGeometry(f.geometry())
+            parts_count[f.id()] = f['parts']
+        groups = []
+        visited = []
+        index = self.get_index()
+        for pa in self.getFeatures():
+            pc = pa['parts']
+            geom = geometries[pa.id()]
+            bbox = geom.boundingBox().buffered(buffer)
+            fids = index.intersects(bbox)
+            candidates = [
+                fid for fid in fids
+                if parts_count[fid] <= max_parts - pc
+            ]
+            centro = geom.centroid()
+            distance = lambda fid: centro.distance(geometries[fid].centroid())
+            candidates = sorted(candidates, key=distance)
+            group = []
+            pcsum = 0
+            for fid in candidates:
+                pc = parts_count[fid]
+                if pcsum + pc > max_parts:
+                    groups.append(group)
+                    group = []
+                    pcsum = 0
+                if fid not in visited:
+                    visited.append(fid)
+                    group.append(fid)
+                    pcsum += pc
+        return groups, geometries, parts_count
+
+    def merge_by_parts_count(self, buildings, max_parts, buffer):
+        """Merge parcels in groups with less than max_parts"""
+        parts_count = {f.id(): f['parts'] for f in self.getFeatures()}
+        pa_groups, geometries, parts_count = (
+            self.get_groups_by_parts_count(buildings, max_parts, buffer)
+        )
+        area = lambda fid: geometries[fid].area()
+        self.merge_geometries(pa_groups, geometries, area, False, False)
+        self.startEditing()
+        for group in pa_groups:
+            pc = sum([parts_count[fid] for fid in group])
+            fnx = self.writer.fieldNameIndex('parts')
+            self.changeAttributeValue(group[0], fnx, pc)
+        self.commitChanges()
