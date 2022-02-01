@@ -1,6 +1,6 @@
 import math
 
-from qgis.core import QgsPoint, QgsPointXY, QgsRectangle
+from qgis.core import QgsGeometry, QgsPoint, QgsPointXY, QgsRectangle
 
 from catatom2osm import config
 
@@ -9,8 +9,10 @@ class Point(QgsPointXY):
     """Extends QgsPoint with some utility methods"""
 
     def __init__(self, arg1, arg2=None):
-        if type(arg1) is QgsPoint:
+        if isinstance(arg1, QgsPoint):
             super(Point, self).__init__(arg1)
+        elif isinstance(arg1, str):
+            super(Point, self).__init__(QgsGeometry.fromWkt(arg1).asPoint())
         elif arg2 is None:
             super(Point, self).__init__(arg1[0], arg1[1])
         else:

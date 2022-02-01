@@ -71,8 +71,11 @@ class TestPolygonLayer(unittest.TestCase):
             Geometry.get_multipolygon(f)
                 for f in self.layer.getFeatures()]))
         self.assertGreater(len(parents_per_vertex), 0)
-        self.assertTrue(all([Geometry.fromPointXY(vertex).intersects(geometries[fid])
-            for (vertex, fids) in list(parents_per_vertex.items()) for fid in fids]))
+        self.assertTrue(all([
+            Geometry.fromPointXY(Point(vertex)).intersects(geometries[fid])
+            for (vertex, fids) in list(parents_per_vertex.items())
+            for fid in fids
+        ]))
 
     def get_duplicates(self):
         """

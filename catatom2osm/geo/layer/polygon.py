@@ -79,8 +79,8 @@ class PolygonLayer(BaseLayer):
         geometry of feature with id 'feature_id' is shared with another
         geometry.
         """
-        parents = [gid for gid in parents_per_vx[va] if gid != feature_id]
-        parents += [gid for gid in parents_per_vx[vb] if gid != feature_id]
+        parents = [gid for gid in parents_per_vx[va.asWkt()] if gid != feature_id]
+        parents += [gid for gid in parents_per_vx[vb.asWkt()] if gid != feature_id]
         return any([c > 1 for c in Counter(parents).values()])
 
     def get_parents_per_vertex_and_geometries(self, expression=''):
@@ -96,7 +96,7 @@ class PolygonLayer(BaseLayer):
             geom = QgsGeometry(feature.geometry())
             geometries[feature.id()] = geom
             for point in Geometry.get_vertices_list(feature):
-                parents_per_vertex[point].append(feature.id())
+                parents_per_vertex[point.asWkt()].append(feature.id())
         return (parents_per_vertex, geometries)
 
     def get_adjacents_and_geometries(self, expression=''):
@@ -109,13 +109,14 @@ class PolygonLayer(BaseLayer):
             self.get_parents_per_vertex_and_geometries(expression)
         )
         adjs = []
-        for (point, parents) in parents_per_vertex.items():
+        for (wkt, parents) in parents_per_vertex.items():
+            point = Point(wkt)
             if len(parents) > 1:
                 for fid in parents:
                     geom = geometries[fid]
                     (point, ndx, ndxa, ndxb, dist) = geom.closestVertex(point)
                     next = Point(geom.vertexAt(ndxb))
-                    parents_next = parents_per_vertex[next]
+                    parents_next = parents_per_vertex[next.asWkt()]
                     common = set(x for x in parents if x in parents_next)
                     if len(common) > 1:
                         adjs.append(common)
@@ -366,8 +367,8 @@ class PolygonLayer(BaseLayer):
             self.get_parents_per_vertex_and_geometries()
         )
         pbar = self.get_progressbar(_("Simplify"), len(parents_per_vertex))
-        for pnt, parents in parents_per_vertex.items():
-            point = Point(pnt)
+        for wkt, parents in parents_per_vertex.items():
+            point = Point(wkt)
             # Test if this vertex is a 'corner' in any of its parent polygons
             for fid in parents:
                 geom = geometries[fid]
