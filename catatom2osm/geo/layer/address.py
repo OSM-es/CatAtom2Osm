@@ -112,8 +112,3 @@ class AddressLayer(BaseLayer):
             feat['image'] = url
             to_change[feat.id()] = get_attributes(feat)
         self.writer.changeAttributeValues(to_change)
-
-    def get_label(self, feat):
-        """Get the zone label for this feature from the index"""
-        localid = ConsLayer.get_id(feat)
-        return self.labels.get(localid, None)
