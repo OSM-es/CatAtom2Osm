@@ -68,11 +68,31 @@ class Geometry(object):
     def get_outer_vertices(feature):
         """
         Returns list of all distinct vertices in feature geometry outer rings
-        s"""
+        """
         return [
             point for part in Geometry.get_multipolygon(feature)
             for point in part[0][0:-1]
         ]
+
+    @staticmethod
+    def merge_adjacent_polygons(feature):
+        """
+        Merge adjacent polygons in a feature geometry
+        """
+        mp = Geometry.get_multipolygon(feature)
+        if len(mp) < 2:
+            return False
+        else:
+            geom = None
+            for p in mp:
+                g = Geometry.fromPolygonXY(p)
+                ng = g if geom is None else geom.combine(g)
+                if ng.isGeosValid():
+                    geom = ng
+            if geom is not None:
+                feature.setGeometry(geom)
+        return geom.isGeosValid()
+
 
     @staticmethod
     def merge_adjacent_features(group):

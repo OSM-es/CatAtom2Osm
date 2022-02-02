@@ -234,6 +234,17 @@ class PolygonLayer(BaseLayer):
                 tp, self.name())
             report.values['vertex_topo_' + self.name()] = tp
 
+    def merge_adjacent_polygons(self):
+        """
+        Merge adjacent polygons in each feature geometry
+        """
+        to_change = {}
+        for feat in self.getFeatures():
+            if Geometry.merge_adjacent_polygons(feat):
+                to_change[feat.id()] = feat.geometry()
+        if len(to_change) > 0:
+            self.writer.changeGeometryValues(to_change)
+
     def delete_invalid_geometries(self):
         """
         Delete invalid geometries testing if any of it acute angle vertex could
