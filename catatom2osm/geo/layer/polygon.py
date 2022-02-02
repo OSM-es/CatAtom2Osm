@@ -99,6 +99,23 @@ class PolygonLayer(BaseLayer):
                 parents_per_vertex[point.asWkt()].append(feature.id())
         return (parents_per_vertex, geometries)
 
+    def get_contacts_and_geometries(self, expression=''):
+        """
+        Returns:
+            (list) groups of polygons with at least one common node
+            (dict) feature id: geometry
+        """
+        parents_per_vertex, geometries = (
+            self.get_parents_per_vertex_and_geometries(expression)
+        )
+        adjs = []
+        for (__, parents) in parents_per_vertex.items():
+            if len(parents) > 1:
+                adjs.append(parents)
+        adjs = list(adjs)
+        groups = merge_groups(adjs)
+        return (groups, geometries)
+
     def get_adjacents_and_geometries(self, expression=''):
         """
         Returns:

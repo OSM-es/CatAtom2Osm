@@ -73,7 +73,7 @@ class ParcelLayer(PolygonLayer):
         buildings of another parcel.
         """
         exp = "NOT(localId ~ 'part')"
-        bu_groups, __ = buildings.get_adjacents_and_geometries(exp)
+        bu_groups, __ = buildings.get_contacts_and_geometries(exp)
         bu_refs = {f.id(): ConsLayer.get_id(f) for f in buildings.search(exp)}
         geometries = {}
         pa_ids = {}

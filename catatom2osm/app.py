@@ -118,8 +118,7 @@ class CatAtom2Osm(object):
         log.info(_("Start processing '%s'"), report.mun_code)
         self.get_zoning()
         if self.options.zoning or not self.is_new:
-            pass # self.process_zoning()
-        self.options.address = False  ###
+            self.process_zoning()
         if self.options.zoning:
             self.output_zoning()
             self.end_messages()
@@ -138,16 +137,8 @@ class CatAtom2Osm(object):
         if report.sum('inp_buildings', 'inp_address') == 0:
             self.end_messages()
             return
-        #if self.options.building:
-        self.process_building()
-        parcel = self.process_parcel()
-
-        parcel.reproject()
-        parcel_osm = parcel.to_osm()
-        self.delete_shp(parcel)
-        self.write_osm(parcel_osm, "parcel.osm")
-        return
-
+        if self.options.building:
+            self.process_building()
         if self.options.address:
             self.address.reproject()
             self.address_osm = self.address.to_osm()
@@ -467,24 +458,18 @@ class CatAtom2Osm(object):
         del self.building_osm
 
     def process_parcel(self):
-        log.info("1")
         parcel_gml = self.cat.read("cadastralparcel")
-        parcel = geo.ParcelLayer(source_date=parcel_gml.source_date)
-        log.info("2")
+        fn = self.cat.get_path('parcel.shp')
+        geo.ParcelLayer.create_shp(fn, parcel_gml.crs())
+        parcel = geo.ParcelLayer(
+            fn, providerLib='ogr', source_date=parcel_gml.source_date
+        )
         parcel.append(parcel_gml)
         del parcel_gml
-        log.info("3 %d", parcel.featureCount())
-        parcel.delete_void_parcels(self.building)
-        log.info("4 %d", parcel.featureCount())
-        parcel.clean()
-        log.info("5 %d", parcel.featureCount())
-        parcel.create_missing_parcels(self.building)
-        log.info("6 %d", parcel.featureCount())
-        parcel.merge_by_adjacent_buildings(self.building)
-        log.info("7 %d", parcel.featureCount())
-        #parcel.merge_by_parts_count(self.building, 20, 30)
-        log.info("8 %d", parcel.featureCount())
-        return parcel
+        parcel.reproject()
+        parcel_osm = parcel.to_osm()
+        self.delete_shp(parcel)
+        self.write_osm(parcel_osm, "parcel.osm")
 
     def end_messages(self):
         self.delete_shp('urban_zoning')
