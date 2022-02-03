@@ -485,7 +485,7 @@ prov_codes = {
     '38': 'Santa Cruz de Tenerife',
     '39': 'Cantabria',
     '40': 'Segovia',
-    '41': 'Sevilla',-
+    '41': 'Sevilla',
     '42': 'Soria',
     '43': 'Tarragona',
     '44': 'Teruel',
