@@ -1,15 +1,21 @@
 Change log
 ==========
 
-**2021-1-30 (2.5.0)**
+**2022-2-03 (2.5.2)**
+* Includes Jerez de la Frontera in CDAU
+
+**2022-2-03 (2.5.1)**
+* Fix reference to layer
+
+**2022-1-30 (2.5.0)**
 * Process much faster unsing in memory layers.
 * Avoids to move entrances to shared wall between buildings.
 * Don't generate output to view building conflation.
 
-**2021-1-23 (2.4.0)**
+**2022-1-23 (2.4.0)**
 * Remove parts without associated building #86
 
-**2021-1-22 (2.3.0)**
+**2022-1-22 (2.3.0)**
 * Fix bug assigning multiple entrances to building
 * Creates backup subdirectory for split municipalities
 * Fix addresses stats for split municipalities
@@ -19,38 +25,38 @@ Change log
 * Process of buildings without zone #88
 * Split zoning with -o is used
 
-**2021-1-21 (2.2.2)**
+**2022-1-21 (2.2.2)**
 * Improves definition of bounding box to search in Overpass
 
-**2021-1-20 (2.2.1)**
+**2022-1-20 (2.2.1)**
 * Raises error for non-existing -o zones
 * Flux control for no data to process
 * Fix subdirectory name for -o option
 
-**2021-1-20 (2.2.0)**
+**2022-1-20 (2.2.0)**
 * Store municipality names and search areas #82 #87
 
-**2021-1-16 (2.1.0)**
+**2022-1-16 (2.1.0)**
 * Add entrance addresses associated with multiple buildings
 * Fix bug moving the project
 * Fix bug for keeping shapefiles in debug mode
 
-**2021-1-14 (2.0.0)**
+**2022-1-14 (2.0.0)**
 * Update to Ubuntu 20.04 / QGIS3 / python3 #67.
 * Simplify CLI.
 * Allow to process tasks for addresses only (-d).
 
-**2021-1-11 (1.9.3)**
+**2022-1-11 (1.9.3)**
 * Fix error deleting osm elements.
 
-**2021-1-10 (1.9.2)**
+**2022-1-10 (1.9.2)**
 * Fix overpass search area for -s option.
 
-**2021-1-8 (1.9.1)**
+**2022-1-8 (1.9.1)**
 * Clip polygon includes zones if overlapped area is greater than 50%.
 * Fix error renaming the project.
 
-**2021-1-8 (1.9.0)**
+**2022-1-8 (1.9.0)**
 * Option to split big municipallities using a file (#78)
 * Fix and perfomance improvement of -o option (#73)
 

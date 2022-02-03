@@ -1,15 +1,21 @@
 Registro de cambios
 ===================
 
-**30-01-2021 (2.5.0)**
+**03-1-2022 (2.5.2)**
+* Incluye Jerez de la Frontera en CDAU
+
+**03-1-2022 (2.5.1)**
+* Corrige referencia a layer
+
+**30-1-2022 (2.5.0)**
 * Procesa con capas en memoria mucho más rápido.
 * Evita mover entradas a paredes compartidas con otro edificio.
 * Deja de generar salida para visualizar combinación de edificios.
 
-**23-1-2021 (2.4.0)**
+**23-1-2022 (2.4.0)**
 * Elimina partes sin edificio asociado #86
 
-**22-01-2021 (2.3.0)**
+**22-01-2022 (2.3.0)**
 * Corrige error asignando entradas múltiples a edificio
 * Crea subdirectorio de salvaguardia para municipios fraccionados
 * Corrige estadísticas de direcciones para municipios fraccionados
@@ -19,38 +25,38 @@ Registro de cambios
 * Procesar edificios sin zona #88
 * Recorta zonificación cuando se usa -o
 
-**21-01-2021 (2.2.2)**
+**21-01-2022 (2.2.2)**
 * Mejora la definición de la zona de búsqueda en Overpass
 
-**20-01-2021 (2.2.1)**
+**20-01-2022 (2.2.1)**
 * Lanza error si se pasa una zona -o que no existe
 * Control de flujo cuando no hay datos a procesar
 * Corrige nombre de carpeta para opción -o
 
-**20-01-2021 (2.2.0)**
+**20-01-2022 (2.2.0)**
 * Almacenar nombres de municipio y áreas de búsqueda #82 #87
 
-**16-1-2021 (2.1.0)**
+**16-1-2022 (2.1.0)**
 * Añade direcciones tipo entrada asociadas a varios edificios
 * Corrige error moviendo proyecto
 * Corrige error por mantener shapefiles en modo depuración
 
-**14-1-2021 (2.0.0)**
+**14-1-2022 (2.0.0)**
 * Actualiza a Ubuntu 20.04 / QGIS3 / python3 #67.
 * Simplifica la interfaz de línea de comandos.
 * Permite procesar sólo direcciones por tareas (-d).
 
-**10-1-2021 (1.9.3)**
+**10-1-2022 (1.9.3)**
 * Corrige error eliminando elementos OSM.
 
-**10-1-2021 (1.9.2)**
+**10-1-2022 (1.9.2)**
 * Corrige área de búsqueda de overpass para la opción -s.
 
-**8-1-2021 (1.9.1)**
+**8-1-2022 (1.9.1)**
 * El polígono de recorte incluye zonas si el área superpuesta es mayor que el 50%.
 * Corrige error renombrando proyecto.
 
-**8-1-2021 (1.9.0)**
+**8-1-2022 (1.9.0)**
 * Opción para dividir un municipio grande usando un archivo (#78)
 * Corrección y mejora de rendimiento de opción -o (#73)
 

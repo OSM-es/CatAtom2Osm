@@ -444,7 +444,7 @@ remove_place_from_name = [place_types[26]]
 # List of highway types not to be parsed
 excluded_types = ['DS', 'ER']
 
-aux_address = {'cdau': ['04', '11', '14', '18', '21', '23', '29', '41']}
+aux_address = {'cdau': ['04', '11', '14', '18', '21', '23', '29', '41', '53']}
 aux_path = 'auxsrcs'
 
 prov_codes = {
