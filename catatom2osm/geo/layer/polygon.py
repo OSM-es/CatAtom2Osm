@@ -268,6 +268,9 @@ class PolygonLayer(BaseLayer):
         msg = _("Delete invalid geometries")
         pbar = self.get_progressbar(msg, len(geometries))
         for fid, geom in geometries.items():
+            if geom.area() < config.min_area:
+                to_clean.append(fid)
+                continue
             badgeom = False
             for polygon in Geometry.get_multipolygon(geom):
                 for i, ring in enumerate(polygon):
