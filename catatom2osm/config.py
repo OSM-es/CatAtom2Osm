@@ -444,7 +444,7 @@ remove_place_from_name = [place_types[26]]
 # List of highway types not to be parsed
 excluded_types = ['DS', 'ER']
 
-aux_address = {'cdau': ['04', '11', '14', '18', '21', '23', '29', '41']}
+aux_address = {'cdau': ['04', '11', '14', '18', '21', '23', '29', '41', '53']}
 aux_path = 'auxsrcs'
 
 prov_codes = {
@@ -485,7 +485,7 @@ prov_codes = {
     '38': 'Santa Cruz de Tenerife',
     '39': 'Cantabria',
     '40': 'Segovia',
-    '41': 'Sevilla',
+    '41': 'Sevilla',-
     '42': 'Soria',
     '43': 'Tarragona',
     '44': 'Teruel',

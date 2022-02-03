@@ -13,8 +13,17 @@ from catatom2osm import config, download, geo
 from catatom2osm.report import instance as report
 log = logging.getLogger(config.app_name)
 
-andalucia = {'04': 'Almeria', '11': 'Cadiz', '14': 'Cordova', '18': 'Granada',
-    '21': 'Huelva', '23': 'Jaen', '29': 'Malaga', '41': 'Sevilla'}
+andalucia = {
+    '04': 'Almeria',
+    '11': 'Cadiz',
+    '14': 'Cordova',
+    '18': 'Granada',
+    '21': 'Huelva',
+    '23': 'Jaen',
+    '29': 'Malaga',
+    '41': 'Sevilla',
+    '53': 'Cadiz',
+}
 
 cdau_url = 'https://www.juntadeandalucia.es/institutodeestadisticaycartografia/cdau/portales/{}'
 csv_name = 'portal_{}.csv'
@@ -23,7 +32,7 @@ cdau_crs = 25830
 cdau_thr = 5 # Threhold in meters to conflate Cadastre addresses
 cod_mun_trans = {
     '04': {40: 901, 104: 902, 105: 903, 900: 13},
-    '11': {43: 901, 44: 902, 900: 12},
+    '11': {43: 901, 44: 902, 45:903, 900: 12},
     '14': {900: 21},
     '18': {20: 911, 53: 908, 59: 907, 63: 119, 83: 905, 92: 906, 105: 910, 106: 103, 120: 903, 130: 904, 132: 902, 141: 909, 163: 901, 199: 912, 200: 913, 900: 87},
     '21': {79: 60, 900: 41},
@@ -64,7 +73,10 @@ def cod_mun_cat2ine(cod_mun_cat):
                 cod_mun -= 1
     elif cod_prov == '21':
         cod_mun = cod_mun_trans[cod_prov].get(cod_mun, cod_mun + 1 if cod_mun > 59 else cod_mun)
-    else: 
+    elif cod_prov == '53':
+        cod_prov = '11'
+        cod_mun = cod_mun_trans[cod_prov].get(cod_mun, cod_mun)
+    else:
         cod_mun = cod_mun_trans[cod_prov].get(cod_mun, cod_mun)
     cod_mun_ine = '{}{:03d}'.format(cod_prov, cod_mun)
     return cod_mun_ine
