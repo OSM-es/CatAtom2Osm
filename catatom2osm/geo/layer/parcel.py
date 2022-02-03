@@ -22,6 +22,7 @@ class ParcelLayer(PolygonLayer):
         baseName="cadastralparcel",
         providerLib="memory",
         source_date=None,
+        mun_code='',
     ):
         super(ParcelLayer, self).__init__(path, baseName, providerLib)
         if self.fields().isEmpty():
@@ -32,6 +33,7 @@ class ParcelLayer(PolygonLayer):
             self.updateFields()
         self.rename = {'localId': 'inspireId_localId'}
         self.source_date = source_date
+        self.mun_code = mun_code
 
     def delete_void_parcels(self, buildings):
         """Remove parcels without buildings (or pools)."""
@@ -140,6 +142,13 @@ class ParcelLayer(PolygonLayer):
         self.writer.changeAttributeValues(to_change)
         return parts_count
 
+    def get_label(self, localid):
+        label = localid[0:5]
+        if label == self.mun_code:
+            label = localid[6:9]
+        return label
+
+
     def get_groups_by_parts_count(self, buildings, max_parts, buffer):
         """
         Get groups of ids of near parcels with less than max_parts
@@ -147,26 +156,28 @@ class ParcelLayer(PolygonLayer):
         parts_count = {}
         geometries = {}
         pa_refs = {}
+        zoning = defaultdict(list)
         for pa in self.getFeatures():
             geometries[pa.id()] = QgsGeometry(pa.geometry())
             parts_count[pa['localId']] = pa['parts']
             pa_refs[pa.id()] = pa['localId']
+            zoning[self.get_label(pa['localId'])].append(pa.id())
         pa_groups = []
         visited = []
-        index = self.get_index()
         for pa in self.getFeatures():
             if pa.id() in visited:
                 continue
             pc = pa['parts']
             geom = geometries[pa.id()]
-            bbox = geom.boundingBox().buffered(buffer)
-            fids = index.intersects(bbox)
-            candidates = [
-                fid for fid in fids
-                if parts_count[pa_refs[fid]] <= max_parts - pc
-            ]
+            localid = pa_refs[pa.id()]
             centro = geom.centroid()
             distance = lambda fid: centro.distance(geometries[fid].centroid())
+            label = self.get_label(localid)
+            candidates = [
+                fid for fid in zoning[label]
+                if parts_count[pa_refs[fid]] <= max_parts - pc
+                and distance(fid) < buffer
+            ]
             candidates = sorted(candidates, key=distance)
             group = []
             pcsum = 0

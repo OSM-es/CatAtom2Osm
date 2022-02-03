@@ -154,11 +154,16 @@ class TestParcelLayer(unittest.TestCase):
             self.parcel.get_groups_by_parts_count(self.building, 10, 100)
         )
         self.assertEqual(len(parts_count), 48)
-        self.assertEqual(len(pa_groups), 9)
+        self.assertEqual(len(pa_groups), 17)
         self.assertTrue(all([
             sum([parts_count[pa_refs[fid]] for fid in group]) <= 10
             for group in pa_groups
         ]))
+        label_count = set([
+            len(set([self.parcel.get_label(pa_refs[fid]) for fid in group]))
+            for group in pa_groups
+        ])
+        self.assertEqual(label_count, {1})
 
     def write_osm(self, data, osm_path):
         for e in data.elements:
