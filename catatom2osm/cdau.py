@@ -161,7 +161,7 @@ def conflate(cdau_address, cat_address, cod_mun_cat):
                 feat = QgsFeature(cat_address.fields())
                 for key, value in list(attr.items()):
                     feat[key] = value
-                feat.setGeometry(layer.Geometry.fromPointXY(pt))
+                feat.setGeometry(geo.Geometry.fromPointXY(pt))
                 to_add.append(feat) # add new
         else: # get nearest
             min_dist = 100
