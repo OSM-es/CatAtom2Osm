@@ -27,8 +27,9 @@ class ParcelLayer(PolygonLayer):
         super(ParcelLayer, self).__init__(path, baseName, providerLib)
         if self.fields().isEmpty():
             self.writer.addAttributes([
-                QgsField('localId', QVariant.String, len=254),
+                QgsField('localId', QVariant.String, len=14),
                 QgsField('parts', QVariant.Int),
+                QgsField('zone', QVariant.String, len=5),
             ])
             self.updateFields()
         self.rename = {'localId': 'inspireId_localId'}
@@ -142,14 +143,16 @@ class ParcelLayer(PolygonLayer):
         self.writer.changeAttributeValues(to_change)
         return parts_count
 
-    def get_label(self, localid):
-        label = localid[0:5]
-        if label == self.mun_code:
-            label = localid[6:9]
-        return label
+    def get_zone(self, feat):
+        zone = feat['zone']
+        if zone is None:
+            localid = feat['localId']
+            zone = localid[0:5]
+            if zone == self.mun_code:
+                zone = localid[6:9]
+        return zone
 
-
-    def get_groups_by_parts_count(self, buildings, max_parts, buffer):
+    def get_groups_by_parts_count(self, max_parts, buffer):
         """
         Get groups of ids of near parcels with less than max_parts
         """
@@ -161,7 +164,7 @@ class ParcelLayer(PolygonLayer):
             geometries[pa.id()] = QgsGeometry(pa.geometry())
             parts_count[pa['localId']] = pa['parts']
             pa_refs[pa.id()] = pa['localId']
-            zoning[self.get_label(pa['localId'])].append(pa.id())
+            zoning[self.get_zone(pa)].append(pa.id())
         pa_groups = []
         visited = []
         for pa in self.getFeatures():
@@ -169,10 +172,9 @@ class ParcelLayer(PolygonLayer):
                 continue
             pc = pa['parts']
             geom = geometries[pa.id()]
-            localid = pa_refs[pa.id()]
             centro = geom.centroid()
             distance = lambda fid: centro.distance(geometries[fid].centroid())
-            label = self.get_label(localid)
+            label = self.get_zone(pa)
             candidates = [
                 fid for fid in zoning[label]
                 if parts_count[pa_refs[fid]] <= max_parts - pc
@@ -191,11 +193,19 @@ class ParcelLayer(PolygonLayer):
                 pa_groups.append(group)
         return pa_groups, pa_refs, geometries, parts_count
 
-    def merge_by_parts_count(self, buildings, max_parts, buffer):
+    def merge_by_parts_count(self, max_parts, buffer):
         """Merge parcels in groups with less than max_parts"""
         pa_groups, pa_refs, geometries, parts_count = (
-            self.get_groups_by_parts_count(buildings, max_parts, buffer)
+            self.get_groups_by_parts_count(max_parts, buffer)
         )
         self.merge_geometries(pa_groups, geometries, None, False, False)
         tasks = self.update_parts_count(pa_groups, pa_refs, parts_count)
         return tasks
+
+    def clean(self):
+        """Delete invalid geometries and close vertices, add topological points
+        and simplify vertices."""
+        self.merge_adjacent_polygons()
+        self.delete_invalid_geometries()
+        self.topology()
+        self.simplify()

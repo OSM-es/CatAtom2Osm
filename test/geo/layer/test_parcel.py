@@ -41,7 +41,7 @@ class TestParcelLayer(unittest.TestCase):
 
     def test_not_empty(self):
         layer = ParcelLayer()
-        self.assertEqual(len(layer.fields().toList()), 2)
+        self.assertGreater(len(layer.fields().toList()), 0)
 
     def test_delete_void_parcels(self):
         self.parcel.delete_void_parcels(self.building)
@@ -150,8 +150,9 @@ class TestParcelLayer(unittest.TestCase):
         self.parcel.create_missing_parcels(self.building)
         self.parcel.count_parts(self.building)
         self.parcel.merge_by_adjacent_buildings(self.building)
+        features = {pa.id(): pa for pa in self.parcel.getFeatures()}
         pa_groups, pa_refs, geometries, parts_count = (
-            self.parcel.get_groups_by_parts_count(self.building, 10, 100)
+            self.parcel.get_groups_by_parts_count(10, 100)
         )
         self.assertEqual(len(parts_count), 48)
         self.assertEqual(len(pa_groups), 17)
@@ -160,7 +161,7 @@ class TestParcelLayer(unittest.TestCase):
             for group in pa_groups
         ]))
         label_count = set([
-            len(set([self.parcel.get_label(pa_refs[fid]) for fid in group]))
+            len(set([self.parcel.get_zone(features[fid]) for fid in group]))
             for group in pa_groups
         ])
         self.assertEqual(label_count, {1})
@@ -186,7 +187,7 @@ class TestParcelLayer(unittest.TestCase):
         self.parcel.merge_by_adjacent_buildings(self.building)
         pca = sum([f['parts'] for f in self.parcel.getFeatures()])
         la = self.parcel.featureCount()
-        tasks = self.parcel.merge_by_parts_count(self.building, 20, 30)
+        tasks = self.parcel.merge_by_parts_count(20, 30)
         pcd = sum([f['parts'] for f in self.parcel.getFeatures()])
         ld = self.parcel.featureCount()
         cl = len([k for k, v in tasks.items() if k != v])
