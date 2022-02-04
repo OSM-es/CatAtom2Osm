@@ -259,6 +259,7 @@ class PolygonLayer(BaseLayer):
         to_change = {}
         to_clean = []
         to_move = {}
+        parts = 0
         rings = 0
         zz = 0
         spikes = 0
@@ -272,7 +273,20 @@ class PolygonLayer(BaseLayer):
                 to_clean.append(fid)
                 continue
             badgeom = False
+            pn = 0
             for polygon in Geometry.get_multipolygon(geom):
+                f = QgsFeature(QgsFields())
+                g = Geometry.fromPolygonXY(polygon)
+                if g.area() < config.min_area:
+                    parts += 1
+                    geom.deletePart(pn)
+                    to_change[fid] = geom
+                    geometries[fid] = geom
+                    f.setGeometry(QgsGeometry(g))
+                    if log.app_level <= logging.DEBUG:
+                        debshp.addFeature(f)
+                    continue
+                pn += 1
                 for i, ring in enumerate(polygon):
                     if badgeom: break
                     skip = False
@@ -285,7 +299,6 @@ class PolygonLayer(BaseLayer):
                             skip = False
                             continue
                         g = Geometry.fromPolygonXY([ring])
-                        f = QgsFeature(QgsFields())
                         f.setGeometry(QgsGeometry(g))
                         g.deleteVertex(n)
                         if not g.isGeosValid() or g.area() < config.min_area:
@@ -361,6 +374,10 @@ class PolygonLayer(BaseLayer):
                     v = Point(geom.vertexAt(n))
         if to_change:
             self.writer.changeGeometryValues(to_change)
+        if parts:
+            msg = _("Deleted %d invalid part geometries in the '%s' layer")
+            log.debug(msg, parts, self.name())
+            report.values['geom_parts_' + self.name()] = parts
         if rings:
             msg = _("Deleted %d invalid ring geometries in the '%s' layer")
             log.debug(msg, rings, self.name())

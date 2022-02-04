@@ -103,6 +103,7 @@ class Report(object):
             ('adjacent_parts', _("Adjacent parts merged")),
             ('buildings_in_pools',
              _("Buildings coincidents with a swimming pool deleted")),
+            ('geom_parts_building', _('Invalid geometry parts deleted')),
             ('geom_rings_building', _('Invalid geometry rings deleted')),
             ('geom_invalid_building', _('Invalid geometries deleted')),
             ('vertex_zigzag_building', _('Zig-zag vertices deleted')),

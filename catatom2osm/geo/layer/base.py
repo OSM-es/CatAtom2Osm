@@ -6,7 +6,7 @@ from tqdm import tqdm
 from qgis.core import (
     QgsCoordinateReferenceSystem, QgsCoordinateTransform, QgsExpression,
     QgsFeature, QgsFeatureRequest, QgsFields, QgsGeometry, QgsProject,
-    QgsSpatialIndex, QgsVectorLayer, QgsVectorFileWriter,
+    QgsSpatialIndex, QgsVectorLayer, QgsVectorFileWriter, QgsWkbTypes,
 )
 
 from catatom2osm import config, osm, translate
@@ -415,7 +415,7 @@ class BaseLayer(QgsVectorLayer):
                     e = data.MultiPolygon(mp)
             else:
                 msg = _("Detected a %s geometry in the '%s' layer") % (
-                    geom.wkbType(), self.name()
+                    QgsWkbTypes.displayString(geom.wkbType()), self.name()
                 )
                 log.warning(msg)
                 report.warnings.append(msg)
