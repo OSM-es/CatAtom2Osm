@@ -15,8 +15,10 @@ def merge_groups(adjs):
         while len(group) > lastlen:
             lastlen = len(group)
             for adj in adjs[:]:
-                if len({p for p in adj if p in group}) > 0:
-                    group |= set(adj)
-                    adjs.remove(adj)
+                for p in adj:
+                    if p in group:
+                        group |= set(adj)
+                        adjs.remove(adj)
+                        break
         groups.append(group)
     return groups
