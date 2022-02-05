@@ -1,6 +1,9 @@
 Change log
 ==========
 
+**2022-1-05 (2.5.3)**
+* Fixs CDAU coordinates
+
 **2022-2-03 (2.5.2)**
 * Includes Jerez de la Frontera in CDAU
 

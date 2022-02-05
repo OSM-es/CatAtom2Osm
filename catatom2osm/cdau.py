@@ -16,7 +16,7 @@ log = logging.getLogger(config.app_name)
 andalucia = {
     '04': 'Almeria',
     '11': 'Cadiz',
-    '14': 'Cordova',
+    '14': 'Cordoba',
     '18': 'Granada',
     '21': 'Huelva',
     '23': 'Jaen',
@@ -157,6 +157,9 @@ def conflate(cdau_address, cat_address, cod_mun_cat):
     to_add = []
     to_change = {}
     to_change_g = {}
+    crs_transform = cat_address.get_crs_transform(
+        cdau_address.crs(), cat_address.crs()
+    )
     for feat in cat_address.getFeatures():
         g = feat['localId'].split('.')
         ref = '.'.join(g[:3] + g[4:])
@@ -166,6 +169,10 @@ def conflate(cdau_address, cat_address, cod_mun_cat):
         attr = get_cat_address(ad, cod_mun_cat)
         ref = attr['localId']
         pt = geo.Point(float(ad['x']), float(ad['y']))
+        if cat_address.crs() != cdau_address.crs():
+            g = geo.Geometry.fromPointXY(pt)
+            g.transform(crs_transform)
+            pt = g.asPoint()
         if len(addresses[ref]) == 0: # can't resolve cadastral reference
             area_of_candidates = geo.Point(pt).boundingBox(cdau_thr)
             fids = index.intersects(area_of_candidates)
