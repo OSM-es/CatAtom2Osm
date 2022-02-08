@@ -1,6 +1,9 @@
 Registro de cambios
 ===================
 
+**05-1-2022 (2.5.3)**
+* Corrige coordenadas CDAU
+
 **03-1-2022 (2.5.2)**
 * Incluye Jerez de la Frontera en CDAU
 
