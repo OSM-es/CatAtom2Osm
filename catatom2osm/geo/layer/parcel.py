@@ -165,22 +165,15 @@ class ParcelLayer(PolygonLayer):
 
     def count_parts(self, buildings):
         """Adds count of parts in parcel field"""
-        parts = []
         parts_count = defaultdict(int)
-        exp = "localId ~ '_'"
-        for f in buildings.getFeatures(exp):
-            parts_count[buildings.get_id(f)] += 1
-            parts.append(buildings.get_id(f))
         for f in buildings.getFeatures():
-            if buildings.get_id(f) not in parts:
-                parts_count[buildings.get_id(f)] += 1
-        parts_count = dict(parts_count)
+            parts_count[buildings.get_id(f)] += 1
         to_change = {}
         for f in self.getFeatures():
             f['parts'] = parts_count[f['localId']]
             to_change[f.id()] = get_attributes(f)
         self.writer.changeAttributeValues(to_change)
-        return parts_count
+        return dict(parts_count)
 
     def get_zone(self, feat):
         zone = feat['zone']

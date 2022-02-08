@@ -100,7 +100,7 @@ class TestParcelLayer(unittest.TestCase):
         ]
         self.assertEqual(pa_refs, expected)
         f = next(self.parcel.search("localId = '8840501CS5284S'"))
-        self.assertEqual(f['parts'], 10)
+        self.assertEqual(f['parts'], 11)
         merged = []
         for bu in self.building.getFeatures():
             if self.building.is_building(bu):
@@ -120,14 +120,14 @@ class TestParcelLayer(unittest.TestCase):
         self.parcel.delete_void_parcels(self.building)
         self.parcel.create_missing_parcels(self.building)
         parts_count = self.parcel.count_parts(self.building)
-        self.assertEqual(sum(parts_count.values()), 255)
+        self.assertEqual(sum(parts_count.values()), 324)
         self.assertEqual(len(parts_count), self.parcel.featureCount())
         f = next(self.parcel.search("localId = '8840501CS5284S'"))
         self.assertEqual(f['parts'], 7)
         self.assertEqual(parts_count['8840501CS5284S'], 7)
         f = next(self.parcel.search("localId = '8840502CS5284S'"))
-        self.assertEqual(f['parts'], 3)
-        self.assertEqual(parts_count['8840502CS5284S'], 3)
+        self.assertEqual(f['parts'], 4)
+        self.assertEqual(parts_count['8840502CS5284S'], 4)
 
     @mock.patch('catatom2osm.geo.layer.base.tqdm', mock.MagicMock())
     @mock.patch('catatom2osm.geo.layer.base.log', m_log)
@@ -145,7 +145,7 @@ class TestParcelLayer(unittest.TestCase):
             self.parcel.get_groups_by_parts_count(10, 100)
         )
         self.assertEqual(len(parts_count), 48)
-        self.assertEqual(len(pa_groups), 17)
+        self.assertEqual(len(pa_groups), 18)
         self.assertTrue(all([
             sum([parts_count[pa_refs[fid]] for fid in group]) <= 10
             for group in pa_groups
@@ -155,15 +155,6 @@ class TestParcelLayer(unittest.TestCase):
             for group in pa_groups
         ])
         self.assertEqual(label_count, {1})
-
-    def write_osm(self, data, osm_path):
-        for e in data.elements:
-            if 'ref' in e.tags:
-                del e.tags['ref']
-        data.merge_duplicated()
-        file_obj = io.open(osm_path, "w", encoding="utf-8")
-        osmxml.serialize(file_obj, data)
-        file_obj.close()
 
     @mock.patch('catatom2osm.geo.layer.base.tqdm', mock.MagicMock())
     @mock.patch('catatom2osm.geo.layer.base.log', m_log)
