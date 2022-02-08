@@ -22,7 +22,7 @@ class TestParcelLayer(unittest.TestCase):
     @mock.patch('catatom2osm.geo.layer.base.log', m_log)
     def setUp(self):
         fn = 'test/fixtures/parcel.gpkg|layername=parcel'
-        self.parcel = ParcelLayer('MultiPolygon', 'parcel', 'memory')
+        self.parcel = ParcelLayer('38012')
         fixture = QgsVectorLayer(fn, 'parcel', 'ogr')
         self.assertTrue(fixture.isValid(), "Loading fixture")
         self.parcel.append(fixture)
@@ -34,13 +34,13 @@ class TestParcelLayer(unittest.TestCase):
         self.assertTrue(self.building.isValid(), "Loading fixture")
 
     def test_init(self):
-        layer = ParcelLayer()
+        layer = ParcelLayer('38012')
         self.assertEqual(layer.fields()[0].name(), 'localId')
         self.assertEqual(layer.fields()[1].name(), 'parts')
         self.assertEqual(layer.rename['localId'], 'inspireId_localId')
 
     def test_not_empty(self):
-        layer = ParcelLayer()
+        layer = ParcelLayer('38012')
         self.assertGreater(len(layer.fields().toList()), 0)
 
     def test_delete_void_parcels(self):
@@ -55,19 +55,11 @@ class TestParcelLayer(unittest.TestCase):
 
     def test_get_groups_by_adjacent_buildings(self):
         self.parcel.create_missing_parcels(self.building)
-        pa_groups, __, __ = self.parcel.get_groups_by_adjacent_buildings(
+        pa_groups, pa_refs, __ = self.parcel.get_groups_by_adjacent_buildings(
             self.building
         )
-        expected = [
-            {48, 9, 10}, {14, 15}, {16, 17}, {18, 19, 20, 22, 23},
-            {27, 40, 41, 42, 43, 44, 45, 24, 25, 26, 187, 28, 29, 30, 31},
-            {34, 35, 55}, {56, 36, 37}, {32, 33, 38, 39}, {11, 12, 46, 47},
-            {5, 6, 7, 8, 49, 50, 51, 52}, {3, 4, 53, 54}, {57, 58},
-            {64, 65, 66, 71, 73, 59, 60, 61, 62, 63}, {82, 188}, {81, 77, 78},
-            {80, 79}, {84, 85}, {86, 87}, {91, 92}, {97, 93},
-            {99, 100, 105, 90, 107},
-         ]
-        self.assertEqual(pa_groups, expected)
+        self.assertEqual(len(pa_groups), 21)
+        self.assertEqual(sum([len(gr) for gr in pa_groups]), 85)
 
     @mock.patch('catatom2osm.geo.layer.base.tqdm', mock.MagicMock())
     @mock.patch('catatom2osm.geo.layer.base.log', m_log)
@@ -117,8 +109,6 @@ class TestParcelLayer(unittest.TestCase):
                     merged.append(ref)
         self.assertEqual(len(merged), 71)
         self.assertTrue(all([tasks[ref] != ref for ref in merged]))
-        self.parcel.reproject()
-        self.parcel.export('parcel_adj.geojson', 'GeoJSON')
 
     @mock.patch('catatom2osm.geo.layer.base.tqdm', mock.MagicMock())
     @mock.patch('catatom2osm.geo.layer.base.log', m_log)

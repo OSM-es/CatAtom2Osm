@@ -1,11 +1,13 @@
 import logging
 from collections import defaultdict
 
-from qgis.core import QgsFeature, QgsFeatureRequest, QgsField, QgsGeometry
+from qgis.core import (
+    QgsFeature, QgsFeatureRequest, QgsField, QgsGeometry, QgsRectangle
+)
 from qgis.PyQt.QtCore import QVariant
 
 from catatom2osm import config
-from catatom2osm.geo.aux import get_attributes, merge_groups
+from catatom2osm.geo.aux import get_attributes, is_inside_area, merge_groups
 from catatom2osm.geo.geometry import Geometry
 from catatom2osm.geo.layer.cons import ConsLayer
 from catatom2osm.geo.layer.polygon import PolygonLayer
@@ -18,11 +20,11 @@ class ParcelLayer(PolygonLayer):
 
     def __init__(
         self,
+        mun_code,
         path="MultiPolygon",
         baseName="cadastralparcel",
         providerLib="memory",
         source_date=None,
-        mun_code='',
     ):
         super(ParcelLayer, self).__init__(path, baseName, providerLib)
         if self.fields().isEmpty():
@@ -32,6 +34,7 @@ class ParcelLayer(PolygonLayer):
                 QgsField('zone', QVariant.String, len=5),
             ])
             self.updateFields()
+        self.mun_code = mun_code
         self.rename = {'localId': 'inspireId_localId'}
         self.source_date = source_date
         self.mun_code = mun_code
@@ -70,6 +73,30 @@ class ParcelLayer(PolygonLayer):
             self.writer.addFeatures(to_add.values())
             log.debug(_("Added %d missing parcels"), len(to_add))
 
+    def set_zones(self, zoning):
+        """
+        Assigns to each parcel the label of the zone that contains it
+        """
+        index = zoning.get_index()
+        features = {f.id(): f for f in zoning.getFeatures()}
+        to_change = {}
+        pbar = self.get_progressbar(_("setzones"), self.featureCount())
+        for pa in self.getFeatures():
+            if pa['zone'] is None:
+                c = pa.geometry().centroid()
+                fid = index.nearestNeighbor(c, 1)[0]
+                zone = features[fid]
+                label = zoning.format_label(zone)
+                pa_label = self.get_zone(pa)
+                if pa_label == label or is_inside_area(pa, zone):
+                    pa['zone'] = label
+                    to_change[pa.id()] = get_attributes(pa)
+            pbar.update()
+        pbar.close()
+        log.info("%d", len(to_change))
+        if to_change:
+            self.writer.changeAttributeValues(to_change)
+
     def get_groups_by_adjacent_buildings(self, buildings):
         """
         Get grupos of ids of parcels with buildings sharing walls with
@@ -81,18 +108,30 @@ class ParcelLayer(PolygonLayer):
         geometries = {}
         pa_ids = {}
         pa_refs = {}
+        pa_zone = {}
         for f in self.getFeatures():
             geometries[f.id()] = QgsGeometry(f.geometry())
             pa_ids[f['localId']] = f.id()
             pa_refs[f.id()] = f['localId']
-        adjs = []
+            pa_zone[f.id()] = self.get_zone(f)
+        adjs = defaultdict(list)
         for group in bu_groups:
             pids = set()
             for bid in group:
                 ref = bu_refs[bid]
                 pids.add(pa_ids[ref])
-            adjs.append(pids)
-        pa_groups = merge_groups(adjs)
+            k = '-'.join(set([pa_zone[fid] for fid in pids]))
+            adjs[k].append(pids)
+        mz_groups = {k for k in adjs.keys() if '-' in k}
+        mz_groups |= {z for k in mz_groups for z in k.split('-')}
+        pa_groups = merge_groups([adj for z in mz_groups for adj in adjs[z]])
+        for z, adj in adjs.items():
+            if z not in mz_groups:
+                if len(adj) == 1:
+                    pa_groups.append(adj[0])
+                else:
+                    for group in merge_groups(adj):
+                        pa_groups.append(group)
         return pa_groups, pa_refs, geometries
 
     def update_parts_count(self, pa_groups, pa_refs, parts_count):

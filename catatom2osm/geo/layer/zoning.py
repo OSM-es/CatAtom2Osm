@@ -6,7 +6,7 @@ from qgis.PyQt.QtCore import QVariant
 
 from catatom2osm import config
 from catatom2osm.geo import BUFFER_SIZE
-from catatom2osm.geo.aux import get_attributes, is_inside, is_inside_area
+from catatom2osm.geo.aux import get_attributes, is_inside
 from catatom2osm.geo.geometry import Geometry
 from catatom2osm.geo.layer.cons import ConsLayer
 from catatom2osm.geo.layer.polygon import PolygonLayer
@@ -168,25 +168,6 @@ class ZoningLayer(PolygonLayer):
             self.writer.deleteFeatures(to_clean)
             msg = _("%s: Removed %d of %d features.")
             log.debug(msg, self.name(), len(to_clean), fcount)
-
-    def set_zone(self, layer):
-        """
-        Assigns to each feature of layer the label of the zone that contains it
-        """
-        index = layer.get_index()
-        features = {f.id(): f for f in layer.getFeatures()}
-        for zone in self.getFeatures():
-            to_change = {}
-            label = self.format_label(zone)
-            fids = index.intersects(zone.geometry().boundingBox())
-            for fid in fids:
-                pa = features[fid]
-                if is_inside_area(pa, zone):
-                    if pa['zone'] is None:
-                        pa['zone'] = label
-                        to_change[fid] = get_attributes(pa)
-            if to_change:
-                layer.writer.changeAttributeValues(to_change)
 
     def get_labels(self, labels, gml):
         """

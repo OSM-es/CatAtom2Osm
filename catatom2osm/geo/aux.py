@@ -6,8 +6,12 @@ is_inside = lambda f1, f2: (
 def is_inside_area(f1, f2):
     g1 = f1.geometry()
     g2 = f2.geometry()
-    inter = g2.intersection(g1)
-    return inter.area() / g1.area() >= 0.5
+    if f2.geometry().contains(f1.geometry()):
+        return True
+    elif f2.geometry().overlaps(f1.geometry()):
+        inter = g2.intersection(g1)
+        return inter.area() / g1.area() >= 0.5
+    return False
 
 get_attributes = lambda feat: \
     dict([(i, feat[i]) for i in range(len(feat.fields().toList()))])

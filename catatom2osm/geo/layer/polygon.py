@@ -112,9 +112,7 @@ class PolygonLayer(BaseLayer):
         for (__, parents) in parents_per_vertex.items():
             if len(parents) > 1:
                 adjs.append(parents)
-        adjs = list(adjs)
-        groups = merge_groups(adjs)
-        return (groups, geometries)
+        return (adjs, geometries)
 
     def get_adjacents_and_geometries(self, expression=''):
         """
