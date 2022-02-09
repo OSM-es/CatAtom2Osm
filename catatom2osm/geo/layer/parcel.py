@@ -80,19 +80,19 @@ class ParcelLayer(PolygonLayer):
         index = zoning.get_index()
         features = {f.id(): f for f in zoning.getFeatures()}
         to_change = {}
-        pbar = self.get_progressbar(_("setzones"), self.featureCount())
         for pa in self.getFeatures():
             if pa['zone'] is None:
-                c = pa.geometry().centroid()
-                fid = index.nearestNeighbor(c, 1)[0]
-                zone = features[fid]
-                label = zoning.format_label(zone)
-                pa_label = self.get_zone(pa)
-                if pa_label == label or is_inside_area(pa, zone):
-                    pa['zone'] = label
-                    to_change[pa.id()] = get_attributes(pa)
-            pbar.update()
-        pbar.close()
+                c = pa.geometry().centroid().asPoint()
+                bb = QgsRectangle(c, c)
+                fids = index.intersects(bb)
+                for fid in fids:
+                    zone = features[fid]
+                    label = zoning.format_label(zone)
+                    pa_label = self.get_zone(pa)
+                    if pa_label == label or is_inside_area(pa, zone):
+                        pa['zone'] = label
+                        to_change[pa.id()] = get_attributes(pa)
+                        break
         log.info("%d", len(to_change))
         if to_change:
             self.writer.changeAttributeValues(to_change)
