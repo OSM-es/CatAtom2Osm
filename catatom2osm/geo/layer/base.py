@@ -68,6 +68,7 @@ class BaseLayer(QgsVectorLayer):
         save_options = QgsVectorFileWriter.SaveVectorOptions()
         save_options.driverName = driver_name
         save_options.fileEncoding = "UTF-8"
+        save_options.onlySelectedFeatures = self.selectedFeatureCount() != 0
         if target_crs is not None or target_crs != self.crs():
             save_options.ct = QgsCoordinateTransform(
                 self.crs(),
@@ -317,6 +318,7 @@ class BaseLayer(QgsVectorLayer):
         else:
             self.selectByExpression(expression)
         bbox = self.boundingBoxOfSelected()
+        self.removeSelection()
         return self.get_overpass_bbox(bbox)
 
     def get_overpass_bbox(self, bbox):
