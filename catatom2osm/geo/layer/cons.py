@@ -116,6 +116,20 @@ class ConsLayer(PolygonLayer):
                 parts[localId].append(feature)
         return (buildings, parts)
 
+    def remove_parts_wo_building(self):
+        """Remove building parts without building."""
+        bu_refs = [
+            f['localId'] for f in self.getFeatures() if self.is_building(f)
+        ]
+        to_clean = [
+            f.id() for f in self.getFeatures()
+            if self.is_part(f) and self.get_id(f) not in bu_refs
+        ]
+        if to_clean:
+            # TODO report
+            self.writer.deleteFeatures(to_clean)
+            log.debug(_("Removed %d parts without building"), len(to_clean))
+
     def remove_outside_parts(self):
         """
         Remove parts without levels above ground.
