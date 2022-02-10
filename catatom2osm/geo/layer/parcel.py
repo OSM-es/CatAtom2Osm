@@ -32,6 +32,7 @@ class ParcelLayer(PolygonLayer):
                 QgsField('localId', QVariant.String, len=14),
                 QgsField('parts', QVariant.Int),
                 QgsField('zone', QVariant.String, len=5),
+                QgsField('type', QVariant.String, len=10),
             ])
             self.updateFields()
         self.mun_code = mun_code
@@ -42,7 +43,7 @@ class ParcelLayer(PolygonLayer):
     def delete_void_parcels(self, buildings):
         """Remove parcels without buildings (or pools)."""
         exp = "NOT(localId ~ 'part')"
-        bu_refs = [ConsLayer.get_id(f) for f in buildings.search(exp)]
+        bu_refs = [buildings.get_id(f) for f in buildings.search(exp)]
         to_clean = [
             f.id() for f in self.getFeatures() if f['localId'] not in bu_refs
         ]
@@ -93,9 +94,24 @@ class ParcelLayer(PolygonLayer):
                         pa['zone'] = label
                         to_change[pa.id()] = get_attributes(pa)
                         break
-        log.info("%d", len(to_change))
+        msg = _("Assigned %d zones from %s to parcels")
+        log.debug(msg, len(to_change), self.sourceName())
         if to_change:
             self.writer.changeAttributeValues(to_change)
+
+    def set_missing_zones(self):
+        """Assigns label from cadastral reference if no zone exists"""
+        to_change = {}
+        m = 0
+        for pa in self.getFeatures():
+            if pa['zone'] is None:
+                m += 1
+                pa['zone'] = self.get_zone(pa)
+            pa['type'] = _('Rustic') if len(pa['zone']) == 3 else _('Urban')
+            to_change[pa.id()] = get_attributes(pa)
+        if m:
+            log.debug(_("There are %d parcels without zone"), m)
+        self.writer.changeAttributeValues(to_change)
 
     def get_groups_by_adjacent_buildings(self, buildings):
         """
