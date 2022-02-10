@@ -1,18 +1,15 @@
 """Reader of Cadastre ATOM GML files"""
 from __future__ import print_function, unicode_literals
 from builtins import next, object, str
-import json
 import logging
 import os
 import re
 import zipfile
 from lxml import etree
-from requests.exceptions import ConnectionError
 
 from qgis.core import QgsCoordinateReferenceSystem
 
-from catatom2osm import config, csvtools, download, hgwnames, geo, overpass
-from catatom2osm.report import instance as report
+from catatom2osm import config, download, geo
 log = logging.getLogger(config.app_name)
 
 
@@ -111,25 +108,21 @@ class Reader(object):
         return (md_path, gml_path, zip_path, group)
 
     def is_empty(self, gml_path, zip_path):
-        """Detects if the file is empty. Cadastre empty files (usually 
+        """Detects if the file is empty. Cadastre empty files (usually
         otherconstruction) comes with a null feature and results in a non valid
         layer in QGIS"""
         if os.path.exists(zip_path):
             zf = zipfile.ZipFile(zip_path)
             gml_fp = self.get_path_from_zip(zf, gml_path)
-            f = zf.open(gml_fp, 'r')
+            fo = zf.open(gml_fp, 'r')
         else:
-            f = open(gml_path, 'rb')
-        context = etree.iterparse(f, events=('end',))
-        try:
-            event, elem = next(context) # </something>
-            event, elem = next(context) # </featureMember>
-            event, elem = next(context) # </featureCollection>
-            f.close()
-            return False
-        except StopIteration:
-            f.close()
-            return True
+            fo = open(gml_path, 'rb')
+        text = fo.read(2000)
+        fo.close()
+        parser = etree.XMLPullParser(['start', 'end'])
+        parser.feed(text)
+        events = list(parser.read_events())
+        return len([event for event, elem in events if event == 'start']) < 3
 
     def get_path_from_zip(self, zf, a_path):
         """Return full path in zip of this file name"""
