@@ -7,7 +7,7 @@ from qgis.core import QgsFeature, QgsFeatureRequest, QgsFields, QgsGeometry
 from catatom2osm import config
 from catatom2osm.report import instance as report
 from catatom2osm.geo import BUFFER_SIZE
-from catatom2osm.geo.aux import is_inside, merge_groups
+from catatom2osm.geo.aux import is_inside, is_inside_area, merge_groups
 from catatom2osm.geo.debug import DebugWriter
 from catatom2osm.geo.geometry import Geometry
 from catatom2osm.geo.point import Point
@@ -36,9 +36,16 @@ class PolygonLayer(BaseLayer):
         return sum([f.geometry().area() for f in self.getFeatures()])
 
     def is_inside(self, feature):
-        """Returns list of features of this layer that have feature inside"""
+        """Returns first feature of this layer that have feature inside"""
         for feat in self.getFeatures():
             if is_inside(feature, feat):
+                return feat
+        return None
+
+    def is_inside_area(self, feature):
+        """Returns first feature of this layer that have feature inside"""
+        for feat in self.getFeatures():
+            if is_inside_area(feature, feat):
                 return feat
         return None
 

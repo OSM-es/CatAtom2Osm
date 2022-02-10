@@ -1,14 +1,16 @@
-is_inside = lambda f1, f2: (
-        f2.geometry().contains(f1.geometry())
-        or f2.geometry().overlaps(f1.geometry())
-)
+get_geometry = lambda f: f.geometry() if hasattr(f, 'geometry') else f
+
+def is_inside(f1, f2):
+    g1 = get_geometry(f1)
+    g2 = get_geometry(f2)
+    return g2.contains(g1) or g2.overlaps(g1)
 
 def is_inside_area(f1, f2):
-    g1 = f1.geometry()
-    g2 = f2.geometry()
-    if f2.geometry().contains(f1.geometry()):
+    g1 = get_geometry(f1)
+    g2 = get_geometry(f2)
+    if g2.contains(g1):
         return True
-    elif f2.geometry().overlaps(f1.geometry()):
+    elif g2.overlaps(g1):
         inter = g2.intersection(g1)
         return inter.area() / g1.area() >= 0.5
     return False
