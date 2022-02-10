@@ -54,6 +54,11 @@ class AddressLayer(BaseLayer):
         """Address features have '.' but not '_' in its localId field"""
         return '.' in feature['localId'] and '_' not in feature['localId']
 
+    @staticmethod
+    def get_id(feat):
+        """Trim to parcel id"""
+        return feat['localId'].split('_')[0].split('.')[-1]
+
     def to_osm(self, data=None, tags={}, upload='never'):
         """Export to OSM"""
         return super(AddressLayer, self).to_osm(translate.address_tags, data,
@@ -112,3 +117,19 @@ class AddressLayer(BaseLayer):
             feat['image'] = url
             to_change[feat.id()] = get_attributes(feat)
         self.writer.changeAttributeValues(to_change)
+
+    def remove_address_wo_building(self, buildings):
+        """Remove address without associated building."""
+        bu_refs = [
+            f['localId'] for f in buildings.getFeatures()
+            if buildings.is_building(f)
+        ]
+        to_clean = [
+            f.id() for f in self.getFeatures()
+            if self.get_id(f) not in bu_refs
+        ]
+        if to_clean:
+            #TODO report
+            self.writer.deleteFeatures(to_clean)
+            msg = _("Removed %d addresses without building")
+            log.debug(msg, len(to_clean))
