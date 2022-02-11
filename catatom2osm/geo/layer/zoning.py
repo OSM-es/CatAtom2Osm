@@ -13,6 +13,8 @@ from catatom2osm.geo.layer.polygon import PolygonLayer
 
 log = logging.getLogger(config.app_name)
 
+level_query = lambda f, kw: ZoningLayer.check_zone(f, kw['level'])
+
 
 class ZoningLayer(PolygonLayer):
     """Class for cadastral zoning"""
@@ -70,6 +72,7 @@ class ZoningLayer(PolygonLayer):
             pass
         return label
 
+    #TODO remove
     def set_tasks(self, zip_code):
         """Assings a unique task label to each zone"""
         to_change = {}
@@ -79,49 +82,15 @@ class ZoningLayer(PolygonLayer):
             to_change[zone.id()] = get_attributes(zone)
         self.writer.changeAttributeValues(to_change)
 
-    def append(self, layer, level=None):
-        """Append features. Split multipolygon geometries.
+    def append(
+        self, layer, rename=None, resolve=None, query=level_query, **kwargs
+    ):
+        """Append filtering by level: 'M' Urban, 'P' Rustic"""
+        super(ZoningLayer, self).append(
+            layer, rename, resolve, query, **kwargs
+        )
 
-        Args:
-            layer(QgsVectorLayer): cadastralzoning GML source
-            level(str): 'P' (rustic polygon), 'M' (urban block) or None for both
-        """
-        self.setCrs(layer.crs())
-        total = 0
-        to_add = []
-        multi = 0
-        final = 0
-        pbar = self.get_progressbar(_("Append"), layer.featureCount())
-        for feature in layer.getFeatures():
-            if self.check_zone(feature, level):
-                feat = self.copy_feature(feature)
-                geom = feature.geometry()
-                mp = Geometry.get_multipolygon(geom)
-                if len(mp) > 1:
-                    for part in mp:
-                        f = QgsFeature(feat)
-                        f.setGeometry(Geometry.fromPolygonXY(part))
-                        to_add.append(f)
-                        final += 1
-                    multi += 1
-                    total += 1
-                elif len(mp) == 1:
-                    to_add.append(feat)
-                    total += 1
-            if len(to_add) > BUFFER_SIZE:
-                self.writer.addFeatures(to_add)
-                to_add = []
-            pbar.update()
-        pbar.close()
-        if len(to_add) > 0:
-            self.writer.addFeatures(to_add)
-        if total:
-            log.debug (_("Loaded %d features in '%s' from '%s'"), total,
-                self.name(), layer.name())
-        if multi:
-            log.debug(_("%d multi-polygons splitted into %d polygons in "
-                "the '%s' layer"), multi, final, self.name())
-
+    #TODO renovar
     def export_poly(self, filename):
         """Export as polygon file for Osmosis"""
         mun = Geometry.merge_adjacent_features([f for f in self.getFeatures()])
@@ -140,6 +109,7 @@ class ZoningLayer(PolygonLayer):
             fo.write('END\n')
         return
 
+    #TODO remove
     def remove_outside_features(self, layer=None, skip=[]):
         """
         Remove any zone not contained in layer features except if its label
@@ -169,6 +139,7 @@ class ZoningLayer(PolygonLayer):
             msg = _("%s: Removed %d of %d features.")
             log.debug(msg, self.name(), len(to_clean), fcount)
 
+    #TODO remove
     def get_labels(self, labels, gml):
         """
         Builds in labels an index of gml features localId vs the label of the

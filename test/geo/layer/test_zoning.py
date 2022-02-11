@@ -42,21 +42,23 @@ class TestZoningLayer(unittest.TestCase):
     @mock.patch('catatom2osm.geo.layer.base.log', m_log)
     @mock.patch('catatom2osm.geo.layer.base.tqdm', mock.MagicMock())
     def test_append(self):
-        self.ulayer.append(self.fixture, 'M')
-        self.rlayer.append(self.fixture, 'P')
-        self.assertGreater(
-            self.ulayer.featureCount() + self.rlayer.featureCount(),
-            self.fixture.featureCount()
-        )
+        bad_geoms = lambda l: [
+            f for f in l.getFeatures() if not f.geometry().isGeosValid()
+        ]
+        self.assertGreater(len(bad_geoms(self.fixture)), 0)
+        self.ulayer.append(self.fixture, level='M')
+        self.rlayer.append(self.fixture, level='P')
         for f in self.ulayer.getFeatures():
             self.assertTrue(self.ulayer.check_zone(f, level='M'))
         for f in self.rlayer.getFeatures():
             self.assertTrue(self.rlayer.check_zone(f, level='P'))
+        self.assertEqual(len(bad_geoms(self.ulayer)), 0)
+        self.assertEqual(len(bad_geoms(self.rlayer)), 0)
 
     @mock.patch('catatom2osm.geo.layer.base.log', m_log)
     @mock.patch('catatom2osm.geo.layer.base.tqdm', mock.MagicMock())
     def test_is_inside_full(self):
-        self.ulayer.append(self.fixture, 'M')
+        self.ulayer.append(self.fixture, level='M')
         zone = Geometry.fromPolygonXY([[
             Point(357275.888, 3123959.765),
             Point(357276.418, 3123950.625),
@@ -70,7 +72,7 @@ class TestZoningLayer(unittest.TestCase):
     @mock.patch('catatom2osm.geo.layer.base.log', m_log)
     @mock.patch('catatom2osm.geo.layer.base.tqdm', mock.MagicMock())
     def test_is_inside_part(self):
-        self.ulayer.append(self.fixture, 'M')
+        self.ulayer.append(self.fixture, level='M')
         feat = QgsFeature(self.ulayer.fields())
         zone = Geometry.fromPolygonXY([[
             Point(357270.987, 3123924.266),
@@ -84,7 +86,7 @@ class TestZoningLayer(unittest.TestCase):
     @mock.patch('catatom2osm.geo.layer.base.log', m_log)
     @mock.patch('catatom2osm.geo.layer.base.tqdm', mock.MagicMock())
     def test_is_inside_false(self):
-        self.ulayer.append(self.fixture, 'M')
+        self.ulayer.append(self.fixture, level='M')
         feat = QgsFeature(self.ulayer.fields())
         zone = Geometry.fromPolygonXY([[
             Point(357228.335, 3123901.881),
@@ -98,7 +100,7 @@ class TestZoningLayer(unittest.TestCase):
     @mock.patch('catatom2osm.geo.layer.base.log', m_log)
     @mock.patch('catatom2osm.geo.layer.base.tqdm', mock.MagicMock())
     def test_get_adjacents_and_geometries(self):
-        self.ulayer.append(self.fixture, 'M')
+        self.ulayer.append(self.fixture, level='M')
         (groups, geometries) = self.ulayer.get_adjacents_and_geometries()
         self.assertTrue(all([len(g) > 1 for g in groups]))
         for group in groups:
@@ -109,8 +111,8 @@ class TestZoningLayer(unittest.TestCase):
     @mock.patch('catatom2osm.geo.layer.base.log', m_log)
     @mock.patch('catatom2osm.geo.layer.base.tqdm', mock.MagicMock())
     def test_set_tasks(self):
-        self.ulayer.append(self.fixture, 'M')
-        self.rlayer.append(self.fixture, 'P')
+        self.ulayer.append(self.fixture, level='M')
+        self.rlayer.append(self.fixture, level='P')
         self.ulayer.set_tasks('12345')
         labels = {int(f['label']) for f in self.ulayer.getFeatures()}
         self.assertEqual(max(labels), 92409)
@@ -125,8 +127,8 @@ class TestZoningLayer(unittest.TestCase):
     @mock.patch('catatom2osm.geo.layer.base.log', m_log)
     @mock.patch('catatom2osm.geo.layer.base.tqdm', mock.MagicMock())
     def test_get_labels(self):
-        self.ulayer.append(self.fixture, 'M')
-        self.rlayer.append(self.fixture, 'P')
+        self.ulayer.append(self.fixture, level='M')
+        self.rlayer.append(self.fixture, level='P')
         expected = Counter({
              '86416': 56, '84428': 21, '88423': 18, '86423': 18,
              '89423': 17, '86439': 17, '86417': 17, '90417': 12,
@@ -154,37 +156,3 @@ class TestZoningLayer(unittest.TestCase):
         self.assertFalse('000902900CS52D_part1' in labels)
         result = Counter(labels.values())
         self.assertEqual(result, expected)
-
-    @mock.patch('catatom2osm.geo.layer.base.tqdm', mock.MagicMock())
-    def do_test_split(self, split):
-        splitted = [
-            '001', '83462', '83462', '83468', '83469', '84486', '84499',
-            '85461', '85462', '85463', '85490', '86464', '87483',
-        ]
-        self.ulayer.append(self.fixture, 'M')
-        self.rlayer.append(self.fixture, 'P')
-        self.ulayer.remove_outside_features(split, ['001'])
-        self.assertEqual(self.ulayer.featureCount() + 1, len(splitted))
-        for feat in self.ulayer.getFeatures():
-            self.assertIn(feat['label'], splitted)
-
-    @mock.patch('catatom2osm.geo.layer.base.log', m_log)
-    def test_remove_outside_features1(self):
-        """Splits using a polygon geojson created with QGIS"""
-        split = BaseLayer('test/fixtures/split1.geojson', 'splitzoning', 'ogr')
-        self.do_test_split(split)
-
-    @mock.patch('catatom2osm.geo.layer.base.log', m_log)
-    def test_remove_outside_features2(self):
-        """Splits using a multipolygon geojson created with QGIS"""
-        split = BaseLayer('test/fixtures/split2.geojson', 'splitzoning', 'ogr')
-        self.do_test_split(split)
-
-    @mock.patch('catatom2osm.geo.layer.base.log', m_log)
-    def test_remove_outside_features3(self):
-        """
-        Splits using a polygon geojson with different CRS created with JOSM.
-        Manually edited to change MultiString to Polygon
-        """
-        split = BaseLayer('test/fixtures/split3.geojson', 'splitzoning', 'ogr')
-        self.do_test_split(split)

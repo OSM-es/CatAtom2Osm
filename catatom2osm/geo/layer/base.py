@@ -167,6 +167,7 @@ class BaseLayer(QgsVectorLayer):
         to_add = []
         pbar = self.get_progressbar(_("Append"), layer.featureCount())
         for feature in layer.getFeatures():
+            Geometry.merge_adjacent_polygons(feature)
             geom = feature.geometry()
             if not query or query(feature, kwargs):
                 if (

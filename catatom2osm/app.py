@@ -435,7 +435,7 @@ class CatAtom2Osm(object):
             self.export_layer(
                 self.rustic_zoning, 'rustic_zoning.geojson', 'GeoJSON'
             )
-        self.rustic_zoning.append(self.urban_zoning)
+        self.rustic_zoning.append(self.urban_zoning, level='M')
         fn = 'zoning.geojson'
         self.export_layer(self.rustic_zoning, fn, 'GeoJSON')
 

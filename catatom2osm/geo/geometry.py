@@ -1,6 +1,6 @@
 from qgis.core import QgsFeature, QgsGeometry, QgsPointXY
 
-from catatom2osm.geo.types import WKBPolygon
+from catatom2osm.geo.types import WKBMultiPolygon, WKBPolygon
 from catatom2osm.report import instance as report
 
 
@@ -78,7 +78,10 @@ class Geometry(object):
     def merge_adjacent_polygons(feature):
         """
         Merge adjacent polygons in a feature geometry
+        Returns true if geometry is changed
         """
+        if feature.geometry().wkbType() != WKBMultiPolygon:
+            return False
         mp = Geometry.get_multipolygon(feature)
         if len(mp) < 2:
             return False

@@ -253,7 +253,6 @@ class ParcelLayer(PolygonLayer):
     def clean(self):
         """Delete invalid geometries and close vertices, add topological points
         and simplify vertices."""
-        self.merge_adjacent_polygons()
         self.delete_invalid_geometries()
         self.topology()
         self.simplify()
