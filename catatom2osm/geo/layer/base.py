@@ -122,7 +122,7 @@ class BaseLayer(QgsVectorLayer):
             self.writer.addAttributes(feature.fields().toList())
             self.updateFields()
         dst_ft = QgsFeature(self.fields())
-        dst_ft.setGeometry(feature.geometry())  # TODO: Add makeValid (QGIS3)
+        dst_ft.setGeometry(feature.geometry())
         src_attrs = [f.name() for f in feature.fields()]
         for field in self.fields().toList():
             dst_attr = field.name()

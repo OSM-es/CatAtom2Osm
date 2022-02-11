@@ -126,9 +126,9 @@ class ConsLayer(PolygonLayer):
             if self.is_part(f) and self.get_id(f) not in bu_refs
         ]
         if to_clean:
-            # TODO report
             self.writer.deleteFeatures(to_clean)
             log.debug(_("Removed %d parts without building"), len(to_clean))
+            report.parts_wo_building = len(to_clean)
 
     def remove_outside_parts(self):
         """
@@ -138,7 +138,6 @@ class ConsLayer(PolygonLayer):
         """
         to_clean_o = []
         to_clean_b = []
-        to_add = []
         buildings = {f['localId']: f for f in self.getFeatures() if
                      self.is_building(f)}
         pbar = self.get_progressbar(_("Remove outside parts"),
@@ -165,10 +164,6 @@ class ConsLayer(PolygonLayer):
                 _("Deleted %d building parts with no floors above ground"),
                 len(to_clean_b))
             report.underground_parts = len(to_clean_b)
-        if to_add:
-            self.writer.addFeatures(to_add)
-            log.debug(_("Generated %d building outlines"), len(to_add))
-            report.new_outlines = len(to_add)
 
     def get_parts(self, outline, parts):
         """

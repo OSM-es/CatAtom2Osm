@@ -72,16 +72,6 @@ class ZoningLayer(PolygonLayer):
             pass
         return label
 
-    #TODO remove
-    def set_tasks(self, zip_code):
-        """Assings a unique task label to each zone"""
-        to_change = {}
-        for zone in self.getFeatures():
-            zone['label'] = self.format_label(zone)
-            zone['zipcode'] = zip_code
-            to_change[zone.id()] = get_attributes(zone)
-        self.writer.changeAttributeValues(to_change)
-
     def append(
         self, layer, rename=None, resolve=None, query=level_query, **kwargs
     ):
@@ -109,68 +99,3 @@ class ZoningLayer(PolygonLayer):
             fo.write('END\n')
         return
 
-    #TODO remove
-    def remove_outside_features(self, layer=None, skip=[]):
-        """
-        Remove any zone not contained in layer features except if its label
-        is in skip list.
-        """
-        split = None
-        if layer:
-            split = Geometry.merge_adjacent_features(
-                [f for f in layer.getFeatures()]
-            )
-            if layer.crs() != self.crs():
-                crs_transform = self.get_crs_transform(layer.crs(), self.crs())
-                split.transform(crs_transform)
-        to_clean = []
-        fcount = self.featureCount()
-        for feat in self.getFeatures():
-            geom = feat.geometry()
-            if feat['label'] not in skip:
-                if split:
-                    inter = split.intersection(geom)
-                    if inter.area() / geom.area() < 0.5:
-                        to_clean.append(feat.id())
-                else:
-                    to_clean.append(feat.id())
-        if len(to_clean):
-            self.writer.deleteFeatures(to_clean)
-            msg = _("%s: Removed %d of %d features.")
-            log.debug(msg, self.name(), len(to_clean), fcount)
-
-    #TODO remove
-    def get_labels(self, labels, gml):
-        """
-        Builds in labels an index of gml features localId vs the label of the
-        zone in witch it is contained. If the feature geometry overlaps many
-        zones, takes the zone with the largest intersection.
-        """
-        index = self.get_index()
-        features = {f.id(): f for f in self.getFeatures()}
-        pbar = gml.get_progressbar(_("Labeling"), gml.featureCount())
-        for feat in gml.getFeatures():
-            localid = ConsLayer.get_id(feat)
-            label = labels.get(localid, None)
-            if label is None or label == 'missing':
-                if ConsLayer.is_part(feat):
-                    continue  # exclude parts without building
-                fids = index.intersects(feat.geometry().boundingBox())
-                zones = [
-                    features[fid] for fid in fids
-                    if is_inside(feat, features[fid])
-                ]
-                if len(zones) == 0:
-                    label = 'missing'
-                else:
-                    label = self.format_label(zones[0])
-                    geom = feat.geometry()
-                    parea = zones[0].geometry().intersection(geom).area()
-                    for z in zones[1:]:
-                        area = z.geometry().intersection(geom).area()
-                        if area > parea:
-                            parea = area
-                            label = self.format_label(z)
-                labels[localid] = label
-            pbar.update()
-        pbar.close()

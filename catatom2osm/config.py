@@ -64,19 +64,20 @@ fn_prefix = 'A.ES.SDGC' # Inspire Atom file name prefix
 silence_gdal = False
 
 delimiter = '\t'
-dup_thr = 0.012 # Distance in meters to merge nearest vertexs.
-                # 0.011 is about 1E-7 degrees in latitude
-dist_thr = 0.02 # Threshold in meters for vertex simplification and topological points.
-straight_thr = 2 # Threshold in degrees from straight angle to delete a vertex
-acute_thr = 10 # Remove vertices with an angle smaller than this value
-min_area = 0.05 # Delete geometries with an area smaller than this value
-addr_thr = 10 # Distance in meters to merge address node with building outline
-acute_inv = 5 # Remove geometries/rings that result invalid after removing any vertex with an angle smaller than this value
-dist_inv = 0.1 # Threshold in meters to filter angles for zig-zag and spikes
-entrance_thr = 0.4 # Minimum distance in meters from a entrance to the nearest corner
-warning_min_area = 1 # Area in m2 for small area warning
-warning_max_area = 30000 # Area in m2 for big area warning
-bbox_buffer = 0.002 # Buffer in degrees around overpass bounding boxes
+dup_thr = 0.012  # Distance in meters to merge nearest vertexs.
+                 # 0.011 is about 1E-7 degrees in latitude
+dist_thr = 0.02  # Threshold in meters for vertex simplification and topological points.
+straight_thr = 2  # Threshold in degrees from straight angle to delete a vertex
+acute_thr = 10  # Remove vertices with an angle smaller than this value
+min_area = 0.05  # Delete geometries with an area smaller than this value
+addr_thr = 10  # Distance in meters to merge address node with building outline
+acute_inv = 5  # Remove geometries/rings that result invalid after removing any vertex with an angle smaller than this value
+dist_inv = 0.1  # Threshold in meters to filter angles for zig-zag and spikes
+entrance_thr = 0.4  # Minimum distance in meters from a entrance to the nearest corner
+warning_min_area = 1  # Area in m2 for small area warning
+warning_max_area = 30000  # Area in m2 for big area warning
+bbox_buffer = 0.002  # Buffer in degrees around overpass bounding boxes
+parcel_buffer = 200  # Buffer in meters around parcel to search adjacents
 
 changeset_tags = {
     'comment': "#Spanish_Cadastre_Buildings_Import",

@@ -40,12 +40,12 @@ class ParcelLayer(PolygonLayer):
         self.source_date = source_date
         self.mun_code = mun_code
 
-    def delete_void_parcels(self, buildings):
-        """Remove parcels without buildings (or pools)."""
+    def delete_void_parcels(self, source):
+        """Remove parcels without buildings (or pools)/addresses."""
         exp = "NOT(localId ~ 'part')"
-        bu_refs = [buildings.get_id(f) for f in buildings.search(exp)]
+        refs = [source.get_id(f) for f in source.search(exp)]
         to_clean = [
-            f.id() for f in self.getFeatures() if f['localId'] not in bu_refs
+            f.id() for f in self.getFeatures() if f['localId'] not in refs
         ]
         if to_clean:
             self.writer.deleteFeatures(to_clean)

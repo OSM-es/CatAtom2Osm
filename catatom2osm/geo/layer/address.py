@@ -129,7 +129,7 @@ class AddressLayer(BaseLayer):
             if self.get_id(f) not in bu_refs
         ]
         if to_clean:
-            #TODO report
             self.writer.deleteFeatures(to_clean)
             msg = _("Removed %d addresses without building")
             log.debug(msg, len(to_clean))
+            report.orphaned_addresses = len(to_clean)

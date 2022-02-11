@@ -61,25 +61,35 @@ class Report(object):
             ('inp_address_parcel', TAB + _('Type parcel')),
             ('inp_zip_codes', _('Postal codes')),
             ('inp_street_names', _('Street names')),
-            ('orphand_addresses',
-             _('Addresses without associated building excluded')),
             ('subgroup_ad_process', _('Process')),
+            (
+                'orphaned_addresses',
+                _('Addresses without associated building excluded')
+            ),
             ('ignored_addresses', _('Addresses deleted by street name')),
-            ('addresses_without_number',
-             _('Addresses without house number deleted')),
-            ('multiple_addresses',
-             _('Addresses belonging to multiple buildings deleted')),
-            ('not_unique_addresses',
-             _("'Parcel' addresses not unique for its building deleted")),
+            (
+                'addresses_without_number',
+                _('Addresses without house number deleted')
+            ),
+            (
+                'multiple_addresses',
+                _('Addresses belonging to multiple buildings deleted')
+            ),
+            (
+                'not_unique_addresses',
+                _("'Parcel' addresses not unique for its building deleted")
+            ),
             ('subgroup_ad_conflation', _("Conflation")),
             ('osm_addresses', _("OSM addresses ")),
-            ('osm_addresses_whithout_number', TAB + _("Without house number")),
-            ('refused_addresses',
-             _("Addresses rejected because they exist in OSM")),
+            ('osm_addresses_without_number', TAB + _("Without house number")),
+            (
+                'refused_addresses',
+                _("Addresses rejected because they exist in OSM")
+            ),
             ('subgroup_ad_output', _('Output data')),
             ('out_address', _('Addresses')),
             ('out_address_entrance', TAB + _('In entrance nodes')),
-            ('out_address_building', TAB + _('In buildings')),
+            ('out_address_parcel', TAB + _('In parcels')),
             ('out_addr_str', TAB + _('Type addr:street')),
             ('out_addr_plc', TAB + _('Type addr:place')),
             ('group_buildings', _('Buildings')),
@@ -89,20 +99,28 @@ class Report(object):
             ('inp_buildings', TAB + _('Buildings')),
             ('inp_parts', TAB + _('Building parts')),
             ('inp_pools', TAB + _('Swimming pools')),
-            ('orphand_parts',
-             _('Parts without associated building excluded')),
+            (
+                'orphaned_parts',
+                _('Parts without associated building excluded')
+            ),
             ('subgroup_bu_process', _('Process')),
+            ('parts_wo_building', _('Parts without building deleted')),
             ('outside_parts', _("Parts outside outline deleted")),
             ('underground_parts', _("Parts with no floors above ground")),
-            ('new_outlines', _("Building outlines created")),
-            ('multipart_geoms_building',
-             _("Buildings with multipart geometries")),
-            ('exploded_parts_building',
-             _("Buildings resulting from splitting multiparts")),
+            (
+                'multipart_geoms_building',
+                _("Buildings with multipart geometries")
+            ),
+            (
+                'exploded_parts_building',
+                _("Buildings resulting from splitting multiparts")
+            ),
             ('parts_to_outline', _("Parts merged to the outline")),
             ('adjacent_parts', _("Adjacent parts merged")),
-            ('buildings_in_pools',
-             _("Buildings coincidents with a swimming pool deleted")),
+            (
+                'buildings_in_pools',
+                _("Buildings coincidents with a swimming pool deleted")
+            ),
             ('geom_parts_building', _('Invalid geometry parts deleted')),
             ('geom_rings_building', _('Invalid geometry rings deleted')),
             ('geom_invalid_building', _('Invalid geometries deleted')),
@@ -126,9 +144,10 @@ class Report(object):
             ('building_types', _("Building types counter")),
             ('dlag', _("Max. levels above ground (level: # of buildings)")),
             ('dlbg', _("Min. levels below ground (level: # of buildings)")),
-            ('tasks_r', _("Rustic tasks files")),
-            ('tasks_u', _("Urban tasks files")),
-            ('tasks_m', _("Buildings without zone")),
+            ('group_tasks', _('Project')),
+            ('tasks', _('Tasks files')),
+            ('tasks_r', TAB + _("Rustic")),
+            ('tasks_u', TAB + _("Urban")),
             ('group_problems', _("Problems")),
             ('errors', _("Report validation:")),
             ('fixme_count', _("Fixmes")),
@@ -173,7 +192,7 @@ class Report(object):
                 if el.type == 'node' and 'entrance' in el.tags:
                     self.inc('out_address_entrance')
                 if not 'entrance' in el.tags:
-                    self.inc('out_address_building')
+                    self.inc('out_address_parcel')
 
     def cons_stats(self, data, task_label=None):
         for el in data.elements:
@@ -246,42 +265,79 @@ class Report(object):
         except ImportError:
             pass
 
+    def clean_group(self, group):
+        group = '_' + group
+        for k in frozenset(self.values.keys()):
+            if k.endswith(group):
+                del self.values[k]
+
     def validate(self):
-        if self.sum('inp_address_entrance', 'inp_address_parcel') != \
-                self.get('inp_address'):
-            self.errors.append(_("Sum of address types should be equal "
-                "to the input addresses"))
-        if self.sum('addresses_without_number', 'not_unique_addresses',
-                'multiple_addresses', 'refused_addresses', 'ignored_addresses', 
-                'out_address', 'pool_addresses') != self.get('inp_address'):
-            self.errors.append(_("Sum of output and deleted addresses "
-                "should be equal to the input addresses"))
+        if self.sum('tasks_u', 'tasks_r') != self.get('tasks'):
+            self.errors.append(_(
+                "Sum of rustic and urban tasks should be equal "
+                "to number of tasks in the project"
+            ))
         if (
-            self.sum('out_address_entrance', 'out_address_building') > 0
-            and self.sum('out_address_entrance', 'out_address_building')
+            self.sum('inp_address_entrance', 'inp_address_parcel')
+            !=self.get('inp_address')
+        ):
+            self.errors.append(_(
+                "Sum of address types should be equal to the input addresses"
+            ))
+        if self.sum(
+            'addresses_without_number', 'not_unique_addresses',
+            'multiple_addresses', 'refused_addresses', 'ignored_addresses',
+            'out_address', 'pool_addresses', 'orphaned_addresses',
+        ) != self.get('inp_address'):
+            self.errors.append(_(
+                "Sum of output and deleted addresses should be equal "
+                "to the input addresses"
+            ))
+        if (
+            self.sum('out_address_entrance', 'out_address_parcel') > 0
+            and self.sum('out_address_entrance', 'out_address_parcel')
         ) != self.get('out_address'):
-            self.errors.append(_("Sum of entrance and building address "
-                "should be equal to output addresses"))
-        if self.sum('out_addr_str', 'out_addr_plc') != \
-                self.get('out_address'):
-            self.errors.append(_("Sum of street and place addresses "
-                "should be equal to output addresses"))
-        if self.sum('inp_buildings', 'inp_parts', 'inp_pools') != \
-                self.get('inp_features'):
-            self.errors.append(_("Sum of buildings, parts and pools should "
-                "be equal to the feature count"))
-        if self.sum('out_features', 'outside_parts', 'underground_parts',
+            self.errors.append(_(
+                "Sum of entrance and parcel addresses should be equal "
+                "to output addresses"
+            ))
+        if (
+            self.sum('out_addr_str', 'out_addr_plc') != self.get('out_address')
+        ):
+            self.errors.append(_(
+                "Sum of street and place addresses should be equal "
+                "to output addresses"
+            ))
+        if (
+            self.sum('inp_buildings', 'inp_parts', 'inp_pools')
+            != self.get('inp_features')
+        ):
+            self.errors.append(_(
+                "Sum of buildings, parts and pools should be equal "
+                "to the feature count"
+            ))
+        if (
+            self.sum(
+                'out_features', 'outside_parts', 'underground_parts',
                 'multipart_geoms_building', 'parts_to_outline',
-                'adjacent_parts', 'geom_invalid_building', 'buildings_in_pools') - \
-                self.sum('new_outlines', 'exploded_parts_building') != \
-                    self.get('inp_features'):
-            self.errors.append(_("Sum of output and deleted minus created "
-                "building features should be equal to input features"))
+                'parts_wo_building', 'adjacent_parts',
+                'geom_invalid_building', 'buildings_in_pools',
+            )
+            - self.get('exploded_parts_building') != self.get('inp_features')
+        ):
+            self.errors.append(_(
+                "Sum of output and deleted minus created "
+                "building features should be equal to input features"
+            ))
         if 'building_counter' in self.values:
-            if sum(self.values['building_counter'].values()) != \
-                    self.get('out_buildings'):
-                self.errors.append(_("Sum of building types should be equal "
-                    "to the number of buildings"))
+            if (
+                sum(self.values['building_counter'].values())
+                != self.get('out_buildings')
+            ):
+                self.errors.append(_(
+                    "Sum of building types should be equal "
+                    "to the number of buildings"
+                ))
 
     def to_string(self):
         self.validate()

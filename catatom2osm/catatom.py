@@ -130,7 +130,7 @@ class Reader(object):
         for name in zf.namelist():
             if name.endswith(fn):
                 return name
-        raise(KeyError("There is no item named '{}' in the archive".format(fn)))
+        raise KeyError("There is no item named '{}' in the archive".format(fn))
 
     def get_gml_from_zip(self, gml_path, zip_path, group, layername):
         """Return gml layer from zip if exists and is valid or none"""
