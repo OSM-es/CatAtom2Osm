@@ -14,11 +14,6 @@ app_copyright = '2017, Javier Sanchez Portero'
 app_desc = 'Tool to convert INSPIRE data sets from the Spanish Cadastre ATOM Services to OSM files'
 app_tags = ''
 
-MIN_QGIS_VERSION_INT = 21001
-MIN_QGIS_VERSION = '2.10.1'
-MIN_GDAL_VERSION_INT = 11103
-MIN_GDAL_VERSION = '1.11.3'
-
 def install_gettext(app_name, localedir):
     try:
         gettext.install(app_name.lower(), localedir=localedir, unicode=1)

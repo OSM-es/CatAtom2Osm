@@ -73,18 +73,8 @@ class CatAtom2Osm(object):
             report.gdal_version = gdal.__version__
             log.debug(_("Initialized QGIS %s API"), report.qgs_version)
             log.debug(_("Using GDAL %s"), report.gdal_version)
-        if qgis_utils.QGIS_VERSION_INT < config.MIN_QGIS_VERSION_INT:
-            msg = _(
-                "Required QGIS version %s or greater"
-            ) % config.MIN_QGIS_VERSION
-            raise ValueError(msg)
         gdal_version_int = int('{:02d}{:02d}{:02d}'.format(
             *list(map(int, gdal.__version__.split('.')))))
-        if gdal_version_int < config.MIN_GDAL_VERSION_INT:
-            msg = _(
-                "Required GDAL version %s or greater"
-            ) % config.MIN_GDAL_VERSION
-            raise ValueError(msg)
         self.highway_names_path = self.cat.get_path('highway_names.csv')
         self.tasks_path = self.cat.get_path(tasks_folder)
         if not os.path.exists(self.tasks_path):
@@ -181,7 +171,6 @@ class CatAtom2Osm(object):
             q = lambda f, __: f.geometry().wkbType() == geo.types.WKBMultiPolygon
             self.split.append(split, query=q)
             if self.split.featureCount() == 0:
-                #TODO: review locale
                 msg = _("'%s' does not include any zone") % self.options.split
                 raise ValueError(msg)
 

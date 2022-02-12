@@ -95,7 +95,7 @@ def run():
     )
     parser.add_argument(
         "-z", "--zoning", dest="zoning", action="store_true",
-        help=_("Process only the tasks zoning file"),
+        help=_("Process only the tasks definition file"),
     )
     parser.add_argument(
         "-o", "--parcel", dest="parcel", nargs=1, default=[], metavar='REFCAT',
