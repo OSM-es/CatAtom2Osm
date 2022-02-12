@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 """Statistics report"""
-
 from collections import OrderedDict, Counter
 from datetime import datetime
 import io

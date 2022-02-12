@@ -1,6 +1,4 @@
 """CatAtom2Osm command line entry point"""
-from __future__ import unicode_literals
-from builtins import str
 import argparse
 import logging
 import os

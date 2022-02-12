@@ -1,9 +1,6 @@
 """
 Tool to convert INSPIRE data sets from the Spanish Cadastre ATOM Services to OSM files
 """
-#TODO review core segmentation fault cat.is_empty
-from __future__ import division
-from builtins import map, object
 from past.builtins import basestring  # qgis/utils.py:744: DeprecationWarning
 import io, codecs
 import gzip

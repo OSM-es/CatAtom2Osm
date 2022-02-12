@@ -1,4 +1,3 @@
-from past.builtins import basestring
 from argparse import Namespace
 import logging
 import mock
