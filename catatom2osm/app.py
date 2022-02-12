@@ -131,6 +131,7 @@ class CatAtom2Osm(object):
         if self.options.zoning:
             return
         if self.options.address and self.is_new:
+            self.write_osm(self.address_osm, 'address.osm')
             msg = _("Generated '%s'") % self.highway_names_path
             msg += '. ' + _("Please, check it and run again")
             log.info(msg)
@@ -217,10 +218,9 @@ class CatAtom2Osm(object):
         tasks_r = 0
         tasks_u = 0
         for pa in self.parcel.getFeatures():
-            localid = pa['localId']
-            label = self.tasks.get(localid, localid)
+            label = pa['localId']
             task = tasks[label]
-            if len(self.parcel.get_zone(pa)) == 3:
+            if len(pa['zone']) == 3:
                 tasks_r += 1
             else:
                 tasks_u += 1
@@ -263,7 +263,7 @@ class CatAtom2Osm(object):
                 to_add.append(f)
             if i == fcount - 1 or label != last_task:
                 if last_task not in tasks:
-                    tasks[last_task] = layer_class(baseName=localid)
+                    tasks[last_task] = layer_class(baseName=last_task)
                     tasks[last_task].source_date = source.source_date
                 tasks[last_task].writer.addFeatures(to_add)
                 to_add = [f]
@@ -279,6 +279,7 @@ class CatAtom2Osm(object):
         if self.split or self.options.parcel:
             q = lambda f, kw: (
                 self.urban_zoning.check_zone(f, kw['level'])
+                and self.parcel_query(f, kw)
             )
         self.rustic_zoning.append(zoning_gml, query=q, level='P')
         self.urban_zoning.append(zoning_gml, query=q, level='M')
@@ -330,7 +331,7 @@ class CatAtom2Osm(object):
             bb = pa.geometry().boundingBox().buffered(config.parcel_buffer)
             g = QgsGeometry.fromRect(bb)
             q = lambda f, __: geo.aux.is_inside(f, g)
-        self.q = q
+        self.parcel_query = q
         self.parcel.append(parcel_gml, query=q)
         del parcel_gml
         if self.parcel.featureCount() == 0:
@@ -350,7 +351,9 @@ class CatAtom2Osm(object):
         tasks1 = self.parcel.merge_by_adjacent_buildings(self.building)
         for k, v in self.tasks.items():
             self.tasks[k] = tasks1.get(v, v)
-        tasks2 = self.parcel.merge_by_parts_count(20, 1000)
+        tasks2 = self.parcel.merge_by_parts_count(
+            config.parcel_parts, config.parcel_dist
+        )
         for k, v in self.tasks.items():
             self.tasks[k] = tasks2.get(v, v)
 
@@ -434,7 +437,6 @@ class CatAtom2Osm(object):
         self.building.move_address(self.address)
         self.address.reproject()
         self.address_osm = self.address.to_osm()
-        self.write_osm(self.address_osm, 'address.osm')
 
     def get_auxiliary_addresses(self):
         """If exists, reads and conflate an auxiliary addresses data source"""
@@ -679,10 +681,10 @@ class CatAtom2Osm(object):
             data (Osm): OSM data set
             paths (str): output filename components relative to self.path
                             (compress if ends with .gz)
+        """
         for e in data.elements:
             if 'ref' in e.tags:
                 del e.tags['ref']
-        """
         data.merge_duplicated()
         osm_path = self.cat.get_path(*paths)
         if osm_path.endswith('.gz'):

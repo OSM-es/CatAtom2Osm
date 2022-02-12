@@ -78,6 +78,8 @@ warning_min_area = 1  # Area in m2 for small area warning
 warning_max_area = 30000  # Area in m2 for big area warning
 bbox_buffer = 0.002  # Buffer in degrees around overpass bounding boxes
 parcel_buffer = 200  # Buffer in meters around parcel to search adjacents
+parcel_parts = 20  # Number of building parts to agregate parcels
+parcel_dist = 1000  # Distance in meters to agregate parcels
 
 changeset_tags = {
     'comment': "#Spanish_Cadastre_Buildings_Import",

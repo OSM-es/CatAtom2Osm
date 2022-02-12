@@ -41,15 +41,15 @@ class TestReport(unittest.TestCase):
 
     def test_validate1(self):
         r = report.Report()
-        r.inp_address_entrance = 6
-        r.inp_address_parcel = 4
-        r.inp_address = 10
+        r.inp_address_entrance = 7
+        r.inp_address_parcel = 5
+        r.inp_address = 12
         r.addresses_without_number = 1
-        r.orphand_addresses = 2
+        r.orphaned_addresses = 2
         r.multiple_addresses = 1
         r.refused_addresses = 2
         r.out_address_entrance = 5
-        r.out_address_building = 1
+        r.out_address_parcel = 1
         r.out_addr_str = 4
         r.out_addr_plc = 2
         r.out_address = 6
@@ -59,10 +59,9 @@ class TestReport(unittest.TestCase):
         r.inp_pools = 1
         r.building_counter = {'a': 1, 'b': 2}
         r.out_buildings = 3
-        r.out_features = 8
+        r.out_features = 6
         r.outside_parts = 1
         r.underground_parts = 1
-        r.new_outlines = 2
         r.multipart_geoms_building = 2
         r.exploded_parts_building = 4
         r.validate()
@@ -74,11 +73,11 @@ class TestReport(unittest.TestCase):
         r.inp_address_parcel = 2
         r.inp_address = 4
         r.addresses_without_number = 1
-        r.orphand_addresses = 1
+        r.orphaned_addresses = 1
         r.multiple_addresses = 1
         r.refused_addresses = 1
         r.out_address_entrance = 1
-        r.out_address_building = 2
+        r.out_address_parcel = 2
         r.out_addr_str = 1
         r.out_addr_plc = 2
         r.out_address = 4
@@ -93,7 +92,7 @@ class TestReport(unittest.TestCase):
         msgs = [
             "Sum of address types should be equal to the input addresses",
             "Sum of output and deleted addresses should be equal to the input addresses",
-            "Sum of entrance and building address should be equal to output addresses",
+            "Sum of entrance and parcel addresses should be equal to output addresses",
             "Sum of street and place addresses should be equal to output addresses",
             "Sum of buildings, parts and pools should be equal to the feature count",
             "Sum of building types should be equal to the number of buildings",
@@ -168,7 +167,7 @@ class TestReport(unittest.TestCase):
         self.assertEqual(r.out_addr_str, 3)
         self.assertEqual(r.out_addr_plc, 1)
         self.assertEqual(r.out_address_entrance, 2)
-        self.assertEqual(r.out_address_building, 2)
+        self.assertEqual(r.out_address_parcel, 2)
 
     def test_cons_end_stats(self):
         r = report.Report()

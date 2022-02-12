@@ -151,8 +151,6 @@ def run():
         ) as e:
             msg = e.message if getattr(e, 'message', '') else str(e)
             log.error(msg)
-            if 'qgis' in msg or 'core' in msg or 'osgeo' in msg:
-                log.error(_("Please, install QGIS"))
 
 if __name__ == "__main__":
     run()
