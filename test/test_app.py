@@ -1,5 +1,6 @@
 from past.builtins import basestring
 from importlib import reload
+import logging
 import mock
 import unittest
 import os
@@ -10,6 +11,8 @@ from catatom2osm import config, osm, app
 qgs = app.QgsSingleton()
 os.environ['LANGUAGE'] = 'C'
 config.install_gettext('catato2osm', '')
+m_log = mock.MagicMock()
+m_log.app_level = logging.INFO
 
 
 def get_func(f):
@@ -78,51 +81,22 @@ class TestCatAtom2Osm(unittest.TestCase):
     def test_run_default(self):
         self.m_app.source = 'building'
         self.m_app.building = mock.MagicMock()
+        self.m_app.is_new = True
+        self.m_app.options.address = True
         self.m_app.run = get_func(app.CatAtom2Osm.run)
         address = self.m_app.address
         self.m_app.run(self.m_app)
-        self.m_app.process_tasks.assert_called_once_with(self.m_app.building)
-        self.m_app.process_building.assert_called_once_with()
-        self.m_app.read_address.assert_called_once_with()
+        self.m_app.stop_address.assert_called_once_with()
 
     @mock.patch('catatom2osm.app.report', mock.MagicMock())
-    def test_run_default_new(self):
-        self.m_app.is_new = True
+    def test_run_default_2nd(self):
+        self.m_app.is_new = False
+        self.m_app.options.address = True
         self.m_app.source = 'building'
         self.m_app.run = get_func(app.CatAtom2Osm.run)
         self.m_app.run(self.m_app)
-        self.m_app.process_tasks.assert_not_called()
-
-    @mock.patch('catatom2osm.app.geo')
-    def xtest_get_building(self, m_layer):
-        self.m_app.get_building = get_func(app.CatAtom2Osm.get_building)
-        bugml = mock.MagicMock()
-        bugml.source_date = 1
-        partgml = mock.MagicMock()
-        othergml = mock.MagicMock()
-        self.m_app.cat.read.side_effect = [bugml, partgml, othergml]
-        building = m_layer.ConsLayer.return_value
-        self.m_app.get_building(self.m_app)
-        fn = os.path.join('33333', 'building.shp')
-        m_layer.ConsLayer.assert_called_once_with(source_date = 1)
-        building.append.assert_has_calls([
-            mock.call(bugml, query=self.m_app.zone_query),
-            mock.call(partgml, query=self.m_app.zone_query),
-            mock.call(othergml, query=self.m_app.zone_query),
-        ])
-
-    @mock.patch('catatom2osm.app.geo')
-    def xtest_get_building_no_other(self, m_layer):
-        self.m_app.get_building = get_func(app.CatAtom2Osm.get_building)
-        bugml = mock.MagicMock()
-        partgml = mock.MagicMock()
-        self.m_app.cat.read.side_effect = [bugml, partgml, None]
-        building = m_layer.ConsLayer.return_value
-        self.m_app.get_building(self.m_app)
-        building.append.assert_has_calls([
-            mock.call(bugml, query=self.m_app.zone_query),
-            mock.call(partgml, query=self.m_app.zone_query),
-        ])
+        self.m_app.resume_address.assert_called_once_with()
+        self.m_app.process_tasks.assert_called_once_with(self.m_app.building)
 
     @mock.patch('catatom2osm.app.geo', mock.MagicMock())
     @mock.patch('catatom2osm.app.report')
@@ -212,6 +186,7 @@ class TestCatAtom2Osm(unittest.TestCase):
         result = {'a': 'a', 'b': 'a', 'c': 'a', 'd': 'd', 'e': 'd'}
         self.assertEqual(self.m_app.tasks, result)
 
+    @mock.patch('catatom2osm.geo.layer.base.log', m_log)
     def test_exit(self):
         self.m_app.exit = get_func(app.CatAtom2Osm.exit)
         self.m_app.test1 = QgsVectorLayer('Point', 'test', 'memory')

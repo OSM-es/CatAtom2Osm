@@ -65,18 +65,15 @@ class CatAtom2Osm(object):
         self.path = self.cat.path
         report.clear(options=self.options.args, mun_code=self.cat.zip_code)
         report.sys_info = True
-        if report.sys_info:
-            report.qgs_version = qgis_utils.QGIS_VERSION
-            report.gdal_version = gdal.__version__
-            log.debug(_("Initialized QGIS %s API"), report.qgs_version)
-            log.debug(_("Using GDAL %s"), report.gdal_version)
-        gdal_version_int = int('{:02d}{:02d}{:02d}'.format(
-            *list(map(int, gdal.__version__.split('.')))))
-        self.highway_names_path = self.cat.get_path('highway_names.csv')
+        report.qgs_version = qgis_utils.QGIS_VERSION
+        report.gdal_version = gdal.__version__
+        log.debug(_("Initialized QGIS %s API"), report.qgs_version)
+        log.debug(_("Using GDAL %s"), report.gdal_version)
         self.tasks_path = self.cat.get_path(tasks_folder)
         if not os.path.exists(self.tasks_path):
             os.makedirs(self.tasks_path)
         self.get_split()
+        self.highway_names_path = self.cat.get_path('highway_names.csv')
         self.is_new = not os.path.exists(self.highway_names_path)
         self.source = 'building'
         if self.options.address and not self.options.building:
@@ -105,23 +102,26 @@ class CatAtom2Osm(object):
             self.add_comments()
             return
         log.info(_("Start processing '%s'"), report.mun_code)
-        self.get_parcel()
         self.get_boundary()
-        self.get_zoning()
-        self.get_building()
-        self.process_building()
-        self.process_parcel()
+        if self.options.address and not self.is_new:
+            self.resume_address()
+        else:
+            self.get_parcel()
+            self.get_boundary()
+            self.get_zoning()
+            self.get_building()
+            self.process_building()
+            self.process_parcel()
+            if self.options.address:
+                self.get_address()
+                self.stop_address()
+                return
         if self.options.address:
-            self.read_address()
+            self.process_address()
+            self.address.reproject()
         self.parcel.delete_void_parcels(getattr(self, self.source))
         self.output_zoning()
         if self.options.zoning:
-            return
-        if self.options.address and self.is_new:
-            self.write_osm(self.address_osm, 'address.osm')
-            msg = _("Generated '%s'") % self.highway_names_path
-            msg += '. ' + _("Please, check it and run again")
-            log.info(msg)
             return
         self.building.reproject()
         self.process_tasks(getattr(self, self.source))
@@ -277,7 +277,7 @@ class CatAtom2Osm(object):
         __, id, name = csvtools.get_key(fn, self.cat.zip_code)
         self.boundary_search_area = id
         report.mun_name = name
-        report.cat_mun = self.cat.cat_mun
+        #report.cat_mun = self.cat.cat_mun
         log.info(_("Municipality: '%s'"), name)
 
     def output_zoning(self):
@@ -371,7 +371,7 @@ class CatAtom2Osm(object):
             if isinstance(getattr(self, propname), QgsVectorLayer):
                 delattr(self, propname)
 
-    def read_address(self):
+    def get_address(self):
         """Reads Address GML dataset"""
         address_gml = self.cat.read("address")
         report.address_date = address_gml.source_date
@@ -413,6 +413,10 @@ class CatAtom2Osm(object):
         self.get_auxiliary_addresses()
         self.export_layer(self.address, 'address.geojson', target_crs_id=4326)
         highway_names = self.get_translations(self.address)
+
+    def process_address(self):
+        """Fix street names, conflate and move addresses"""
+        highway_names = self.get_translations(self.address)
         ia = self.address.translate_field('TN_text', highway_names)
         if ia > 0:
             log.debug(_("Deleted %d addresses refused by street name"), ia)
@@ -423,6 +427,45 @@ class CatAtom2Osm(object):
         self.building.move_address(self.address)
         self.address.reproject()
         self.address_osm = self.address.to_osm()
+
+    def stop_address(self):
+        """Save current processing status and exits"""
+        self.export_layer(self.parcel, 'parcel.shp', driver_name='ESRI Shapefile')
+        self.export_layer(self.building, 'building.shp', driver_name='ESRI Shapefile')
+        self.address.reproject()
+        self.address_osm = self.address.to_osm()
+        self.write_osm(self.address_osm, 'address.osm')
+        fn = self.cat.get_path('tasks.csv')
+        csvtools.dict2csv(fn, self.tasks)
+        msg = _("Generated '%s'") % self.highway_names_path
+        msg += '. ' + _("Please, check it and run again")
+        log.info(msg)
+
+    def resume_address(self):
+        """Resume processing for second run of addresses dataset"""
+        fn = self.cat.get_path('tasks.csv')
+        self.tasks = csvtools.csv2dict(fn)
+        fn = self.cat.get_path('parcel.shp')
+        parcel = geo.ParcelLayer(self.cat.zip_code, fn, providerLib='ogr')
+        self.parcel = geo.ParcelLayer(self.cat.zip_code)
+        self.parcel.append(parcel)
+        del parcel
+        geo.BaseLayer.delete_shp(fn)
+        fn = self.cat.get_path('building.shp')
+        building = geo.ConsLayer(fn, providerLib='ogr')
+        self.building = geo.ConsLayer()
+        self.building.append(building)
+        del building
+        geo.BaseLayer.delete_shp(fn)
+        fn = self.cat.get_path('address.geojson')
+        address = geo.AddressLayer(fn, providerLib='ogr')
+        self.address = geo.AddressLayer()
+        self.address.rename = {}
+        self.address.resolve = {}
+        self.address.append(address)
+        self.address.reproject(self.building.crs())
+        del address
+
 
     def get_auxiliary_addresses(self):
         """If exists, reads and conflate an auxiliary addresses data source"""
@@ -607,7 +650,7 @@ class CatAtom2Osm(object):
         Args:
             layer (QgsVectorLayer): Source layer.
             filename (str): Output filename.
-            driver_name (str): Defaults to ESRI Shapefile.
+            driver_name (str): name of OGR driver (or get it from filename).
             target_crs_id (int): Defaults to source CRS.
         """
         out_path = self.cat.get_path(filename)

@@ -29,7 +29,6 @@ class BaseLayer(QgsVectorLayer):
         self.rename={}
         self.resolve={}
         self.reference_matchs={}
-        self.keep = False
 
     @staticmethod
     def get_writer(name, crs, fields=QgsFields(), geom_type=WKBMultiPolygon):
@@ -121,10 +120,12 @@ class BaseLayer(QgsVectorLayer):
         if self.fields().isEmpty():
             self.writer.addAttributes(feature.fields().toList())
             self.updateFields()
-        dst_ft = QgsFeature(self.fields())
+        dst_fields = self.fields()
+        fidnx = dst_fields.indexFromName('fid')
+        dst_ft = QgsFeature(dst_fields)
         dst_ft.setGeometry(feature.geometry())
         src_attrs = [f.name() for f in feature.fields()]
-        for field in self.fields().toList():
+        for field in dst_fields.toList():
             dst_attr = field.name()
             if dst_attr in resolve:
                 (src_attr, reference_match) = resolve[dst_attr]
