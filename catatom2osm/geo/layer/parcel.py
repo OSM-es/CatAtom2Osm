@@ -40,10 +40,13 @@ class ParcelLayer(PolygonLayer):
         self.source_date = source_date
         self.mun_code = mun_code
 
-    def delete_void_parcels(self, source):
+    def delete_void_parcels(self, *sources):
         """Remove parcels without buildings (or pools)/addresses."""
-        exp = "NOT(localId ~ 'part')"
-        refs = [ConsLayer.get_id(f) for f in source.search(exp)]
+        refs = []
+        for source in sources:
+            if source is not None:
+                for f in source.getFeatures():
+                    refs.append(ConsLayer.get_id(f))
         to_clean = [
             f.id() for f in self.getFeatures() if f['localId'] not in refs
         ]
@@ -51,25 +54,26 @@ class ParcelLayer(PolygonLayer):
             self.writer.deleteFeatures(to_clean)
             log.debug(_("Removed %d void parcels"), len(to_clean))
 
-    def create_missing_parcels(self, buildings):
+    def create_missing_parcels(self, *sources):
         """Creates fake parcels for buildings not contained in any."""
         pa_refs = [f['localId'] for f in self.getFeatures()]
         to_add = {}
-        exp = "NOT(localId ~ 'part')"
-        for bu in buildings.getFeatures(exp):
-            ref = ConsLayer.get_id(bu)
-            if ref not in pa_refs:
-                mp = Geometry.get_outer_rings(bu)
-                bu_geom = Geometry.fromMultiPolygonXY(mp)
-                if ref in to_add:
-                    parcel = to_add[ref]
-                    pa_geom = bu_geom.combine(parcel.geometry())
-                    parcel.setGeometry(pa_geom)
-                else:
-                    parcel = QgsFeature(self.fields())
-                    parcel['localId'] = ref
-                    parcel.setGeometry(bu_geom)
-                to_add[ref] = parcel
+        for source in sources:
+            if source is None:
+                continue
+            for feat in source.getFeatures():
+                ref = ConsLayer.get_id(feat)
+                if ref not in pa_refs:
+                    mp = Geometry.get_outer_rings(feat)
+                    geom = Geometry.fromMultiPolygonXY(mp)
+                    if ref in to_add:
+                        parcel = to_add[ref]
+                        geom = parcel.geometry().combine(geom)
+                    else:
+                        parcel = QgsFeature(self.fields())
+                        parcel['localId'] = ref
+                    parcel.setGeometry(geom)
+                    to_add[ref] = parcel
         if to_add:
             self.writer.addFeatures(to_add.values())
             log.debug(_("Added %d missing parcels"), len(to_add))

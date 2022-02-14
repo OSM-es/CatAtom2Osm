@@ -190,10 +190,9 @@ class CatAtom2Osm(object):
         self.building.append(part_gml, query=q, keys=self.tasks.keys())
         del part_gml
         inpa = self.building.featureCount() - inbu
-        other_gml = self.cat.read("otherconstruction", True)
-        if other_gml:
-            self.building.append(other_gml, query=q, keys=self.tasks.keys())
-            del other_gml
+        if self.po_gml:
+            self.building.append(self.po_gml, query=q, keys=self.tasks.keys())
+            del self.po_gml
         if self.options.building:
             report.building_date = self.building.source_date
             report.inp_features = self.building.featureCount()
@@ -326,9 +325,10 @@ class CatAtom2Osm(object):
         if self.parcel.featureCount() == 0:
             raise ValueError(_("No parcels data"))
         self.bu_gml = self.cat.read("building")
-        self.parcel.delete_void_parcels(self.bu_gml)
+        self.po_gml = self.cat.read("otherconstruction", True)
+        self.parcel.delete_void_parcels(self.bu_gml, self.po_gml)
         self.parcel.clean()
-        self.parcel.create_missing_parcels(self.bu_gml)
+        self.parcel.create_missing_parcels(self.bu_gml, self.po_gml)
         self.tasks = {
             f['localId']: f['localId'] for f in self.parcel.getFeatures()
         }
