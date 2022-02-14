@@ -43,7 +43,7 @@ class ParcelLayer(PolygonLayer):
     def delete_void_parcels(self, source):
         """Remove parcels without buildings (or pools)/addresses."""
         exp = "NOT(localId ~ 'part')"
-        refs = [source.get_id(f) for f in source.search(exp)]
+        refs = [ConsLayer.get_id(f) for f in source.search(exp)]
         to_clean = [
             f.id() for f in self.getFeatures() if f['localId'] not in refs
         ]
@@ -57,7 +57,7 @@ class ParcelLayer(PolygonLayer):
         to_add = {}
         exp = "NOT(localId ~ 'part')"
         for bu in buildings.getFeatures(exp):
-            ref = buildings.get_id(bu)
+            ref = ConsLayer.get_id(bu)
             if ref not in pa_refs:
                 mp = Geometry.get_outer_rings(bu)
                 bu_geom = Geometry.fromMultiPolygonXY(mp)

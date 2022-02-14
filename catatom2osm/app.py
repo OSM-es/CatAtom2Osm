@@ -100,13 +100,14 @@ class CatAtom2Osm(object):
         if self.options.comment:
             self.add_comments()
             return
-        log.info(_("Start processing '%s'"), report.mun_code)
-        self.get_boundary()
         if self.options.address and not self.is_new:
+            log.info(_("Resume processing '%s'"), report.mun_code)
+            self.get_boundary()
             self.resume_address()
         else:
-            self.get_parcel()
+            log.info(_("Start processing '%s'"), report.mun_code)
             self.get_boundary()
+            self.get_parcel()
             self.get_zoning()
             self.get_building()
             self.process_building()
@@ -118,7 +119,8 @@ class CatAtom2Osm(object):
         if self.options.address:
             self.process_address()
             self.address.reproject()
-        self.parcel.delete_void_parcels(getattr(self, self.source))
+            if not self.options.building:
+                self.parcel.delete_void_parcels(self.address)
         self.output_zoning()
         if self.options.zoning:
             return
@@ -172,26 +174,28 @@ class CatAtom2Osm(object):
 
     def get_building(self):
         """Merge building, parts and pools"""
-        building_gml = self.cat.read("building")
-        self.building = geo.ConsLayer(source_date=building_gml.source_date)
+        self.building = geo.ConsLayer()
+        self.building.source_date = self.bu_gml.source_date
         q = None
         if self.split or self.options.parcel:
             q = lambda f, kw: self.building.get_id(f) in kw['keys']
-        self.building.append(building_gml, query=q, keys=self.tasks.keys())
+        self.building.append(self.bu_gml, query=q, keys=self.tasks.keys())
+        del self.bu_gml
         inbu = self.building.featureCount()
         if inbu == 0:
-            del building_gml
             raise ValueError(_("No buildings data"))
         if self.options.address and not self.options.building:
             return
         part_gml = self.cat.read("buildingpart")
         self.building.append(part_gml, query=q, keys=self.tasks.keys())
+        del part_gml
         inpa = self.building.featureCount() - inbu
         other_gml = self.cat.read("otherconstruction", True)
         if other_gml:
             self.building.append(other_gml, query=q, keys=self.tasks.keys())
+            del other_gml
         if self.options.building:
-            report.building_date = building_gml.source_date
+            report.building_date = self.building.source_date
             report.inp_features = self.building.featureCount()
             report.inp_buildings = inbu
             report.inp_parts = inpa
@@ -276,7 +280,6 @@ class CatAtom2Osm(object):
         __, id, name = csvtools.get_key(fn, self.cat.zip_code)
         self.boundary_search_area = id
         report.mun_name = name
-        #report.cat_mun = self.cat.cat_mun
         log.info(_("Municipality: '%s'"), name)
 
     def output_zoning(self):
@@ -299,6 +302,7 @@ class CatAtom2Osm(object):
     def get_parcel(self):
         """Get parcels dataset"""
         parcel_gml = self.cat.read("cadastralparcel")
+        report.cat_mun = self.cat.cat_mun
         self.parcel = geo.ParcelLayer(self.cat.zip_code)
         self.parcel.source_date = parcel_gml.source_date
         q = None
@@ -321,15 +325,16 @@ class CatAtom2Osm(object):
         del parcel_gml
         if self.parcel.featureCount() == 0:
             raise ValueError(_("No parcels data"))
+        self.bu_gml = self.cat.read("building")
+        self.parcel.delete_void_parcels(self.bu_gml)
+        self.parcel.clean()
+        self.parcel.create_missing_parcels(self.bu_gml)
         self.tasks = {
             f['localId']: f['localId'] for f in self.parcel.getFeatures()
         }
 
     def process_parcel(self):
         """Process parcels dataset"""
-        self.parcel.delete_void_parcels(self.building)
-        self.parcel.clean()
-        self.parcel.create_missing_parcels(self.building)
         self.parcel.set_zones(self.urban_zoning)
         self.parcel.set_zones(self.rustic_zoning)
         self.parcel.set_missing_zones()
@@ -346,6 +351,9 @@ class CatAtom2Osm(object):
     def finish(self):
         """Generates final report"""
         options = self.options
+        if log.app_level > logging.DEBUG:
+            geo.BaseLayer.delete_shp(self.cat.get_path('parcel.shp'))
+            geo.BaseLayer.delete_shp(self.cat.get_path('building.shp'))
         if report.fixme_stats():
             log.warning(_("Check %d fixme tags"), report.fixme_count)
             fn = 'review.txt'
@@ -448,21 +456,25 @@ class CatAtom2Osm(object):
         """Resume processing for second run of addresses dataset"""
         report.from_file(self.cat.get_path('report.json'))
         fn = self.cat.get_path('tasks.csv')
-        self.tasks = csvtools.csv2dict(fn)
+        self.tasks = csvtools.csv2dict(fn, exists=True)
         fn = self.cat.get_path('parcel.shp')
         parcel = geo.ParcelLayer(self.cat.zip_code, fn, providerLib='ogr')
+        if not parcel.isValid() or parcel.featureCount() == 0:
+            raise ValueError(_("No parcels data"))
         self.parcel = geo.ParcelLayer(self.cat.zip_code)
         self.parcel.append(parcel)
         del parcel
-        geo.BaseLayer.delete_shp(fn)
         fn = self.cat.get_path('building.shp')
         building = geo.ConsLayer(fn, providerLib='ogr')
+        if not building.isValid() or building.featureCount() == 0:
+            raise ValueError(_("No buildings data"))
         self.building = geo.ConsLayer()
         self.building.append(building)
         del building
-        geo.BaseLayer.delete_shp(fn)
         fn = self.cat.get_path('address.geojson')
         address = geo.AddressLayer(fn, providerLib='ogr')
+        if not address.isValid() or address.featureCount() == 0:
+            raise ValueError(_("No addresses data"))
         self.address = geo.AddressLayer()
         self.address.rename = {}
         self.address.resolve = {}
@@ -628,7 +640,8 @@ class CatAtom2Osm(object):
         if not os.path.exists(bkp_path):
             os.makedirs(bkp_path)
         move_files = [
-            'current_address.osm', 'current_highway.osm', 'highway_names.csv'
+            'current_address.osm', 'current_highway.osm', 'highway_names.csv',
+            'tasks.csv',
         ]
         copy_files = [
             'address.osm', 'address.geojson', 'zoning.geojson',
