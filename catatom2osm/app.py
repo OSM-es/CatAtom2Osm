@@ -119,8 +119,7 @@ class CatAtom2Osm(object):
         if self.options.address:
             self.process_address()
             self.address.reproject()
-            if not self.options.building:
-                self.parcel.delete_void_parcels(self.address)
+        self.parcel.delete_void_parcels(getattr(self, self.source))
         self.output_zoning()
         if self.options.zoning:
             return
