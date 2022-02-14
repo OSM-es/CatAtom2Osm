@@ -64,7 +64,6 @@ class CatAtom2Osm(object):
         self.cat = catatom.Reader(a_path)
         self.path = self.cat.path
         report.clear(options=self.options.args, mun_code=self.cat.zip_code)
-        report.sys_info = True
         report.qgs_version = qgis_utils.QGIS_VERSION
         report.gdal_version = gdal.__version__
         log.debug(_("Initialized QGIS %s API"), report.qgs_version)
@@ -130,7 +129,7 @@ class CatAtom2Osm(object):
     def add_comments(self):
         """Recover missing task files metadata after Josm editing."""
         folder = os.path.basename(self.tasks_path)
-        report_path = self.cat.get_path('report.txt')
+        report_path = self.cat.get_path('report.json')
         if not os.path.exists(report_path):
             log.info(_("No report found"))
             return
@@ -361,7 +360,9 @@ class CatAtom2Osm(object):
             report.cons_end_stats()
         else:
             report.clean_group('building')
+        report.validate()
         report.to_file(self.cat.get_path('report.txt'))
+        report.export(self.cat.get_path('report.json'))
         self.move_project()
         log.info(_("Finished!"))
 
@@ -437,12 +438,15 @@ class CatAtom2Osm(object):
         self.write_osm(self.address_osm, 'address.osm')
         fn = self.cat.get_path('tasks.csv')
         csvtools.dict2csv(fn, self.tasks)
+        report.to_file(self.cat.get_path('report.txt'))
+        report.export(self.cat.get_path('report.json'))
         msg = _("Generated '%s'") % self.highway_names_path
         msg += '. ' + _("Please, check it and run again")
         log.info(msg)
 
     def resume_address(self):
         """Resume processing for second run of addresses dataset"""
+        report.from_file(self.cat.get_path('report.json'))
         fn = self.cat.get_path('tasks.csv')
         self.tasks = csvtools.csv2dict(fn)
         fn = self.cat.get_path('parcel.shp')
@@ -627,8 +631,8 @@ class CatAtom2Osm(object):
             'current_address.osm', 'current_highway.osm', 'highway_names.csv'
         ]
         copy_files = [
-            'address.osm', 'address.geojson', 'report.txt', 'review.txt',
-            'zoning.geojson'
+            'address.osm', 'address.geojson', 'zoning.geojson',
+            'report.txt', 'review.txt', 'report.json',
         ]
         if self.options.split:
             copy_files.append(self.options.split)

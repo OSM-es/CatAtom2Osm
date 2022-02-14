@@ -388,6 +388,7 @@ class TestConsLayer(unittest.TestCase):
 
     @mock.patch('catatom2osm.geo.layer.base.log', m_log)
     @mock.patch('catatom2osm.geo.layer.polygon.log', m_log)
+    @mock.patch('catatom2osm.geo.layer.base.tqdm', mock.MagicMock())
     def test_simplify2(self):
         layer = ConsLayer()
         fn = 'test/fixtures/38023.buildingpart.gml'

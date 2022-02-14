@@ -3,8 +3,10 @@
 from collections import OrderedDict, Counter
 from datetime import datetime
 import io
+import json
 import locale
 import platform
+import psutil
 import time
 
 from catatom2osm import config
@@ -18,19 +20,11 @@ int_format = lambda v: locale.format_string('%d', v, True)
 class Report(object):
 
     def __init__(self, **kwargs):
-        self.clear(**kwargs)
-
-    def clear(self, **kwargs):
-        self.values = {
-            'start_time': time.time(),
-            'date': datetime.now().strftime('%x'),
-            'fixme_counter': Counter(),
-            'warnings': [],
-            'errors': [],
-            'min_level': {},
-            'max_level': {},
-        }
         self.titles = OrderedDict([
+            ('fixme_counter', None),
+            ('min_level', None),
+            ('max_level', None),
+            ('building_counter', None),
             ('mun_name', _('Municipality')),
             ('cat_mun', _('Cadastre name')),
             ('mun_code', _('Code')),
@@ -155,30 +149,48 @@ class Report(object):
         ])
         self.formats = {
             'cpu_freq': lambda v: locale.format_string('%.1f Mhz', v, True),
-            'ex_time': lambda v: locale.format_string('%.1f ' + _('seconds'), v,
-                                                      True),
-            'memory': lambda v: locale.format_string('%.2f ', v,
-                                                     True) + MEMORY_LABEL,
-            'rss': lambda v: locale.format_string('%.2f ', v,
-                                                  True) + MEMORY_LABEL,
-            'vms': lambda v: locale.format_string('%.2f ', v,
-                                                  True) + MEMORY_LABEL,
+            'ex_time': lambda v: locale.format_string(
+                '%.1f ' + _('seconds'), v, True
+            ),
+            'memory': lambda v: locale.format_string(
+                '%.2f ', v, True
+            ) + MEMORY_LABEL,
+            'rss': lambda v: locale.format_string(
+                '%.2f ', v, True
+            ) + MEMORY_LABEL,
+            'vms': lambda v: locale.format_string(
+                '%.2f ', v, True
+            ) + MEMORY_LABEL,
         }
+        self.clear(**kwargs)
+
+    def clear(self, **kwargs):
+        self.start_time = time.time()
+        self.values = {
+            'date': datetime.now().strftime('%x'),
+            'warnings': [],
+            'errors': [],
+            'min_level': {},
+            'max_level': {},
+            'fixme_counter': Counter(),
+            'building_counter': Counter(),
+        }
+        self.get_sys_info()
         self.tasks_with_fixmes = set()
         for k,v in list(kwargs.items()):
             self.values[k] = v
 
     def __setattr__(self, key, value):
-        if key in ['values', 'titles', 'groups']:
-            super(Report, self).__setattr__(key, value)
-        else:
+        if key != 'titles' and key in self.titles.keys():
             self.values[key] = value
+        else:
+            super(Report, self).__setattr__(key, value)
 
     def __getattr__(self, key):
-        if key.startswith('_'):
-            return super(Report, self).__getattr__(key, value)
-        else:
+        if key != 'titles' and key in self.titles.keys():
             return self.values[key]
+        else:
+            return super(Report, self).__getattribute__(key)
 
     def address_stats(self, address_osm):
         for el in address_osm.elements:
@@ -200,8 +212,6 @@ class Report(object):
                 self.inc('out_features')
             if 'building' in el.tags:
                 self.inc('out_buildings')
-                if 'building_counter' not in self.values:
-                    self.building_counter = Counter()
                 self.building_counter[el.tags['building']] += 1
                 self.inc('out_features')
             if 'building:part' in el.tags:
@@ -225,7 +235,6 @@ class Report(object):
             list(OrderedDict(Counter(list(self.max_level.values()))).items())])
         self.dlbg = ', '.join(["%d: %d" % (l, c) for (l, c) in \
             list(OrderedDict(Counter(list(self.min_level.values()))).items())])
-        building_counter = self.get('building_counter', Counter())
         self.building_types = ', '.join(['%s: %d' % (b, c) \
             for (b, c) in list(self.building_counter.items())])
 
@@ -247,22 +256,17 @@ class Report(object):
         return sum(self.get(key) for key in args)
 
     def get_sys_info(self):
-        try:
-            import psutil
-            p = psutil.Process()
-            v = list(platform.uname())
-            v.pop(1)
-            self.platform = ' '.join(v)
-            self.app_version = config.app_name + ' ' + config.app_version
-            self.language = config.language
-            self.cpu_count = psutil.cpu_count(logical=False)
-            self.cpu_freq = getattr(getattr(psutil, 'cpu_freq', lambda: 0)(), 'max', 0)
-            self.memory = psutil.virtual_memory().total / MEMORY_UNIT
-            self.rss = p.memory_info().rss / MEMORY_UNIT
-            self.vms = p.memory_info().vms / MEMORY_UNIT
-            self.ex_time = time.time() - self.start_time
-        except ImportError:
-            pass
+        p = psutil.Process()
+        v = list(platform.uname())
+        v.pop(1)
+        self.platform = ' '.join(v)
+        self.app_version = config.app_name + ' ' + config.app_version
+        self.language = config.language
+        self.cpu_count = psutil.cpu_count(logical=False)
+        self.cpu_freq = getattr(getattr(psutil, 'cpu_freq', lambda: 0)(), 'max', 0)
+        self.memory = psutil.virtual_memory().total / MEMORY_UNIT
+        self.rss = p.memory_info().rss / MEMORY_UNIT
+        self.vms = p.memory_info().vms / MEMORY_UNIT
 
     def clean_group(self, group):
         group = '_' + group
@@ -328,9 +332,9 @@ class Report(object):
                 "Sum of output and deleted minus created "
                 "building features should be equal to input features"
             ))
-        if 'building_counter' in self.values:
+        if self.building_counter:
             if (
-                sum(self.values['building_counter'].values())
+                sum(self.building_counter.values())
                 != self.get('out_buildings')
             ):
                 self.errors.append(_(
@@ -339,9 +343,8 @@ class Report(object):
                 ))
 
     def to_string(self):
-        self.validate()
-        if self.get('sys_info'):
-            self.get_sys_info()
+        if self.start_time is not None:
+            self.ex_time = time.time() - self.start_time
         groups = set()
         last_group = False
         last_subgroup = False
@@ -360,6 +363,8 @@ class Report(object):
                 groups.add(last_subgroup)
         output = u''
         for key, title in list(self.titles.items()):
+            if title is None:
+                continue
             if key.startswith('group_') and key in groups:
                 output += config.eol + '=' + self.titles[key] + '=' + config.eol
             elif key.startswith('subgroup_') and key in groups:
@@ -390,22 +395,15 @@ class Report(object):
         with io.open(fn, "w", encoding=config.encoding) as fo:
             fo.write(self.to_string())
 
+    def export(self, fn):
+        with open(fn, 'w') as fo:
+            fo.write(json.dumps(self.values))
+
     def from_file(self, fn):
-        keys = {v: k for k, v in self.titles.items()}
-        with io.open(fn, 'r', encoding=config.encoding) as fo:
-            group = ''
-            for line in fo.readlines():
-                if line.startswith('=') and not line.startswith('=='):
-                    group = line.strip().strip('=')
-                elif line.count(':') == 1:
-                    title, value = line.split(':')
-                    key = keys.get(title, '')
-                    if title == _('Source date'):
-                        if group == _('Addresses'):
-                            key = 'address_date'
-                        elif group == _('Buildings'):
-                            key = 'building_date'
-                    if key:
-                        self.values[key] = value.strip()
+        with open(fn, 'r') as fo:
+            self.values = json.loads(fo.read())
+            for k, v in self.values.items():
+                if k.endswith('_counter'):
+                    self.values[k] = Counter(v)
 
 instance = Report()

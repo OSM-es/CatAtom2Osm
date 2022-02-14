@@ -14,8 +14,8 @@ config.install_gettext('catato2osm', '')
 class TestReport(unittest.TestCase):
 
     def test_init(self):
-        r = report.Report(foo = 'bar')
-        self.assertEqual(r.foo, 'bar')
+        r = report.Report(mun_name='bar')
+        self.assertEqual(r.mun_name, 'bar')
 
     def test_setattr(self):
         r = report.Report()
@@ -34,10 +34,10 @@ class TestReport(unittest.TestCase):
 
     def test_inc(self):
         r = report.Report()
-        r.inc('foo')
-        self.assertEqual(r.foo, 1)
-        r.inc('foo', 2)
-        self.assertEqual(r.foo, 3)
+        r.inc('nodes')
+        self.assertEqual(r.nodes, 1)
+        r.inc('nodes', 2)
+        self.assertEqual(r.nodes, 3)
 
     def test_validate1(self):
         r = report.Report()
@@ -101,14 +101,18 @@ class TestReport(unittest.TestCase):
         for msg in msgs:
             self.assertIn(msg, r.errors)
 
+    @mock.patch('catatom2osm.report.Report.get_sys_info', mock.MagicMock())
     def test_to_string0(self):
         r = report.Report()
+        r.start_time = None
         output = r.to_string()
         expected = "Date: " + datetime.now().strftime('%x') + config.eol
         self.assertEqual(output, expected)
 
+    @mock.patch('catatom2osm.report.Report.get_sys_info', mock.MagicMock())
     def test_to_string1(self):
         r = report.Report()
+        r.start_time = None
         r.mun_name = 'Foobar'
         r.code = 99999
         r.inp_zip_codes = 1000
@@ -122,8 +126,10 @@ class TestReport(unittest.TestCase):
             + config.eol + config.fixme_doc_url
         self.assertEqual(output, expected)
 
+    @mock.patch('catatom2osm.report.Report.get_sys_info', mock.MagicMock())
     def test_to_string2(self):
         r = report.Report()
+        r.start_time = None
         r.fixme_count = 2
         r.fixmes = ['f1', 'f2']
         r.warnings = ['w1', 'w2']
@@ -143,9 +149,11 @@ class TestReport(unittest.TestCase):
         expected = locale.format_string("Execution time: %.1f seconds", r.ex_time, 1)
         self.assertIn(expected, output)
 
+    @mock.patch('catatom2osm.report.Report.get_sys_info', mock.MagicMock())
     def test_to_file(self):
         r = report.Report()
         r.mun_name = "áéíóúñ"
+        r.start_time = None
         output = r.to_string()
         fn = 'test_report.txt'
         r.to_file(fn)
@@ -207,24 +215,24 @@ class TestReport(unittest.TestCase):
         self.assertEqual(r.fixme_stats(), 3)
         self.assertEqual(len(r.fixmes), 2)
 
-    @mock.patch('catatom2osm.report.io')
-    def test_from_file(self, m_io):
+    @mock.patch('catatom2osm.report.open')
+    def test_from_file(self, m_open):
         r = report.Report()
         t = (
-            "Municipality: foobar\n"
-            "Code: 12345\n"
-            "Application version: taz\n"
-            "=Addresses=\n"
-            "==Input data==\n"
-            "Source date: 2021-09-11\n"
-            "=Buildings=\n"
-            "==Input data==\n"
-            "Source date: 2021-06-22\n"
+            '{"mun_name": "foobar",\n'
+            '"mun_code": 12345,\n'
+            '"app_version": "taz",\n'
+            '"address_date": "2021-09-11",\n'
+            '"building_date": "2021-06-22"}'
         )
-        m_io.open.return_value = io.StringIO(t)
+        e = mock.MagicMock()
+        fo = mock.MagicMock()
+        fo.read.return_value = t
+        e.__enter__.return_value = fo
+        m_open.return_value = e
         r.from_file('')
         self.assertEqual(r.mun_name, 'foobar')
-        self.assertEqual(r.mun_code, '12345')
+        self.assertEqual(r.mun_code, 12345)
         self.assertEqual(r.app_version, 'taz')
         self.assertEqual(r.building_date, '2021-06-22')
         self.assertEqual(r.address_date, '2021-09-11')
