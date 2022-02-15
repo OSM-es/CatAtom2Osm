@@ -8,7 +8,6 @@ import logging
 import os
 import shutil
 from collections import defaultdict
-from glob import glob
 
 from qgis.core import QgsApplication, QgsGeometry, QgsVectorLayer
 import qgis.utils
@@ -68,6 +67,8 @@ class CatAtom2Osm(object):
         report.gdal_version = gdal.__version__
         log.debug(_("Initialized QGIS %s API"), report.qgs_version)
         log.debug(_("Using GDAL %s"), report.gdal_version)
+        if self.options.zoning:
+            self.options.address = False
         self.tasks_path = self.cat.get_path(tasks_folder)
         if not os.path.exists(self.tasks_path):
             os.makedirs(self.tasks_path)
