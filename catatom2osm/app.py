@@ -111,6 +111,8 @@ class CatAtom2Osm(object):
             self.get_parcel()
             self.get_building()
             self.get_zoning()
+            if self.options.zoning:
+                self.export_poly()
             self.process_building()
             self.process_parcel()
             if self.options.address:
@@ -329,6 +331,15 @@ class CatAtom2Osm(object):
             fn = 'zoning.geojson'
             self.export_layer(self.parcel, fn, target_crs_id=4326)
             report.tasks = self.parcel.featureCount()
+
+    def export_poly(self):
+        bpoly = geo.ZoningLayer()
+        bpoly.append(self.rustic_zoning, level='P')
+        bpoly.reproject()
+        fn = self.cat.get_path('boundary.poly')
+        bpoly.export_poly(fn)
+        log.info(_("Generated '%s'"), fn)
+        del bpoly
 
     def process_building(self):
         """Process all buildings dataset"""
