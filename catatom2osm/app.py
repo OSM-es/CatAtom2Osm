@@ -203,8 +203,8 @@ class CatAtom2Osm(object):
         building_gml = self.cat.read("building")
         other_gml = self.cat.read("otherconstruction", True)
         self.parcel.delete_void_parcels(building_gml, other_gml)
-        self.parcel.create_missing_parcels(building_gml, other_gml, split=self.split)
         self.parcel.clean()
+        self.parcel.create_missing_parcels(building_gml, other_gml, split=self.split)
         self.tasks = {
             f['localId']: f['localId'] for f in self.parcel.getFeatures()
         }
