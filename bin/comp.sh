@@ -22,7 +22,7 @@ function table {
     outrow nodos "<node"
     outrow vías "<way"
     outrow relaciones "<relation"
-    outrow edificios 'k=".*building"'
+    outrow edificios 'k="[^=]*building"'
     outrow partes 'building:part'
     outrow piscinas 'swimming_pool'
     outrow direcciones "addr:postcode"
