@@ -108,8 +108,8 @@ class CatAtom2Osm(object):
             log.info(_("Start processing '%s'"), report.mun_code)
             self.get_boundary()
             self.get_parcel()
-            self.get_zoning()
             self.get_building()
+            self.get_zoning()
             self.process_building()
             self.process_parcel()
             if self.options.address:
@@ -171,33 +171,68 @@ class CatAtom2Osm(object):
                 msg = _("'%s' does not include any zone") % self.options.split
                 raise ValueError(msg)
 
+    def get_parcel(self):
+        """Get parcels dataset"""
+        parcel_gml = self.cat.read("cadastralparcel")
+        report.cat_mun = self.cat.cat_mun
+        self.parcel = geo.ParcelLayer(self.cat.zip_code)
+        self.parcel.source_date = parcel_gml.source_date
+        q = None
+        if self.split:
+            if self.split.crs() != parcel_gml.crs():
+                self.split.reproject(parcel_gml.crs())
+            q = lambda f, __: self.split.is_inside_area(f)
+        elif self.options.parcel:
+            localid = self.options.parcel[0]
+            try:
+                pa = next(parcel_gml.search(f"localId = '{localid}'"))
+            except StopIteration:
+                msg = _("Parcel '%s' does not exists") % localid
+                raise(ValueError(msg))
+            bb = pa.geometry().boundingBox().buffered(config.parcel_buffer)
+            g = QgsGeometry.fromRect(bb)
+            q = lambda f, __: geo.aux.is_inside(f, g)
+        self.parcel_query = q
+        self.parcel.append(parcel_gml, query=q)
+        del parcel_gml
+        if self.parcel.featureCount() == 0:
+            raise ValueError(_("No parcels data"))
+
     def get_building(self):
         """Merge building, parts and pools"""
+        building_gml = self.cat.read("building")
+        other_gml = self.cat.read("otherconstruction", True)
+        self.parcel.delete_void_parcels(building_gml, other_gml)
+        self.parcel.create_missing_parcels(building_gml, other_gml, split=self.split)
+        self.parcel.clean()
+        self.tasks = {
+            f['localId']: f['localId'] for f in self.parcel.getFeatures()
+        }
         self.building = geo.ConsLayer()
-        self.building.source_date = self.bu_gml.source_date
+        self.building.source_date = building_gml.source_date
         q = None
         if self.split or self.options.parcel:
             q = lambda f, kw: self.building.get_id(f) in kw['keys']
-        self.building.append(self.bu_gml, query=q, keys=self.tasks.keys())
-        del self.bu_gml
+        self.building.append(building_gml, query=q, keys=self.tasks.keys())
+        del building_gml
         inbu = self.building.featureCount()
         if inbu == 0:
             raise ValueError(_("No buildings data"))
+        if other_gml:
+            self.building.append(other_gml, query=q, keys=self.tasks.keys())
+            del other_gml
         if self.options.address and not self.options.building:
             return
+        inpo = self.building.featureCount() - inbu
         part_gml = self.cat.read("buildingpart")
         self.building.append(part_gml, query=q, keys=self.tasks.keys())
         del part_gml
-        inpa = self.building.featureCount() - inbu
-        if self.po_gml:
-            self.building.append(self.po_gml, query=q, keys=self.tasks.keys())
-            del self.po_gml
         if self.options.building:
             report.building_date = self.building.source_date
             report.inp_features = self.building.featureCount()
             report.inp_buildings = inbu
-            report.inp_parts = inpa
-            report.inp_pools = report.inp_features - inbu - inpa
+            report.inp_pools = inpo
+            report.inp_parts = report.inp_features - inbu - inpo
 
     def process_tasks(self, source):
         """Convert to osm for each task."""
@@ -296,41 +331,6 @@ class CatAtom2Osm(object):
         self.building.clean()
         if self.options.building:
             self.building.validate(report.max_level, report.min_level)
-
-    def get_parcel(self):
-        """Get parcels dataset"""
-        parcel_gml = self.cat.read("cadastralparcel")
-        report.cat_mun = self.cat.cat_mun
-        self.parcel = geo.ParcelLayer(self.cat.zip_code)
-        self.parcel.source_date = parcel_gml.source_date
-        q = None
-        if self.split:
-            if self.split.crs() != parcel_gml.crs():
-                self.split.reproject(parcel_gml.crs())
-            q = lambda f, __: self.split.is_inside_area(f)
-        elif self.options.parcel:
-            localid = self.options.parcel[0]
-            try:
-                pa = next(parcel_gml.search(f"localId = '{localid}'"))
-            except StopIteration:
-                msg = _("Parcel '%s' does not exists") % localid
-                raise(ValueError(msg))
-            bb = pa.geometry().boundingBox().buffered(config.parcel_buffer)
-            g = QgsGeometry.fromRect(bb)
-            q = lambda f, __: geo.aux.is_inside(f, g)
-        self.parcel_query = q
-        self.parcel.append(parcel_gml, query=q)
-        del parcel_gml
-        if self.parcel.featureCount() == 0:
-            raise ValueError(_("No parcels data"))
-        self.bu_gml = self.cat.read("building")
-        self.po_gml = self.cat.read("otherconstruction", True)
-        self.parcel.delete_void_parcels(self.bu_gml, self.po_gml)
-        self.parcel.clean()
-        self.parcel.create_missing_parcels(self.bu_gml, self.po_gml)
-        self.tasks = {
-            f['localId']: f['localId'] for f in self.parcel.getFeatures()
-        }
 
     def process_parcel(self):
         """Process parcels dataset"""

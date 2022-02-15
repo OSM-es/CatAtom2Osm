@@ -54,7 +54,7 @@ class ParcelLayer(PolygonLayer):
             self.writer.deleteFeatures(to_clean)
             log.debug(_("Removed %d void parcels"), len(to_clean))
 
-    def create_missing_parcels(self, *sources):
+    def create_missing_parcels(self, *sources, split=None):
         """Creates fake parcels for buildings not contained in any."""
         pa_refs = [f['localId'] for f in self.getFeatures()]
         to_add = {}
@@ -69,11 +69,13 @@ class ParcelLayer(PolygonLayer):
                     if ref in to_add:
                         parcel = to_add[ref]
                         geom = parcel.geometry().combine(geom)
-                    else:
+                        parcel.setGeometry(geom)
+                        to_add[ref] = parcel
+                    elif split is None or split.is_inside(geom):
                         parcel = QgsFeature(self.fields())
                         parcel['localId'] = ref
-                    parcel.setGeometry(geom)
-                    to_add[ref] = parcel
+                        parcel.setGeometry(geom)
+                        to_add[ref] = parcel
         if to_add:
             self.writer.addFeatures(to_add.values())
             log.debug(_("Added %d missing parcels"), len(to_add))
