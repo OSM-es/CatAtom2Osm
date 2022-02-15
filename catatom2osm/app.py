@@ -119,7 +119,6 @@ class CatAtom2Osm(object):
         if self.options.address:
             self.process_address()
             self.address.reproject()
-        self.parcel.delete_void_parcels(getattr(self, self.source))
         self.output_zoning()
         if self.options.zoning:
             return
@@ -239,9 +238,13 @@ class CatAtom2Osm(object):
         tasks = self.get_tasks(source)
         tasks_r = 0
         tasks_u = 0
+        to_clean = []
         for pa in self.parcel.getFeatures():
             label = pa['localId']
-            task = tasks[label]
+            task = tasks.get(label, None)
+            if task is None:
+                to_clean.append(pa.id())
+                continue
             if len(pa['zone']) == 3:
                 tasks_r += 1
             else:
@@ -257,6 +260,9 @@ class CatAtom2Osm(object):
                 report.osm_stats(task_osm)
             self.write_osm(task_osm, tasks_folder, label + '.osm.gz')
             del task
+        if to_clean:
+            self.parcel.writer.deleteFeatures(to_clean)
+            log.debug(_("Removed %d void parcels"), len(to_clean))
         msg = _("Generated %d rustic and %d urban tasks files")
         log.debug(msg, tasks_r, tasks_u)
         report.tasks_r = tasks_r
