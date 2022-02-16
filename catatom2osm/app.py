@@ -8,7 +8,6 @@ import logging
 import os
 import shutil
 from collections import defaultdict
-from glob import glob
 
 from qgis.core import QgsApplication, QgsGeometry, QgsVectorLayer
 import qgis.utils
@@ -68,6 +67,8 @@ class CatAtom2Osm(object):
         report.gdal_version = gdal.__version__
         log.debug(_("Initialized QGIS %s API"), report.qgs_version)
         log.debug(_("Using GDAL %s"), report.gdal_version)
+        if self.options.zoning:
+            self.options.address = False
         self.tasks_path = self.cat.get_path(tasks_folder)
         if not os.path.exists(self.tasks_path):
             os.makedirs(self.tasks_path)
@@ -110,6 +111,8 @@ class CatAtom2Osm(object):
             self.get_parcel()
             self.get_building()
             self.get_zoning()
+            if self.options.zoning:
+                self.export_poly()
             self.process_building()
             self.process_parcel()
             if self.options.address:
@@ -328,6 +331,15 @@ class CatAtom2Osm(object):
             fn = 'zoning.geojson'
             self.export_layer(self.parcel, fn, target_crs_id=4326)
             report.tasks = self.parcel.featureCount()
+
+    def export_poly(self):
+        bpoly = geo.ZoningLayer()
+        bpoly.append(self.rustic_zoning, level='P')
+        bpoly.reproject()
+        fn = self.cat.get_path('boundary.poly')
+        bpoly.export_poly(fn)
+        log.info(_("Generated '%s'"), fn)
+        del bpoly
 
     def process_building(self):
         """Process all buildings dataset"""

@@ -121,7 +121,6 @@ class BaseLayer(QgsVectorLayer):
             self.writer.addAttributes(feature.fields().toList())
             self.updateFields()
         dst_fields = self.fields()
-        fidnx = dst_fields.indexFromName('fid')
         dst_ft = QgsFeature(dst_fields)
         dst_ft.setGeometry(feature.geometry())
         src_attrs = [f.name() for f in feature.fields()]
