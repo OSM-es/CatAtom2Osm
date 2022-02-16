@@ -348,10 +348,13 @@ class ConsLayer(PolygonLayer):
         Delete invalid geometries and close vertices, add topological points,
         merge building parts and simplify vertices.
         """
-        self.delete_invalid_geometries()
+        self.delete_invalid_geometries(
+            query_small_area=lambda feat: '_part' not in feat['localId']
+        )
         self.topology()
         self.merge_building_parts()
         self.simplify()
+        self.delete_small_geometries()
 
     def move_entrance(
             self, ad, ad_buildings, ad_parts, to_move, to_insert,

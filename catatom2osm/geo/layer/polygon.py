@@ -250,7 +250,20 @@ class PolygonLayer(BaseLayer):
         if len(to_change) > 0:
             self.writer.changeGeometryValues(to_change)
 
-    def delete_invalid_geometries(self):
+    def delete_small_geometries(self):
+        to_clean = []
+        for feat in self.getFeatures():
+            fid = feat.id()
+            geom = feat.geometry()
+            if geom.area() < config.min_area:
+                to_clean.append(fid)
+        if to_clean:
+            self.writer.deleteFeatures(to_clean)
+            msg = _("Deleted %d invalid geometries in the '%s' layer")
+            log.debug(msg, len(to_clean), self.name())
+            report.values['geom_invalid_' + self.name()] += len(to_clean)
+
+    def delete_invalid_geometries(self, query_small_area=lambda feat: True):
         """
         Delete invalid geometries testing if any of it acute angle vertex could
         be deleted.
@@ -268,13 +281,13 @@ class PolygonLayer(BaseLayer):
         rings = 0
         zz = 0
         spikes = 0
-        geometries = {
-            f.id(): QgsGeometry(f.geometry()) for f in self.getFeatures()
-        }
+        geometries = {}
         msg = _("Delete invalid geometries")
         pbar = self.get_progressbar(msg, len(geometries))
-        for fid, geom in geometries.items():
-            if geom.area() < config.min_area:
+        for feat in self.getFeatures():
+            fid = feat.id()
+            geom = feat.geometry()
+            if geom.area() < config.min_area and query_small_area(feat):
                 to_clean.append(fid)
                 continue
             badgeom = False
@@ -282,11 +295,10 @@ class PolygonLayer(BaseLayer):
             for polygon in Geometry.get_multipolygon(geom):
                 f = QgsFeature(QgsFields())
                 g = Geometry.fromPolygonXY(polygon)
-                if g.area() < config.min_area:
+                if g.area() < config.min_area and query_small_area(feat):
                     parts += 1
                     geom.deletePart(pn)
                     to_change[fid] = geom
-                    geometries[fid] = geom
                     f.setGeometry(QgsGeometry(g))
                     if log.app_level <= logging.DEBUG:
                         debshp.addFeature(f)
@@ -311,7 +323,6 @@ class PolygonLayer(BaseLayer):
                                 rings += 1
                                 geom.deleteRing(i)
                                 to_change[fid] = geom
-                                geometries[fid] = geom
                                 if log.app_level <= logging.DEBUG:
                                     debshp.addFeature(f)
                             else:
@@ -337,7 +348,6 @@ class PolygonLayer(BaseLayer):
                                     geom = g
                                     zz += 1
                                     to_change[fid] = g
-                                    geometries[fid] = geom
                                 if log.app_level <= logging.DEBUG:
                                     debshp2.add_point(va, 'zza %d %d %d %f' % (fid, ndx, ndxa, angle_a))
                                     debshp2.add_point(v, 'zz %d %d %d %s' % (fid, ndx, len(ring), valid))
@@ -352,11 +362,11 @@ class PolygonLayer(BaseLayer):
                                     skip = ndxa > ndx
                                     geom = g
                                     to_change[fid] = g
-                                    geometries[fid] = geom
                                 if log.app_level <= logging.DEBUG:
                                     debshp2.add_point(vx, 'vx %d %d' % (fid, ndx))
                                     debshp2.add_point(va, 'va %d %d %d %f' % (fid, ndx, ndxa, angle_a))
                                     debshp2.add_point(v, 'v %d %d %d %s' % (fid, ndx, len(ring), valid))
+                geometries[fid] = geom
             pbar.update()
         pbar.close()
         if to_move:
