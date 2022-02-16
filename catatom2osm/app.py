@@ -163,7 +163,10 @@ class CatAtom2Osm(object):
         """Get boundary file for splitting"""
         self.split = None
         if self.options.split:
-            split = geo.BaseLayer(self.options.split, 'zoningsplit', 'ogr')
+            fn = self.options.split
+            if fn.endswith('.osm'):
+                fn += '|layername=multipolygons'
+            split = geo.BaseLayer(fn, 'zoningsplit', 'ogr')
             if not split.isValid():
                 raise IOError("Can't open %s" % self.options.split)
             self.split = geo.PolygonLayer('MultiPolygon', 'split', 'memory')
