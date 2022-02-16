@@ -84,7 +84,6 @@ class TestCatAtom2Osm(unittest.TestCase):
         self.m_app.is_new = True
         self.m_app.options.address = True
         self.m_app.run = get_func(app.CatAtom2Osm.run)
-        address = self.m_app.address
         self.m_app.run(self.m_app)
         self.m_app.stop_address.assert_called_once_with()
 
@@ -98,6 +97,7 @@ class TestCatAtom2Osm(unittest.TestCase):
         self.m_app.resume_address.assert_called_once_with()
         self.m_app.process_tasks.assert_called_once_with(self.m_app.building)
 
+    @mock.patch('catatom2osm.app.log', m_log)
     @mock.patch('catatom2osm.app.geo', mock.MagicMock())
     @mock.patch('catatom2osm.app.report')
     def test_process_building(self, m_report):
@@ -111,6 +111,7 @@ class TestCatAtom2Osm(unittest.TestCase):
         building.clean.assert_called_once_with()
         building.validate.assert_called_once()
 
+    @mock.patch('catatom2osm.app.log', m_log)
     @mock.patch('catatom2osm.app.report', mock.MagicMock())
     def test_process_building_no_add_no_conf(self):
         self.m_app.process_building = get_func(app.CatAtom2Osm.process_building)
