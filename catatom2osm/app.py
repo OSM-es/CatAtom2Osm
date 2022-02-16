@@ -335,6 +335,9 @@ class CatAtom2Osm(object):
         self.building.remove_parts_wo_building()
         self.building.explode_multi_parts()
         self.building.clean()
+        if log.app_level <= logging.DEBUG:
+            fn = 'building.geojson'
+            self.export_layer(self.building, fn, 'GeoJSON', target_crs_id=4326)
         if self.options.building:
             self.building.validate(report.max_level, report.min_level)
 
@@ -426,7 +429,7 @@ class CatAtom2Osm(object):
         report.inp_street_names = self.address.count(unique='TN_text')
         self.get_auxiliary_addresses()
         self.export_layer(self.address, 'address.geojson', target_crs_id=4326)
-        highway_names = self.get_translations(self.address)
+        self.get_translations(self.address)
 
     def process_address(self):
         """Fix street names, conflate and move addresses"""

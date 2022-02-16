@@ -15,7 +15,7 @@
   <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.geo.geometry module &#8212; CatAtom2Osm 2.5.0 documentation</title>
+    <title>catatom2osm.geo.geometry module &#8212; CatAtom2Osm 2.6.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/guzzle.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
@@ -45,7 +45,7 @@
         <li class="right" >
           <a href="catatom2osm.geo.debug.html" title="catatom2osm.geo.debug module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 2.5.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 2.6.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../api.html" >API reference</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="modules.html" >CatAtom2Osm</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="catatom2osm.html" >catatom2osm package</a> &#187;</li>
@@ -151,8 +151,7 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.geo.geometry.Geometry.get_outer_vertices">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_outer_vertices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feature</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/geometry.html#Geometry.get_outer_vertices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.geo.geometry.Geometry.get_outer_vertices" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns list of all distinct vertices in feature geometry outer rings
-s</p>
+<dd><p>Returns list of all distinct vertices in feature geometry outer rings</p>
 </dd></dl>
 
 <dl class="py method">
@@ -170,6 +169,13 @@ s</p>
 <dt class="sig sig-object py" id="catatom2osm.geo.geometry.Geometry.merge_adjacent_features">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">merge_adjacent_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/geometry.html#Geometry.merge_adjacent_features"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.geo.geometry.Geometry.merge_adjacent_features" title="Permalink to this definition">¶</a></dt>
 <dd><p>Combine all geometries in group of features</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="catatom2osm.geo.geometry.Geometry.merge_adjacent_polygons">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">merge_adjacent_polygons</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feature</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/geometry.html#Geometry.merge_adjacent_polygons"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.geo.geometry.Geometry.merge_adjacent_polygons" title="Permalink to this definition">¶</a></dt>
+<dd><p>Merge adjacent polygons in a feature geometry
+Returns true if geometry is changed</p>
 </dd></dl>
 
 </dd></dl>
@@ -209,7 +215,7 @@ s</p>
         <li class="right" >
           <a href="catatom2osm.geo.debug.html" title="catatom2osm.geo.debug module"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 2.5.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 2.6.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../api.html" >API reference</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="modules.html" >CatAtom2Osm</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="catatom2osm.html" >catatom2osm package</a> &#187;</li>

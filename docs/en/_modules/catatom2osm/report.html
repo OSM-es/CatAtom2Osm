@@ -14,7 +14,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.report &#8212; CatAtom2Osm 2.5.0 documentation</title>
+    <title>catatom2osm.report &#8212; CatAtom2Osm 2.6.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/guzzle.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.5.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.6.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.report</a></li> 
       </ul>
@@ -81,12 +81,13 @@
   <h1>Source code for catatom2osm.report</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="sd">&quot;&quot;&quot;Statistics report&quot;&quot;&quot;</span>
-
 <span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">OrderedDict</span><span class="p">,</span> <span class="n">Counter</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span>
 <span class="kn">import</span> <span class="nn">io</span>
+<span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">locale</span>
 <span class="kn">import</span> <span class="nn">platform</span>
+<span class="kn">import</span> <span class="nn">psutil</span>
 <span class="kn">import</span> <span class="nn">time</span>
 
 <span class="kn">from</span> <span class="nn">catatom2osm</span> <span class="k">import</span> <span class="n">config</span>
@@ -100,19 +101,11 @@
 <div class="viewcode-block" id="Report"><a class="viewcode-back" href="../../api/catatom2osm.report.html#catatom2osm.report.Report">[docs]</a><span class="k">class</span> <span class="nc">Report</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">clear</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-<div class="viewcode-block" id="Report.clear"><a class="viewcode-back" href="../../api/catatom2osm.report.html#catatom2osm.report.Report.clear">[docs]</a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">values</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;start_time&#39;</span><span class="p">:</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">(),</span>
-            <span class="s1">&#39;date&#39;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%x</span><span class="s1">&#39;</span><span class="p">),</span>
-            <span class="s1">&#39;fixme_counter&#39;</span><span class="p">:</span> <span class="n">Counter</span><span class="p">(),</span>
-            <span class="s1">&#39;warnings&#39;</span><span class="p">:</span> <span class="p">[],</span>
-            <span class="s1">&#39;errors&#39;</span><span class="p">:</span> <span class="p">[],</span>
-            <span class="s1">&#39;min_level&#39;</span><span class="p">:</span> <span class="p">{},</span>
-            <span class="s1">&#39;max_level&#39;</span><span class="p">:</span> <span class="p">{},</span>
-        <span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">titles</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">([</span>
+            <span class="p">(</span><span class="s1">&#39;fixme_counter&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;min_level&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;max_level&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;building_counter&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
             <span class="p">(</span><span class="s1">&#39;mun_name&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Municipality&#39;</span><span class="p">)),</span>
             <span class="p">(</span><span class="s1">&#39;cat_mun&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Cadastre name&#39;</span><span class="p">)),</span>
             <span class="p">(</span><span class="s1">&#39;mun_code&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Code&#39;</span><span class="p">)),</span>
@@ -142,25 +135,35 @@
             <span class="p">(</span><span class="s1">&#39;inp_address_parcel&#39;</span><span class="p">,</span> <span class="n">TAB</span> <span class="o">+</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Type parcel&#39;</span><span class="p">)),</span>
             <span class="p">(</span><span class="s1">&#39;inp_zip_codes&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Postal codes&#39;</span><span class="p">)),</span>
             <span class="p">(</span><span class="s1">&#39;inp_street_names&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Street names&#39;</span><span class="p">)),</span>
-            <span class="p">(</span><span class="s1">&#39;orphand_addresses&#39;</span><span class="p">,</span>
-             <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Addresses without associated building excluded&#39;</span><span class="p">)),</span>
             <span class="p">(</span><span class="s1">&#39;subgroup_ad_process&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Process&#39;</span><span class="p">)),</span>
+            <span class="p">(</span>
+                <span class="s1">&#39;orphaned_addresses&#39;</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Addresses without associated building excluded&#39;</span><span class="p">)</span>
+            <span class="p">),</span>
             <span class="p">(</span><span class="s1">&#39;ignored_addresses&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Addresses deleted by street name&#39;</span><span class="p">)),</span>
-            <span class="p">(</span><span class="s1">&#39;addresses_without_number&#39;</span><span class="p">,</span>
-             <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Addresses without house number deleted&#39;</span><span class="p">)),</span>
-            <span class="p">(</span><span class="s1">&#39;multiple_addresses&#39;</span><span class="p">,</span>
-             <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Addresses belonging to multiple buildings deleted&#39;</span><span class="p">)),</span>
-            <span class="p">(</span><span class="s1">&#39;not_unique_addresses&#39;</span><span class="p">,</span>
-             <span class="n">_</span><span class="p">(</span><span class="s2">&quot;&#39;Parcel&#39; addresses not unique for its building deleted&quot;</span><span class="p">)),</span>
+            <span class="p">(</span>
+                <span class="s1">&#39;addresses_without_number&#39;</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Addresses without house number deleted&#39;</span><span class="p">)</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s1">&#39;multiple_addresses&#39;</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Addresses belonging to multiple buildings deleted&#39;</span><span class="p">)</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s1">&#39;not_unique_addresses&#39;</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">(</span><span class="s2">&quot;&#39;Parcel&#39; addresses not unique for its building deleted&quot;</span><span class="p">)</span>
+            <span class="p">),</span>
             <span class="p">(</span><span class="s1">&#39;subgroup_ad_conflation&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Conflation&quot;</span><span class="p">)),</span>
             <span class="p">(</span><span class="s1">&#39;osm_addresses&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;OSM addresses &quot;</span><span class="p">)),</span>
-            <span class="p">(</span><span class="s1">&#39;osm_addresses_whithout_number&#39;</span><span class="p">,</span> <span class="n">TAB</span> <span class="o">+</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Without house number&quot;</span><span class="p">)),</span>
-            <span class="p">(</span><span class="s1">&#39;refused_addresses&#39;</span><span class="p">,</span>
-             <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Addresses rejected because they exist in OSM&quot;</span><span class="p">)),</span>
+            <span class="p">(</span><span class="s1">&#39;osm_addresses_without_number&#39;</span><span class="p">,</span> <span class="n">TAB</span> <span class="o">+</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Without house number&quot;</span><span class="p">)),</span>
+            <span class="p">(</span>
+                <span class="s1">&#39;refused_addresses&#39;</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Addresses rejected because they exist in OSM&quot;</span><span class="p">)</span>
+            <span class="p">),</span>
             <span class="p">(</span><span class="s1">&#39;subgroup_ad_output&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Output data&#39;</span><span class="p">)),</span>
             <span class="p">(</span><span class="s1">&#39;out_address&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Addresses&#39;</span><span class="p">)),</span>
             <span class="p">(</span><span class="s1">&#39;out_address_entrance&#39;</span><span class="p">,</span> <span class="n">TAB</span> <span class="o">+</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;In entrance nodes&#39;</span><span class="p">)),</span>
-            <span class="p">(</span><span class="s1">&#39;out_address_building&#39;</span><span class="p">,</span> <span class="n">TAB</span> <span class="o">+</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;In buildings&#39;</span><span class="p">)),</span>
+            <span class="p">(</span><span class="s1">&#39;out_address_parcel&#39;</span><span class="p">,</span> <span class="n">TAB</span> <span class="o">+</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;In parcels&#39;</span><span class="p">)),</span>
             <span class="p">(</span><span class="s1">&#39;out_addr_str&#39;</span><span class="p">,</span> <span class="n">TAB</span> <span class="o">+</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Type addr:street&#39;</span><span class="p">)),</span>
             <span class="p">(</span><span class="s1">&#39;out_addr_plc&#39;</span><span class="p">,</span> <span class="n">TAB</span> <span class="o">+</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Type addr:place&#39;</span><span class="p">)),</span>
             <span class="p">(</span><span class="s1">&#39;group_buildings&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Buildings&#39;</span><span class="p">)),</span>
@@ -170,20 +173,29 @@
             <span class="p">(</span><span class="s1">&#39;inp_buildings&#39;</span><span class="p">,</span> <span class="n">TAB</span> <span class="o">+</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Buildings&#39;</span><span class="p">)),</span>
             <span class="p">(</span><span class="s1">&#39;inp_parts&#39;</span><span class="p">,</span> <span class="n">TAB</span> <span class="o">+</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Building parts&#39;</span><span class="p">)),</span>
             <span class="p">(</span><span class="s1">&#39;inp_pools&#39;</span><span class="p">,</span> <span class="n">TAB</span> <span class="o">+</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Swimming pools&#39;</span><span class="p">)),</span>
-            <span class="p">(</span><span class="s1">&#39;orphand_parts&#39;</span><span class="p">,</span>
-             <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Parts without associated building excluded&#39;</span><span class="p">)),</span>
+            <span class="p">(</span>
+                <span class="s1">&#39;orphaned_parts&#39;</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Parts without associated building excluded&#39;</span><span class="p">)</span>
+            <span class="p">),</span>
             <span class="p">(</span><span class="s1">&#39;subgroup_bu_process&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Process&#39;</span><span class="p">)),</span>
+            <span class="p">(</span><span class="s1">&#39;parts_wo_building&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Parts without building deleted&#39;</span><span class="p">)),</span>
             <span class="p">(</span><span class="s1">&#39;outside_parts&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Parts outside outline deleted&quot;</span><span class="p">)),</span>
             <span class="p">(</span><span class="s1">&#39;underground_parts&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Parts with no floors above ground&quot;</span><span class="p">)),</span>
-            <span class="p">(</span><span class="s1">&#39;new_outlines&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Building outlines created&quot;</span><span class="p">)),</span>
-            <span class="p">(</span><span class="s1">&#39;multipart_geoms_building&#39;</span><span class="p">,</span>
-             <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Buildings with multipart geometries&quot;</span><span class="p">)),</span>
-            <span class="p">(</span><span class="s1">&#39;exploded_parts_building&#39;</span><span class="p">,</span>
-             <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Buildings resulting from splitting multiparts&quot;</span><span class="p">)),</span>
+            <span class="p">(</span>
+                <span class="s1">&#39;multipart_geoms_building&#39;</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Buildings with multipart geometries&quot;</span><span class="p">)</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="s1">&#39;exploded_parts_building&#39;</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Buildings resulting from splitting multiparts&quot;</span><span class="p">)</span>
+            <span class="p">),</span>
             <span class="p">(</span><span class="s1">&#39;parts_to_outline&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Parts merged to the outline&quot;</span><span class="p">)),</span>
             <span class="p">(</span><span class="s1">&#39;adjacent_parts&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Adjacent parts merged&quot;</span><span class="p">)),</span>
-            <span class="p">(</span><span class="s1">&#39;buildings_in_pools&#39;</span><span class="p">,</span>
-             <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Buildings coincidents with a swimming pool deleted&quot;</span><span class="p">)),</span>
+            <span class="p">(</span>
+                <span class="s1">&#39;buildings_in_pools&#39;</span><span class="p">,</span>
+                <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Buildings coincidents with a swimming pool deleted&quot;</span><span class="p">)</span>
+            <span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;geom_parts_building&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Invalid geometry parts deleted&#39;</span><span class="p">)),</span>
             <span class="p">(</span><span class="s1">&#39;geom_rings_building&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Invalid geometry rings deleted&#39;</span><span class="p">)),</span>
             <span class="p">(</span><span class="s1">&#39;geom_invalid_building&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Invalid geometries deleted&#39;</span><span class="p">)),</span>
             <span class="p">(</span><span class="s1">&#39;vertex_zigzag_building&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Zig-zag vertices deleted&#39;</span><span class="p">)),</span>
@@ -206,9 +218,10 @@
             <span class="p">(</span><span class="s1">&#39;building_types&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Building types counter&quot;</span><span class="p">)),</span>
             <span class="p">(</span><span class="s1">&#39;dlag&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Max. levels above ground (level: # of buildings)&quot;</span><span class="p">)),</span>
             <span class="p">(</span><span class="s1">&#39;dlbg&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Min. levels below ground (level: # of buildings)&quot;</span><span class="p">)),</span>
-            <span class="p">(</span><span class="s1">&#39;tasks_r&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Rustic tasks files&quot;</span><span class="p">)),</span>
-            <span class="p">(</span><span class="s1">&#39;tasks_u&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Urban tasks files&quot;</span><span class="p">)),</span>
-            <span class="p">(</span><span class="s1">&#39;tasks_m&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Buildings without zone&quot;</span><span class="p">)),</span>
+            <span class="p">(</span><span class="s1">&#39;group_tasks&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Project&#39;</span><span class="p">)),</span>
+            <span class="p">(</span><span class="s1">&#39;tasks&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Tasks files&#39;</span><span class="p">)),</span>
+            <span class="p">(</span><span class="s1">&#39;tasks_r&#39;</span><span class="p">,</span> <span class="n">TAB</span> <span class="o">+</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Rustic&quot;</span><span class="p">)),</span>
+            <span class="p">(</span><span class="s1">&#39;tasks_u&#39;</span><span class="p">,</span> <span class="n">TAB</span> <span class="o">+</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Urban&quot;</span><span class="p">)),</span>
             <span class="p">(</span><span class="s1">&#39;group_problems&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Problems&quot;</span><span class="p">)),</span>
             <span class="p">(</span><span class="s1">&#39;errors&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Report validation:&quot;</span><span class="p">)),</span>
             <span class="p">(</span><span class="s1">&#39;fixme_count&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Fixmes&quot;</span><span class="p">)),</span>
@@ -217,30 +230,48 @@
         <span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">formats</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s1">&#39;cpu_freq&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">locale</span><span class="o">.</span><span class="n">format_string</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%.1f</span><span class="s1"> Mhz&#39;</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
-            <span class="s1">&#39;ex_time&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">locale</span><span class="o">.</span><span class="n">format_string</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%.1f</span><span class="s1"> &#39;</span> <span class="o">+</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;seconds&#39;</span><span class="p">),</span> <span class="n">v</span><span class="p">,</span>
-                                                      <span class="kc">True</span><span class="p">),</span>
-            <span class="s1">&#39;memory&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">locale</span><span class="o">.</span><span class="n">format_string</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%.2f</span><span class="s1"> &#39;</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span>
-                                                     <span class="kc">True</span><span class="p">)</span> <span class="o">+</span> <span class="n">MEMORY_LABEL</span><span class="p">,</span>
-            <span class="s1">&#39;rss&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">locale</span><span class="o">.</span><span class="n">format_string</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%.2f</span><span class="s1"> &#39;</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span>
-                                                  <span class="kc">True</span><span class="p">)</span> <span class="o">+</span> <span class="n">MEMORY_LABEL</span><span class="p">,</span>
-            <span class="s1">&#39;vms&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">locale</span><span class="o">.</span><span class="n">format_string</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%.2f</span><span class="s1"> &#39;</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span>
-                                                  <span class="kc">True</span><span class="p">)</span> <span class="o">+</span> <span class="n">MEMORY_LABEL</span><span class="p">,</span>
+            <span class="s1">&#39;ex_time&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">locale</span><span class="o">.</span><span class="n">format_string</span><span class="p">(</span>
+                <span class="s1">&#39;</span><span class="si">%.1f</span><span class="s1"> &#39;</span> <span class="o">+</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;seconds&#39;</span><span class="p">),</span> <span class="n">v</span><span class="p">,</span> <span class="kc">True</span>
+            <span class="p">),</span>
+            <span class="s1">&#39;memory&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">locale</span><span class="o">.</span><span class="n">format_string</span><span class="p">(</span>
+                <span class="s1">&#39;</span><span class="si">%.2f</span><span class="s1"> &#39;</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="kc">True</span>
+            <span class="p">)</span> <span class="o">+</span> <span class="n">MEMORY_LABEL</span><span class="p">,</span>
+            <span class="s1">&#39;rss&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">locale</span><span class="o">.</span><span class="n">format_string</span><span class="p">(</span>
+                <span class="s1">&#39;</span><span class="si">%.2f</span><span class="s1"> &#39;</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="kc">True</span>
+            <span class="p">)</span> <span class="o">+</span> <span class="n">MEMORY_LABEL</span><span class="p">,</span>
+            <span class="s1">&#39;vms&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">locale</span><span class="o">.</span><span class="n">format_string</span><span class="p">(</span>
+                <span class="s1">&#39;</span><span class="si">%.2f</span><span class="s1"> &#39;</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="kc">True</span>
+            <span class="p">)</span> <span class="o">+</span> <span class="n">MEMORY_LABEL</span><span class="p">,</span>
         <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clear</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Report.clear"><a class="viewcode-back" href="../../api/catatom2osm.report.html#catatom2osm.report.Report.clear">[docs]</a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">values</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;date&#39;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%x</span><span class="s1">&#39;</span><span class="p">),</span>
+            <span class="s1">&#39;warnings&#39;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s1">&#39;errors&#39;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s1">&#39;min_level&#39;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s1">&#39;max_level&#39;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s1">&#39;fixme_counter&#39;</span><span class="p">:</span> <span class="n">Counter</span><span class="p">(),</span>
+            <span class="s1">&#39;building_counter&#39;</span><span class="p">:</span> <span class="n">Counter</span><span class="p">(),</span>
+        <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_sys_info</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tasks_with_fixmes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span></div>
 
     <span class="k">def</span> <span class="nf">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;values&#39;</span><span class="p">,</span> <span class="s1">&#39;titles&#39;</span><span class="p">,</span> <span class="s1">&#39;groups&#39;</span><span class="p">]:</span>
-            <span class="nb">super</span><span class="p">(</span><span class="n">Report</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="o">!=</span> <span class="s1">&#39;titles&#39;</span> <span class="ow">and</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">titles</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">super</span><span class="p">(</span><span class="n">Report</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">key</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">):</span>
-            <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">Report</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__getattr__</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="o">!=</span> <span class="s1">&#39;titles&#39;</span> <span class="ow">and</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">titles</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">Report</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__getattribute__</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Report.address_stats"><a class="viewcode-back" href="../../api/catatom2osm.report.html#catatom2osm.report.Report.address_stats">[docs]</a>    <span class="k">def</span> <span class="nf">address_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">address_osm</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">el</span> <span class="ow">in</span> <span class="n">address_osm</span><span class="o">.</span><span class="n">elements</span><span class="p">:</span>
@@ -253,7 +284,7 @@
                 <span class="k">if</span> <span class="n">el</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;node&#39;</span> <span class="ow">and</span> <span class="s1">&#39;entrance&#39;</span> <span class="ow">in</span> <span class="n">el</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">inc</span><span class="p">(</span><span class="s1">&#39;out_address_entrance&#39;</span><span class="p">)</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="s1">&#39;entrance&#39;</span> <span class="ow">in</span> <span class="n">el</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">inc</span><span class="p">(</span><span class="s1">&#39;out_address_building&#39;</span><span class="p">)</span></div>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">inc</span><span class="p">(</span><span class="s1">&#39;out_address_parcel&#39;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Report.cons_stats"><a class="viewcode-back" href="../../api/catatom2osm.report.html#catatom2osm.report.Report.cons_stats">[docs]</a>    <span class="k">def</span> <span class="nf">cons_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">task_label</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">el</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">elements</span><span class="p">:</span>
@@ -262,8 +293,6 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">inc</span><span class="p">(</span><span class="s1">&#39;out_features&#39;</span><span class="p">)</span>
             <span class="k">if</span> <span class="s1">&#39;building&#39;</span> <span class="ow">in</span> <span class="n">el</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">inc</span><span class="p">(</span><span class="s1">&#39;out_buildings&#39;</span><span class="p">)</span>
-                <span class="k">if</span> <span class="s1">&#39;building_counter&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">building_counter</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">building_counter</span><span class="p">[</span><span class="n">el</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;building&#39;</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">inc</span><span class="p">(</span><span class="s1">&#39;out_features&#39;</span><span class="p">)</span>
             <span class="k">if</span> <span class="s1">&#39;building:part&#39;</span> <span class="ow">in</span> <span class="n">el</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span>
@@ -287,7 +316,6 @@
             <span class="nb">list</span><span class="p">(</span><span class="n">OrderedDict</span><span class="p">(</span><span class="n">Counter</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_level</span><span class="o">.</span><span class="n">values</span><span class="p">())))</span><span class="o">.</span><span class="n">items</span><span class="p">())])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dlbg</span> <span class="o">=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">: </span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span> <span class="ow">in</span> \
             <span class="nb">list</span><span class="p">(</span><span class="n">OrderedDict</span><span class="p">(</span><span class="n">Counter</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">min_level</span><span class="o">.</span><span class="n">values</span><span class="p">())))</span><span class="o">.</span><span class="n">items</span><span class="p">())])</span>
-        <span class="n">building_counter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;building_counter&#39;</span><span class="p">,</span> <span class="n">Counter</span><span class="p">())</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">building_types</span> <span class="o">=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">: </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span> \
             <span class="k">for</span> <span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">building_counter</span><span class="o">.</span><span class="n">items</span><span class="p">())])</span></div>
 
@@ -309,64 +337,95 @@
         <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">args</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Report.get_sys_info"><a class="viewcode-back" href="../../api/catatom2osm.report.html#catatom2osm.report.Report.get_sys_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_sys_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="kn">import</span> <span class="nn">psutil</span>
-            <span class="n">p</span> <span class="o">=</span> <span class="n">psutil</span><span class="o">.</span><span class="n">Process</span><span class="p">()</span>
-            <span class="n">v</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">platform</span><span class="o">.</span><span class="n">uname</span><span class="p">())</span>
-            <span class="n">v</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">platform</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">app_version</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">app_name</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">app_version</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">language</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">language</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">cpu_count</span> <span class="o">=</span> <span class="n">psutil</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">(</span><span class="n">logical</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">cpu_freq</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">psutil</span><span class="p">,</span> <span class="s1">&#39;cpu_freq&#39;</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="mi">0</span><span class="p">)(),</span> <span class="s1">&#39;max&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">memory</span> <span class="o">=</span> <span class="n">psutil</span><span class="o">.</span><span class="n">virtual_memory</span><span class="p">()</span><span class="o">.</span><span class="n">total</span> <span class="o">/</span> <span class="n">MEMORY_UNIT</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">rss</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">memory_info</span><span class="p">()</span><span class="o">.</span><span class="n">rss</span> <span class="o">/</span> <span class="n">MEMORY_UNIT</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">vms</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">memory_info</span><span class="p">()</span><span class="o">.</span><span class="n">vms</span> <span class="o">/</span> <span class="n">MEMORY_UNIT</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">ex_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span>
-        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-            <span class="k">pass</span></div>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">psutil</span><span class="o">.</span><span class="n">Process</span><span class="p">()</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">platform</span><span class="o">.</span><span class="n">uname</span><span class="p">())</span>
+        <span class="n">v</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">platform</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">app_version</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">app_name</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">app_version</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">language</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">language</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cpu_count</span> <span class="o">=</span> <span class="n">psutil</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">(</span><span class="n">logical</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cpu_freq</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">psutil</span><span class="p">,</span> <span class="s1">&#39;cpu_freq&#39;</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="mi">0</span><span class="p">)(),</span> <span class="s1">&#39;max&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">memory</span> <span class="o">=</span> <span class="n">psutil</span><span class="o">.</span><span class="n">virtual_memory</span><span class="p">()</span><span class="o">.</span><span class="n">total</span> <span class="o">/</span> <span class="n">MEMORY_UNIT</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rss</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">memory_info</span><span class="p">()</span><span class="o">.</span><span class="n">rss</span> <span class="o">/</span> <span class="n">MEMORY_UNIT</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vms</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">memory_info</span><span class="p">()</span><span class="o">.</span><span class="n">vms</span> <span class="o">/</span> <span class="n">MEMORY_UNIT</span></div>
+
+<div class="viewcode-block" id="Report.clean_group"><a class="viewcode-back" href="../../api/catatom2osm.report.html#catatom2osm.report.Report.clean_group">[docs]</a>    <span class="k">def</span> <span class="nf">clean_group</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group</span><span class="p">):</span>
+        <span class="n">group</span> <span class="o">=</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">group</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">frozenset</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="k">if</span> <span class="n">k</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">group</span><span class="p">):</span>
+                <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">k</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="Report.validate"><a class="viewcode-back" href="../../api/catatom2osm.report.html#catatom2osm.report.Report.validate">[docs]</a>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="s1">&#39;inp_address_entrance&#39;</span><span class="p">,</span> <span class="s1">&#39;inp_address_parcel&#39;</span><span class="p">)</span> <span class="o">!=</span> \
-                <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;inp_address&#39;</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Sum of address types should be equal &quot;</span>
-                <span class="s2">&quot;to the input addresses&quot;</span><span class="p">))</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="s1">&#39;addresses_without_number&#39;</span><span class="p">,</span> <span class="s1">&#39;not_unique_addresses&#39;</span><span class="p">,</span>
-                <span class="s1">&#39;multiple_addresses&#39;</span><span class="p">,</span> <span class="s1">&#39;refused_addresses&#39;</span><span class="p">,</span> <span class="s1">&#39;ignored_addresses&#39;</span><span class="p">,</span> 
-                <span class="s1">&#39;out_address&#39;</span><span class="p">,</span> <span class="s1">&#39;pool_addresses&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;inp_address&#39;</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Sum of output and deleted addresses &quot;</span>
-                <span class="s2">&quot;should be equal to the input addresses&quot;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="s1">&#39;tasks_u&#39;</span><span class="p">,</span> <span class="s1">&#39;tasks_r&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tasks&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_</span><span class="p">(</span>
+                <span class="s2">&quot;Sum of rustic and urban tasks should be equal &quot;</span>
+                <span class="s2">&quot;to number of tasks in the project&quot;</span>
+            <span class="p">))</span>
         <span class="k">if</span> <span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="s1">&#39;out_address_entrance&#39;</span><span class="p">,</span> <span class="s1">&#39;out_address_building&#39;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span>
-            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="s1">&#39;out_address_entrance&#39;</span><span class="p">,</span> <span class="s1">&#39;out_address_building&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="s1">&#39;inp_address_entrance&#39;</span><span class="p">,</span> <span class="s1">&#39;inp_address_parcel&#39;</span><span class="p">)</span>
+            <span class="o">!=</span><span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;inp_address&#39;</span><span class="p">)</span>
+        <span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_</span><span class="p">(</span>
+                <span class="s2">&quot;Sum of address types should be equal to the input addresses&quot;</span>
+            <span class="p">))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
+            <span class="s1">&#39;addresses_without_number&#39;</span><span class="p">,</span> <span class="s1">&#39;not_unique_addresses&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;multiple_addresses&#39;</span><span class="p">,</span> <span class="s1">&#39;refused_addresses&#39;</span><span class="p">,</span> <span class="s1">&#39;ignored_addresses&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;out_address&#39;</span><span class="p">,</span> <span class="s1">&#39;pool_addresses&#39;</span><span class="p">,</span> <span class="s1">&#39;orphaned_addresses&#39;</span><span class="p">,</span>
+        <span class="p">)</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;inp_address&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_</span><span class="p">(</span>
+                <span class="s2">&quot;Sum of output and deleted addresses should be equal &quot;</span>
+                <span class="s2">&quot;to the input addresses&quot;</span>
+            <span class="p">))</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="s1">&#39;out_address_entrance&#39;</span><span class="p">,</span> <span class="s1">&#39;out_address_parcel&#39;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="s1">&#39;out_address_entrance&#39;</span><span class="p">,</span> <span class="s1">&#39;out_address_parcel&#39;</span><span class="p">)</span>
         <span class="p">)</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;out_address&#39;</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Sum of entrance and building address &quot;</span>
-                <span class="s2">&quot;should be equal to output addresses&quot;</span><span class="p">))</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="s1">&#39;out_addr_str&#39;</span><span class="p">,</span> <span class="s1">&#39;out_addr_plc&#39;</span><span class="p">)</span> <span class="o">!=</span> \
-                <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;out_address&#39;</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Sum of street and place addresses &quot;</span>
-                <span class="s2">&quot;should be equal to output addresses&quot;</span><span class="p">))</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="s1">&#39;inp_buildings&#39;</span><span class="p">,</span> <span class="s1">&#39;inp_parts&#39;</span><span class="p">,</span> <span class="s1">&#39;inp_pools&#39;</span><span class="p">)</span> <span class="o">!=</span> \
-                <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;inp_features&#39;</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Sum of buildings, parts and pools should &quot;</span>
-                <span class="s2">&quot;be equal to the feature count&quot;</span><span class="p">))</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="s1">&#39;out_features&#39;</span><span class="p">,</span> <span class="s1">&#39;outside_parts&#39;</span><span class="p">,</span> <span class="s1">&#39;underground_parts&#39;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_</span><span class="p">(</span>
+                <span class="s2">&quot;Sum of entrance and parcel addresses should be equal &quot;</span>
+                <span class="s2">&quot;to output addresses&quot;</span>
+            <span class="p">))</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="s1">&#39;out_addr_str&#39;</span><span class="p">,</span> <span class="s1">&#39;out_addr_plc&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;out_address&#39;</span><span class="p">)</span>
+        <span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_</span><span class="p">(</span>
+                <span class="s2">&quot;Sum of street and place addresses should be equal &quot;</span>
+                <span class="s2">&quot;to output addresses&quot;</span>
+            <span class="p">))</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="s1">&#39;inp_buildings&#39;</span><span class="p">,</span> <span class="s1">&#39;inp_parts&#39;</span><span class="p">,</span> <span class="s1">&#39;inp_pools&#39;</span><span class="p">)</span>
+            <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;inp_features&#39;</span><span class="p">)</span>
+        <span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_</span><span class="p">(</span>
+                <span class="s2">&quot;Sum of buildings, parts and pools should be equal &quot;</span>
+                <span class="s2">&quot;to the feature count&quot;</span>
+            <span class="p">))</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
+                <span class="s1">&#39;out_features&#39;</span><span class="p">,</span> <span class="s1">&#39;outside_parts&#39;</span><span class="p">,</span> <span class="s1">&#39;underground_parts&#39;</span><span class="p">,</span>
                 <span class="s1">&#39;multipart_geoms_building&#39;</span><span class="p">,</span> <span class="s1">&#39;parts_to_outline&#39;</span><span class="p">,</span>
-                <span class="s1">&#39;adjacent_parts&#39;</span><span class="p">,</span> <span class="s1">&#39;geom_invalid_building&#39;</span><span class="p">,</span> <span class="s1">&#39;buildings_in_pools&#39;</span><span class="p">)</span> <span class="o">-</span> \
-                <span class="bp">self</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="s1">&#39;new_outlines&#39;</span><span class="p">,</span> <span class="s1">&#39;exploded_parts_building&#39;</span><span class="p">)</span> <span class="o">!=</span> \
-                    <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;inp_features&#39;</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Sum of output and deleted minus created &quot;</span>
-                <span class="s2">&quot;building features should be equal to input features&quot;</span><span class="p">))</span>
-        <span class="k">if</span> <span class="s1">&#39;building_counter&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="s1">&#39;building_counter&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="o">!=</span> \
-                    <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;out_buildings&#39;</span><span class="p">):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Sum of building types should be equal &quot;</span>
-                    <span class="s2">&quot;to the number of buildings&quot;</span><span class="p">))</span></div>
+                <span class="s1">&#39;parts_wo_building&#39;</span><span class="p">,</span> <span class="s1">&#39;adjacent_parts&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;geom_invalid_building&#39;</span><span class="p">,</span> <span class="s1">&#39;buildings_in_pools&#39;</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;exploded_parts_building&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;inp_features&#39;</span><span class="p">)</span>
+        <span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_</span><span class="p">(</span>
+                <span class="s2">&quot;Sum of output and deleted minus created &quot;</span>
+                <span class="s2">&quot;building features should be equal to input features&quot;</span>
+            <span class="p">))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">building_counter</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">building_counter</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+                <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;out_buildings&#39;</span><span class="p">)</span>
+            <span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_</span><span class="p">(</span>
+                    <span class="s2">&quot;Sum of building types should be equal &quot;</span>
+                    <span class="s2">&quot;to the number of buildings&quot;</span>
+                <span class="p">))</span></div>
 
 <div class="viewcode-block" id="Report.to_string"><a class="viewcode-back" href="../../api/catatom2osm.report.html#catatom2osm.report.Report.to_string">[docs]</a>    <span class="k">def</span> <span class="nf">to_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">validate</span><span class="p">()</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;sys_info&#39;</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">get_sys_info</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ex_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span>
         <span class="n">groups</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
         <span class="n">last_group</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="n">last_subgroup</span> <span class="o">=</span> <span class="kc">False</span>
@@ -385,6 +444,8 @@
                 <span class="n">groups</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">last_subgroup</span><span class="p">)</span>
         <span class="n">output</span> <span class="o">=</span> <span class="sa">u</span><span class="s1">&#39;&#39;</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">title</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">titles</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+            <span class="k">if</span> <span class="n">title</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">continue</span>
             <span class="k">if</span> <span class="n">key</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;group_&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">groups</span><span class="p">:</span>
                 <span class="n">output</span> <span class="o">+=</span> <span class="n">config</span><span class="o">.</span><span class="n">eol</span> <span class="o">+</span> <span class="s1">&#39;=&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">titles</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;=&#39;</span> <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">eol</span>
             <span class="k">elif</span> <span class="n">key</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;subgroup_&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">groups</span><span class="p">:</span>
@@ -415,23 +476,16 @@
         <span class="k">with</span> <span class="n">io</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">encoding</span><span class="p">)</span> <span class="k">as</span> <span class="n">fo</span><span class="p">:</span>
             <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">to_string</span><span class="p">())</span></div>
 
+<div class="viewcode-block" id="Report.export"><a class="viewcode-back" href="../../api/catatom2osm.report.html#catatom2osm.report.Report.export">[docs]</a>    <span class="k">def</span> <span class="nf">export</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">):</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fo</span><span class="p">:</span>
+            <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">))</span></div>
+
 <div class="viewcode-block" id="Report.from_file"><a class="viewcode-back" href="../../api/catatom2osm.report.html#catatom2osm.report.Report.from_file">[docs]</a>    <span class="k">def</span> <span class="nf">from_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">):</span>
-        <span class="n">keys</span> <span class="o">=</span> <span class="p">{</span><span class="n">v</span><span class="p">:</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">titles</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
-        <span class="k">with</span> <span class="n">io</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">encoding</span><span class="p">)</span> <span class="k">as</span> <span class="n">fo</span><span class="p">:</span>
-            <span class="n">group</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">fo</span><span class="o">.</span><span class="n">readlines</span><span class="p">():</span>
-                <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;==&#39;</span><span class="p">):</span>
-                    <span class="n">group</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="p">)</span>
-                <span class="k">elif</span> <span class="n">line</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                    <span class="n">title</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)</span>
-                    <span class="n">key</span> <span class="o">=</span> <span class="n">keys</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="n">title</span> <span class="o">==</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Source date&#39;</span><span class="p">):</span>
-                        <span class="k">if</span> <span class="n">group</span> <span class="o">==</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Addresses&#39;</span><span class="p">):</span>
-                            <span class="n">key</span> <span class="o">=</span> <span class="s1">&#39;address_date&#39;</span>
-                        <span class="k">elif</span> <span class="n">group</span> <span class="o">==</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Buildings&#39;</span><span class="p">):</span>
-                            <span class="n">key</span> <span class="o">=</span> <span class="s1">&#39;building_date&#39;</span>
-                    <span class="k">if</span> <span class="n">key</span><span class="p">:</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span></div></div>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fo</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">values</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">fo</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">k</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;_counter&#39;</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">v</span><span class="p">)</span></div></div>
 
 <span class="n">instance</span> <span class="o">=</span> <span class="n">Report</span><span class="p">()</span>
 </pre></div>
@@ -450,7 +504,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.5.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.6.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.report</a></li> 
       </ul>

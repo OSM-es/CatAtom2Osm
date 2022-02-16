@@ -14,7 +14,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.cdau &#8212; CatAtom2Osm 2.5.0 documentation</title>
+    <title>catatom2osm.cdau &#8212; CatAtom2Osm 2.6.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/guzzle.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.5.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.6.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.cdau</a></li> 
       </ul>
@@ -80,8 +80,6 @@
             
   <h1>Source code for catatom2osm.cdau</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Reader of CDAU CSV files&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
-<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">object</span><span class="p">,</span> <span class="nb">range</span><span class="p">,</span> <span class="nb">str</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">re</span>
@@ -94,8 +92,17 @@
 <span class="kn">from</span> <span class="nn">catatom2osm.report</span> <span class="k">import</span> <span class="n">instance</span> <span class="k">as</span> <span class="n">report</span>
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">app_name</span><span class="p">)</span>
 
-<span class="n">andalucia</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;04&#39;</span><span class="p">:</span> <span class="s1">&#39;Almeria&#39;</span><span class="p">,</span> <span class="s1">&#39;11&#39;</span><span class="p">:</span> <span class="s1">&#39;Cadiz&#39;</span><span class="p">,</span> <span class="s1">&#39;14&#39;</span><span class="p">:</span> <span class="s1">&#39;Cordova&#39;</span><span class="p">,</span> <span class="s1">&#39;18&#39;</span><span class="p">:</span> <span class="s1">&#39;Granada&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;21&#39;</span><span class="p">:</span> <span class="s1">&#39;Huelva&#39;</span><span class="p">,</span> <span class="s1">&#39;23&#39;</span><span class="p">:</span> <span class="s1">&#39;Jaen&#39;</span><span class="p">,</span> <span class="s1">&#39;29&#39;</span><span class="p">:</span> <span class="s1">&#39;Malaga&#39;</span><span class="p">,</span> <span class="s1">&#39;41&#39;</span><span class="p">:</span> <span class="s1">&#39;Sevilla&#39;</span><span class="p">}</span>
+<span class="n">andalucia</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;04&#39;</span><span class="p">:</span> <span class="s1">&#39;Almeria&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;11&#39;</span><span class="p">:</span> <span class="s1">&#39;Cadiz&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;14&#39;</span><span class="p">:</span> <span class="s1">&#39;Cordoba&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;18&#39;</span><span class="p">:</span> <span class="s1">&#39;Granada&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;21&#39;</span><span class="p">:</span> <span class="s1">&#39;Huelva&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;23&#39;</span><span class="p">:</span> <span class="s1">&#39;Jaen&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;29&#39;</span><span class="p">:</span> <span class="s1">&#39;Malaga&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;41&#39;</span><span class="p">:</span> <span class="s1">&#39;Sevilla&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;53&#39;</span><span class="p">:</span> <span class="s1">&#39;Cadiz&#39;</span><span class="p">,</span>
+<span class="p">}</span>
 
 <span class="n">cdau_url</span> <span class="o">=</span> <span class="s1">&#39;https://www.juntadeandalucia.es/institutodeestadisticaycartografia/cdau/portales/</span><span class="si">{}</span><span class="s1">&#39;</span>
 <span class="n">csv_name</span> <span class="o">=</span> <span class="s1">&#39;portal_</span><span class="si">{}</span><span class="s1">.csv&#39;</span>
@@ -104,7 +111,7 @@
 <span class="n">cdau_thr</span> <span class="o">=</span> <span class="mi">5</span> <span class="c1"># Threhold in meters to conflate Cadastre addresses</span>
 <span class="n">cod_mun_trans</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s1">&#39;04&#39;</span><span class="p">:</span> <span class="p">{</span><span class="mi">40</span><span class="p">:</span> <span class="mi">901</span><span class="p">,</span> <span class="mi">104</span><span class="p">:</span> <span class="mi">902</span><span class="p">,</span> <span class="mi">105</span><span class="p">:</span> <span class="mi">903</span><span class="p">,</span> <span class="mi">900</span><span class="p">:</span> <span class="mi">13</span><span class="p">},</span>
-    <span class="s1">&#39;11&#39;</span><span class="p">:</span> <span class="p">{</span><span class="mi">43</span><span class="p">:</span> <span class="mi">901</span><span class="p">,</span> <span class="mi">44</span><span class="p">:</span> <span class="mi">902</span><span class="p">,</span> <span class="mi">900</span><span class="p">:</span> <span class="mi">12</span><span class="p">},</span>
+    <span class="s1">&#39;11&#39;</span><span class="p">:</span> <span class="p">{</span><span class="mi">43</span><span class="p">:</span> <span class="mi">901</span><span class="p">,</span> <span class="mi">44</span><span class="p">:</span> <span class="mi">902</span><span class="p">,</span> <span class="mi">45</span><span class="p">:</span><span class="mi">903</span><span class="p">,</span> <span class="mi">900</span><span class="p">:</span> <span class="mi">12</span><span class="p">},</span>
     <span class="s1">&#39;14&#39;</span><span class="p">:</span> <span class="p">{</span><span class="mi">900</span><span class="p">:</span> <span class="mi">21</span><span class="p">},</span>
     <span class="s1">&#39;18&#39;</span><span class="p">:</span> <span class="p">{</span><span class="mi">20</span><span class="p">:</span> <span class="mi">911</span><span class="p">,</span> <span class="mi">53</span><span class="p">:</span> <span class="mi">908</span><span class="p">,</span> <span class="mi">59</span><span class="p">:</span> <span class="mi">907</span><span class="p">,</span> <span class="mi">63</span><span class="p">:</span> <span class="mi">119</span><span class="p">,</span> <span class="mi">83</span><span class="p">:</span> <span class="mi">905</span><span class="p">,</span> <span class="mi">92</span><span class="p">:</span> <span class="mi">906</span><span class="p">,</span> <span class="mi">105</span><span class="p">:</span> <span class="mi">910</span><span class="p">,</span> <span class="mi">106</span><span class="p">:</span> <span class="mi">103</span><span class="p">,</span> <span class="mi">120</span><span class="p">:</span> <span class="mi">903</span><span class="p">,</span> <span class="mi">130</span><span class="p">:</span> <span class="mi">904</span><span class="p">,</span> <span class="mi">132</span><span class="p">:</span> <span class="mi">902</span><span class="p">,</span> <span class="mi">141</span><span class="p">:</span> <span class="mi">909</span><span class="p">,</span> <span class="mi">163</span><span class="p">:</span> <span class="mi">901</span><span class="p">,</span> <span class="mi">199</span><span class="p">:</span> <span class="mi">912</span><span class="p">,</span> <span class="mi">200</span><span class="p">:</span> <span class="mi">913</span><span class="p">,</span> <span class="mi">900</span><span class="p">:</span> <span class="mi">87</span><span class="p">},</span>
     <span class="s1">&#39;21&#39;</span><span class="p">:</span> <span class="p">{</span><span class="mi">79</span><span class="p">:</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">900</span><span class="p">:</span> <span class="mi">41</span><span class="p">},</span>
@@ -145,7 +152,10 @@
                 <span class="n">cod_mun</span> <span class="o">-=</span> <span class="mi">1</span>
     <span class="k">elif</span> <span class="n">cod_prov</span> <span class="o">==</span> <span class="s1">&#39;21&#39;</span><span class="p">:</span>
         <span class="n">cod_mun</span> <span class="o">=</span> <span class="n">cod_mun_trans</span><span class="p">[</span><span class="n">cod_prov</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cod_mun</span><span class="p">,</span> <span class="n">cod_mun</span> <span class="o">+</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">cod_mun</span> <span class="o">&gt;</span> <span class="mi">59</span> <span class="k">else</span> <span class="n">cod_mun</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span> 
+    <span class="k">elif</span> <span class="n">cod_prov</span> <span class="o">==</span> <span class="s1">&#39;53&#39;</span><span class="p">:</span>
+        <span class="n">cod_prov</span> <span class="o">=</span> <span class="s1">&#39;11&#39;</span>
+        <span class="n">cod_mun</span> <span class="o">=</span> <span class="n">cod_mun_trans</span><span class="p">[</span><span class="n">cod_prov</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cod_mun</span><span class="p">,</span> <span class="n">cod_mun</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
         <span class="n">cod_mun</span> <span class="o">=</span> <span class="n">cod_mun_trans</span><span class="p">[</span><span class="n">cod_prov</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cod_mun</span><span class="p">,</span> <span class="n">cod_mun</span><span class="p">)</span>
     <span class="n">cod_mun_ine</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}{:03d}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cod_prov</span><span class="p">,</span> <span class="n">cod_mun</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">cod_mun_ine</span></div>
@@ -226,6 +236,9 @@
     <span class="n">to_add</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">to_change</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">to_change_g</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">crs_transform</span> <span class="o">=</span> <span class="n">cat_address</span><span class="o">.</span><span class="n">get_crs_transform</span><span class="p">(</span>
+        <span class="n">cdau_address</span><span class="o">.</span><span class="n">crs</span><span class="p">(),</span> <span class="n">cat_address</span><span class="o">.</span><span class="n">crs</span><span class="p">()</span>
+    <span class="p">)</span>
     <span class="k">for</span> <span class="n">feat</span> <span class="ow">in</span> <span class="n">cat_address</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">():</span>
         <span class="n">g</span> <span class="o">=</span> <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
         <span class="n">ref</span> <span class="o">=</span> <span class="s1">&#39;.&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">g</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="n">g</span><span class="p">[</span><span class="mi">4</span><span class="p">:])</span>
@@ -235,6 +248,10 @@
         <span class="n">attr</span> <span class="o">=</span> <span class="n">get_cat_address</span><span class="p">(</span><span class="n">ad</span><span class="p">,</span> <span class="n">cod_mun_cat</span><span class="p">)</span>
         <span class="n">ref</span> <span class="o">=</span> <span class="n">attr</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">]</span>
         <span class="n">pt</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">ad</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]),</span> <span class="nb">float</span><span class="p">(</span><span class="n">ad</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]))</span>
+        <span class="k">if</span> <span class="n">cat_address</span><span class="o">.</span><span class="n">crs</span><span class="p">()</span> <span class="o">!=</span> <span class="n">cdau_address</span><span class="o">.</span><span class="n">crs</span><span class="p">():</span>
+            <span class="n">g</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">fromPointXY</span><span class="p">(</span><span class="n">pt</span><span class="p">)</span>
+            <span class="n">g</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">crs_transform</span><span class="p">)</span>
+            <span class="n">pt</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">asPoint</span><span class="p">()</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">addresses</span><span class="p">[</span><span class="n">ref</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="c1"># can&#39;t resolve cadastral reference</span>
             <span class="n">area_of_candidates</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="n">pt</span><span class="p">)</span><span class="o">.</span><span class="n">boundingBox</span><span class="p">(</span><span class="n">cdau_thr</span><span class="p">)</span>
             <span class="n">fids</span> <span class="o">=</span> <span class="n">index</span><span class="o">.</span><span class="n">intersects</span><span class="p">(</span><span class="n">area_of_candidates</span><span class="p">)</span>
@@ -242,7 +259,7 @@
                 <span class="n">feat</span> <span class="o">=</span> <span class="n">QgsFeature</span><span class="p">(</span><span class="n">cat_address</span><span class="o">.</span><span class="n">fields</span><span class="p">())</span>
                 <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">attr</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
                     <span class="n">feat</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
-                <span class="n">feat</span><span class="o">.</span><span class="n">setGeometry</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">fromPointXY</span><span class="p">(</span><span class="n">pt</span><span class="p">))</span>
+                <span class="n">feat</span><span class="o">.</span><span class="n">setGeometry</span><span class="p">(</span><span class="n">geo</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">fromPointXY</span><span class="p">(</span><span class="n">pt</span><span class="p">))</span>
                 <span class="n">to_add</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">feat</span><span class="p">)</span> <span class="c1"># add new</span>
         <span class="k">else</span><span class="p">:</span> <span class="c1"># get nearest</span>
             <span class="n">min_dist</span> <span class="o">=</span> <span class="mi">100</span>
@@ -291,7 +308,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.5.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.6.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.cdau</a></li> 
       </ul>

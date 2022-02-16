@@ -14,7 +14,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>test.test_report &#8212; CatAtom2Osm 2.5.0 documentation</title>
+    <title>test.test_report &#8212; CatAtom2Osm 2.6.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/guzzle.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.5.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.6.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">test.test_report</a></li> 
       </ul>
@@ -95,8 +95,8 @@
 <div class="viewcode-block" id="TestReport"><a class="viewcode-back" href="../../api/test.test_report.html#test.test_report.TestReport">[docs]</a><span class="k">class</span> <span class="nc">TestReport</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
 
 <div class="viewcode-block" id="TestReport.test_init"><a class="viewcode-back" href="../../api/test.test_report.html#test.test_report.TestReport.test_init">[docs]</a>    <span class="k">def</span> <span class="nf">test_init</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">r</span> <span class="o">=</span> <span class="n">report</span><span class="o">.</span><span class="n">Report</span><span class="p">(</span><span class="n">foo</span> <span class="o">=</span> <span class="s1">&#39;bar&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">foo</span><span class="p">,</span> <span class="s1">&#39;bar&#39;</span><span class="p">)</span></div>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">report</span><span class="o">.</span><span class="n">Report</span><span class="p">(</span><span class="n">mun_name</span><span class="o">=</span><span class="s1">&#39;bar&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">mun_name</span><span class="p">,</span> <span class="s1">&#39;bar&#39;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="TestReport.test_setattr"><a class="viewcode-back" href="../../api/test.test_report.html#test.test_report.TestReport.test_setattr">[docs]</a>    <span class="k">def</span> <span class="nf">test_setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">r</span> <span class="o">=</span> <span class="n">report</span><span class="o">.</span><span class="n">Report</span><span class="p">()</span>
@@ -115,22 +115,22 @@
 
 <div class="viewcode-block" id="TestReport.test_inc"><a class="viewcode-back" href="../../api/test.test_report.html#test.test_report.TestReport.test_inc">[docs]</a>    <span class="k">def</span> <span class="nf">test_inc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">r</span> <span class="o">=</span> <span class="n">report</span><span class="o">.</span><span class="n">Report</span><span class="p">()</span>
-        <span class="n">r</span><span class="o">.</span><span class="n">inc</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">foo</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="n">r</span><span class="o">.</span><span class="n">inc</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">foo</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span></div>
+        <span class="n">r</span><span class="o">.</span><span class="n">inc</span><span class="p">(</span><span class="s1">&#39;nodes&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">nodes</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">inc</span><span class="p">(</span><span class="s1">&#39;nodes&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">nodes</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="TestReport.test_validate1"><a class="viewcode-back" href="../../api/test.test_report.html#test.test_report.TestReport.test_validate1">[docs]</a>    <span class="k">def</span> <span class="nf">test_validate1</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">r</span> <span class="o">=</span> <span class="n">report</span><span class="o">.</span><span class="n">Report</span><span class="p">()</span>
-        <span class="n">r</span><span class="o">.</span><span class="n">inp_address_entrance</span> <span class="o">=</span> <span class="mi">6</span>
-        <span class="n">r</span><span class="o">.</span><span class="n">inp_address_parcel</span> <span class="o">=</span> <span class="mi">4</span>
-        <span class="n">r</span><span class="o">.</span><span class="n">inp_address</span> <span class="o">=</span> <span class="mi">10</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">inp_address_entrance</span> <span class="o">=</span> <span class="mi">7</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">inp_address_parcel</span> <span class="o">=</span> <span class="mi">5</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">inp_address</span> <span class="o">=</span> <span class="mi">12</span>
         <span class="n">r</span><span class="o">.</span><span class="n">addresses_without_number</span> <span class="o">=</span> <span class="mi">1</span>
-        <span class="n">r</span><span class="o">.</span><span class="n">orphand_addresses</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">orphaned_addresses</span> <span class="o">=</span> <span class="mi">2</span>
         <span class="n">r</span><span class="o">.</span><span class="n">multiple_addresses</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="n">r</span><span class="o">.</span><span class="n">refused_addresses</span> <span class="o">=</span> <span class="mi">2</span>
         <span class="n">r</span><span class="o">.</span><span class="n">out_address_entrance</span> <span class="o">=</span> <span class="mi">5</span>
-        <span class="n">r</span><span class="o">.</span><span class="n">out_address_building</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">out_address_parcel</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="n">r</span><span class="o">.</span><span class="n">out_addr_str</span> <span class="o">=</span> <span class="mi">4</span>
         <span class="n">r</span><span class="o">.</span><span class="n">out_addr_plc</span> <span class="o">=</span> <span class="mi">2</span>
         <span class="n">r</span><span class="o">.</span><span class="n">out_address</span> <span class="o">=</span> <span class="mi">6</span>
@@ -140,10 +140,9 @@
         <span class="n">r</span><span class="o">.</span><span class="n">inp_pools</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="n">r</span><span class="o">.</span><span class="n">building_counter</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}</span>
         <span class="n">r</span><span class="o">.</span><span class="n">out_buildings</span> <span class="o">=</span> <span class="mi">3</span>
-        <span class="n">r</span><span class="o">.</span><span class="n">out_features</span> <span class="o">=</span> <span class="mi">8</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">out_features</span> <span class="o">=</span> <span class="mi">6</span>
         <span class="n">r</span><span class="o">.</span><span class="n">outside_parts</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="n">r</span><span class="o">.</span><span class="n">underground_parts</span> <span class="o">=</span> <span class="mi">1</span>
-        <span class="n">r</span><span class="o">.</span><span class="n">new_outlines</span> <span class="o">=</span> <span class="mi">2</span>
         <span class="n">r</span><span class="o">.</span><span class="n">multipart_geoms_building</span> <span class="o">=</span> <span class="mi">2</span>
         <span class="n">r</span><span class="o">.</span><span class="n">exploded_parts_building</span> <span class="o">=</span> <span class="mi">4</span>
         <span class="n">r</span><span class="o">.</span><span class="n">validate</span><span class="p">()</span>
@@ -155,11 +154,11 @@
         <span class="n">r</span><span class="o">.</span><span class="n">inp_address_parcel</span> <span class="o">=</span> <span class="mi">2</span>
         <span class="n">r</span><span class="o">.</span><span class="n">inp_address</span> <span class="o">=</span> <span class="mi">4</span>
         <span class="n">r</span><span class="o">.</span><span class="n">addresses_without_number</span> <span class="o">=</span> <span class="mi">1</span>
-        <span class="n">r</span><span class="o">.</span><span class="n">orphand_addresses</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">orphaned_addresses</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="n">r</span><span class="o">.</span><span class="n">multiple_addresses</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="n">r</span><span class="o">.</span><span class="n">refused_addresses</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="n">r</span><span class="o">.</span><span class="n">out_address_entrance</span> <span class="o">=</span> <span class="mi">1</span>
-        <span class="n">r</span><span class="o">.</span><span class="n">out_address_building</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">out_address_parcel</span> <span class="o">=</span> <span class="mi">2</span>
         <span class="n">r</span><span class="o">.</span><span class="n">out_addr_str</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="n">r</span><span class="o">.</span><span class="n">out_addr_plc</span> <span class="o">=</span> <span class="mi">2</span>
         <span class="n">r</span><span class="o">.</span><span class="n">out_address</span> <span class="o">=</span> <span class="mi">4</span>
@@ -174,7 +173,7 @@
         <span class="n">msgs</span> <span class="o">=</span> <span class="p">[</span>
             <span class="s2">&quot;Sum of address types should be equal to the input addresses&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Sum of output and deleted addresses should be equal to the input addresses&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Sum of entrance and building address should be equal to output addresses&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Sum of entrance and parcel addresses should be equal to output addresses&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Sum of street and place addresses should be equal to output addresses&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Sum of buildings, parts and pools should be equal to the feature count&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Sum of building types should be equal to the number of buildings&quot;</span><span class="p">,</span>
@@ -183,14 +182,18 @@
         <span class="k">for</span> <span class="n">msg</span> <span class="ow">in</span> <span class="n">msgs</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">r</span><span class="o">.</span><span class="n">errors</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="TestReport.test_to_string0"><a class="viewcode-back" href="../../api/test.test_report.html#test.test_report.TestReport.test_to_string0">[docs]</a>    <span class="k">def</span> <span class="nf">test_to_string0</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestReport.test_to_string0"><a class="viewcode-back" href="../../api/test.test_report.html#test.test_report.TestReport.test_to_string0">[docs]</a>    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.report.Report.get_sys_info&#39;</span><span class="p">,</span> <span class="n">mock</span><span class="o">.</span><span class="n">MagicMock</span><span class="p">())</span>
+    <span class="k">def</span> <span class="nf">test_to_string0</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">r</span> <span class="o">=</span> <span class="n">report</span><span class="o">.</span><span class="n">Report</span><span class="p">()</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">start_time</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">output</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">to_string</span><span class="p">()</span>
         <span class="n">expected</span> <span class="o">=</span> <span class="s2">&quot;Date: &quot;</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%x</span><span class="s1">&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">eol</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">expected</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="TestReport.test_to_string1"><a class="viewcode-back" href="../../api/test.test_report.html#test.test_report.TestReport.test_to_string1">[docs]</a>    <span class="k">def</span> <span class="nf">test_to_string1</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestReport.test_to_string1"><a class="viewcode-back" href="../../api/test.test_report.html#test.test_report.TestReport.test_to_string1">[docs]</a>    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.report.Report.get_sys_info&#39;</span><span class="p">,</span> <span class="n">mock</span><span class="o">.</span><span class="n">MagicMock</span><span class="p">())</span>
+    <span class="k">def</span> <span class="nf">test_to_string1</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">r</span> <span class="o">=</span> <span class="n">report</span><span class="o">.</span><span class="n">Report</span><span class="p">()</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">start_time</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">r</span><span class="o">.</span><span class="n">mun_name</span> <span class="o">=</span> <span class="s1">&#39;Foobar&#39;</span>
         <span class="n">r</span><span class="o">.</span><span class="n">code</span> <span class="o">=</span> <span class="mi">99999</span>
         <span class="n">r</span><span class="o">.</span><span class="n">inp_zip_codes</span> <span class="o">=</span> <span class="mi">1000</span>
@@ -204,8 +207,10 @@
             <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">eol</span> <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">fixme_doc_url</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">expected</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="TestReport.test_to_string2"><a class="viewcode-back" href="../../api/test.test_report.html#test.test_report.TestReport.test_to_string2">[docs]</a>    <span class="k">def</span> <span class="nf">test_to_string2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestReport.test_to_string2"><a class="viewcode-back" href="../../api/test.test_report.html#test.test_report.TestReport.test_to_string2">[docs]</a>    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.report.Report.get_sys_info&#39;</span><span class="p">,</span> <span class="n">mock</span><span class="o">.</span><span class="n">MagicMock</span><span class="p">())</span>
+    <span class="k">def</span> <span class="nf">test_to_string2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">r</span> <span class="o">=</span> <span class="n">report</span><span class="o">.</span><span class="n">Report</span><span class="p">()</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">start_time</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">r</span><span class="o">.</span><span class="n">fixme_count</span> <span class="o">=</span> <span class="mi">2</span>
         <span class="n">r</span><span class="o">.</span><span class="n">fixmes</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;f1&#39;</span><span class="p">,</span> <span class="s1">&#39;f2&#39;</span><span class="p">]</span>
         <span class="n">r</span><span class="o">.</span><span class="n">warnings</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;w1&#39;</span><span class="p">,</span> <span class="s1">&#39;w2&#39;</span><span class="p">]</span>
@@ -225,9 +230,11 @@
         <span class="n">expected</span> <span class="o">=</span> <span class="n">locale</span><span class="o">.</span><span class="n">format_string</span><span class="p">(</span><span class="s2">&quot;Execution time: </span><span class="si">%.1f</span><span class="s2"> seconds&quot;</span><span class="p">,</span> <span class="n">r</span><span class="o">.</span><span class="n">ex_time</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="n">expected</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="TestReport.test_to_file"><a class="viewcode-back" href="../../api/test.test_report.html#test.test_report.TestReport.test_to_file">[docs]</a>    <span class="k">def</span> <span class="nf">test_to_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestReport.test_to_file"><a class="viewcode-back" href="../../api/test.test_report.html#test.test_report.TestReport.test_to_file">[docs]</a>    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.report.Report.get_sys_info&#39;</span><span class="p">,</span> <span class="n">mock</span><span class="o">.</span><span class="n">MagicMock</span><span class="p">())</span>
+    <span class="k">def</span> <span class="nf">test_to_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">r</span> <span class="o">=</span> <span class="n">report</span><span class="o">.</span><span class="n">Report</span><span class="p">()</span>
         <span class="n">r</span><span class="o">.</span><span class="n">mun_name</span> <span class="o">=</span> <span class="s2">&quot;áéíóúñ&quot;</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">start_time</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">output</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">to_string</span><span class="p">()</span>
         <span class="n">fn</span> <span class="o">=</span> <span class="s1">&#39;test_report.txt&#39;</span>
         <span class="n">r</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
@@ -249,7 +256,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">out_addr_str</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">out_addr_plc</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">out_address_entrance</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">out_address_building</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">out_address_parcel</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="TestReport.test_cons_end_stats"><a class="viewcode-back" href="../../api/test.test_report.html#test.test_report.TestReport.test_cons_end_stats">[docs]</a>    <span class="k">def</span> <span class="nf">test_cons_end_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">r</span> <span class="o">=</span> <span class="n">report</span><span class="o">.</span><span class="n">Report</span><span class="p">()</span>
@@ -289,24 +296,24 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">fixme_stats</span><span class="p">(),</span> <span class="mi">3</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">fixmes</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="TestReport.test_from_file"><a class="viewcode-back" href="../../api/test.test_report.html#test.test_report.TestReport.test_from_file">[docs]</a>    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.report.io&#39;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">test_from_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m_io</span><span class="p">):</span>
+<div class="viewcode-block" id="TestReport.test_from_file"><a class="viewcode-back" href="../../api/test.test_report.html#test.test_report.TestReport.test_from_file">[docs]</a>    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.report.open&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">test_from_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m_open</span><span class="p">):</span>
         <span class="n">r</span> <span class="o">=</span> <span class="n">report</span><span class="o">.</span><span class="n">Report</span><span class="p">()</span>
         <span class="n">t</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;Municipality: foobar</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="s2">&quot;Code: 12345</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="s2">&quot;Application version: taz</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="s2">&quot;=Addresses=</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="s2">&quot;==Input data==</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="s2">&quot;Source date: 2021-09-11</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="s2">&quot;=Buildings=</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="s2">&quot;==Input data==</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="s2">&quot;Source date: 2021-06-22</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="s1">&#39;{&quot;mun_name&quot;: &quot;foobar&quot;,</span><span class="se">\n</span><span class="s1">&#39;</span>
+            <span class="s1">&#39;&quot;mun_code&quot;: 12345,</span><span class="se">\n</span><span class="s1">&#39;</span>
+            <span class="s1">&#39;&quot;app_version&quot;: &quot;taz&quot;,</span><span class="se">\n</span><span class="s1">&#39;</span>
+            <span class="s1">&#39;&quot;address_date&quot;: &quot;2021-09-11&quot;,</span><span class="se">\n</span><span class="s1">&#39;</span>
+            <span class="s1">&#39;&quot;building_date&quot;: &quot;2021-06-22&quot;}&#39;</span>
         <span class="p">)</span>
-        <span class="n">m_io</span><span class="o">.</span><span class="n">open</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+        <span class="n">e</span> <span class="o">=</span> <span class="n">mock</span><span class="o">.</span><span class="n">MagicMock</span><span class="p">()</span>
+        <span class="n">fo</span> <span class="o">=</span> <span class="n">mock</span><span class="o">.</span><span class="n">MagicMock</span><span class="p">()</span>
+        <span class="n">fo</span><span class="o">.</span><span class="n">read</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">t</span>
+        <span class="n">e</span><span class="o">.</span><span class="fm">__enter__</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">fo</span>
+        <span class="n">m_open</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">e</span>
         <span class="n">r</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">mun_name</span><span class="p">,</span> <span class="s1">&#39;foobar&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">mun_code</span><span class="p">,</span> <span class="s1">&#39;12345&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">mun_code</span><span class="p">,</span> <span class="mi">12345</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">app_version</span><span class="p">,</span> <span class="s1">&#39;taz&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">building_date</span><span class="p">,</span> <span class="s1">&#39;2021-06-22&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">address_date</span><span class="p">,</span> <span class="s1">&#39;2021-09-11&#39;</span><span class="p">)</span></div></div>
@@ -326,7 +333,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.5.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.6.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">test.test_report</a></li> 
       </ul>

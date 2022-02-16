@@ -15,7 +15,7 @@
   <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.geo.layer.parcel module &#8212; documentación de CatAtom2Osm - 2.5.0</title>
+    <title>catatom2osm.geo.layer.parcel module &#8212; documentación de CatAtom2Osm - 2.6.0</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/guzzle.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="catatom2osm.geo.layer.highway.html" title="catatom2osm.geo.layer.highway module"
              accesskey="P">anterior</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">documentación de CatAtom2Osm - 2.5.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">documentación de CatAtom2Osm - 2.6.0</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../api.html" >Referencia API</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="modules.html" >CatAtom2Osm</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="catatom2osm.html" >catatom2osm package</a> &#187;</li>
@@ -117,27 +117,51 @@
 <span id="catatom2osm-geo-layer-parcel-module"></span><h1>catatom2osm.geo.layer.parcel module<a class="headerlink" href="#module-catatom2osm.geo.layer.parcel" title="Enlazar permanentemente con este título">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="catatom2osm.geo.layer.parcel.ParcelLayer">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">catatom2osm.geo.layer.parcel.</span></span><span class="sig-name descname"><span class="pre">ParcelLayer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Polygon'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baseName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cadastralparcel'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">providerLib</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'memory'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_date</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/parcel.html#ParcelLayer"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.parcel.ParcelLayer" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">catatom2osm.geo.layer.parcel.</span></span><span class="sig-name descname"><span class="pre">ParcelLayer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mun_code</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MultiPolygon'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baseName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cadastralparcel'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">providerLib</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'memory'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_date</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/parcel.html#ParcelLayer"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.parcel.ParcelLayer" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="catatom2osm.geo.layer.polygon.html#catatom2osm.geo.layer.polygon.PolygonLayer" title="catatom2osm.geo.layer.polygon.PolygonLayer"><code class="xref py py-class docutils literal notranslate"><span class="pre">catatom2osm.geo.layer.polygon.PolygonLayer</span></code></a></p>
 <p>Class for cadastral parcels</p>
 <dl class="py method">
+<dt class="sig sig-object py" id="catatom2osm.geo.layer.parcel.ParcelLayer.clean">
+<span class="sig-name descname"><span class="pre">clean</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/parcel.html#ParcelLayer.clean"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.parcel.ParcelLayer.clean" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Delete invalid geometries and close vertices, add topological points
+and simplify vertices.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="catatom2osm.geo.layer.parcel.ParcelLayer.count_parts">
+<span class="sig-name descname"><span class="pre">count_parts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">buildings</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/parcel.html#ParcelLayer.count_parts"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.parcel.ParcelLayer.count_parts" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Adds count of parts in parcel field</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.geo.layer.parcel.ParcelLayer.create_missing_parcels">
-<span class="sig-name descname"><span class="pre">create_missing_parcels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">buildings</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/parcel.html#ParcelLayer.create_missing_parcels"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.parcel.ParcelLayer.create_missing_parcels" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<span class="sig-name descname"><span class="pre">create_missing_parcels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">sources</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/parcel.html#ParcelLayer.create_missing_parcels"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.parcel.ParcelLayer.create_missing_parcels" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>Creates fake parcels for buildings not contained in any.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.geo.layer.parcel.ParcelLayer.delete_void_parcels">
-<span class="sig-name descname"><span class="pre">delete_void_parcels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">buildings</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/parcel.html#ParcelLayer.delete_void_parcels"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.parcel.ParcelLayer.delete_void_parcels" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Remove parcels without buildings (or pools).</p>
+<span class="sig-name descname"><span class="pre">delete_void_parcels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">sources</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/parcel.html#ParcelLayer.delete_void_parcels"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.parcel.ParcelLayer.delete_void_parcels" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Remove parcels without buildings (or pools)/addresses.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="catatom2osm.geo.layer.parcel.ParcelLayer.get_groups_with_context">
-<span class="sig-name descname"><span class="pre">get_groups_with_context</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">buildings</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/parcel.html#ParcelLayer.get_groups_with_context"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.parcel.ParcelLayer.get_groups_with_context" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dt class="sig sig-object py" id="catatom2osm.geo.layer.parcel.ParcelLayer.get_groups_by_adjacent_buildings">
+<span class="sig-name descname"><span class="pre">get_groups_by_adjacent_buildings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">buildings</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/parcel.html#ParcelLayer.get_groups_by_adjacent_buildings"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.parcel.ParcelLayer.get_groups_by_adjacent_buildings" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>Get grupos of ids of parcels with buildings sharing walls with
 buildings of another parcel.</p>
 </dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="catatom2osm.geo.layer.parcel.ParcelLayer.get_groups_by_parts_count">
+<span class="sig-name descname"><span class="pre">get_groups_by_parts_count</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_parts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buffer</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/parcel.html#ParcelLayer.get_groups_by_parts_count"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.parcel.ParcelLayer.get_groups_by_parts_count" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Get groups of ids of near parcels with less than max_parts</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="catatom2osm.geo.layer.parcel.ParcelLayer.get_zone">
+<span class="sig-name descname"><span class="pre">get_zone</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feat</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/parcel.html#ParcelLayer.get_zone"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.parcel.ParcelLayer.get_zone" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.geo.layer.parcel.ParcelLayer.merge_by_adjacent_buildings">
@@ -145,6 +169,29 @@ buildings of another parcel.</p>
 <dd><p>Merge parcels with buildings sharing walls with buildings of another
 parcel.</p>
 </dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="catatom2osm.geo.layer.parcel.ParcelLayer.merge_by_parts_count">
+<span class="sig-name descname"><span class="pre">merge_by_parts_count</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_parts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buffer</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/parcel.html#ParcelLayer.merge_by_parts_count"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.parcel.ParcelLayer.merge_by_parts_count" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Merge parcels in groups with less than max_parts</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="catatom2osm.geo.layer.parcel.ParcelLayer.set_missing_zones">
+<span class="sig-name descname"><span class="pre">set_missing_zones</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/parcel.html#ParcelLayer.set_missing_zones"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.parcel.ParcelLayer.set_missing_zones" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Assigns label from cadastral reference if no zone exists</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="catatom2osm.geo.layer.parcel.ParcelLayer.set_zones">
+<span class="sig-name descname"><span class="pre">set_zones</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">zoning</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/parcel.html#ParcelLayer.set_zones"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.parcel.ParcelLayer.set_zones" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Assigns to each parcel the label of the zone that contains it</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="catatom2osm.geo.layer.parcel.ParcelLayer.update_parts_count">
+<span class="sig-name descname"><span class="pre">update_parts_count</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pa_groups</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pa_refs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parts_count</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/parcel.html#ParcelLayer.update_parts_count"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.parcel.ParcelLayer.update_parts_count" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
@@ -183,7 +230,7 @@ parcel.</p>
         <li class="right" >
           <a href="catatom2osm.geo.layer.highway.html" title="catatom2osm.geo.layer.highway module"
              >anterior</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">documentación de CatAtom2Osm - 2.5.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">documentación de CatAtom2Osm - 2.6.0</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../api.html" >Referencia API</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="modules.html" >CatAtom2Osm</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="catatom2osm.html" >catatom2osm package</a> &#187;</li>

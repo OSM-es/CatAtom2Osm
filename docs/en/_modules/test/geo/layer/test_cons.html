@@ -14,7 +14,7 @@
   <link rel="stylesheet" type="text/css" href="../../../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>test.geo.layer.test_cons &#8212; CatAtom2Osm 2.5.0 documentation</title>
+    <title>test.geo.layer.test_cons &#8212; CatAtom2Osm 2.6.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/guzzle.css" />
     <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">CatAtom2Osm 2.5.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">CatAtom2Osm 2.6.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">test.geo.layer.test_cons</a></li> 
       </ul>
@@ -469,6 +469,7 @@
 
 <div class="viewcode-block" id="TestConsLayer.test_simplify2"><a class="viewcode-back" href="../../../../api/test.geo.layer.test_cons.html#test.geo.layer.test_cons.TestConsLayer.test_simplify2">[docs]</a>    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.geo.layer.base.log&#39;</span><span class="p">,</span> <span class="n">m_log</span><span class="p">)</span>
     <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.geo.layer.polygon.log&#39;</span><span class="p">,</span> <span class="n">m_log</span><span class="p">)</span>
+    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.geo.layer.base.tqdm&#39;</span><span class="p">,</span> <span class="n">mock</span><span class="o">.</span><span class="n">MagicMock</span><span class="p">())</span>
     <span class="k">def</span> <span class="nf">test_simplify2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">layer</span> <span class="o">=</span> <span class="n">ConsLayer</span><span class="p">()</span>
         <span class="n">fn</span> <span class="o">=</span> <span class="s1">&#39;test/fixtures/38023.buildingpart.gml&#39;</span>
@@ -654,7 +655,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">CatAtom2Osm 2.5.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">CatAtom2Osm 2.6.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">test.geo.layer.test_cons</a></li> 
       </ul>

@@ -15,7 +15,7 @@
   <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.geo.layer.zoning module &#8212; documentación de CatAtom2Osm - 2.5.0</title>
+    <title>catatom2osm.geo.layer.zoning module &#8212; documentación de CatAtom2Osm - 2.6.0</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/guzzle.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="catatom2osm.geo.layer.polygon.html" title="catatom2osm.geo.layer.polygon module"
              accesskey="P">anterior</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">documentación de CatAtom2Osm - 2.5.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">documentación de CatAtom2Osm - 2.6.0</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../api.html" >Referencia API</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="modules.html" >CatAtom2Osm</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="catatom2osm.html" >catatom2osm package</a> &#187;</li>
@@ -122,16 +122,8 @@
 <p>Class for cadastral zoning</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.geo.layer.zoning.ZoningLayer.append">
-<span class="sig-name descname"><span class="pre">append</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/zoning.html#ZoningLayer.append"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.zoning.ZoningLayer.append" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Append features. Split multipolygon geometries.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parámetros</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>layer</strong> (<em>QgsVectorLayer</em>) – cadastralzoning GML source</p></li>
-<li><p><strong>level</strong> (<em>str</em>) – “P” (rustic polygon), “M” (urban block) or None for both</p></li>
-</ul>
-</dd>
-</dl>
+<span class="sig-name descname"><span class="pre">append</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rename=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolve=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query=&lt;function</span> <span class="pre">&lt;lambda&gt;&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/zoning.html#ZoningLayer.append"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.zoning.ZoningLayer.append" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Append filtering by level: “M” Urban, “P” Rustic</p>
 </dd></dl>
 
 <dl class="py method">
@@ -151,31 +143,10 @@
 <dd><p>Format a zone label</p>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="catatom2osm.geo.layer.zoning.ZoningLayer.get_labels">
-<span class="sig-name descname"><span class="pre">get_labels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gml</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/zoning.html#ZoningLayer.get_labels"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.zoning.ZoningLayer.get_labels" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Builds in labels an index of gml features localId vs the label of the
-zone in witch it is contained. If the feature geometry overlaps many
-zones, takes the zone with the largest intersection.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="catatom2osm.geo.layer.zoning.ZoningLayer.remove_outside_features">
-<span class="sig-name descname"><span class="pre">remove_outside_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/zoning.html#ZoningLayer.remove_outside_features"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.zoning.ZoningLayer.remove_outside_features" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Remove any zone not contained in layer features except if its label
-is in skip list.</p>
-</dd></dl>
-
 <dl class="py attribute">
 <dt class="sig sig-object py" id="catatom2osm.geo.layer.zoning.ZoningLayer.rpattern">
 <span class="sig-name descname"><span class="pre">rpattern</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'{:03}'</span></em><a class="headerlink" href="#catatom2osm.geo.layer.zoning.ZoningLayer.rpattern" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="catatom2osm.geo.layer.zoning.ZoningLayer.set_tasks">
-<span class="sig-name descname"><span class="pre">set_tasks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">zip_code</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/zoning.html#ZoningLayer.set_tasks"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.zoning.ZoningLayer.set_tasks" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Assings a unique task label to each zone</p>
-</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="catatom2osm.geo.layer.zoning.ZoningLayer.upattern">
@@ -183,6 +154,11 @@ is in skip list.</p>
 <dd></dd></dl>
 
 </dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="catatom2osm.geo.layer.zoning.level_query">
+<span class="sig-prename descclassname"><span class="pre">catatom2osm.geo.layer.zoning.</span></span><span class="sig-name descname"><span class="pre">level_query</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#catatom2osm.geo.layer.zoning.level_query" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
 
 </section>
 
@@ -219,7 +195,7 @@ is in skip list.</p>
         <li class="right" >
           <a href="catatom2osm.geo.layer.polygon.html" title="catatom2osm.geo.layer.polygon module"
              >anterior</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">documentación de CatAtom2Osm - 2.5.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">documentación de CatAtom2Osm - 2.6.0</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../api.html" >Referencia API</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="modules.html" >CatAtom2Osm</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="catatom2osm.html" >catatom2osm package</a> &#187;</li>

@@ -15,7 +15,7 @@
   <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.geo.layer.polygon module &#8212; CatAtom2Osm 2.5.0 documentation</title>
+    <title>catatom2osm.geo.layer.polygon module &#8212; CatAtom2Osm 2.6.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/guzzle.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
@@ -45,7 +45,7 @@
         <li class="right" >
           <a href="catatom2osm.geo.layer.parcel.html" title="catatom2osm.geo.layer.parcel module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 2.5.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 2.6.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../api.html" >API reference</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="modules.html" >CatAtom2Osm</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="catatom2osm.html" >catatom2osm package</a> &#187;</li>
@@ -128,11 +128,16 @@ and simplify vertices.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.geo.layer.polygon.PolygonLayer.delete_invalid_geometries">
-<span class="sig-name descname"><span class="pre">delete_invalid_geometries</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/polygon.html#PolygonLayer.delete_invalid_geometries"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.polygon.PolygonLayer.delete_invalid_geometries" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">delete_invalid_geometries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query_small_area=&lt;function</span> <span class="pre">PolygonLayer.&lt;lambda&gt;&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/polygon.html#PolygonLayer.delete_invalid_geometries"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.polygon.PolygonLayer.delete_invalid_geometries" title="Permalink to this definition">¶</a></dt>
 <dd><p>Delete invalid geometries testing if any of it acute angle vertex could
 be deleted.
 Also removes zig-zag and spike vertex (see Point.get_spike_context).</p>
 </dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="catatom2osm.geo.layer.polygon.PolygonLayer.delete_small_geometries">
+<span class="sig-name descname"><span class="pre">delete_small_geometries</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/polygon.html#PolygonLayer.delete_small_geometries"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.polygon.PolygonLayer.delete_small_geometries" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.geo.layer.polygon.PolygonLayer.difference">
@@ -154,7 +159,8 @@ for buildings.</p>
 <span class="sig-name descname"><span class="pre">get_adjacents_and_geometries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expression</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/polygon.html#PolygonLayer.get_adjacents_and_geometries"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.polygon.PolygonLayer.get_adjacents_and_geometries" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>(list) groups of adjacent polygons</p>
+<dd class="field-odd"><p>(list) groups of adjacent polygons
+(dict) feature id: geometry</p>
 </dd>
 </dl>
 </dd></dl>
@@ -163,6 +169,17 @@ for buildings.</p>
 <dt class="sig sig-object py" id="catatom2osm.geo.layer.polygon.PolygonLayer.get_area">
 <span class="sig-name descname"><span class="pre">get_area</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/polygon.html#PolygonLayer.get_area"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.polygon.PolygonLayer.get_area" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns total area</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="catatom2osm.geo.layer.polygon.PolygonLayer.get_contacts_and_geometries">
+<span class="sig-name descname"><span class="pre">get_contacts_and_geometries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expression</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/polygon.html#PolygonLayer.get_contacts_and_geometries"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.polygon.PolygonLayer.get_contacts_and_geometries" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>(list) groups of polygons with at least one common node
+(dict) feature id: geometry</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -182,7 +199,13 @@ for buildings.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.geo.layer.polygon.PolygonLayer.is_inside">
 <span class="sig-name descname"><span class="pre">is_inside</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feature</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/polygon.html#PolygonLayer.is_inside"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.polygon.PolygonLayer.is_inside" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns list of features of this layer that have feature inside</p>
+<dd><p>Returns first feature of this layer that have feature inside</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="catatom2osm.geo.layer.polygon.PolygonLayer.is_inside_area">
+<span class="sig-name descname"><span class="pre">is_inside_area</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feature</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/polygon.html#PolygonLayer.is_inside_area"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.polygon.PolygonLayer.is_inside_area" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns first feature of this layer that have feature inside</p>
 </dd></dl>
 
 <dl class="py method">
@@ -194,9 +217,38 @@ geometry.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="catatom2osm.geo.layer.polygon.PolygonLayer.merge_adjacent_polygons">
+<span class="sig-name descname"><span class="pre">merge_adjacent_polygons</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/polygon.html#PolygonLayer.merge_adjacent_polygons"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.polygon.PolygonLayer.merge_adjacent_polygons" title="Permalink to this definition">¶</a></dt>
+<dd><p>Merge adjacent polygons in each feature geometry</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.geo.layer.polygon.PolygonLayer.merge_adjacents">
 <span class="sig-name descname"><span class="pre">merge_adjacents</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/polygon.html#PolygonLayer.merge_adjacents"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.polygon.PolygonLayer.merge_adjacents" title="Permalink to this definition">¶</a></dt>
 <dd><p>Merge polygons with shared segments</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="catatom2osm.geo.layer.polygon.PolygonLayer.merge_geometries">
+<span class="sig-name descname"><span class="pre">merge_geometries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">groups</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geometries</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reverse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/polygon.html#PolygonLayer.merge_geometries"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.polygon.PolygonLayer.merge_geometries" title="Permalink to this definition">¶</a></dt>
+<dd><p>Merge groups of fids from geometries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>groups</strong> (<em>list</em>) – groups of adjacent polygons</p></li>
+<li><p><strong>geometries</strong> (<em>dict</em>) – feature id: geometry</p></li>
+<li><p><strong>sort</strong> (<em>lambda</em><em> or </em><em>None</em>) – key to sort group</p></li>
+<li><p><strong>reverse</strong> (<em>bool</em>) – reverse sort if True</p></li>
+<li><p><strong>split</strong> (<em>bool</em>) – split multipart geometries if True</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>feature id: geometry changed geometries</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(dict)</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -254,7 +306,7 @@ less than ‘cath_thr’ meters.</p></li>
         <li class="right" >
           <a href="catatom2osm.geo.layer.parcel.html" title="catatom2osm.geo.layer.parcel module"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 2.5.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 2.6.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../api.html" >API reference</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="modules.html" >CatAtom2Osm</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="catatom2osm.html" >catatom2osm package</a> &#187;</li>

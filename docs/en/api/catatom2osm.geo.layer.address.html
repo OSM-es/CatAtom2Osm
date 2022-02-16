@@ -15,7 +15,7 @@
   <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.geo.layer.address module &#8212; CatAtom2Osm 2.5.0 documentation</title>
+    <title>catatom2osm.geo.layer.address module &#8212; CatAtom2Osm 2.6.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/guzzle.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
@@ -45,7 +45,7 @@
         <li class="right" >
           <a href="catatom2osm.geo.layer.html" title="catatom2osm.geo.layer package"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 2.5.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 2.6.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../api.html" >API reference</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="modules.html" >CatAtom2Osm</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="catatom2osm.html" >catatom2osm package</a> &#187;</li>
@@ -154,20 +154,26 @@
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="catatom2osm.geo.layer.address.AddressLayer.get_id">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feat</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/address.html#AddressLayer.get_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.address.AddressLayer.get_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trim to parcel id</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.geo.layer.address.AddressLayer.get_image_links">
 <span class="sig-name descname"><span class="pre">get_image_links</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/address.html#AddressLayer.get_image_links"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.address.AddressLayer.get_image_links" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="catatom2osm.geo.layer.address.AddressLayer.get_label">
-<span class="sig-name descname"><span class="pre">get_label</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feat</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/address.html#AddressLayer.get_label"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.address.AddressLayer.get_label" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the zone label for this feature from the index</p>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.geo.layer.address.AddressLayer.is_address">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_address</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feature</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/address.html#AddressLayer.is_address"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.address.AddressLayer.is_address" title="Permalink to this definition">¶</a></dt>
 <dd><p>Address features have ‘.’ but not ‘_’ in its localId field</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="catatom2osm.geo.layer.address.AddressLayer.remove_address_wo_building">
+<span class="sig-name descname"><span class="pre">remove_address_wo_building</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">buildings</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/address.html#AddressLayer.remove_address_wo_building"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.address.AddressLayer.remove_address_wo_building" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove address without associated building.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -213,7 +219,7 @@
         <li class="right" >
           <a href="catatom2osm.geo.layer.html" title="catatom2osm.geo.layer package"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 2.5.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 2.6.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../api.html" >API reference</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="modules.html" >CatAtom2Osm</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="catatom2osm.html" >catatom2osm package</a> &#187;</li>

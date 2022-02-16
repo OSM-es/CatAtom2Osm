@@ -1,6 +1,12 @@
 Change log
 ==========
 
+**2022-2-16 (2.6.0)**
+* Distribute task files using parcels instead of zones.
+* Generate projects containing only addresses.
+* Adds parts count to project as a task complexity indicator.
+* The option -o split using zone codes is abandoned.
+
 **2022-1-05 (2.5.3)**
 * Fixs CDAU coordinates
 

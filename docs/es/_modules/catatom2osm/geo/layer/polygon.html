@@ -14,7 +14,7 @@
   <link rel="stylesheet" type="text/css" href="../../../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.geo.layer.polygon &#8212; documentación de CatAtom2Osm - 2.5.0</title>
+    <title>catatom2osm.geo.layer.polygon &#8212; documentación de CatAtom2Osm - 2.6.0</title>
     <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/guzzle.css" />
     <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">documentación de CatAtom2Osm - 2.5.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">documentación de CatAtom2Osm - 2.6.0</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Código de módulo</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.geo.layer.polygon</a></li> 
       </ul>
@@ -89,7 +89,7 @@
 <span class="kn">from</span> <span class="nn">catatom2osm</span> <span class="k">import</span> <span class="n">config</span>
 <span class="kn">from</span> <span class="nn">catatom2osm.report</span> <span class="k">import</span> <span class="n">instance</span> <span class="k">as</span> <span class="n">report</span>
 <span class="kn">from</span> <span class="nn">catatom2osm.geo</span> <span class="k">import</span> <span class="n">BUFFER_SIZE</span>
-<span class="kn">from</span> <span class="nn">catatom2osm.geo.aux</span> <span class="k">import</span> <span class="n">is_inside</span><span class="p">,</span> <span class="n">merge_groups</span>
+<span class="kn">from</span> <span class="nn">catatom2osm.geo.aux</span> <span class="k">import</span> <span class="n">is_inside</span><span class="p">,</span> <span class="n">is_inside_area</span><span class="p">,</span> <span class="n">merge_groups</span>
 <span class="kn">from</span> <span class="nn">catatom2osm.geo.debug</span> <span class="k">import</span> <span class="n">DebugWriter</span>
 <span class="kn">from</span> <span class="nn">catatom2osm.geo.geometry</span> <span class="k">import</span> <span class="n">Geometry</span>
 <span class="kn">from</span> <span class="nn">catatom2osm.geo.point</span> <span class="k">import</span> <span class="n">Point</span>
@@ -118,9 +118,16 @@
         <span class="k">return</span> <span class="nb">sum</span><span class="p">([</span><span class="n">f</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span><span class="o">.</span><span class="n">area</span><span class="p">()</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">()])</span></div>
 
 <div class="viewcode-block" id="PolygonLayer.is_inside"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.polygon.html#catatom2osm.geo.layer.polygon.PolygonLayer.is_inside">[documentos]</a>    <span class="k">def</span> <span class="nf">is_inside</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">feature</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Returns list of features of this layer that have feature inside&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Returns first feature of this layer that have feature inside&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">feat</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">is_inside</span><span class="p">(</span><span class="n">feature</span><span class="p">,</span> <span class="n">feat</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">feat</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="PolygonLayer.is_inside_area"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.polygon.html#catatom2osm.geo.layer.polygon.PolygonLayer.is_inside_area">[documentos]</a>    <span class="k">def</span> <span class="nf">is_inside_area</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">feature</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns first feature of this layer that have feature inside&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">feat</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">is_inside_area</span><span class="p">(</span><span class="n">feature</span><span class="p">,</span> <span class="n">feat</span><span class="p">):</span>
                 <span class="k">return</span> <span class="n">feat</span>
         <span class="k">return</span> <span class="kc">None</span></div>
 
@@ -161,8 +168,8 @@
 <span class="sd">        geometry of feature with id &#39;feature_id&#39; is shared with another</span>
 <span class="sd">        geometry.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">parents</span> <span class="o">=</span> <span class="p">[</span><span class="n">gid</span> <span class="k">for</span> <span class="n">gid</span> <span class="ow">in</span> <span class="n">parents_per_vx</span><span class="p">[</span><span class="n">va</span><span class="p">]</span> <span class="k">if</span> <span class="n">gid</span> <span class="o">!=</span> <span class="n">feature_id</span><span class="p">]</span>
-        <span class="n">parents</span> <span class="o">+=</span> <span class="p">[</span><span class="n">gid</span> <span class="k">for</span> <span class="n">gid</span> <span class="ow">in</span> <span class="n">parents_per_vx</span><span class="p">[</span><span class="n">vb</span><span class="p">]</span> <span class="k">if</span> <span class="n">gid</span> <span class="o">!=</span> <span class="n">feature_id</span><span class="p">]</span>
+        <span class="n">parents</span> <span class="o">=</span> <span class="p">[</span><span class="n">gid</span> <span class="k">for</span> <span class="n">gid</span> <span class="ow">in</span> <span class="n">parents_per_vx</span><span class="p">[</span><span class="n">va</span><span class="o">.</span><span class="n">asWkt</span><span class="p">()]</span> <span class="k">if</span> <span class="n">gid</span> <span class="o">!=</span> <span class="n">feature_id</span><span class="p">]</span>
+        <span class="n">parents</span> <span class="o">+=</span> <span class="p">[</span><span class="n">gid</span> <span class="k">for</span> <span class="n">gid</span> <span class="ow">in</span> <span class="n">parents_per_vx</span><span class="p">[</span><span class="n">vb</span><span class="o">.</span><span class="n">asWkt</span><span class="p">()]</span> <span class="k">if</span> <span class="n">gid</span> <span class="o">!=</span> <span class="n">feature_id</span><span class="p">]</span>
         <span class="k">return</span> <span class="nb">any</span><span class="p">([</span><span class="n">c</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">Counter</span><span class="p">(</span><span class="n">parents</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">()])</span></div>
 
 <div class="viewcode-block" id="PolygonLayer.get_parents_per_vertex_and_geometries"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.polygon.html#catatom2osm.geo.layer.polygon.PolygonLayer.get_parents_per_vertex_and_geometries">[documentos]</a>    <span class="k">def</span> <span class="nf">get_parents_per_vertex_and_geometries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">expression</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
@@ -178,25 +185,42 @@
             <span class="n">geom</span> <span class="o">=</span> <span class="n">QgsGeometry</span><span class="p">(</span><span class="n">feature</span><span class="o">.</span><span class="n">geometry</span><span class="p">())</span>
             <span class="n">geometries</span><span class="p">[</span><span class="n">feature</span><span class="o">.</span><span class="n">id</span><span class="p">()]</span> <span class="o">=</span> <span class="n">geom</span>
             <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">Geometry</span><span class="o">.</span><span class="n">get_vertices_list</span><span class="p">(</span><span class="n">feature</span><span class="p">):</span>
-                <span class="n">parents_per_vertex</span><span class="p">[</span><span class="n">point</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">feature</span><span class="o">.</span><span class="n">id</span><span class="p">())</span>
+                <span class="n">parents_per_vertex</span><span class="p">[</span><span class="n">point</span><span class="o">.</span><span class="n">asWkt</span><span class="p">()]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">feature</span><span class="o">.</span><span class="n">id</span><span class="p">())</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">parents_per_vertex</span><span class="p">,</span> <span class="n">geometries</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="PolygonLayer.get_adjacents_and_geometries"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.polygon.html#catatom2osm.geo.layer.polygon.PolygonLayer.get_adjacents_and_geometries">[documentos]</a>    <span class="k">def</span> <span class="nf">get_adjacents_and_geometries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">expression</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="PolygonLayer.get_contacts_and_geometries"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.polygon.html#catatom2osm.geo.layer.polygon.PolygonLayer.get_contacts_and_geometries">[documentos]</a>    <span class="k">def</span> <span class="nf">get_contacts_and_geometries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">expression</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns:</span>
-<span class="sd">            (list) groups of adjacent polygons</span>
+<span class="sd">            (list) groups of polygons with at least one common node</span>
+<span class="sd">            (dict) feature id: geometry</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">parents_per_vertex</span><span class="p">,</span> <span class="n">geometries</span> <span class="o">=</span> <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">get_parents_per_vertex_and_geometries</span><span class="p">(</span><span class="n">expression</span><span class="p">)</span>
         <span class="p">)</span>
         <span class="n">adjs</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="n">parents</span><span class="p">)</span> <span class="ow">in</span> <span class="n">parents_per_vertex</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">__</span><span class="p">,</span> <span class="n">parents</span><span class="p">)</span> <span class="ow">in</span> <span class="n">parents_per_vertex</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parents</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">adjs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">parents</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">adjs</span><span class="p">,</span> <span class="n">geometries</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PolygonLayer.get_adjacents_and_geometries"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.polygon.html#catatom2osm.geo.layer.polygon.PolygonLayer.get_adjacents_and_geometries">[documentos]</a>    <span class="k">def</span> <span class="nf">get_adjacents_and_geometries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">expression</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            (list) groups of adjacent polygons</span>
+<span class="sd">            (dict) feature id: geometry</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">parents_per_vertex</span><span class="p">,</span> <span class="n">geometries</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">get_parents_per_vertex_and_geometries</span><span class="p">(</span><span class="n">expression</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">adjs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">wkt</span><span class="p">,</span> <span class="n">parents</span><span class="p">)</span> <span class="ow">in</span> <span class="n">parents_per_vertex</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">point</span> <span class="o">=</span> <span class="n">Point</span><span class="p">(</span><span class="n">wkt</span><span class="p">)</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parents</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">fid</span> <span class="ow">in</span> <span class="n">parents</span><span class="p">:</span>
                     <span class="n">geom</span> <span class="o">=</span> <span class="n">geometries</span><span class="p">[</span><span class="n">fid</span><span class="p">]</span>
                     <span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="n">ndx</span><span class="p">,</span> <span class="n">ndxa</span><span class="p">,</span> <span class="n">ndxb</span><span class="p">,</span> <span class="n">dist</span><span class="p">)</span> <span class="o">=</span> <span class="n">geom</span><span class="o">.</span><span class="n">closestVertex</span><span class="p">(</span><span class="n">point</span><span class="p">)</span>
                     <span class="nb">next</span> <span class="o">=</span> <span class="n">Point</span><span class="p">(</span><span class="n">geom</span><span class="o">.</span><span class="n">vertexAt</span><span class="p">(</span><span class="n">ndxb</span><span class="p">))</span>
-                    <span class="n">parents_next</span> <span class="o">=</span> <span class="n">parents_per_vertex</span><span class="p">[</span><span class="nb">next</span><span class="p">]</span>
+                    <span class="n">parents_next</span> <span class="o">=</span> <span class="n">parents_per_vertex</span><span class="p">[</span><span class="nb">next</span><span class="o">.</span><span class="n">asWkt</span><span class="p">()]</span>
                     <span class="n">common</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">parents</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">parents_next</span><span class="p">)</span>
                     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">common</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
                         <span class="n">adjs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">common</span><span class="p">)</span>
@@ -297,7 +321,31 @@
                 <span class="n">tp</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">())</span>
             <span class="n">report</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="s1">&#39;vertex_topo_&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">()]</span> <span class="o">=</span> <span class="n">tp</span></div>
 
-<div class="viewcode-block" id="PolygonLayer.delete_invalid_geometries"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.polygon.html#catatom2osm.geo.layer.polygon.PolygonLayer.delete_invalid_geometries">[documentos]</a>    <span class="k">def</span> <span class="nf">delete_invalid_geometries</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="PolygonLayer.merge_adjacent_polygons"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.polygon.html#catatom2osm.geo.layer.polygon.PolygonLayer.merge_adjacent_polygons">[documentos]</a>    <span class="k">def</span> <span class="nf">merge_adjacent_polygons</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Merge adjacent polygons in each feature geometry</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">to_change</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">feat</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">Geometry</span><span class="o">.</span><span class="n">merge_adjacent_polygons</span><span class="p">(</span><span class="n">feat</span><span class="p">):</span>
+                <span class="n">to_change</span><span class="p">[</span><span class="n">feat</span><span class="o">.</span><span class="n">id</span><span class="p">()]</span> <span class="o">=</span> <span class="n">feat</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_change</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">changeGeometryValues</span><span class="p">(</span><span class="n">to_change</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PolygonLayer.delete_small_geometries"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.polygon.html#catatom2osm.geo.layer.polygon.PolygonLayer.delete_small_geometries">[documentos]</a>    <span class="k">def</span> <span class="nf">delete_small_geometries</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">to_clean</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">feat</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">():</span>
+            <span class="n">fid</span> <span class="o">=</span> <span class="n">feat</span><span class="o">.</span><span class="n">id</span><span class="p">()</span>
+            <span class="n">geom</span> <span class="o">=</span> <span class="n">feat</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">geom</span><span class="o">.</span><span class="n">area</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">config</span><span class="o">.</span><span class="n">min_area</span><span class="p">:</span>
+                <span class="n">to_clean</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fid</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">to_clean</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">deleteFeatures</span><span class="p">(</span><span class="n">to_clean</span><span class="p">)</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Deleted </span><span class="si">%d</span><span class="s2"> invalid geometries in the &#39;</span><span class="si">%s</span><span class="s2">&#39; layer&quot;</span><span class="p">)</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_clean</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">())</span>
+            <span class="n">report</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="s1">&#39;geom_invalid_&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">()]</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_clean</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PolygonLayer.delete_invalid_geometries"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.polygon.html#catatom2osm.geo.layer.polygon.PolygonLayer.delete_invalid_geometries">[documentos]</a>    <span class="k">def</span> <span class="nf">delete_invalid_geometries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query_small_area</span><span class="o">=</span><span class="k">lambda</span> <span class="n">feat</span><span class="p">:</span> <span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Delete invalid geometries testing if any of it acute angle vertex could</span>
 <span class="sd">        be deleted.</span>
@@ -311,17 +359,33 @@
         <span class="n">to_change</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">to_clean</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">to_move</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">parts</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">rings</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">zz</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">spikes</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="n">geometries</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="n">f</span><span class="o">.</span><span class="n">id</span><span class="p">():</span> <span class="n">QgsGeometry</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">geometry</span><span class="p">())</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">()</span>
-        <span class="p">}</span>
+        <span class="n">geometries</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">msg</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Delete invalid geometries&quot;</span><span class="p">)</span>
         <span class="n">pbar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_progressbar</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">geometries</span><span class="p">))</span>
-        <span class="k">for</span> <span class="n">fid</span><span class="p">,</span> <span class="n">geom</span> <span class="ow">in</span> <span class="n">geometries</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">feat</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">():</span>
+            <span class="n">fid</span> <span class="o">=</span> <span class="n">feat</span><span class="o">.</span><span class="n">id</span><span class="p">()</span>
+            <span class="n">geom</span> <span class="o">=</span> <span class="n">feat</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">geom</span><span class="o">.</span><span class="n">area</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">config</span><span class="o">.</span><span class="n">min_area</span> <span class="ow">and</span> <span class="n">query_small_area</span><span class="p">(</span><span class="n">feat</span><span class="p">):</span>
+                <span class="n">to_clean</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fid</span><span class="p">)</span>
+                <span class="k">continue</span>
             <span class="n">badgeom</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">pn</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="k">for</span> <span class="n">polygon</span> <span class="ow">in</span> <span class="n">Geometry</span><span class="o">.</span><span class="n">get_multipolygon</span><span class="p">(</span><span class="n">geom</span><span class="p">):</span>
+                <span class="n">f</span> <span class="o">=</span> <span class="n">QgsFeature</span><span class="p">(</span><span class="n">QgsFields</span><span class="p">())</span>
+                <span class="n">g</span> <span class="o">=</span> <span class="n">Geometry</span><span class="o">.</span><span class="n">fromPolygonXY</span><span class="p">(</span><span class="n">polygon</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">g</span><span class="o">.</span><span class="n">area</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">config</span><span class="o">.</span><span class="n">min_area</span> <span class="ow">and</span> <span class="n">query_small_area</span><span class="p">(</span><span class="n">feat</span><span class="p">):</span>
+                    <span class="n">parts</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="n">geom</span><span class="o">.</span><span class="n">deletePart</span><span class="p">(</span><span class="n">pn</span><span class="p">)</span>
+                    <span class="n">to_change</span><span class="p">[</span><span class="n">fid</span><span class="p">]</span> <span class="o">=</span> <span class="n">geom</span>
+                    <span class="n">f</span><span class="o">.</span><span class="n">setGeometry</span><span class="p">(</span><span class="n">QgsGeometry</span><span class="p">(</span><span class="n">g</span><span class="p">))</span>
+                    <span class="k">if</span> <span class="n">log</span><span class="o">.</span><span class="n">app_level</span> <span class="o">&lt;=</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">:</span>
+                        <span class="n">debshp</span><span class="o">.</span><span class="n">addFeature</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+                    <span class="k">continue</span>
+                <span class="n">pn</span> <span class="o">+=</span> <span class="mi">1</span>
                 <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">ring</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">polygon</span><span class="p">):</span>
                     <span class="k">if</span> <span class="n">badgeom</span><span class="p">:</span> <span class="k">break</span>
                     <span class="n">skip</span> <span class="o">=</span> <span class="kc">False</span>
@@ -334,7 +398,6 @@
                             <span class="n">skip</span> <span class="o">=</span> <span class="kc">False</span>
                             <span class="k">continue</span>
                         <span class="n">g</span> <span class="o">=</span> <span class="n">Geometry</span><span class="o">.</span><span class="n">fromPolygonXY</span><span class="p">([</span><span class="n">ring</span><span class="p">])</span>
-                        <span class="n">f</span> <span class="o">=</span> <span class="n">QgsFeature</span><span class="p">(</span><span class="n">QgsFields</span><span class="p">())</span>
                         <span class="n">f</span><span class="o">.</span><span class="n">setGeometry</span><span class="p">(</span><span class="n">QgsGeometry</span><span class="p">(</span><span class="n">g</span><span class="p">))</span>
                         <span class="n">g</span><span class="o">.</span><span class="n">deleteVertex</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
                         <span class="k">if</span> <span class="ow">not</span> <span class="n">g</span><span class="o">.</span><span class="n">isGeosValid</span><span class="p">()</span> <span class="ow">or</span> <span class="n">g</span><span class="o">.</span><span class="n">area</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">config</span><span class="o">.</span><span class="n">min_area</span><span class="p">:</span>
@@ -342,7 +405,6 @@
                                 <span class="n">rings</span> <span class="o">+=</span> <span class="mi">1</span>
                                 <span class="n">geom</span><span class="o">.</span><span class="n">deleteRing</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
                                 <span class="n">to_change</span><span class="p">[</span><span class="n">fid</span><span class="p">]</span> <span class="o">=</span> <span class="n">geom</span>
-                                <span class="n">geometries</span><span class="p">[</span><span class="n">fid</span><span class="p">]</span> <span class="o">=</span> <span class="n">geom</span>
                                 <span class="k">if</span> <span class="n">log</span><span class="o">.</span><span class="n">app_level</span> <span class="o">&lt;=</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">:</span>
                                     <span class="n">debshp</span><span class="o">.</span><span class="n">addFeature</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
                             <span class="k">else</span><span class="p">:</span>
@@ -368,7 +430,6 @@
                                     <span class="n">geom</span> <span class="o">=</span> <span class="n">g</span>
                                     <span class="n">zz</span> <span class="o">+=</span> <span class="mi">1</span>
                                     <span class="n">to_change</span><span class="p">[</span><span class="n">fid</span><span class="p">]</span> <span class="o">=</span> <span class="n">g</span>
-                                    <span class="n">geometries</span><span class="p">[</span><span class="n">fid</span><span class="p">]</span> <span class="o">=</span> <span class="n">geom</span>
                                 <span class="k">if</span> <span class="n">log</span><span class="o">.</span><span class="n">app_level</span> <span class="o">&lt;=</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">:</span>
                                     <span class="n">debshp2</span><span class="o">.</span><span class="n">add_point</span><span class="p">(</span><span class="n">va</span><span class="p">,</span> <span class="s1">&#39;zza </span><span class="si">%d</span><span class="s1"> </span><span class="si">%d</span><span class="s1"> </span><span class="si">%d</span><span class="s1"> </span><span class="si">%f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">fid</span><span class="p">,</span> <span class="n">ndx</span><span class="p">,</span> <span class="n">ndxa</span><span class="p">,</span> <span class="n">angle_a</span><span class="p">))</span>
                                     <span class="n">debshp2</span><span class="o">.</span><span class="n">add_point</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="s1">&#39;zz </span><span class="si">%d</span><span class="s1"> </span><span class="si">%d</span><span class="s1"> </span><span class="si">%d</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">fid</span><span class="p">,</span> <span class="n">ndx</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">ring</span><span class="p">),</span> <span class="n">valid</span><span class="p">))</span>
@@ -383,11 +444,11 @@
                                     <span class="n">skip</span> <span class="o">=</span> <span class="n">ndxa</span> <span class="o">&gt;</span> <span class="n">ndx</span>
                                     <span class="n">geom</span> <span class="o">=</span> <span class="n">g</span>
                                     <span class="n">to_change</span><span class="p">[</span><span class="n">fid</span><span class="p">]</span> <span class="o">=</span> <span class="n">g</span>
-                                    <span class="n">geometries</span><span class="p">[</span><span class="n">fid</span><span class="p">]</span> <span class="o">=</span> <span class="n">geom</span>
                                 <span class="k">if</span> <span class="n">log</span><span class="o">.</span><span class="n">app_level</span> <span class="o">&lt;=</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">:</span>
                                     <span class="n">debshp2</span><span class="o">.</span><span class="n">add_point</span><span class="p">(</span><span class="n">vx</span><span class="p">,</span> <span class="s1">&#39;vx </span><span class="si">%d</span><span class="s1"> </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">fid</span><span class="p">,</span> <span class="n">ndx</span><span class="p">))</span>
                                     <span class="n">debshp2</span><span class="o">.</span><span class="n">add_point</span><span class="p">(</span><span class="n">va</span><span class="p">,</span> <span class="s1">&#39;va </span><span class="si">%d</span><span class="s1"> </span><span class="si">%d</span><span class="s1"> </span><span class="si">%d</span><span class="s1"> </span><span class="si">%f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">fid</span><span class="p">,</span> <span class="n">ndx</span><span class="p">,</span> <span class="n">ndxa</span><span class="p">,</span> <span class="n">angle_a</span><span class="p">))</span>
                                     <span class="n">debshp2</span><span class="o">.</span><span class="n">add_point</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="s1">&#39;v </span><span class="si">%d</span><span class="s1"> </span><span class="si">%d</span><span class="s1"> </span><span class="si">%d</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">fid</span><span class="p">,</span> <span class="n">ndx</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">ring</span><span class="p">),</span> <span class="n">valid</span><span class="p">))</span>
+                <span class="n">geometries</span><span class="p">[</span><span class="n">fid</span><span class="p">]</span> <span class="o">=</span> <span class="n">geom</span>
             <span class="n">pbar</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
         <span class="n">pbar</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">to_move</span><span class="p">:</span>
@@ -410,6 +471,10 @@
                     <span class="n">v</span> <span class="o">=</span> <span class="n">Point</span><span class="p">(</span><span class="n">geom</span><span class="o">.</span><span class="n">vertexAt</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">to_change</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">changeGeometryValues</span><span class="p">(</span><span class="n">to_change</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">parts</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Deleted </span><span class="si">%d</span><span class="s2"> invalid part geometries in the &#39;</span><span class="si">%s</span><span class="s2">&#39; layer&quot;</span><span class="p">)</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">parts</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">())</span>
+            <span class="n">report</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="s1">&#39;geom_parts_&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">()]</span> <span class="o">=</span> <span class="n">parts</span>
         <span class="k">if</span> <span class="n">rings</span><span class="p">:</span>
             <span class="n">msg</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Deleted </span><span class="si">%d</span><span class="s2"> invalid ring geometries in the &#39;</span><span class="si">%s</span><span class="s2">&#39; layer&quot;</span><span class="p">)</span>
             <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">rings</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">())</span>
@@ -447,8 +512,8 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">get_parents_per_vertex_and_geometries</span><span class="p">()</span>
         <span class="p">)</span>
         <span class="n">pbar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_progressbar</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Simplify&quot;</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">parents_per_vertex</span><span class="p">))</span>
-        <span class="k">for</span> <span class="n">pnt</span><span class="p">,</span> <span class="n">parents</span> <span class="ow">in</span> <span class="n">parents_per_vertex</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">point</span> <span class="o">=</span> <span class="n">Point</span><span class="p">(</span><span class="n">pnt</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">wkt</span><span class="p">,</span> <span class="n">parents</span> <span class="ow">in</span> <span class="n">parents_per_vertex</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">point</span> <span class="o">=</span> <span class="n">Point</span><span class="p">(</span><span class="n">wkt</span><span class="p">)</span>
             <span class="c1"># Test if this vertex is a &#39;corner&#39; in any of its parent polygons</span>
             <span class="k">for</span> <span class="n">fid</span> <span class="ow">in</span> <span class="n">parents</span><span class="p">:</span>
                 <span class="n">geom</span> <span class="o">=</span> <span class="n">geometries</span><span class="p">[</span><span class="n">fid</span><span class="p">]</span>
@@ -491,30 +556,55 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">())</span>
             <span class="n">report</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="s1">&#39;vertex_simplify_&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">()]</span> <span class="o">=</span> <span class="n">killed</span></div>
 
-<div class="viewcode-block" id="PolygonLayer.merge_adjacents"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.polygon.html#catatom2osm.geo.layer.polygon.PolygonLayer.merge_adjacents">[documentos]</a>    <span class="k">def</span> <span class="nf">merge_adjacents</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Merge polygons with shared segments&quot;&quot;&quot;</span>
-        <span class="p">(</span><span class="n">groups</span><span class="p">,</span> <span class="n">geometries</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_adjacents_and_geometries</span><span class="p">()</span>
+<div class="viewcode-block" id="PolygonLayer.merge_geometries"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.polygon.html#catatom2osm.geo.layer.polygon.PolygonLayer.merge_geometries">[documentos]</a>    <span class="k">def</span> <span class="nf">merge_geometries</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">groups</span><span class="p">,</span> <span class="n">geometries</span><span class="p">,</span> <span class="n">sort</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Merge groups of fids from geometries.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            groups (list): groups of adjacent polygons</span>
+<span class="sd">            geometries (dict): feature id: geometry</span>
+<span class="sd">            sort (lambda or None): key to sort group</span>
+<span class="sd">            reverse (bool): reverse sort if True</span>
+<span class="sd">            split (bool): split multipart geometries if True</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            (dict): feature id: geometry changed geometries</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">to_clean</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">to_change</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">count_adj</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">count_com</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">groups</span><span class="p">:</span>
-            <span class="n">group</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">group</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">groups</span><span class="p">):</span>
+            <span class="n">group</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">sort</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="n">reverse</span><span class="p">)</span>
+            <span class="n">groups</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">group</span>
             <span class="n">count_adj</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
             <span class="n">geom</span> <span class="o">=</span> <span class="n">geometries</span><span class="p">[</span><span class="n">group</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
             <span class="k">for</span> <span class="n">fid</span> <span class="ow">in</span> <span class="n">group</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
                 <span class="n">geom</span> <span class="o">=</span> <span class="n">geom</span><span class="o">.</span><span class="n">combine</span><span class="p">(</span><span class="n">geometries</span><span class="p">[</span><span class="n">fid</span><span class="p">])</span>
-            <span class="n">mp</span> <span class="o">=</span> <span class="n">Geometry</span><span class="o">.</span><span class="n">get_multipolygon</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">part</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">mp</span><span class="p">):</span>
-                <span class="n">g</span> <span class="o">=</span> <span class="n">Geometry</span><span class="o">.</span><span class="n">fromPolygonXY</span><span class="p">(</span><span class="n">part</span><span class="p">)</span>
-                <span class="n">to_change</span><span class="p">[</span><span class="n">group</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="n">g</span>
+            <span class="k">if</span> <span class="n">split</span><span class="p">:</span>
+                <span class="n">mp</span> <span class="o">=</span> <span class="n">Geometry</span><span class="o">.</span><span class="n">get_multipolygon</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">part</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">mp</span><span class="p">):</span>
+                    <span class="n">g</span> <span class="o">=</span> <span class="n">Geometry</span><span class="o">.</span><span class="n">fromPolygonXY</span><span class="p">(</span><span class="n">part</span><span class="p">)</span>
+                    <span class="n">to_change</span><span class="p">[</span><span class="n">group</span><span class="p">[</span><span class="n">j</span><span class="p">]]</span> <span class="o">=</span> <span class="n">g</span>
+                    <span class="n">count_com</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">to_clean</span> <span class="o">+=</span> <span class="n">group</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">to_change</span><span class="p">[</span><span class="n">group</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">geom</span>
                 <span class="n">count_com</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="n">to_clean</span> <span class="o">+=</span> <span class="n">group</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">:]</span>
+                <span class="n">to_clean</span> <span class="o">+=</span> <span class="n">group</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
         <span class="k">if</span> <span class="n">to_clean</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">changeGeometryValues</span><span class="p">(</span><span class="n">to_change</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">deleteFeatures</span><span class="p">(</span><span class="n">to_clean</span><span class="p">)</span>
-            <span class="n">msg</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2"> adjacent polygons merged into </span><span class="si">%d</span><span class="s2"> polygons in &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
-            <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">count_adj</span><span class="p">,</span> <span class="n">count_com</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">())</span></div>
+            <span class="n">msg</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2"> polygons merged into </span><span class="si">%d</span><span class="s2"> polygons in &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">count_adj</span><span class="p">,</span> <span class="n">count_com</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">to_change</span><span class="p">,</span> <span class="n">to_clean</span></div>
+
+<div class="viewcode-block" id="PolygonLayer.merge_adjacents"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.polygon.html#catatom2osm.geo.layer.polygon.PolygonLayer.merge_adjacents">[documentos]</a>    <span class="k">def</span> <span class="nf">merge_adjacents</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Merge polygons with shared segments&quot;&quot;&quot;</span>
+        <span class="p">(</span><span class="n">groups</span><span class="p">,</span> <span class="n">geometries</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_adjacents_and_geometries</span><span class="p">()</span>
+        <span class="n">merge_geometries</span><span class="p">(</span><span class="n">groups</span><span class="p">,</span> <span class="n">geometries</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="PolygonLayer.difference"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.polygon.html#catatom2osm.geo.layer.polygon.PolygonLayer.difference">[documentos]</a>    <span class="k">def</span> <span class="nf">difference</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layer</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Calculate the difference of each geometry with those in layer&quot;&quot;&quot;</span>
@@ -562,7 +652,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">documentación de CatAtom2Osm - 2.5.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">documentación de CatAtom2Osm - 2.6.0</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" >Código de módulo</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.geo.layer.polygon</a></li> 
       </ul>

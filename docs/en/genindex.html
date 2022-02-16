@@ -14,7 +14,7 @@
   <link rel="stylesheet" type="text/css" href="_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>Index &#8212; CatAtom2Osm 2.5.0 documentation</title>
+    <title>Index &#8212; CatAtom2Osm 2.6.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/guzzle.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">CatAtom2Osm 2.5.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">CatAtom2Osm 2.6.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Index</a></li> 
       </ul>
     </div>
@@ -311,8 +311,6 @@
         <li><a href="api/catatom2osm.geo.layer.zoning.html#module-catatom2osm.geo.layer.zoning">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     catatom2osm.geo.point
 
@@ -320,6 +318,8 @@
         <li><a href="api/catatom2osm.geo.point.html#module-catatom2osm.geo.point">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     catatom2osm.geo.types
 
@@ -382,10 +382,14 @@
       <li><a href="api/catatom2osm.geo.layer.cons.html#catatom2osm.geo.layer.cons.ConsLayer.clean">clean() (catatom2osm.geo.layer.cons.ConsLayer method)</a>
 
       <ul>
+        <li><a href="api/catatom2osm.geo.layer.parcel.html#catatom2osm.geo.layer.parcel.ParcelLayer.clean">(catatom2osm.geo.layer.parcel.ParcelLayer method)</a>
+</li>
         <li><a href="api/catatom2osm.geo.layer.polygon.html#catatom2osm.geo.layer.polygon.PolygonLayer.clean">(catatom2osm.geo.layer.polygon.PolygonLayer method)</a>
 </li>
       </ul></li>
       <li><a href="api/catatom2osm.osm.html#catatom2osm.osm.Way.clean_duplicated_nodes">clean_duplicated_nodes() (catatom2osm.osm.Way method)</a>
+</li>
+      <li><a href="api/catatom2osm.report.html#catatom2osm.report.Report.clean_group">clean_group() (catatom2osm.report.Report method)</a>
 </li>
       <li><a href="api/catatom2osm.report.html#catatom2osm.report.Report.clear">clear() (catatom2osm.report.Report method)</a>
 </li>
@@ -419,6 +423,8 @@
       </ul></li>
       <li><a href="api/catatom2osm.geo.layer.base.html#catatom2osm.geo.layer.base.BaseLayer.count">count() (catatom2osm.geo.layer.base.BaseLayer method)</a>
 </li>
+      <li><a href="api/catatom2osm.geo.layer.parcel.html#catatom2osm.geo.layer.parcel.ParcelLayer.count_parts">count_parts() (catatom2osm.geo.layer.parcel.ParcelLayer method)</a>
+</li>
       <li><a href="api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.create_and_run">create_and_run() (catatom2osm.app.CatAtom2Osm static method)</a>
 </li>
       <li><a href="api/catatom2osm.geo.layer.parcel.html#catatom2osm.geo.layer.parcel.ParcelLayer.create_missing_parcels">create_missing_parcels() (catatom2osm.geo.layer.parcel.ParcelLayer method)</a>
@@ -441,23 +447,19 @@
 </li>
       <li><a href="api/catatom2osm.geo.layer.polygon.html#catatom2osm.geo.layer.polygon.PolygonLayer.delete_invalid_geometries">delete_invalid_geometries() (catatom2osm.geo.layer.polygon.PolygonLayer method)</a>
 </li>
-      <li><a href="api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.delete_shp">delete_shp() (catatom2osm.app.CatAtom2Osm method)</a>
-
-      <ul>
-        <li><a href="api/catatom2osm.geo.layer.base.html#catatom2osm.geo.layer.base.BaseLayer.delete_shp">(catatom2osm.geo.layer.base.BaseLayer static method)</a>
+      <li><a href="api/catatom2osm.geo.layer.base.html#catatom2osm.geo.layer.base.BaseLayer.delete_shp">delete_shp() (catatom2osm.geo.layer.base.BaseLayer static method)</a>
 </li>
-      </ul></li>
+      <li><a href="api/catatom2osm.geo.layer.polygon.html#catatom2osm.geo.layer.polygon.PolygonLayer.delete_small_geometries">delete_small_geometries() (catatom2osm.geo.layer.polygon.PolygonLayer method)</a>
+</li>
       <li><a href="api/catatom2osm.geo.layer.parcel.html#catatom2osm.geo.layer.parcel.ParcelLayer.delete_void_parcels">delete_void_parcels() (catatom2osm.geo.layer.parcel.ParcelLayer method)</a>
-</li>
-      <li><a href="api/catatom2osm.osmxml.html#catatom2osm.osmxml.deserialize">deserialize() (in module catatom2osm.osmxml)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/catatom2osm.osmxml.html#catatom2osm.osmxml.deserialize">deserialize() (in module catatom2osm.osmxml)</a>
+</li>
       <li><a href="api/catatom2osm.csvtools.html#catatom2osm.csvtools.dict2csv">dict2csv() (in module catatom2osm.csvtools)</a>
 </li>
       <li><a href="api/catatom2osm.geo.layer.polygon.html#catatom2osm.geo.layer.polygon.PolygonLayer.difference">difference() (catatom2osm.geo.layer.polygon.PolygonLayer method)</a>
-</li>
-      <li><a href="api/test.geo.layer.test_zoning.html#test.geo.layer.test_zoning.TestZoningLayer.do_test_split">do_test_split() (test.geo.layer.test_zoning.TestZoningLayer method)</a>
 </li>
       <li><a href="api/catatom2osm.catatom.html#catatom2osm.catatom.Reader.download">download() (catatom2osm.catatom.Reader method)</a>
 
@@ -475,8 +477,6 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/catatom2osm.osm.html#catatom2osm.osm.Element">Element (class in catatom2osm.osm)</a>
 </li>
-      <li><a href="api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.end_messages">end_messages() (catatom2osm.app.CatAtom2Osm method)</a>
-</li>
       <li><a href="api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.exit">exit() (catatom2osm.app.CatAtom2Osm method)</a>
 </li>
       <li><a href="api/catatom2osm.geo.layer.cons.html#catatom2osm.geo.layer.cons.ConsLayer.explode_multi_parts">explode_multi_parts() (catatom2osm.geo.layer.cons.ConsLayer method)</a>
@@ -488,7 +488,11 @@
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/catatom2osm.geo.layer.base.html#catatom2osm.geo.layer.base.BaseLayer.export">export() (catatom2osm.geo.layer.base.BaseLayer method)</a>
+
+      <ul>
+        <li><a href="api/catatom2osm.report.html#catatom2osm.report.Report.export">(catatom2osm.report.Report method)</a>
 </li>
+      </ul></li>
       <li><a href="api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.export_layer">export_layer() (catatom2osm.app.CatAtom2Osm method)</a>
 </li>
       <li><a href="api/catatom2osm.geo.layer.zoning.html#catatom2osm.geo.layer.zoning.ZoningLayer.export_poly">export_poly() (catatom2osm.geo.layer.zoning.ZoningLayer method)</a>
@@ -503,20 +507,18 @@
 </li>
       <li><a href="api/catatom2osm.csvtools.html#catatom2osm.csvtools.filter">filter() (in module catatom2osm.csvtools)</a>
 </li>
+      <li><a href="api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.finish">finish() (catatom2osm.app.CatAtom2Osm method)</a>
+</li>
       <li><a href="api/catatom2osm.report.html#catatom2osm.report.Report.fixme_stats">fixme_stats() (catatom2osm.report.Report method)</a>
 </li>
       <li><a href="api/catatom2osm.geo.layer.zoning.html#catatom2osm.geo.layer.zoning.ZoningLayer.format_label">format_label() (catatom2osm.geo.layer.zoning.ZoningLayer static method)</a>
 </li>
-      <li><a href="api/catatom2osm.report.html#catatom2osm.report.Report.from_file">from_file() (catatom2osm.report.Report method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/catatom2osm.app.html#catatom2osm.app.fromFunction">fromFunction() (in module catatom2osm.app)</a>
-
-      <ul>
-        <li><a href="api/catatom2osm.cdau.html#catatom2osm.cdau.fromFunction">(in module catatom2osm.cdau)</a>
+      <li><a href="api/catatom2osm.report.html#catatom2osm.report.Report.from_file">from_file() (catatom2osm.report.Report method)</a>
 </li>
-      </ul></li>
+      <li><a href="api/catatom2osm.cdau.html#catatom2osm.cdau.fromFunction">fromFunction() (in module catatom2osm.cdau)</a>
+</li>
       <li><a href="api/catatom2osm.geo.geometry.html#catatom2osm.geo.geometry.Geometry.fromMultiPointXY">fromMultiPointXY() (catatom2osm.geo.geometry.Geometry static method)</a>
 </li>
       <li><a href="api/catatom2osm.geo.geometry.html#catatom2osm.geo.geometry.Geometry.fromMultiPolygonXY">fromMultiPolygonXY() (catatom2osm.geo.geometry.Geometry static method)</a>
@@ -547,6 +549,8 @@
         <li><a href="api/catatom2osm.report.html#catatom2osm.report.Report.get">(catatom2osm.report.Report method)</a>
 </li>
       </ul></li>
+      <li><a href="api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.get_address">get_address() (catatom2osm.app.CatAtom2Osm method)</a>
+</li>
       <li><a href="api/catatom2osm.geo.layer.polygon.html#catatom2osm.geo.layer.polygon.PolygonLayer.get_adjacents_and_geometries">get_adjacents_and_geometries() (catatom2osm.geo.layer.polygon.PolygonLayer method)</a>
 </li>
       <li><a href="api/catatom2osm.geo.point.html#catatom2osm.geo.point.Point.get_angle">get_angle() (catatom2osm.geo.point.Point method)</a>
@@ -559,21 +563,19 @@
 </li>
       <li><a href="api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.get_auxiliary_addresses">get_auxiliary_addresses() (catatom2osm.app.CatAtom2Osm method)</a>
 </li>
-      <li><a href="api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.get_bbox">get_bbox() (catatom2osm.app.CatAtom2Osm method)</a>
-</li>
       <li><a href="api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.get_boundary">get_boundary() (catatom2osm.app.CatAtom2Osm method)</a>
 </li>
       <li><a href="api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.get_building">get_building() (catatom2osm.app.CatAtom2Osm method)</a>
 </li>
       <li><a href="api/catatom2osm.cdau.html#catatom2osm.cdau.get_cat_address">get_cat_address() (in module catatom2osm.cdau)</a>
 </li>
+      <li><a href="api/catatom2osm.geo.layer.polygon.html#catatom2osm.geo.layer.polygon.PolygonLayer.get_contacts_and_geometries">get_contacts_and_geometries() (catatom2osm.geo.layer.polygon.PolygonLayer method)</a>
+</li>
       <li><a href="api/catatom2osm.geo.point.html#catatom2osm.geo.point.Point.get_corner_context">get_corner_context() (catatom2osm.geo.point.Point method)</a>
 </li>
       <li><a href="api/catatom2osm.geo.layer.base.html#catatom2osm.geo.layer.base.BaseLayer.get_crs_transform">get_crs_transform() (catatom2osm.geo.layer.base.BaseLayer static method)</a>
 </li>
       <li><a href="api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.get_current_ad_osm">get_current_ad_osm() (catatom2osm.app.CatAtom2Osm method)</a>
-</li>
-      <li><a href="api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.get_current_bu_osm">get_current_bu_osm() (catatom2osm.app.CatAtom2Osm method)</a>
 </li>
       <li><a href="api/test.geo.layer.test_polygon.html#test.geo.layer.test_polygon.TestPolygonLayer.get_duplicates">get_duplicates() (test.geo.layer.test_polygon.TestPolygonLayer method)</a>
 </li>
@@ -585,36 +587,32 @@
         <li><a href="api/test.test_cdau.html#test.test_cdau.get_func">(in module test.test_cdau)</a>
 </li>
       </ul></li>
+      <li><a href="api/catatom2osm.geo.aux.html#catatom2osm.geo.aux.get_geometry">get_geometry() (in module catatom2osm.geo.aux)</a>
+</li>
       <li><a href="api/catatom2osm.catatom.html#catatom2osm.catatom.Reader.get_gml_from_zip">get_gml_from_zip() (catatom2osm.catatom.Reader method)</a>
 </li>
-      <li><a href="api/catatom2osm.geo.layer.parcel.html#catatom2osm.geo.layer.parcel.ParcelLayer.get_groups_with_context">get_groups_with_context() (catatom2osm.geo.layer.parcel.ParcelLayer method)</a>
+      <li><a href="api/catatom2osm.geo.layer.parcel.html#catatom2osm.geo.layer.parcel.ParcelLayer.get_groups_by_adjacent_buildings">get_groups_by_adjacent_buildings() (catatom2osm.geo.layer.parcel.ParcelLayer method)</a>
+</li>
+      <li><a href="api/catatom2osm.geo.layer.parcel.html#catatom2osm.geo.layer.parcel.ParcelLayer.get_groups_by_parts_count">get_groups_by_parts_count() (catatom2osm.geo.layer.parcel.ParcelLayer method)</a>
 </li>
       <li><a href="api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.get_highway">get_highway() (catatom2osm.app.CatAtom2Osm method)</a>
 </li>
       <li><a href="api/catatom2osm.geo.layer.address.html#catatom2osm.geo.layer.address.AddressLayer.get_highway_names">get_highway_names() (catatom2osm.geo.layer.address.AddressLayer method)</a>
 </li>
-      <li><a href="api/catatom2osm.geo.layer.cons.html#catatom2osm.geo.layer.cons.ConsLayer.get_id">get_id() (catatom2osm.geo.layer.cons.ConsLayer static method)</a>
+      <li><a href="api/catatom2osm.geo.layer.address.html#catatom2osm.geo.layer.address.AddressLayer.get_id">get_id() (catatom2osm.geo.layer.address.AddressLayer static method)</a>
+
+      <ul>
+        <li><a href="api/catatom2osm.geo.layer.cons.html#catatom2osm.geo.layer.cons.ConsLayer.get_id">(catatom2osm.geo.layer.cons.ConsLayer static method)</a>
 </li>
-      <li><a href="api/catatom2osm.geo.layer.address.html#catatom2osm.geo.layer.address.AddressLayer.get_image_links">get_image_links() (catatom2osm.geo.layer.address.AddressLayer method)</a>
-</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/catatom2osm.geo.layer.address.html#catatom2osm.geo.layer.address.AddressLayer.get_image_links">get_image_links() (catatom2osm.geo.layer.address.AddressLayer method)</a>
+</li>
       <li><a href="api/catatom2osm.geo.layer.base.html#catatom2osm.geo.layer.base.BaseLayer.get_index">get_index() (catatom2osm.geo.layer.base.BaseLayer method)</a>
 </li>
       <li><a href="api/catatom2osm.csvtools.html#catatom2osm.csvtools.get_key">get_key() (in module catatom2osm.csvtools)</a>
 </li>
-      <li><a href="api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.get_label">get_label() (catatom2osm.app.CatAtom2Osm method)</a>
-
-      <ul>
-        <li><a href="api/catatom2osm.geo.layer.address.html#catatom2osm.geo.layer.address.AddressLayer.get_label">(catatom2osm.geo.layer.address.AddressLayer method)</a>
-</li>
-      </ul></li>
-      <li><a href="api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.get_labels">get_labels() (catatom2osm.app.CatAtom2Osm method)</a>
-
-      <ul>
-        <li><a href="api/catatom2osm.geo.layer.zoning.html#catatom2osm.geo.layer.zoning.ZoningLayer.get_labels">(catatom2osm.geo.layer.zoning.ZoningLayer method)</a>
-</li>
-      </ul></li>
       <li><a href="api/catatom2osm.catatom.html#catatom2osm.catatom.Reader.get_layer_paths">get_layer_paths() (catatom2osm.catatom.Reader method)</a>
 </li>
       <li><a href="api/catatom2osm.config.html#catatom2osm.config.get_logger">get_logger() (in module catatom2osm.config)</a>
@@ -635,6 +633,8 @@
 </li>
       <li><a href="api/catatom2osm.geo.layer.base.html#catatom2osm.geo.layer.base.BaseLayer.get_overpass_bbox">get_overpass_bbox() (catatom2osm.geo.layer.base.BaseLayer method)</a>
 </li>
+      <li><a href="api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.get_parcel">get_parcel() (catatom2osm.app.CatAtom2Osm method)</a>
+</li>
       <li><a href="api/catatom2osm.geo.layer.polygon.html#catatom2osm.geo.layer.polygon.PolygonLayer.get_parents_per_vertex_and_geometries">get_parents_per_vertex_and_geometries() (catatom2osm.geo.layer.polygon.PolygonLayer method)</a>
 </li>
       <li><a href="api/catatom2osm.geo.layer.cons.html#catatom2osm.geo.layer.cons.ConsLayer.get_parts">get_parts() (catatom2osm.geo.layer.cons.ConsLayer method)</a>
@@ -649,7 +649,11 @@
 </li>
       <li><a href="api/catatom2osm.geo.point.html#catatom2osm.geo.point.Point.get_spike_context">get_spike_context() (catatom2osm.geo.point.Point method)</a>
 </li>
+      <li><a href="api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.get_split">get_split() (catatom2osm.app.CatAtom2Osm method)</a>
+</li>
       <li><a href="api/catatom2osm.report.html#catatom2osm.report.Report.get_sys_info">get_sys_info() (catatom2osm.report.Report method)</a>
+</li>
+      <li><a href="api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.get_task_comment">get_task_comment() (catatom2osm.app.CatAtom2Osm static method)</a>
 </li>
       <li><a href="api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.get_tasks">get_tasks() (catatom2osm.app.CatAtom2Osm method)</a>
 </li>
@@ -662,6 +666,8 @@
       <li><a href="api/catatom2osm.geo.geometry.html#catatom2osm.geo.geometry.Geometry.get_vertices_list">get_vertices_list() (catatom2osm.geo.geometry.Geometry static method)</a>
 </li>
       <li><a href="api/catatom2osm.geo.layer.base.html#catatom2osm.geo.layer.base.BaseLayer.get_writer">get_writer() (catatom2osm.geo.layer.base.BaseLayer static method)</a>
+</li>
+      <li><a href="api/catatom2osm.geo.layer.parcel.html#catatom2osm.geo.layer.parcel.ParcelLayer.get_zone">get_zone() (catatom2osm.geo.layer.parcel.ParcelLayer method)</a>
 </li>
       <li><a href="api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.get_zoning">get_zoning() (catatom2osm.app.CatAtom2Osm method)</a>
 </li>
@@ -697,14 +703,20 @@
 </li>
       <li><a href="api/catatom2osm.osm.html#catatom2osm.osm.Way.is_closed">is_closed() (catatom2osm.osm.Way method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/catatom2osm.catatom.html#catatom2osm.catatom.Reader.is_empty">is_empty() (catatom2osm.catatom.Reader method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/catatom2osm.geo.layer.polygon.html#catatom2osm.geo.layer.polygon.PolygonLayer.is_inside">is_inside() (catatom2osm.geo.layer.polygon.PolygonLayer method)</a>
 
       <ul>
         <li><a href="api/catatom2osm.geo.aux.html#catatom2osm.geo.aux.is_inside">(in module catatom2osm.geo.aux)</a>
+</li>
+      </ul></li>
+      <li><a href="api/catatom2osm.geo.layer.polygon.html#catatom2osm.geo.layer.polygon.PolygonLayer.is_inside_area">is_inside_area() (catatom2osm.geo.layer.polygon.PolygonLayer method)</a>
+
+      <ul>
+        <li><a href="api/catatom2osm.geo.aux.html#catatom2osm.geo.aux.is_inside_area">(in module catatom2osm.geo.aux)</a>
 </li>
       </ul></li>
       <li><a href="api/catatom2osm.osm.html#catatom2osm.osm.Element.is_new">is_new() (catatom2osm.osm.Element method)</a>
@@ -739,7 +751,7 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.list_zones">list_zones() (catatom2osm.app.CatAtom2Osm method)</a>
+      <li><a href="api/catatom2osm.geo.layer.zoning.html#catatom2osm.geo.layer.zoning.level_query">level_query() (in module catatom2osm.geo.layer.zoning)</a>
 </li>
       <li><a href="api/catatom2osm.osm.html#catatom2osm.osm.Node.lon">lon (catatom2osm.osm.Node property)</a>
 </li>
@@ -757,13 +769,23 @@
 </li>
       <li><a href="api/catatom2osm.geo.layer.cons.html#catatom2osm.geo.layer.cons.ConsLayer.merge_adjacent_parts">merge_adjacent_parts() (catatom2osm.geo.layer.cons.ConsLayer method)</a>
 </li>
+      <li><a href="api/catatom2osm.geo.geometry.html#catatom2osm.geo.geometry.Geometry.merge_adjacent_polygons">merge_adjacent_polygons() (catatom2osm.geo.geometry.Geometry static method)</a>
+
+      <ul>
+        <li><a href="api/catatom2osm.geo.layer.polygon.html#catatom2osm.geo.layer.polygon.PolygonLayer.merge_adjacent_polygons">(catatom2osm.geo.layer.polygon.PolygonLayer method)</a>
+</li>
+      </ul></li>
       <li><a href="api/catatom2osm.geo.layer.polygon.html#catatom2osm.geo.layer.polygon.PolygonLayer.merge_adjacents">merge_adjacents() (catatom2osm.geo.layer.polygon.PolygonLayer method)</a>
 </li>
       <li><a href="api/catatom2osm.geo.layer.cons.html#catatom2osm.geo.layer.cons.ConsLayer.merge_building_parts">merge_building_parts() (catatom2osm.geo.layer.cons.ConsLayer method)</a>
 </li>
       <li><a href="api/catatom2osm.geo.layer.parcel.html#catatom2osm.geo.layer.parcel.ParcelLayer.merge_by_adjacent_buildings">merge_by_adjacent_buildings() (catatom2osm.geo.layer.parcel.ParcelLayer method)</a>
 </li>
+      <li><a href="api/catatom2osm.geo.layer.parcel.html#catatom2osm.geo.layer.parcel.ParcelLayer.merge_by_parts_count">merge_by_parts_count() (catatom2osm.geo.layer.parcel.ParcelLayer method)</a>
+</li>
       <li><a href="api/catatom2osm.osm.html#catatom2osm.osm.Osm.merge_duplicated">merge_duplicated() (catatom2osm.osm.Osm method)</a>
+</li>
+      <li><a href="api/catatom2osm.geo.layer.polygon.html#catatom2osm.geo.layer.polygon.PolygonLayer.merge_geometries">merge_geometries() (catatom2osm.geo.layer.polygon.PolygonLayer method)</a>
 </li>
       <li><a href="api/catatom2osm.geo.aux.html#catatom2osm.geo.aux.merge_groups">merge_groups() (in module catatom2osm.geo.aux)</a>
 </li>
@@ -926,8 +948,6 @@
 </li>
       <li><a href="api/catatom2osm.osm.html#catatom2osm.osm.Relation.outer_geometry">outer_geometry() (catatom2osm.osm.Relation method)</a>
 </li>
-      <li><a href="api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.output_building">output_building() (catatom2osm.app.CatAtom2Osm method)</a>
-</li>
       <li><a href="api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.output_zoning">output_zoning() (catatom2osm.app.CatAtom2Osm method)</a>
 </li>
   </ul></td>
@@ -948,13 +968,13 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/catatom2osm.geo.layer.polygon.html#catatom2osm.geo.layer.polygon.PolygonLayer">PolygonLayer (class in catatom2osm.geo.layer.polygon)</a>
 </li>
+      <li><a href="api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.process_address">process_address() (catatom2osm.app.CatAtom2Osm method)</a>
+</li>
       <li><a href="api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.process_building">process_building() (catatom2osm.app.CatAtom2Osm method)</a>
 </li>
       <li><a href="api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.process_parcel">process_parcel() (catatom2osm.app.CatAtom2Osm method)</a>
 </li>
       <li><a href="api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.process_tasks">process_tasks() (catatom2osm.app.CatAtom2Osm method)</a>
-</li>
-      <li><a href="api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.process_zoning">process_zoning() (catatom2osm.app.CatAtom2Osm method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -988,8 +1008,6 @@
         <li><a href="api/catatom2osm.overpass.html#catatom2osm.overpass.Query.read">(catatom2osm.overpass.Query method)</a>
 </li>
       </ul></li>
-      <li><a href="api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.read_address">read_address() (catatom2osm.app.CatAtom2Osm method)</a>
-</li>
       <li><a href="api/catatom2osm.geo.layer.highway.html#catatom2osm.geo.layer.highway.HighwayLayer.read_from_osm">read_from_osm() (catatom2osm.geo.layer.highway.HighwayLayer method)</a>
 </li>
       <li><a href="api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.read_osm">read_osm() (catatom2osm.app.CatAtom2Osm method)</a>
@@ -1006,10 +1024,10 @@
 </li>
       <li><a href="api/catatom2osm.osm.html#catatom2osm.osm.Relation.Member">Relation.Member (class in catatom2osm.osm)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/catatom2osm.osm.html#catatom2osm.osm.Osm.relations">relations (catatom2osm.osm.Osm property)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/catatom2osm.osm.html#catatom2osm.osm.Osm.remove">remove() (catatom2osm.osm.Osm method)</a>
 
       <ul>
@@ -1018,11 +1036,13 @@
         <li><a href="api/catatom2osm.osm.html#catatom2osm.osm.Way.remove">(catatom2osm.osm.Way method)</a>
 </li>
       </ul></li>
+      <li><a href="api/catatom2osm.geo.layer.address.html#catatom2osm.geo.layer.address.AddressLayer.remove_address_wo_building">remove_address_wo_building() (catatom2osm.geo.layer.address.AddressLayer method)</a>
+</li>
       <li><a href="api/catatom2osm.geo.layer.cons.html#catatom2osm.geo.layer.cons.ConsLayer.remove_inner_rings">remove_inner_rings() (catatom2osm.geo.layer.cons.ConsLayer method)</a>
 </li>
-      <li><a href="api/catatom2osm.geo.layer.zoning.html#catatom2osm.geo.layer.zoning.ZoningLayer.remove_outside_features">remove_outside_features() (catatom2osm.geo.layer.zoning.ZoningLayer method)</a>
-</li>
       <li><a href="api/catatom2osm.geo.layer.cons.html#catatom2osm.geo.layer.cons.ConsLayer.remove_outside_parts">remove_outside_parts() (catatom2osm.geo.layer.cons.ConsLayer method)</a>
+</li>
+      <li><a href="api/catatom2osm.geo.layer.cons.html#catatom2osm.geo.layer.cons.ConsLayer.remove_parts_wo_building">remove_parts_wo_building() (catatom2osm.geo.layer.cons.ConsLayer method)</a>
 </li>
       <li><a href="api/catatom2osm.osm.html#catatom2osm.osm.Osm.replace">replace() (catatom2osm.osm.Osm method)</a>
 
@@ -1035,6 +1055,8 @@
       <li><a href="api/catatom2osm.report.html#catatom2osm.report.Report">Report (class in catatom2osm.report)</a>
 </li>
       <li><a href="api/catatom2osm.geo.layer.base.html#catatom2osm.geo.layer.base.BaseLayer.reproject">reproject() (catatom2osm.geo.layer.base.BaseLayer method)</a>
+</li>
+      <li><a href="api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.resume_address">resume_address() (catatom2osm.app.CatAtom2Osm method)</a>
 </li>
       <li><a href="api/catatom2osm.geo.layer.zoning.html#catatom2osm.geo.layer.zoning.ZoningLayer.rpattern">rpattern (catatom2osm.geo.layer.zoning.ZoningLayer attribute)</a>
 </li>
@@ -1058,9 +1080,11 @@
 </li>
       <li><a href="api/catatom2osm.config.html#catatom2osm.config.set_log_level">set_log_level() (in module catatom2osm.config)</a>
 </li>
+      <li><a href="api/catatom2osm.geo.layer.parcel.html#catatom2osm.geo.layer.parcel.ParcelLayer.set_missing_zones">set_missing_zones() (catatom2osm.geo.layer.parcel.ParcelLayer method)</a>
+</li>
       <li><a href="api/catatom2osm.overpass.html#catatom2osm.overpass.Query.set_search_area">set_search_area() (catatom2osm.overpass.Query method)</a>
 </li>
-      <li><a href="api/catatom2osm.geo.layer.zoning.html#catatom2osm.geo.layer.zoning.ZoningLayer.set_tasks">set_tasks() (catatom2osm.geo.layer.zoning.ZoningLayer method)</a>
+      <li><a href="api/catatom2osm.geo.layer.parcel.html#catatom2osm.geo.layer.parcel.ParcelLayer.set_zones">set_zones() (catatom2osm.geo.layer.parcel.ParcelLayer method)</a>
 </li>
       <li><a href="api/test.geo.layer.test_address.html#test.geo.layer.test_address.TestAddressLayer.setUp">setUp() (test.geo.layer.test_address.TestAddressLayer method)</a>
 
@@ -1094,9 +1118,9 @@
 </li>
       <li><a href="api/catatom2osm.geo.layer.polygon.html#catatom2osm.geo.layer.polygon.PolygonLayer.simplify">simplify() (catatom2osm.geo.layer.polygon.PolygonLayer method)</a>
 </li>
-      <li><a href="api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.split_zoning">split_zoning() (catatom2osm.app.CatAtom2Osm method)</a>
-</li>
       <li><a href="api/catatom2osm.csvtools.html#catatom2osm.csvtools.startswith">startswith() (in module catatom2osm.csvtools)</a>
+</li>
+      <li><a href="api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.stop_address">stop_address() (catatom2osm.app.CatAtom2Osm method)</a>
 </li>
       <li><a href="api/catatom2osm.report.html#catatom2osm.report.Report.sum">sum() (catatom2osm.report.Report method)</a>
 </li>
@@ -1422,6 +1446,8 @@
 </li>
       <li><a href="api/test.geo.layer.test_base.html#test.geo.layer.test_base.TestBaseLayer.test_copy_feature_with_resolve">test_copy_feature_with_resolve() (test.geo.layer.test_base.TestBaseLayer method)</a>
 </li>
+      <li><a href="api/test.geo.layer.test_parcel.html#test.geo.layer.test_parcel.TestParcelLayer.test_count_parts">test_count_parts() (test.geo.layer.test_parcel.TestParcelLayer method)</a>
+</li>
       <li><a href="api/test.geo.layer.test_parcel.html#test.geo.layer.test_parcel.TestParcelLayer.test_create_missing_parcels">test_create_missing_parcels() (test.geo.layer.test_parcel.TestParcelLayer method)</a>
 </li>
       <li><a href="api/test.test_csvtools.html#test.test_csvtools.TestCsvTools.test_csv2dict">test_csv2dict() (test.test_csvtools.TestCsvTools method)</a>
@@ -1452,10 +1478,6 @@
         <li><a href="api/test.test_overpass.html#test.test_overpass.TestQuery.test_download">(test.test_overpass.TestQuery method)</a>
 </li>
       </ul></li>
-      <li><a href="api/test.test_app.html#test.test_app.TestCatAtom2Osm.test_end_messages">test_end_messages() (test.test_app.TestCatAtom2Osm method)</a>
-</li>
-      <li><a href="api/test.test_app.html#test.test_app.TestCatAtom2Osm.test_end_messages_finish">test_end_messages_finish() (test.test_app.TestCatAtom2Osm method)</a>
-</li>
       <li><a href="api/test.test_osm.html#test.test_osm.TestOsmNode.test_eq">test_eq() (test.test_osm.TestOsmNode method)</a>
 
       <ul>
@@ -1512,23 +1534,19 @@
 </li>
       <li><a href="api/test.test_app.html#test.test_app.TestCatAtom2Osm.test_get_auxiliary_addresses">test_get_auxiliary_addresses() (test.test_app.TestCatAtom2Osm method)</a>
 </li>
-      <li><a href="api/test.test_app.html#test.test_app.TestCatAtom2Osm.test_get_building">test_get_building() (test.test_app.TestCatAtom2Osm method)</a>
-</li>
-      <li><a href="api/test.test_app.html#test.test_app.TestCatAtom2Osm.test_get_building_no_other">test_get_building_no_other() (test.test_app.TestCatAtom2Osm method)</a>
-</li>
       <li><a href="api/test.test_cdau.html#test.test_cdau.TestCdau.test_get_cat_address">test_get_cat_address() (test.test_cdau.TestCdau method)</a>
 </li>
       <li><a href="api/test.geo.test_point.html#test.geo.test_point.TestPoint.test_get_corner_context">test_get_corner_context() (test.geo.test_point.TestPoint method)</a>
 </li>
       <li><a href="api/test.test_app.html#test.test_app.TestCatAtom2Osm.test_get_current_ad_osm">test_get_current_ad_osm() (test.test_app.TestCatAtom2Osm method)</a>
 </li>
-      <li><a href="api/test.test_app.html#test.test_app.TestCatAtom2Osm.test_get_current_bu_osm">test_get_current_bu_osm() (test.test_app.TestCatAtom2Osm method)</a>
-</li>
       <li><a href="api/test.test_catatom.html#test.test_catatom.TestCatAtom.test_get_gml_from_zip">test_get_gml_from_zip() (test.test_catatom.TestCatAtom method)</a>
 </li>
       <li><a href="api/test.test_catatom.html#test.test_catatom.TestCatAtom.test_get_gml_from_zip_ifs">test_get_gml_from_zip_ifs() (test.test_catatom.TestCatAtom method)</a>
 </li>
-      <li><a href="api/test.geo.layer.test_parcel.html#test.geo.layer.test_parcel.TestParcelLayer.test_get_groups_with_context">test_get_groups_with_context() (test.geo.layer.test_parcel.TestParcelLayer method)</a>
+      <li><a href="api/test.geo.layer.test_parcel.html#test.geo.layer.test_parcel.TestParcelLayer.test_get_groups_by_adjacent_buildings">test_get_groups_by_adjacent_buildings() (test.geo.layer.test_parcel.TestParcelLayer method)</a>
+</li>
+      <li><a href="api/test.geo.layer.test_parcel.html#test.geo.layer.test_parcel.TestParcelLayer.test_get_groups_by_parts_count">test_get_groups_by_parts_count() (test.geo.layer.test_parcel.TestParcelLayer method)</a>
 </li>
       <li><a href="api/test.test_app.html#test.test_app.TestCatAtom2Osm.test_get_highway">test_get_highway() (test.test_app.TestCatAtom2Osm method)</a>
 </li>
@@ -1537,8 +1555,6 @@
       <li><a href="api/test.geo.layer.test_cons.html#test.geo.layer.test_cons.TestConsLayerSimple.test_get_id">test_get_id() (test.geo.layer.test_cons.TestConsLayerSimple method)</a>
 </li>
       <li><a href="api/test.geo.layer.test_base.html#test.geo.layer.test_base.TestBaseLayer.test_get_index">test_get_index() (test.geo.layer.test_base.TestBaseLayer method)</a>
-</li>
-      <li><a href="api/test.geo.layer.test_zoning.html#test.geo.layer.test_zoning.TestZoningLayer.test_get_labels">test_get_labels() (test.geo.layer.test_zoning.TestZoningLayer method)</a>
 </li>
       <li><a href="api/test.test_catatom.html#test.test_catatom.TestCatAtom.test_get_layer_paths">test_get_layer_paths() (test.test_catatom.TestCatAtom method)</a>
 </li>
@@ -1554,6 +1570,8 @@
 </li>
       <li><a href="api/test.geo.test_geometry.html#test.geo.test_geometry.TestGeometry.test_get_outer_vertices">test_get_outer_vertices() (test.geo.test_geometry.TestGeometry method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/test.geo.layer.test_polygon.html#test.geo.layer.test_polygon.TestPolygonLayer.test_get_parents_per_vertex_and_geometries">test_get_parents_per_vertex_and_geometries() (test.geo.layer.test_polygon.TestPolygonLayer method)</a>
 </li>
       <li><a href="api/test.geo.layer.test_cons.html#test.geo.layer.test_cons.TestConsLayer.test_get_parts">test_get_parts() (test.geo.layer.test_cons.TestConsLayer method)</a>
@@ -1562,8 +1580,6 @@
 </li>
       <li><a href="api/test.test_download.html#test.test_download.TestGetResponse.test_get_response_bad">test_get_response_bad() (test.test_download.TestGetResponse method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/test.test_download.html#test.test_download.TestGetResponse.test_get_response_ok">test_get_response_ok() (test.test_download.TestGetResponse method)</a>
 </li>
       <li><a href="api/test.geo.test_point.html#test.geo.test_point.TestPoint.test_get_spike_context">test_get_spike_context() (test.geo.test_point.TestPoint method)</a>
@@ -1576,8 +1592,6 @@
 </li>
       <li><a href="api/test.geo.test_geometry.html#test.geo.test_geometry.TestGeometry.test_get_vertices_list">test_get_vertices_list() (test.geo.test_geometry.TestGeometry method)</a>
 </li>
-      <li><a href="api/test.test_app.html#test.test_app.TestCatAtom2Osm.test_get_zoning1">test_get_zoning1() (test.test_app.TestCatAtom2Osm method)</a>
-</li>
       <li><a href="api/test.test_osm.html#test.test_osm.TestOsm.test_getattr">test_getattr() (test.test_osm.TestOsm method)</a>
 
       <ul>
@@ -1585,8 +1599,6 @@
 </li>
       </ul></li>
       <li><a href="api/test.test_osm.html#test.test_osm.TestOsmNode.test_getitem">test_getitem() (test.test_osm.TestOsmNode method)</a>
-</li>
-      <li><a href="api/test.test_main.html#test.test_main.TestMain.test_ImportError">test_ImportError() (test.test_main.TestMain method)</a>
 </li>
       <li><a href="api/test.test_report.html#test.test_report.TestReport.test_inc">test_inc() (test.test_report.TestReport method)</a>
 </li>
@@ -1664,8 +1676,6 @@
 </li>
       <li><a href="api/test.test_main.html#test.test_main.TestMain.test_list_error">test_list_error() (test.test_main.TestMain method)</a>
 </li>
-      <li><a href="api/test.test_main.html#test.test_main.TestMain.test_list_zones">test_list_zones() (test.test_main.TestMain method)</a>
-</li>
       <li><a href="api/test.test_osm.html#test.test_osm.TestOsmRelation.test_member_attrs">test_member_attrs() (test.test_osm.TestOsmRelation method)</a>
 </li>
       <li><a href="api/test.test_osm.html#test.test_osm.TestOsmRelation.test_member_eq">test_member_eq() (test.test_osm.TestOsmRelation method)</a>
@@ -1682,13 +1692,13 @@
 </li>
       <li><a href="api/test.geo.layer.test_parcel.html#test.geo.layer.test_parcel.TestParcelLayer.test_merge_by_adjacent_buildings">test_merge_by_adjacent_buildings() (test.geo.layer.test_parcel.TestParcelLayer method)</a>
 </li>
+      <li><a href="api/test.geo.layer.test_parcel.html#test.geo.layer.test_parcel.TestParcelLayer.test_merge_by_parts_count">test_merge_by_parts_count() (test.geo.layer.test_parcel.TestParcelLayer method)</a>
+</li>
       <li><a href="api/test.test_osm.html#test.test_osm.TestOsm.test_merge_duplicated">test_merge_duplicated() (test.test_osm.TestOsm method)</a>
 </li>
       <li><a href="api/test.geo.test_aux.html#test.geo.test_aux.TestAux.test_merge_groups">test_merge_groups() (test.geo.test_aux.TestAux method)</a>
 </li>
       <li><a href="api/test.geo.layer.test_cons.html#test.geo.layer.test_cons.TestConsLayer.test_move_address">test_move_address() (test.geo.layer.test_cons.TestConsLayer method)</a>
-</li>
-      <li><a href="api/test.test_main.html#test.test_main.TestMain.test_multi">test_multi() (test.test_main.TestMain method)</a>
 </li>
       <li><a href="api/test.test_osm.html#test.test_osm.TestOsmNode.test_ne">test_ne() (test.test_osm.TestOsmNode method)</a>
 
@@ -1734,8 +1744,6 @@
         <li><a href="api/test.test_overpass.html#test.test_overpass.TestQuery.test_read">(test.test_overpass.TestQuery method)</a>
 </li>
       </ul></li>
-      <li><a href="api/test.test_app.html#test.test_app.TestCatAtom2Osm.test_read_address">test_read_address() (test.test_app.TestCatAtom2Osm method)</a>
-</li>
       <li><a href="api/test.geo.layer.test_highway.html#test.geo.layer.test_highway.TestHighwayLayer.test_read_from_osm">test_read_from_osm() (test.geo.layer.test_highway.TestHighwayLayer method)</a>
 </li>
       <li><a href="api/test.test_app.html#test.test_app.TestCatAtom2Osm.test_read_osm">test_read_osm() (test.test_app.TestCatAtom2Osm method)</a>
@@ -1750,12 +1758,6 @@
         <li><a href="api/test.test_osm.html#test.test_osm.TestOsmWay.test_remove">(test.test_osm.TestOsmWay method)</a>
 </li>
       </ul></li>
-      <li><a href="api/test.geo.layer.test_zoning.html#test.geo.layer.test_zoning.TestZoningLayer.test_remove_outside_features1">test_remove_outside_features1() (test.geo.layer.test_zoning.TestZoningLayer method)</a>
-</li>
-      <li><a href="api/test.geo.layer.test_zoning.html#test.geo.layer.test_zoning.TestZoningLayer.test_remove_outside_features2">test_remove_outside_features2() (test.geo.layer.test_zoning.TestZoningLayer method)</a>
-</li>
-      <li><a href="api/test.geo.layer.test_zoning.html#test.geo.layer.test_zoning.TestZoningLayer.test_remove_outside_features3">test_remove_outside_features3() (test.geo.layer.test_zoning.TestZoningLayer method)</a>
-</li>
       <li><a href="api/test.geo.layer.test_cons.html#test.geo.layer.test_cons.TestConsLayer.test_remove_outside_parts">test_remove_outside_parts() (test.geo.layer.test_cons.TestConsLayer method)</a>
 </li>
       <li><a href="api/test.geo.layer.test_cons.html#test.geo.layer.test_cons.TestConsLayer.test_remove_parts_below_ground">test_remove_parts_below_ground() (test.geo.layer.test_cons.TestConsLayer method)</a>
@@ -1772,9 +1774,7 @@
 </li>
       <li><a href="api/test.test_app.html#test.test_app.TestCatAtom2Osm.test_run_default">test_run_default() (test.test_app.TestCatAtom2Osm method)</a>
 </li>
-      <li><a href="api/test.test_app.html#test.test_app.TestCatAtom2Osm.test_run_default_new">test_run_default_new() (test.test_app.TestCatAtom2Osm method)</a>
-</li>
-      <li><a href="api/test.test_app.html#test.test_app.TestCatAtom2Osm.test_run_list">test_run_list() (test.test_app.TestCatAtom2Osm method)</a>
+      <li><a href="api/test.test_app.html#test.test_app.TestCatAtom2Osm.test_run_default_2nd">test_run_default_2nd() (test.test_app.TestCatAtom2Osm method)</a>
 </li>
       <li><a href="api/test.geo.layer.test_base.html#test.geo.layer.test_base.TestBaseLayer.test_search">test_search() (test.geo.layer.test_base.TestBaseLayer method)</a>
 </li>
@@ -1792,8 +1792,6 @@
       </ul></li>
       <li><a href="api/test.test_overpass.html#test.test_overpass.TestQuery.test_set_search_area">test_set_search_area() (test.test_overpass.TestQuery method)</a>
 </li>
-      <li><a href="api/test.geo.layer.test_zoning.html#test.geo.layer.test_zoning.TestZoningLayer.test_set_tasks">test_set_tasks() (test.geo.layer.test_zoning.TestZoningLayer method)</a>
-</li>
       <li><a href="api/test.test_report.html#test.test_report.TestReport.test_setattr">test_setattr() (test.test_report.TestReport method)</a>
 </li>
       <li><a href="api/test.test_osm.html#test.test_osm.TestOsmWay.test_shoelace">test_shoelace() (test.test_osm.TestOsmWay method)</a>
@@ -1801,8 +1799,6 @@
       <li><a href="api/test.geo.layer.test_cons.html#test.geo.layer.test_cons.TestConsLayer.test_simplify1">test_simplify1() (test.geo.layer.test_cons.TestConsLayer method)</a>
 </li>
       <li><a href="api/test.geo.layer.test_cons.html#test.geo.layer.test_cons.TestConsLayer.test_simplify2">test_simplify2() (test.geo.layer.test_cons.TestConsLayer method)</a>
-</li>
-      <li><a href="api/test.test_app.html#test.test_app.TestCatAtom2Osm.test_split_zoning">test_split_zoning() (test.test_app.TestCatAtom2Osm method)</a>
 </li>
       <li><a href="api/test.test_osm.html#test.test_osm.TestOsmNode.test_str">test_str() (test.test_osm.TestOsmNode method)</a>
 </li>
@@ -1841,12 +1837,6 @@
       <li><a href="api/test.test_download.html#test.test_download.TestWget.test_wget0">test_wget0() (test.test_download.TestWget method)</a>
 </li>
       <li><a href="api/test.test_app.html#test.test_app.TestCatAtom2Osm.test_write_osm">test_write_osm() (test.test_app.TestCatAtom2Osm method)</a>
-</li>
-      <li><a href="api/test.test_main.html#test.test_main.TestMain.test_zone">test_zone() (test.test_main.TestMain method)</a>
-</li>
-      <li><a href="api/test.test_main.html#test.test_main.TestMain.test_zones">test_zones() (test.test_main.TestMain method)</a>
-</li>
-      <li><a href="api/test.test_main.html#test.test_main.TestMain.test_zones2">test_zones2() (test.test_main.TestMain method)</a>
 </li>
       <li><a href="api/test.geo.layer.test_address.html#test.geo.layer.test_address.TestAddressLayer">TestAddressLayer (class in test.geo.layer.test_address)</a>
 </li>
@@ -1943,6 +1933,10 @@
       <li><a href="api/catatom2osm.geo.layer.zoning.html#catatom2osm.geo.layer.zoning.ZoningLayer.upattern">upattern (catatom2osm.geo.layer.zoning.ZoningLayer attribute)</a>
 </li>
   </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/catatom2osm.geo.layer.parcel.html#catatom2osm.geo.layer.parcel.ParcelLayer.update_parts_count">update_parts_count() (catatom2osm.geo.layer.parcel.ParcelLayer method)</a>
+</li>
+  </ul></td>
 </tr></table>
 
 <h2 id="V">V</h2>
@@ -1980,10 +1974,6 @@
 <h2 id="Z">Z</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.zone_query">zone_query() (catatom2osm.app.CatAtom2Osm method)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/catatom2osm.geo.layer.zoning.html#catatom2osm.geo.layer.zoning.ZoningLayer">ZoningLayer (class in catatom2osm.geo.layer.zoning)</a>
 </li>
   </ul></td>
@@ -2005,7 +1995,7 @@
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">CatAtom2Osm 2.5.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">CatAtom2Osm 2.6.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Index</a></li> 
       </ul>
     </div>

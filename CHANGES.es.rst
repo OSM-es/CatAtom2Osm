@@ -1,6 +1,12 @@
 Registro de cambios
 ===================
 
+**16-2-2022 (2.6.0)**
+* Repartir los archivos de tareas por parcelas en lugar de zonas.
+* Generar proyectos conteniendo sólo direcciones.
+* Añade al proyecto recuento de partes de edificio como indicativo de complejidad de la tarea.
+* Se abandona opción -o dividir proyecto usando códigos de zonas.
+
 **05-1-2022 (2.5.3)**
 * Corrige coordenadas CDAU
 

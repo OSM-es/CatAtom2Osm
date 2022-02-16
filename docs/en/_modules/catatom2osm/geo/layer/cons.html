@@ -14,7 +14,7 @@
   <link rel="stylesheet" type="text/css" href="../../../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.geo.layer.cons &#8212; CatAtom2Osm 2.5.0 documentation</title>
+    <title>catatom2osm.geo.layer.cons &#8212; CatAtom2Osm 2.6.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/guzzle.css" />
     <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">CatAtom2Osm 2.5.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">CatAtom2Osm 2.6.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.geo.layer.cons</a></li> 
       </ul>
@@ -197,6 +197,20 @@
                 <span class="n">parts</span><span class="p">[</span><span class="n">localId</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">feature</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">buildings</span><span class="p">,</span> <span class="n">parts</span><span class="p">)</span></div>
 
+<div class="viewcode-block" id="ConsLayer.remove_parts_wo_building"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.cons.html#catatom2osm.geo.layer.cons.ConsLayer.remove_parts_wo_building">[docs]</a>    <span class="k">def</span> <span class="nf">remove_parts_wo_building</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Remove building parts without building.&quot;&quot;&quot;</span>
+        <span class="n">bu_refs</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">f</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">()</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_building</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="p">]</span>
+        <span class="n">to_clean</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">id</span><span class="p">()</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_part</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_id</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">bu_refs</span>
+        <span class="p">]</span>
+        <span class="k">if</span> <span class="n">to_clean</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">deleteFeatures</span><span class="p">(</span><span class="n">to_clean</span><span class="p">)</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Removed </span><span class="si">%d</span><span class="s2"> parts without building&quot;</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_clean</span><span class="p">))</span>
+            <span class="n">report</span><span class="o">.</span><span class="n">parts_wo_building</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_clean</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="ConsLayer.remove_outside_parts"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.cons.html#catatom2osm.geo.layer.cons.ConsLayer.remove_outside_parts">[docs]</a>    <span class="k">def</span> <span class="nf">remove_outside_parts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Remove parts without levels above ground.</span>
@@ -205,7 +219,6 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">to_clean_o</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">to_clean_b</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">to_add</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">buildings</span> <span class="o">=</span> <span class="p">{</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">]:</span> <span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">()</span> <span class="k">if</span>
                      <span class="bp">self</span><span class="o">.</span><span class="n">is_building</span><span class="p">(</span><span class="n">f</span><span class="p">)}</span>
         <span class="n">pbar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_progressbar</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Remove outside parts&quot;</span><span class="p">),</span>
@@ -231,11 +244,7 @@
             <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
                 <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Deleted </span><span class="si">%d</span><span class="s2"> building parts with no floors above ground&quot;</span><span class="p">),</span>
                 <span class="nb">len</span><span class="p">(</span><span class="n">to_clean_b</span><span class="p">))</span>
-            <span class="n">report</span><span class="o">.</span><span class="n">underground_parts</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_clean_b</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">to_add</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">addFeatures</span><span class="p">(</span><span class="n">to_add</span><span class="p">)</span>
-            <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Generated </span><span class="si">%d</span><span class="s2"> building outlines&quot;</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_add</span><span class="p">))</span>
-            <span class="n">report</span><span class="o">.</span><span class="n">new_outlines</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_add</span><span class="p">)</span></div>
+            <span class="n">report</span><span class="o">.</span><span class="n">underground_parts</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_clean_b</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ConsLayer.get_parts"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.cons.html#catatom2osm.geo.layer.cons.ConsLayer.get_parts">[docs]</a>    <span class="k">def</span> <span class="nf">get_parts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">outline</span><span class="p">,</span> <span class="n">parts</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -420,10 +429,13 @@
 <span class="sd">        Delete invalid geometries and close vertices, add topological points,</span>
 <span class="sd">        merge building parts and simplify vertices.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">delete_invalid_geometries</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">delete_invalid_geometries</span><span class="p">(</span>
+            <span class="n">query_small_area</span><span class="o">=</span><span class="k">lambda</span> <span class="n">feat</span><span class="p">:</span> <span class="s1">&#39;_part&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">]</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">topology</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">merge_building_parts</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">simplify</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">simplify</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">delete_small_geometries</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="ConsLayer.move_entrance"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.cons.html#catatom2osm.geo.layer.cons.ConsLayer.move_entrance">[docs]</a>    <span class="k">def</span> <span class="nf">move_entrance</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span> <span class="n">ad</span><span class="p">,</span> <span class="n">ad_buildings</span><span class="p">,</span> <span class="n">ad_parts</span><span class="p">,</span> <span class="n">to_move</span><span class="p">,</span> <span class="n">to_insert</span><span class="p">,</span>
@@ -632,7 +644,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">CatAtom2Osm 2.5.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">CatAtom2Osm 2.6.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.geo.layer.cons</a></li> 
       </ul>

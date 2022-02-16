@@ -14,7 +14,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.config &#8212; documentación de CatAtom2Osm - 2.5.0</title>
+    <title>catatom2osm.config &#8212; documentación de CatAtom2Osm - 2.6.0</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/guzzle.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.5.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.6.0</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Código de módulo</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.config</a></li> 
       </ul>
@@ -96,11 +96,6 @@
 <span class="n">app_desc</span> <span class="o">=</span> <span class="s1">&#39;Tool to convert INSPIRE data sets from the Spanish Cadastre ATOM Services to OSM files&#39;</span>
 <span class="n">app_tags</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
 
-<span class="n">MIN_QGIS_VERSION_INT</span> <span class="o">=</span> <span class="mi">21001</span>
-<span class="n">MIN_QGIS_VERSION</span> <span class="o">=</span> <span class="s1">&#39;2.10.1&#39;</span>
-<span class="n">MIN_GDAL_VERSION_INT</span> <span class="o">=</span> <span class="mi">11103</span>
-<span class="n">MIN_GDAL_VERSION</span> <span class="o">=</span> <span class="s1">&#39;1.11.3&#39;</span>
-
 <div class="viewcode-block" id="install_gettext"><a class="viewcode-back" href="../../api/catatom2osm.config.html#catatom2osm.config.install_gettext">[documentos]</a><span class="k">def</span> <span class="nf">install_gettext</span><span class="p">(</span><span class="n">app_name</span><span class="p">,</span> <span class="n">localedir</span><span class="p">):</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">gettext</span><span class="o">.</span><span class="n">install</span><span class="p">(</span><span class="n">app_name</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="n">localedir</span><span class="o">=</span><span class="n">localedir</span><span class="p">,</span> <span class="n">unicode</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -146,19 +141,22 @@
 <span class="n">silence_gdal</span> <span class="o">=</span> <span class="kc">False</span>
 
 <span class="n">delimiter</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span>
-<span class="n">dup_thr</span> <span class="o">=</span> <span class="mf">0.012</span> <span class="c1"># Distance in meters to merge nearest vertexs.</span>
-                <span class="c1"># 0.011 is about 1E-7 degrees in latitude</span>
-<span class="n">dist_thr</span> <span class="o">=</span> <span class="mf">0.02</span> <span class="c1"># Threshold in meters for vertex simplification and topological points.</span>
-<span class="n">straight_thr</span> <span class="o">=</span> <span class="mi">2</span> <span class="c1"># Threshold in degrees from straight angle to delete a vertex</span>
-<span class="n">acute_thr</span> <span class="o">=</span> <span class="mi">10</span> <span class="c1"># Remove vertices with an angle smaller than this value</span>
-<span class="n">min_area</span> <span class="o">=</span> <span class="mf">0.05</span> <span class="c1"># Delete geometries with an area smaller than this value</span>
-<span class="n">addr_thr</span> <span class="o">=</span> <span class="mi">10</span> <span class="c1"># Distance in meters to merge address node with building outline</span>
-<span class="n">acute_inv</span> <span class="o">=</span> <span class="mi">5</span> <span class="c1"># Remove geometries/rings that result invalid after removing any vertex with an angle smaller than this value</span>
-<span class="n">dist_inv</span> <span class="o">=</span> <span class="mf">0.1</span> <span class="c1"># Threshold in meters to filter angles for zig-zag and spikes</span>
-<span class="n">entrance_thr</span> <span class="o">=</span> <span class="mf">0.4</span> <span class="c1"># Minimum distance in meters from a entrance to the nearest corner</span>
-<span class="n">warning_min_area</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1"># Area in m2 for small area warning</span>
-<span class="n">warning_max_area</span> <span class="o">=</span> <span class="mi">30000</span> <span class="c1"># Area in m2 for big area warning</span>
-<span class="n">bbox_buffer</span> <span class="o">=</span> <span class="mf">0.002</span> <span class="c1"># Buffer in degrees around overpass bounding boxes</span>
+<span class="n">dup_thr</span> <span class="o">=</span> <span class="mf">0.012</span>  <span class="c1"># Distance in meters to merge nearest vertexs.</span>
+                 <span class="c1"># 0.011 is about 1E-7 degrees in latitude</span>
+<span class="n">dist_thr</span> <span class="o">=</span> <span class="mf">0.02</span>  <span class="c1"># Threshold in meters for vertex simplification and topological points.</span>
+<span class="n">straight_thr</span> <span class="o">=</span> <span class="mi">2</span>  <span class="c1"># Threshold in degrees from straight angle to delete a vertex</span>
+<span class="n">acute_thr</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># Remove vertices with an angle smaller than this value</span>
+<span class="n">min_area</span> <span class="o">=</span> <span class="mf">0.05</span>  <span class="c1"># Delete geometries with an area smaller than this value</span>
+<span class="n">addr_thr</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># Distance in meters to merge address node with building outline</span>
+<span class="n">acute_inv</span> <span class="o">=</span> <span class="mi">5</span>  <span class="c1"># Remove geometries/rings that result invalid after removing any vertex with an angle smaller than this value</span>
+<span class="n">dist_inv</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="c1"># Threshold in meters to filter angles for zig-zag and spikes</span>
+<span class="n">entrance_thr</span> <span class="o">=</span> <span class="mf">0.4</span>  <span class="c1"># Minimum distance in meters from a entrance to the nearest corner</span>
+<span class="n">warning_min_area</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># Area in m2 for small area warning</span>
+<span class="n">warning_max_area</span> <span class="o">=</span> <span class="mi">30000</span>  <span class="c1"># Area in m2 for big area warning</span>
+<span class="n">bbox_buffer</span> <span class="o">=</span> <span class="mf">0.002</span>  <span class="c1"># Buffer in degrees around overpass bounding boxes</span>
+<span class="n">parcel_buffer</span> <span class="o">=</span> <span class="mi">200</span>  <span class="c1"># Buffer in meters around parcel to search adjacents</span>
+<span class="n">parcel_parts</span> <span class="o">=</span> <span class="mi">20</span>  <span class="c1"># Number of building parts to agregate parcels</span>
+<span class="n">parcel_dist</span> <span class="o">=</span> <span class="mi">1000</span>  <span class="c1"># Distance in meters to agregate parcels</span>
 
 <span class="n">changeset_tags</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s1">&#39;comment&#39;</span><span class="p">:</span> <span class="s2">&quot;#Spanish_Cadastre_Buildings_Import&quot;</span><span class="p">,</span>
@@ -526,7 +524,7 @@
 <span class="c1"># List of highway types not to be parsed</span>
 <span class="n">excluded_types</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;DS&#39;</span><span class="p">,</span> <span class="s1">&#39;ER&#39;</span><span class="p">]</span>
 
-<span class="n">aux_address</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;cdau&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;04&#39;</span><span class="p">,</span> <span class="s1">&#39;11&#39;</span><span class="p">,</span> <span class="s1">&#39;14&#39;</span><span class="p">,</span> <span class="s1">&#39;18&#39;</span><span class="p">,</span> <span class="s1">&#39;21&#39;</span><span class="p">,</span> <span class="s1">&#39;23&#39;</span><span class="p">,</span> <span class="s1">&#39;29&#39;</span><span class="p">,</span> <span class="s1">&#39;41&#39;</span><span class="p">]}</span>
+<span class="n">aux_address</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;cdau&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;04&#39;</span><span class="p">,</span> <span class="s1">&#39;11&#39;</span><span class="p">,</span> <span class="s1">&#39;14&#39;</span><span class="p">,</span> <span class="s1">&#39;18&#39;</span><span class="p">,</span> <span class="s1">&#39;21&#39;</span><span class="p">,</span> <span class="s1">&#39;23&#39;</span><span class="p">,</span> <span class="s1">&#39;29&#39;</span><span class="p">,</span> <span class="s1">&#39;41&#39;</span><span class="p">,</span> <span class="s1">&#39;53&#39;</span><span class="p">]}</span>
 <span class="n">aux_path</span> <span class="o">=</span> <span class="s1">&#39;auxsrcs&#39;</span>
 
 <span class="n">prov_codes</span> <span class="o">=</span> <span class="p">{</span>
@@ -599,7 +597,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.5.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.6.0</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Código de módulo</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.config</a></li> 
       </ul>

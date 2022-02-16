@@ -71,7 +71,7 @@ class ParcelLayer(PolygonLayer):
                         geom = parcel.geometry().combine(geom)
                         parcel.setGeometry(geom)
                         to_add[ref] = parcel
-                    elif split is None or split.is_inside(geom):
+                    elif split is None or split.is_inside_area(geom):
                         parcel = QgsFeature(self.fields())
                         parcel['localId'] = ref
                         parcel.setGeometry(geom)
