@@ -331,6 +331,7 @@ class CatAtom2Osm(object):
         """Generates project zoning file"""
         if not self.options.parcel:
             self.parcel.simplify()
+            self.parcel.set_muncode(self.cat.zip_code)
             fn = 'zoning.geojson'
             self.export_layer(self.parcel, fn, target_crs_id=4326)
             report.tasks = self.parcel.featureCount()

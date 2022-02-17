@@ -33,6 +33,7 @@ class ParcelLayer(PolygonLayer):
                 QgsField('parts', QVariant.Int),
                 QgsField('zone', QVariant.String, len=5),
                 QgsField('type', QVariant.String, len=10),
+                QgsField('muncode', QVariant.String, len=5),
             ])
             self.updateFields()
         self.mun_code = mun_code
@@ -79,6 +80,15 @@ class ParcelLayer(PolygonLayer):
         if to_add:
             self.writer.addFeatures(to_add.values())
             log.debug(_("Added %d missing parcels"), len(to_add))
+
+    def set_muncode(self, muncode):
+        """Assigns to each parcel the code of the municipality"""
+        to_change = {}
+        for pa in self.getFeatures():
+            pa['muncode'] = muncode
+            to_change[pa.id()] = get_attributes(pa)
+        if to_change:
+            self.writer.changeAttributeValues(to_change)
 
     def set_zones(self, zoning):
         """

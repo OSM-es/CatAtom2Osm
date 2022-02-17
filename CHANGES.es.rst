@@ -1,6 +1,9 @@
 Registro de cambios
 ===================
 
+**17-2-2022 (2.6.1)**
+* Añade código de municipio a archivo de  proyecto.
+
 **16-2-2022 (2.6.0)**
 * Repartir los archivos de tareas por parcelas en lugar de zonas.
 * Generar proyectos conteniendo sólo direcciones.

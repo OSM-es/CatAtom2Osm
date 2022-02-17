@@ -1,6 +1,9 @@
 Change log
 ==========
 
+**2022-2-17 (2.6.1)**
+* Adds municipality code to tasks project file.
+
 **2022-2-16 (2.6.0)**
 * Distribute task files using parcels instead of zones.
 * Generate projects containing only addresses.
