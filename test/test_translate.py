@@ -1,6 +1,7 @@
-import unittest
-import mock
 import random
+import unittest
+
+import mock
 
 from catatom2osm.translate import *
 
@@ -45,7 +46,7 @@ class TestTranslate(unittest.TestCase):
         self.assertEqual(tags['addr:postcode'], '00333')
         feat = {
             'localId': '000',
-            'TN_text': 'Lugar foo', 
+            'TN_text': 'Lugar foo',
             'designator': '',
             'postCode': '',
             'spec': '',
@@ -56,9 +57,9 @@ class TestTranslate(unittest.TestCase):
         self.assertNotIn('addr:street', tags)
 
     def test_building_tags(self):
-        building_values = ('residential', 'barn', 'industrial', 'office', 
+        building_values = ('residential', 'barn', 'industrial', 'office',
             'retail', 'public')
-        use_values = ('1_residential', '2_agriculture', '3_industrial', 
+        use_values = ('1_residential', '2_agriculture', '3_industrial',
             '4_1_office', '4_2_retail', '4_3_publicServices')
         feat = {
             'condition': 'functional',
@@ -80,7 +81,6 @@ class TestTranslate(unittest.TestCase):
         self.assertEqual(tags['layer'], '1')
         self.assertEqual(tags['location'], 'roof')
         self.assertEqual(tags['fixme'], 'check')
-        use = random.randint(0, len(use_values)-1)
         feat['currentUse'] = None
         feat['condition'] = 'ruin'
         feat['nature'] = 'openAirPool'
@@ -97,13 +97,12 @@ class TestTranslate(unittest.TestCase):
         self.assertEqual(tags['building:levels'], '1')
         self.assertEqual(tags['building:levels:underground'], '2')
         self.assertNotIn('fixme', tags)
-        use = random.randint(0, len(use_values)-1)
+        use = random.randint(0, len(use_values) - 1)
         feat['currentUse'] = use_values[use]
         feat['condition'] = 'declined'
         tags = building_tags(feat)
         self.assertEqual(tags['building'], 'yes')
         self.assertEqual(tags['disused:building'], building_values[use])
-        use = random.randint(0, len(use_values)-1)
         feat['lev_above'] = 0
         feat['lev_below'] = 0
         tags = building_tags(feat)

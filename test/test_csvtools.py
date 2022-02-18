@@ -1,10 +1,9 @@
-﻿import unittest
+﻿import io
+import unittest
 from tempfile import mkstemp
 
-import io
-
 from catatom2osm import csvtools
-from catatom2osm.config import eol, encoding, delimiter
+from catatom2osm.config import delimiter, encoding, eol
 
 
 class TestCsvTools(unittest.TestCase):

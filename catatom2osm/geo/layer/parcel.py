@@ -1,9 +1,8 @@
 import logging
 from collections import defaultdict
 
-from qgis.core import (
-    QgsFeature, QgsFeatureRequest, QgsField, QgsGeometry, QgsRectangle
-)
+from qgis.core import (QgsFeature, QgsFeatureRequest, QgsField, QgsGeometry,
+                       QgsRectangle)
 from qgis.PyQt.QtCore import QVariant
 
 from catatom2osm import config

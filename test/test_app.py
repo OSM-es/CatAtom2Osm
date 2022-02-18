@@ -1,13 +1,15 @@
-from past.builtins import basestring
-from importlib import reload
 import logging
-import mock
-import unittest
 import os
+import unittest
+from importlib import reload
 from optparse import Values
+
+import mock
+from past.builtins import basestring
 from qgis.core import QgsVectorLayer
 
-from catatom2osm import config, osm, app
+from catatom2osm import app, config, osm
+
 qgs = app.QgsSingleton()
 os.environ['LANGUAGE'] = 'C'
 config.install_gettext('catato2osm', '')

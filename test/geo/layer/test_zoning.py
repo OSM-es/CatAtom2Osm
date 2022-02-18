@@ -1,16 +1,16 @@
 import logging
-import mock
 import unittest
 from collections import Counter
 
+import mock
 from qgis.core import QgsFeature, QgsVectorLayer
 
 from catatom2osm.app import QgsSingleton
 from catatom2osm.geo.geometry import Geometry
-from catatom2osm.geo.point import Point
 from catatom2osm.geo.layer.base import BaseLayer
 from catatom2osm.geo.layer.cons import ConsLayer
 from catatom2osm.geo.layer.zoning import ZoningLayer
+from catatom2osm.geo.point import Point
 
 qgs = QgsSingleton()
 m_log = mock.MagicMock()

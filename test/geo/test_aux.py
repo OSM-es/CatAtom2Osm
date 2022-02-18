@@ -1,5 +1,6 @@
-import mock
 import unittest
+
+import mock
 
 from catatom2osm.geo.aux import merge_groups
 

@@ -1,5 +1,5 @@
 import unittest
-from io import StringIO, BytesIO
+from io import BytesIO, StringIO
 
 from catatom2osm import osm, osmxml
 from catatom2osm.osmxml import etree

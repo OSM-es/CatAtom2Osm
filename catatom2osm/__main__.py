@@ -5,13 +5,12 @@ import os
 import sys
 from zipfile import BadZipfile
 
-from catatom2osm import config
-from catatom2osm import csvtools
+from catatom2osm import config, csvtools
+
 log = config.get_logger()
 
-
 usage = _("""catatom2osm [OPTION]... [PATHS]
-  The argument PATHS states for directories to process municipalities. The last 
+  The argument PATHS states for directories to process municipalities. The last
   directory in each path shall be 5 digits (GGMMM) matching the Cadastral codes
   for Provincial Office (GG) and Municipality (MMM). If the program don't find
   the input files it will download them for you from the INSPIRE Services of

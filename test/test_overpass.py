@@ -1,4 +1,5 @@
 import unittest
+
 import mock
 
 from catatom2osm.overpass import Query, api_servers

@@ -5,10 +5,11 @@ import re
 from collections import defaultdict
 from datetime import datetime
 
-from qgis.core import *
+from qgis.core import QgsCoordinateReferenceSystem, QgsFeature
 
 from catatom2osm import config, download, geo
 from catatom2osm.report import instance as report
+
 log = logging.getLogger(config.app_name)
 
 andalucia = {
@@ -82,7 +83,7 @@ def cod_mun_cat2ine(cod_mun_cat):
 def get_cat_address(ad, cod_mun_cat):
     """Convert CDAU address to Cadastre attributes"""
     attr = {}
-    attr['localId'] = '{}.{}.{}.{}'.format(cod_mun_cat[:2], cod_mun_cat[2:], 
+    attr['localId'] = '{}.{}.{}.{}'.format(cod_mun_cat[:2], cod_mun_cat[2:],
         ad['dgc_via'], ad['refcatparc'])
     nom_tip_via = highway_types_equiv.get(ad['nom_tip_via'], ad['nom_tip_via'])
     attr['TN_text'] = "{} {}".format(str(nom_tip_via), str(ad['nom_via']))

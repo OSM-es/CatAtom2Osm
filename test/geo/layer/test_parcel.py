@@ -1,8 +1,8 @@
 import io
 import logging
-import mock
 import unittest
 
+import mock
 from qgis.core import QgsFeature, QgsVectorLayer
 
 from catatom2osm import osmxml

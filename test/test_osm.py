@@ -1,8 +1,9 @@
-import unittest
 import random
+import unittest
 from collections import Counter
 
 from catatom2osm import osm, osmxml
+
 
 class OsmTestCase(unittest.TestCase):
 

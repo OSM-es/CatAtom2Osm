@@ -1,12 +1,16 @@
+import os
+import random
 import unittest
+
 import mock
 from requests.exceptions import ConnectionError
-import random
-import os
+
 os.environ['LANGUAGE'] = 'C'
 
-from catatom2osm import config, catatom
 from test.tools import capture
+
+from catatom2osm import catatom, config
+
 
 def raiseException():
     raise ConnectionError

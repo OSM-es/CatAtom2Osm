@@ -1,6 +1,7 @@
 import sys
-from io import TextIOWrapper, BytesIO
 from contextlib import contextmanager
+from io import BytesIO, TextIOWrapper
+
 
 @contextmanager
 def capture(command, *args, **kwargs):

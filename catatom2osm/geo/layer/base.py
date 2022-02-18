@@ -1,20 +1,19 @@
 import logging
 import os
 import re
-from tqdm import tqdm
 
-from qgis.core import (
-    QgsCoordinateReferenceSystem, QgsCoordinateTransform, QgsExpression,
-    QgsFeature, QgsFeatureRequest, QgsFields, QgsGeometry, QgsProject,
-    QgsSpatialIndex, QgsVectorLayer, QgsVectorFileWriter, QgsWkbTypes,
-)
+from qgis.core import (QgsCoordinateReferenceSystem, QgsCoordinateTransform,
+                       QgsExpression, QgsFeature, QgsFeatureRequest, QgsFields,
+                       QgsGeometry, QgsProject, QgsSpatialIndex,
+                       QgsVectorFileWriter, QgsVectorLayer, QgsWkbTypes)
+from tqdm import tqdm
 
 from catatom2osm import config, osm, translate
 from catatom2osm.geo import BUFFER_SIZE
+from catatom2osm.geo.aux import get_attributes
 from catatom2osm.geo.geometry import Geometry
 from catatom2osm.geo.point import Point
-from catatom2osm.geo.aux import get_attributes
-from catatom2osm.geo.types import WKBPoint, WKBPolygon, WKBMultiPolygon
+from catatom2osm.geo.types import WKBMultiPolygon, WKBPoint, WKBPolygon
 from catatom2osm.report import instance as report
 
 log = logging.getLogger(config.app_name)

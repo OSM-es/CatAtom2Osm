@@ -4,12 +4,13 @@ CSV related help functions
 import csv
 import io
 import os
-from catatom2osm.config import encoding, delimiter
+
+from catatom2osm.config import delimiter, encoding
 
 
 def dict2csv(csv_path, a_dict, sort=None):
     """
-    Writes a dictionary to a csv file, optinally sorted by key (sort=0) or 
+    Writes a dictionary to a csv file, optinally sorted by key (sort=0) or
     value (sort=1)
     """
     with io.open(csv_path, 'w', encoding=encoding) as csv_file:

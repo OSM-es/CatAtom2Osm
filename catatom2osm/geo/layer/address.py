@@ -5,7 +5,7 @@ from collections import defaultdict
 from qgis.core import QgsField, QgsFields
 from qgis.PyQt.QtCore import QVariant
 
-from catatom2osm import csvtools, config, hgwnames, translate
+from catatom2osm import config, csvtools, hgwnames, translate
 from catatom2osm.geo import BUFFER_SIZE
 from catatom2osm.geo.aux import get_attributes
 from catatom2osm.geo.geometry import Geometry

@@ -3,6 +3,7 @@ import json
 
 from catatom2osm import config
 
+
 def all_tags(feature):
     """All fields to tags translations"""
     tags = {}

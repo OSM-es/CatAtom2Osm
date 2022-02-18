@@ -1,7 +1,5 @@
-from qgis.core import (
-    QgsCoordinateReferenceSystem, QgsFeature, QgsField, QgsFields, QgsGeometry,
-    QgsPoint,
-)
+from qgis.core import (QgsCoordinateReferenceSystem, QgsFeature, QgsField,
+                       QgsFields, QgsGeometry, QgsPoint)
 from qgis.PyQt.QtCore import QVariant
 
 from catatom2osm.geo.layer.base import BaseLayer

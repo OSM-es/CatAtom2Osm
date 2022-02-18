@@ -4,8 +4,8 @@ from qgis.core import QgsFeature, QgsField, QgsFields
 from qgis.PyQt.QtCore import QVariant
 
 from catatom2osm.geo.geometry import Geometry
-from catatom2osm.geo.types import WKBPoint
 from catatom2osm.geo.layer.base import BaseLayer
+from catatom2osm.geo.types import WKBPoint
 
 
 class DebugWriter():

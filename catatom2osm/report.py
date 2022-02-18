@@ -1,13 +1,13 @@
-# -*- coding: utf-8 -*-
 """Statistics report"""
-from collections import OrderedDict, Counter
-from datetime import datetime
 import io
 import json
 import locale
 import platform
-import psutil
 import time
+from collections import Counter, OrderedDict
+from datetime import datetime
+
+import psutil
 
 from catatom2osm import config
 

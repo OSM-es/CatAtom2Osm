@@ -1,9 +1,11 @@
-import unittest
-import mock
 import os
+import unittest
 
-from catatom2osm import config, cdau, geo
+import mock
+
+from catatom2osm import cdau, config, geo
 from catatom2osm.app import QgsSingleton
+
 qgs = QgsSingleton()
 os.environ['LANGUAGE'] = 'C'
 config.install_gettext('catato2osm', '')

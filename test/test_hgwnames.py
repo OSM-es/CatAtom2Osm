@@ -1,4 +1,5 @@
 import unittest
+
 import mock
 
 from catatom2osm import hgwnames

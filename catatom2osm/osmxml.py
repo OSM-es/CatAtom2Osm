@@ -1,8 +1,10 @@
 """OSM XML format serializer"""
 import logging
+
 from lxml import etree
 
 from catatom2osm import config, osm
+
 log = logging.getLogger(config.app_name)
 
 
@@ -51,7 +53,7 @@ def serialize(outfile, data):
             e.append(etree.Element('tag', dict(k=key, v=str(value))))
         write_elem(outfile, e)
     outfile.write("</osm>\n")
-        
+
 def deserialize(infile, data=None):
     """Generates or append to an OSM data set from OSM XML"""
     if data is None:

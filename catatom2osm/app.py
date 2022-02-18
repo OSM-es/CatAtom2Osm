@@ -1,23 +1,27 @@
 """
 Tool to convert INSPIRE data sets from the Spanish Cadastre ATOM Services to OSM files
 """
-from past.builtins import basestring  # qgis/utils.py:744: DeprecationWarning
-import io, codecs
+import codecs
 import gzip
+import io
 import logging
 import os
 import shutil
 from collections import defaultdict
 
-from qgis.core import QgsApplication, QgsGeometry, QgsVectorLayer
+# isort: off
+from past.builtins import basestring  # qgis/utils.py:744: DeprecationWarning
+# isort: on
+
 import qgis.utils
+from qgis.core import QgsApplication, QgsGeometry, QgsVectorLayer
 
 qgis.utils.uninstallErrorHook()
 qgis_utils = getattr(qgis.utils, 'QGis', getattr(qgis.utils, 'Qgis', None))
 from osgeo import gdal
 
-from catatom2osm import config, catatom, csvtools, geo, osm, osmxml, overpass
 from catatom2osm import cdau  # Used in get_auxiliary_addresses
+from catatom2osm import catatom, config, csvtools, geo, osm, osmxml, overpass
 from catatom2osm.report import instance as report
 
 log = logging.getLogger(config.app_name)
@@ -768,4 +772,3 @@ class CatAtom2Osm(object):
             msg, os.path.basename(osm_path), len(data.nodes), len(data.ways),
             len(data.relations),
         )
-

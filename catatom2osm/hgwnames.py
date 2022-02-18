@@ -2,8 +2,8 @@
 Parsing of highway names
 """
 import re
-from fuzzywuzzy import fuzz
-from fuzzywuzzy import process
+
+from fuzzywuzzy import fuzz, process
 
 from catatom2osm import config
 

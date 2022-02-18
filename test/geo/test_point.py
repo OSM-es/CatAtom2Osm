@@ -5,6 +5,7 @@ from qgis.core import QgsGeometry
 
 from catatom2osm.geo import Point
 
+
 class TestPoint(unittest.TestCase):
 
     def test_init(self):

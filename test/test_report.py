@@ -1,12 +1,14 @@
 import io
-import mock
-import unittest
-import os
 import locale
+import os
+import unittest
 from collections import Counter
 from datetime import datetime
 
+import mock
+
 from catatom2osm import config, osm, report
+
 os.environ['LANGUAGE'] = 'C'
 config.install_gettext('catato2osm', '')
 

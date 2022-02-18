@@ -1,5 +1,5 @@
 """OpenStreetMap data model"""
-from collections import defaultdict, Counter
+from collections import Counter, defaultdict
 
 # Number of significant decimal digits. 0 to cancel rounding. With a value 
 # greater than 7, JOSM give duplicated points errors

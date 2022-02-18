@@ -3,11 +3,12 @@ import logging
 import os
 import re
 import zipfile
-from lxml import etree
 
+from lxml import etree
 from qgis.core import QgsCoordinateReferenceSystem
 
 from catatom2osm import config, download, geo
+
 log = logging.getLogger(config.app_name)
 
 

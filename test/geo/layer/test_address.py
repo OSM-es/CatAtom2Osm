@@ -1,8 +1,8 @@
 import logging
-import mock
 import unittest
-from osgeo import gdal
 
+import mock
+from osgeo import gdal
 from qgis.core import QgsField, QgsVectorLayer
 from qgis.PyQt.QtCore import QVariant
 

@@ -1,18 +1,18 @@
 import logging
-from collections import defaultdict, Counter
-from tqdm import tqdm
+from collections import Counter, defaultdict
 
 from qgis.core import QgsFeature, QgsFeatureRequest, QgsFields, QgsGeometry
+from tqdm import tqdm
 
 from catatom2osm import config
-from catatom2osm.report import instance as report
 from catatom2osm.geo import BUFFER_SIZE
 from catatom2osm.geo.aux import is_inside, is_inside_area, merge_groups
 from catatom2osm.geo.debug import DebugWriter
 from catatom2osm.geo.geometry import Geometry
-from catatom2osm.geo.point import Point
 from catatom2osm.geo.layer.base import BaseLayer
+from catatom2osm.geo.point import Point
 from catatom2osm.geo.types import WKBPolygon
+from catatom2osm.report import instance as report
 
 log = logging.getLogger(config.app_name)
 

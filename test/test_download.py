@@ -1,7 +1,8 @@
 import unittest
+
 import mock
 
-from catatom2osm.download import get_response, wget, chunk_size
+from catatom2osm.download import chunk_size, get_response, wget
 
 
 class TestGetResponse(unittest.TestCase):

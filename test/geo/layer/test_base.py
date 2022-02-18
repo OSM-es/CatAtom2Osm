@@ -1,12 +1,10 @@
 import logging
-import mock
 import random
 import unittest
 
-from qgis.core import (
-    QgsCoordinateReferenceSystem, QgsFeature, QgsField, QgsGeometry,
-    QgsVectorFileWriter, QgsVectorLayer,
-)
+import mock
+from qgis.core import (QgsCoordinateReferenceSystem, QgsFeature, QgsField,
+                       QgsGeometry, QgsVectorFileWriter, QgsVectorLayer)
 from qgis.PyQt.QtCore import QVariant
 
 from catatom2osm import config

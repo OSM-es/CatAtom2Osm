@@ -10,6 +10,7 @@ if __name__ == "__main__":
 
     __unittest = True
 
-    from unittest.main import main, TestProgram#, USAGE_AS_MAIN
+    from unittest.main import TestProgram, main  # , USAGE_AS_MAIN
+
     #TestProgram.USAGE = USAGE_AS_MAIN
     main(module=None)
