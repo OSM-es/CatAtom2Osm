@@ -287,9 +287,6 @@ class PolygonLayer(BaseLayer):
         for feat in self.getFeatures():
             fid = feat.id()
             geom = feat.geometry()
-            if geom.area() < config.min_area and query_small_area(feat):
-                to_clean.append(fid)
-                continue
             badgeom = False
             pn = 0
             for polygon in Geometry.get_multipolygon(geom):
@@ -328,7 +325,6 @@ class PolygonLayer(BaseLayer):
                             else:
                                 badgeom = True
                                 to_clean.append(fid)
-                                if fid in to_change: del to_change[fid]
                                 if log.app_level <= logging.DEBUG:
                                     debshp.addFeature(f)
                             break
@@ -367,6 +363,10 @@ class PolygonLayer(BaseLayer):
                                     debshp2.add_point(va, 'va %d %d %d %f' % (fid, ndx, ndxa, angle_a))
                                     debshp2.add_point(v, 'v %d %d %d %s' % (fid, ndx, len(ring), valid))
                 geometries[fid] = geom
+            if geom.area() < config.min_area and query_small_area(feat):
+                to_clean.append(fid)
+                if fid in to_change:
+                    del to_change[fid]
             pbar.update()
         pbar.close()
         if to_move:
