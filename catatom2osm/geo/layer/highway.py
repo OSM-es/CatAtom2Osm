@@ -12,7 +12,7 @@ from catatom2osm.geo.layer.base import BaseLayer
 
 
 class HighwayLayer(BaseLayer):
-    """Class for OSM highways"""
+    """Class for OSM highways."""
 
     def __init__(self, path="LineString", baseName="highway", providerLib="memory"):
         super(HighwayLayer, self).__init__(path, baseName, providerLib)
@@ -26,7 +26,7 @@ class HighwayLayer(BaseLayer):
         self.setCrs(QgsCoordinateReferenceSystem.fromEpsgId(4326))
 
     def read_from_osm(self, data):
-        """Get features from a osm dataset"""
+        """Get features from a osm dataset."""
         to_add = []
         for r in data.relations:
             for m in r.members:

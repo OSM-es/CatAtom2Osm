@@ -15,7 +15,7 @@ log = logging.getLogger(config.app_name)
 
 
 class AddressLayer(BaseLayer):
-    """Class for address"""
+    """Class for addresses."""
 
     def __init__(
         self, path="Point", baseName="address", providerLib="memory", source_date=None
@@ -51,23 +51,23 @@ class AddressLayer(BaseLayer):
 
     @staticmethod
     def is_address(feature):
-        """Address features have '.' but not '_' in its localId field"""
+        """Address features have '.' but not '_' in its localId field."""
         return "." in feature["localId"] and "_" not in feature["localId"]
 
     @staticmethod
     def get_id(feat):
-        """Trim to parcel id"""
+        """Trim to parcel id."""
         return feat["localId"].split("_")[0].split(".")[-1]
 
     def to_osm(self, data=None, tags={}, upload="never"):
-        """Export to OSM"""
+        """Export to OSM."""
         return super(AddressLayer, self).to_osm(
             translate.address_tags, data, tags=tags, upload=upload
         )
 
     def conflate(self, current_address):
         """
-        Delete address existing in current_address
+        Delete address existing in current_address.
 
         Args:
             current_address (OSM): dataset
@@ -93,7 +93,7 @@ class AddressLayer(BaseLayer):
 
     def get_highway_names(self, highway=None):
         """
-        Returns a dictionary with the translation for each street name.
+        Return a dictionary with the translation for each street name.
 
         Args:
             highway (HighwayLayer): Current OSM highway data for conflation.

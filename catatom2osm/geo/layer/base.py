@@ -30,7 +30,7 @@ log = logging.getLogger(config.app_name)
 
 
 class BaseLayer(QgsVectorLayer):
-    """Base class for application layers"""
+    """Base class for application layers."""
 
     def __init__(self, path, baseName, providerLib="ogr"):
         super(BaseLayer, self).__init__(path, baseName, providerLib)
@@ -87,8 +87,7 @@ class BaseLayer(QgsVectorLayer):
 
     def copy_feature(self, feature, rename=None, resolve=None):
         r"""
-        Return a copy of feature renaming attributes or resolving xlink
-        references.
+        Return a copy of feature renaming attributes or resolving xlink references.
 
         Args:
             feature (QgsFeature): Source feature
@@ -153,7 +152,8 @@ class BaseLayer(QgsVectorLayer):
         return dst_ft
 
     def append(self, layer, rename=None, resolve=None, query=None, **kwargs):
-        """Copy all features from layer.
+        """
+        Copy all features from layer.
 
         Args:
             layer (QgsVectorLayer): Source layer
@@ -164,7 +164,6 @@ class BaseLayer(QgsVectorLayer):
             kwargs: aditional arguments for query function
 
         Examples:
-
             >>> query = lambda feat, kwargs: feat['foo']=='bar'
             Will copy only features with a value 'bar' in the field 'foo'.
             >>> query = lambda feat, kwargs: layer.is_inside(feat, kwargs['zone'])
@@ -242,8 +241,9 @@ class BaseLayer(QgsVectorLayer):
         prefix="",
     ):
         """
-        Replaces qgis table join mechanism becouse I'm not able to work with it
-        in standalone script mode (without GUI).
+        Replace qgis table join mechanism.
+
+        I'm not able to work with it in standalone script mode (without GUI).
 
         Args:
             source_layer (QgsVectorLayer): Source layer.
@@ -296,7 +296,7 @@ class BaseLayer(QgsVectorLayer):
 
     def translate_field(self, field_name, translations, clean=True):
         """
-        Transform the values of a field
+        Transform the values of a field.
 
         Args:
             field_name (str): Name of the field to transform
@@ -321,16 +321,18 @@ class BaseLayer(QgsVectorLayer):
         return len(to_clean)
 
     def get_index(self):
-        """Returns a QgsSpatialIndex of all features in this layer (overpass
-        QGIS exception for void layers)"""
+        """Return a QgsSpatialIndex of all features in this layer."""
         if self.featureCount() > 0:
             return QgsSpatialIndex(self.getFeatures())
-        else:
+        else:  # QGIS exception for void layers).
             return QgsSpatialIndex()
 
     def bounding_box(self, expression=None):
-        """Returns bounding box in overpass format of matching features using
-        an expression or all features if expression is None."""
+        """
+        Return bounding box in overpass format.
+
+        Use features matching expression or all features if expression is None.
+        """
         if expression is None:
             self.selectAll()
         else:
@@ -340,9 +342,7 @@ class BaseLayer(QgsVectorLayer):
         return self.get_overpass_bbox(bbox)
 
     def get_overpass_bbox(self, bbox):
-        """
-        bbox is transformed to EPSG 4326 and returns str in overpass format.
-        """
+        """Transform bbox to EPSG 4326 and returns str in overpass format."""
         if bbox.isEmpty():
             bbox = None
         else:
@@ -368,7 +368,7 @@ class BaseLayer(QgsVectorLayer):
         overwrite=True,
         target_crs_id=None,
     ):
-        """Write layer to file
+        """Write layer to file.
 
         Args:
             path (str): Path of the output file
@@ -399,7 +399,7 @@ class BaseLayer(QgsVectorLayer):
         upload="never",
     ):
         """
-        Export this layer to an Osm data set
+        Export this layer to an Osm data set.
 
         Args:
             tags_translation (function): Function to translate fields to tags.
@@ -457,7 +457,7 @@ class BaseLayer(QgsVectorLayer):
         return data
 
     def search(self, expression=""):
-        """Returns a features iterator for this search expression"""
+        """Return a features iterator for this search expression."""
         if expression == "":
             return self.getFeatures()
         exp = QgsExpression(expression)
@@ -465,7 +465,7 @@ class BaseLayer(QgsVectorLayer):
         return self.getFeatures(request)
 
     def count(self, expression="", unique=""):
-        """Returns number of features for this search expression"""
+        """Return number of features for this search expression."""
         count = 0
         exists = set()
         for f in self.search(expression):
@@ -478,7 +478,7 @@ class BaseLayer(QgsVectorLayer):
         return count
 
     def get_progressbar(self, description, total=None):
-        """Return progress bar with 'description' for 'total' iterations"""
+        """Return progress bar with 'description' for 'total' iterations."""
         leave = log.app_level <= logging.DEBUG
         fn = os.path.basename(self.source())
         if self.writer.name() == "memory":

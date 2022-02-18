@@ -1,4 +1,4 @@
-"""Entry point to run test with coverage.py"""
+"""Entry point to run test with coverage.py."""
 
 # copied directly from 2.7's unittest/__main__.py b/c coverage can't do -m
 

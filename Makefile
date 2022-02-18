@@ -80,6 +80,22 @@ uninstall:  ## Remove application simbolic link
 all: clean coverage api html msg  ## Do clean, api, coverage, html and msg
 .PHONY: all
 
+.PHONY: check
+check:   ## Show the changes that the code formatters would apply.
+	black .
+	isort --diff .
+
+.PHONY: format
+format:   ## Run code formatters and apply it's changes.
+	black .
+	isort -y .
+
+.PHONY: style
+style:   ## Check code styling.
+	flake8
+	pydocstyle
+	isort --check-only -rc .
+
 .PHONY: build
 build:  ## Build docker image
 	@docker build -t catatom2osm .
