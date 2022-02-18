@@ -13,7 +13,8 @@ def all_tags(feature):
 def address_tags(feature):
     """Translatios for address layer fields"""
     tags = {}
-    hgw_name = feature['TN_text'].strip()
+    hgw_name = feature['TN_text'] or ''
+    hgw_name = hgw_name.strip()
     if len(hgw_name) == 0:
     	return tags
     hgw_type = hgw_name.split(' ')[0].lower()

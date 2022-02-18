@@ -102,7 +102,8 @@ class AddressLayer(BaseLayer):
             index = highway.get_index()
             features = {feat.id(): feat for feat in highway.getFeatures()}
             for f in self.getFeatures():
-                highway_names[f['TN_text']].append(f.geometry().asPoint())
+                if f['TN_text']:
+                    highway_names[f['TN_text']].append(f.geometry().asPoint())
             for name, points in highway_names.items():
                 bbox = Geometry.fromMultiPointXY(points).boundingBox()
                 bbox.grow(config.bbox_buffer * 100000)
