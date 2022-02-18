@@ -9,7 +9,7 @@ chunk_size = 1024
 
 
 def get_response(url, stream=False):
-    """Try many times to get a http response or raise exception"""
+    """Try many times to get a http response or raise exception."""
     for i in range(number_of_retries):
         response = requests.get(url, stream=stream, timeout=default_timeout)
         if response.status_code == requests.codes.ok:
@@ -18,7 +18,7 @@ def get_response(url, stream=False):
 
 
 def wget(url, filename):
-    """Download url to filename"""
+    """Download url to filename."""
     response = get_response(url, stream=True)
     total = 0
     if "Content-Length" in response.headers:

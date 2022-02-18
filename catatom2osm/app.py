@@ -1,6 +1,4 @@
-"""
-Tool to convert INSPIRE data sets from the Spanish Cadastre ATOM Services to OSM files
-"""
+"""Main application processes."""
 import codecs
 import gzip
 import io
@@ -32,7 +30,7 @@ tasks_folder = "tasks"
 
 
 class QgsSingleton(QgsApplication):
-    """Keeps a unique instance of QGIS for the application (and tests)"""
+    """Keep a unique instance of QGIS for the application (and tests)."""
 
     _qgs = None
 
@@ -51,14 +49,11 @@ class QgsSingleton(QgsApplication):
 
 
 class CatAtom2Osm(object):
-    """
-    Main application class for a tool to convert the data sets from the
-    Spanish Cadastre ATOM Services to OSM files.
-    """
+    """Main application class."""
 
     def __init__(self, a_path, options):
         """
-        Constructor.
+        Application constructor.
 
         Args:
             a_path (str): Directory where the source files are located.
@@ -92,7 +87,7 @@ class CatAtom2Osm(object):
 
     @staticmethod
     def get_task_comment(label):
-        """Return comment for task with this label"""
+        """Return comment for task with this label."""
         comment = " ".join(
             (
                 config.changeset_tags["comment"],
@@ -104,7 +99,7 @@ class CatAtom2Osm(object):
         return comment
 
     def run(self):
-        """Launches the app"""
+        """Launch the app processing."""
         if self.options.comment:
             self.add_comments()
             return
@@ -137,7 +132,7 @@ class CatAtom2Osm(object):
         self.finish()
 
     def add_comments(self):
-        """Recover missing task files metadata after Josm editing."""
+        """Recover missing task files metadata after JOSM editing."""
         folder = os.path.basename(self.tasks_path)
         report_path = self.cat.get_path("report.json")
         if not os.path.exists(report_path):
@@ -167,7 +162,7 @@ class CatAtom2Osm(object):
             log.info(_("No tasks found"))
 
     def get_split(self):
-        """Get boundary file for splitting"""
+        """Get boundary file for splitting."""
         self.split = None
         if self.options.split:
             fn = self.options.split
@@ -184,7 +179,7 @@ class CatAtom2Osm(object):
                 raise ValueError(msg)
 
     def get_parcel(self):
-        """Get parcels dataset"""
+        """Get parcels dataset."""
         parcel_gml = self.cat.read("cadastralparcel")
         report.cat_mun = self.cat.cat_mun
         self.parcel = geo.ParcelLayer(self.cat.zip_code)
@@ -211,7 +206,7 @@ class CatAtom2Osm(object):
             raise ValueError(_("No parcels data"))
 
     def get_building(self):
-        """Merge building, parts and pools"""
+        """Merge building, parts and pools."""
         building_gml = self.cat.read("building")
         other_gml = self.cat.read("otherconstruction", True)
         self.parcel.delete_void_parcels(building_gml, other_gml)
@@ -280,9 +275,7 @@ class CatAtom2Osm(object):
         report.tasks_u = tasks_u
 
     def get_tasks(self, source):
-        """
-        Put each source feature into a task layer according to their localId.
-        """
+        """Put each source feature into a task layer."""
         if os.path.exists(self.tasks_path):
             for fn in os.listdir(self.tasks_path):
                 if os.path.isfile(fn):
@@ -310,7 +303,7 @@ class CatAtom2Osm(object):
         return tasks
 
     def get_zoning(self):
-        """Get zoning data"""
+        """Get zoning data."""
         zoning_gml = self.cat.read("cadastralzoning")
         self.rustic_zoning = geo.ZoningLayer(baseName="rusticzoning")
         self.urban_zoning = geo.ZoningLayer(baseName="urbanzoning")
@@ -333,7 +326,7 @@ class CatAtom2Osm(object):
         log.info(_("Municipality: '%s'"), name)
 
     def output_zoning(self):
-        """Generates project zoning file"""
+        """Generate project zoning file."""
         if not self.options.parcel:
             self.parcel.simplify()
             self.parcel.set_muncode(self.cat.zip_code)
@@ -351,7 +344,7 @@ class CatAtom2Osm(object):
         del bpoly
 
     def process_building(self):
-        """Process all buildings dataset"""
+        """Process all buildings dataset."""
         self.building.remove_outside_parts()
         self.building.remove_parts_wo_building()
         self.building.explode_multi_parts()
@@ -363,7 +356,7 @@ class CatAtom2Osm(object):
             self.building.validate(report.max_level, report.min_level)
 
     def process_parcel(self):
-        """Process parcels dataset"""
+        """Process parcels dataset."""
         self.parcel.set_zones(self.urban_zoning)
         self.parcel.set_zones(self.rustic_zoning)
         self.parcel.set_missing_zones()
@@ -377,7 +370,7 @@ class CatAtom2Osm(object):
             self.tasks[k] = tasks2.get(v, v)
 
     def finish(self):
-        """Generates final report"""
+        """Generate final report."""
         options = self.options
         if log.app_level > logging.DEBUG:
             geo.BaseLayer.delete_shp(self.cat.get_path("parcel.shp"))
@@ -400,13 +393,13 @@ class CatAtom2Osm(object):
         log.info(_("Finished!"))
 
     def exit(self):
-        """Ends properly"""
+        """Exit properly."""
         for propname in list(self.__dict__.keys()):
             if isinstance(getattr(self, propname), QgsVectorLayer):
                 delattr(self, propname)
 
     def get_address(self):
-        """Reads Address GML dataset"""
+        """Read Address GML dataset."""
         address_gml = self.cat.read("address")
         report.address_date = address_gml.source_date
         if address_gml.writer.fieldNameIndex("component_href") == -1:
@@ -446,7 +439,7 @@ class CatAtom2Osm(object):
         self.get_translations(self.address)
 
     def process_address(self):
-        """Fix street names, conflate and move addresses"""
+        """Fix street names, conflate and move addresses."""
         highway_names = self.get_translations(self.address)
         ia = self.address.translate_field("TN_text", highway_names)
         if ia > 0:
@@ -460,7 +453,7 @@ class CatAtom2Osm(object):
         self.address_osm = self.address.to_osm()
 
     def stop_address(self):
-        """Save current processing status and exits"""
+        """Save current processing status and exits."""
         self.export_layer(self.parcel, "parcel.shp", driver_name="ESRI Shapefile")
         self.export_layer(self.building, "building.shp", driver_name="ESRI Shapefile")
         self.address.reproject()
@@ -475,7 +468,7 @@ class CatAtom2Osm(object):
         log.info(msg)
 
     def resume_address(self):
-        """Resume processing for second run of addresses dataset"""
+        """Resume processing for second run of addresses dataset."""
         report.from_file(self.cat.get_path("report.json"))
         fn = self.cat.get_path("tasks.csv")
         self.tasks = csvtools.csv2dict(fn, exists=True)
@@ -505,7 +498,7 @@ class CatAtom2Osm(object):
         del address
 
     def get_auxiliary_addresses(self):
-        """If exists, reads and conflate an auxiliary addresses data source"""
+        """Read and conflate auxiliary sources of addresses data."""
         for source in list(config.aux_address.keys()):
             if self.cat.zip_code[:2] in config.aux_address[source]:
                 aux_source = globals()[source]
@@ -572,10 +565,12 @@ class CatAtom2Osm(object):
 
     def get_translations(self, address):
         """
-        If there exists the configuration file 'highway_types.csv', read it,
-        else write one with default values. If don't exists the translations file
-        'highway_names.csv', creates one parsing current OSM highways data, else
-        reads and returns it as a dictionary.
+        Get the translate file.
+
+        If there exists the translation file 'highway_types.csv', read it,
+        else write one with default values. If the translations file
+        'highway_names.csv' don't exist, creates one parsing current OSM
+        highways data, else reads and returns it as a dictionary.
 
         * 'highway_types.csv' List of osm elements in json format located in the
           application path that contains translations from abbreviations to full
@@ -604,7 +599,7 @@ class CatAtom2Osm(object):
         return highway_names
 
     def get_highway(self):
-        """Gets OSM highways needed for street names conflation"""
+        """Get OSM highways for street names conflation."""
         ql = [
             'way["highway"]["name"]',
             'relation["highway"]["name"]',
@@ -618,7 +613,7 @@ class CatAtom2Osm(object):
         return highway
 
     def get_current_ad_osm(self):
-        """Gets OSM address for address conflation"""
+        """Get OSM address for conflation."""
         ql = [
             'node["addr:street"]["addr:housenumber"]["entrance"]',
             'wr["addr:street"]["addr:housenumber"][~"building"~".*"]',
@@ -647,8 +642,9 @@ class CatAtom2Osm(object):
 
     def move_project(self):
         """
-        Move to tasks all files needed for the project for backup in the
-        repository. Use a subdirectory if it's a split municipality.
+        Move to tasks all files needed for the backup the in the repository.
+
+        Use a subdirectory if it's a split municipality.
         """
         fn = self.options.split or ""
         bkp_dir = os.path.splitext(os.path.basename(fn))[0]
@@ -698,8 +694,9 @@ class CatAtom2Osm(object):
 
     def read_osm(self, *paths, **kwargs):
         """
-        Reads a OSM data set from a OSM XML file. If the file not exists,
-        downloads data from overpass using ql query
+        Read an OSM data set from an OSM XML file.
+
+        If the file not exists, downloads data from overpass using ql query.
 
         Args:
             paths (str): input filename components relative to self.path
@@ -745,7 +742,7 @@ class CatAtom2Osm(object):
 
     def write_osm(self, data, *paths):
         """
-        Generates a OSM XML file for a OSM data set.
+        Generate an OSM XML file for an OSM data set.
 
         Args:
             data (Osm): OSM data set

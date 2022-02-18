@@ -6,7 +6,7 @@ from catatom2osm import config
 
 
 class Point(QgsPointXY):
-    """Extends QgsPoint with some utility methods"""
+    """Extend QgsPoint with some utility methods."""
 
     def __init__(self, arg1, arg2=None):
         if isinstance(arg1, QgsPoint):
@@ -19,15 +19,17 @@ class Point(QgsPointXY):
             super(Point, self).__init__(arg1, arg2)
 
     def boundingBox(self, radius):
-        """Returns a bounding box of 2*radius centered in point."""
+        """Return a bounding box of 2*radius centered in point."""
         return QgsRectangle(
             self.x() - radius, self.y() - radius, self.x() + radius, self.y() + radius
         )
 
     def get_angle(self, geom):
         """
-        For the vertex in a geometry nearest to this point, give the angle
-        between its adjacent vertexs.
+        Get angle for nearest vertex in a geometry.
+
+        For the vertex in geom nearest to this point, give the angle between
+        its adjacent vertexs.
 
         Args:
             geom (QgsGeometry): Geometry to test.
@@ -49,6 +51,8 @@ class Point(QgsPointXY):
         cath_thr=config.dist_thr,
     ):
         """
+        Test if nearest vertex in a geometry is a corner.
+
         For the vertex in a geometry nearest to this point, give context to
         determine if it is a corner (the angle differs by more than straight_thr
         of 180 and if the distance from the vertex to the segment formed by
@@ -85,6 +89,8 @@ class Point(QgsPointXY):
         threshold=config.dist_inv,
     ):
         """
+        Test if nearest vertex in geometry is spike.
+
         For the vertex in a geometry nearest to this point, give context to
         determine if its a zig-zag or a spike. It's a zig-zag if both the angles
         of this vertex and the closest adjacents are acute. It's a spike if the

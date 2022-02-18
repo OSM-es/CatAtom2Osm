@@ -1,6 +1,4 @@
-"""
-Parsing of highway names
-"""
+"""Parsing of highway names."""
 import re
 
 from fuzzywuzzy import fuzz, process
@@ -47,8 +45,9 @@ def parse(name):
 
 def match(name, choices):
     """
-    Fuzzy search best match for string name in iterable choices, if the result
-    is not good enough returns the name parsed
+    Fuzzy search best match for string name in iterable choices.
+
+    If the result is not good enough returns the name parsed.
 
     Args:
         name (str): String to look for
@@ -70,7 +69,7 @@ def match(name, choices):
 
 def dsmatch(name, dataset, fn):
     """
-    Fuzzy search best matching object for string name in dataset
+    Fuzzy search best matching object for string name in dataset.
 
     Args:
         name (str): String to look for

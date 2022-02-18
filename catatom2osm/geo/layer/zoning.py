@@ -15,7 +15,7 @@ def level_query(feat, kwargs):
 
 
 class ZoningLayer(PolygonLayer):
-    """Class for cadastral zoning"""
+    """Class for cadastral zoning."""
 
     upattern = "{:05}"
     rpattern = "{:03}"
@@ -62,7 +62,7 @@ class ZoningLayer(PolygonLayer):
 
     @staticmethod
     def format_label(feature):
-        """Format a zone label"""
+        """Format a zone label."""
         label = feature["label"]
         level = ZoningLayer.check_zone(feature, "M")
         pattern = ZoningLayer.upattern if level else ZoningLayer.rpattern
@@ -73,12 +73,12 @@ class ZoningLayer(PolygonLayer):
         return label
 
     def append(self, layer, rename=None, resolve=None, query=level_query, **kwargs):
-        """Append filtering by level: 'M' Urban, 'P' Rustic"""
+        """Append filtering by level: 'M' Urban, 'P' Rustic."""
         super(ZoningLayer, self).append(layer, rename, resolve, query, **kwargs)
 
     # TODO renovar
     def export_poly(self, filename):
-        """Export as polygon file for Osmosis"""
+        """Export as polygon file for Osmosis."""
         mun = Geometry.merge_adjacent_features([f for f in self.getFeatures()])
         mun = Geometry.get_multipolygon(mun)
         with open(filename, "w") as fo:

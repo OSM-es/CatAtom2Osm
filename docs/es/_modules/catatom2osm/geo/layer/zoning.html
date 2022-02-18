@@ -14,7 +14,7 @@
   <link rel="stylesheet" type="text/css" href="../../../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.geo.layer.zoning &#8212; documentación de CatAtom2Osm - 2.6.0</title>
+    <title>catatom2osm.geo.layer.zoning &#8212; documentación de CatAtom2Osm - 2.6.3.dev.5</title>
     <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/guzzle.css" />
     <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">documentación de CatAtom2Osm - 2.6.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">documentación de CatAtom2Osm - 2.6.3.dev.5</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Código de módulo</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.geo.layer.zoning</a></li> 
       </ul>
@@ -81,106 +81,101 @@
             
   <h1>Código fuente para catatom2osm.geo.layer.zoning</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">import</span> <span class="nn">os</span>
 
-<span class="kn">from</span> <span class="nn">qgis.core</span> <span class="k">import</span> <span class="n">QgsFeature</span><span class="p">,</span> <span class="n">QgsField</span>
+<span class="kn">from</span> <span class="nn">qgis.core</span> <span class="k">import</span> <span class="n">QgsField</span>
 <span class="kn">from</span> <span class="nn">qgis.PyQt.QtCore</span> <span class="k">import</span> <span class="n">QVariant</span>
 
 <span class="kn">from</span> <span class="nn">catatom2osm</span> <span class="k">import</span> <span class="n">config</span>
-<span class="kn">from</span> <span class="nn">catatom2osm.geo</span> <span class="k">import</span> <span class="n">BUFFER_SIZE</span>
-<span class="kn">from</span> <span class="nn">catatom2osm.geo.aux</span> <span class="k">import</span> <span class="n">get_attributes</span><span class="p">,</span> <span class="n">is_inside</span>
 <span class="kn">from</span> <span class="nn">catatom2osm.geo.geometry</span> <span class="k">import</span> <span class="n">Geometry</span>
-<span class="kn">from</span> <span class="nn">catatom2osm.geo.layer.cons</span> <span class="k">import</span> <span class="n">ConsLayer</span>
 <span class="kn">from</span> <span class="nn">catatom2osm.geo.layer.polygon</span> <span class="k">import</span> <span class="n">PolygonLayer</span>
 
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">app_name</span><span class="p">)</span>
 
-<span class="n">level_query</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">f</span><span class="p">,</span> <span class="n">kw</span><span class="p">:</span> <span class="n">ZoningLayer</span><span class="o">.</span><span class="n">check_zone</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">kw</span><span class="p">[</span><span class="s1">&#39;level&#39;</span><span class="p">])</span>
+
+<div class="viewcode-block" id="level_query"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.zoning.html#catatom2osm.geo.layer.zoning.level_query">[documentos]</a><span class="k">def</span> <span class="nf">level_query</span><span class="p">(</span><span class="n">feat</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">ZoningLayer</span><span class="o">.</span><span class="n">check_zone</span><span class="p">(</span><span class="n">feat</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;level&quot;</span><span class="p">])</span></div>
 
 
 <div class="viewcode-block" id="ZoningLayer"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.zoning.html#catatom2osm.geo.layer.zoning.ZoningLayer">[documentos]</a><span class="k">class</span> <span class="nc">ZoningLayer</span><span class="p">(</span><span class="n">PolygonLayer</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Class for cadastral zoning&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Class for cadastral zoning.&quot;&quot;&quot;</span>
 
-    <span class="n">upattern</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{:05}</span><span class="s1">&#39;</span>
-    <span class="n">rpattern</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{:03}</span><span class="s1">&#39;</span>
+    <span class="n">upattern</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{:05}</span><span class="s2">&quot;</span>
+    <span class="n">rpattern</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{:03}</span><span class="s2">&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">path</span><span class="o">=</span><span class="s2">&quot;MultiPolygon&quot;</span><span class="p">,</span>
         <span class="n">baseName</span><span class="o">=</span><span class="s2">&quot;cadastralzoning&quot;</span><span class="p">,</span>
         <span class="n">providerLib</span><span class="o">=</span><span class="s2">&quot;memory&quot;</span><span class="p">,</span>
-        <span class="n">source_date</span><span class="o">=</span><span class="kc">None</span>
+        <span class="n">source_date</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ZoningLayer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">baseName</span><span class="p">,</span> <span class="n">providerLib</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">()</span><span class="o">.</span><span class="n">isEmpty</span><span class="p">():</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">addAttributes</span><span class="p">([</span>
-                <span class="n">QgsField</span><span class="p">(</span><span class="s1">&#39;localId&#39;</span><span class="p">,</span> <span class="n">QVariant</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="nb">len</span><span class="o">=</span><span class="mi">254</span><span class="p">),</span>
-                <span class="n">QgsField</span><span class="p">(</span><span class="s1">&#39;label&#39;</span><span class="p">,</span> <span class="n">QVariant</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="nb">len</span><span class="o">=</span><span class="mi">254</span><span class="p">),</span>
-                <span class="n">QgsField</span><span class="p">(</span><span class="s1">&#39;levelName&#39;</span><span class="p">,</span> <span class="n">QVariant</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="nb">len</span><span class="o">=</span><span class="mi">254</span><span class="p">),</span>
-                <span class="n">QgsField</span><span class="p">(</span><span class="s1">&#39;zipcode&#39;</span><span class="p">,</span> <span class="n">QVariant</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="nb">len</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span>
-            <span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">addAttributes</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">QgsField</span><span class="p">(</span><span class="s2">&quot;localId&quot;</span><span class="p">,</span> <span class="n">QVariant</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="nb">len</span><span class="o">=</span><span class="mi">254</span><span class="p">),</span>
+                    <span class="n">QgsField</span><span class="p">(</span><span class="s2">&quot;label&quot;</span><span class="p">,</span> <span class="n">QVariant</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="nb">len</span><span class="o">=</span><span class="mi">254</span><span class="p">),</span>
+                    <span class="n">QgsField</span><span class="p">(</span><span class="s2">&quot;levelName&quot;</span><span class="p">,</span> <span class="n">QVariant</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="nb">len</span><span class="o">=</span><span class="mi">254</span><span class="p">),</span>
+                    <span class="n">QgsField</span><span class="p">(</span><span class="s2">&quot;zipcode&quot;</span><span class="p">,</span> <span class="n">QVariant</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="nb">len</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">updateFields</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rename</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;localId&#39;</span><span class="p">:</span> <span class="s1">&#39;inspireId_localId&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;levelName&#39;</span><span class="p">:</span> <span class="s1">&#39;LocalisedCharacterString&#39;</span><span class="p">,</span>
+            <span class="s2">&quot;localId&quot;</span><span class="p">:</span> <span class="s2">&quot;inspireId_localId&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;levelName&quot;</span><span class="p">:</span> <span class="s2">&quot;LocalisedCharacterString&quot;</span><span class="p">,</span>
         <span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">source_date</span> <span class="o">=</span> <span class="n">source_date</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">task_number</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">task_pattern</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rpattern</span>
-        <span class="k">if</span> <span class="n">baseName</span> <span class="o">==</span> <span class="s1">&#39;urbanzoning&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">baseName</span> <span class="o">==</span> <span class="s2">&quot;urbanzoning&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">task_pattern</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">upattern</span>
 
 <div class="viewcode-block" id="ZoningLayer.check_zone"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.zoning.html#catatom2osm.geo.layer.zoning.ZoningLayer.check_zone">[documentos]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">check_zone</span><span class="p">(</span><span class="n">feat</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">level</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">True</span>
-        <span class="k">if</span> <span class="n">feat</span><span class="o">.</span><span class="n">fieldNameIndex</span><span class="p">(</span><span class="s1">&#39;levelName&#39;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">zone_type</span> <span class="o">=</span> <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;LocalisedCharacterString&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">feat</span><span class="o">.</span><span class="n">fieldNameIndex</span><span class="p">(</span><span class="s2">&quot;levelName&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">zone_type</span> <span class="o">=</span> <span class="n">feat</span><span class="p">[</span><span class="s2">&quot;LocalisedCharacterString&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">feat</span><span class="p">[</span><span class="s1">&#39;levelName&#39;</span><span class="p">])</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
-                <span class="n">zone_type</span> <span class="o">=</span> <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;levelName&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">zone_type</span> <span class="o">=</span> <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;levelName&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">feat</span><span class="p">[</span><span class="s2">&quot;levelName&quot;</span><span class="p">])</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
+                <span class="n">zone_type</span> <span class="o">=</span> <span class="n">feat</span><span class="p">[</span><span class="s2">&quot;levelName&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">zone_type</span> <span class="o">=</span> <span class="n">feat</span><span class="p">[</span><span class="s2">&quot;levelName&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">level</span> <span class="o">==</span> <span class="n">zone_type</span></div>
 
 <div class="viewcode-block" id="ZoningLayer.format_label"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.zoning.html#catatom2osm.geo.layer.zoning.ZoningLayer.format_label">[documentos]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">format_label</span><span class="p">(</span><span class="n">feature</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Format a zone label&quot;&quot;&quot;</span>
-        <span class="n">label</span> <span class="o">=</span> <span class="n">feature</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span>
-        <span class="n">level</span> <span class="o">=</span> <span class="n">ZoningLayer</span><span class="o">.</span><span class="n">check_zone</span><span class="p">(</span><span class="n">feature</span><span class="p">,</span> <span class="s1">&#39;M&#39;</span><span class="p">)</span>
+        <span class="sd">&quot;&quot;&quot;Format a zone label.&quot;&quot;&quot;</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="n">feature</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span>
+        <span class="n">level</span> <span class="o">=</span> <span class="n">ZoningLayer</span><span class="o">.</span><span class="n">check_zone</span><span class="p">(</span><span class="n">feature</span><span class="p">,</span> <span class="s2">&quot;M&quot;</span><span class="p">)</span>
         <span class="n">pattern</span> <span class="o">=</span> <span class="n">ZoningLayer</span><span class="o">.</span><span class="n">upattern</span> <span class="k">if</span> <span class="n">level</span> <span class="k">else</span> <span class="n">ZoningLayer</span><span class="o">.</span><span class="n">rpattern</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">label</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">feature</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]))</span>
-        <span class="k">except</span><span class="p">:</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">feature</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]))</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
             <span class="k">pass</span>
         <span class="k">return</span> <span class="n">label</span></div>
 
-<div class="viewcode-block" id="ZoningLayer.append"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.zoning.html#catatom2osm.geo.layer.zoning.ZoningLayer.append">[documentos]</a>    <span class="k">def</span> <span class="nf">append</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">layer</span><span class="p">,</span> <span class="n">rename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">resolve</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="n">level_query</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
-    <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Append filtering by level: &#39;M&#39; Urban, &#39;P&#39; Rustic&quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">ZoningLayer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-            <span class="n">layer</span><span class="p">,</span> <span class="n">rename</span><span class="p">,</span> <span class="n">resolve</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
-        <span class="p">)</span></div>
+<div class="viewcode-block" id="ZoningLayer.append"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.zoning.html#catatom2osm.geo.layer.zoning.ZoningLayer.append">[documentos]</a>    <span class="k">def</span> <span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layer</span><span class="p">,</span> <span class="n">rename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">resolve</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="n">level_query</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Append filtering by level: &#39;M&#39; Urban, &#39;P&#39; Rustic.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ZoningLayer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="n">rename</span><span class="p">,</span> <span class="n">resolve</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
-    <span class="c1">#TODO renovar</span>
+    <span class="c1"># TODO renovar</span>
 <div class="viewcode-block" id="ZoningLayer.export_poly"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.zoning.html#catatom2osm.geo.layer.zoning.ZoningLayer.export_poly">[documentos]</a>    <span class="k">def</span> <span class="nf">export_poly</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Export as polygon file for Osmosis&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Export as polygon file for Osmosis.&quot;&quot;&quot;</span>
         <span class="n">mun</span> <span class="o">=</span> <span class="n">Geometry</span><span class="o">.</span><span class="n">merge_adjacent_features</span><span class="p">([</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">()])</span>
         <span class="n">mun</span> <span class="o">=</span> <span class="n">Geometry</span><span class="o">.</span><span class="n">get_multipolygon</span><span class="p">(</span><span class="n">mun</span><span class="p">)</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fo</span><span class="p">:</span>
-            <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;admin_boundary</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fo</span><span class="p">:</span>
+            <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;admin_boundary</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">mun</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">ring</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">part</span><span class="p">):</span>
                     <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
-                    <span class="n">prefix</span> <span class="o">=</span> <span class="s1">&#39;!&#39;</span> <span class="k">if</span> <span class="n">j</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
-                    <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">prefix</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                    <span class="n">prefix</span> <span class="o">=</span> <span class="s2">&quot;!&quot;</span> <span class="k">if</span> <span class="n">j</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+                    <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">prefix</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
                     <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">ring</span><span class="p">:</span>
-                        <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%f</span><span class="s1"> </span><span class="si">%f</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">x</span><span class="p">(),</span> <span class="n">p</span><span class="o">.</span><span class="n">y</span><span class="p">()))</span>
-                    <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;END</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-            <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;END</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                        <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%f</span><span class="s2"> </span><span class="si">%f</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">x</span><span class="p">(),</span> <span class="n">p</span><span class="o">.</span><span class="n">y</span><span class="p">()))</span>
+                    <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;END</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;END</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">return</span></div></div>
-
 </pre></div>
 
           </div>
@@ -197,7 +192,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">documentación de CatAtom2Osm - 2.6.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">documentación de CatAtom2Osm - 2.6.3.dev.5</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" >Código de módulo</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.geo.layer.zoning</a></li> 
       </ul>

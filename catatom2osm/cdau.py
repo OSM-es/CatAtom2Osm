@@ -1,4 +1,4 @@
-﻿"""Reader of CDAU CSV files"""
+﻿"""Reader of CDAU CSV files."""
 import logging
 import os
 import re
@@ -106,7 +106,7 @@ highway_types_equiv = {
 
 
 def cod_mun_cat2ine(cod_mun_cat):
-    """Return the INE municipality code from the Cadastre code"""
+    """Return the INE municipality code from the Cadastre code."""
     cod_prov = cod_mun_cat[0:2]
     cod_mun = int(cod_mun_cat[2:])
     if cod_prov == "18":
@@ -135,7 +135,7 @@ def cod_mun_cat2ine(cod_mun_cat):
 
 
 def get_cat_address(ad, cod_mun_cat):
-    """Convert CDAU address to Cadastre attributes"""
+    """Convert CDAU addresses to Cadastre attributes."""
     attr = {}
     attr["localId"] = "{}.{}.{}.{}".format(
         cod_mun_cat[:2], cod_mun_cat[2:], ad["dgc_via"], ad["refcatparc"]
@@ -152,10 +152,12 @@ def get_cat_address(ad, cod_mun_cat):
 
 
 class Reader(object):
-    """Class to download and read CDAU CSV files"""
+    """Class to download and read CDAU CSV files."""
 
     def __init__(self, a_path):
         """
+        Construct a reader.
+
         Args:
             a_path (str): Directory where the source files are located.
         """
@@ -206,7 +208,7 @@ class Reader(object):
 
 
 def conflate(cdau_address, cat_address, cod_mun_cat):
-    """Conflate CDAU over Cadastre addresses datasets"""
+    """Conflate CDAU over Cadastre addresses datasets."""
     cod_mun = cod_mun_cat2ine(cod_mun_cat)
     q = "ine_mun='{}' and (tipo_portal_pk='{}' or tipo_portal_pk='{}')"
     exp = q.format(cod_mun, "PORTAL", "ACCESORIO")

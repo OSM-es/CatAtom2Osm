@@ -1,4 +1,4 @@
-"""OpenStreetMap data model"""
+"""OpenStreetMap data model."""
 from collections import Counter, defaultdict
 
 # Number of significant decimal digits. 0 to cancel rounding. With a value
@@ -24,22 +24,22 @@ class Osm(object):
 
     @property
     def nodes(self):
-        """Returns list of nodes in elements"""
+        """Return list of nodes in elements."""
         return [e for e in self.elements if isinstance(e, Node)]
 
     @property
     def ways(self):
-        """Returns list of ways in elements"""
+        """Return list of ways in elements."""
         return [e for e in self.elements if isinstance(e, Way)]
 
     @property
     def relations(self):
-        """Returns list of relations in elements"""
+        """Return list of relations in elements."""
         return [e for e in self.elements if isinstance(e, Relation)]
 
     @property
     def attrs(self):
-        """Returns dictionary of properties in self._attr_list"""
+        """Return dictionary of properties in self._attr_list."""
         attrs = {
             k: getattr(self, k, None)
             for k in self._attr_list
@@ -50,14 +50,14 @@ class Osm(object):
         return attrs
 
     def get(self, eid, etype="n"):
-        """Returns element by its id"""
+        """Return element by its id."""
         eid = str(eid)
         if eid[0] not in "nwr":
             eid = etype[0].lower() + eid
         return self.index[eid]
 
     def remove(self, el):
-        """Remove el from element, from its parents and its orphand childs"""
+        """Remove el from element, from its parents and its orphaned children."""
         self.elements.discard(el)
         if el.fid in self.index:
             del self.index[el.fid]
@@ -74,7 +74,7 @@ class Osm(object):
                         pass
 
     def replace(self, n1, n2):
-        """Replaces n1 witn n2 in elements."""
+        """Replace n1 witn n2 in elements."""
         n1.container = None
         self.elements.discard(n1)
         del self.index[n1.fid]
@@ -106,6 +106,7 @@ class Osm(object):
     def append(self, data, query=None):
         """
         Append data elements to this dataset avoiding duplicates.
+
         Optionally filter by query.
 
         Args:
@@ -133,7 +134,8 @@ class Osm(object):
 
     def __getattr__(self, name):
         """
-        Helper to create elements.
+        Help to create elements.
+
         Example:
         >>> d = osm.Osm()
         >>> n = d.Node(1,1) # instead of
@@ -157,10 +159,10 @@ class Osm(object):
 
 
 class Element(object):
-    """Base class for Osm elements"""
+    """Base class for Osm elements."""
 
     def __init__(self, container, tags={}, attrs={}):
-        """Each element must belong to a container OSM dataset"""
+        """Each element must belong to a container OSM dataset."""
         self.container = container
         self.action = "modify"
         self.visible = "true"
@@ -188,7 +190,7 @@ class Element(object):
         container.index[self.fid] = self
 
     def __eq__(self, other):
-        """Used to determine if two elements could be merged."""
+        """Test equality to determine if two elements could be merged."""
         if isinstance(other, self.__class__):
             a = dict(self.__dict__)
             b = dict(other.__dict__)
@@ -214,22 +216,22 @@ class Element(object):
         return id(self)
 
     def is_new(self):
-        """Returns true if this element is new to OSM"""
+        """Return true if this element is new to OSM."""
         return self.id <= 0
 
     @property
     def type(self):
-        """Returns class name as string"""
+        """Return class name as string."""
         return self.__class__.__name__.lower()
 
     @property
     def fid(self):
-        """Returns id as unique string"""
+        """Return id as unique string."""
         return self.type[0] + str(self.id)
 
     @property
     def attrs(self):
-        """Returns the element attributes as a dictionary"""
+        """Return the element attributes as a dictionary."""
         attrs = {
             k: getattr(self, k, None)
             for k in self._attr_list
@@ -241,7 +243,7 @@ class Element(object):
 
     @attrs.setter
     def attrs(self, attrs):
-        """Sets the element attributes from a dictionary"""
+        """Set the element attributes from a dictionary."""
         for (k, v) in attrs.items():
             if k == "id":
                 v = int(v)
@@ -250,10 +252,13 @@ class Element(object):
 
 
 class Node(Element):
-    """A node is a pair of coordinates"""
+    """Define a node as a pair of coordinates."""
 
     def __init__(self, container, x, y=0, *args, **kwargs):
-        """Use any of this:
+        """
+        Construct a node.
+
+        Use any of this:
         >>> d = osm.Osm()
         >>> n1 = d.Node(1,1)
         >>> p = (1,1)
@@ -267,42 +272,42 @@ class Node(Element):
         self._attr_list = self._attr_list + ("lon", "lat")
 
     def __getitem__(self, key):
-        """n[0], n[1] is equivalent to n.x, n.y"""
+        """Commodity getter. n[0], n[1] is equivalent to n.x, n.y."""
         if key not in (0, 1):
             raise IndexError
         return self.x if key == 0 else self.y
 
     def geometry(self):
-        """Returns pair of coordinates"""
+        """Return pair of coordinates."""
         return (self.x, self.y)
 
     @property
     def childs(self):
-        """Only for simetry with ways and relations"""
+        """Only for simetry with ways and relations."""
         return set()
 
     @property
     def lon(self):
-        """Returns longitude as string"""
+        """Return longitude as string."""
         return str(self.x)
 
     @lon.setter
     def lon(self, value):
-        """Sets longitude from string"""
+        """Set longitude from string."""
         self.x = float(value)
 
     @property
     def lat(self):
-        """Returns latitude as string"""
+        """Return latitude as string."""
         return str(self.y)
 
     @lat.setter
     def lat(self, value):
-        """Sets latitude from string"""
+        """Set latitude from string."""
         self.y = float(value)
 
     def copyto(self, container):
-        """Copy self in another container"""
+        """Copy self in another container."""
         if self.fid not in container.index.keys():
             container.Node(self.geometry(), tags=self.tags, attrs=self.attrs)
 
@@ -311,10 +316,13 @@ class Node(Element):
 
 
 class Way(Element):
-    """A way is a list of nodes"""
+    """Define a way as a list of nodes."""
 
     def __init__(self, container, nodes=[], *args, **kwargs):
-        """Use any of this:
+        """
+        Construct a way.
+
+        Use any of this:
         >>> d = osm.Osm()
         >>> n1 = d.Node(1,1)
         >>> n2 = d.Node(2,2)
@@ -328,19 +336,19 @@ class Way(Element):
 
     @property
     def childs(self):
-        """Returns set of unique nodes"""
+        """Return set of unique nodes."""
         return set(self.nodes)
 
     def is_closed(self):
-        """Returns true if the way is closed"""
+        """Return true if the way is closed."""
         return (len(self.nodes) > 2) and self.nodes[0] == self.nodes[-1]
 
     def is_open(self):
-        """Returns true if the way is not closed"""
+        """Return true if the way is not closed."""
         return (len(self.nodes) > 1) and self.nodes[0] != self.nodes[-1]
 
     def shoelace(self):
-        """Returns the area for a closed way or 0, + for CCW nodes, - for CW"""
+        """Return the area for a closed way or 0, + for CCW nodes, - for CW."""
         s = 0
         if self.is_closed():
             for i in range(len(self.nodes) - 1):
@@ -350,25 +358,25 @@ class Way(Element):
         return s
 
     def append(self, n):
-        """Append n to nodes"""
+        """Append n to nodes."""
         if not isinstance(n, Node):
             n = Node(self.container, n)
         self.nodes.append(n)
         self.container.parents[n].add(self)
 
     def remove(self, n):
-        """Remove n from nodes"""
+        """Remove n from nodes."""
         self.nodes = [o for o in self.nodes if o is not n]
         self.container.parents[n].remove(self)
 
     def replace(self, n1, n2):
-        """Replaces first occurence of node n1 with n2"""
+        """Replace first occurence of node n1 with n2."""
         self.nodes = [n2 if n is n1 else n for n in self.nodes]
         self.container.parents[n1].remove(self)
         self.container.parents[n2].add(self)
 
     def __eq__(self, other):
-        """Used to determine if two elements could be merged."""
+        """Test equality to determine if two elements could be merged."""
         if self.is_open():
             return super(Way, self).__eq__(other)
         elif isinstance(other, self.__class__):
@@ -400,7 +408,7 @@ class Way(Element):
         return id(self)
 
     def geometry(self):
-        """Returns tuple of coordinates"""
+        """Return tuple of coordinates."""
         g = tuple(n.geometry() for n in self.nodes)
         if self.is_closed():
             i = g.index(min(g))
@@ -410,7 +418,7 @@ class Way(Element):
         return g
 
     def clean_duplicated_nodes(self):
-        """Removes consecutive duplicate nodes"""
+        """Remove consecutive duplicated nodes."""
         if self.nodes:
             merged = [self.nodes[0]]
             for i, n in enumerate(self.nodes[1:]):
@@ -419,7 +427,7 @@ class Way(Element):
             self.nodes = merged
 
     def search_node(self, x, y):
-        """Returns osm node of way in the given position or None"""
+        """Return osm node of way in the given position or None."""
         result = None
         for n in self.nodes:
             if n.x == x and n.y == y:
@@ -428,7 +436,7 @@ class Way(Element):
         return result
 
     def copyto(self, container):
-        """Copy self in another container"""
+        """Copy self in another container."""
         if self.fid not in container.index.keys():
             for n in self.nodes:
                 n.copyto(container)
@@ -446,23 +454,23 @@ class Relation(Element):
 
     @property
     def childs(self):
-        """Returns set of unique members elements"""
+        """Return set of unique members elements."""
         return set([m.element for m in self.members])
 
     def append(self, m, role=None):
-        """Adds a member"""
+        """Add a member."""
         if not isinstance(m, Relation.Member):
             m = Relation.Member(m, role)
         self.members.append(m)
         self.container.parents[m.element].add(self)
 
     def remove(self, e):
-        """Remove e from members"""
+        """Remove e from members."""
         self.members = [m for m in self.members if m.element is not e]
         self.container.parents[e].remove(self)
 
     def replace(self, e1, e2):
-        """Replaces first occurence of element e1 with e2"""
+        """Replace first occurrence of element e1 with e2."""
         self.members = [
             Relation.Member(e2, m.role) if m.element == e1 else m for m in self.members
         ]
@@ -470,7 +478,7 @@ class Relation(Element):
         self.container.parents[e2].add(self)
 
     def is_valid_multipolygon(self):
-        """Returns true if this is valid as a multipolygon relation"""
+        """Return true if this is valid as a multipolygon relation."""
         ends = []
         for m in self.members:
             if m.role not in ("outer", "inner") or m.type != "way":
@@ -484,12 +492,11 @@ class Relation(Element):
         return is_conected
 
     def geometry(self):
-        """Returns tuple of coordinates"""
+        """Return tuple of coordinates."""
         return tuple(m.element.geometry() for m in self.members)
 
     def outer_geometry(self):
-        """If this is a valid multipolygon returns the outer rings
-        with every open way conected as areas"""
+        """Return equivalent geometry removing inner rings."""
         if not self.is_valid_multipolygon():
             return []
         outer = [m.element.geometry() for m in self.members if m.role == "outer"]
@@ -515,7 +522,7 @@ class Relation(Element):
         return outer
 
     def copyto(self, container):
-        """Copy self in another container"""
+        """Copy self in another container."""
         if self.fid not in container.index.keys():
             for m in self.members:
                 m.element.copyto(container)
@@ -531,7 +538,7 @@ class Relation(Element):
             self.role = role
 
         def __eq__(self, other):
-            """Used to determine if two elements could be merged."""
+            """Test equality to determine if two elements could be merged."""
             if isinstance(other, self.__class__):
                 return self.__dict__ == other.__dict__
             else:
@@ -561,8 +568,7 @@ class Relation(Element):
 
 
 class Polygon(Relation):
-    """Helper to create a multipolygon type relation with one outer ring and
-    many inner rings."""
+    """Helper to create a multipolygon type relation with only one outer ring."""
 
     def __init__(self, container, rings=[], *args, **kwargs):
         super(Polygon, self).__init__(container, *args, **kwargs)
@@ -577,8 +583,7 @@ class Polygon(Relation):
 
 
 class MultiPolygon(Polygon):
-    """Helper to create a multipolygon type relation with many outer ring and
-    many inner rings."""
+    """Helper to create a multipolygon type relation."""
 
     def __init__(self, container, parts=[], *args, **kwargs):
         super(MultiPolygon, self).__init__(container, *args, **kwargs)

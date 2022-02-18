@@ -14,7 +14,7 @@ log = logging.getLogger(config.app_name)
 
 
 class ParcelLayer(PolygonLayer):
-    """Class for cadastral parcels"""
+    """Class for cadastral parcels."""
 
     def __init__(
         self,
@@ -54,7 +54,7 @@ class ParcelLayer(PolygonLayer):
             log.debug(_("Removed %d void parcels"), len(to_clean))
 
     def create_missing_parcels(self, *sources, split=None):
-        """Creates fake parcels for buildings not contained in any."""
+        """Create fake parcels for buildings not contained in any."""
         pa_refs = [f["localId"] for f in self.getFeatures()]
         to_add = {}
         for source in sources:
@@ -80,7 +80,7 @@ class ParcelLayer(PolygonLayer):
             log.debug(_("Added %d missing parcels"), len(to_add))
 
     def set_muncode(self, muncode):
-        """Assigns to each parcel the code of the municipality"""
+        """Assign to each parcel the code of the municipality."""
         to_change = {}
         for pa in self.getFeatures():
             pa["muncode"] = muncode
@@ -89,9 +89,7 @@ class ParcelLayer(PolygonLayer):
             self.writer.changeAttributeValues(to_change)
 
     def set_zones(self, zoning):
-        """
-        Assigns to each parcel the label of the zone that contains it
-        """
+        """Assign to each parcel the label of the zone that contains it."""
         index = zoning.get_index()
         features = {f.id(): f for f in zoning.getFeatures()}
         to_change = {}
@@ -114,7 +112,7 @@ class ParcelLayer(PolygonLayer):
             self.writer.changeAttributeValues(to_change)
 
     def set_missing_zones(self):
-        """Assigns label from cadastral reference if no zone exists"""
+        """Assign label from cadastral reference if no zone exists."""
         to_change = {}
         m = 0
         for pa in self.getFeatures():
@@ -128,10 +126,7 @@ class ParcelLayer(PolygonLayer):
         self.writer.changeAttributeValues(to_change)
 
     def get_groups_by_adjacent_buildings(self, buildings):
-        """
-        Get grupos of ids of parcels with buildings sharing walls with
-        buildings of another parcel.
-        """
+        """Get groups of parcel ids with buildings sharing walls in another parcel."""
         exp = "NOT(localId ~ 'part')"
         bu_groups, __ = buildings.get_contacts_and_geometries(exp)
         bu_refs = {f.id(): ConsLayer.get_id(f) for f in buildings.search(exp)}
@@ -180,10 +175,7 @@ class ParcelLayer(PolygonLayer):
         return tasks
 
     def merge_by_adjacent_buildings(self, buildings):
-        """
-        Merge parcels with buildings sharing walls with buildings of another
-        parcel.
-        """
+        """Merge parcels with buildings sharing walls with in another parcel."""
 
         def area(fid):
             return geometries[fid].area()
@@ -197,7 +189,7 @@ class ParcelLayer(PolygonLayer):
         return tasks
 
     def count_parts(self, buildings):
-        """Adds count of parts in parcel field"""
+        """Add count of parts in parcel field."""
         parts_count = defaultdict(int)
         for f in buildings.getFeatures():
             parts_count[buildings.get_id(f)] += 1
@@ -218,9 +210,7 @@ class ParcelLayer(PolygonLayer):
         return zone
 
     def get_groups_by_parts_count(self, max_parts, buffer):
-        """
-        Get groups of ids of near parcels with less than max_parts
-        """
+        """Get groups of ids of near parcels with less than max_parts."""
 
         def distance(fid):
             return centro.distance(geometries[fid].centroid())
@@ -263,7 +253,7 @@ class ParcelLayer(PolygonLayer):
         return pa_groups, pa_refs, geometries, parts_count
 
     def merge_by_parts_count(self, max_parts, buffer):
-        """Merge parcels in groups with less than max_parts"""
+        """Merge parcels in groups with less than max_parts."""
         pa_groups, pa_refs, geometries, parts_count = self.get_groups_by_parts_count(
             max_parts, buffer
         )
@@ -272,8 +262,12 @@ class ParcelLayer(PolygonLayer):
         return tasks
 
     def clean(self):
-        """Delete invalid geometries and close vertices, add topological points
-        and simplify vertices."""
+        """
+        Clean geometries.
+
+        Delete invalid geometries and close vertices, add topological points
+        and simplify vertices.
+        """
         self.delete_invalid_geometries()
         self.topology()
         self.simplify()

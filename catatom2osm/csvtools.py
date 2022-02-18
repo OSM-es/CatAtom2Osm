@@ -1,6 +1,4 @@
-"""
-CSV related help functions
-"""
+"""CSV related help functions."""
 import csv
 import io
 import os
@@ -10,8 +8,9 @@ from catatom2osm.config import delimiter, encoding
 
 def dict2csv(csv_path, a_dict, sort=None):
     """
-    Writes a dictionary to a csv file, optinally sorted by key (sort=0) or
-    value (sort=1)
+    Write a dictionary to a csv file.
+
+    Optinally sorted by key (sort=0) or value (sort=1)
     """
     with io.open(csv_path, "w", encoding=encoding) as csv_file:
         dictitems = list(a_dict.items())
@@ -22,7 +21,7 @@ def dict2csv(csv_path, a_dict, sort=None):
 
 
 def csv2dict(csv_path, a_dict=None, exists=False):
-    """Read a dictionary from a csv file"""
+    """Read a dictionary from a csv file."""
     a_dict = {} if a_dict is None else a_dict
     msg = _("Failed to load CSV file '%s'") % os.path.basename(csv_path)
     if os.path.exists(csv_path):
@@ -39,7 +38,7 @@ def csv2dict(csv_path, a_dict=None, exists=False):
 
 def filter(csv_path, *args, query=lambda row, args: True, stop=False):
     """
-    Return csv rows filtered using query
+    Return csv rows filtered using query.
 
     Args:
         args: aditional arguments for query function
@@ -60,7 +59,7 @@ def filter(csv_path, *args, query=lambda row, args: True, stop=False):
 
 def search(csv_path, *args, query=lambda row, args: True):
     """
-    Return first matched row in csv
+    Return first matched row in csv.
 
     Args:
         args: aditional arguments for query function
@@ -71,7 +70,7 @@ def search(csv_path, *args, query=lambda row, args: True):
 
 
 def get_key(csv_path, key):
-    """Get a row given first column value"""
+    """Get a row given first column value."""
 
     def query(row, args):
         return row[0] == args[0]
@@ -80,7 +79,7 @@ def get_key(csv_path, key):
 
 
 def startswith(csv_path, key):
-    """Get rows which first column starts with key"""
+    """Get rows which first column starts with key."""
 
     def query(row, args):
         return row[0].startswith(args[0])

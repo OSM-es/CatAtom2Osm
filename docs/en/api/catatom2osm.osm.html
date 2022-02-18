@@ -15,7 +15,7 @@
   <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.osm module &#8212; CatAtom2Osm 2.6.0 documentation</title>
+    <title>catatom2osm.osm module &#8212; CatAtom2Osm 2.6.3.dev.5 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/guzzle.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
@@ -45,7 +45,7 @@
         <li class="right" >
           <a href="catatom2osm.hgwnames.html" title="catatom2osm.hgwnames module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 2.6.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 2.6.3.dev.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../api.html" >API reference</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="modules.html" >CatAtom2Osm</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="catatom2osm.html" accesskey="U">catatom2osm package</a> &#187;</li>
@@ -108,34 +108,34 @@
             
   <section id="module-catatom2osm.osm">
 <span id="catatom2osm-osm-module"></span><h1>catatom2osm.osm module<a class="headerlink" href="#module-catatom2osm.osm" title="Permalink to this headline">¶</a></h1>
-<p>OpenStreetMap data model</p>
+<p>OpenStreetMap data model.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="catatom2osm.osm.Element">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">catatom2osm.osm.</span></span><span class="sig-name descname"><span class="pre">Element</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">container</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attrs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/osm.html#Element"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.osm.Element" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Base class for Osm elements</p>
+<p>Base class for Osm elements.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="catatom2osm.osm.Element.attrs">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">attrs</span></span><a class="headerlink" href="#catatom2osm.osm.Element.attrs" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the element attributes as a dictionary</p>
+<dd><p>Return the element attributes as a dictionary.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="catatom2osm.osm.Element.fid">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fid</span></span><a class="headerlink" href="#catatom2osm.osm.Element.fid" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns id as unique string</p>
+<dd><p>Return id as unique string.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.osm.Element.is_new">
 <span class="sig-name descname"><span class="pre">is_new</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/osm.html#Element.is_new"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.osm.Element.is_new" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns true if this element is new to OSM</p>
+<dd><p>Return true if this element is new to OSM.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="catatom2osm.osm.Element.type">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#catatom2osm.osm.Element.type" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns class name as string</p>
+<dd><p>Return class name as string.</p>
 </dd></dl>
 
 </dd></dl>
@@ -144,43 +144,42 @@
 <dt class="sig sig-object py" id="catatom2osm.osm.MultiPolygon">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">catatom2osm.osm.</span></span><span class="sig-name descname"><span class="pre">MultiPolygon</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">container</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/osm.html#MultiPolygon"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.osm.MultiPolygon" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#catatom2osm.osm.Polygon" title="catatom2osm.osm.Polygon"><code class="xref py py-class docutils literal notranslate"><span class="pre">catatom2osm.osm.Polygon</span></code></a></p>
-<p>Helper to create a multipolygon type relation with many outer ring and
-many inner rings.</p>
+<p>Helper to create a multipolygon type relation.</p>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="catatom2osm.osm.Node">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">catatom2osm.osm.</span></span><span class="sig-name descname"><span class="pre">Node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">container</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/osm.html#Node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.osm.Node" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#catatom2osm.osm.Element" title="catatom2osm.osm.Element"><code class="xref py py-class docutils literal notranslate"><span class="pre">catatom2osm.osm.Element</span></code></a></p>
-<p>A node is a pair of coordinates</p>
+<p>Define a node as a pair of coordinates.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="catatom2osm.osm.Node.childs">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">childs</span></span><a class="headerlink" href="#catatom2osm.osm.Node.childs" title="Permalink to this definition">¶</a></dt>
-<dd><p>Only for simetry with ways and relations</p>
+<dd><p>Only for simetry with ways and relations.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.osm.Node.copyto">
 <span class="sig-name descname"><span class="pre">copyto</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">container</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/osm.html#Node.copyto"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.osm.Node.copyto" title="Permalink to this definition">¶</a></dt>
-<dd><p>Copy self in another container</p>
+<dd><p>Copy self in another container.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.osm.Node.geometry">
 <span class="sig-name descname"><span class="pre">geometry</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/osm.html#Node.geometry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.osm.Node.geometry" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns pair of coordinates</p>
+<dd><p>Return pair of coordinates.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="catatom2osm.osm.Node.lat">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">lat</span></span><a class="headerlink" href="#catatom2osm.osm.Node.lat" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns latitude as string</p>
+<dd><p>Return latitude as string.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="catatom2osm.osm.Node.lon">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">lon</span></span><a class="headerlink" href="#catatom2osm.osm.Node.lon" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns longitude as string</p>
+<dd><p>Return longitude as string.</p>
 </dd></dl>
 
 </dd></dl>
@@ -193,8 +192,8 @@ many inner rings.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.osm.Osm.append">
 <span class="sig-name descname"><span class="pre">append</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/osm.html#Osm.append"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.osm.Osm.append" title="Permalink to this definition">¶</a></dt>
-<dd><p>Append data elements to this dataset avoiding duplicates.
-Optionally filter by query.</p>
+<dd><p>Append data elements to this dataset avoiding duplicates.</p>
+<p>Optionally filter by query.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -219,13 +218,13 @@ boolean deciding if it will be included or not</p></li>
 <dl class="py property">
 <dt class="sig sig-object py" id="catatom2osm.osm.Osm.attrs">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">attrs</span></span><a class="headerlink" href="#catatom2osm.osm.Osm.attrs" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns dictionary of properties in self._attr_list</p>
+<dd><p>Return dictionary of properties in self._attr_list.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.osm.Osm.get">
 <span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">etype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'n'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/osm.html#Osm.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.osm.Osm.get" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns element by its id</p>
+<dd><p>Return element by its id.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -243,31 +242,31 @@ boolean deciding if it will be included or not</p></li>
 <dl class="py property">
 <dt class="sig sig-object py" id="catatom2osm.osm.Osm.nodes">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">nodes</span></span><a class="headerlink" href="#catatom2osm.osm.Osm.nodes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns list of nodes in elements</p>
+<dd><p>Return list of nodes in elements.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="catatom2osm.osm.Osm.relations">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">relations</span></span><a class="headerlink" href="#catatom2osm.osm.Osm.relations" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns list of relations in elements</p>
+<dd><p>Return list of relations in elements.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.osm.Osm.remove">
 <span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">el</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/osm.html#Osm.remove"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.osm.Osm.remove" title="Permalink to this definition">¶</a></dt>
-<dd><p>Remove el from element, from its parents and its orphand childs</p>
+<dd><p>Remove el from element, from its parents and its orphaned children.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.osm.Osm.replace">
 <span class="sig-name descname"><span class="pre">replace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/osm.html#Osm.replace"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.osm.Osm.replace" title="Permalink to this definition">¶</a></dt>
-<dd><p>Replaces n1 witn n2 in elements.</p>
+<dd><p>Replace n1 witn n2 in elements.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="catatom2osm.osm.Osm.ways">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ways</span></span><a class="headerlink" href="#catatom2osm.osm.Osm.ways" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns list of ways in elements</p>
+<dd><p>Return list of ways in elements.</p>
 </dd></dl>
 
 </dd></dl>
@@ -276,8 +275,7 @@ boolean deciding if it will be included or not</p></li>
 <dt class="sig sig-object py" id="catatom2osm.osm.Polygon">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">catatom2osm.osm.</span></span><span class="sig-name descname"><span class="pre">Polygon</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">container</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/osm.html#Polygon"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.osm.Polygon" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#catatom2osm.osm.Relation" title="catatom2osm.osm.Relation"><code class="xref py py-class docutils literal notranslate"><span class="pre">catatom2osm.osm.Relation</span></code></a></p>
-<p>Helper to create a multipolygon type relation with one outer ring and
-many inner rings.</p>
+<p>Helper to create a multipolygon type relation with only one outer ring.</p>
 </dd></dl>
 
 <dl class="py class">
@@ -310,50 +308,49 @@ many inner rings.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.osm.Relation.append">
 <span class="sig-name descname"><span class="pre">append</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">role</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/osm.html#Relation.append"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.osm.Relation.append" title="Permalink to this definition">¶</a></dt>
-<dd><p>Adds a member</p>
+<dd><p>Add a member.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="catatom2osm.osm.Relation.childs">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">childs</span></span><a class="headerlink" href="#catatom2osm.osm.Relation.childs" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns set of unique members elements</p>
+<dd><p>Return set of unique members elements.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.osm.Relation.copyto">
 <span class="sig-name descname"><span class="pre">copyto</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">container</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/osm.html#Relation.copyto"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.osm.Relation.copyto" title="Permalink to this definition">¶</a></dt>
-<dd><p>Copy self in another container</p>
+<dd><p>Copy self in another container.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.osm.Relation.geometry">
 <span class="sig-name descname"><span class="pre">geometry</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/osm.html#Relation.geometry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.osm.Relation.geometry" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns tuple of coordinates</p>
+<dd><p>Return tuple of coordinates.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.osm.Relation.is_valid_multipolygon">
 <span class="sig-name descname"><span class="pre">is_valid_multipolygon</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/osm.html#Relation.is_valid_multipolygon"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.osm.Relation.is_valid_multipolygon" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns true if this is valid as a multipolygon relation</p>
+<dd><p>Return true if this is valid as a multipolygon relation.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.osm.Relation.outer_geometry">
 <span class="sig-name descname"><span class="pre">outer_geometry</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/osm.html#Relation.outer_geometry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.osm.Relation.outer_geometry" title="Permalink to this definition">¶</a></dt>
-<dd><p>If this is a valid multipolygon returns the outer rings
-with every open way conected as areas</p>
+<dd><p>Return equivalent geometry removing inner rings.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.osm.Relation.remove">
 <span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">e</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/osm.html#Relation.remove"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.osm.Relation.remove" title="Permalink to this definition">¶</a></dt>
-<dd><p>Remove e from members</p>
+<dd><p>Remove e from members.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.osm.Relation.replace">
 <span class="sig-name descname"><span class="pre">replace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">e1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/osm.html#Relation.replace"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.osm.Relation.replace" title="Permalink to this definition">¶</a></dt>
-<dd><p>Replaces first occurence of element e1 with e2</p>
+<dd><p>Replace first occurrence of element e1 with e2.</p>
 </dd></dl>
 
 </dd></dl>
@@ -362,71 +359,71 @@ with every open way conected as areas</p>
 <dt class="sig sig-object py" id="catatom2osm.osm.Way">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">catatom2osm.osm.</span></span><span class="sig-name descname"><span class="pre">Way</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">container</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nodes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/osm.html#Way"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.osm.Way" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#catatom2osm.osm.Element" title="catatom2osm.osm.Element"><code class="xref py py-class docutils literal notranslate"><span class="pre">catatom2osm.osm.Element</span></code></a></p>
-<p>A way is a list of nodes</p>
+<p>Define a way as a list of nodes.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.osm.Way.append">
 <span class="sig-name descname"><span class="pre">append</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/osm.html#Way.append"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.osm.Way.append" title="Permalink to this definition">¶</a></dt>
-<dd><p>Append n to nodes</p>
+<dd><p>Append n to nodes.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="catatom2osm.osm.Way.childs">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">childs</span></span><a class="headerlink" href="#catatom2osm.osm.Way.childs" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns set of unique nodes</p>
+<dd><p>Return set of unique nodes.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.osm.Way.clean_duplicated_nodes">
 <span class="sig-name descname"><span class="pre">clean_duplicated_nodes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/osm.html#Way.clean_duplicated_nodes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.osm.Way.clean_duplicated_nodes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Removes consecutive duplicate nodes</p>
+<dd><p>Remove consecutive duplicated nodes.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.osm.Way.copyto">
 <span class="sig-name descname"><span class="pre">copyto</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">container</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/osm.html#Way.copyto"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.osm.Way.copyto" title="Permalink to this definition">¶</a></dt>
-<dd><p>Copy self in another container</p>
+<dd><p>Copy self in another container.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.osm.Way.geometry">
 <span class="sig-name descname"><span class="pre">geometry</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/osm.html#Way.geometry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.osm.Way.geometry" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns tuple of coordinates</p>
+<dd><p>Return tuple of coordinates.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.osm.Way.is_closed">
 <span class="sig-name descname"><span class="pre">is_closed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/osm.html#Way.is_closed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.osm.Way.is_closed" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns true if the way is closed</p>
+<dd><p>Return true if the way is closed.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.osm.Way.is_open">
 <span class="sig-name descname"><span class="pre">is_open</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/osm.html#Way.is_open"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.osm.Way.is_open" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns true if the way is not closed</p>
+<dd><p>Return true if the way is not closed.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.osm.Way.remove">
 <span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/osm.html#Way.remove"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.osm.Way.remove" title="Permalink to this definition">¶</a></dt>
-<dd><p>Remove n from nodes</p>
+<dd><p>Remove n from nodes.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.osm.Way.replace">
 <span class="sig-name descname"><span class="pre">replace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/osm.html#Way.replace"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.osm.Way.replace" title="Permalink to this definition">¶</a></dt>
-<dd><p>Replaces first occurence of node n1 with n2</p>
+<dd><p>Replace first occurence of node n1 with n2.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.osm.Way.search_node">
 <span class="sig-name descname"><span class="pre">search_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/osm.html#Way.search_node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.osm.Way.search_node" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns osm node of way in the given position or None</p>
+<dd><p>Return osm node of way in the given position or None.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.osm.Way.shoelace">
 <span class="sig-name descname"><span class="pre">shoelace</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/osm.html#Way.shoelace"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.osm.Way.shoelace" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the area for a closed way or 0, + for CCW nodes, - for CW</p>
+<dd><p>Return the area for a closed way or 0, + for CCW nodes, - for CW.</p>
 </dd></dl>
 
 </dd></dl>
@@ -466,7 +463,7 @@ with every open way conected as areas</p>
         <li class="right" >
           <a href="catatom2osm.hgwnames.html" title="catatom2osm.hgwnames module"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 2.6.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 2.6.3.dev.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../api.html" >API reference</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="modules.html" >CatAtom2Osm</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="catatom2osm.html" >catatom2osm package</a> &#187;</li>

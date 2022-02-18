@@ -1,4 +1,4 @@
-"""OSM XML format serializer"""
+"""OSM XML format serializer."""
 import logging
 
 from lxml import etree
@@ -16,7 +16,7 @@ def write_elem(outfile, e):
 
 
 def serialize(outfile, data):
-    """Output XML for an OSM data set"""
+    """Output XML for an OSM data set."""
     outfile.write("<?xml version='1.0' encoding='UTF-8'?>\n")
     attrs = "".join([" {}='{}'".format(k, v) for (k, v) in data.attrs.items()])
     outfile.write("<osm{}>\n".format(attrs))
@@ -57,7 +57,7 @@ def serialize(outfile, data):
 
 
 def deserialize(infile, data=None):
-    """Generates or append to an OSM data set from OSM XML"""
+    """Generate a OSM data set from OSM XML or append to existing data."""
     if data is None:
         data = osm.Osm()
     context = etree.iterparse(infile, events=("end",))

@@ -1,2 +1,2 @@
-"""Reader of Carto BCN addresses"""
+"""Reader of Carto BCN addresses."""
 pass

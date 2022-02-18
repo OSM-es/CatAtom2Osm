@@ -1,11 +1,11 @@
-"""Translations from source fields to OSM tags"""
+"""Translations from source fields to OSM tags."""
 import json
 
 from catatom2osm import config
 
 
 def all_tags(feature):
-    """All fields to tags translations"""
+    """All fields to tags translate."""
     tags = {}
     for attr in [f.name() for f in feature.fields()]:
         tags[attr] = str(feature[attr])
@@ -13,7 +13,7 @@ def all_tags(feature):
 
 
 def address_tags(feature):
-    """Translatios for address layer fields"""
+    """Translate address layer fields."""
     tags = {}
     hgw_name = feature["TN_text"] or ""
     hgw_name = hgw_name.strip()
@@ -40,7 +40,7 @@ def address_tags(feature):
 
 
 def building_tags(feature):
-    """Translations for constructions layer"""
+    """Translate constructions layer fields."""
     building_key = {
         "functional": "building",
         "declined": "disused:building",

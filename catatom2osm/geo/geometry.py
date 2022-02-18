@@ -10,7 +10,7 @@ log = logging.getLogger(app_name)
 
 
 class Geometry(object):
-    """Methods for QGIS 2-3 compatibility and geometry utilities"""
+    """Methods for QGIS 2-3 compatibility and geometry utilities."""
 
     @staticmethod
     def fromPointXY(point):
@@ -46,7 +46,7 @@ class Geometry(object):
 
     @staticmethod
     def get_multipolygon(feature_or_geometry):
-        """Returns feature geometry always as a multipolygon"""
+        """Return feature geometry always as a multipolygon."""
         if isinstance(feature_or_geometry, QgsFeature):
             geom = feature_or_geometry.geometry()
         else:
@@ -57,13 +57,13 @@ class Geometry(object):
 
     @staticmethod
     def get_outer_rings(feature_or_geometry):
-        """Returns feature geometry as a multipolygon without inner rings"""
+        """Return feature geometry as a multipolygon without inner rings."""
         mp = Geometry.get_multipolygon(feature_or_geometry)
         return [[t[0]] for t in mp]
 
     @staticmethod
     def get_vertices_list(feature):
-        """Returns list of all distinct vertices in feature geometry"""
+        """Return list of all distinct vertices in feature geometry."""
         return [
             point
             for part in Geometry.get_multipolygon(feature)
@@ -73,9 +73,7 @@ class Geometry(object):
 
     @staticmethod
     def get_outer_vertices(feature):
-        """
-        Returns list of all distinct vertices in feature geometry outer rings
-        """
+        """Return list of distinct vertices in feature geometry outer rings."""
         return [
             point
             for part in Geometry.get_multipolygon(feature)
@@ -85,8 +83,9 @@ class Geometry(object):
     @staticmethod
     def merge_adjacent_polygons(feature):
         """
-        Merge adjacent polygons in a feature geometry
-        Returns true if geometry is changed
+        Merge adjacent polygons in a feature geometry.
+
+        Returns true if geometry is changed.
         """
         if feature.geometry().wkbType() != WKBMultiPolygon:
             return False
@@ -106,7 +105,7 @@ class Geometry(object):
 
     @staticmethod
     def merge_adjacent_features(group):
-        """Combine all geometries in group of features"""
+        """Combine all geometries in group of features."""
         geom = False
         for p in group:
             g = p.geometry()

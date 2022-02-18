@@ -15,7 +15,7 @@
   <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.geo.geometry module &#8212; documentación de CatAtom2Osm - 2.6.0</title>
+    <title>catatom2osm.geo.geometry module &#8212; documentación de CatAtom2Osm - 2.6.3.dev.5</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/guzzle.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="catatom2osm.geo.debug.html" title="catatom2osm.geo.debug module"
              accesskey="P">anterior</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">documentación de CatAtom2Osm - 2.6.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">documentación de CatAtom2Osm - 2.6.3.dev.5</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../api.html" >Referencia API</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="modules.html" >CatAtom2Osm</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="catatom2osm.html" >catatom2osm package</a> &#187;</li>
@@ -116,7 +116,7 @@
 <dt class="sig sig-object py" id="catatom2osm.geo.geometry.Geometry">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">catatom2osm.geo.geometry.</span></span><span class="sig-name descname"><span class="pre">Geometry</span></span><a class="reference internal" href="../_modules/catatom2osm/geo/geometry.html#Geometry"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.geo.geometry.Geometry" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Methods for QGIS 2-3 compatibility and geometry utilities</p>
+<p>Methods for QGIS 2-3 compatibility and geometry utilities.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.geo.geometry.Geometry.fromMultiPointXY">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fromMultiPointXY</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/geometry.html#Geometry.fromMultiPointXY"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.geo.geometry.Geometry.fromMultiPointXY" title="Enlazar permanentemente con esta definición">¶</a></dt>
@@ -140,25 +140,25 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.geo.geometry.Geometry.get_multipolygon">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_multipolygon</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feature_or_geometry</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/geometry.html#Geometry.get_multipolygon"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.geo.geometry.Geometry.get_multipolygon" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Returns feature geometry always as a multipolygon</p>
+<dd><p>Return feature geometry always as a multipolygon.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.geo.geometry.Geometry.get_outer_rings">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_outer_rings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feature_or_geometry</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/geometry.html#Geometry.get_outer_rings"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.geo.geometry.Geometry.get_outer_rings" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Returns feature geometry as a multipolygon without inner rings</p>
+<dd><p>Return feature geometry as a multipolygon without inner rings.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.geo.geometry.Geometry.get_outer_vertices">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_outer_vertices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feature</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/geometry.html#Geometry.get_outer_vertices"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.geo.geometry.Geometry.get_outer_vertices" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Returns list of all distinct vertices in feature geometry outer rings</p>
+<dd><p>Return list of distinct vertices in feature geometry outer rings.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.geo.geometry.Geometry.get_vertices_list">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_vertices_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feature</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/geometry.html#Geometry.get_vertices_list"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.geo.geometry.Geometry.get_vertices_list" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Returns list of all distinct vertices in feature geometry</p>
+<dd><p>Return list of all distinct vertices in feature geometry.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -169,14 +169,14 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.geo.geometry.Geometry.merge_adjacent_features">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">merge_adjacent_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/geometry.html#Geometry.merge_adjacent_features"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.geo.geometry.Geometry.merge_adjacent_features" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Combine all geometries in group of features</p>
+<dd><p>Combine all geometries in group of features.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.geo.geometry.Geometry.merge_adjacent_polygons">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">merge_adjacent_polygons</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feature</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/geometry.html#Geometry.merge_adjacent_polygons"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.geo.geometry.Geometry.merge_adjacent_polygons" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Merge adjacent polygons in a feature geometry
-Returns true if geometry is changed</p>
+<dd><p>Merge adjacent polygons in a feature geometry.</p>
+<p>Returns true if geometry is changed.</p>
 </dd></dl>
 
 </dd></dl>
@@ -216,7 +216,7 @@ Returns true if geometry is changed</p>
         <li class="right" >
           <a href="catatom2osm.geo.debug.html" title="catatom2osm.geo.debug module"
              >anterior</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">documentación de CatAtom2Osm - 2.6.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">documentación de CatAtom2Osm - 2.6.3.dev.5</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../api.html" >Referencia API</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="modules.html" >CatAtom2Osm</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="catatom2osm.html" >catatom2osm package</a> &#187;</li>

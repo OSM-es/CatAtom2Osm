@@ -15,7 +15,7 @@
   <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.geo.layer.polygon module &#8212; documentación de CatAtom2Osm - 2.6.0</title>
+    <title>catatom2osm.geo.layer.polygon module &#8212; documentación de CatAtom2Osm - 2.6.3.dev.5</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/guzzle.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="catatom2osm.geo.layer.parcel.html" title="catatom2osm.geo.layer.parcel module"
              accesskey="P">anterior</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">documentación de CatAtom2Osm - 2.6.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">documentación de CatAtom2Osm - 2.6.3.dev.5</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../api.html" >Referencia API</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="modules.html" >CatAtom2Osm</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="catatom2osm.html" >catatom2osm package</a> &#187;</li>
@@ -119,19 +119,20 @@
 <dt class="sig sig-object py" id="catatom2osm.geo.layer.polygon.PolygonLayer">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">catatom2osm.geo.layer.polygon.</span></span><span class="sig-name descname"><span class="pre">PolygonLayer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baseName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">providerLib</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ogr'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/polygon.html#PolygonLayer"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.polygon.PolygonLayer" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="catatom2osm.geo.layer.base.html#catatom2osm.geo.layer.base.BaseLayer" title="catatom2osm.geo.layer.base.BaseLayer"><code class="xref py py-class docutils literal notranslate"><span class="pre">catatom2osm.geo.layer.base.BaseLayer</span></code></a></p>
-<p>Base class for polygon layers</p>
+<p>Base class for polygon layers.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.geo.layer.polygon.PolygonLayer.clean">
 <span class="sig-name descname"><span class="pre">clean</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/polygon.html#PolygonLayer.clean"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.polygon.PolygonLayer.clean" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Delete invalid geometries and close vertices, add topological points
+<dd><p>Clean geometries.</p>
+<p>Delete invalid geometries and close vertices, add topological points
 and simplify vertices.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.geo.layer.polygon.PolygonLayer.delete_invalid_geometries">
 <span class="sig-name descname"><span class="pre">delete_invalid_geometries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query_small_area=&lt;function</span> <span class="pre">PolygonLayer.&lt;lambda&gt;&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/polygon.html#PolygonLayer.delete_invalid_geometries"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.polygon.PolygonLayer.delete_invalid_geometries" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Delete invalid geometries testing if any of it acute angle vertex could
-be deleted.
+<dd><p>Delete invalid geometries.</p>
+<p>Test if any of it acute angle vertex could be deleted.
 Also removes zig-zag and spike vertex (see Point.get_spike_context).</p>
 </dd></dl>
 
@@ -143,13 +144,14 @@ Also removes zig-zag and spike vertex (see Point.get_spike_context).</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.geo.layer.polygon.PolygonLayer.difference">
 <span class="sig-name descname"><span class="pre">difference</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/polygon.html#PolygonLayer.difference"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.polygon.PolygonLayer.difference" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Calculate the difference of each geometry with those in layer</p>
+<dd><p>Calculate the difference of each geometry with those in layer.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.geo.layer.polygon.PolygonLayer.explode_multi_parts">
 <span class="sig-name descname"><span class="pre">explode_multi_parts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request=&lt;qgis._core.QgsFeatureRequest</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/polygon.html#PolygonLayer.explode_multi_parts"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.polygon.PolygonLayer.explode_multi_parts" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Creates a new WKBPolygon feature for each part of any WKBMultiPolygon
+<dd><p>Split multipolygons.</p>
+<p>Creates a new WKBPolygon feature for each part of any WKBMultiPolygon
 feature in request. This avoid relations with many “outer” members in
 OSM data set. From this moment, localId will not be a unique identifier
 for buildings.</p>
@@ -158,7 +160,8 @@ for buildings.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.geo.layer.polygon.PolygonLayer.get_adjacents_and_geometries">
 <span class="sig-name descname"><span class="pre">get_adjacents_and_geometries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expression</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/polygon.html#PolygonLayer.get_adjacents_and_geometries"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.polygon.PolygonLayer.get_adjacents_and_geometries" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Auxiliary indexes for adjacency of geometries.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Devuelve</dt>
 <dd class="field-odd"><p>(list) groups of adjacent polygons
 (dict) feature id: geometry</p>
@@ -169,13 +172,14 @@ for buildings.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.geo.layer.polygon.PolygonLayer.get_area">
 <span class="sig-name descname"><span class="pre">get_area</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/polygon.html#PolygonLayer.get_area"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.polygon.PolygonLayer.get_area" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Returns total area</p>
+<dd><p>Return sum of all features area.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.geo.layer.polygon.PolygonLayer.get_contacts_and_geometries">
 <span class="sig-name descname"><span class="pre">get_contacts_and_geometries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expression</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/polygon.html#PolygonLayer.get_contacts_and_geometries"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.polygon.PolygonLayer.get_contacts_and_geometries" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Auxiliary indexes for contact of geometries.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Devuelve</dt>
 <dd class="field-odd"><p>(list) groups of polygons with at least one common node
 (dict) feature id: geometry</p>
@@ -186,7 +190,8 @@ for buildings.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.geo.layer.polygon.PolygonLayer.get_parents_per_vertex_and_geometries">
 <span class="sig-name descname"><span class="pre">get_parents_per_vertex_and_geometries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expression</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/polygon.html#PolygonLayer.get_parents_per_vertex_and_geometries"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.polygon.PolygonLayer.get_parents_per_vertex_and_geometries" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Auxiliary indexes for vertex of geometries.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Devuelve</dt>
 <dd class="field-odd"><p>(dict) parent fids for each vertex, (dict) geometry for each fid.</p>
 </dd>
@@ -200,19 +205,20 @@ for buildings.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.geo.layer.polygon.PolygonLayer.is_inside">
 <span class="sig-name descname"><span class="pre">is_inside</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feature</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/polygon.html#PolygonLayer.is_inside"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.polygon.PolygonLayer.is_inside" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Returns first feature of this layer that have feature inside</p>
+<dd><p>Return first feature of this layer that is_inside feature.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.geo.layer.polygon.PolygonLayer.is_inside_area">
 <span class="sig-name descname"><span class="pre">is_inside_area</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feature</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/polygon.html#PolygonLayer.is_inside_area"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.polygon.PolygonLayer.is_inside_area" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Returns first feature of this layer that have feature inside</p>
+<dd><p>Return first feature of this layer that is_inside_area feature.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.geo.layer.polygon.PolygonLayer.is_shared_segment">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_shared_segment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parents_per_vx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">va</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feature_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/polygon.html#PolygonLayer.is_shared_segment"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.polygon.PolygonLayer.is_shared_segment" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Given a dictionary of parents per vertex check if segment va-vb in
+<dd><p>Return True if a segment is used by another geometry.</p>
+<p>Given a dictionary of parents per vertex check if segment va-vb in
 geometry of feature with id “feature_id” is shared with another
 geometry.</p>
 </dd></dl>
@@ -220,13 +226,13 @@ geometry.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.geo.layer.polygon.PolygonLayer.merge_adjacent_polygons">
 <span class="sig-name descname"><span class="pre">merge_adjacent_polygons</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/polygon.html#PolygonLayer.merge_adjacent_polygons"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.polygon.PolygonLayer.merge_adjacent_polygons" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Merge adjacent polygons in each feature geometry</p>
+<dd><p>Merge adjacent polygons in each feature geometry.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.geo.layer.polygon.PolygonLayer.merge_adjacents">
 <span class="sig-name descname"><span class="pre">merge_adjacents</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/polygon.html#PolygonLayer.merge_adjacents"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.polygon.PolygonLayer.merge_adjacents" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Merge polygons with shared segments</p>
+<dd><p>Merge polygons with shared segments.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -255,7 +261,7 @@ geometry.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.geo.layer.polygon.PolygonLayer.simplify">
 <span class="sig-name descname"><span class="pre">simplify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/polygon.html#PolygonLayer.simplify"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.polygon.PolygonLayer.simplify" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Reduces the number of vertices in a polygon layer according to:</p>
+<dd><p>Reduce the number of vertices in a polygon layer.</p>
 <ul class="simple">
 <li><p>Delete vertex if the angle with its adjacents is near of the straight
 angle for less than “straight_thr” degrees in all its parents.</p></li>
@@ -267,7 +273,7 @@ less than “cath_thr” meters.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.geo.layer.polygon.PolygonLayer.topology">
 <span class="sig-name descname"><span class="pre">topology</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/polygon.html#PolygonLayer.topology"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.polygon.PolygonLayer.topology" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>For each vertex in a polygon layer, adds it to nearest segments.</p>
+<dd><p>Add to nearest segments each vertex in a polygon layer.</p>
 </dd></dl>
 
 </dd></dl>
@@ -307,7 +313,7 @@ less than “cath_thr” meters.</p></li>
         <li class="right" >
           <a href="catatom2osm.geo.layer.parcel.html" title="catatom2osm.geo.layer.parcel module"
              >anterior</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">documentación de CatAtom2Osm - 2.6.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">documentación de CatAtom2Osm - 2.6.3.dev.5</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../api.html" >Referencia API</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="modules.html" >CatAtom2Osm</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="catatom2osm.html" >catatom2osm package</a> &#187;</li>

@@ -1,4 +1,4 @@
-"""Minimum Overpass API interface"""
+"""Minimum Overpass API interface."""
 import re
 
 from catatom2osm import download
@@ -10,10 +10,12 @@ api_servers = [
 
 
 class Query(object):
-    """Class for a query to Overpass"""
+    """Class for a query to Overpass."""
 
     def __init__(self, search_area, output="xml", down=True, meta=True):
         """
+        Construct a query.
+
         Args:
             search_area (str): See set_search_area
             output (str): xml (default) / json
@@ -30,8 +32,12 @@ class Query(object):
         self.url = ""
 
     def set_search_area(self, search_area):
-        """Set the area to search in. It could be either the osm id of a named
-        area or a bounding box (bottom, left, top, right) clause."""
+        """
+        Set the area to search in.
+
+        It could be either the osm id of a named area or a bounding box
+        (bottom, left, top, right) clause.
+        """
         if re.match(r"^\d{1,8}$", search_area):
             self.area_id = search_area
         elif re.match(r"^(-?\d{1,3}(\.\d+)?,\s*){3}-?\d{1,3}(\.\d+)?$", search_area):
@@ -41,8 +47,13 @@ class Query(object):
             raise TypeError(msg % search_area)
 
     def add(self, *args):
-        """Adds a statement to the query. Use QL query statements without bbox
-        or area clauses. Example: node["name"="Berlin"]"""
+        """
+        Add a statement to the query.
+
+        Use QL query statements without bbox or area clauses.
+
+        Example: node["name"="Berlin"]
+        """
 
         def rsc(st):
             return st[:-1] if st[-1] == ";" else st
@@ -55,7 +66,7 @@ class Query(object):
         return self
 
     def get_url(self, n=0):
-        """Returns url for the query"""
+        """Return the url for the query."""
         if len(self.statements) > 0:
             search_area = ""
             query = ""
@@ -70,7 +81,7 @@ class Query(object):
         return self.url
 
     def download(self, filename, log=False):
-        """Downloads query result to filename"""
+        """Download query results to filename."""
         for i in range(len(api_servers)):
             try:
                 if log:
@@ -82,6 +93,6 @@ class Query(object):
         raise IOError("Can't read from any Overpass server'")
 
     def read(self):
-        """Returns query result"""
+        """Return query results."""
         response = download.get_response(self.get_url())
         return response.text.encode(response.apparent_encoding)

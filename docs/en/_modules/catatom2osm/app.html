@@ -14,7 +14,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.app &#8212; CatAtom2Osm 2.6.0 documentation</title>
+    <title>catatom2osm.app &#8212; CatAtom2Osm 2.6.3.dev.5 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/guzzle.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.6.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.6.3.dev.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.app</a></li> 
       </ul>
@@ -79,63 +79,62 @@
           <div class="document clearer body">
             
   <h1>Source code for catatom2osm.app</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Tool to convert INSPIRE data sets from the Spanish Cadastre ATOM Services to OSM files</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">past.builtins</span> <span class="k">import</span> <span class="n">basestring</span>  <span class="c1"># qgis/utils.py:744: DeprecationWarning</span>
-<span class="kn">import</span> <span class="nn">io</span><span class="o">,</span> <span class="nn">codecs</span>
+<span></span><span class="sd">&quot;&quot;&quot;Main application processes.&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">codecs</span>
 <span class="kn">import</span> <span class="nn">gzip</span>
+<span class="kn">import</span> <span class="nn">io</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">defaultdict</span>
-<span class="kn">from</span> <span class="nn">glob</span> <span class="k">import</span> <span class="n">glob</span>
 
-<span class="kn">from</span> <span class="nn">qgis.core</span> <span class="k">import</span> <span class="n">QgsApplication</span><span class="p">,</span> <span class="n">QgsGeometry</span><span class="p">,</span> <span class="n">QgsVectorLayer</span>
+<span class="c1"># isort: off</span>
+<span class="kn">from</span> <span class="nn">past.builtins</span> <span class="k">import</span> <span class="n">basestring</span>  <span class="c1"># NOQA: F401 - qgis/utils.py:744: Warning</span>
+
+<span class="c1"># isort: on</span>
 <span class="kn">import</span> <span class="nn">qgis.utils</span>
+<span class="kn">from</span> <span class="nn">osgeo</span> <span class="k">import</span> <span class="n">gdal</span>
+<span class="kn">from</span> <span class="nn">qgis.core</span> <span class="k">import</span> <span class="n">QgsApplication</span><span class="p">,</span> <span class="n">QgsGeometry</span><span class="p">,</span> <span class="n">QgsVectorLayer</span>
+
+<span class="kn">from</span> <span class="nn">catatom2osm</span> <span class="k">import</span> <span class="n">cdau</span>  <span class="c1"># NOQA: F401 - Used in get_auxiliary_addresses</span>
+<span class="kn">from</span> <span class="nn">catatom2osm</span> <span class="k">import</span> <span class="n">catatom</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">csvtools</span><span class="p">,</span> <span class="n">geo</span><span class="p">,</span> <span class="n">osmxml</span><span class="p">,</span> <span class="n">overpass</span>
+<span class="kn">from</span> <span class="nn">catatom2osm.report</span> <span class="k">import</span> <span class="n">instance</span> <span class="k">as</span> <span class="n">report</span>
 
 <span class="n">qgis</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">uninstallErrorHook</span><span class="p">()</span>
-<span class="n">qgis_utils</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">qgis</span><span class="o">.</span><span class="n">utils</span><span class="p">,</span> <span class="s1">&#39;QGis&#39;</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">qgis</span><span class="o">.</span><span class="n">utils</span><span class="p">,</span> <span class="s1">&#39;Qgis&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
-<span class="kn">from</span> <span class="nn">osgeo</span> <span class="k">import</span> <span class="n">gdal</span>
-
-<span class="kn">from</span> <span class="nn">catatom2osm</span> <span class="k">import</span> <span class="n">config</span><span class="p">,</span> <span class="n">catatom</span><span class="p">,</span> <span class="n">csvtools</span><span class="p">,</span> <span class="n">geo</span><span class="p">,</span> <span class="n">osm</span><span class="p">,</span> <span class="n">osmxml</span><span class="p">,</span> <span class="n">overpass</span>
-<span class="kn">from</span> <span class="nn">catatom2osm</span> <span class="k">import</span> <span class="n">cdau</span>  <span class="c1"># Used in get_auxiliary_addresses</span>
-<span class="kn">from</span> <span class="nn">catatom2osm.report</span> <span class="k">import</span> <span class="n">instance</span> <span class="k">as</span> <span class="n">report</span>
+<span class="n">qgis_utils</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">qgis</span><span class="o">.</span><span class="n">utils</span><span class="p">,</span> <span class="s2">&quot;QGis&quot;</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">qgis</span><span class="o">.</span><span class="n">utils</span><span class="p">,</span> <span class="s2">&quot;Qgis&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
 
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">app_name</span><span class="p">)</span>
 <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">silence_gdal</span><span class="p">:</span>
-    <span class="n">gdal</span><span class="o">.</span><span class="n">PushErrorHandler</span><span class="p">(</span><span class="s1">&#39;CPLQuietErrorHandler&#39;</span><span class="p">)</span>
+    <span class="n">gdal</span><span class="o">.</span><span class="n">PushErrorHandler</span><span class="p">(</span><span class="s2">&quot;CPLQuietErrorHandler&quot;</span><span class="p">)</span>
 
-<span class="n">tasks_folder</span> <span class="o">=</span> <span class="s1">&#39;tasks&#39;</span>
+<span class="n">tasks_folder</span> <span class="o">=</span> <span class="s2">&quot;tasks&quot;</span>
 
 
 <div class="viewcode-block" id="QgsSingleton"><a class="viewcode-back" href="../../api/catatom2osm.app.html#catatom2osm.app.QgsSingleton">[docs]</a><span class="k">class</span> <span class="nc">QgsSingleton</span><span class="p">(</span><span class="n">QgsApplication</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Keeps a unique instance of QGIS for the application (and tests)&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Keep a unique instance of QGIS for the application (and tests).&quot;&quot;&quot;</span>
+
     <span class="n">_qgs</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">QgsSingleton</span><span class="o">.</span><span class="n">_qgs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># Init qGis API</span>
             <span class="n">QgsSingleton</span><span class="o">.</span><span class="n">_qgs</span> <span class="o">=</span> <span class="n">QgsApplication</span><span class="p">([],</span> <span class="kc">False</span><span class="p">)</span>
-            <span class="n">qgis_prefix</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;QGISHOME&#39;</span><span class="p">)</span>
+            <span class="n">qgis_prefix</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;QGISHOME&quot;</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">qgis_prefix</span><span class="p">:</span>
                 <span class="n">QgsApplication</span><span class="o">.</span><span class="n">setPrefixPath</span><span class="p">(</span><span class="n">qgis_prefix</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
             <span class="n">QgsApplication</span><span class="o">.</span><span class="n">initQgis</span><span class="p">()</span>
             <span class="c1"># sets GDAL to convert xlink references to fields but not resolve</span>
-            <span class="n">gdal</span><span class="o">.</span><span class="n">SetConfigOption</span><span class="p">(</span><span class="s1">&#39;GML_ATTRIBUTES_TO_OGR_FIELDS&#39;</span><span class="p">,</span> <span class="s1">&#39;YES&#39;</span><span class="p">)</span>
-            <span class="n">gdal</span><span class="o">.</span><span class="n">SetConfigOption</span><span class="p">(</span><span class="s1">&#39;GML_SKIP_RESOLVE_ELEMS&#39;</span><span class="p">,</span> <span class="s1">&#39;ALL&#39;</span><span class="p">)</span>
+            <span class="n">gdal</span><span class="o">.</span><span class="n">SetConfigOption</span><span class="p">(</span><span class="s2">&quot;GML_ATTRIBUTES_TO_OGR_FIELDS&quot;</span><span class="p">,</span> <span class="s2">&quot;YES&quot;</span><span class="p">)</span>
+            <span class="n">gdal</span><span class="o">.</span><span class="n">SetConfigOption</span><span class="p">(</span><span class="s2">&quot;GML_SKIP_RESOLVE_ELEMS&quot;</span><span class="p">,</span> <span class="s2">&quot;ALL&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">QgsSingleton</span><span class="o">.</span><span class="n">_qgs</span></div>
 
 
 <div class="viewcode-block" id="CatAtom2Osm"><a class="viewcode-back" href="../../api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm">[docs]</a><span class="k">class</span> <span class="nc">CatAtom2Osm</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Main application class for a tool to convert the data sets from the</span>
-<span class="sd">    Spanish Cadastre ATOM Services to OSM files.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Main application class.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a_path</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Constructor.</span>
+<span class="sd">        Application constructor.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            a_path (str): Directory where the source files are located.</span>
@@ -149,15 +148,17 @@
         <span class="n">report</span><span class="o">.</span><span class="n">gdal_version</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">__version__</span>
         <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Initialized QGIS </span><span class="si">%s</span><span class="s2"> API&quot;</span><span class="p">),</span> <span class="n">report</span><span class="o">.</span><span class="n">qgs_version</span><span class="p">)</span>
         <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Using GDAL </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">),</span> <span class="n">report</span><span class="o">.</span><span class="n">gdal_version</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">zoning</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">address</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tasks_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="n">tasks_folder</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tasks_path</span><span class="p">):</span>
             <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tasks_path</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">get_split</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">highway_names_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;highway_names.csv&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">highway_names_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;highway_names.csv&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">is_new</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">highway_names_path</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="s1">&#39;building&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="s2">&quot;building&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">address</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">building</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="s1">&#39;address&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="s2">&quot;address&quot;</span>
 
 <div class="viewcode-block" id="CatAtom2Osm.create_and_run"><a class="viewcode-back" href="../../api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.create_and_run">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">create_and_run</span><span class="p">(</span><span class="n">a_path</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
@@ -167,17 +168,19 @@
 
 <div class="viewcode-block" id="CatAtom2Osm.get_task_comment"><a class="viewcode-back" href="../../api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.get_task_comment">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">get_task_comment</span><span class="p">(</span><span class="n">label</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return comment for task with this label&quot;&quot;&quot;</span>
-        <span class="n">comment</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span>
-            <span class="n">config</span><span class="o">.</span><span class="n">changeset_tags</span><span class="p">[</span><span class="s1">&#39;comment&#39;</span><span class="p">],</span>
-            <span class="n">report</span><span class="o">.</span><span class="n">mun_code</span><span class="p">,</span>
-            <span class="n">report</span><span class="o">.</span><span class="n">mun_name</span><span class="p">,</span>
-            <span class="n">label</span><span class="p">,</span>
-        <span class="p">))</span>
+        <span class="sd">&quot;&quot;&quot;Return comment for task with this label.&quot;&quot;&quot;</span>
+        <span class="n">comment</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="n">config</span><span class="o">.</span><span class="n">changeset_tags</span><span class="p">[</span><span class="s2">&quot;comment&quot;</span><span class="p">],</span>
+                <span class="n">report</span><span class="o">.</span><span class="n">mun_code</span><span class="p">,</span>
+                <span class="n">report</span><span class="o">.</span><span class="n">mun_name</span><span class="p">,</span>
+                <span class="n">label</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
         <span class="k">return</span> <span class="n">comment</span></div>
 
 <div class="viewcode-block" id="CatAtom2Osm.run"><a class="viewcode-back" href="../../api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Launches the app&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Launch the app processing.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">comment</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">add_comments</span><span class="p">()</span>
             <span class="k">return</span>
@@ -191,6 +194,8 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">get_parcel</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">get_building</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">get_zoning</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">zoning</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">export_poly</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process_building</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process_parcel</span><span class="p">()</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">address</span><span class="p">:</span>
@@ -208,43 +213,46 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">finish</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="CatAtom2Osm.add_comments"><a class="viewcode-back" href="../../api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.add_comments">[docs]</a>    <span class="k">def</span> <span class="nf">add_comments</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Recover missing task files metadata after Josm editing.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Recover missing task files metadata after JOSM editing.&quot;&quot;&quot;</span>
         <span class="n">folder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tasks_path</span><span class="p">)</span>
-        <span class="n">report_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;report.json&#39;</span><span class="p">)</span>
+        <span class="n">report_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;report.json&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">report_path</span><span class="p">):</span>
             <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;No report found&quot;</span><span class="p">))</span>
             <span class="k">return</span>
         <span class="n">report</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">report_path</span><span class="p">)</span>
         <span class="n">tasks</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tasks_path</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">fn</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.osm&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">fn</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.osm.gz&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">fn</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.osm&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">fn</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.osm.gz&quot;</span><span class="p">):</span>
                 <span class="n">tasks</span> <span class="o">+=</span> <span class="mi">1</span>
-                <span class="n">label</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">label</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
                 <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_osm</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">fn</span><span class="p">)</span>
-                <span class="n">fixmes</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="mi">1</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">elements</span> <span class="k">if</span> <span class="s1">&#39;fixme&#39;</span> <span class="ow">in</span> <span class="n">e</span><span class="o">.</span><span class="n">tags</span><span class="p">])</span>
+                <span class="n">fixmes</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="mi">1</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">elements</span> <span class="k">if</span> <span class="s2">&quot;fixme&quot;</span> <span class="ow">in</span> <span class="n">e</span><span class="o">.</span><span class="n">tags</span><span class="p">])</span>
                 <span class="k">if</span> <span class="n">fixmes</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                     <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Check </span><span class="si">%d</span><span class="s2"> fixme tags&quot;</span><span class="p">),</span> <span class="n">fixmes</span><span class="p">)</span>
                 <span class="n">oldtags</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">tags</span><span class="p">)</span>
                 <span class="n">data</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">changeset_tags</span><span class="p">)</span>
-                <span class="n">data</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;comment&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_task_comment</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
-                <span class="n">data</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;generator&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">report</span><span class="o">.</span><span class="n">app_version</span>
-                <span class="k">if</span> <span class="s1">&#39;building_date&#39;</span> <span class="ow">in</span> <span class="n">report</span><span class="o">.</span><span class="n">values</span><span class="p">:</span>
-                    <span class="n">data</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;source:date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">report</span><span class="o">.</span><span class="n">building_date</span>
-                <span class="k">if</span> <span class="s1">&#39;address_date&#39;</span> <span class="ow">in</span> <span class="n">report</span><span class="o">.</span><span class="n">values</span><span class="p">:</span>
-                    <span class="n">data</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;source:date:addr&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">report</span><span class="o">.</span><span class="n">address_date</span>
+                <span class="n">data</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s2">&quot;comment&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_task_comment</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+                <span class="n">data</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s2">&quot;generator&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">report</span><span class="o">.</span><span class="n">app_version</span>
+                <span class="k">if</span> <span class="s2">&quot;building_date&quot;</span> <span class="ow">in</span> <span class="n">report</span><span class="o">.</span><span class="n">values</span><span class="p">:</span>
+                    <span class="n">data</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s2">&quot;source:date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">report</span><span class="o">.</span><span class="n">building_date</span>
+                <span class="k">if</span> <span class="s2">&quot;address_date&quot;</span> <span class="ow">in</span> <span class="n">report</span><span class="o">.</span><span class="n">values</span><span class="p">:</span>
+                    <span class="n">data</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s2">&quot;source:date:addr&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">report</span><span class="o">.</span><span class="n">address_date</span>
                 <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">tags</span> <span class="o">!=</span> <span class="n">oldtags</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">write_osm</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">folder</span><span class="p">,</span> <span class="n">fn</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">tasks</span><span class="p">:</span>
             <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;No tasks found&quot;</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="CatAtom2Osm.get_split"><a class="viewcode-back" href="../../api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.get_split">[docs]</a>    <span class="k">def</span> <span class="nf">get_split</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Get boundary file for splitting&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Get boundary file for splitting.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">split</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">split</span><span class="p">:</span>
-            <span class="n">split</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">BaseLayer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">split</span><span class="p">,</span> <span class="s1">&#39;zoningsplit&#39;</span><span class="p">,</span> <span class="s1">&#39;ogr&#39;</span><span class="p">)</span>
+            <span class="n">fn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">split</span>
+            <span class="k">if</span> <span class="n">fn</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.osm&quot;</span><span class="p">):</span>
+                <span class="n">fn</span> <span class="o">+=</span> <span class="s2">&quot;|layername=multipolygons&quot;</span>
+            <span class="n">split</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">BaseLayer</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="s2">&quot;zoningsplit&quot;</span><span class="p">,</span> <span class="s2">&quot;ogr&quot;</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">split</span><span class="o">.</span><span class="n">isValid</span><span class="p">():</span>
                 <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">&quot;Can&#39;t open </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">split</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">split</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">PolygonLayer</span><span class="p">(</span><span class="s1">&#39;MultiPolygon&#39;</span><span class="p">,</span> <span class="s1">&#39;split&#39;</span><span class="p">,</span> <span class="s1">&#39;memory&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">split</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">PolygonLayer</span><span class="p">(</span><span class="s2">&quot;MultiPolygon&quot;</span><span class="p">,</span> <span class="s2">&quot;split&quot;</span><span class="p">,</span> <span class="s2">&quot;memory&quot;</span><span class="p">)</span>
             <span class="n">q</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">f</span><span class="p">,</span> <span class="n">__</span><span class="p">:</span> <span class="n">f</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span><span class="o">.</span><span class="n">wkbType</span><span class="p">()</span> <span class="o">==</span> <span class="n">geo</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">WKBMultiPolygon</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">split</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">split</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="n">q</span><span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">split</span><span class="o">.</span><span class="n">featureCount</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -252,7 +260,7 @@
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="CatAtom2Osm.get_parcel"><a class="viewcode-back" href="../../api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.get_parcel">[docs]</a>    <span class="k">def</span> <span class="nf">get_parcel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Get parcels dataset&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Get parcels dataset.&quot;&quot;&quot;</span>
         <span class="n">parcel_gml</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;cadastralparcel&quot;</span><span class="p">)</span>
         <span class="n">report</span><span class="o">.</span><span class="n">cat_mun</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">cat_mun</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">ParcelLayer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">zip_code</span><span class="p">)</span>
@@ -268,7 +276,7 @@
                 <span class="n">pa</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">parcel_gml</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;localId = &#39;</span><span class="si">{localid}</span><span class="s2">&#39;&quot;</span><span class="p">))</span>
             <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
                 <span class="n">msg</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Parcel &#39;</span><span class="si">%s</span><span class="s2">&#39; does not exists&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="n">localid</span>
-                <span class="k">raise</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">))</span>
+                <span class="k">raise</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">))</span>
             <span class="n">bb</span> <span class="o">=</span> <span class="n">pa</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span><span class="o">.</span><span class="n">boundingBox</span><span class="p">()</span><span class="o">.</span><span class="n">buffered</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">parcel_buffer</span><span class="p">)</span>
             <span class="n">g</span> <span class="o">=</span> <span class="n">QgsGeometry</span><span class="o">.</span><span class="n">fromRect</span><span class="p">(</span><span class="n">bb</span><span class="p">)</span>
             <span class="n">q</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">f</span><span class="p">,</span> <span class="n">__</span><span class="p">:</span> <span class="n">geo</span><span class="o">.</span><span class="n">aux</span><span class="o">.</span><span class="n">is_inside</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">g</span><span class="p">)</span>
@@ -279,20 +287,18 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;No parcels data&quot;</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="CatAtom2Osm.get_building"><a class="viewcode-back" href="../../api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.get_building">[docs]</a>    <span class="k">def</span> <span class="nf">get_building</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Merge building, parts and pools&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Merge building, parts and pools.&quot;&quot;&quot;</span>
         <span class="n">building_gml</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;building&quot;</span><span class="p">)</span>
         <span class="n">other_gml</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;otherconstruction&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">delete_void_parcels</span><span class="p">(</span><span class="n">building_gml</span><span class="p">,</span> <span class="n">other_gml</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">clean</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">create_missing_parcels</span><span class="p">(</span><span class="n">building_gml</span><span class="p">,</span> <span class="n">other_gml</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">split</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="n">f</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">]:</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">()</span>
-        <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span> <span class="o">=</span> <span class="p">{</span><span class="n">f</span><span class="p">[</span><span class="s2">&quot;localId&quot;</span><span class="p">]:</span> <span class="n">f</span><span class="p">[</span><span class="s2">&quot;localId&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">()}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">building</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">ConsLayer</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">building</span><span class="o">.</span><span class="n">source_date</span> <span class="o">=</span> <span class="n">building_gml</span><span class="o">.</span><span class="n">source_date</span>
         <span class="n">q</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">split</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">parcel</span><span class="p">:</span>
-            <span class="n">q</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">f</span><span class="p">,</span> <span class="n">kw</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">building</span><span class="o">.</span><span class="n">get_id</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="ow">in</span> <span class="n">kw</span><span class="p">[</span><span class="s1">&#39;keys&#39;</span><span class="p">]</span>
+            <span class="n">q</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">f</span><span class="p">,</span> <span class="n">kw</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">building</span><span class="o">.</span><span class="n">get_id</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="ow">in</span> <span class="n">kw</span><span class="p">[</span><span class="s2">&quot;keys&quot;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">building</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">building_gml</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="n">q</span><span class="p">,</span> <span class="n">keys</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tasks</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
         <span class="k">del</span> <span class="n">building_gml</span>
         <span class="n">inbu</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">building</span><span class="o">.</span><span class="n">featureCount</span><span class="p">()</span>
@@ -321,25 +327,25 @@
         <span class="n">tasks_u</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">to_clean</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">pa</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">():</span>
-            <span class="n">label</span> <span class="o">=</span> <span class="n">pa</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">]</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="n">pa</span><span class="p">[</span><span class="s2">&quot;localId&quot;</span><span class="p">]</span>
             <span class="n">task</span> <span class="o">=</span> <span class="n">tasks</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">task</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">to_clean</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pa</span><span class="o">.</span><span class="n">id</span><span class="p">())</span>
                 <span class="k">continue</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pa</span><span class="p">[</span><span class="s1">&#39;zone&#39;</span><span class="p">])</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pa</span><span class="p">[</span><span class="s2">&quot;zone&quot;</span><span class="p">])</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
                 <span class="n">tasks_r</span> <span class="o">+=</span> <span class="mi">1</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">tasks_u</span> <span class="o">+=</span> <span class="mi">1</span>
             <span class="n">comment</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_task_comment</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
-            <span class="n">task_osm</span> <span class="o">=</span> <span class="n">task</span><span class="o">.</span><span class="n">to_osm</span><span class="p">(</span><span class="n">upload</span><span class="o">=</span><span class="s1">&#39;yes&#39;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;comment&#39;</span><span class="p">:</span> <span class="n">comment</span><span class="p">})</span>
+            <span class="n">task_osm</span> <span class="o">=</span> <span class="n">task</span><span class="o">.</span><span class="n">to_osm</span><span class="p">(</span><span class="n">upload</span><span class="o">=</span><span class="s2">&quot;yes&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="n">comment</span><span class="p">})</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">address</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">building</span><span class="p">:</span>
-                 <span class="bp">self</span><span class="o">.</span><span class="n">merge_address</span><span class="p">(</span><span class="n">task_osm</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">address_osm</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">merge_address</span><span class="p">(</span><span class="n">task_osm</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">address_osm</span><span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">address</span><span class="p">:</span>
                 <span class="n">report</span><span class="o">.</span><span class="n">address_stats</span><span class="p">(</span><span class="n">task_osm</span><span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">building</span><span class="p">:</span>
                 <span class="n">report</span><span class="o">.</span><span class="n">cons_stats</span><span class="p">(</span><span class="n">task_osm</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
                 <span class="n">report</span><span class="o">.</span><span class="n">osm_stats</span><span class="p">(</span><span class="n">task_osm</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">write_osm</span><span class="p">(</span><span class="n">task_osm</span><span class="p">,</span> <span class="n">tasks_folder</span><span class="p">,</span> <span class="n">label</span> <span class="o">+</span> <span class="s1">&#39;.osm.gz&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write_osm</span><span class="p">(</span><span class="n">task_osm</span><span class="p">,</span> <span class="n">tasks_folder</span><span class="p">,</span> <span class="n">label</span> <span class="o">+</span> <span class="s2">&quot;.osm.gz&quot;</span><span class="p">)</span>
             <span class="k">del</span> <span class="n">task</span>
         <span class="k">if</span> <span class="n">to_clean</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">deleteFeatures</span><span class="p">(</span><span class="n">to_clean</span><span class="p">)</span>
@@ -350,9 +356,7 @@
         <span class="n">report</span><span class="o">.</span><span class="n">tasks_u</span> <span class="o">=</span> <span class="n">tasks_u</span></div>
 
 <div class="viewcode-block" id="CatAtom2Osm.get_tasks"><a class="viewcode-back" href="../../api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.get_tasks">[docs]</a>    <span class="k">def</span> <span class="nf">get_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Put each source feature into a task layer according to their localId.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Put each source feature into a task layer.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tasks_path</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tasks_path</span><span class="p">):</span>
                 <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
@@ -380,47 +384,60 @@
         <span class="k">return</span> <span class="n">tasks</span></div>
 
 <div class="viewcode-block" id="CatAtom2Osm.get_zoning"><a class="viewcode-back" href="../../api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.get_zoning">[docs]</a>    <span class="k">def</span> <span class="nf">get_zoning</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Get zoning data&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Get zoning data.&quot;&quot;&quot;</span>
         <span class="n">zoning_gml</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;cadastralzoning&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">rustic_zoning</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">ZoningLayer</span><span class="p">(</span><span class="n">baseName</span><span class="o">=</span><span class="s1">&#39;rusticzoning&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">urban_zoning</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">ZoningLayer</span><span class="p">(</span><span class="n">baseName</span><span class="o">=</span><span class="s1">&#39;urbanzoning&#39;</span><span class="p">)</span>
-        <span class="n">q</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">f</span><span class="p">,</span> <span class="n">kw</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">urban_zoning</span><span class="o">.</span><span class="n">check_zone</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">kw</span><span class="p">[</span><span class="s1">&#39;level&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rustic_zoning</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">ZoningLayer</span><span class="p">(</span><span class="n">baseName</span><span class="o">=</span><span class="s2">&quot;rusticzoning&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">urban_zoning</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">ZoningLayer</span><span class="p">(</span><span class="n">baseName</span><span class="o">=</span><span class="s2">&quot;urbanzoning&quot;</span><span class="p">)</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">f</span><span class="p">,</span> <span class="n">kw</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">urban_zoning</span><span class="o">.</span><span class="n">check_zone</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">kw</span><span class="p">[</span><span class="s2">&quot;level&quot;</span><span class="p">])</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">split</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">parcel</span><span class="p">:</span>
             <span class="n">q</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">f</span><span class="p">,</span> <span class="n">kw</span><span class="p">:</span> <span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">urban_zoning</span><span class="o">.</span><span class="n">check_zone</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">kw</span><span class="p">[</span><span class="s1">&#39;level&#39;</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">urban_zoning</span><span class="o">.</span><span class="n">check_zone</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">kw</span><span class="p">[</span><span class="s2">&quot;level&quot;</span><span class="p">])</span>
                 <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">parcel_query</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">kw</span><span class="p">)</span>
             <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">rustic_zoning</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">zoning_gml</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="n">q</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="s1">&#39;P&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">urban_zoning</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">zoning_gml</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="n">q</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="s1">&#39;M&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rustic_zoning</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">zoning_gml</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="n">q</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="s2">&quot;P&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">urban_zoning</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">zoning_gml</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="n">q</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="s2">&quot;M&quot;</span><span class="p">)</span>
         <span class="k">del</span> <span class="n">zoning_gml</span></div>
 
 <div class="viewcode-block" id="CatAtom2Osm.get_boundary"><a class="viewcode-back" href="../../api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.get_boundary">[docs]</a>    <span class="k">def</span> <span class="nf">get_boundary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get best boundary search area for overpass queries.&quot;&quot;&quot;</span>
-        <span class="n">fn</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">app_path</span><span class="p">,</span> <span class="s1">&#39;municipalities.csv&#39;</span><span class="p">)</span>
+        <span class="n">fn</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">app_path</span><span class="p">,</span> <span class="s2">&quot;municipalities.csv&quot;</span><span class="p">)</span>
         <span class="n">__</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="n">csvtools</span><span class="o">.</span><span class="n">get_key</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">zip_code</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">boundary_search_area</span> <span class="o">=</span> <span class="nb">id</span>
         <span class="n">report</span><span class="o">.</span><span class="n">mun_name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Municipality: &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">),</span> <span class="n">name</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="CatAtom2Osm.output_zoning"><a class="viewcode-back" href="../../api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.output_zoning">[docs]</a>    <span class="k">def</span> <span class="nf">output_zoning</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Generates project zoning file&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Generate project zoning file.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">parcel</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">simplify</span><span class="p">()</span>
-            <span class="n">fn</span> <span class="o">=</span> <span class="s1">&#39;zoning.geojson&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">set_muncode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">zip_code</span><span class="p">)</span>
+            <span class="n">fn</span> <span class="o">=</span> <span class="s2">&quot;zoning.geojson&quot;</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">export_layer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">target_crs_id</span><span class="o">=</span><span class="mi">4326</span><span class="p">)</span>
             <span class="n">report</span><span class="o">.</span><span class="n">tasks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">featureCount</span><span class="p">()</span></div>
 
+<div class="viewcode-block" id="CatAtom2Osm.export_poly"><a class="viewcode-back" href="../../api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.export_poly">[docs]</a>    <span class="k">def</span> <span class="nf">export_poly</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">bpoly</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">ZoningLayer</span><span class="p">()</span>
+        <span class="n">bpoly</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rustic_zoning</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="s2">&quot;P&quot;</span><span class="p">)</span>
+        <span class="n">bpoly</span><span class="o">.</span><span class="n">reproject</span><span class="p">()</span>
+        <span class="n">fn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;boundary.poly&quot;</span><span class="p">)</span>
+        <span class="n">bpoly</span><span class="o">.</span><span class="n">export_poly</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Generated &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">),</span> <span class="n">fn</span><span class="p">)</span>
+        <span class="k">del</span> <span class="n">bpoly</span></div>
+
 <div class="viewcode-block" id="CatAtom2Osm.process_building"><a class="viewcode-back" href="../../api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.process_building">[docs]</a>    <span class="k">def</span> <span class="nf">process_building</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Process all buildings dataset&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Process all buildings dataset.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">building</span><span class="o">.</span><span class="n">remove_outside_parts</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">building</span><span class="o">.</span><span class="n">remove_parts_wo_building</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">building</span><span class="o">.</span><span class="n">explode_multi_parts</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">building</span><span class="o">.</span><span class="n">clean</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">log</span><span class="o">.</span><span class="n">app_level</span> <span class="o">&lt;=</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">:</span>
+            <span class="n">fn</span> <span class="o">=</span> <span class="s2">&quot;building.geojson&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">export_layer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">building</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="s2">&quot;GeoJSON&quot;</span><span class="p">,</span> <span class="n">target_crs_id</span><span class="o">=</span><span class="mi">4326</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">building</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">building</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">report</span><span class="o">.</span><span class="n">max_level</span><span class="p">,</span> <span class="n">report</span><span class="o">.</span><span class="n">min_level</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="CatAtom2Osm.process_parcel"><a class="viewcode-back" href="../../api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.process_parcel">[docs]</a>    <span class="k">def</span> <span class="nf">process_parcel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Process parcels dataset&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Process parcels dataset.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">set_zones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">urban_zoning</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">set_zones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rustic_zoning</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">set_missing_zones</span><span class="p">()</span>
@@ -433,54 +450,51 @@
         <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">tasks2</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span></div>
 
-
 <div class="viewcode-block" id="CatAtom2Osm.finish"><a class="viewcode-back" href="../../api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.finish">[docs]</a>    <span class="k">def</span> <span class="nf">finish</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Generates final report&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Generate final report.&quot;&quot;&quot;</span>
         <span class="n">options</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span>
         <span class="k">if</span> <span class="n">log</span><span class="o">.</span><span class="n">app_level</span> <span class="o">&gt;</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">:</span>
-            <span class="n">geo</span><span class="o">.</span><span class="n">BaseLayer</span><span class="o">.</span><span class="n">delete_shp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;parcel.shp&#39;</span><span class="p">))</span>
-            <span class="n">geo</span><span class="o">.</span><span class="n">BaseLayer</span><span class="o">.</span><span class="n">delete_shp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;building.shp&#39;</span><span class="p">))</span>
+            <span class="n">geo</span><span class="o">.</span><span class="n">BaseLayer</span><span class="o">.</span><span class="n">delete_shp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;parcel.shp&quot;</span><span class="p">))</span>
+            <span class="n">geo</span><span class="o">.</span><span class="n">BaseLayer</span><span class="o">.</span><span class="n">delete_shp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;building.shp&quot;</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">report</span><span class="o">.</span><span class="n">fixme_stats</span><span class="p">():</span>
             <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Check </span><span class="si">%d</span><span class="s2"> fixme tags&quot;</span><span class="p">),</span> <span class="n">report</span><span class="o">.</span><span class="n">fixme_count</span><span class="p">)</span>
-            <span class="n">fn</span> <span class="o">=</span> <span class="s1">&#39;review.txt&#39;</span>
+            <span class="n">fn</span> <span class="o">=</span> <span class="s2">&quot;review.txt&quot;</span>
             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="n">fn</span><span class="p">),</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fo</span><span class="p">:</span>
                 <span class="n">fixmes</span> <span class="o">=</span> <span class="n">report</span><span class="o">.</span><span class="n">get_tasks_with_fixmes</span><span class="p">()</span>
-                <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">eol</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">fixmes</span><span class="p">)</span> <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">eol</span>
-                <span class="p">)</span>
-                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-                    <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Generated &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;. &#39;</span> <span class="o">+</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Please, check it&quot;</span><span class="p">),</span> <span class="n">fn</span>
-                <span class="p">)</span>
+                <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">eol</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">fixmes</span><span class="p">)</span> <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">eol</span><span class="p">)</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Generated &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;. &quot;</span> <span class="o">+</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Please, check it&quot;</span><span class="p">),</span> <span class="n">fn</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">options</span><span class="o">.</span><span class="n">building</span><span class="p">:</span>
             <span class="n">report</span><span class="o">.</span><span class="n">cons_end_stats</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">report</span><span class="o">.</span><span class="n">clean_group</span><span class="p">(</span><span class="s1">&#39;building&#39;</span><span class="p">)</span>
+            <span class="n">report</span><span class="o">.</span><span class="n">clean_group</span><span class="p">(</span><span class="s2">&quot;building&quot;</span><span class="p">)</span>
         <span class="n">report</span><span class="o">.</span><span class="n">validate</span><span class="p">()</span>
-        <span class="n">report</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;report.txt&#39;</span><span class="p">))</span>
-        <span class="n">report</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;report.json&#39;</span><span class="p">))</span>
+        <span class="n">report</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;report.txt&quot;</span><span class="p">))</span>
+        <span class="n">report</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;report.json&quot;</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">move_project</span><span class="p">()</span>
         <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Finished!&quot;</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="CatAtom2Osm.exit"><a class="viewcode-back" href="../../api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.exit">[docs]</a>    <span class="k">def</span> <span class="nf">exit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Ends properly&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Exit properly.&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">propname</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">propname</span><span class="p">),</span> <span class="n">QgsVectorLayer</span><span class="p">):</span>
                 <span class="nb">delattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">propname</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="CatAtom2Osm.get_address"><a class="viewcode-back" href="../../api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.get_address">[docs]</a>    <span class="k">def</span> <span class="nf">get_address</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Reads Address GML dataset&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Read Address GML dataset.&quot;&quot;&quot;</span>
         <span class="n">address_gml</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;address&quot;</span><span class="p">)</span>
         <span class="n">report</span><span class="o">.</span><span class="n">address_date</span> <span class="o">=</span> <span class="n">address_gml</span><span class="o">.</span><span class="n">source_date</span>
-        <span class="k">if</span> <span class="n">address_gml</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">fieldNameIndex</span><span class="p">(</span><span class="s1">&#39;component_href&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">address_gml</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">fieldNameIndex</span><span class="p">(</span><span class="s2">&quot;component_href&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
             <span class="n">address_gml</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;address&quot;</span><span class="p">,</span> <span class="n">force_zip</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">address_gml</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">fieldNameIndex</span><span class="p">(</span><span class="s1">&#39;component_href&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
-                <span class="n">msg</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span>
-                    <span class="s2">&quot;Could not resolve joined tables for the &#39;</span><span class="si">%s</span><span class="s2">&#39; layer&quot;</span>
-                <span class="p">)</span> <span class="o">%</span> <span class="n">address_gml</span><span class="o">.</span><span class="n">name</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">address_gml</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">fieldNameIndex</span><span class="p">(</span><span class="s2">&quot;component_href&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Could not resolve joined tables for the &#39;</span><span class="si">%s</span><span class="s2">&#39; layer&quot;</span><span class="p">)</span>
+                    <span class="o">%</span> <span class="n">address_gml</span><span class="o">.</span><span class="n">name</span><span class="p">()</span>
+                <span class="p">)</span>
                 <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">address</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">AddressLayer</span><span class="p">(</span><span class="n">source_date</span><span class="o">=</span><span class="n">address_gml</span><span class="o">.</span><span class="n">source_date</span><span class="p">)</span>
         <span class="n">q</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">split</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">parcel</span><span class="p">:</span>
-            <span class="n">q</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">f</span><span class="p">,</span> <span class="n">kw</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">address</span><span class="o">.</span><span class="n">get_id</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="ow">in</span> <span class="n">kw</span><span class="p">[</span><span class="s1">&#39;keys&#39;</span><span class="p">]</span>
+            <span class="n">q</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">f</span><span class="p">,</span> <span class="n">kw</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">address</span><span class="o">.</span><span class="n">get_id</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="ow">in</span> <span class="n">kw</span><span class="p">[</span><span class="s2">&quot;keys&quot;</span><span class="p">]</span>  <span class="c1"># NOQA: E731</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">boundary_bbox</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">bounding_box</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">address</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">address_gml</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="n">q</span><span class="p">,</span> <span class="n">keys</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tasks</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
         <span class="k">del</span> <span class="n">address_gml</span>
@@ -496,26 +510,22 @@
             <span class="k">return</span>
         <span class="n">postaldescriptor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;postaldescriptor&quot;</span><span class="p">)</span>
         <span class="n">thoroughfarename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;thoroughfarename&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">address</span><span class="o">.</span><span class="n">join_field</span><span class="p">(</span>
-            <span class="n">postaldescriptor</span><span class="p">,</span> <span class="s1">&#39;PD_id&#39;</span><span class="p">,</span> <span class="s1">&#39;gml_id&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;postCode&#39;</span><span class="p">]</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">address</span><span class="o">.</span><span class="n">join_field</span><span class="p">(</span>
-            <span class="n">thoroughfarename</span><span class="p">,</span> <span class="s1">&#39;TN_id&#39;</span><span class="p">,</span> <span class="s1">&#39;gml_id&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">],</span> <span class="s1">&#39;TN_&#39;</span>
-        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">address</span><span class="o">.</span><span class="n">join_field</span><span class="p">(</span><span class="n">postaldescriptor</span><span class="p">,</span> <span class="s2">&quot;PD_id&quot;</span><span class="p">,</span> <span class="s2">&quot;gml_id&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;postCode&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">address</span><span class="o">.</span><span class="n">join_field</span><span class="p">(</span><span class="n">thoroughfarename</span><span class="p">,</span> <span class="s2">&quot;TN_id&quot;</span><span class="p">,</span> <span class="s2">&quot;gml_id&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">],</span> <span class="s2">&quot;TN_&quot;</span><span class="p">)</span>
         <span class="k">del</span> <span class="n">postaldescriptor</span><span class="p">,</span> <span class="n">thoroughfarename</span>
-        <span class="n">report</span><span class="o">.</span><span class="n">inp_zip_codes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">address</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">unique</span><span class="o">=</span><span class="s1">&#39;postCode&#39;</span><span class="p">)</span>
-        <span class="n">report</span><span class="o">.</span><span class="n">inp_street_names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">address</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">unique</span><span class="o">=</span><span class="s1">&#39;TN_text&#39;</span><span class="p">)</span>
+        <span class="n">report</span><span class="o">.</span><span class="n">inp_zip_codes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">address</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">unique</span><span class="o">=</span><span class="s2">&quot;postCode&quot;</span><span class="p">)</span>
+        <span class="n">report</span><span class="o">.</span><span class="n">inp_street_names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">address</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">unique</span><span class="o">=</span><span class="s2">&quot;TN_text&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">get_auxiliary_addresses</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">export_layer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">address</span><span class="p">,</span> <span class="s1">&#39;address.geojson&#39;</span><span class="p">,</span> <span class="n">target_crs_id</span><span class="o">=</span><span class="mi">4326</span><span class="p">)</span>
-        <span class="n">highway_names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_translations</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">address</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_layer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">address</span><span class="p">,</span> <span class="s2">&quot;address.geojson&quot;</span><span class="p">,</span> <span class="n">target_crs_id</span><span class="o">=</span><span class="mi">4326</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_translations</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">address</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="CatAtom2Osm.process_address"><a class="viewcode-back" href="../../api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.process_address">[docs]</a>    <span class="k">def</span> <span class="nf">process_address</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Fix street names, conflate and move addresses&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Fix street names, conflate and move addresses.&quot;&quot;&quot;</span>
         <span class="n">highway_names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_translations</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">address</span><span class="p">)</span>
-        <span class="n">ia</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">address</span><span class="o">.</span><span class="n">translate_field</span><span class="p">(</span><span class="s1">&#39;TN_text&#39;</span><span class="p">,</span> <span class="n">highway_names</span><span class="p">)</span>
+        <span class="n">ia</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">address</span><span class="o">.</span><span class="n">translate_field</span><span class="p">(</span><span class="s2">&quot;TN_text&quot;</span><span class="p">,</span> <span class="n">highway_names</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">ia</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Deleted </span><span class="si">%d</span><span class="s2"> addresses refused by street name&quot;</span><span class="p">),</span> <span class="n">ia</span><span class="p">)</span>
-            <span class="n">report</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="s1">&#39;ignored_addresses&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ia</span>
+            <span class="n">report</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="s2">&quot;ignored_addresses&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ia</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_new</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">manual</span><span class="p">:</span>
             <span class="n">current_address</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_current_ad_osm</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">address</span><span class="o">.</span><span class="n">conflate</span><span class="p">(</span><span class="n">current_address</span><span class="p">)</span>
@@ -524,41 +534,41 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">address_osm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">address</span><span class="o">.</span><span class="n">to_osm</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="CatAtom2Osm.stop_address"><a class="viewcode-back" href="../../api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.stop_address">[docs]</a>    <span class="k">def</span> <span class="nf">stop_address</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Save current processing status and exits&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">export_layer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="p">,</span> <span class="s1">&#39;parcel.shp&#39;</span><span class="p">,</span> <span class="n">driver_name</span><span class="o">=</span><span class="s1">&#39;ESRI Shapefile&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">export_layer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">building</span><span class="p">,</span> <span class="s1">&#39;building.shp&#39;</span><span class="p">,</span> <span class="n">driver_name</span><span class="o">=</span><span class="s1">&#39;ESRI Shapefile&#39;</span><span class="p">)</span>
+        <span class="sd">&quot;&quot;&quot;Save current processing status and exits.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_layer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="p">,</span> <span class="s2">&quot;parcel.shp&quot;</span><span class="p">,</span> <span class="n">driver_name</span><span class="o">=</span><span class="s2">&quot;ESRI Shapefile&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_layer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">building</span><span class="p">,</span> <span class="s2">&quot;building.shp&quot;</span><span class="p">,</span> <span class="n">driver_name</span><span class="o">=</span><span class="s2">&quot;ESRI Shapefile&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">address</span><span class="o">.</span><span class="n">reproject</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">address_osm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">address</span><span class="o">.</span><span class="n">to_osm</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">write_osm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">address_osm</span><span class="p">,</span> <span class="s1">&#39;address.osm&#39;</span><span class="p">)</span>
-        <span class="n">fn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;tasks.csv&#39;</span><span class="p">)</span>
+        <span class="n">address_osm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">address</span><span class="o">.</span><span class="n">to_osm</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write_osm</span><span class="p">(</span><span class="n">address_osm</span><span class="p">,</span> <span class="s2">&quot;address.osm&quot;</span><span class="p">)</span>
+        <span class="n">fn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;tasks.csv&quot;</span><span class="p">)</span>
         <span class="n">csvtools</span><span class="o">.</span><span class="n">dict2csv</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span><span class="p">)</span>
-        <span class="n">report</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;report.txt&#39;</span><span class="p">))</span>
-        <span class="n">report</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;report.json&#39;</span><span class="p">))</span>
+        <span class="n">report</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;report.txt&quot;</span><span class="p">))</span>
+        <span class="n">report</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;report.json&quot;</span><span class="p">))</span>
         <span class="n">msg</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Generated &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">highway_names_path</span>
-        <span class="n">msg</span> <span class="o">+=</span> <span class="s1">&#39;. &#39;</span> <span class="o">+</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Please, check it and run again&quot;</span><span class="p">)</span>
+        <span class="n">msg</span> <span class="o">+=</span> <span class="s2">&quot;. &quot;</span> <span class="o">+</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Please, check it and run again&quot;</span><span class="p">)</span>
         <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="CatAtom2Osm.resume_address"><a class="viewcode-back" href="../../api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.resume_address">[docs]</a>    <span class="k">def</span> <span class="nf">resume_address</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Resume processing for second run of addresses dataset&quot;&quot;&quot;</span>
-        <span class="n">report</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;report.json&#39;</span><span class="p">))</span>
-        <span class="n">fn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;tasks.csv&#39;</span><span class="p">)</span>
+        <span class="sd">&quot;&quot;&quot;Resume processing for second run of addresses dataset.&quot;&quot;&quot;</span>
+        <span class="n">report</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;report.json&quot;</span><span class="p">))</span>
+        <span class="n">fn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;tasks.csv&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span> <span class="o">=</span> <span class="n">csvtools</span><span class="o">.</span><span class="n">csv2dict</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">exists</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="n">fn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;parcel.shp&#39;</span><span class="p">)</span>
-        <span class="n">parcel</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">ParcelLayer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">zip_code</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">providerLib</span><span class="o">=</span><span class="s1">&#39;ogr&#39;</span><span class="p">)</span>
+        <span class="n">fn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;parcel.shp&quot;</span><span class="p">)</span>
+        <span class="n">parcel</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">ParcelLayer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">zip_code</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">providerLib</span><span class="o">=</span><span class="s2">&quot;ogr&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">parcel</span><span class="o">.</span><span class="n">isValid</span><span class="p">()</span> <span class="ow">or</span> <span class="n">parcel</span><span class="o">.</span><span class="n">featureCount</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;No parcels data&quot;</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">ParcelLayer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">zip_code</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">parcel</span><span class="p">)</span>
         <span class="k">del</span> <span class="n">parcel</span>
-        <span class="n">fn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;building.shp&#39;</span><span class="p">)</span>
-        <span class="n">building</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">ConsLayer</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">providerLib</span><span class="o">=</span><span class="s1">&#39;ogr&#39;</span><span class="p">)</span>
+        <span class="n">fn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;building.shp&quot;</span><span class="p">)</span>
+        <span class="n">building</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">ConsLayer</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">providerLib</span><span class="o">=</span><span class="s2">&quot;ogr&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">building</span><span class="o">.</span><span class="n">isValid</span><span class="p">()</span> <span class="ow">or</span> <span class="n">building</span><span class="o">.</span><span class="n">featureCount</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;No buildings data&quot;</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">building</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">ConsLayer</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">building</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">building</span><span class="p">)</span>
         <span class="k">del</span> <span class="n">building</span>
-        <span class="n">fn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;address.geojson&#39;</span><span class="p">)</span>
-        <span class="n">address</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">AddressLayer</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">providerLib</span><span class="o">=</span><span class="s1">&#39;ogr&#39;</span><span class="p">)</span>
+        <span class="n">fn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;address.geojson&quot;</span><span class="p">)</span>
+        <span class="n">address</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">AddressLayer</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">providerLib</span><span class="o">=</span><span class="s2">&quot;ogr&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">address</span><span class="o">.</span><span class="n">isValid</span><span class="p">()</span> <span class="ow">or</span> <span class="n">address</span><span class="o">.</span><span class="n">featureCount</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;No addresses data&quot;</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">address</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">AddressLayer</span><span class="p">()</span>
@@ -568,15 +578,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">address</span><span class="o">.</span><span class="n">reproject</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">building</span><span class="o">.</span><span class="n">crs</span><span class="p">())</span>
         <span class="k">del</span> <span class="n">address</span></div>
 
-
 <div class="viewcode-block" id="CatAtom2Osm.get_auxiliary_addresses"><a class="viewcode-back" href="../../api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.get_auxiliary_addresses">[docs]</a>    <span class="k">def</span> <span class="nf">get_auxiliary_addresses</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;If exists, reads and conflate an auxiliary addresses data source&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Read and conflate auxiliary sources of addresses data.&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">source</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">aux_address</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">zip_code</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">aux_address</span><span class="p">[</span><span class="n">source</span><span class="p">]:</span>
                 <span class="n">aux_source</span> <span class="o">=</span> <span class="nb">globals</span><span class="p">()[</span><span class="n">source</span><span class="p">]</span>
-                <span class="n">aux_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">),</span> <span class="n">config</span><span class="o">.</span><span class="n">aux_path</span>
-                <span class="p">)</span>
+                <span class="n">aux_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">),</span> <span class="n">config</span><span class="o">.</span><span class="n">aux_path</span><span class="p">)</span>
                 <span class="n">reader</span> <span class="o">=</span> <span class="n">aux_source</span><span class="o">.</span><span class="n">Reader</span><span class="p">(</span><span class="n">aux_path</span><span class="p">)</span>
                 <span class="n">aux</span> <span class="o">=</span> <span class="n">reader</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">zip_code</span><span class="p">[:</span><span class="mi">2</span><span class="p">])</span>
                 <span class="n">aux_source</span><span class="o">.</span><span class="n">conflate</span><span class="p">(</span><span class="n">aux</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">address</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">zip_code</span><span class="p">)</span></div>
@@ -590,37 +597,37 @@
 <span class="sd">        else to the entrance if there exist a node with the address coordinates</span>
 <span class="sd">        in the building.</span>
 
-<span class="sd">        Precondition: building.move_address deleted addresses belonging to multiple buildings</span>
+<span class="sd">        Precondition: building.move_address deleted addresses belonging to multiple</span>
+<span class="sd">        buildings</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            building_osm (Osm): OSM data set with buildings</span>
 <span class="sd">            address_osm (Osm): OSM data set with addresses</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="s1">&#39;source:date&#39;</span> <span class="ow">in</span> <span class="n">address_osm</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span>
-            <span class="n">building_osm</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;source:date:addr&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">address_osm</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span>
-                <span class="s1">&#39;source:date&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">&quot;source:date&quot;</span> <span class="ow">in</span> <span class="n">address_osm</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span>
+            <span class="n">building_osm</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s2">&quot;source:date:addr&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">address_osm</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s2">&quot;source:date&quot;</span><span class="p">]</span>
         <span class="n">address_index</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
         <span class="n">building_index</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">bu</span> <span class="ow">in</span> <span class="n">building_osm</span><span class="o">.</span><span class="n">elements</span><span class="p">:</span>
-            <span class="k">if</span> <span class="s1">&#39;ref&#39;</span> <span class="ow">in</span> <span class="n">bu</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span>
-                <span class="n">building_index</span><span class="p">[</span><span class="n">bu</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;ref&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bu</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s2">&quot;ref&quot;</span> <span class="ow">in</span> <span class="n">bu</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span>
+                <span class="n">building_index</span><span class="p">[</span><span class="n">bu</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s2">&quot;ref&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bu</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">ad</span> <span class="ow">in</span> <span class="n">address_osm</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">ad</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;ref&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">building_index</span><span class="p">:</span>
-                <span class="n">address_index</span><span class="p">[</span><span class="n">ad</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;ref&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ad</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">ad</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s2">&quot;ref&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">building_index</span><span class="p">:</span>
+                <span class="n">address_index</span><span class="p">[</span><span class="n">ad</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s2">&quot;ref&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ad</span><span class="p">)</span>
         <span class="n">md</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">group</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">building_index</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
             <span class="n">parcel_ad</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="n">entrance_count</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="k">for</span> <span class="n">ad</span> <span class="ow">in</span> <span class="n">address_index</span><span class="p">[</span><span class="n">ref</span><span class="p">]:</span>
                 <span class="n">entrance</span> <span class="o">=</span> <span class="kc">False</span>
-                <span class="k">if</span> <span class="s1">&#39;entrance&#39;</span> <span class="ow">in</span> <span class="n">ad</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s2">&quot;entrance&quot;</span> <span class="ow">in</span> <span class="n">ad</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span>
                     <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">building_osm</span><span class="o">.</span><span class="n">get_outline</span><span class="p">(</span><span class="n">group</span><span class="p">):</span>
                         <span class="n">entrance</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">search_node</span><span class="p">(</span><span class="n">ad</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">ad</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
                         <span class="k">if</span> <span class="n">entrance</span><span class="p">:</span>
-                            <span class="n">ad</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;group&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">group</span><span class="p">))</span>
+                            <span class="n">ad</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s2">&quot;group&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">group</span><span class="p">))</span>
                             <span class="n">entrance</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">ad</span><span class="o">.</span><span class="n">tags</span><span class="p">)</span>
-                            <span class="n">entrance</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;ref&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-                            <span class="n">entrance</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;image&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                            <span class="n">entrance</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;ref&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                            <span class="n">entrance</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;image&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
                             <span class="k">break</span>
                 <span class="k">if</span> <span class="n">entrance</span><span class="p">:</span>
                     <span class="n">entrance_count</span> <span class="o">+=</span> <span class="mi">1</span>
@@ -630,21 +637,21 @@
                 <span class="n">ad</span> <span class="o">=</span> <span class="n">parcel_ad</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
                 <span class="n">bu</span> <span class="o">=</span> <span class="n">group</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
                 <span class="n">bu</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">ad</span><span class="o">.</span><span class="n">tags</span><span class="p">)</span>
-                <span class="n">bu</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;image&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-                <span class="n">bu</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;entrance&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="n">bu</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;image&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="n">bu</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;entrance&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
             <span class="n">md</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">parcel_ad</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">md</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
-                <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Refused </span><span class="si">%d</span><span class="s2"> &#39;parcel&#39; addresses not unique for it building&quot;</span><span class="p">),</span>
-                <span class="n">md</span><span class="p">)</span>
-            <span class="n">report</span><span class="o">.</span><span class="n">inc</span><span class="p">(</span><span class="s1">&#39;not_unique_addresses&#39;</span><span class="p">,</span> <span class="n">md</span><span class="p">)</span></div>
+            <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Refused </span><span class="si">%d</span><span class="s2"> &#39;parcel&#39; addresses not unique for it building&quot;</span><span class="p">),</span> <span class="n">md</span><span class="p">)</span>
+            <span class="n">report</span><span class="o">.</span><span class="n">inc</span><span class="p">(</span><span class="s2">&quot;not_unique_addresses&quot;</span><span class="p">,</span> <span class="n">md</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="CatAtom2Osm.get_translations"><a class="viewcode-back" href="../../api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.get_translations">[docs]</a>    <span class="k">def</span> <span class="nf">get_translations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">address</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        If there exists the configuration file &#39;highway_types.csv&#39;, read it,</span>
-<span class="sd">        else write one with default values. If don&#39;t exists the translations file</span>
-<span class="sd">        &#39;highway_names.csv&#39;, creates one parsing current OSM highways data, else</span>
-<span class="sd">        reads and returns it as a dictionary.</span>
+<span class="sd">        Get the translate file.</span>
+
+<span class="sd">        If there exists the translation file &#39;highway_types.csv&#39;, read it,</span>
+<span class="sd">        else write one with default values. If the translations file</span>
+<span class="sd">        &#39;highway_names.csv&#39; don&#39;t exist, creates one parsing current OSM</span>
+<span class="sd">        highways data, else reads and returns it as a dictionary.</span>
 
 <span class="sd">        * &#39;highway_types.csv&#39; List of osm elements in json format located in the</span>
 <span class="sd">          application path that contains translations from abbreviations to full</span>
@@ -653,7 +660,7 @@
 <span class="sd">        * &#39;highway_names.csv&#39; is located in the outputh folder and contains</span>
 <span class="sd">          corrections for original highway names.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">highway_types_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">app_path</span><span class="p">,</span> <span class="s1">&#39;highway_types.csv&#39;</span><span class="p">)</span>
+        <span class="n">highway_types_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">app_path</span><span class="p">,</span> <span class="s2">&quot;highway_types.csv&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">highway_types_path</span><span class="p">):</span>
             <span class="n">csvtools</span><span class="o">.</span><span class="n">dict2csv</span><span class="p">(</span><span class="n">highway_types_path</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">highway_types</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -673,43 +680,42 @@
         <span class="k">return</span> <span class="n">highway_names</span></div>
 
 <div class="viewcode-block" id="CatAtom2Osm.get_highway"><a class="viewcode-back" href="../../api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.get_highway">[docs]</a>    <span class="k">def</span> <span class="nf">get_highway</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Gets OSM highways needed for street names conflation&quot;&quot;&quot;</span>
-        <span class="n">ql</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;way[&quot;highway&quot;][&quot;name&quot;]&#39;</span><span class="p">,</span>
-              <span class="s1">&#39;relation[&quot;highway&quot;][&quot;name&quot;]&#39;</span><span class="p">,</span>
-              <span class="s1">&#39;way[&quot;place&quot;=&quot;square&quot;][&quot;name&quot;]&#39;</span><span class="p">,</span>
-              <span class="s1">&#39;relation[&quot;place&quot;=&quot;square&quot;][&quot;name&quot;]&#39;</span><span class="p">]</span>
-        <span class="n">highway_osm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_osm</span><span class="p">(</span><span class="s1">&#39;current_highway.osm&#39;</span><span class="p">,</span> <span class="n">ql</span><span class="o">=</span><span class="n">ql</span><span class="p">)</span>
+        <span class="sd">&quot;&quot;&quot;Get OSM highways for street names conflation.&quot;&quot;&quot;</span>
+        <span class="n">ql</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s1">&#39;way[&quot;highway&quot;][&quot;name&quot;]&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;relation[&quot;highway&quot;][&quot;name&quot;]&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;way[&quot;place&quot;=&quot;square&quot;][&quot;name&quot;]&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;relation[&quot;place&quot;=&quot;square&quot;][&quot;name&quot;]&#39;</span><span class="p">,</span>
+        <span class="p">]</span>
+        <span class="n">highway_osm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_osm</span><span class="p">(</span><span class="s2">&quot;current_highway.osm&quot;</span><span class="p">,</span> <span class="n">ql</span><span class="o">=</span><span class="n">ql</span><span class="p">)</span>
         <span class="n">highway</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">HighwayLayer</span><span class="p">()</span>
         <span class="n">highway</span><span class="o">.</span><span class="n">read_from_osm</span><span class="p">(</span><span class="n">highway_osm</span><span class="p">)</span>
         <span class="k">del</span> <span class="n">highway_osm</span>
         <span class="k">return</span> <span class="n">highway</span></div>
 
 <div class="viewcode-block" id="CatAtom2Osm.get_current_ad_osm"><a class="viewcode-back" href="../../api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.get_current_ad_osm">[docs]</a>    <span class="k">def</span> <span class="nf">get_current_ad_osm</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Gets OSM address for address conflation&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Get OSM address for conflation.&quot;&quot;&quot;</span>
         <span class="n">ql</span> <span class="o">=</span> <span class="p">[</span>
             <span class="s1">&#39;node[&quot;addr:street&quot;][&quot;addr:housenumber&quot;][&quot;entrance&quot;]&#39;</span><span class="p">,</span>
             <span class="s1">&#39;wr[&quot;addr:street&quot;][&quot;addr:housenumber&quot;][~&quot;building&quot;~&quot;.*&quot;]&#39;</span><span class="p">,</span>
             <span class="s1">&#39;nwr[&quot;addr:place&quot;][&quot;addr:housenumber&quot;]&#39;</span><span class="p">,</span>
         <span class="p">]</span>
-        <span class="n">address_osm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_osm</span><span class="p">(</span><span class="s1">&#39;current_address.osm&#39;</span><span class="p">,</span> <span class="n">ql</span><span class="o">=</span><span class="n">ql</span><span class="p">)</span>
+        <span class="n">address_osm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_osm</span><span class="p">(</span><span class="s2">&quot;current_address.osm&quot;</span><span class="p">,</span> <span class="n">ql</span><span class="o">=</span><span class="n">ql</span><span class="p">)</span>
         <span class="n">current_address</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
         <span class="n">w</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">report</span><span class="o">.</span><span class="n">osm_addresses</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">address_osm</span><span class="o">.</span><span class="n">elements</span><span class="p">:</span>
-            <span class="k">if</span> <span class="s1">&#39;addr:housenumber&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span>
-                <span class="k">if</span> <span class="s1">&#39;addr:street&#39;</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">tags</span> <span class="ow">or</span> <span class="s1">&#39;addr:place&#39;</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;addr:housenumber&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s2">&quot;addr:street&quot;</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">tags</span> <span class="ow">or</span> <span class="s2">&quot;addr:place&quot;</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span>
                     <span class="n">w</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="k">elif</span> <span class="s1">&#39;addr:street&#39;</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span>
-                <span class="n">current_address</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
-                    <span class="n">d</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;addr:street&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">d</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;addr:housenumber&#39;</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="s2">&quot;addr:street&quot;</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span>
+                <span class="n">current_address</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s2">&quot;addr:street&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">d</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s2">&quot;addr:housenumber&quot;</span><span class="p">])</span>
                 <span class="n">report</span><span class="o">.</span><span class="n">osm_addresses</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="k">elif</span> <span class="s1">&#39;addr:place&#39;</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span>
-                <span class="n">current_address</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
-                    <span class="n">d</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;addr:place&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">d</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;addr:housenumber&#39;</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="s2">&quot;addr:place&quot;</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span>
+                <span class="n">current_address</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s2">&quot;addr:place&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">d</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s2">&quot;addr:housenumber&quot;</span><span class="p">])</span>
                 <span class="n">report</span><span class="o">.</span><span class="n">osm_addresses</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="k">if</span> <span class="n">w</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">msg</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span>
-                <span class="s2">&quot;There are </span><span class="si">%d</span><span class="s2"> address without house number in the OSM data&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="n">w</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;There are </span><span class="si">%d</span><span class="s2"> address without house number in the OSM data&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="n">w</span>
             <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
             <span class="n">report</span><span class="o">.</span><span class="n">warnings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
             <span class="n">report</span><span class="o">.</span><span class="n">osm_addresses_without_number</span> <span class="o">=</span> <span class="n">w</span>
@@ -717,21 +723,28 @@
 
 <div class="viewcode-block" id="CatAtom2Osm.move_project"><a class="viewcode-back" href="../../api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.move_project">[docs]</a>    <span class="k">def</span> <span class="nf">move_project</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Move to tasks all files needed for the project for backup in the</span>
-<span class="sd">        repository. Use a subdirectory if it&#39;s a split municipality.</span>
+<span class="sd">        Move to tasks all files needed for the backup the in the repository.</span>
+
+<span class="sd">        Use a subdirectory if it&#39;s a split municipality.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">fn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">split</span> <span class="ow">or</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">fn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">split</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>
         <span class="n">bkp_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fn</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">bkp_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="n">tasks_folder</span><span class="p">,</span> <span class="n">bkp_dir</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">bkp_path</span><span class="p">):</span>
             <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">bkp_path</span><span class="p">)</span>
         <span class="n">move_files</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="s1">&#39;current_address.osm&#39;</span><span class="p">,</span> <span class="s1">&#39;current_highway.osm&#39;</span><span class="p">,</span> <span class="s1">&#39;highway_names.csv&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;tasks.csv&#39;</span><span class="p">,</span>
+            <span class="s2">&quot;current_address.osm&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;current_highway.osm&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;highway_names.csv&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;tasks.csv&quot;</span><span class="p">,</span>
         <span class="p">]</span>
         <span class="n">copy_files</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="s1">&#39;address.osm&#39;</span><span class="p">,</span> <span class="s1">&#39;address.geojson&#39;</span><span class="p">,</span> <span class="s1">&#39;zoning.geojson&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;report.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;review.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;report.json&#39;</span><span class="p">,</span>
+            <span class="s2">&quot;address.osm&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;address.geojson&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;zoning.geojson&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;report.txt&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;review.txt&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;report.json&quot;</span><span class="p">,</span>
         <span class="p">]</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">split</span><span class="p">:</span>
             <span class="n">copy_files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">split</span><span class="p">)</span>
@@ -744,9 +757,7 @@
             <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
                 <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">bkp_path</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="CatAtom2Osm.export_layer"><a class="viewcode-back" href="../../api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.export_layer">[docs]</a>    <span class="k">def</span> <span class="nf">export_layer</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">layer</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">driver_name</span><span class="o">=</span><span class="s1">&#39;GeoJSON&#39;</span><span class="p">,</span> <span class="n">target_crs_id</span><span class="o">=</span><span class="kc">None</span>
-    <span class="p">):</span>
+<div class="viewcode-block" id="CatAtom2Osm.export_layer"><a class="viewcode-back" href="../../api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.export_layer">[docs]</a>    <span class="k">def</span> <span class="nf">export_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layer</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">driver_name</span><span class="o">=</span><span class="s2">&quot;GeoJSON&quot;</span><span class="p">,</span> <span class="n">target_crs_id</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Export a vector layer.</span>
 
@@ -764,8 +775,9 @@
 
 <div class="viewcode-block" id="CatAtom2Osm.read_osm"><a class="viewcode-back" href="../../api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.read_osm">[docs]</a>    <span class="k">def</span> <span class="nf">read_osm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">paths</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Reads a OSM data set from a OSM XML file. If the file not exists,</span>
-<span class="sd">        downloads data from overpass using ql query</span>
+<span class="sd">        Read an OSM data set from an OSM XML file.</span>
+
+<span class="sd">        If the file not exists, downloads data from overpass using ql query.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            paths (str): input filename components relative to self.path</span>
@@ -774,7 +786,7 @@
 <span class="sd">        Returns</span>
 <span class="sd">            Osm: OSM data set</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">ql</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ql&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="n">ql</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ql&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
         <span class="n">osm_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="o">*</span><span class="n">paths</span><span class="p">)</span>
         <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">osm_path</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">osm_path</span><span class="p">):</span>
@@ -782,17 +794,17 @@
                 <span class="k">return</span> <span class="kc">None</span>
             <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Downloading &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="n">filename</span><span class="p">)</span>
             <span class="n">query</span> <span class="o">=</span> <span class="n">overpass</span><span class="o">.</span><span class="n">Query</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">boundary_search_area</span><span class="p">)</span>
-            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;boundary_bbox&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">boundary_bbox</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;boundary_bbox&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">boundary_bbox</span><span class="p">:</span>
                 <span class="n">query</span><span class="o">.</span><span class="n">set_search_area</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">boundary_bbox</span><span class="p">)</span>
             <span class="n">query</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">ql</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">log</span><span class="o">.</span><span class="n">app_level</span> <span class="o">==</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">:</span>
                 <span class="n">query</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="n">osm_path</span><span class="p">,</span> <span class="n">log</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">query</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="n">osm_path</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">osm_path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.gz&#39;</span><span class="p">):</span>
-            <span class="n">fo</span> <span class="o">=</span> <span class="n">gzip</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">osm_path</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">osm_path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.gz&quot;</span><span class="p">):</span>
+            <span class="n">fo</span> <span class="o">=</span> <span class="n">gzip</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">osm_path</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">fo</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">osm_path</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span>
+            <span class="n">fo</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">osm_path</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">osmxml</span><span class="o">.</span><span class="n">deserialize</span><span class="p">(</span><span class="n">fo</span><span class="p">)</span>
         <span class="n">fo</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">elements</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -800,14 +812,18 @@
             <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
             <span class="n">report</span><span class="o">.</span><span class="n">warnings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Read &#39;</span><span class="si">%s</span><span class="s2">&#39;: </span><span class="si">%d</span><span class="s2"> nodes, </span><span class="si">%d</span><span class="s2"> ways, </span><span class="si">%d</span><span class="s2"> relations&quot;</span><span class="p">),</span>
-                     <span class="n">filename</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">nodes</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">ways</span><span class="p">),</span>
-                     <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">relations</span><span class="p">))</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Read &#39;</span><span class="si">%s</span><span class="s2">&#39;: </span><span class="si">%d</span><span class="s2"> nodes, </span><span class="si">%d</span><span class="s2"> ways, </span><span class="si">%d</span><span class="s2"> relations&quot;</span><span class="p">),</span>
+                <span class="n">filename</span><span class="p">,</span>
+                <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">nodes</span><span class="p">),</span>
+                <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">ways</span><span class="p">),</span>
+                <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">relations</span><span class="p">),</span>
+            <span class="p">)</span>
         <span class="k">return</span> <span class="n">data</span></div>
 
 <div class="viewcode-block" id="CatAtom2Osm.write_osm"><a class="viewcode-back" href="../../api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.write_osm">[docs]</a>    <span class="k">def</span> <span class="nf">write_osm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="o">*</span><span class="n">paths</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Generates a OSM XML file for a OSM data set.</span>
+<span class="sd">        Generate an OSM XML file for an OSM data set.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            data (Osm): OSM data set</span>
@@ -815,11 +831,11 @@
 <span class="sd">                            (compress if ends with .gz)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">elements</span><span class="p">:</span>
-            <span class="k">if</span> <span class="s1">&#39;ref&#39;</span> <span class="ow">in</span> <span class="n">e</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span>
-                <span class="k">del</span> <span class="n">e</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;ref&#39;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="s2">&quot;ref&quot;</span> <span class="ow">in</span> <span class="n">e</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span>
+                <span class="k">del</span> <span class="n">e</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s2">&quot;ref&quot;</span><span class="p">]</span>
         <span class="n">data</span><span class="o">.</span><span class="n">merge_duplicated</span><span class="p">()</span>
         <span class="n">osm_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="o">*</span><span class="n">paths</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">osm_path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.gz&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">osm_path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.gz&quot;</span><span class="p">):</span>
             <span class="n">file_obj</span> <span class="o">=</span> <span class="n">codecs</span><span class="o">.</span><span class="n">getwriter</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)(</span><span class="n">gzip</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">osm_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">file_obj</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">osm_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
@@ -827,10 +843,12 @@
         <span class="n">file_obj</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="n">msg</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Generated &#39;</span><span class="si">%s</span><span class="s2">&#39;: </span><span class="si">%d</span><span class="s2"> nodes, </span><span class="si">%d</span><span class="s2"> ways, </span><span class="si">%d</span><span class="s2"> relations&quot;</span><span class="p">)</span>
         <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-            <span class="n">msg</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">osm_path</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">nodes</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">ways</span><span class="p">),</span>
+            <span class="n">msg</span><span class="p">,</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">osm_path</span><span class="p">),</span>
+            <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">nodes</span><span class="p">),</span>
+            <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">ways</span><span class="p">),</span>
             <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">relations</span><span class="p">),</span>
         <span class="p">)</span></div></div>
-
 </pre></div>
 
           </div>
@@ -847,7 +865,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.6.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.6.3.dev.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.app</a></li> 
       </ul>

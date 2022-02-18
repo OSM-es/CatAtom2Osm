@@ -16,7 +16,7 @@ log = logging.getLogger(config.app_name)
 
 
 class ConsLayer(PolygonLayer):
-    """Class for constructions"""
+    """Class for constructions."""
 
     def __init__(
         self,
@@ -57,22 +57,22 @@ class ConsLayer(PolygonLayer):
 
     @staticmethod
     def is_building(feature):
-        """Building features have not any underscore in its localId field"""
+        """Return True for building features."""
         return "_" not in feature["localId"]
 
     @staticmethod
     def is_part(feature):
-        """Part features have '_part' in its localId field"""
+        """Return True for Part features."""
         return "_part" in feature["localId"]
 
     @staticmethod
     def is_pool(feature):
-        """Pool features have '_PI.' in its localId field"""
+        """Return True for Pool features."""
         return "_PI." in feature["localId"]
 
     @staticmethod
     def get_id(feat):
-        """Trim to parcel id"""
+        """Trim to parcel id."""
         return feat["localId"].split("_")[0].split(".")[-1]
 
     def explode_multi_parts(self, address=False):
@@ -84,7 +84,7 @@ class ConsLayer(PolygonLayer):
         super(ConsLayer, self).explode_multi_parts(request)
 
     def to_osm(self, data=None, tags={}, upload="never"):
-        """Export to OSM"""
+        """Export to OSM."""
         return super(ConsLayer, self).to_osm(
             translate.building_tags, data, tags=tags, upload=upload
         )
@@ -107,7 +107,8 @@ class ConsLayer(PolygonLayer):
 
     def index_of_building_and_parts(self):
         """
-        Constructs some utility dicts.
+        Construct some utility dicts.
+
         buildings index building by localid (call before explode_multi_parts).
         parts index parts of building by building localid.
         """
@@ -136,8 +137,9 @@ class ConsLayer(PolygonLayer):
 
     def remove_outside_parts(self):
         """
-        Remove parts without levels above ground.
         Remove parts outside the outline of it building.
+
+        Remove parts without levels above ground.
         Precondition: Called before merge_greatest_part.
         """
         to_clean_o = []
@@ -171,9 +173,9 @@ class ConsLayer(PolygonLayer):
 
     def get_parts(self, outline, parts):
         """
-        Given a building outline and its parts, for the parts inside the
-        outline returns a dictionary of parts for levels, the maximum and
-        minimum levels
+        Return a dictionary of parts for levels, the maximum and minimum levels.
+
+        Given the building outline and its parts, for the parts inside the outline.
         """
         max_level = 0
         min_level = 0
@@ -190,14 +192,10 @@ class ConsLayer(PolygonLayer):
 
     def merge_adjacent_parts(self, outline, parts):
         """
-        Given a building outline and its parts, for the parts inside the
-        outline:
+        Merge the adjacent parts in each level given a building outline and its parts.
 
-          * Translates the maximum values of number of levels above and below
-            ground to the outline and optionally deletes all the parts in
-            that level.
-
-          * Merges the adjacent parts in each level.
+        Translates the maximum values of number of levels above and below ground to
+        the outline and optionally deletes all the parts in that level.
         """
         to_clean = []
         to_clean_g = []
@@ -240,7 +238,8 @@ class ConsLayer(PolygonLayer):
 
     def remove_inner_rings(self, feat1, feat2):
         """
-        Auxiliary method to remove feat1 of its inner rings if equals to feat2
+        Auxiliary method to remove feat1 of its inner rings if equals to feat2.
+
         Returns True if feat1 must be deleted and new geometry if any ring is
         removed.
         """
@@ -263,12 +262,13 @@ class ConsLayer(PolygonLayer):
 
     def merge_building_parts(self):
         """
+        Apply merge_adjacent_parts to each set of building and its parts.
+
         Detect pools contained in a building and assign layer=1.
         Detect buildings/parts with geometry equals to a pool geometry and
         delete them.
         Detect inner rings of buildings/parts with geometry equals to a pool
         geometry and remove them.
-        Apply merge_adjacent_parts to each set of building and its parts.
         """
         parts = self.index_of_parts()
         pools = self.index_of_pools()
@@ -348,6 +348,8 @@ class ConsLayer(PolygonLayer):
 
     def clean(self):
         """
+        Clean geometries.
+
         Delete invalid geometries and close vertices, add topological points,
         merge building parts and simplify vertices.
         """
@@ -370,6 +372,7 @@ class ConsLayer(PolygonLayer):
     ):
         """
         Auxiliary method to move entrance to the nearest building and part.
+
         Don't move and the entrance specification is changed if the new
         position is not enough close ('remote'), is a corner ('corner'),
         is in an inner ring ('inner') or is in a wall shared with another
@@ -417,11 +420,12 @@ class ConsLayer(PolygonLayer):
 
     def move_address(self, address):
         """
-        Try to move each entrance address to the nearest point in the outline
-        of its associated building (same cadastral reference). Non entrance
-        addresses ends in the building outline when CatAtom2Osm.merge_address
-        is called. Delete the address if the number of associated buildings
-        is 0 or greater than 1 for non entrance addresses.
+        Try to move each entrance address to the nearest point in the building outline.
+
+        Building and addresses are associated using the cadastral reference.
+        Non entrance addresses ends in the building outline when
+        CatAtom2Osm.merge_address is called. Delete the address if the number of
+        associated buildings is 0 or greater than 1 for non entrance addresses.
         """
         to_change = {}
         to_move = {}
@@ -479,8 +483,11 @@ class ConsLayer(PolygonLayer):
             report.multiple_addresses = mp
 
     def validate(self, max_level, min_level):
-        """Put fixmes to buildings with not valid geometry, too small or big.
-        Returns distribution of floors"""
+        """
+        Put fixmes to buildings with not valid geometry, too small or big.
+
+        Returns distribution of floors.
+        """
         to_change = {}
         for feat in self.getFeatures():
             geom = feat.geometry()
@@ -509,8 +516,9 @@ class ConsLayer(PolygonLayer):
 
     def conflate(self, current_bu_osm, delete=True):
         """
-        Removes from current_bu_osm the buildings that don't have conflicts.
-        If delete=False, only mark buildings with conflicts
+        Remove from current_bu_osm the buildings that don't have conflicts.
+
+        If delete=False, only mark buildings with conflicts.
         """
         if len(current_bu_osm.elements) == 0:
             return

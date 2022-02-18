@@ -14,7 +14,7 @@
   <link rel="stylesheet" type="text/css" href="../../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.geo.aux &#8212; CatAtom2Osm 2.6.0 documentation</title>
+    <title>catatom2osm.geo.aux &#8212; CatAtom2Osm 2.6.3.dev.5 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/guzzle.css" />
     <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">CatAtom2Osm 2.6.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CatAtom2Osm 2.6.3.dev.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.geo.aux</a></li> 
       </ul>
@@ -79,12 +79,15 @@
           <div class="document clearer body">
             
   <h1>Source code for catatom2osm.geo.aux</h1><div class="highlight"><pre>
-<span></span><span class="n">get_geometry</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">f</span><span class="p">:</span> <span class="n">f</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s1">&#39;geometry&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="n">f</span>
+<div class="viewcode-block" id="get_geometry"><a class="viewcode-back" href="../../../api/catatom2osm.geo.aux.html#catatom2osm.geo.aux.get_geometry">[docs]</a><span></span><span class="k">def</span> <span class="nf">get_geometry</span><span class="p">(</span><span class="n">feat</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">feat</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">feat</span><span class="p">,</span> <span class="s2">&quot;geometry&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="n">feat</span></div>
+
 
 <div class="viewcode-block" id="is_inside"><a class="viewcode-back" href="../../../api/catatom2osm.geo.aux.html#catatom2osm.geo.aux.is_inside">[docs]</a><span class="k">def</span> <span class="nf">is_inside</span><span class="p">(</span><span class="n">f1</span><span class="p">,</span> <span class="n">f2</span><span class="p">):</span>
     <span class="n">g1</span> <span class="o">=</span> <span class="n">get_geometry</span><span class="p">(</span><span class="n">f1</span><span class="p">)</span>
     <span class="n">g2</span> <span class="o">=</span> <span class="n">get_geometry</span><span class="p">(</span><span class="n">f2</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">g2</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">g1</span><span class="p">)</span> <span class="ow">or</span> <span class="n">g2</span><span class="o">.</span><span class="n">overlaps</span><span class="p">(</span><span class="n">g1</span><span class="p">)</span></div>
+
 
 <div class="viewcode-block" id="is_inside_area"><a class="viewcode-back" href="../../../api/catatom2osm.geo.aux.html#catatom2osm.geo.aux.is_inside_area">[docs]</a><span class="k">def</span> <span class="nf">is_inside_area</span><span class="p">(</span><span class="n">f1</span><span class="p">,</span> <span class="n">f2</span><span class="p">):</span>
     <span class="n">g1</span> <span class="o">=</span> <span class="n">get_geometry</span><span class="p">(</span><span class="n">f1</span><span class="p">)</span>
@@ -96,8 +99,10 @@
         <span class="k">return</span> <span class="n">inter</span><span class="o">.</span><span class="n">area</span><span class="p">()</span> <span class="o">/</span> <span class="n">g1</span><span class="o">.</span><span class="n">area</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="mf">0.5</span>
     <span class="k">return</span> <span class="kc">False</span></div>
 
-<span class="n">get_attributes</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">feat</span><span class="p">:</span> \
-    <span class="nb">dict</span><span class="p">([(</span><span class="n">i</span><span class="p">,</span> <span class="n">feat</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">feat</span><span class="o">.</span><span class="n">fields</span><span class="p">()</span><span class="o">.</span><span class="n">toList</span><span class="p">()))])</span>
+
+<div class="viewcode-block" id="get_attributes"><a class="viewcode-back" href="../../../api/catatom2osm.geo.aux.html#catatom2osm.geo.aux.get_attributes">[docs]</a><span class="k">def</span> <span class="nf">get_attributes</span><span class="p">(</span><span class="n">feat</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">dict</span><span class="p">([(</span><span class="n">i</span><span class="p">,</span> <span class="n">feat</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">feat</span><span class="o">.</span><span class="n">fields</span><span class="p">()</span><span class="o">.</span><span class="n">toList</span><span class="p">()))])</span></div>
+
 
 <div class="viewcode-block" id="merge_groups"><a class="viewcode-back" href="../../../api/catatom2osm.geo.aux.html#catatom2osm.geo.aux.merge_groups">[docs]</a><span class="k">def</span> <span class="nf">merge_groups</span><span class="p">(</span><span class="n">adjs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Merge all sets in adjs with common members.&quot;&quot;&quot;</span>
@@ -131,7 +136,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">CatAtom2Osm 2.6.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CatAtom2Osm 2.6.3.dev.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.geo.aux</a></li> 
       </ul>

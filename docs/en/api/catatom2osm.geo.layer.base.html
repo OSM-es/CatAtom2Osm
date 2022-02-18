@@ -15,7 +15,7 @@
   <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.geo.layer.base module &#8212; CatAtom2Osm 2.6.0 documentation</title>
+    <title>catatom2osm.geo.layer.base module &#8212; CatAtom2Osm 2.6.3.dev.5 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/guzzle.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
@@ -45,7 +45,7 @@
         <li class="right" >
           <a href="catatom2osm.geo.layer.address.html" title="catatom2osm.geo.layer.address module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 2.6.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 2.6.3.dev.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../api.html" >API reference</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="modules.html" >CatAtom2Osm</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="catatom2osm.html" >catatom2osm package</a> &#187;</li>
@@ -118,7 +118,7 @@
 <dt class="sig sig-object py" id="catatom2osm.geo.layer.base.BaseLayer">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">catatom2osm.geo.layer.base.</span></span><span class="sig-name descname"><span class="pre">BaseLayer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baseName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">providerLib</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ogr'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/base.html#BaseLayer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.base.BaseLayer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">qgis._core.QgsVectorLayer</span></code></p>
-<p>Base class for application layers</p>
+<p>Base class for application layers.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.geo.layer.base.BaseLayer.append">
 <span class="sig-name descname"><span class="pre">append</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolve</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/base.html#BaseLayer.append"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.base.BaseLayer.append" title="Permalink to this definition">¶</a></dt>
@@ -148,15 +148,14 @@ a boolean deciding if each feature will be included or not</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.geo.layer.base.BaseLayer.bounding_box">
 <span class="sig-name descname"><span class="pre">bounding_box</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expression</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/base.html#BaseLayer.bounding_box"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.base.BaseLayer.bounding_box" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns bounding box in overpass format of matching features using
-an expression or all features if expression is None.</p>
+<dd><p>Return bounding box in overpass format.</p>
+<p>Use features matching expression or all features if expression is None.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.geo.layer.base.BaseLayer.copy_feature">
 <span class="sig-name descname"><span class="pre">copy_feature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feature</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolve</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/base.html#BaseLayer.copy_feature"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.base.BaseLayer.copy_feature" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a copy of feature renaming attributes or resolving xlink
-references.</p>
+<dd><p>Return a copy of feature renaming attributes or resolving xlink references.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -180,8 +179,11 @@ references.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">original_attributes</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">,</span> <span class="s1">&#39;specification&#39;</span><span class="p">,</span> <span class="s1">&#39;component_href&#39;</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">original_values</span> <span class="o">=</span> <span class="p">[</span>
 <span class="gp">... </span>    <span class="s1">&#39;38.012.1.12.0295603CS6109N&#39;</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="s1">&#39;Parcel&#39;</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="s1">&#39;(3:#ES.SDGC.PD.38.012.38570,#ES.SDGC.TN.38.012.1,#ES.SDGC.AU.38.012)&#39;</span>
+<span class="gp">... </span>    <span class="s1">&#39;Parcel&#39;</span><span class="p">,</span> <span class="p">(</span>
+<span class="gp">... </span>        <span class="s1">&#39;(3:#ES.SDGC.PD.38.012.38570,&#39;</span>
+<span class="gp">... </span>        <span class="s1">&#39;#ES.SDGC.TN.38.012.1,&#39;</span>
+<span class="gp">... </span>        <span class="s1">&#39;#ES.SDGC.AU.38.012)&#39;</span>
+<span class="gp">... </span>    <span class="p">)</span>
 <span class="gp">... </span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">final_attributes</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">,</span> <span class="s1">&#39;spec&#39;</span><span class="p">,</span> <span class="s1">&#39;PD_id&#39;</span><span class="p">,</span> <span class="s1">&#39;TN_id&#39;</span><span class="p">,</span> <span class="s1">&#39;AU_id&#39;</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">final_values</span> <span class="o">=</span> <span class="p">[</span>
@@ -198,7 +200,7 @@ references.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.geo.layer.base.BaseLayer.count">
 <span class="sig-name descname"><span class="pre">count</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expression</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unique</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/base.html#BaseLayer.count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.base.BaseLayer.count" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns number of features for this search expression</p>
+<dd><p>Return number of features for this search expression.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -214,7 +216,7 @@ references.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.geo.layer.base.BaseLayer.export">
 <span class="sig-name descname"><span class="pre">export</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">driver_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ESRI</span> <span class="pre">Shapefile'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_crs_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/base.html#BaseLayer.export"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.base.BaseLayer.export" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write layer to file</p>
+<dd><p>Write layer to file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -235,20 +237,19 @@ references.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.geo.layer.base.BaseLayer.get_index">
 <span class="sig-name descname"><span class="pre">get_index</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/base.html#BaseLayer.get_index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.base.BaseLayer.get_index" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a QgsSpatialIndex of all features in this layer (overpass
-QGIS exception for void layers)</p>
+<dd><p>Return a QgsSpatialIndex of all features in this layer.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.geo.layer.base.BaseLayer.get_overpass_bbox">
 <span class="sig-name descname"><span class="pre">get_overpass_bbox</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bbox</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/base.html#BaseLayer.get_overpass_bbox"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.base.BaseLayer.get_overpass_bbox" title="Permalink to this definition">¶</a></dt>
-<dd><p>bbox is transformed to EPSG 4326 and returns str in overpass format.</p>
+<dd><p>Transform bbox to EPSG 4326 and returns str in overpass format.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.geo.layer.base.BaseLayer.get_progressbar">
 <span class="sig-name descname"><span class="pre">get_progressbar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">description</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/base.html#BaseLayer.get_progressbar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.base.BaseLayer.get_progressbar" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return progress bar with ‘description’ for ‘total’ iterations</p>
+<dd><p>Return progress bar with ‘description’ for ‘total’ iterations.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -259,8 +260,8 @@ QGIS exception for void layers)</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.geo.layer.base.BaseLayer.join_field">
 <span class="sig-name descname"><span class="pre">join_field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source_layer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_field_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">join_field_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_names_subset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/base.html#BaseLayer.join_field"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.base.BaseLayer.join_field" title="Permalink to this definition">¶</a></dt>
-<dd><p>Replaces qgis table join mechanism becouse I’m not able to work with it
-in standalone script mode (without GUI).</p>
+<dd><p>Replace qgis table join mechanism.</p>
+<p>I’m not able to work with it in standalone script mode (without GUI).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -288,13 +289,13 @@ in standalone script mode (without GUI).</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.geo.layer.base.BaseLayer.search">
 <span class="sig-name descname"><span class="pre">search</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expression</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/base.html#BaseLayer.search"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.base.BaseLayer.search" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a features iterator for this search expression</p>
+<dd><p>Return a features iterator for this search expression.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.geo.layer.base.BaseLayer.to_osm">
 <span class="sig-name descname"><span class="pre">to_osm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tags_translation=&lt;function</span> <span class="pre">all_tags&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags={}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upload='never'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/base.html#BaseLayer.to_osm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.base.BaseLayer.to_osm" title="Permalink to this definition">¶</a></dt>
-<dd><p>Export this layer to an Osm data set</p>
+<dd><p>Export this layer to an Osm data set.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -317,7 +318,7 @@ By defaults convert all fields.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.geo.layer.base.BaseLayer.translate_field">
 <span class="sig-name descname"><span class="pre">translate_field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">translations</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clean</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/base.html#BaseLayer.translate_field"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.base.BaseLayer.translate_field" title="Permalink to this definition">¶</a></dt>
-<dd><p>Transform the values of a field</p>
+<dd><p>Transform the values of a field.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -371,7 +372,7 @@ By defaults convert all fields.</p></li>
         <li class="right" >
           <a href="catatom2osm.geo.layer.address.html" title="catatom2osm.geo.layer.address module"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 2.6.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 2.6.3.dev.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../api.html" >API reference</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="modules.html" >CatAtom2Osm</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="catatom2osm.html" >catatom2osm package</a> &#187;</li>

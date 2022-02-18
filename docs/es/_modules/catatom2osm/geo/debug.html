@@ -14,7 +14,7 @@
   <link rel="stylesheet" type="text/css" href="../../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.geo.debug &#8212; documentación de CatAtom2Osm - 2.6.0</title>
+    <title>catatom2osm.geo.debug &#8212; documentación de CatAtom2Osm - 2.6.3.dev.5</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/guzzle.css" />
     <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">documentación de CatAtom2Osm - 2.6.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">documentación de CatAtom2Osm - 2.6.3.dev.5</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Código de módulo</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.geo.debug</a></li> 
       </ul>
@@ -86,17 +86,19 @@
 <span class="kn">from</span> <span class="nn">qgis.PyQt.QtCore</span> <span class="k">import</span> <span class="n">QVariant</span>
 
 <span class="kn">from</span> <span class="nn">catatom2osm.geo.geometry</span> <span class="k">import</span> <span class="n">Geometry</span>
-<span class="kn">from</span> <span class="nn">catatom2osm.geo.types</span> <span class="k">import</span> <span class="n">WKBPoint</span>
 <span class="kn">from</span> <span class="nn">catatom2osm.geo.layer.base</span> <span class="k">import</span> <span class="n">BaseLayer</span>
+<span class="kn">from</span> <span class="nn">catatom2osm.geo.types</span> <span class="k">import</span> <span class="n">WKBPoint</span>
 
 
-<div class="viewcode-block" id="DebugWriter"><a class="viewcode-back" href="../../../api/catatom2osm.geo.debug.html#catatom2osm.geo.debug.DebugWriter">[documentos]</a><span class="k">class</span> <span class="nc">DebugWriter</span><span class="p">():</span>
+<div class="viewcode-block" id="DebugWriter"><a class="viewcode-back" href="../../../api/catatom2osm.geo.debug.html#catatom2osm.geo.debug.DebugWriter">[documentos]</a><span class="k">class</span> <span class="nc">DebugWriter</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;A QgsVectorFileWriter for debugging purposess.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">layer</span><span class="p">,</span> <span class="n">driver_name</span><span class="o">=</span><span class="s2">&quot;ESRI Shapefile&quot;</span><span class="p">,</span> <span class="n">geom_type</span><span class="o">=</span><span class="n">WKBPoint</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Construct.</span>
+
 <span class="sd">        Args:</span>
 <span class="sd">            filename (str): File name of this layer</span>
 <span class="sd">            layer (QgsVectorLayer): A layer to test.</span>
@@ -112,7 +114,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">writer</span> <span class="o">=</span> <span class="n">writer</span>
 
 <div class="viewcode-block" id="DebugWriter.add_point"><a class="viewcode-back" href="../../../api/catatom2osm.geo.debug.html#catatom2osm.geo.debug.DebugWriter.add_point">[documentos]</a>    <span class="k">def</span> <span class="nf">add_point</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">note</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Adds a point to the layer with the attribute note.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Add a point to the layer with the attribute note.&quot;&quot;&quot;</span>
         <span class="n">feat</span> <span class="o">=</span> <span class="n">QgsFeature</span><span class="p">(</span><span class="n">QgsFields</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">))</span>
         <span class="n">geom</span> <span class="o">=</span> <span class="n">Geometry</span><span class="o">.</span><span class="n">fromPointXY</span><span class="p">(</span><span class="n">point</span><span class="p">)</span>
         <span class="n">feat</span><span class="o">.</span><span class="n">setGeometry</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span>
@@ -138,7 +140,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">documentación de CatAtom2Osm - 2.6.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">documentación de CatAtom2Osm - 2.6.3.dev.5</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Código de módulo</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.geo.debug</a></li> 
       </ul>

@@ -15,7 +15,7 @@
   <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.geo.layer.address module &#8212; CatAtom2Osm 2.6.0 documentation</title>
+    <title>catatom2osm.geo.layer.address module &#8212; CatAtom2Osm 2.6.3.dev.5 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/guzzle.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
@@ -45,7 +45,7 @@
         <li class="right" >
           <a href="catatom2osm.geo.layer.html" title="catatom2osm.geo.layer package"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 2.6.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 2.6.3.dev.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../api.html" >API reference</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="modules.html" >CatAtom2Osm</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="catatom2osm.html" >catatom2osm package</a> &#187;</li>
@@ -118,11 +118,11 @@
 <dt class="sig sig-object py" id="catatom2osm.geo.layer.address.AddressLayer">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">catatom2osm.geo.layer.address.</span></span><span class="sig-name descname"><span class="pre">AddressLayer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Point'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baseName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'address'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">providerLib</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'memory'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_date</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/address.html#AddressLayer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.address.AddressLayer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="catatom2osm.geo.layer.base.html#catatom2osm.geo.layer.base.BaseLayer" title="catatom2osm.geo.layer.base.BaseLayer"><code class="xref py py-class docutils literal notranslate"><span class="pre">catatom2osm.geo.layer.base.BaseLayer</span></code></a></p>
-<p>Class for address</p>
+<p>Class for addresses.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.geo.layer.address.AddressLayer.conflate">
 <span class="sig-name descname"><span class="pre">conflate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">current_address</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/address.html#AddressLayer.conflate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.address.AddressLayer.conflate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Delete address existing in current_address</p>
+<dd><p>Delete address existing in current_address.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>current_address</strong> (<em>OSM</em>) – dataset</p>
@@ -138,7 +138,7 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.geo.layer.address.AddressLayer.get_highway_names">
 <span class="sig-name descname"><span class="pre">get_highway_names</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">highway</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/address.html#AddressLayer.get_highway_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.address.AddressLayer.get_highway_names" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a dictionary with the translation for each street name.</p>
+<dd><p>Return a dictionary with the translation for each street name.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -156,7 +156,7 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.geo.layer.address.AddressLayer.get_id">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feat</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/address.html#AddressLayer.get_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.address.AddressLayer.get_id" title="Permalink to this definition">¶</a></dt>
-<dd><p>Trim to parcel id</p>
+<dd><p>Trim to parcel id.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -167,7 +167,7 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.geo.layer.address.AddressLayer.is_address">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_address</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feature</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/address.html#AddressLayer.is_address"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.address.AddressLayer.is_address" title="Permalink to this definition">¶</a></dt>
-<dd><p>Address features have ‘.’ but not ‘_’ in its localId field</p>
+<dd><p>Address features have ‘.’ but not ‘_’ in its localId field.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -179,7 +179,7 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.geo.layer.address.AddressLayer.to_osm">
 <span class="sig-name descname"><span class="pre">to_osm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upload</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'never'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/layer/address.html#AddressLayer.to_osm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.geo.layer.address.AddressLayer.to_osm" title="Permalink to this definition">¶</a></dt>
-<dd><p>Export to OSM</p>
+<dd><p>Export to OSM.</p>
 </dd></dl>
 
 </dd></dl>
@@ -219,7 +219,7 @@
         <li class="right" >
           <a href="catatom2osm.geo.layer.html" title="catatom2osm.geo.layer package"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 2.6.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 2.6.3.dev.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../api.html" >API reference</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="modules.html" >CatAtom2Osm</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="catatom2osm.html" >catatom2osm package</a> &#187;</li>

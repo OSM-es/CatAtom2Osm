@@ -17,7 +17,7 @@ log = logging.getLogger(config.app_name)
 
 
 class PolygonLayer(BaseLayer):
-    """Base class for polygon layers"""
+    """Base class for polygon layers."""
 
     def __init__(self, path, baseName, providerLib="ogr"):
         super(PolygonLayer, self).__init__(path, baseName, providerLib)
@@ -31,18 +31,18 @@ class PolygonLayer(BaseLayer):
         self.dist_thr = config.dist_thr
 
     def get_area(self):
-        """Returns total area"""
+        """Return sum of all features area."""
         return sum([f.geometry().area() for f in self.getFeatures()])
 
     def is_inside(self, feature):
-        """Returns first feature of this layer that have feature inside"""
+        """Return first feature of this layer that is_inside feature."""
         for feat in self.getFeatures():
             if is_inside(feature, feat):
                 return feat
         return None
 
     def is_inside_area(self, feature):
-        """Returns first feature of this layer that have feature inside"""
+        """Return first feature of this layer that is_inside_area feature."""
         for feat in self.getFeatures():
             if is_inside_area(feature, feat):
                 return feat
@@ -50,6 +50,8 @@ class PolygonLayer(BaseLayer):
 
     def explode_multi_parts(self, request=QgsFeatureRequest()):
         """
+        Split multipolygons.
+
         Creates a new WKBPolygon feature for each part of any WKBMultiPolygon
         feature in request. This avoid relations with many 'outer' members in
         OSM data set. From this moment, localId will not be a unique identifier
@@ -84,6 +86,8 @@ class PolygonLayer(BaseLayer):
     @staticmethod
     def is_shared_segment(parents_per_vx, va, vb, feature_id):
         """
+        Return True if a segment is used by another geometry.
+
         Given a dictionary of parents per vertex check if segment va-vb in
         geometry of feature with id 'feature_id' is shared with another
         geometry.
@@ -94,6 +98,8 @@ class PolygonLayer(BaseLayer):
 
     def get_parents_per_vertex_and_geometries(self, expression=""):
         """
+        Auxiliary indexes for vertex of geometries.
+
         Returns:
             (dict) parent fids for each vertex, (dict) geometry for each fid.
         Precondition:
@@ -110,6 +116,8 @@ class PolygonLayer(BaseLayer):
 
     def get_contacts_and_geometries(self, expression=""):
         """
+        Auxiliary indexes for contact of geometries.
+
         Returns:
             (list) groups of polygons with at least one common node
             (dict) feature id: geometry
@@ -125,6 +133,8 @@ class PolygonLayer(BaseLayer):
 
     def get_adjacents_and_geometries(self, expression=""):
         """
+        Auxiliary indexes for adjacency of geometries.
+
         Returns:
             (list) groups of adjacent polygons
             (dict) feature id: geometry
@@ -149,7 +159,7 @@ class PolygonLayer(BaseLayer):
         return (groups, geometries)
 
     def topology(self):
-        """For each vertex in a polygon layer, adds it to nearest segments."""
+        """Add to nearest segments each vertex in a polygon layer."""
         threshold = self.dist_thr  # Distance threshold to create nodes
         dup_thr = self.dup_thr
         straight_thr = self.straight_thr
@@ -260,9 +270,7 @@ class PolygonLayer(BaseLayer):
             report.values["vertex_topo_" + self.name()] = tp
 
     def merge_adjacent_polygons(self):
-        """
-        Merge adjacent polygons in each feature geometry
-        """
+        """Merge adjacent polygons in each feature geometry."""
         to_change = {}
         for feat in self.getFeatures():
             if Geometry.merge_adjacent_polygons(feat):
@@ -285,8 +293,9 @@ class PolygonLayer(BaseLayer):
 
     def delete_invalid_geometries(self, query_small_area=lambda feat: True):
         """
-        Delete invalid geometries testing if any of it acute angle vertex could
-        be deleted.
+        Delete invalid geometries.
+
+        Test if any of it acute angle vertex could be deleted.
         Also removes zig-zag and spike vertex (see Point.get_spike_context).
         """
         if log.app_level <= logging.DEBUG:
@@ -450,7 +459,7 @@ class PolygonLayer(BaseLayer):
 
     def simplify(self):
         """
-        Reduces the number of vertices in a polygon layer according to:
+        Reduce the number of vertices in a polygon layer.
 
         * Delete vertex if the angle with its adjacents is near of the straight
           angle for less than 'straight_thr' degrees in all its parents.
@@ -558,12 +567,12 @@ class PolygonLayer(BaseLayer):
         return to_change, to_clean
 
     def merge_adjacents(self):
-        """Merge polygons with shared segments"""
+        """Merge polygons with shared segments."""
         (groups, geometries) = self.get_adjacents_and_geometries()
         self.merge_geometries(groups, geometries)
 
     def difference(self, layer):
-        """Calculate the difference of each geometry with those in layer"""
+        """Calculate the difference of each geometry with those in layer."""
         geometries = {f.id(): QgsGeometry(f.geometry()) for f in layer.getFeatures()}
         index = layer.get_index()
         pbar = self.get_progressbar(_("Difference"), len(geometries))
@@ -585,8 +594,12 @@ class PolygonLayer(BaseLayer):
         pbar.close()
 
     def clean(self):
-        """Delete invalid geometries and close vertices, add topological points
-        and simplify vertices."""
+        """
+        Clean geometries.
+
+        Delete invalid geometries and close vertices, add topological points
+        and simplify vertices.
+        """
         self.delete_invalid_geometries()
         self.topology()
         self.simplify()

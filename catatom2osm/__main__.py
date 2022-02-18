@@ -1,4 +1,4 @@
-"""CatAtom2Osm command line entry point"""
+"""CatAtom2Osm command line entry point."""
 import argparse
 import logging
 import os

@@ -15,7 +15,7 @@
   <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.geo.point module &#8212; documentación de CatAtom2Osm - 2.6.0</title>
+    <title>catatom2osm.geo.point module &#8212; documentación de CatAtom2Osm - 2.6.3.dev.5</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/guzzle.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="catatom2osm.geo.geometry.html" title="catatom2osm.geo.geometry module"
              accesskey="P">anterior</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">documentación de CatAtom2Osm - 2.6.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">documentación de CatAtom2Osm - 2.6.3.dev.5</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../api.html" >Referencia API</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="modules.html" >CatAtom2Osm</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="catatom2osm.html" >catatom2osm package</a> &#187;</li>
@@ -116,18 +116,19 @@
 <dt class="sig sig-object py" id="catatom2osm.geo.point.Point">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">catatom2osm.geo.point.</span></span><span class="sig-name descname"><span class="pre">Point</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/point.html#Point"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.geo.point.Point" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">qgis._core.QgsPointXY</span></code></p>
-<p>Extends QgsPoint with some utility methods</p>
+<p>Extend QgsPoint with some utility methods.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.geo.point.Point.boundingBox">
 <span class="sig-name descname"><span class="pre">boundingBox</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radius</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/point.html#Point.boundingBox"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.geo.point.Point.boundingBox" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Returns a bounding box of 2*radius centered in point.</p>
+<dd><p>Return a bounding box of 2*radius centered in point.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.geo.point.Point.get_angle">
 <span class="sig-name descname"><span class="pre">get_angle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">geom</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/point.html#Point.get_angle"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.geo.point.Point.get_angle" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>For the vertex in a geometry nearest to this point, give the angle
-between its adjacent vertexs.</p>
+<dd><p>Get angle for nearest vertex in a geometry.</p>
+<p>For the vertex in geom nearest to this point, give the angle between
+its adjacent vertexs.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parámetros</dt>
 <dd class="field-odd"><p><strong>geom</strong> (<em>QgsGeometry</em>) – Geometry to test.</p>
@@ -141,7 +142,8 @@ between its adjacent vertexs.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.geo.point.Point.get_corner_context">
 <span class="sig-name descname"><span class="pre">get_corner_context</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">geom</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acute_thr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">straight_thr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cath_thr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.02</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/point.html#Point.get_corner_context"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.geo.point.Point.get_corner_context" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>For the vertex in a geometry nearest to this point, give context to
+<dd><p>Test if nearest vertex in a geometry is a corner.</p>
+<p>For the vertex in a geometry nearest to this point, give context to
 determine if it is a corner (the angle differs by more than straight_thr
 of 180 and if the distance from the vertex to the segment formed by
 their adjacents is greater than cath_thr).</p>
@@ -166,7 +168,8 @@ their adjacents is greater than cath_thr).</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.geo.point.Point.get_spike_context">
 <span class="sig-name descname"><span class="pre">get_spike_context</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">geom</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acute_thr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">straight_thr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/geo/point.html#Point.get_spike_context"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.geo.point.Point.get_spike_context" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>For the vertex in a geometry nearest to this point, give context to
+<dd><p>Test if nearest vertex in geometry is spike.</p>
+<p>For the vertex in a geometry nearest to this point, give context to
 determine if its a zig-zag or a spike. It’s a zig-zag if both the angles
 of this vertex and the closest adjacents are acute. It’s a spike if the
 angle of this vertex is acute and the angle of the closest vertex is
@@ -232,7 +235,7 @@ the distance from va to the segment v-vb is lower than threshold.
         <li class="right" >
           <a href="catatom2osm.geo.geometry.html" title="catatom2osm.geo.geometry module"
              >anterior</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">documentación de CatAtom2Osm - 2.6.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">documentación de CatAtom2Osm - 2.6.3.dev.5</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../api.html" >Referencia API</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="modules.html" >CatAtom2Osm</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="catatom2osm.html" >catatom2osm package</a> &#187;</li>

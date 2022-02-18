@@ -1,4 +1,4 @@
-"""Reader of Cadastre ATOM GML files"""
+"""Reader of Cadastre ATOM GML files."""
 import logging
 import os
 import re
@@ -13,10 +13,12 @@ log = logging.getLogger(config.app_name)
 
 
 class Reader(object):
-    """Class to download and read Cadastre ATOM GML files"""
+    """Class to download and read Cadastre ATOM GML files."""
 
     def __init__(self, a_path):
         """
+        Construct a cadastre reader.
+
         Args:
             a_path (str): Directory where the source files are located.
         """
@@ -35,11 +37,11 @@ class Reader(object):
             raise IOError(_("Not a directory: '%s'") % a_path)
 
     def get_path(self, *paths):
-        """Get path from components relative to self.path"""
+        """Get path from components relative to self.path."""
         return os.path.join(self.path, *paths)
 
     def get_metadata(self, md_path, zip_path=""):
-        """Get the metadata of the source file"""
+        """Get the metadata of the source file."""
         if os.path.exists(md_path):
             with open(md_path, "rb") as f:
                 text = f.read()
@@ -68,8 +70,9 @@ class Reader(object):
 
     def get_atom_file(self, url):
         """
-        Given the url of a Cadastre ATOM service, tries to download the ZIP
-        file for self.zip_code
+        Try to download the ZIP file for self.zip_code.
+
+        Given the url of a Cadastre ATOM service.
         """
         s = re.search(r"INSPIRE/(\w+)/", url)
         log.debug(
@@ -114,9 +117,12 @@ class Reader(object):
         return (md_path, gml_path, zip_path, group)
 
     def is_empty(self, gml_path, zip_path):
-        """Detects if the file is empty. Cadastre empty files (usually
-        otherconstruction) comes with a null feature and results in a non valid
-        layer in QGIS"""
+        """
+        Detect if the file is empty.
+
+        Cadastre empty files (usually otherconstruction) comes with a null
+        feature and results in a non valid layer in QGIS.
+        """
         if os.path.exists(zip_path):
             zf = zipfile.ZipFile(zip_path)
             gml_fp = self.get_path_from_zip(zf, gml_path)
@@ -131,7 +137,7 @@ class Reader(object):
         return len([event for event, elem in events if event == "start"]) < 3
 
     def get_path_from_zip(self, zf, a_path):
-        """Return full path in zip of this file name"""
+        """Return full path in zip of this file name."""
         fn = os.path.basename(a_path).split("|")[0]
         for name in zf.namelist():
             if name.endswith(fn):
@@ -139,7 +145,7 @@ class Reader(object):
         raise KeyError("There is no item named '{}' in the archive".format(fn))
 
     def get_gml_from_zip(self, gml_path, zip_path, group, layername):
-        """Return gml layer from zip if exists and is valid or none"""
+        """Return gml layer from zip if exists and is valid or none."""
         try:
             zf = zipfile.ZipFile(zip_path)
             gml_fp = self.get_path_from_zip(zf, gml_path)
@@ -155,7 +161,7 @@ class Reader(object):
 
     def download(self, layername):
         """
-        Downloads the file for a a Cadastre layername.
+        Download the file for a Cadastre layername.
 
         Args:
             layername (str): Short name of the Cadastre layer. Any of
@@ -167,9 +173,10 @@ class Reader(object):
 
     def read(self, layername, allow_empty=False, force_zip=False):
         """
-        Create a QGIS vector layer for a Cadastre layername. Derives the GML
-        filename from layername. Downloads the file if not is present. First try
-        to read the ZIP file, if fails try with the GML file.
+        Create a QGIS vector layer for a Cadastre layername.
+
+        Derive the GML filename from layername. Downloads the file if not is
+        present. First try to read the ZIP file, if fails try with the GML file.
 
         Args:
             layername (str): Short name of the Cadastre layer. Any of

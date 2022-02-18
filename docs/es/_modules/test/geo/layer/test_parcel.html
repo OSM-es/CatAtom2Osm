@@ -14,7 +14,7 @@
   <link rel="stylesheet" type="text/css" href="../../../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>test.geo.layer.test_parcel &#8212; documentación de CatAtom2Osm - 2.6.0</title>
+    <title>test.geo.layer.test_parcel &#8212; documentación de CatAtom2Osm - 2.6.3.dev.5</title>
     <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/guzzle.css" />
     <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">documentación de CatAtom2Osm - 2.6.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">documentación de CatAtom2Osm - 2.6.3.dev.5</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Código de módulo</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">test.geo.layer.test_parcel</a></li> 
       </ul>
@@ -80,14 +80,12 @@
           <div class="document clearer body">
             
   <h1>Código fuente para test.geo.layer.test_parcel</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">io</span>
-<span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">import</span> <span class="nn">mock</span>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">unittest</span>
 
-<span class="kn">from</span> <span class="nn">qgis.core</span> <span class="k">import</span> <span class="n">QgsFeature</span><span class="p">,</span> <span class="n">QgsVectorLayer</span>
+<span class="kn">import</span> <span class="nn">mock</span>
+<span class="kn">from</span> <span class="nn">qgis.core</span> <span class="k">import</span> <span class="n">QgsVectorLayer</span>
 
-<span class="kn">from</span> <span class="nn">catatom2osm</span> <span class="k">import</span> <span class="n">osmxml</span>
 <span class="kn">from</span> <span class="nn">catatom2osm.app</span> <span class="k">import</span> <span class="n">QgsSingleton</span>
 <span class="kn">from</span> <span class="nn">catatom2osm.geo.geometry</span> <span class="k">import</span> <span class="n">Geometry</span>
 <span class="kn">from</span> <span class="nn">catatom2osm.geo.layer.cons</span> <span class="k">import</span> <span class="n">ConsLayer</span>
@@ -99,30 +97,29 @@
 
 
 <div class="viewcode-block" id="TestParcelLayer"><a class="viewcode-back" href="../../../../api/test.geo.layer.test_parcel.html#test.geo.layer.test_parcel.TestParcelLayer">[documentos]</a><span class="k">class</span> <span class="nc">TestParcelLayer</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
-
-<div class="viewcode-block" id="TestParcelLayer.setUp"><a class="viewcode-back" href="../../../../api/test.geo.layer.test_parcel.html#test.geo.layer.test_parcel.TestParcelLayer.setUp">[documentos]</a>    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.geo.layer.base.tqdm&#39;</span><span class="p">,</span> <span class="n">mock</span><span class="o">.</span><span class="n">MagicMock</span><span class="p">())</span>
-    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.geo.layer.base.log&#39;</span><span class="p">,</span> <span class="n">m_log</span><span class="p">)</span>
+<div class="viewcode-block" id="TestParcelLayer.setUp"><a class="viewcode-back" href="../../../../api/test.geo.layer.test_parcel.html#test.geo.layer.test_parcel.TestParcelLayer.setUp">[documentos]</a>    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s2">&quot;catatom2osm.geo.layer.base.tqdm&quot;</span><span class="p">,</span> <span class="n">mock</span><span class="o">.</span><span class="n">MagicMock</span><span class="p">())</span>
+    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s2">&quot;catatom2osm.geo.layer.base.log&quot;</span><span class="p">,</span> <span class="n">m_log</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">fn</span> <span class="o">=</span> <span class="s1">&#39;test/fixtures/parcel.gpkg|layername=parcel&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span> <span class="o">=</span> <span class="n">ParcelLayer</span><span class="p">(</span><span class="s1">&#39;38012&#39;</span><span class="p">)</span>
-        <span class="n">fixture</span> <span class="o">=</span> <span class="n">QgsVectorLayer</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="s1">&#39;parcel&#39;</span><span class="p">,</span> <span class="s1">&#39;ogr&#39;</span><span class="p">)</span>
+        <span class="n">fn</span> <span class="o">=</span> <span class="s2">&quot;test/fixtures/parcel.gpkg|layername=parcel&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span> <span class="o">=</span> <span class="n">ParcelLayer</span><span class="p">(</span><span class="s2">&quot;38012&quot;</span><span class="p">)</span>
+        <span class="n">fixture</span> <span class="o">=</span> <span class="n">QgsVectorLayer</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="s2">&quot;parcel&quot;</span><span class="p">,</span> <span class="s2">&quot;ogr&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">fixture</span><span class="o">.</span><span class="n">isValid</span><span class="p">(),</span> <span class="s2">&quot;Loading fixture&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fixture</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">featureCount</span><span class="p">(),</span> <span class="mi">186</span><span class="p">)</span>
-        <span class="n">fn</span> <span class="o">=</span> <span class="s1">&#39;test/fixtures/cons.gpkg|layername=cons&#39;</span>
-        <span class="n">fixture2</span> <span class="o">=</span> <span class="n">QgsVectorLayer</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="s1">&#39;cons&#39;</span><span class="p">,</span> <span class="s1">&#39;ogr&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">building</span> <span class="o">=</span> <span class="n">ConsLayer</span><span class="p">(</span><span class="s1">&#39;MultiPolygon&#39;</span><span class="p">,</span> <span class="s1">&#39;cons&#39;</span><span class="p">,</span> <span class="s1">&#39;memory&#39;</span><span class="p">)</span>
+        <span class="n">fn</span> <span class="o">=</span> <span class="s2">&quot;test/fixtures/cons.gpkg|layername=cons&quot;</span>
+        <span class="n">fixture2</span> <span class="o">=</span> <span class="n">QgsVectorLayer</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="s2">&quot;cons&quot;</span><span class="p">,</span> <span class="s2">&quot;ogr&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">building</span> <span class="o">=</span> <span class="n">ConsLayer</span><span class="p">(</span><span class="s2">&quot;MultiPolygon&quot;</span><span class="p">,</span> <span class="s2">&quot;cons&quot;</span><span class="p">,</span> <span class="s2">&quot;memory&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">building</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fixture2</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">building</span><span class="o">.</span><span class="n">isValid</span><span class="p">(),</span> <span class="s2">&quot;Loading fixture&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="TestParcelLayer.test_init"><a class="viewcode-back" href="../../../../api/test.geo.layer.test_parcel.html#test.geo.layer.test_parcel.TestParcelLayer.test_init">[documentos]</a>    <span class="k">def</span> <span class="nf">test_init</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">layer</span> <span class="o">=</span> <span class="n">ParcelLayer</span><span class="p">(</span><span class="s1">&#39;38012&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">fields</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">(),</span> <span class="s1">&#39;localId&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">fields</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">(),</span> <span class="s1">&#39;parts&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">rename</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">],</span> <span class="s1">&#39;inspireId_localId&#39;</span><span class="p">)</span></div>
+        <span class="n">layer</span> <span class="o">=</span> <span class="n">ParcelLayer</span><span class="p">(</span><span class="s2">&quot;38012&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">fields</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">(),</span> <span class="s2">&quot;localId&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">fields</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">(),</span> <span class="s2">&quot;parts&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">rename</span><span class="p">[</span><span class="s2">&quot;localId&quot;</span><span class="p">],</span> <span class="s2">&quot;inspireId_localId&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="TestParcelLayer.test_not_empty"><a class="viewcode-back" href="../../../../api/test.geo.layer.test_parcel.html#test.geo.layer.test_parcel.TestParcelLayer.test_not_empty">[documentos]</a>    <span class="k">def</span> <span class="nf">test_not_empty</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">layer</span> <span class="o">=</span> <span class="n">ParcelLayer</span><span class="p">(</span><span class="s1">&#39;38012&#39;</span><span class="p">)</span>
+        <span class="n">layer</span> <span class="o">=</span> <span class="n">ParcelLayer</span><span class="p">(</span><span class="s2">&quot;38012&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertGreater</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">fields</span><span class="p">()</span><span class="o">.</span><span class="n">toList</span><span class="p">()),</span> <span class="mi">0</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="TestParcelLayer.test_delete_void_parcels"><a class="viewcode-back" href="../../../../api/test.geo.layer.test_parcel.html#test.geo.layer.test_parcel.TestParcelLayer.test_delete_void_parcels">[documentos]</a>    <span class="k">def</span> <span class="nf">test_delete_void_parcels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -143,9 +140,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pa_groups</span><span class="p">),</span> <span class="mi">21</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">sum</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">gr</span><span class="p">)</span> <span class="k">for</span> <span class="n">gr</span> <span class="ow">in</span> <span class="n">pa_groups</span><span class="p">]),</span> <span class="mi">85</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="TestParcelLayer.test_merge_by_adjacent_buildings"><a class="viewcode-back" href="../../../../api/test.geo.layer.test_parcel.html#test.geo.layer.test_parcel.TestParcelLayer.test_merge_by_adjacent_buildings">[documentos]</a>    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.geo.layer.base.tqdm&#39;</span><span class="p">,</span> <span class="n">mock</span><span class="o">.</span><span class="n">MagicMock</span><span class="p">())</span>
-    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.geo.layer.base.log&#39;</span><span class="p">,</span> <span class="n">m_log</span><span class="p">)</span>
-    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.geo.layer.polygon.log&#39;</span><span class="p">,</span> <span class="n">m_log</span><span class="p">)</span>
+<div class="viewcode-block" id="TestParcelLayer.test_merge_by_adjacent_buildings"><a class="viewcode-back" href="../../../../api/test.geo.layer.test_parcel.html#test.geo.layer.test_parcel.TestParcelLayer.test_merge_by_adjacent_buildings">[documentos]</a>    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s2">&quot;catatom2osm.geo.layer.base.tqdm&quot;</span><span class="p">,</span> <span class="n">mock</span><span class="o">.</span><span class="n">MagicMock</span><span class="p">())</span>
+    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s2">&quot;catatom2osm.geo.layer.base.log&quot;</span><span class="p">,</span> <span class="n">m_log</span><span class="p">)</span>
+    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s2">&quot;catatom2osm.geo.layer.polygon.log&quot;</span><span class="p">,</span> <span class="n">m_log</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">test_merge_by_adjacent_buildings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">building</span><span class="o">.</span><span class="n">remove_outside_parts</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">building</span><span class="o">.</span><span class="n">explode_multi_parts</span><span class="p">()</span>
@@ -153,36 +150,68 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">delete_void_parcels</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">building</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">create_missing_parcels</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">building</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">count_parts</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">building</span><span class="p">)</span>
-        <span class="n">pca</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;parts&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">()])</span>
+        <span class="n">pca</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">f</span><span class="p">[</span><span class="s2">&quot;parts&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">()])</span>
         <span class="n">la</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">featureCount</span><span class="p">()</span>
         <span class="n">tasks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">merge_by_adjacent_buildings</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">building</span><span class="p">)</span>
-        <span class="n">pcd</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;parts&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">()])</span>
+        <span class="n">pcd</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">f</span><span class="p">[</span><span class="s2">&quot;parts&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">()])</span>
         <span class="n">ld</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">featureCount</span><span class="p">()</span>
         <span class="n">cl</span> <span class="o">=</span> <span class="nb">len</span><span class="p">([</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">tasks</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="o">!=</span> <span class="n">v</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">ld</span><span class="p">,</span> <span class="n">la</span> <span class="o">-</span> <span class="n">cl</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">pca</span><span class="p">,</span> <span class="n">pcd</span><span class="p">)</span>
-        <span class="n">pa_refs</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">()]</span>
+        <span class="n">pa_refs</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="p">[</span><span class="s2">&quot;localId&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">()]</span>
         <span class="n">expected</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="s1">&#39;001000300CS52D&#39;</span><span class="p">,</span> <span class="s1">&#39;001000400CS52D&#39;</span><span class="p">,</span> <span class="s1">&#39;8641608CS5284S&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;8641612CS5284S&#39;</span><span class="p">,</span> <span class="s1">&#39;8641613CS5284S&#39;</span><span class="p">,</span> <span class="s1">&#39;8641616CS5284S&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;8641620CS5284S&#39;</span><span class="p">,</span> <span class="s1">&#39;8641621CS5284S&#39;</span><span class="p">,</span> <span class="s1">&#39;8641632CS5284S&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;8641636CS5284S&#39;</span><span class="p">,</span> <span class="s1">&#39;8641638CS5284S&#39;</span><span class="p">,</span> <span class="s1">&#39;8641649CS5284S&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;8641653CS5284S&#39;</span><span class="p">,</span> <span class="s1">&#39;8641658CS5284S&#39;</span><span class="p">,</span> <span class="s1">&#39;8641660CS5284S&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;8642302CS5284S&#39;</span><span class="p">,</span> <span class="s1">&#39;8642310CS5284S&#39;</span><span class="p">,</span> <span class="s1">&#39;8642312CS5284S&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;8642313CS5284S&#39;</span><span class="p">,</span> <span class="s1">&#39;8642314CS5284S&#39;</span><span class="p">,</span> <span class="s1">&#39;8642317CS5284S&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;8642321CS5284S&#39;</span><span class="p">,</span> <span class="s1">&#39;8642325CS5484N&#39;</span><span class="p">,</span> <span class="s1">&#39;8642701CS5284S&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;8742701CS5284S&#39;</span><span class="p">,</span> <span class="s1">&#39;8742707CS5284S&#39;</span><span class="p">,</span> <span class="s1">&#39;8742711CS5284S&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;8742721CS5284S&#39;</span><span class="p">,</span> <span class="s1">&#39;8839301CS5283N&#39;</span><span class="p">,</span> <span class="s1">&#39;8840501CS5284S&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;8841602CS5284S&#39;</span><span class="p">,</span> <span class="s1">&#39;8841603CS5284S&#39;</span><span class="p">,</span> <span class="s1">&#39;8844121CS5284S&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;8940301CS5284S&#39;</span><span class="p">,</span> <span class="s1">&#39;8940302CS5284S&#39;</span><span class="p">,</span> <span class="s1">&#39;8940305CS5284S&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;8940306CS5284S&#39;</span><span class="p">,</span> <span class="s1">&#39;8940307CS5284S&#39;</span><span class="p">,</span> <span class="s1">&#39;8940309CS5284S&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;8941505CS5284S&#39;</span><span class="p">,</span> <span class="s1">&#39;9041703CS5294S&#39;</span><span class="p">,</span> <span class="s1">&#39;9041704CS5294S&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;9041705CS5294S&#39;</span><span class="p">,</span> <span class="s1">&#39;9041716CS5294S&#39;</span><span class="p">,</span> <span class="s1">&#39;9041719CS5294S&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;9042401CS5294S&#39;</span><span class="p">,</span> <span class="s1">&#39;9042402CS5294S&#39;</span><span class="p">,</span> <span class="s1">&#39;9042404CS5294S&#39;</span><span class="p">,</span>
+            <span class="s2">&quot;001000300CS52D&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;001000400CS52D&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;8641608CS5284S&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;8641612CS5284S&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;8641613CS5284S&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;8641616CS5284S&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;8641620CS5284S&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;8641621CS5284S&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;8641632CS5284S&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;8641636CS5284S&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;8641638CS5284S&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;8641649CS5284S&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;8641653CS5284S&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;8641658CS5284S&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;8641660CS5284S&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;8642302CS5284S&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;8642310CS5284S&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;8642312CS5284S&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;8642313CS5284S&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;8642314CS5284S&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;8642317CS5284S&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;8642321CS5284S&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;8642325CS5484N&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;8642701CS5284S&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;8742701CS5284S&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;8742707CS5284S&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;8742711CS5284S&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;8742721CS5284S&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;8839301CS5283N&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;8840501CS5284S&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;8841602CS5284S&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;8841603CS5284S&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;8844121CS5284S&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;8940301CS5284S&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;8940302CS5284S&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;8940305CS5284S&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;8940306CS5284S&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;8940307CS5284S&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;8940309CS5284S&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;8941505CS5284S&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;9041703CS5294S&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;9041704CS5294S&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;9041705CS5294S&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;9041716CS5294S&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;9041719CS5294S&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;9042401CS5294S&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;9042402CS5294S&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;9042404CS5294S&quot;</span><span class="p">,</span>
         <span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">pa_refs</span><span class="p">,</span> <span class="n">expected</span><span class="p">)</span>
         <span class="n">f</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;localId = &#39;8840501CS5284S&#39;&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;parts&#39;</span><span class="p">],</span> <span class="mi">11</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s2">&quot;parts&quot;</span><span class="p">],</span> <span class="mi">11</span><span class="p">)</span>
         <span class="n">merged</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">bu</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">building</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">():</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">building</span><span class="o">.</span><span class="n">is_building</span><span class="p">(</span><span class="n">bu</span><span class="p">):</span>
@@ -192,9 +221,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">merged</span><span class="p">),</span> <span class="mi">71</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">all</span><span class="p">([</span><span class="n">tasks</span><span class="p">[</span><span class="n">ref</span><span class="p">]</span> <span class="o">!=</span> <span class="n">ref</span> <span class="k">for</span> <span class="n">ref</span> <span class="ow">in</span> <span class="n">merged</span><span class="p">]))</span></div>
 
-<div class="viewcode-block" id="TestParcelLayer.test_count_parts"><a class="viewcode-back" href="../../../../api/test.geo.layer.test_parcel.html#test.geo.layer.test_parcel.TestParcelLayer.test_count_parts">[documentos]</a>    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.geo.layer.base.tqdm&#39;</span><span class="p">,</span> <span class="n">mock</span><span class="o">.</span><span class="n">MagicMock</span><span class="p">())</span>
-    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.geo.layer.base.log&#39;</span><span class="p">,</span> <span class="n">m_log</span><span class="p">)</span>
-    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.geo.layer.polygon.log&#39;</span><span class="p">,</span> <span class="n">m_log</span><span class="p">)</span>
+<div class="viewcode-block" id="TestParcelLayer.test_count_parts"><a class="viewcode-back" href="../../../../api/test.geo.layer.test_parcel.html#test.geo.layer.test_parcel.TestParcelLayer.test_count_parts">[documentos]</a>    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s2">&quot;catatom2osm.geo.layer.base.tqdm&quot;</span><span class="p">,</span> <span class="n">mock</span><span class="o">.</span><span class="n">MagicMock</span><span class="p">())</span>
+    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s2">&quot;catatom2osm.geo.layer.base.log&quot;</span><span class="p">,</span> <span class="n">m_log</span><span class="p">)</span>
+    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s2">&quot;catatom2osm.geo.layer.polygon.log&quot;</span><span class="p">,</span> <span class="n">m_log</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">test_count_parts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">building</span><span class="o">.</span><span class="n">remove_outside_parts</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">building</span><span class="o">.</span><span class="n">explode_multi_parts</span><span class="p">()</span>
@@ -205,15 +234,15 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">parts_count</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="mi">324</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">parts_count</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">featureCount</span><span class="p">())</span>
         <span class="n">f</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;localId = &#39;8840501CS5284S&#39;&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;parts&#39;</span><span class="p">],</span> <span class="mi">7</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">parts_count</span><span class="p">[</span><span class="s1">&#39;8840501CS5284S&#39;</span><span class="p">],</span> <span class="mi">7</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s2">&quot;parts&quot;</span><span class="p">],</span> <span class="mi">7</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">parts_count</span><span class="p">[</span><span class="s2">&quot;8840501CS5284S&quot;</span><span class="p">],</span> <span class="mi">7</span><span class="p">)</span>
         <span class="n">f</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;localId = &#39;8840502CS5284S&#39;&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;parts&#39;</span><span class="p">],</span> <span class="mi">4</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">parts_count</span><span class="p">[</span><span class="s1">&#39;8840502CS5284S&#39;</span><span class="p">],</span> <span class="mi">4</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s2">&quot;parts&quot;</span><span class="p">],</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">parts_count</span><span class="p">[</span><span class="s2">&quot;8840502CS5284S&quot;</span><span class="p">],</span> <span class="mi">4</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="TestParcelLayer.test_get_groups_by_parts_count"><a class="viewcode-back" href="../../../../api/test.geo.layer.test_parcel.html#test.geo.layer.test_parcel.TestParcelLayer.test_get_groups_by_parts_count">[documentos]</a>    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.geo.layer.base.tqdm&#39;</span><span class="p">,</span> <span class="n">mock</span><span class="o">.</span><span class="n">MagicMock</span><span class="p">())</span>
-    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.geo.layer.base.log&#39;</span><span class="p">,</span> <span class="n">m_log</span><span class="p">)</span>
-    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.geo.layer.polygon.log&#39;</span><span class="p">,</span> <span class="n">m_log</span><span class="p">)</span>
+<div class="viewcode-block" id="TestParcelLayer.test_get_groups_by_parts_count"><a class="viewcode-back" href="../../../../api/test.geo.layer.test_parcel.html#test.geo.layer.test_parcel.TestParcelLayer.test_get_groups_by_parts_count">[documentos]</a>    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s2">&quot;catatom2osm.geo.layer.base.tqdm&quot;</span><span class="p">,</span> <span class="n">mock</span><span class="o">.</span><span class="n">MagicMock</span><span class="p">())</span>
+    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s2">&quot;catatom2osm.geo.layer.base.log&quot;</span><span class="p">,</span> <span class="n">m_log</span><span class="p">)</span>
+    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s2">&quot;catatom2osm.geo.layer.polygon.log&quot;</span><span class="p">,</span> <span class="n">m_log</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">test_get_groups_by_parts_count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">building</span><span class="o">.</span><span class="n">remove_outside_parts</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">building</span><span class="o">.</span><span class="n">explode_multi_parts</span><span class="p">()</span>
@@ -223,24 +252,33 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">count_parts</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">building</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">merge_by_adjacent_buildings</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">building</span><span class="p">)</span>
         <span class="n">features</span> <span class="o">=</span> <span class="p">{</span><span class="n">pa</span><span class="o">.</span><span class="n">id</span><span class="p">():</span> <span class="n">pa</span> <span class="k">for</span> <span class="n">pa</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">()}</span>
-        <span class="n">pa_groups</span><span class="p">,</span> <span class="n">pa_refs</span><span class="p">,</span> <span class="n">geometries</span><span class="p">,</span> <span class="n">parts_count</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">get_groups_by_parts_count</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
-        <span class="p">)</span>
+        <span class="p">(</span>
+            <span class="n">pa_groups</span><span class="p">,</span>
+            <span class="n">pa_refs</span><span class="p">,</span>
+            <span class="n">geometries</span><span class="p">,</span>
+            <span class="n">parts_count</span><span class="p">,</span>
+        <span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">get_groups_by_parts_count</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">parts_count</span><span class="p">),</span> <span class="mi">48</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pa_groups</span><span class="p">),</span> <span class="mi">18</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">all</span><span class="p">([</span>
-            <span class="nb">sum</span><span class="p">([</span><span class="n">parts_count</span><span class="p">[</span><span class="n">pa_refs</span><span class="p">[</span><span class="n">fid</span><span class="p">]]</span> <span class="k">for</span> <span class="n">fid</span> <span class="ow">in</span> <span class="n">group</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="mi">10</span>
-            <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">pa_groups</span>
-        <span class="p">]))</span>
-        <span class="n">label_count</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span>
-            <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">get_zone</span><span class="p">(</span><span class="n">features</span><span class="p">[</span><span class="n">fid</span><span class="p">])</span> <span class="k">for</span> <span class="n">fid</span> <span class="ow">in</span> <span class="n">group</span><span class="p">]))</span>
-            <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">pa_groups</span>
-        <span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
+            <span class="nb">all</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="nb">sum</span><span class="p">([</span><span class="n">parts_count</span><span class="p">[</span><span class="n">pa_refs</span><span class="p">[</span><span class="n">fid</span><span class="p">]]</span> <span class="k">for</span> <span class="n">fid</span> <span class="ow">in</span> <span class="n">group</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="mi">10</span>
+                    <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">pa_groups</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">label_count</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">get_zone</span><span class="p">(</span><span class="n">features</span><span class="p">[</span><span class="n">fid</span><span class="p">])</span> <span class="k">for</span> <span class="n">fid</span> <span class="ow">in</span> <span class="n">group</span><span class="p">]))</span>
+                <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">pa_groups</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">label_count</span><span class="p">,</span> <span class="p">{</span><span class="mi">1</span><span class="p">})</span></div>
 
-<div class="viewcode-block" id="TestParcelLayer.test_merge_by_parts_count"><a class="viewcode-back" href="../../../../api/test.geo.layer.test_parcel.html#test.geo.layer.test_parcel.TestParcelLayer.test_merge_by_parts_count">[documentos]</a>    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.geo.layer.base.tqdm&#39;</span><span class="p">,</span> <span class="n">mock</span><span class="o">.</span><span class="n">MagicMock</span><span class="p">())</span>
-    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.geo.layer.base.log&#39;</span><span class="p">,</span> <span class="n">m_log</span><span class="p">)</span>
-    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;catatom2osm.geo.layer.polygon.log&#39;</span><span class="p">,</span> <span class="n">m_log</span><span class="p">)</span>
+<div class="viewcode-block" id="TestParcelLayer.test_merge_by_parts_count"><a class="viewcode-back" href="../../../../api/test.geo.layer.test_parcel.html#test.geo.layer.test_parcel.TestParcelLayer.test_merge_by_parts_count">[documentos]</a>    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s2">&quot;catatom2osm.geo.layer.base.tqdm&quot;</span><span class="p">,</span> <span class="n">mock</span><span class="o">.</span><span class="n">MagicMock</span><span class="p">())</span>
+    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s2">&quot;catatom2osm.geo.layer.base.log&quot;</span><span class="p">,</span> <span class="n">m_log</span><span class="p">)</span>
+    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s2">&quot;catatom2osm.geo.layer.polygon.log&quot;</span><span class="p">,</span> <span class="n">m_log</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">test_merge_by_parts_count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">building</span><span class="o">.</span><span class="n">remove_outside_parts</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">building</span><span class="o">.</span><span class="n">explode_multi_parts</span><span class="p">()</span>
@@ -248,10 +286,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">delete_void_parcels</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">building</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">create_missing_parcels</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">building</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">merge_by_adjacent_buildings</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">building</span><span class="p">)</span>
-        <span class="n">pca</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;parts&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">()])</span>
+        <span class="n">pca</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">f</span><span class="p">[</span><span class="s2">&quot;parts&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">()])</span>
         <span class="n">la</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">featureCount</span><span class="p">()</span>
         <span class="n">tasks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">merge_by_parts_count</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
-        <span class="n">pcd</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;parts&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">()])</span>
+        <span class="n">pcd</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">f</span><span class="p">[</span><span class="s2">&quot;parts&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">()])</span>
         <span class="n">ld</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">featureCount</span><span class="p">()</span>
         <span class="n">cl</span> <span class="o">=</span> <span class="nb">len</span><span class="p">([</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">tasks</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="o">!=</span> <span class="n">v</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">ld</span><span class="p">,</span> <span class="n">la</span> <span class="o">-</span> <span class="n">cl</span><span class="p">)</span>
@@ -272,7 +310,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">documentación de CatAtom2Osm - 2.6.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">documentación de CatAtom2Osm - 2.6.3.dev.5</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" >Código de módulo</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">test.geo.layer.test_parcel</a></li> 
       </ul>

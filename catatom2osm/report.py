@@ -1,4 +1,4 @@
-"""Statistics report"""
+"""Statistics report."""
 import io
 import json
 import locale

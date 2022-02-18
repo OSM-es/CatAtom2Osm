@@ -14,7 +14,7 @@
   <link rel="stylesheet" type="text/css" href="../../../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.geo.layer.cons &#8212; documentación de CatAtom2Osm - 2.6.0</title>
+    <title>catatom2osm.geo.layer.cons &#8212; documentación de CatAtom2Osm - 2.6.3.dev.5</title>
     <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/guzzle.css" />
     <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">documentación de CatAtom2Osm - 2.6.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">documentación de CatAtom2Osm - 2.6.3.dev.5</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Código de módulo</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.geo.layer.cons</a></li> 
       </ul>
@@ -81,93 +81,98 @@
             
   <h1>Código fuente para catatom2osm.geo.layer.cons</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">defaultdict</span>
 
 <span class="kn">from</span> <span class="nn">qgis.core</span> <span class="k">import</span> <span class="n">QgsFeatureRequest</span><span class="p">,</span> <span class="n">QgsField</span><span class="p">,</span> <span class="n">QgsGeometry</span>
 <span class="kn">from</span> <span class="nn">qgis.PyQt.QtCore</span> <span class="k">import</span> <span class="n">QVariant</span>
 
-<span class="kn">from</span> <span class="nn">catatom2osm</span> <span class="k">import</span> <span class="n">config</span><span class="p">,</span> <span class="n">csvtools</span><span class="p">,</span> <span class="n">translate</span>
+<span class="kn">from</span> <span class="nn">catatom2osm</span> <span class="k">import</span> <span class="n">config</span><span class="p">,</span> <span class="n">translate</span>
 <span class="kn">from</span> <span class="nn">catatom2osm.geo</span> <span class="k">import</span> <span class="n">BUFFER_SIZE</span><span class="p">,</span> <span class="n">SIMPLIFY_BUILDING_PARTS</span>
 <span class="kn">from</span> <span class="nn">catatom2osm.geo.aux</span> <span class="k">import</span> <span class="n">get_attributes</span><span class="p">,</span> <span class="n">is_inside</span>
 <span class="kn">from</span> <span class="nn">catatom2osm.geo.geometry</span> <span class="k">import</span> <span class="n">Geometry</span>
-<span class="kn">from</span> <span class="nn">catatom2osm.geo.point</span> <span class="k">import</span> <span class="n">Point</span>
-<span class="kn">from</span> <span class="nn">catatom2osm.geo.types</span> <span class="k">import</span> <span class="n">WKBPolygon</span>
 <span class="kn">from</span> <span class="nn">catatom2osm.geo.layer.polygon</span> <span class="k">import</span> <span class="n">PolygonLayer</span>
+<span class="kn">from</span> <span class="nn">catatom2osm.geo.point</span> <span class="k">import</span> <span class="n">Point</span>
 <span class="kn">from</span> <span class="nn">catatom2osm.report</span> <span class="k">import</span> <span class="n">instance</span> <span class="k">as</span> <span class="n">report</span>
 
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">app_name</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="ConsLayer"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.cons.html#catatom2osm.geo.layer.cons.ConsLayer">[documentos]</a><span class="k">class</span> <span class="nc">ConsLayer</span><span class="p">(</span><span class="n">PolygonLayer</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Class for constructions&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Class for constructions.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;MultiPolygon&quot;</span><span class="p">,</span> <span class="n">baseName</span><span class="o">=</span><span class="s2">&quot;building&quot;</span><span class="p">,</span>
-                 <span class="n">providerLib</span><span class="o">=</span><span class="s2">&quot;memory&quot;</span><span class="p">,</span> <span class="n">source_date</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">path</span><span class="o">=</span><span class="s2">&quot;MultiPolygon&quot;</span><span class="p">,</span>
+        <span class="n">baseName</span><span class="o">=</span><span class="s2">&quot;building&quot;</span><span class="p">,</span>
+        <span class="n">providerLib</span><span class="o">=</span><span class="s2">&quot;memory&quot;</span><span class="p">,</span>
+        <span class="n">source_date</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ConsLayer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">baseName</span><span class="p">,</span> <span class="n">providerLib</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">()</span><span class="o">.</span><span class="n">isEmpty</span><span class="p">():</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">addAttributes</span><span class="p">([</span>
-                <span class="n">QgsField</span><span class="p">(</span><span class="s1">&#39;localId&#39;</span><span class="p">,</span> <span class="n">QVariant</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="nb">len</span><span class="o">=</span><span class="mi">254</span><span class="p">),</span>
-                <span class="n">QgsField</span><span class="p">(</span><span class="s1">&#39;condition&#39;</span><span class="p">,</span> <span class="n">QVariant</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="nb">len</span><span class="o">=</span><span class="mi">254</span><span class="p">),</span>
-                <span class="n">QgsField</span><span class="p">(</span><span class="s1">&#39;image&#39;</span><span class="p">,</span> <span class="n">QVariant</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="nb">len</span><span class="o">=</span><span class="mi">254</span><span class="p">),</span>
-                <span class="n">QgsField</span><span class="p">(</span><span class="s1">&#39;currentUse&#39;</span><span class="p">,</span> <span class="n">QVariant</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="nb">len</span><span class="o">=</span><span class="mi">254</span><span class="p">),</span>
-                <span class="n">QgsField</span><span class="p">(</span><span class="s1">&#39;bu_units&#39;</span><span class="p">,</span> <span class="n">QVariant</span><span class="o">.</span><span class="n">Int</span><span class="p">),</span>
-                <span class="n">QgsField</span><span class="p">(</span><span class="s1">&#39;dwellings&#39;</span><span class="p">,</span> <span class="n">QVariant</span><span class="o">.</span><span class="n">Int</span><span class="p">),</span>
-                <span class="n">QgsField</span><span class="p">(</span><span class="s1">&#39;lev_above&#39;</span><span class="p">,</span> <span class="n">QVariant</span><span class="o">.</span><span class="n">Int</span><span class="p">),</span>
-                <span class="n">QgsField</span><span class="p">(</span><span class="s1">&#39;lev_below&#39;</span><span class="p">,</span> <span class="n">QVariant</span><span class="o">.</span><span class="n">Int</span><span class="p">),</span>
-                <span class="n">QgsField</span><span class="p">(</span><span class="s1">&#39;nature&#39;</span><span class="p">,</span> <span class="n">QVariant</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="nb">len</span><span class="o">=</span><span class="mi">254</span><span class="p">),</span>
-                <span class="n">QgsField</span><span class="p">(</span><span class="s1">&#39;task&#39;</span><span class="p">,</span> <span class="n">QVariant</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="nb">len</span><span class="o">=</span><span class="mi">254</span><span class="p">),</span>
-                <span class="n">QgsField</span><span class="p">(</span><span class="s1">&#39;fixme&#39;</span><span class="p">,</span> <span class="n">QVariant</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="nb">len</span><span class="o">=</span><span class="mi">254</span><span class="p">),</span>
-                <span class="n">QgsField</span><span class="p">(</span><span class="s1">&#39;layer&#39;</span><span class="p">,</span> <span class="n">QVariant</span><span class="o">.</span><span class="n">Int</span><span class="p">),</span>
-            <span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">addAttributes</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">QgsField</span><span class="p">(</span><span class="s2">&quot;localId&quot;</span><span class="p">,</span> <span class="n">QVariant</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="nb">len</span><span class="o">=</span><span class="mi">254</span><span class="p">),</span>
+                    <span class="n">QgsField</span><span class="p">(</span><span class="s2">&quot;condition&quot;</span><span class="p">,</span> <span class="n">QVariant</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="nb">len</span><span class="o">=</span><span class="mi">254</span><span class="p">),</span>
+                    <span class="n">QgsField</span><span class="p">(</span><span class="s2">&quot;image&quot;</span><span class="p">,</span> <span class="n">QVariant</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="nb">len</span><span class="o">=</span><span class="mi">254</span><span class="p">),</span>
+                    <span class="n">QgsField</span><span class="p">(</span><span class="s2">&quot;currentUse&quot;</span><span class="p">,</span> <span class="n">QVariant</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="nb">len</span><span class="o">=</span><span class="mi">254</span><span class="p">),</span>
+                    <span class="n">QgsField</span><span class="p">(</span><span class="s2">&quot;bu_units&quot;</span><span class="p">,</span> <span class="n">QVariant</span><span class="o">.</span><span class="n">Int</span><span class="p">),</span>
+                    <span class="n">QgsField</span><span class="p">(</span><span class="s2">&quot;dwellings&quot;</span><span class="p">,</span> <span class="n">QVariant</span><span class="o">.</span><span class="n">Int</span><span class="p">),</span>
+                    <span class="n">QgsField</span><span class="p">(</span><span class="s2">&quot;lev_above&quot;</span><span class="p">,</span> <span class="n">QVariant</span><span class="o">.</span><span class="n">Int</span><span class="p">),</span>
+                    <span class="n">QgsField</span><span class="p">(</span><span class="s2">&quot;lev_below&quot;</span><span class="p">,</span> <span class="n">QVariant</span><span class="o">.</span><span class="n">Int</span><span class="p">),</span>
+                    <span class="n">QgsField</span><span class="p">(</span><span class="s2">&quot;nature&quot;</span><span class="p">,</span> <span class="n">QVariant</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="nb">len</span><span class="o">=</span><span class="mi">254</span><span class="p">),</span>
+                    <span class="n">QgsField</span><span class="p">(</span><span class="s2">&quot;task&quot;</span><span class="p">,</span> <span class="n">QVariant</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="nb">len</span><span class="o">=</span><span class="mi">254</span><span class="p">),</span>
+                    <span class="n">QgsField</span><span class="p">(</span><span class="s2">&quot;fixme&quot;</span><span class="p">,</span> <span class="n">QVariant</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="nb">len</span><span class="o">=</span><span class="mi">254</span><span class="p">),</span>
+                    <span class="n">QgsField</span><span class="p">(</span><span class="s2">&quot;layer&quot;</span><span class="p">,</span> <span class="n">QVariant</span><span class="o">.</span><span class="n">Int</span><span class="p">),</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">updateFields</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rename</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;condition&#39;</span><span class="p">:</span> <span class="s1">&#39;conditionOfConstruction&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;image&#39;</span><span class="p">:</span> <span class="s1">&#39;documentLink&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;bu_units&#39;</span><span class="p">:</span> <span class="s1">&#39;numberOfBuildingUnits&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;dwellings&#39;</span><span class="p">:</span> <span class="s1">&#39;numberOfDwellings&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;lev_above&#39;</span><span class="p">:</span> <span class="s1">&#39;numberOfFloorsAboveGround&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;lev_below&#39;</span><span class="p">:</span> <span class="s1">&#39;numberOfFloorsBelowGround&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;nature&#39;</span><span class="p">:</span> <span class="s1">&#39;constructionNature&#39;</span>
+            <span class="s2">&quot;condition&quot;</span><span class="p">:</span> <span class="s2">&quot;conditionOfConstruction&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;image&quot;</span><span class="p">:</span> <span class="s2">&quot;documentLink&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;bu_units&quot;</span><span class="p">:</span> <span class="s2">&quot;numberOfBuildingUnits&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;dwellings&quot;</span><span class="p">:</span> <span class="s2">&quot;numberOfDwellings&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;lev_above&quot;</span><span class="p">:</span> <span class="s2">&quot;numberOfFloorsAboveGround&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;lev_below&quot;</span><span class="p">:</span> <span class="s2">&quot;numberOfFloorsBelowGround&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;nature&quot;</span><span class="p">:</span> <span class="s2">&quot;constructionNature&quot;</span><span class="p">,</span>
         <span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">source_date</span> <span class="o">=</span> <span class="n">source_date</span>
 
 <div class="viewcode-block" id="ConsLayer.is_building"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.cons.html#catatom2osm.geo.layer.cons.ConsLayer.is_building">[documentos]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">is_building</span><span class="p">(</span><span class="n">feature</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Building features have not any underscore in its localId field&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="s1">&#39;_&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">feature</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">]</span></div>
+        <span class="sd">&quot;&quot;&quot;Return True for building features.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;_&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">feature</span><span class="p">[</span><span class="s2">&quot;localId&quot;</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="ConsLayer.is_part"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.cons.html#catatom2osm.geo.layer.cons.ConsLayer.is_part">[documentos]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">is_part</span><span class="p">(</span><span class="n">feature</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Part features have &#39;_part&#39; in its localId field&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="s1">&#39;_part&#39;</span> <span class="ow">in</span> <span class="n">feature</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">]</span></div>
+        <span class="sd">&quot;&quot;&quot;Return True for Part features.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;_part&quot;</span> <span class="ow">in</span> <span class="n">feature</span><span class="p">[</span><span class="s2">&quot;localId&quot;</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="ConsLayer.is_pool"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.cons.html#catatom2osm.geo.layer.cons.ConsLayer.is_pool">[documentos]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">is_pool</span><span class="p">(</span><span class="n">feature</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Pool features have &#39;_PI.&#39; in its localId field&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="s1">&#39;_PI.&#39;</span> <span class="ow">in</span> <span class="n">feature</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">]</span></div>
+        <span class="sd">&quot;&quot;&quot;Return True for Pool features.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;_PI.&quot;</span> <span class="ow">in</span> <span class="n">feature</span><span class="p">[</span><span class="s2">&quot;localId&quot;</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="ConsLayer.get_id"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.cons.html#catatom2osm.geo.layer.cons.ConsLayer.get_id">[documentos]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">get_id</span><span class="p">(</span><span class="n">feat</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Trim to parcel id&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span></div>
+        <span class="sd">&quot;&quot;&quot;Trim to parcel id.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">feat</span><span class="p">[</span><span class="s2">&quot;localId&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="ConsLayer.explode_multi_parts"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.cons.html#catatom2osm.geo.layer.cons.ConsLayer.explode_multi_parts">[documentos]</a>    <span class="k">def</span> <span class="nf">explode_multi_parts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">address</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="n">request</span> <span class="o">=</span> <span class="n">QgsFeatureRequest</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">address</span><span class="p">:</span>
             <span class="n">refs</span> <span class="o">=</span> <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">get_id</span><span class="p">(</span><span class="n">ad</span><span class="p">)</span> <span class="k">for</span> <span class="n">ad</span> <span class="ow">in</span> <span class="n">address</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">()}</span>
-            <span class="n">fids</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">id</span><span class="p">()</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">()</span> <span class="k">if</span>
-                    <span class="n">f</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">refs</span><span class="p">]</span>
+            <span class="n">fids</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">id</span><span class="p">()</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">()</span> <span class="k">if</span> <span class="n">f</span><span class="p">[</span><span class="s2">&quot;localId&quot;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">refs</span><span class="p">]</span>
             <span class="n">request</span><span class="o">.</span><span class="n">setFilterFids</span><span class="p">(</span><span class="n">fids</span><span class="p">)</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ConsLayer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">explode_multi_parts</span><span class="p">(</span><span class="n">request</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ConsLayer.to_osm"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.cons.html#catatom2osm.geo.layer.cons.ConsLayer.to_osm">[documentos]</a>    <span class="k">def</span> <span class="nf">to_osm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">{},</span> <span class="n">upload</span><span class="o">=</span><span class="s1">&#39;never&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Export to OSM&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">ConsLayer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">to_osm</span><span class="p">(</span><span class="n">translate</span><span class="o">.</span><span class="n">building_tags</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span>
-                                             <span class="n">tags</span><span class="o">=</span><span class="n">tags</span><span class="p">,</span> <span class="n">upload</span><span class="o">=</span><span class="n">upload</span><span class="p">)</span></div>
+<div class="viewcode-block" id="ConsLayer.to_osm"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.cons.html#catatom2osm.geo.layer.cons.ConsLayer.to_osm">[documentos]</a>    <span class="k">def</span> <span class="nf">to_osm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">{},</span> <span class="n">upload</span><span class="o">=</span><span class="s2">&quot;never&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Export to OSM.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">ConsLayer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">to_osm</span><span class="p">(</span>
+            <span class="n">translate</span><span class="o">.</span><span class="n">building_tags</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="n">tags</span><span class="p">,</span> <span class="n">upload</span><span class="o">=</span><span class="n">upload</span>
+        <span class="p">)</span></div>
 
 <div class="viewcode-block" id="ConsLayer.index_of_parts"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.cons.html#catatom2osm.geo.layer.cons.ConsLayer.index_of_parts">[documentos]</a>    <span class="k">def</span> <span class="nf">index_of_parts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Index parts of building by building localid. &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Index parts of building by building localid.&quot;&quot;&quot;</span>
         <span class="n">parts</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;regexp_match(localId, &#39;_part&#39;)&quot;</span><span class="p">):</span>
             <span class="n">localId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_id</span><span class="p">(</span><span class="n">part</span><span class="p">)</span>
@@ -175,7 +180,7 @@
         <span class="k">return</span> <span class="n">parts</span></div>
 
 <div class="viewcode-block" id="ConsLayer.index_of_pools"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.cons.html#catatom2osm.geo.layer.cons.ConsLayer.index_of_pools">[documentos]</a>    <span class="k">def</span> <span class="nf">index_of_pools</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Index pools in building parcel by building localid. &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Index pools in building parcel by building localid.&quot;&quot;&quot;</span>
         <span class="n">pools</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">pool</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;regexp_match(localId, &#39;_PI&#39;)&quot;</span><span class="p">):</span>
             <span class="n">localId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_id</span><span class="p">(</span><span class="n">pool</span><span class="p">)</span>
@@ -184,7 +189,8 @@
 
 <div class="viewcode-block" id="ConsLayer.index_of_building_and_parts"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.cons.html#catatom2osm.geo.layer.cons.ConsLayer.index_of_building_and_parts">[documentos]</a>    <span class="k">def</span> <span class="nf">index_of_building_and_parts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Constructs some utility dicts.</span>
+<span class="sd">        Construct some utility dicts.</span>
+
 <span class="sd">        buildings index building by localid (call before explode_multi_parts).</span>
 <span class="sd">        parts index parts of building by building localid.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -192,7 +198,7 @@
         <span class="n">parts</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">feature</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">():</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_building</span><span class="p">(</span><span class="n">feature</span><span class="p">):</span>
-                <span class="n">buildings</span><span class="p">[</span><span class="n">feature</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">feature</span><span class="p">)</span>
+                <span class="n">buildings</span><span class="p">[</span><span class="n">feature</span><span class="p">[</span><span class="s2">&quot;localId&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">feature</span><span class="p">)</span>
             <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_part</span><span class="p">(</span><span class="n">feature</span><span class="p">):</span>
                 <span class="n">localId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_id</span><span class="p">(</span><span class="n">feature</span><span class="p">)</span>
                 <span class="n">parts</span><span class="p">[</span><span class="n">localId</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">feature</span><span class="p">)</span>
@@ -200,11 +206,10 @@
 
 <div class="viewcode-block" id="ConsLayer.remove_parts_wo_building"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.cons.html#catatom2osm.geo.layer.cons.ConsLayer.remove_parts_wo_building">[documentos]</a>    <span class="k">def</span> <span class="nf">remove_parts_wo_building</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Remove building parts without building.&quot;&quot;&quot;</span>
-        <span class="n">bu_refs</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="n">f</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">()</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_building</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-        <span class="p">]</span>
+        <span class="n">bu_refs</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="p">[</span><span class="s2">&quot;localId&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">()</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_building</span><span class="p">(</span><span class="n">f</span><span class="p">)]</span>
         <span class="n">to_clean</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="n">f</span><span class="o">.</span><span class="n">id</span><span class="p">()</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">()</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">id</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">()</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_part</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_id</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">bu_refs</span>
         <span class="p">]</span>
         <span class="k">if</span> <span class="n">to_clean</span><span class="p">:</span>
@@ -214,20 +219,19 @@
 
 <div class="viewcode-block" id="ConsLayer.remove_outside_parts"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.cons.html#catatom2osm.geo.layer.cons.ConsLayer.remove_outside_parts">[documentos]</a>    <span class="k">def</span> <span class="nf">remove_outside_parts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Remove parts without levels above ground.</span>
 <span class="sd">        Remove parts outside the outline of it building.</span>
+
+<span class="sd">        Remove parts without levels above ground.</span>
 <span class="sd">        Precondition: Called before merge_greatest_part.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">to_clean_o</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">to_clean_b</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">buildings</span> <span class="o">=</span> <span class="p">{</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">]:</span> <span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">()</span> <span class="k">if</span>
-                     <span class="bp">self</span><span class="o">.</span><span class="n">is_building</span><span class="p">(</span><span class="n">f</span><span class="p">)}</span>
-        <span class="n">pbar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_progressbar</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Remove outside parts&quot;</span><span class="p">),</span>
-                                    <span class="bp">self</span><span class="o">.</span><span class="n">featureCount</span><span class="p">())</span>
+        <span class="n">buildings</span> <span class="o">=</span> <span class="p">{</span><span class="n">f</span><span class="p">[</span><span class="s2">&quot;localId&quot;</span><span class="p">]:</span> <span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">()</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_building</span><span class="p">(</span><span class="n">f</span><span class="p">)}</span>
+        <span class="n">pbar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_progressbar</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Remove outside parts&quot;</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">featureCount</span><span class="p">())</span>
         <span class="k">for</span> <span class="n">feat</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">():</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_part</span><span class="p">(</span><span class="n">feat</span><span class="p">):</span>
                 <span class="n">ref</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_id</span><span class="p">(</span><span class="n">feat</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;lev_above&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;lev_below&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">feat</span><span class="p">[</span><span class="s2">&quot;lev_above&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">feat</span><span class="p">[</span><span class="s2">&quot;lev_below&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
                     <span class="n">to_clean_b</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">feat</span><span class="o">.</span><span class="n">id</span><span class="p">())</span>
                 <span class="k">elif</span> <span class="n">ref</span> <span class="ow">in</span> <span class="n">buildings</span><span class="p">:</span>
                     <span class="n">bu</span> <span class="o">=</span> <span class="n">buildings</span><span class="p">[</span><span class="n">ref</span><span class="p">]</span>
@@ -238,42 +242,42 @@
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_clean_o</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_clean_b</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">deleteFeatures</span><span class="p">(</span><span class="n">to_clean_o</span> <span class="o">+</span> <span class="n">to_clean_b</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_clean_o</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Removed </span><span class="si">%d</span><span class="s2"> building parts outside the outline&quot;</span><span class="p">),</span>
-                      <span class="nb">len</span><span class="p">(</span><span class="n">to_clean_o</span><span class="p">))</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Removed </span><span class="si">%d</span><span class="s2"> building parts outside the outline&quot;</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_clean_o</span><span class="p">)</span>
+            <span class="p">)</span>
             <span class="n">report</span><span class="o">.</span><span class="n">outside_parts</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_clean_o</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_clean_b</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
                 <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Deleted </span><span class="si">%d</span><span class="s2"> building parts with no floors above ground&quot;</span><span class="p">),</span>
-                <span class="nb">len</span><span class="p">(</span><span class="n">to_clean_b</span><span class="p">))</span>
+                <span class="nb">len</span><span class="p">(</span><span class="n">to_clean_b</span><span class="p">),</span>
+            <span class="p">)</span>
             <span class="n">report</span><span class="o">.</span><span class="n">underground_parts</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_clean_b</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ConsLayer.get_parts"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.cons.html#catatom2osm.geo.layer.cons.ConsLayer.get_parts">[documentos]</a>    <span class="k">def</span> <span class="nf">get_parts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">outline</span><span class="p">,</span> <span class="n">parts</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Given a building outline and its parts, for the parts inside the</span>
-<span class="sd">        outline returns a dictionary of parts for levels, the maximum and</span>
-<span class="sd">        minimum levels</span>
+<span class="sd">        Return a dictionary of parts for levels, the maximum and minimum levels.</span>
+
+<span class="sd">        Given the building outline and its parts, for the parts inside the outline.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">max_level</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">min_level</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">parts_for_level</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">parts</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">is_inside</span><span class="p">(</span><span class="n">part</span><span class="p">,</span> <span class="n">outline</span><span class="p">):</span>
-                <span class="n">level</span> <span class="o">=</span> <span class="p">(</span><span class="n">part</span><span class="p">[</span><span class="s1">&#39;lev_above&#39;</span><span class="p">]</span> <span class="ow">or</span> <span class="mi">0</span><span class="p">,</span> <span class="n">part</span><span class="p">[</span><span class="s1">&#39;lev_below&#39;</span><span class="p">]</span> <span class="ow">or</span> <span class="mi">0</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">level</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">max_level</span><span class="p">:</span> <span class="n">max_level</span> <span class="o">=</span> <span class="n">level</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                <span class="k">if</span> <span class="n">level</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">min_level</span><span class="p">:</span> <span class="n">min_level</span> <span class="o">=</span> <span class="n">level</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">level</span> <span class="o">=</span> <span class="p">(</span><span class="n">part</span><span class="p">[</span><span class="s2">&quot;lev_above&quot;</span><span class="p">]</span> <span class="ow">or</span> <span class="mi">0</span><span class="p">,</span> <span class="n">part</span><span class="p">[</span><span class="s2">&quot;lev_below&quot;</span><span class="p">]</span> <span class="ow">or</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">level</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">max_level</span><span class="p">:</span>
+                    <span class="n">max_level</span> <span class="o">=</span> <span class="n">level</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">level</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">min_level</span><span class="p">:</span>
+                    <span class="n">min_level</span> <span class="o">=</span> <span class="n">level</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
                 <span class="n">parts_for_level</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">part</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">parts_for_level</span><span class="p">,</span> <span class="n">max_level</span><span class="p">,</span> <span class="n">min_level</span></div>
 
 <div class="viewcode-block" id="ConsLayer.merge_adjacent_parts"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.cons.html#catatom2osm.geo.layer.cons.ConsLayer.merge_adjacent_parts">[documentos]</a>    <span class="k">def</span> <span class="nf">merge_adjacent_parts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">outline</span><span class="p">,</span> <span class="n">parts</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Given a building outline and its parts, for the parts inside the</span>
-<span class="sd">        outline:</span>
+<span class="sd">        Merge the adjacent parts in each level given a building outline and its parts.</span>
 
-<span class="sd">          * Translates the maximum values of number of levels above and below</span>
-<span class="sd">            ground to the outline and optionally deletes all the parts in</span>
-<span class="sd">            that level.</span>
-
-<span class="sd">          * Merges the adjacent parts in each level.</span>
+<span class="sd">        Translates the maximum values of number of levels above and below ground to</span>
+<span class="sd">        the outline and optionally deletes all the parts in that level.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">to_clean</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">to_clean_g</span> <span class="o">=</span> <span class="p">[]</span>
@@ -281,8 +285,8 @@
         <span class="n">to_change_g</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">parts_for_level</span><span class="p">,</span> <span class="n">max_level</span><span class="p">,</span> <span class="n">min_level</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parts</span><span class="p">(</span><span class="n">outline</span><span class="p">,</span> <span class="n">parts</span><span class="p">)</span>
         <span class="n">parts_area</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="n">outline</span><span class="p">[</span><span class="s1">&#39;lev_above&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">max_level</span>
-        <span class="n">outline</span><span class="p">[</span><span class="s1">&#39;lev_below&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">min_level</span>
+        <span class="n">outline</span><span class="p">[</span><span class="s2">&quot;lev_above&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">max_level</span>
+        <span class="n">outline</span><span class="p">[</span><span class="s2">&quot;lev_below&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">min_level</span>
         <span class="n">building_area</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">outline</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span><span class="o">.</span><span class="n">area</span><span class="p">(),</span> <span class="mi">0</span><span class="p">)</span>
         <span class="k">for</span> <span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="n">parts</span><span class="p">)</span> <span class="ow">in</span> <span class="n">parts_for_level</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">check_area</span> <span class="o">=</span> <span class="kc">False</span>
@@ -290,16 +294,15 @@
                 <span class="n">part_area</span> <span class="o">=</span> <span class="n">part</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span><span class="o">.</span><span class="n">area</span><span class="p">()</span>
                 <span class="n">parts_area</span> <span class="o">+=</span> <span class="n">part_area</span>
                 <span class="k">if</span> <span class="nb">round</span><span class="p">(</span><span class="n">part_area</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">building_area</span><span class="p">:</span>
-                    <span class="n">part</span><span class="p">[</span><span class="s1">&#39;fixme&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;This part is bigger than its building&#39;</span><span class="p">)</span>
+                    <span class="n">part</span><span class="p">[</span><span class="s2">&quot;fixme&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;This part is bigger than its building&quot;</span><span class="p">)</span>
                     <span class="n">to_change</span><span class="p">[</span><span class="n">part</span><span class="o">.</span><span class="n">id</span><span class="p">()]</span> <span class="o">=</span> <span class="n">get_attributes</span><span class="p">(</span><span class="n">part</span><span class="p">)</span>
                     <span class="n">check_area</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="k">if</span> <span class="n">check_area</span><span class="p">:</span>
                 <span class="k">continue</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parts_for_level</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">or</span> <span class="p">(</span>
-                    <span class="n">level</span> <span class="o">==</span> <span class="p">(</span><span class="n">max_level</span><span class="p">,</span> <span class="n">min_level</span><span class="p">)</span> <span class="ow">and</span> <span class="n">SIMPLIFY_BUILDING_PARTS</span>
+                <span class="n">level</span> <span class="o">==</span> <span class="p">(</span><span class="n">max_level</span><span class="p">,</span> <span class="n">min_level</span><span class="p">)</span> <span class="ow">and</span> <span class="n">SIMPLIFY_BUILDING_PARTS</span>
             <span class="p">):</span>
-                <span class="n">to_clean</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">id</span><span class="p">()</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span>
-                            <span class="n">parts_for_level</span><span class="p">[</span><span class="n">max_level</span><span class="p">,</span> <span class="n">min_level</span><span class="p">]]</span>
+                <span class="n">to_clean</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">id</span><span class="p">()</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">parts_for_level</span><span class="p">[</span><span class="n">max_level</span><span class="p">,</span> <span class="n">min_level</span><span class="p">]]</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">geom</span> <span class="o">=</span> <span class="n">Geometry</span><span class="o">.</span><span class="n">merge_adjacent_features</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span>
                 <span class="n">poly</span> <span class="o">=</span> <span class="n">Geometry</span><span class="o">.</span><span class="n">get_multipolygon</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span>
@@ -311,14 +314,14 @@
                         <span class="k">else</span><span class="p">:</span>
                             <span class="n">to_clean_g</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">part</span><span class="o">.</span><span class="n">id</span><span class="p">())</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parts_for_level</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">round</span><span class="p">(</span><span class="n">parts_area</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">!=</span> <span class="n">building_area</span><span class="p">:</span>
-            <span class="n">outline</span><span class="p">[</span><span class="s1">&#39;fixme&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span>
-                <span class="s2">&quot;Building parts don&#39;t fill the building outline&quot;</span><span class="p">)</span>
+            <span class="n">outline</span><span class="p">[</span><span class="s2">&quot;fixme&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Building parts don&#39;t fill the building outline&quot;</span><span class="p">)</span>
         <span class="n">to_change</span><span class="p">[</span><span class="n">outline</span><span class="o">.</span><span class="n">id</span><span class="p">()]</span> <span class="o">=</span> <span class="n">get_attributes</span><span class="p">(</span><span class="n">outline</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">to_clean</span><span class="p">,</span> <span class="n">to_clean_g</span><span class="p">,</span> <span class="n">to_change</span><span class="p">,</span> <span class="n">to_change_g</span></div>
 
 <div class="viewcode-block" id="ConsLayer.remove_inner_rings"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.cons.html#catatom2osm.geo.layer.cons.ConsLayer.remove_inner_rings">[documentos]</a>    <span class="k">def</span> <span class="nf">remove_inner_rings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">feat1</span><span class="p">,</span> <span class="n">feat2</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Auxiliary method to remove feat1 of its inner rings if equals to feat2</span>
+<span class="sd">        Auxiliary method to remove feat1 of its inner rings if equals to feat2.</span>
+
 <span class="sd">        Returns True if feat1 must be deleted and new geometry if any ring is</span>
 <span class="sd">        removed.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -335,19 +338,19 @@
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">delete_rings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">delete_rings</span><span class="p">:</span>
-            <span class="n">new_poly</span> <span class="o">=</span> <span class="p">[</span><span class="n">ring</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">ring</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">poly</span><span class="p">)</span> \
-                        <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">delete_rings</span><span class="p">]</span>
+            <span class="n">new_poly</span> <span class="o">=</span> <span class="p">[</span><span class="n">ring</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">ring</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">poly</span><span class="p">)</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">delete_rings</span><span class="p">]</span>
             <span class="n">new_geom</span> <span class="o">=</span> <span class="n">Geometry</span><span class="p">()</span><span class="o">.</span><span class="n">fromPolygonXY</span><span class="p">(</span><span class="n">new_poly</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">delete</span><span class="p">,</span> <span class="n">new_geom</span></div>
 
 <div class="viewcode-block" id="ConsLayer.merge_building_parts"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.cons.html#catatom2osm.geo.layer.cons.ConsLayer.merge_building_parts">[documentos]</a>    <span class="k">def</span> <span class="nf">merge_building_parts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Apply merge_adjacent_parts to each set of building and its parts.</span>
+
 <span class="sd">        Detect pools contained in a building and assign layer=1.</span>
 <span class="sd">        Detect buildings/parts with geometry equals to a pool geometry and</span>
 <span class="sd">        delete them.</span>
 <span class="sd">        Detect inner rings of buildings/parts with geometry equals to a pool</span>
 <span class="sd">        geometry and remove them.</span>
-<span class="sd">        Apply merge_adjacent_parts to each set of building and its parts.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">parts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">index_of_parts</span><span class="p">()</span>
         <span class="n">pools</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">index_of_pools</span><span class="p">()</span>
@@ -363,12 +366,12 @@
         <span class="n">t_buildings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s2">&quot;not regexp_match(localId, &#39;_&#39;)&quot;</span><span class="p">)</span>
         <span class="n">pbar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_progressbar</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Merge building parts&quot;</span><span class="p">),</span> <span class="n">t_buildings</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">building</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;not regexp_match(localId, &#39;_&#39;)&quot;</span><span class="p">):</span>
-            <span class="n">ref</span> <span class="o">=</span> <span class="n">building</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">]</span>
+            <span class="n">ref</span> <span class="o">=</span> <span class="n">building</span><span class="p">[</span><span class="s2">&quot;localId&quot;</span><span class="p">]</span>
             <span class="n">it_pools</span> <span class="o">=</span> <span class="n">pools</span><span class="p">[</span><span class="n">ref</span><span class="p">]</span>
             <span class="n">it_parts</span> <span class="o">=</span> <span class="n">parts</span><span class="p">[</span><span class="n">ref</span><span class="p">]</span>
             <span class="k">for</span> <span class="n">pool</span> <span class="ow">in</span> <span class="n">it_pools</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">pool</span><span class="p">[</span><span class="s1">&#39;layer&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">is_inside</span><span class="p">(</span><span class="n">pool</span><span class="p">,</span> <span class="n">building</span><span class="p">):</span>
-                    <span class="n">pool</span><span class="p">[</span><span class="s1">&#39;layer&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="n">pool</span><span class="p">[</span><span class="s2">&quot;layer&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">is_inside</span><span class="p">(</span><span class="n">pool</span><span class="p">,</span> <span class="n">building</span><span class="p">):</span>
+                    <span class="n">pool</span><span class="p">[</span><span class="s2">&quot;layer&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
                     <span class="n">to_change</span><span class="p">[</span><span class="n">pool</span><span class="o">.</span><span class="n">id</span><span class="p">()]</span> <span class="o">=</span> <span class="n">get_attributes</span><span class="p">(</span><span class="n">pool</span><span class="p">)</span>
                     <span class="n">pools_on_roofs</span> <span class="o">+=</span> <span class="mi">1</span>
                 <span class="n">del_building</span><span class="p">,</span> <span class="n">new_geom</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">remove_inner_rings</span><span class="p">(</span><span class="n">building</span><span class="p">,</span> <span class="n">pool</span><span class="p">)</span>
@@ -406,20 +409,20 @@
         <span class="k">if</span> <span class="n">to_clean</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">deleteFeatures</span><span class="p">(</span><span class="n">to_clean</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">pools_on_roofs</span><span class="p">:</span>
-            <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Located </span><span class="si">%d</span><span class="s2"> swimming pools over a building&quot;</span><span class="p">),</span>
-                      <span class="n">pools_on_roofs</span><span class="p">)</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Located </span><span class="si">%d</span><span class="s2"> swimming pools over a building&quot;</span><span class="p">),</span> <span class="n">pools_on_roofs</span><span class="p">)</span>
             <span class="n">report</span><span class="o">.</span><span class="n">pools_on_roofs</span> <span class="o">=</span> <span class="n">pools_on_roofs</span>
         <span class="k">if</span> <span class="n">buildings_in_pools</span><span class="p">:</span>
             <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
                 <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Deleted </span><span class="si">%d</span><span class="s2"> buildings coincidents with a swimming pool&quot;</span><span class="p">),</span>
-                <span class="n">buildings_in_pools</span><span class="p">)</span>
+                <span class="n">buildings_in_pools</span><span class="p">,</span>
+            <span class="p">)</span>
             <span class="n">report</span><span class="o">.</span><span class="n">buildings_in_pools</span> <span class="o">=</span> <span class="n">buildings_in_pools</span>
         <span class="k">if</span> <span class="n">levels_to_outline</span><span class="p">:</span>
-            <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Translated </span><span class="si">%d</span><span class="s2"> level values to the outline&quot;</span><span class="p">),</span>
-                      <span class="n">levels_to_outline</span><span class="p">)</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Translated </span><span class="si">%d</span><span class="s2"> level values to the outline&quot;</span><span class="p">),</span> <span class="n">levels_to_outline</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">parts_merged_to_building</span><span class="p">:</span>
-            <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Merged </span><span class="si">%d</span><span class="s2"> building parts to the outline&quot;</span><span class="p">),</span>
-                      <span class="n">parts_merged_to_building</span><span class="p">)</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Merged </span><span class="si">%d</span><span class="s2"> building parts to the outline&quot;</span><span class="p">),</span> <span class="n">parts_merged_to_building</span>
+            <span class="p">)</span>
             <span class="n">report</span><span class="o">.</span><span class="n">parts_to_outline</span> <span class="o">=</span> <span class="n">parts_merged_to_building</span>
         <span class="k">if</span> <span class="n">adjacent_parts_deleted</span><span class="p">:</span>
             <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Merged </span><span class="si">%d</span><span class="s2"> adjacent parts&quot;</span><span class="p">),</span> <span class="n">adjacent_parts_deleted</span><span class="p">)</span>
@@ -427,11 +430,13 @@
 
 <div class="viewcode-block" id="ConsLayer.clean"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.cons.html#catatom2osm.geo.layer.cons.ConsLayer.clean">[documentos]</a>    <span class="k">def</span> <span class="nf">clean</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Clean geometries.</span>
+
 <span class="sd">        Delete invalid geometries and close vertices, add topological points,</span>
 <span class="sd">        merge building parts and simplify vertices.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">delete_invalid_geometries</span><span class="p">(</span>
-            <span class="n">query_small_area</span><span class="o">=</span><span class="k">lambda</span> <span class="n">feat</span><span class="p">:</span> <span class="s1">&#39;_part&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">]</span>
+            <span class="n">query_small_area</span><span class="o">=</span><span class="k">lambda</span> <span class="n">feat</span><span class="p">:</span> <span class="s2">&quot;_part&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">feat</span><span class="p">[</span><span class="s2">&quot;localId&quot;</span><span class="p">]</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">topology</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">merge_building_parts</span><span class="p">()</span>
@@ -439,18 +444,24 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">delete_small_geometries</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="ConsLayer.move_entrance"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.cons.html#catatom2osm.geo.layer.cons.ConsLayer.move_entrance">[documentos]</a>    <span class="k">def</span> <span class="nf">move_entrance</span><span class="p">(</span>
-            <span class="bp">self</span><span class="p">,</span> <span class="n">ad</span><span class="p">,</span> <span class="n">ad_buildings</span><span class="p">,</span> <span class="n">ad_parts</span><span class="p">,</span> <span class="n">to_move</span><span class="p">,</span> <span class="n">to_insert</span><span class="p">,</span>
-            <span class="n">parents_per_vx</span><span class="p">,</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">ad</span><span class="p">,</span>
+        <span class="n">ad_buildings</span><span class="p">,</span>
+        <span class="n">ad_parts</span><span class="p">,</span>
+        <span class="n">to_move</span><span class="p">,</span>
+        <span class="n">to_insert</span><span class="p">,</span>
+        <span class="n">parents_per_vx</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Auxiliary method to move entrance to the nearest building and part.</span>
+
 <span class="sd">        Don&#39;t move and the entrance specification is changed if the new</span>
 <span class="sd">        position is not enough close (&#39;remote&#39;), is a corner (&#39;corner&#39;),</span>
 <span class="sd">        is in an inner ring (&#39;inner&#39;) or is in a wall shared with another</span>
 <span class="sd">        building (&#39;shared&#39;).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">point</span> <span class="o">=</span> <span class="n">ad</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span><span class="o">.</span><span class="n">asPoint</span><span class="p">()</span>
-        <span class="n">distance</span> <span class="o">=</span> <span class="mf">9E9</span>
+        <span class="n">distance</span> <span class="o">=</span> <span class="mf">9e9</span>
         <span class="k">for</span> <span class="n">bu</span> <span class="ow">in</span> <span class="n">ad_buildings</span><span class="p">:</span>
             <span class="n">bg</span> <span class="o">=</span> <span class="n">bu</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span>
             <span class="n">d</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">bg</span><span class="o">.</span><span class="n">closestSegmentWithContext</span><span class="p">(</span><span class="n">point</span><span class="p">)[:</span><span class="mi">3</span><span class="p">]</span>
@@ -460,17 +471,17 @@
         <span class="n">bid</span> <span class="o">=</span> <span class="n">building</span><span class="o">.</span><span class="n">id</span><span class="p">()</span>
         <span class="n">va</span> <span class="o">=</span> <span class="n">Point</span><span class="p">(</span><span class="n">bg</span><span class="o">.</span><span class="n">vertexAt</span><span class="p">(</span><span class="n">vertex</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
         <span class="n">vb</span> <span class="o">=</span> <span class="n">Point</span><span class="p">(</span><span class="n">bg</span><span class="o">.</span><span class="n">vertexAt</span><span class="p">(</span><span class="n">vertex</span><span class="p">))</span>
-        <span class="k">if</span> <span class="n">distance</span> <span class="o">&gt;</span> <span class="n">config</span><span class="o">.</span><span class="n">addr_thr</span> <span class="o">**</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="n">ad</span><span class="p">[</span><span class="s1">&#39;spec&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;remote&#39;</span>
+        <span class="k">if</span> <span class="n">distance</span> <span class="o">&gt;</span> <span class="n">config</span><span class="o">.</span><span class="n">addr_thr</span><span class="o">**</span><span class="mi">2</span><span class="p">:</span>
+            <span class="n">ad</span><span class="p">[</span><span class="s2">&quot;spec&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;remote&quot;</span>
         <span class="k">elif</span> <span class="n">vertex</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">Geometry</span><span class="o">.</span><span class="n">get_multipolygon</span><span class="p">(</span><span class="n">bg</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]):</span>
-            <span class="n">ad</span><span class="p">[</span><span class="s1">&#39;spec&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;inner&#39;</span>
+            <span class="n">ad</span><span class="p">[</span><span class="s2">&quot;spec&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;inner&quot;</span>
         <span class="k">elif</span> <span class="p">(</span>
-                <span class="n">closest</span><span class="o">.</span><span class="n">sqrDist</span><span class="p">(</span><span class="n">va</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">config</span><span class="o">.</span><span class="n">entrance_thr</span> <span class="o">**</span> <span class="mi">2</span>
-                <span class="ow">or</span> <span class="n">closest</span><span class="o">.</span><span class="n">sqrDist</span><span class="p">(</span><span class="n">vb</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">config</span><span class="o">.</span><span class="n">entrance_thr</span> <span class="o">**</span> <span class="mi">2</span>
+            <span class="n">closest</span><span class="o">.</span><span class="n">sqrDist</span><span class="p">(</span><span class="n">va</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">config</span><span class="o">.</span><span class="n">entrance_thr</span><span class="o">**</span><span class="mi">2</span>
+            <span class="ow">or</span> <span class="n">closest</span><span class="o">.</span><span class="n">sqrDist</span><span class="p">(</span><span class="n">vb</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">config</span><span class="o">.</span><span class="n">entrance_thr</span><span class="o">**</span><span class="mi">2</span>
         <span class="p">):</span>
-            <span class="n">ad</span><span class="p">[</span><span class="s1">&#39;spec&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;corner&#39;</span>
+            <span class="n">ad</span><span class="p">[</span><span class="s2">&quot;spec&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;corner&quot;</span>
         <span class="k">elif</span> <span class="n">PolygonLayer</span><span class="o">.</span><span class="n">is_shared_segment</span><span class="p">(</span><span class="n">parents_per_vx</span><span class="p">,</span> <span class="n">va</span><span class="p">,</span> <span class="n">vb</span><span class="p">,</span> <span class="n">bid</span><span class="p">):</span>
-            <span class="n">ad</span><span class="p">[</span><span class="s1">&#39;spec&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;shared&#39;</span>
+            <span class="n">ad</span><span class="p">[</span><span class="s2">&quot;spec&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;shared&quot;</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">dg</span> <span class="o">=</span> <span class="n">Geometry</span><span class="o">.</span><span class="n">fromPointXY</span><span class="p">(</span><span class="n">closest</span><span class="p">)</span>
             <span class="n">to_move</span><span class="p">[</span><span class="n">ad</span><span class="o">.</span><span class="n">id</span><span class="p">()]</span> <span class="o">=</span> <span class="n">dg</span>
@@ -491,11 +502,12 @@
 
 <div class="viewcode-block" id="ConsLayer.move_address"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.cons.html#catatom2osm.geo.layer.cons.ConsLayer.move_address">[documentos]</a>    <span class="k">def</span> <span class="nf">move_address</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">address</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Try to move each entrance address to the nearest point in the outline</span>
-<span class="sd">        of its associated building (same cadastral reference). Non entrance</span>
-<span class="sd">        addresses ends in the building outline when CatAtom2Osm.merge_address</span>
-<span class="sd">        is called. Delete the address if the number of associated buildings</span>
-<span class="sd">        is 0 or greater than 1 for non entrance addresses.</span>
+<span class="sd">        Try to move each entrance address to the nearest point in the building outline.</span>
+
+<span class="sd">        Building and addresses are associated using the cadastral reference.</span>
+<span class="sd">        Non entrance addresses ends in the building outline when</span>
+<span class="sd">        CatAtom2Osm.merge_address is called. Delete the address if the number of</span>
+<span class="sd">        associated buildings is 0 or greater than 1 for non entrance addresses.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">to_change</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">to_move</span> <span class="o">=</span> <span class="p">{}</span>
@@ -516,14 +528,19 @@
                 <span class="n">to_clean</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ad</span><span class="o">.</span><span class="n">id</span><span class="p">())</span>
                 <span class="n">oa</span> <span class="o">+=</span> <span class="mi">1</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">ad</span><span class="p">[</span><span class="s1">&#39;spec&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Entrance&#39;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">ad</span><span class="p">[</span><span class="s2">&quot;spec&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Entrance&quot;</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">move_entrance</span><span class="p">(</span>
-                        <span class="n">ad</span><span class="p">,</span> <span class="n">ad_buildings</span><span class="p">,</span> <span class="n">ad_parts</span><span class="p">,</span> <span class="n">to_move</span><span class="p">,</span> <span class="n">to_insert</span><span class="p">,</span> <span class="n">ppv</span><span class="p">,</span>
+                        <span class="n">ad</span><span class="p">,</span>
+                        <span class="n">ad_buildings</span><span class="p">,</span>
+                        <span class="n">ad_parts</span><span class="p">,</span>
+                        <span class="n">to_move</span><span class="p">,</span>
+                        <span class="n">to_insert</span><span class="p">,</span>
+                        <span class="n">ppv</span><span class="p">,</span>
                     <span class="p">)</span>
-                <span class="k">if</span> <span class="n">ad</span><span class="p">[</span><span class="s1">&#39;spec&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;Entrance&#39;</span> <span class="ow">and</span> <span class="n">building_count</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">ad</span><span class="p">[</span><span class="s2">&quot;spec&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;Entrance&quot;</span> <span class="ow">and</span> <span class="n">building_count</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
                     <span class="n">to_clean</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ad</span><span class="o">.</span><span class="n">id</span><span class="p">())</span>
                     <span class="n">mp</span> <span class="o">+=</span> <span class="mi">1</span>
-                <span class="k">if</span> <span class="n">ad</span><span class="p">[</span><span class="s1">&#39;spec&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;Parcel&#39;</span> <span class="ow">and</span> <span class="n">building_count</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">ad</span><span class="p">[</span><span class="s2">&quot;spec&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;Parcel&quot;</span> <span class="ow">and</span> <span class="n">building_count</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
                     <span class="n">to_change</span><span class="p">[</span><span class="n">ad</span><span class="o">.</span><span class="n">id</span><span class="p">()]</span> <span class="o">=</span> <span class="n">get_attributes</span><span class="p">(</span><span class="n">ad</span><span class="p">)</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_insert</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">BUFFER_SIZE</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">changeGeometryValues</span><span class="p">(</span><span class="n">to_insert</span><span class="p">)</span>
@@ -548,55 +565,58 @@
             <span class="n">report</span><span class="o">.</span><span class="n">multiple_addresses</span> <span class="o">=</span> <span class="n">mp</span></div>
 
 <div class="viewcode-block" id="ConsLayer.validate"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.cons.html#catatom2osm.geo.layer.cons.ConsLayer.validate">[documentos]</a>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_level</span><span class="p">,</span> <span class="n">min_level</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Put fixmes to buildings with not valid geometry, too small or big.</span>
-<span class="sd">        Returns distribution of floors&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Put fixmes to buildings with not valid geometry, too small or big.</span>
+
+<span class="sd">        Returns distribution of floors.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">to_change</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">feat</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">():</span>
             <span class="n">geom</span> <span class="o">=</span> <span class="n">feat</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span>
             <span class="n">errors</span> <span class="o">=</span> <span class="n">geom</span><span class="o">.</span><span class="n">validateGeometry</span><span class="p">()</span>
             <span class="k">if</span> <span class="n">errors</span><span class="p">:</span>
-                <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;fixme&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;GEOS validation&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;: &#39;</span> <span class="o">+</span> \
-                                <span class="s1">&#39;; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">e</span><span class="o">.</span><span class="n">what</span><span class="p">()</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">errors</span><span class="p">])</span>
+                <span class="n">feat</span><span class="p">[</span><span class="s2">&quot;fixme&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">_</span><span class="p">(</span><span class="s2">&quot;GEOS validation&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;: &quot;</span> <span class="o">+</span> <span class="s2">&quot;; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">e</span><span class="o">.</span><span class="n">what</span><span class="p">()</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">errors</span><span class="p">])</span>
+                <span class="p">)</span>
                 <span class="n">to_change</span><span class="p">[</span><span class="n">feat</span><span class="o">.</span><span class="n">id</span><span class="p">()]</span> <span class="o">=</span> <span class="n">get_attributes</span><span class="p">(</span><span class="n">feat</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">ConsLayer</span><span class="o">.</span><span class="n">is_building</span><span class="p">(</span><span class="n">feat</span><span class="p">):</span>
-                <span class="n">localid</span> <span class="o">=</span> <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">]</span>
-                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">feat</span><span class="p">[</span><span class="s1">&#39;lev_above&#39;</span><span class="p">],</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;lev_above&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-                    <span class="n">max_level</span><span class="p">[</span><span class="n">localid</span><span class="p">]</span> <span class="o">=</span> <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;lev_above&#39;</span><span class="p">]</span>
-                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">feat</span><span class="p">[</span><span class="s1">&#39;lev_below&#39;</span><span class="p">],</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;lev_below&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-                    <span class="n">min_level</span><span class="p">[</span><span class="n">localid</span><span class="p">]</span> <span class="o">=</span> <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;lev_below&#39;</span><span class="p">]</span>
+                <span class="n">localid</span> <span class="o">=</span> <span class="n">feat</span><span class="p">[</span><span class="s2">&quot;localId&quot;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">feat</span><span class="p">[</span><span class="s2">&quot;lev_above&quot;</span><span class="p">],</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="n">feat</span><span class="p">[</span><span class="s2">&quot;lev_above&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">max_level</span><span class="p">[</span><span class="n">localid</span><span class="p">]</span> <span class="o">=</span> <span class="n">feat</span><span class="p">[</span><span class="s2">&quot;lev_above&quot;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">feat</span><span class="p">[</span><span class="s2">&quot;lev_below&quot;</span><span class="p">],</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="n">feat</span><span class="p">[</span><span class="s2">&quot;lev_below&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">min_level</span><span class="p">[</span><span class="n">localid</span><span class="p">]</span> <span class="o">=</span> <span class="n">feat</span><span class="p">[</span><span class="s2">&quot;lev_below&quot;</span><span class="p">]</span>
                 <span class="k">if</span> <span class="n">feat</span><span class="o">.</span><span class="n">id</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">to_change</span><span class="p">:</span>
                     <span class="n">area</span> <span class="o">=</span> <span class="n">geom</span><span class="o">.</span><span class="n">area</span><span class="p">()</span>
                     <span class="k">if</span> <span class="n">area</span> <span class="o">&lt;</span> <span class="n">config</span><span class="o">.</span><span class="n">warning_min_area</span><span class="p">:</span>
-                        <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;fixme&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Check, area too small&quot;</span><span class="p">)</span>
+                        <span class="n">feat</span><span class="p">[</span><span class="s2">&quot;fixme&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Check, area too small&quot;</span><span class="p">)</span>
                         <span class="n">to_change</span><span class="p">[</span><span class="n">feat</span><span class="o">.</span><span class="n">id</span><span class="p">()]</span> <span class="o">=</span> <span class="n">get_attributes</span><span class="p">(</span><span class="n">feat</span><span class="p">)</span>
                     <span class="k">if</span> <span class="n">area</span> <span class="o">&gt;</span> <span class="n">config</span><span class="o">.</span><span class="n">warning_max_area</span><span class="p">:</span>
-                        <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;fixme&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Check, area too big&quot;</span><span class="p">)</span>
+                        <span class="n">feat</span><span class="p">[</span><span class="s2">&quot;fixme&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Check, area too big&quot;</span><span class="p">)</span>
                         <span class="n">to_change</span><span class="p">[</span><span class="n">feat</span><span class="o">.</span><span class="n">id</span><span class="p">()]</span> <span class="o">=</span> <span class="n">get_attributes</span><span class="p">(</span><span class="n">feat</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">to_change</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">changeAttributeValues</span><span class="p">(</span><span class="n">to_change</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ConsLayer.conflate"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.cons.html#catatom2osm.geo.layer.cons.ConsLayer.conflate">[documentos]</a>    <span class="k">def</span> <span class="nf">conflate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">current_bu_osm</span><span class="p">,</span> <span class="n">delete</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Removes from current_bu_osm the buildings that don&#39;t have conflicts.</span>
-<span class="sd">        If delete=False, only mark buildings with conflicts</span>
+<span class="sd">        Remove from current_bu_osm the buildings that don&#39;t have conflicts.</span>
+
+<span class="sd">        If delete=False, only mark buildings with conflicts.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">current_bu_osm</span><span class="o">.</span><span class="n">elements</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span>
         <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_index</span><span class="p">()</span>
-        <span class="n">geometries</span> <span class="o">=</span> <span class="p">{</span><span class="n">f</span><span class="o">.</span><span class="n">id</span><span class="p">():</span> <span class="n">QgsGeometry</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">geometry</span><span class="p">())</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span>
-                      <span class="bp">self</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">()}</span>
+        <span class="n">geometries</span> <span class="o">=</span> <span class="p">{</span><span class="n">f</span><span class="o">.</span><span class="n">id</span><span class="p">():</span> <span class="n">QgsGeometry</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">geometry</span><span class="p">())</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">()}</span>
         <span class="n">num_buildings</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">conflicts</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">to_clean</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
         <span class="n">pbar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_progressbar</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Conflate&quot;</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">current_bu_osm</span><span class="o">.</span><span class="n">elements</span><span class="p">))</span>
         <span class="k">for</span> <span class="n">el</span> <span class="ow">in</span> <span class="n">current_bu_osm</span><span class="o">.</span><span class="n">elements</span><span class="p">:</span>
             <span class="n">poly</span> <span class="o">=</span> <span class="kc">None</span>
-            <span class="n">is_pool</span> <span class="o">=</span> <span class="s1">&#39;leisure&#39;</span> <span class="ow">in</span> <span class="n">el</span><span class="o">.</span><span class="n">tags</span> <span class="ow">and</span> <span class="n">el</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span>
-                <span class="s1">&#39;leisure&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;swimming_pool&#39;</span>
-            <span class="n">is_building</span> <span class="o">=</span> <span class="s1">&#39;building&#39;</span> <span class="ow">in</span> <span class="n">el</span><span class="o">.</span><span class="n">tags</span>
-            <span class="k">if</span> <span class="n">el</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;way&#39;</span> <span class="ow">and</span> <span class="n">el</span><span class="o">.</span><span class="n">is_closed</span><span class="p">()</span> <span class="ow">and</span> <span class="p">(</span><span class="n">is_building</span> <span class="ow">or</span> <span class="n">is_pool</span><span class="p">):</span>
+            <span class="n">is_pool</span> <span class="o">=</span> <span class="s2">&quot;leisure&quot;</span> <span class="ow">in</span> <span class="n">el</span><span class="o">.</span><span class="n">tags</span> <span class="ow">and</span> <span class="n">el</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s2">&quot;leisure&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;swimming_pool&quot;</span>
+            <span class="n">is_building</span> <span class="o">=</span> <span class="s2">&quot;building&quot;</span> <span class="ow">in</span> <span class="n">el</span><span class="o">.</span><span class="n">tags</span>
+            <span class="k">if</span> <span class="n">el</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s2">&quot;way&quot;</span> <span class="ow">and</span> <span class="n">el</span><span class="o">.</span><span class="n">is_closed</span><span class="p">()</span> <span class="ow">and</span> <span class="p">(</span><span class="n">is_building</span> <span class="ow">or</span> <span class="n">is_pool</span><span class="p">):</span>
                 <span class="n">poly</span> <span class="o">=</span> <span class="p">[[</span><span class="nb">map</span><span class="p">(</span><span class="n">Point</span><span class="p">,</span> <span class="n">el</span><span class="o">.</span><span class="n">geometry</span><span class="p">())]]</span>
-            <span class="k">elif</span> <span class="n">el</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;relation&#39;</span> <span class="ow">and</span> <span class="p">(</span><span class="n">is_building</span> <span class="ow">or</span> <span class="n">is_pool</span><span class="p">):</span>
+            <span class="k">elif</span> <span class="n">el</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s2">&quot;relation&quot;</span> <span class="ow">and</span> <span class="p">(</span><span class="n">is_building</span> <span class="ow">or</span> <span class="n">is_pool</span><span class="p">):</span>
                 <span class="n">poly</span> <span class="o">=</span> <span class="p">[[</span><span class="nb">map</span><span class="p">(</span><span class="n">Point</span><span class="p">,</span> <span class="n">w</span><span class="p">)]</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">el</span><span class="o">.</span><span class="n">outer_geometry</span><span class="p">()]</span>
             <span class="k">if</span> <span class="n">poly</span><span class="p">:</span>
                 <span class="n">num_buildings</span> <span class="o">+=</span> <span class="mi">1</span>
@@ -611,21 +631,23 @@
                     <span class="n">conflict</span> <span class="o">=</span> <span class="kc">False</span>
                     <span class="k">for</span> <span class="n">fid</span> <span class="ow">in</span> <span class="n">fids</span><span class="p">:</span>
                         <span class="n">fg</span> <span class="o">=</span> <span class="n">geometries</span><span class="p">[</span><span class="n">fid</span><span class="p">]</span>
-                        <span class="k">if</span> <span class="n">geom</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">fg</span><span class="p">)</span> <span class="ow">or</span> <span class="n">fg</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span>
-                                <span class="n">geom</span><span class="p">)</span> <span class="ow">or</span> <span class="n">geom</span><span class="o">.</span><span class="n">overlaps</span><span class="p">(</span><span class="n">fg</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="n">geom</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">fg</span><span class="p">)</span> <span class="ow">or</span> <span class="n">fg</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span> <span class="ow">or</span> <span class="n">geom</span><span class="o">.</span><span class="n">overlaps</span><span class="p">(</span><span class="n">fg</span><span class="p">):</span>
                             <span class="n">conflict</span> <span class="o">=</span> <span class="kc">True</span>
                             <span class="n">conflicts</span> <span class="o">+=</span> <span class="mi">1</span>
                             <span class="k">break</span>
                     <span class="k">if</span> <span class="n">delete</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">conflict</span><span class="p">:</span>
                         <span class="n">to_clean</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">el</span><span class="p">)</span>
                     <span class="k">if</span> <span class="ow">not</span> <span class="n">delete</span> <span class="ow">and</span> <span class="n">conflict</span><span class="p">:</span>
-                        <span class="n">el</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;conflict&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;yes&#39;</span>
+                        <span class="n">el</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s2">&quot;conflict&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;yes&quot;</span>
             <span class="n">pbar</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
         <span class="n">pbar</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">el</span> <span class="ow">in</span> <span class="n">to_clean</span><span class="p">:</span>
             <span class="n">current_bu_osm</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">el</span><span class="p">)</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Detected </span><span class="si">%d</span><span class="s2"> conflicts in </span><span class="si">%d</span><span class="s2"> buildings/pools from OSM&quot;</span><span class="p">),</span>
-                  <span class="n">conflicts</span><span class="p">,</span> <span class="n">num_buildings</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+            <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Detected </span><span class="si">%d</span><span class="s2"> conflicts in </span><span class="si">%d</span><span class="s2"> buildings/pools from OSM&quot;</span><span class="p">),</span>
+            <span class="n">conflicts</span><span class="p">,</span>
+            <span class="n">num_buildings</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="n">report</span><span class="o">.</span><span class="n">osm_buildings</span> <span class="o">=</span> <span class="n">num_buildings</span>
         <span class="n">report</span><span class="o">.</span><span class="n">osm_building_conflicts</span> <span class="o">=</span> <span class="n">conflicts</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_clean</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span></div></div>
@@ -645,7 +667,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">documentación de CatAtom2Osm - 2.6.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">documentación de CatAtom2Osm - 2.6.3.dev.5</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" >Código de módulo</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.geo.layer.cons</a></li> 
       </ul>

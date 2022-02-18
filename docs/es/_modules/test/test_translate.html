@@ -14,7 +14,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>test.test_translate &#8212; documentación de CatAtom2Osm - 2.6.0</title>
+    <title>test.test_translate &#8212; documentación de CatAtom2Osm - 2.6.3.dev.5</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/guzzle.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.6.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.6.3.dev.5</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Código de módulo</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">test.test_translate</a></li> 
       </ul>
@@ -80,17 +80,17 @@
           <div class="document clearer body">
             
   <h1>Código fuente para test.test_translate</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">unittest</span>
-<span class="kn">import</span> <span class="nn">mock</span>
-<span class="kn">import</span> <span class="nn">random</span>
+<span></span><span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">unittest</span>
 
-<span class="kn">from</span> <span class="nn">catatom2osm.translate</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">mock</span>
+
+<span class="kn">from</span> <span class="nn">catatom2osm.translate</span> <span class="k">import</span> <span class="n">address_tags</span><span class="p">,</span> <span class="n">all_tags</span><span class="p">,</span> <span class="n">building_tags</span>
 
 
 <div class="viewcode-block" id="TestTranslate"><a class="viewcode-back" href="../../api/test.test_translate.html#test.test_translate.TestTranslate">[documentos]</a><span class="k">class</span> <span class="nc">TestTranslate</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
-
 <div class="viewcode-block" id="TestTranslate.test_all_tags"><a class="viewcode-back" href="../../api/test.test_translate.html#test.test_translate.TestTranslate.test_all_tags">[documentos]</a>    <span class="k">def</span> <span class="nf">test_all_tags</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">tags</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
+        <span class="n">tags</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
         <span class="n">fields</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">tags</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
             <span class="n">f</span> <span class="o">=</span> <span class="n">mock</span><span class="o">.</span><span class="n">MagicMock</span><span class="p">()</span>
@@ -104,112 +104,122 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">dest</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="TestTranslate.test_address_tags"><a class="viewcode-back" href="../../api/test.test_translate.html#test.test_translate.TestTranslate.test_address_tags">[documentos]</a>    <span class="k">def</span> <span class="nf">test_address_tags</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">address_tags</span><span class="p">({</span><span class="s1">&#39;TN_text&#39;</span><span class="p">:</span> <span class="s1">&#39;  &#39;</span><span class="p">,</span> <span class="s1">&#39;postCode&#39;</span><span class="p">:</span> <span class="s1">&#39;9&#39;</span><span class="p">}),</span> <span class="p">{})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">address_tags</span><span class="p">({</span><span class="s2">&quot;TN_text&quot;</span><span class="p">:</span> <span class="s2">&quot;  &quot;</span><span class="p">,</span> <span class="s2">&quot;postCode&quot;</span><span class="p">:</span> <span class="s2">&quot;9&quot;</span><span class="p">}),</span> <span class="p">{})</span>
         <span class="n">feat</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;localId&#39;</span><span class="p">:</span> <span class="s1">&#39;000&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;TN_text&#39;</span><span class="p">:</span> <span class="s1">&#39;111&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;designator&#39;</span><span class="p">:</span> <span class="s1">&#39;222&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;postCode&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;spec&#39;</span><span class="p">:</span> <span class="s1">&#39;Parcel&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;image&#39;</span><span class="p">:</span> <span class="s1">&#39;foobar&#39;</span>
+            <span class="s2">&quot;localId&quot;</span><span class="p">:</span> <span class="s2">&quot;000&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;TN_text&quot;</span><span class="p">:</span> <span class="s2">&quot;111&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;designator&quot;</span><span class="p">:</span> <span class="s2">&quot;222&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;postCode&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;spec&quot;</span><span class="p">:</span> <span class="s2">&quot;Parcel&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;image&quot;</span><span class="p">:</span> <span class="s2">&quot;foobar&quot;</span><span class="p">,</span>
         <span class="p">}</span>
         <span class="n">tags</span> <span class="o">=</span> <span class="n">address_tags</span><span class="p">(</span><span class="n">feat</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;ref&#39;</span><span class="p">],</span> <span class="s1">&#39;000&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;addr:street&#39;</span><span class="p">],</span> <span class="s1">&#39;111&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;addr:housenumber&#39;</span><span class="p">],</span> <span class="s1">&#39;222&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;image&#39;</span><span class="p">],</span> <span class="s1">&#39;foobar&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertNotIn</span><span class="p">(</span><span class="s1">&#39;addr:postcode&#39;</span><span class="p">,</span> <span class="n">tags</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertNotIn</span><span class="p">(</span><span class="s1">&#39;entrance&#39;</span><span class="p">,</span> <span class="n">tags</span><span class="p">)</span>
-        <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;spec&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Entrance&#39;</span>
-        <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;postCode&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;333&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">tags</span><span class="p">[</span><span class="s2">&quot;ref&quot;</span><span class="p">],</span> <span class="s2">&quot;000&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">tags</span><span class="p">[</span><span class="s2">&quot;addr:street&quot;</span><span class="p">],</span> <span class="s2">&quot;111&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">tags</span><span class="p">[</span><span class="s2">&quot;addr:housenumber&quot;</span><span class="p">],</span> <span class="s2">&quot;222&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">tags</span><span class="p">[</span><span class="s2">&quot;image&quot;</span><span class="p">],</span> <span class="s2">&quot;foobar&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertNotIn</span><span class="p">(</span><span class="s2">&quot;addr:postcode&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertNotIn</span><span class="p">(</span><span class="s2">&quot;entrance&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="p">)</span>
+        <span class="n">feat</span><span class="p">[</span><span class="s2">&quot;spec&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Entrance&quot;</span>
+        <span class="n">feat</span><span class="p">[</span><span class="s2">&quot;postCode&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;333&quot;</span>
         <span class="n">tags</span> <span class="o">=</span> <span class="n">address_tags</span><span class="p">(</span><span class="n">feat</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;entrance&#39;</span><span class="p">],</span> <span class="s1">&#39;yes&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;addr:postcode&#39;</span><span class="p">],</span> <span class="s1">&#39;00333&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">tags</span><span class="p">[</span><span class="s2">&quot;entrance&quot;</span><span class="p">],</span> <span class="s2">&quot;yes&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">tags</span><span class="p">[</span><span class="s2">&quot;addr:postcode&quot;</span><span class="p">],</span> <span class="s2">&quot;00333&quot;</span><span class="p">)</span>
         <span class="n">feat</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;localId&#39;</span><span class="p">:</span> <span class="s1">&#39;000&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;TN_text&#39;</span><span class="p">:</span> <span class="s1">&#39;Lugar foo&#39;</span><span class="p">,</span> 
-            <span class="s1">&#39;designator&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;postCode&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;spec&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;image&#39;</span><span class="p">:</span> <span class="s1">&#39;foobar&#39;</span>
+            <span class="s2">&quot;localId&quot;</span><span class="p">:</span> <span class="s2">&quot;000&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;TN_text&quot;</span><span class="p">:</span> <span class="s2">&quot;Lugar foo&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;designator&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;postCode&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;spec&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;image&quot;</span><span class="p">:</span> <span class="s2">&quot;foobar&quot;</span><span class="p">,</span>
         <span class="p">}</span>
         <span class="n">tags</span> <span class="o">=</span> <span class="n">address_tags</span><span class="p">(</span><span class="n">feat</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;addr:place&#39;</span><span class="p">],</span> <span class="s1">&#39;foo&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertNotIn</span><span class="p">(</span><span class="s1">&#39;addr:street&#39;</span><span class="p">,</span> <span class="n">tags</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">tags</span><span class="p">[</span><span class="s2">&quot;addr:place&quot;</span><span class="p">],</span> <span class="s2">&quot;foo&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertNotIn</span><span class="p">(</span><span class="s2">&quot;addr:street&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="TestTranslate.test_building_tags"><a class="viewcode-back" href="../../api/test.test_translate.html#test.test_translate.TestTranslate.test_building_tags">[documentos]</a>    <span class="k">def</span> <span class="nf">test_building_tags</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">building_values</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;residential&#39;</span><span class="p">,</span> <span class="s1">&#39;barn&#39;</span><span class="p">,</span> <span class="s1">&#39;industrial&#39;</span><span class="p">,</span> <span class="s1">&#39;office&#39;</span><span class="p">,</span> 
-            <span class="s1">&#39;retail&#39;</span><span class="p">,</span> <span class="s1">&#39;public&#39;</span><span class="p">)</span>
-        <span class="n">use_values</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;1_residential&#39;</span><span class="p">,</span> <span class="s1">&#39;2_agriculture&#39;</span><span class="p">,</span> <span class="s1">&#39;3_industrial&#39;</span><span class="p">,</span> 
-            <span class="s1">&#39;4_1_office&#39;</span><span class="p">,</span> <span class="s1">&#39;4_2_retail&#39;</span><span class="p">,</span> <span class="s1">&#39;4_3_publicServices&#39;</span><span class="p">)</span>
+        <span class="n">building_values</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;residential&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;barn&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;industrial&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;office&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;retail&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;public&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">use_values</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;1_residential&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;2_agriculture&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;3_industrial&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;4_1_office&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;4_2_retail&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;4_3_publicServices&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="n">feat</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;condition&#39;</span><span class="p">:</span> <span class="s1">&#39;functional&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;currentUse&#39;</span><span class="p">:</span> <span class="s1">&#39;foobar&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;nature&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="s1">&#39;localId&#39;</span><span class="p">:</span> <span class="s1">&#39;foobar&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;lev_above&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-            <span class="s1">&#39;lev_below&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-            <span class="s1">&#39;layer&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-            <span class="s1">&#39;fixme&#39;</span><span class="p">:</span> <span class="s1">&#39;check&#39;</span>
+            <span class="s2">&quot;condition&quot;</span><span class="p">:</span> <span class="s2">&quot;functional&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;currentUse&quot;</span><span class="p">:</span> <span class="s2">&quot;foobar&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;nature&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">&quot;localId&quot;</span><span class="p">:</span> <span class="s2">&quot;foobar&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;lev_above&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s2">&quot;lev_below&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s2">&quot;layer&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="s2">&quot;fixme&quot;</span><span class="p">:</span> <span class="s2">&quot;check&quot;</span><span class="p">,</span>
         <span class="p">}</span>
         <span class="n">tags</span> <span class="o">=</span> <span class="n">building_tags</span><span class="p">(</span><span class="n">feat</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;ref&#39;</span><span class="p">],</span> <span class="s1">&#39;foobar&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertNotIn</span><span class="p">(</span><span class="s1">&#39;abandoned:building&#39;</span><span class="p">,</span> <span class="n">tags</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertNotIn</span><span class="p">(</span><span class="s1">&#39;disused:building&#39;</span><span class="p">,</span> <span class="n">tags</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;building&#39;</span><span class="p">],</span> <span class="s1">&#39;yes&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertNotIn</span><span class="p">(</span><span class="s1">&#39;building:levels&#39;</span><span class="p">,</span> <span class="n">tags</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertNotIn</span><span class="p">(</span><span class="s1">&#39;building:levels:underground&#39;</span><span class="p">,</span> <span class="n">tags</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;layer&#39;</span><span class="p">],</span> <span class="s1">&#39;1&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;location&#39;</span><span class="p">],</span> <span class="s1">&#39;roof&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;fixme&#39;</span><span class="p">],</span> <span class="s1">&#39;check&#39;</span><span class="p">)</span>
-        <span class="n">use</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">use_values</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;currentUse&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;condition&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;ruin&#39;</span>
-        <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;nature&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;openAirPool&#39;</span>
-        <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;lev_above&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
-        <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;lev_below&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>
-        <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;localId&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;foobar_part1&#39;</span>
-        <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;fixme&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">tags</span><span class="p">[</span><span class="s2">&quot;ref&quot;</span><span class="p">],</span> <span class="s2">&quot;foobar&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertNotIn</span><span class="p">(</span><span class="s2">&quot;abandoned:building&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertNotIn</span><span class="p">(</span><span class="s2">&quot;disused:building&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">tags</span><span class="p">[</span><span class="s2">&quot;building&quot;</span><span class="p">],</span> <span class="s2">&quot;yes&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertNotIn</span><span class="p">(</span><span class="s2">&quot;building:levels&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertNotIn</span><span class="p">(</span><span class="s2">&quot;building:levels:underground&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">tags</span><span class="p">[</span><span class="s2">&quot;layer&quot;</span><span class="p">],</span> <span class="s2">&quot;1&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">tags</span><span class="p">[</span><span class="s2">&quot;location&quot;</span><span class="p">],</span> <span class="s2">&quot;roof&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">tags</span><span class="p">[</span><span class="s2">&quot;fixme&quot;</span><span class="p">],</span> <span class="s2">&quot;check&quot;</span><span class="p">)</span>
+        <span class="n">feat</span><span class="p">[</span><span class="s2">&quot;currentUse&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">feat</span><span class="p">[</span><span class="s2">&quot;condition&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;ruin&quot;</span>
+        <span class="n">feat</span><span class="p">[</span><span class="s2">&quot;nature&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;openAirPool&quot;</span>
+        <span class="n">feat</span><span class="p">[</span><span class="s2">&quot;lev_above&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">feat</span><span class="p">[</span><span class="s2">&quot;lev_below&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="n">feat</span><span class="p">[</span><span class="s2">&quot;localId&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;foobar_part1&quot;</span>
+        <span class="n">feat</span><span class="p">[</span><span class="s2">&quot;fixme&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="n">tags</span> <span class="o">=</span> <span class="n">building_tags</span><span class="p">(</span><span class="n">feat</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertNotIn</span><span class="p">(</span><span class="s1">&#39;ref&#39;</span><span class="p">,</span> <span class="n">tags</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;building&#39;</span><span class="p">],</span> <span class="s1">&#39;ruins&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;abandoned:building&#39;</span><span class="p">],</span> <span class="s1">&#39;yes&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;leisure&#39;</span><span class="p">],</span> <span class="s1">&#39;swimming_pool&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;building:part&#39;</span><span class="p">],</span> <span class="s1">&#39;yes&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;building:levels&#39;</span><span class="p">],</span> <span class="s1">&#39;1&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;building:levels:underground&#39;</span><span class="p">],</span> <span class="s1">&#39;2&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertNotIn</span><span class="p">(</span><span class="s1">&#39;fixme&#39;</span><span class="p">,</span> <span class="n">tags</span><span class="p">)</span>
-        <span class="n">use</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">use_values</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;currentUse&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">use_values</span><span class="p">[</span><span class="n">use</span><span class="p">]</span>
-        <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;condition&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;declined&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertNotIn</span><span class="p">(</span><span class="s2">&quot;ref&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">tags</span><span class="p">[</span><span class="s2">&quot;building&quot;</span><span class="p">],</span> <span class="s2">&quot;ruins&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">tags</span><span class="p">[</span><span class="s2">&quot;abandoned:building&quot;</span><span class="p">],</span> <span class="s2">&quot;yes&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">tags</span><span class="p">[</span><span class="s2">&quot;leisure&quot;</span><span class="p">],</span> <span class="s2">&quot;swimming_pool&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">tags</span><span class="p">[</span><span class="s2">&quot;building:part&quot;</span><span class="p">],</span> <span class="s2">&quot;yes&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">tags</span><span class="p">[</span><span class="s2">&quot;building:levels&quot;</span><span class="p">],</span> <span class="s2">&quot;1&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">tags</span><span class="p">[</span><span class="s2">&quot;building:levels:underground&quot;</span><span class="p">],</span> <span class="s2">&quot;2&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertNotIn</span><span class="p">(</span><span class="s2">&quot;fixme&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="p">)</span>
+        <span class="n">use</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">use_values</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">feat</span><span class="p">[</span><span class="s2">&quot;currentUse&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">use_values</span><span class="p">[</span><span class="n">use</span><span class="p">]</span>
+        <span class="n">feat</span><span class="p">[</span><span class="s2">&quot;condition&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;declined&quot;</span>
         <span class="n">tags</span> <span class="o">=</span> <span class="n">building_tags</span><span class="p">(</span><span class="n">feat</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;building&#39;</span><span class="p">],</span> <span class="s1">&#39;yes&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;disused:building&#39;</span><span class="p">],</span> <span class="n">building_values</span><span class="p">[</span><span class="n">use</span><span class="p">])</span>
-        <span class="n">use</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">use_values</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;lev_above&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="n">feat</span><span class="p">[</span><span class="s1">&#39;lev_below&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">tags</span><span class="p">[</span><span class="s2">&quot;building&quot;</span><span class="p">],</span> <span class="s2">&quot;yes&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">tags</span><span class="p">[</span><span class="s2">&quot;disused:building&quot;</span><span class="p">],</span> <span class="n">building_values</span><span class="p">[</span><span class="n">use</span><span class="p">])</span>
+        <span class="n">feat</span><span class="p">[</span><span class="s2">&quot;lev_above&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">feat</span><span class="p">[</span><span class="s2">&quot;lev_below&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">tags</span> <span class="o">=</span> <span class="n">building_tags</span><span class="p">(</span><span class="n">feat</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">tags</span><span class="p">[</span><span class="s1">&#39;building:part&#39;</span><span class="p">],</span> <span class="s1">&#39;roof&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertNotIn</span><span class="p">(</span><span class="s1">&#39;building:levels&#39;</span><span class="p">,</span> <span class="n">tags</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertNotIn</span><span class="p">(</span><span class="s1">&#39;building:levels:underground&#39;</span><span class="p">,</span> <span class="n">tags</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">tags</span><span class="p">[</span><span class="s2">&quot;building:part&quot;</span><span class="p">],</span> <span class="s2">&quot;roof&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertNotIn</span><span class="p">(</span><span class="s2">&quot;building:levels&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertNotIn</span><span class="p">(</span><span class="s2">&quot;building:levels:underground&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="TestTranslate.test_places"><a class="viewcode-back" href="../../api/test.test_translate.html#test.test_translate.TestTranslate.test_places">[documentos]</a>    <span class="k">def</span> <span class="nf">test_places</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">f1</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;localId&#39;</span><span class="p">:</span> <span class="s1">&#39;000&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;TN_text&#39;</span><span class="p">:</span> <span class="s1">&#39;Urbanización A&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;designator&#39;</span><span class="p">:</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;postCode&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;spec&#39;</span><span class="p">:</span> <span class="s1">&#39;Parcel&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;image&#39;</span><span class="p">:</span> <span class="s1">&#39;foobar&#39;</span>
+            <span class="s2">&quot;localId&quot;</span><span class="p">:</span> <span class="s2">&quot;000&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;TN_text&quot;</span><span class="p">:</span> <span class="s2">&quot;Urbanización A&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;designator&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;postCode&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;spec&quot;</span><span class="p">:</span> <span class="s2">&quot;Parcel&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;image&quot;</span><span class="p">:</span> <span class="s2">&quot;foobar&quot;</span><span class="p">,</span>
         <span class="p">}</span>
         <span class="n">t</span> <span class="o">=</span> <span class="n">address_tags</span><span class="p">(</span><span class="n">f1</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertNotIn</span><span class="p">(</span><span class="s1">&#39;addr:street&#39;</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="s1">&#39;addr:place&#39;</span><span class="p">],</span> <span class="s1">&#39;Urbanización A&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertNotIn</span><span class="p">(</span><span class="s2">&quot;addr:street&quot;</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="s2">&quot;addr:place&quot;</span><span class="p">],</span> <span class="s2">&quot;Urbanización A&quot;</span><span class="p">)</span>
         <span class="n">f2</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">f1</span><span class="p">)</span>
-        <span class="n">f2</span><span class="p">[</span><span class="s1">&#39;TN_text&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;urbanización A&#39;</span>
+        <span class="n">f2</span><span class="p">[</span><span class="s2">&quot;TN_text&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;urbanización A&quot;</span>
         <span class="n">t</span> <span class="o">=</span> <span class="n">address_tags</span><span class="p">(</span><span class="n">f2</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertNotIn</span><span class="p">(</span><span class="s1">&#39;addr:street&#39;</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="s1">&#39;addr:place&#39;</span><span class="p">],</span> <span class="s1">&#39;urbanización A&#39;</span><span class="p">)</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertNotIn</span><span class="p">(</span><span class="s2">&quot;addr:street&quot;</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="s2">&quot;addr:place&quot;</span><span class="p">],</span> <span class="s2">&quot;urbanización A&quot;</span><span class="p">)</span></div></div>
 </pre></div>
 
           </div>
@@ -226,7 +236,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.6.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.6.3.dev.5</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Código de módulo</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">test.test_translate</a></li> 
       </ul>

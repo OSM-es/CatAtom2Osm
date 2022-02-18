@@ -15,6 +15,8 @@ class DebugWriter:
         self, filename, layer, driver_name="ESRI Shapefile", geom_type=WKBPoint
     ):
         """
+        Construct.
+
         Args:
             filename (str): File name of this layer
             layer (QgsVectorLayer): A layer to test.
@@ -30,7 +32,7 @@ class DebugWriter:
         self.writer = writer
 
     def add_point(self, point, note=None):
-        """Adds a point to the layer with the attribute note."""
+        """Add a point to the layer with the attribute note."""
         feat = QgsFeature(QgsFields(self.fields))
         geom = Geometry.fromPointXY(point)
         feat.setGeometry(geom)

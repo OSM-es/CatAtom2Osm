@@ -15,7 +15,7 @@
   <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.cdau module &#8212; documentación de CatAtom2Osm - 2.6.0</title>
+    <title>catatom2osm.cdau module &#8212; documentación de CatAtom2Osm - 2.6.3.dev.5</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/guzzle.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="catatom2osm.cbcn.html" title="catatom2osm.cbcn module"
              accesskey="P">anterior</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">documentación de CatAtom2Osm - 2.6.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">documentación de CatAtom2Osm - 2.6.3.dev.5</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../api.html" >Referencia API</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="modules.html" >CatAtom2Osm</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="catatom2osm.html" accesskey="U">catatom2osm package</a> &#187;</li>
@@ -109,12 +109,12 @@
             
   <section id="module-catatom2osm.cdau">
 <span id="catatom2osm-cdau-module"></span><h1>catatom2osm.cdau module<a class="headerlink" href="#module-catatom2osm.cdau" title="Enlazar permanentemente con este título">¶</a></h1>
-<p>Reader of CDAU CSV files</p>
+<p>Reader of CDAU CSV files.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="catatom2osm.cdau.Reader">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">catatom2osm.cdau.</span></span><span class="sig-name descname"><span class="pre">Reader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/cdau.html#Reader"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.cdau.Reader" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Class to download and read CDAU CSV files</p>
+<p>Class to download and read CDAU CSV files.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.cdau.Reader.get_metadata">
 <span class="sig-name descname"><span class="pre">get_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">md_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/cdau.html#Reader.get_metadata"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.cdau.Reader.get_metadata" title="Enlazar permanentemente con esta definición">¶</a></dt>
@@ -130,43 +130,19 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="catatom2osm.cdau.cod_mun_cat2ine">
 <span class="sig-prename descclassname"><span class="pre">catatom2osm.cdau.</span></span><span class="sig-name descname"><span class="pre">cod_mun_cat2ine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cod_mun_cat</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/cdau.html#cod_mun_cat2ine"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.cdau.cod_mun_cat2ine" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Return the INE municipality code from the Cadastre code</p>
+<dd><p>Return the INE municipality code from the Cadastre code.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="catatom2osm.cdau.conflate">
 <span class="sig-prename descclassname"><span class="pre">catatom2osm.cdau.</span></span><span class="sig-name descname"><span class="pre">conflate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cdau_address</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cat_address</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cod_mun_cat</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/cdau.html#conflate"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.cdau.conflate" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Conflate CDAU over Cadastre addresses datasets</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="catatom2osm.cdau.fromFunction">
-<span class="sig-prename descclassname"><span class="pre">catatom2osm.cdau.</span></span><span class="sig-name descname"><span class="pre">fromFunction</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#catatom2osm.cdau.fromFunction" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>staticmethod(function) -&gt; method</p>
-<p>Convert a function to be a static method.</p>
-<p>A static method does not receive an implicit first argument.
-To declare a static method, use this idiom:</p>
-<blockquote>
-<div><dl>
-<dt>class C:</dt><dd><p>&#64;staticmethod
-def f(arg1, arg2, …):</p>
-<blockquote>
-<div><p>…</p>
-</div></blockquote>
-</dd>
-</dl>
-</div></blockquote>
-<p>It can be called either on the class (e.g. C.f()) or on an instance
-(e.g. C().f()). Both the class and the instance are ignored, and
-neither is passed implicitly as the first argument to the method.</p>
-<p>Static methods in Python are similar to those found in Java or C++.
-For a more advanced concept, see the classmethod builtin.</p>
+<dd><p>Conflate CDAU over Cadastre addresses datasets.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="catatom2osm.cdau.get_cat_address">
 <span class="sig-prename descclassname"><span class="pre">catatom2osm.cdau.</span></span><span class="sig-name descname"><span class="pre">get_cat_address</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cod_mun_cat</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/cdau.html#get_cat_address"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.cdau.get_cat_address" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>Convert CDAU address to Cadastre attributes</p>
+<dd><p>Convert CDAU addresses to Cadastre attributes.</p>
 </dd></dl>
 
 </section>
@@ -204,7 +180,7 @@ For a more advanced concept, see the classmethod builtin.</p>
         <li class="right" >
           <a href="catatom2osm.cbcn.html" title="catatom2osm.cbcn module"
              >anterior</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">documentación de CatAtom2Osm - 2.6.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">documentación de CatAtom2Osm - 2.6.3.dev.5</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../api.html" >Referencia API</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="modules.html" >CatAtom2Osm</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="catatom2osm.html" >catatom2osm package</a> &#187;</li>

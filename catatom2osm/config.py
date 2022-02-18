@@ -1,4 +1,4 @@
-﻿"""Application preferences"""
+﻿"""Application preferences."""
 import gettext
 import locale
 import logging
