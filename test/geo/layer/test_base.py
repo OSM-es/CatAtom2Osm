@@ -256,32 +256,3 @@ class TestBaseLayer2(unittest.TestCase):
         mock_os.remove.assert_called_once_with("foobar")
         layer.export("foobar", "foo", overwrite=False)
         mock_os.remove.assert_called_once_with("foobar")
-
-
-class TestBaseLayer2(unittest.TestCase):
-    @mock.patch("catatom2osm.geo.layer.base.BaseLayer.writeAsVectorFormat")
-    @mock.patch("catatom2osm.geo.layer.base.QgsVectorFileWriter")
-    @mock.patch("catatom2osm.geo.layer.base.os")
-    def test_export_default(self, mock_os, mock_fw, mock_wvf):
-        layer = BaseLayer("Polygon", "test", "memory")
-        mock_os.path.exists.side_effect = lambda arg: arg == "foobar"
-        mock_wvf.return_value = QgsVectorFileWriter.NoError
-        mock_fw.NoError = QgsVectorFileWriter.NoError
-        self.assertTrue(layer.export("foobar"))
-        mock_fw.deleteShapeFile.assert_called_once_with("foobar")
-        mock_wvf.assert_called_once_with("foobar", "ESRI Shapefile", layer.crs())
-
-    @mock.patch("catatom2osm.geo.layer.base.QgsVectorFileWriter", mock.MagicMock())
-    @mock.patch("catatom2osm.geo.layer.base.BaseLayer.writeAsVectorFormat")
-    @mock.patch("catatom2osm.geo.layer.base.QgsCoordinateReferenceSystem.fromEpsgId")
-    @mock.patch("catatom2osm.geo.layer.base.os")
-    def test_export_other(self, mock_os, mock_crs, mock_wvf):
-        layer = BaseLayer("Polygon", "test", "memory")
-        mock_os.path.exists.side_effect = lambda arg: arg == "foobar"
-        layer.export("foobar", "foo", target_crs_id=1234)
-        crs = mock_crs.return_value
-        mock_crs.assert_called_once_with(1234)
-        mock_wvf.assert_called_once_with("foobar", "foo", crs)
-        mock_os.remove.assert_called_once_with("foobar")
-        layer.export("foobar", "foo", overwrite=False)
-        mock_os.remove.assert_called_once_with("foobar")

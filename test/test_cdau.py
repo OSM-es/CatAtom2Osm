@@ -3,7 +3,7 @@ import unittest
 
 import mock
 
-from catatom2osm import cdau, config, geo
+from catatom2osm import cdau, config
 from catatom2osm.app import QgsSingleton
 
 qgs = QgsSingleton()

@@ -190,7 +190,7 @@ class Report(object):
                 self.inc("out_address")
                 if el.type == "node" and "entrance" in el.tags:
                     self.inc("out_address_entrance")
-                if not "entrance" in el.tags:
+                if "entrance" not in el.tags:
                     self.inc("out_address_parcel")
 
     def cons_stats(self, data, task_label=None):

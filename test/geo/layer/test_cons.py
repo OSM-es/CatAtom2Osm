@@ -226,7 +226,7 @@ class TestConsLayer(unittest.TestCase):
     @mock.patch("catatom2osm.geo.layer.base.log", m_log)
     @mock.patch("catatom2osm.geo.layer.base.tqdm", mock.MagicMock())
     def test_merge_adjacent_parts(self, ref=None):
-        if ref == None:
+        if ref is None:
             self.layer.explode_multi_parts()
             ref = "8842323CS5284S"
         parts = [p for p in self.layer.search("localId like '%s_part%%'" % ref)]
@@ -249,10 +249,10 @@ class TestConsLayer(unittest.TestCase):
                     set([p.id() for p in parts_for_level[max_level, min_level]]),
                 )
             self.assertEqual(
-                max([l[0] for l in list(parts_for_level.keys())]), max_level
+                max([level[0] for level in list(parts_for_level.keys())]), max_level
             )
             self.assertEqual(
-                max([l[1] for l in list(parts_for_level.keys())]), min_level
+                max([level[1] for level in list(parts_for_level.keys())]), min_level
             )
             self.assertEqual(ch[outline.id()][6], max_level)
             self.assertEqual(ch[outline.id()][7], min_level)
@@ -497,7 +497,6 @@ class TestConsLayer(unittest.TestCase):
         self.assertEqual(data.upload, "always")
         ways = 0
         rels = 0
-        c = Counter()
         for feat in self.layer.getFeatures():
             p = Geometry.get_multipolygon(feat)
             ways += sum([len(s) for s in p])

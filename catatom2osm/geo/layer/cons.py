@@ -1,17 +1,15 @@
 import logging
-import os
 from collections import defaultdict
 
 from qgis.core import QgsFeatureRequest, QgsField, QgsGeometry
 from qgis.PyQt.QtCore import QVariant
 
-from catatom2osm import config, csvtools, translate
+from catatom2osm import config, translate
 from catatom2osm.geo import BUFFER_SIZE, SIMPLIFY_BUILDING_PARTS
 from catatom2osm.geo.aux import get_attributes, is_inside
 from catatom2osm.geo.geometry import Geometry
 from catatom2osm.geo.layer.polygon import PolygonLayer
 from catatom2osm.geo.point import Point
-from catatom2osm.geo.types import WKBPolygon
 from catatom2osm.report import instance as report
 
 log = logging.getLogger(config.app_name)

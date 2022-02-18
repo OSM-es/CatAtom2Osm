@@ -29,7 +29,7 @@ def address_tags(feature):
     tags["addr:housenumber"] = feature["designator"]
     try:
         tags["addr:postcode"] = "%05d" % int(feature["postCode"])
-    except:
+    except Exception:
         pass
     if feature["spec"] == "Entrance":
         tags["entrance"] = "yes"
@@ -70,7 +70,7 @@ def building_tags(feature):
         for value, new_tags in list(action.items()):
             if feature[field] == value:
                 tags.update(json.loads(new_tags))
-    if feature["condition"] == "ruin" and feature["currentUse"] == None:
+    if feature["condition"] == "ruin" and feature["currentUse"] is None:
         tags["abandoned:building"] = "yes"
     if "_part" in feature["localId"]:
         tags["building:part"] = "roof" if feature["lev_above"] == 0 else "yes"

@@ -1,3 +1,4 @@
+# flake8: noqa
 import os
 import random
 import unittest
@@ -6,8 +7,6 @@ import mock
 from requests.exceptions import ConnectionError
 
 os.environ["LANGUAGE"] = "C"
-
-from test.tools import capture
 
 from catatom2osm import catatom, config
 
@@ -20,7 +19,7 @@ def get_func(f):
     return getattr(f, "__func__", f)
 
 
-prov_atom = b"""<feed xmlns="http://www.w3.org/2005/Atom" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:georss="http://www.georss.org/georss"  xmlns:inspire_dls = "http://inspire.ec.europa.eu/schemas/inspire_dls/1.0" xml:lang="en"> 
+prov_atom = b"""<feed xmlns="http://www.w3.org/2005/Atom" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:georss="http://www.georss.org/georss"  xmlns:inspire_dls = "http://inspire.ec.europa.eu/schemas/inspire_dls/1.0" xml:lang="en">
 <title>Download Office foobar</title>
 <entry>
 <title> 09001-FOO buildings</title>
@@ -113,26 +112,6 @@ class TestCatAtom(unittest.TestCase):
         self.assertEqual(self.m_cat.src_date, "2017-02-25")
         self.assertEqual(self.m_cat.cat_mun, "TAZ")
         self.assertEqual(self.m_cat.crs_ref, 32628)
-
-    @mock.patch("catatom2osm.catatom.zipfile")
-    def test_get_path_from_zip(self, m_zip):
-        self.m_cat.get_path_from_zip = get_func(catatom.Reader.get_path_from_zip)
-        a_path = os.path.join("foo", "bar", "taz")
-        m_zip.namelist.return_value = ["xyz", "123taz", "abc"]
-        full_path = self.m_cat.get_path_from_zip(self.m_cat, m_zip, a_path)
-        self.assertEqual(full_path, "123taz")
-        with self.assertRaises(KeyError) as ke:
-            self.m_cat.get_path_from_zip(self.m_cat, m_zip, "xxxxx")
-
-    @mock.patch("catatom2osm.catatom.zipfile")
-    def test_get_path_from_zip(self, m_zip):
-        self.m_cat.get_path_from_zip = get_func(catatom.Reader.get_path_from_zip)
-        a_path = os.path.join("foo", "bar", "taz")
-        m_zip.namelist.return_value = ["xyz", "123taz", "abc"]
-        full_path = self.m_cat.get_path_from_zip(self.m_cat, m_zip, a_path)
-        self.assertEqual(full_path, "123taz")
-        with self.assertRaises(KeyError) as ke:
-            self.m_cat.get_path_from_zip(self.m_cat, m_zip, "xxxxx")
 
     @mock.patch("catatom2osm.catatom.os")
     @mock.patch("catatom2osm.catatom.open")
@@ -290,7 +269,17 @@ class TestCatAtom(unittest.TestCase):
         test = self.m_cat.is_empty(self.m_cat, fn, "")
         self.assertFalse(test)
 
-    def test_get_path_from_zip(self):
+    @mock.patch("catatom2osm.catatom.zipfile")
+    def test_get_path_from_zip(self, m_zip):
+        self.m_cat.get_path_from_zip = get_func(catatom.Reader.get_path_from_zip)
+        a_path = os.path.join("foo", "bar", "taz")
+        m_zip.namelist.return_value = ["xyz", "123taz", "abc"]
+        full_path = self.m_cat.get_path_from_zip(self.m_cat, m_zip, a_path)
+        self.assertEqual(full_path, "123taz")
+        with self.assertRaises(KeyError):
+            self.m_cat.get_path_from_zip(self.m_cat, m_zip, "xxxxx")
+
+    def test_get_path_from_zip2(self):
         self.m_cat.get_path_from_zip = get_func(catatom.Reader.get_path_from_zip)
         zf = mock.MagicMock()
         zf.namelist.return_value = ["xxxfoo", "yyybar"]
@@ -311,9 +300,9 @@ class TestCatAtom(unittest.TestCase):
         self.m_cat.get_path_from_zip.return_value = "bar/gml_path"
         self.m_cat.get_gml_from_zip = get_func(catatom.Reader.get_gml_from_zip)
         gml = self.m_cat.get_gml_from_zip(
-            self.m_cat, "gml_path", "foo\zip_path", "group", "ln"
+            self.m_cat, "gml_path", "foo\\zip_path", "group", "ln"
         )
-        m_zip.ZipFile.assert_called_once_with("foo\zip_path")
+        m_zip.ZipFile.assert_called_once_with("foo\\zip_path")
         self.m_cat.get_path_from_zip.assert_called_once_with(zf, "gml_path")
         self.assertEqual(gml, m_layer.BaseLayer.return_value)
         vsizip_path = "/vsizip/foo/zip_path/bar/gml_path"
@@ -326,7 +315,7 @@ class TestCatAtom(unittest.TestCase):
         self.m_cat.get_path_from_zip.return_value = "bar/gml_path"
         self.m_cat.get_gml_from_zip = get_func(catatom.Reader.get_gml_from_zip)
         gml = self.m_cat.get_gml_from_zip(
-            self.m_cat, "gml_path", "foo\zip_path", "AD", "ln"
+            self.m_cat, "gml_path", "foo\\zip_path", "AD", "ln"
         )
         self.assertEqual(gml, None)
         vsizip_path = "/vsizip/foo/zip_path/bar/gml_path|layername=ln"

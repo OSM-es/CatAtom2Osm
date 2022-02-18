@@ -1,7 +1,5 @@
 import unittest
 
-import mock
-
 from catatom2osm import osm
 from catatom2osm.app import QgsSingleton
 from catatom2osm.geo.layer.highway import HighwayLayer
@@ -20,9 +18,9 @@ class TestHighwayLayer(unittest.TestCase):
     def test_read_from_osm(self):
         layer = HighwayLayer()
         data = osm.Osm()
-        w1 = data.Way(((10, 10), (15, 15)), {"name": "FooBar"})
+        data.Way(((10, 10), (15, 15)), {"name": "FooBar"})
         w2 = data.Way(((20, 20), (30, 30)))
-        r = data.Relation([w2], {"name": "BarTaz"})
+        data.Relation([w2], {"name": "BarTaz"})
         layer.read_from_osm(data)
         self.assertEqual(layer.featureCount(), 2)
         names = [feat["name"] for feat in layer.getFeatures()]

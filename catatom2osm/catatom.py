@@ -58,7 +58,7 @@ class Reader(object):
         if hasattr(root, "nsmap"):
             namespace = root.nsmap
         src_date = root.find("gmd:dateStamp/gco:Date", namespace)
-        if is_empty or src_date == None:
+        if is_empty or src_date is None:
             raise IOError(_("Could not read metadata from '%s'") % md_path)
         self.src_date = src_date.text
         gml_title = root.find(".//gmd:title/gco:CharacterString", namespace)

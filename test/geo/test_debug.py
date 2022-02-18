@@ -1,7 +1,5 @@
 import unittest
 
-import mock
-
 from catatom2osm.app import QgsSingleton
 from catatom2osm.geo.debug import DebugWriter
 from catatom2osm.geo.layer.base import BaseLayer

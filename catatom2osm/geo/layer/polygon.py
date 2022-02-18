@@ -2,7 +2,6 @@ import logging
 from collections import Counter, defaultdict
 
 from qgis.core import QgsFeature, QgsFeatureRequest, QgsFields, QgsGeometry
-from tqdm import tqdm
 
 from catatom2osm import config
 from catatom2osm.geo import BUFFER_SIZE
@@ -381,7 +380,7 @@ class PolygonLayer(BaseLayer):
                                     )
                             elif is_spike:
                                 g = QgsGeometry(geom)
-                                to_move[va] = vx  #!
+                                to_move[va] = vx
                                 g.moveVertex(vx.x(), vx.y(), ndxa)
                                 g.deleteVertex(ndx)
                                 valid = g.isGeosValid()
@@ -561,7 +560,7 @@ class PolygonLayer(BaseLayer):
     def merge_adjacents(self):
         """Merge polygons with shared segments"""
         (groups, geometries) = self.get_adjacents_and_geometries()
-        merge_geometries(groups, geometries)
+        self.merge_geometries(groups, geometries)
 
     def difference(self, layer):
         """Calculate the difference of each geometry with those in layer"""

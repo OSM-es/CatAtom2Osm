@@ -1,19 +1,17 @@
 import logging
-import os
 
-from qgis.core import QgsFeature, QgsField
+from qgis.core import QgsField
 from qgis.PyQt.QtCore import QVariant
 
 from catatom2osm import config
-from catatom2osm.geo import BUFFER_SIZE
-from catatom2osm.geo.aux import get_attributes, is_inside
 from catatom2osm.geo.geometry import Geometry
-from catatom2osm.geo.layer.cons import ConsLayer
 from catatom2osm.geo.layer.polygon import PolygonLayer
 
 log = logging.getLogger(config.app_name)
 
-level_query = lambda f, kw: ZoningLayer.check_zone(f, kw["level"])
+
+def level_query(feat, kwargs):
+    return ZoningLayer.check_zone(feat, kwargs["level"])
 
 
 class ZoningLayer(PolygonLayer):
@@ -70,7 +68,7 @@ class ZoningLayer(PolygonLayer):
         pattern = ZoningLayer.upattern if level else ZoningLayer.rpattern
         try:
             label = pattern.format(int(feature["label"]))
-        except:
+        except Exception:
             pass
         return label
 

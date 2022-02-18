@@ -43,9 +43,12 @@ class Query(object):
     def add(self, *args):
         """Adds a statement to the query. Use QL query statements without bbox
         or area clauses. Example: node["name"="Berlin"]"""
-        rsc = lambda s: s[:-1] if s[-1] == ";" else s
+
+        def rsc(st):
+            return st[:-1] if st[-1] == ";" else st
+
         for arg in args:
-            if isinstance(arg, basestring):
+            if isinstance(arg, str):
                 self.statements += rsc(arg).split(";")
             else:
                 self.statements += [rsc(s) for s in arg]
@@ -74,7 +77,7 @@ class Query(object):
                     log.debug(self.get_url(i))
                 download.wget(self.get_url(i), filename)
                 return
-            except IOError as e:
+            except IOError:
                 pass
         raise IOError("Can't read from any Overpass server'")
 

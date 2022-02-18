@@ -92,12 +92,18 @@ class TestReport(unittest.TestCase):
         r.validate()
         msgs = [
             "Sum of address types should be equal to the input addresses",
-            "Sum of output and deleted addresses should be equal to the input addresses",
+            (
+                "Sum of output and deleted addresses should be equal to the input "
+                "addresses"
+            ),
             "Sum of entrance and parcel addresses should be equal to output addresses",
             "Sum of street and place addresses should be equal to output addresses",
             "Sum of buildings, parts and pools should be equal to the feature count",
             "Sum of building types should be equal to the number of buildings",
-            "Sum of output and deleted minus created building features should be equal to input features",
+            (
+                "Sum of output and deleted minus created building features "
+                "should be equal to input features"
+            ),
         ]
         for msg in msgs:
             self.assertIn(msg, r.errors)

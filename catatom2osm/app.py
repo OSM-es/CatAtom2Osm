@@ -10,19 +10,19 @@ import shutil
 from collections import defaultdict
 
 # isort: off
-from past.builtins import basestring  # qgis/utils.py:744: DeprecationWarning
+from past.builtins import basestring  # NOQA: F401 - qgis/utils.py:744: Warning
 
 # isort: on
 import qgis.utils
+from osgeo import gdal
 from qgis.core import QgsApplication, QgsGeometry, QgsVectorLayer
+
+from catatom2osm import cdau  # NOQA: F401 - Used in get_auxiliary_addresses
+from catatom2osm import catatom, config, csvtools, geo, osmxml, overpass
+from catatom2osm.report import instance as report
 
 qgis.utils.uninstallErrorHook()
 qgis_utils = getattr(qgis.utils, "QGis", getattr(qgis.utils, "Qgis", None))
-from osgeo import gdal
-
-from catatom2osm import cdau  # Used in get_auxiliary_addresses
-from catatom2osm import catatom, config, csvtools, geo, osm, osmxml, overpass
-from catatom2osm.report import instance as report
 
 log = logging.getLogger(config.app_name)
 if config.silence_gdal:
@@ -420,7 +420,7 @@ class CatAtom2Osm(object):
         self.address = geo.AddressLayer(source_date=address_gml.source_date)
         q = None
         if self.split or self.options.parcel:
-            q = lambda f, kw: self.address.get_id(f) in kw["keys"]
+            q = lambda f, kw: self.address.get_id(f) in kw["keys"]  # NOQA: E731
             self.boundary_bbox = self.parcel.bounding_box()
         self.address.append(address_gml, query=q, keys=self.tasks.keys())
         del address_gml
@@ -523,7 +523,8 @@ class CatAtom2Osm(object):
         else to the entrance if there exist a node with the address coordinates
         in the building.
 
-        Precondition: building.move_address deleted addresses belonging to multiple buildings
+        Precondition: building.move_address deleted addresses belonging to multiple
+        buildings
 
         Args:
             building_osm (Osm): OSM data set with buildings

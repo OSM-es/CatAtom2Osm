@@ -72,11 +72,17 @@ def search(csv_path, *args, query=lambda row, args: True):
 
 def get_key(csv_path, key):
     """Get a row given first column value"""
-    q = lambda row, args: row[0] == args[0]
-    return search(csv_path, key, query=q)
+
+    def query(row, args):
+        return row[0] == args[0]
+
+    return search(csv_path, key, query=query)
 
 
 def startswith(csv_path, key):
     """Get rows which first column starts with key"""
-    q = lambda row, args: row[0].startswith(args[0])
-    return filter(csv_path, key, query=q)
+
+    def query(row, args):
+        return row[0].startswith(args[0])
+
+    return filter(csv_path, key, query=query)

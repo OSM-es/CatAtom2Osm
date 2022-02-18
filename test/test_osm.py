@@ -23,7 +23,7 @@ class TestOsm(OsmTestCase):
 
     def test_properties(self):
         n1 = self.d.Node(1, 1)
-        n2 = self.d.Node(0, 0)
+        self.d.Node(0, 0)
         w = self.d.Way([(1, 2), (2, 3), (3, 2), (1, 2)])
         r = self.d.Relation([n1, w])
         self.assertEqual(len(self.d.nodes), 6)
@@ -81,13 +81,13 @@ class TestOsm(OsmTestCase):
         n3id = n3.id
         n4 = self.d.Node(4, 4)
         n4.id = 1
-        n5 = self.d.Node(4, 4)
+        self.d.Node(4, 4)
         n6 = self.d.Node(4, 4)
         n6.id = 2
-        n7 = self.d.Node(3, 3)
+        self.d.Node(3, 3)
         n8 = self.d.Node(5, 5, {"a": "1"})
         n9 = self.d.Node(5, 5, {"b": "2"})
-        n10 = self.d.Node(5, 5)
+        self.d.Node(5, 5)
         w1 = self.d.Way([(1, 1), (1, 0), (2, 2), (3, 2), (3, 3)])
         w1id = w1.id
         r1 = self.d.Relation([w1, n3])
@@ -143,10 +143,12 @@ class TestOsm(OsmTestCase):
         self.assertEqual(self.d.get("-3", "Relation"), r)
 
     def test_append_node(self):
+        def query(el):
+            return "building" in el.tags
+
         n1 = self.d.Node(2, 2, tags=dict(highway="residential"))
         n2 = self.d.Node(1, 1, tags=dict(building="yes"), attrs=dict(user="foo"))
         d2 = osm.Osm()
-        query = lambda el: "building" in el.tags
         d2.append(n1, query)
         self.assertEqual(len(d2.elements), 0)  # n1 is ignored due to query
         d2.append(n2, query)
@@ -156,10 +158,12 @@ class TestOsm(OsmTestCase):
         self.assertEqual(len(d2.elements), 1)  # don't insert repeated
 
     def test_append_highway(self):
+        def query(el):
+            return "highway" in el.tags or el.tags.get("place") == "square"
+
         with open("test/fixtures/current.osm", "rb") as fo:
             d1 = osmxml.deserialize(fo)
         d2 = osm.Osm()
-        query = lambda el: ("highway" in el.tags or el.tags.get("place") == "square")
         d2.append(d1, query)
         self.assertEqual(len(d2.nodes), 15)
         self.assertEqual(len(d2.ways), 3)
@@ -168,10 +172,12 @@ class TestOsm(OsmTestCase):
             self.assertNotEqual(tag, "")
 
     def test_append_addr(self):
+        def query(el):
+            return "addr:street" in el.tags or "addr:place" in el.tags
+
         with open("test/fixtures/current.osm", "rb") as fo:
             d1 = osmxml.deserialize(fo)
         d2 = osm.Osm()
-        query = lambda el: ("addr:street" in el.tags or "addr:place" in el.tags)
         d2.append(d1, query)
         self.assertEqual(len(d2.nodes), 6)
         self.assertEqual(len(d2.ways), 1)
@@ -181,12 +187,12 @@ class TestOsm(OsmTestCase):
                 self.assertNotEqual(tag, "")
 
     def test_append_building(self):
+        def query(el):
+            return "building" in el.tags or el.tags.get("leisure") == "swimming_pool"
+
         with open("test/fixtures/current.osm", "rb") as fo:
             d1 = osmxml.deserialize(fo)
         d2 = osm.Osm()
-        query = lambda el: (
-            "building" in el.tags or el.tags.get("leisure") == "swimming_pool"
-        )
         d2.append(d1, query)
         self.assertEqual(len(d2.nodes), 27)
         self.assertEqual(len(d2.ways), 5)
@@ -490,14 +496,14 @@ class TestOsmRelation(OsmTestCase):
 
     def test_member_eq(self):
         n1 = self.d.Node(1, 1)
-        n2 = self.d.Node(1, 1)
+        self.d.Node(1, 1)
         m1 = osm.Relation.Member(n1, "foo")
         m2 = osm.Relation.Member(n1, "foo")
         self.assertEqual(m1, m2)
 
     def test_member_ne(self):
         n1 = self.d.Node(1, 1)
-        n2 = self.d.Node(1, 1)
+        self.d.Node(1, 1)
         m1 = osm.Relation.Member(n1, "foo")
         m2 = osm.Relation.Member(n1, "bar")
         m3 = osm.Relation.Member((1, 1), "foo")

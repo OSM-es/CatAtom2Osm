@@ -101,35 +101,6 @@ class TestPolygonLayer(unittest.TestCase):
             )
         )
 
-    def get_duplicates(self):
-        """
-        Returns a dict of duplicated vertices for each coordinate.
-        Two vertices are duplicated if they are nearest than dup_thr.
-        """
-        vertices = BaseLayer("Point", "vertices", "memory")
-        for feature in self.layer.getFeatures():
-            for point in self.layer.get_vertices_list(feature):
-                feat = QgsFeature(QgsFields())
-                geom = Geometry.fromPointXY(point)
-                feat.setGeometry(geom)
-                vertices.dataProvider().addFeatures([feat])
-        dup_thr = self.layer.dup_thr
-        vertex_by_fid = {f.id(): f.geometry().asPoint() for f in vertices.getFeatures()}
-        index = vertices.get_index()
-        duplicates = defaultdict(set)
-        for vertex in vertices.getFeatures():
-            point = Point(vertex.geometry().asPoint())
-            area_of_candidates = point.boundingBox(dup_thr)
-            fids = index.intersects(area_of_candidates)
-            fids.remove(vertex.id())
-            for fid in fids:
-                dup = vertex_by_fid[fid]
-                dist = point.sqrDist(dup)
-                if dist > 0 and dist < dup_thr**2:
-                    duplicates[point].add(dup)
-        del vertices
-        return duplicates
-
     @mock.patch("catatom2osm.geo.layer.base.log", m_log)
     @mock.patch("catatom2osm.geo.layer.base.tqdm", mock.MagicMock())
     def test_difference(self):

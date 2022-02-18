@@ -24,7 +24,10 @@ andalucia = {
     "53": "Cadiz",
 }
 
-cdau_url = "https://www.juntadeandalucia.es/institutodeestadisticaycartografia/cdau/portales/{}"
+cdau_url = (
+    "https://www.juntadeandalucia.es/institutodeestadisticaycartografia/"
+    "cdau/portales/{}"
+)
 csv_name = "portal_{}.csv"
 meta_url = (
     "https://www.callejerodeandalucia.es/portal/informaci%C3%B3n-alfanum%C3%A9rica"
@@ -178,7 +181,7 @@ class Reader(object):
                 self.src_date = datetime.strptime(
                     s.group(1), "%d de %B de %Y"
                 ).strftime("%Y-%m-%d")
-            except:
+            except Exception:
                 raise IOError(_("Could not read metadata from '%s'") % "CDAU")
             with open(md_path, "w") as fo:
                 fo.write(self.src_date)

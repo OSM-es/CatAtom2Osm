@@ -3,7 +3,7 @@ import unittest
 
 import mock
 
-from catatom2osm.translate import *
+from catatom2osm.translate import address_tags, all_tags, building_tags
 
 
 class TestTranslate(unittest.TestCase):

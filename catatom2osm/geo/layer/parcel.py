@@ -1,7 +1,7 @@
 import logging
 from collections import defaultdict
 
-from qgis.core import QgsFeature, QgsFeatureRequest, QgsField, QgsGeometry, QgsRectangle
+from qgis.core import QgsFeature, QgsField, QgsGeometry, QgsRectangle
 from qgis.PyQt.QtCore import QVariant
 
 from catatom2osm import config
@@ -184,11 +184,14 @@ class ParcelLayer(PolygonLayer):
         Merge parcels with buildings sharing walls with buildings of another
         parcel.
         """
+
+        def area(fid):
+            return geometries[fid].area()
+
         parts_count = self.count_parts(buildings)
         pa_groups, pa_refs, geometries = self.get_groups_by_adjacent_buildings(
             buildings
         )
-        area = lambda fid: geometries[fid].area()
         self.merge_geometries(pa_groups, geometries, area, True, False)
         tasks = self.update_parts_count(pa_groups, pa_refs, parts_count)
         return tasks
@@ -218,6 +221,10 @@ class ParcelLayer(PolygonLayer):
         """
         Get groups of ids of near parcels with less than max_parts
         """
+
+        def distance(fid):
+            return centro.distance(geometries[fid].centroid())
+
         parts_count = {}
         geometries = {}
         pa_refs = {}
@@ -235,7 +242,6 @@ class ParcelLayer(PolygonLayer):
             pc = pa["parts"]
             geom = geometries[pa.id()]
             centro = geom.centroid()
-            distance = lambda fid: centro.distance(geometries[fid].centroid())
             label = self.get_zone(pa)
             candidates = [
                 fid

@@ -1,4 +1,5 @@
-get_geometry = lambda f: f.geometry() if hasattr(f, "geometry") else f
+def get_geometry(feat):
+    return feat.geometry() if hasattr(feat, "geometry") else feat
 
 
 def is_inside(f1, f2):
@@ -18,9 +19,8 @@ def is_inside_area(f1, f2):
     return False
 
 
-get_attributes = lambda feat: dict(
-    [(i, feat[i]) for i in range(len(feat.fields().toList()))]
-)
+def get_attributes(feat):
+    return dict([(i, feat[i]) for i in range(len(feat.fields().toList()))])
 
 
 def merge_groups(adjs):

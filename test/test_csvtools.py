@@ -3,7 +3,7 @@ import unittest
 from tempfile import mkstemp
 
 from catatom2osm import csvtools
-from catatom2osm.config import delimiter, encoding, eol
+from catatom2osm.config import delimiter, encoding
 
 
 class TestCsvTools(unittest.TestCase):
@@ -23,20 +23,20 @@ class TestCsvTools(unittest.TestCase):
 
     def test_dict2csv(self):
         _, tmp_path = mkstemp()
-        d = {"á": "x", "é": "y"}
-        l = list(d.items())
-        t = "%s%s%s\n%s%s%s\n" % (
-            l[0][0],
+        a_dict = {"á": "x", "é": "y"}
+        items = list(a_dict.items())
+        exp = "%s%s%s\n%s%s%s\n" % (
+            items[0][0],
             delimiter,
-            l[0][1],
-            l[1][0],
+            items[0][1],
+            items[1][0],
             delimiter,
-            l[1][1],
+            items[1][1],
         )
-        csvtools.dict2csv(tmp_path, d)
+        csvtools.dict2csv(tmp_path, a_dict)
         with io.open(tmp_path, "r", encoding=encoding) as csv_file:
             text = csv_file.read()
-        self.assertEqual(text, t)
+        self.assertEqual(text, exp)
 
     def test_dict2csv_sort(self):
         _, tmp_path = mkstemp()
@@ -46,14 +46,18 @@ class TestCsvTools(unittest.TestCase):
         self.assertEqual(text, "b%s1\nc%s2\na%s3\n" % (delimiter, delimiter, delimiter))
 
     def test_search_mun(self):
+        def query(row, args):
+            return row[0] == args[0]
+
         fn = "test/fixtures/municipalities.csv"
-        q = lambda row, args: row[0] == args[0]
-        output = csvtools.search(fn, "05001", query=q)
+        output = csvtools.search(fn, "05001", query=query)
         self.assertEqual(output, ["05001", "339910", "Adanero"])
 
     def test_filter_prov(self):
+        def query(row, args):
+            return row[0].startswith(args[0])
+
         fn = "test/fixtures/municipalities.csv"
-        q = lambda row, args: row[0].startswith(args[0])
-        output = csvtools.filter(fn, "02", query=q)
+        output = csvtools.filter(fn, "02", query=query)
         self.assertTrue(all([row[0].startswith("02") for row in output]))
         self.assertEqual(len(output), 87)

@@ -2,15 +2,13 @@ import logging
 import os
 import unittest
 from argparse import Namespace
+from test.tools import capture
 
 import mock
 
-logging.disable(logging.WARNING)
-
-from test.tools import capture
-
 from catatom2osm import __main__, config
 
+logging.disable(logging.WARNING)
 os.environ["LANGUAGE"] = "C"
 config.install_gettext("catato2osm", "")
 

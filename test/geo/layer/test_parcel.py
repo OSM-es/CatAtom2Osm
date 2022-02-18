@@ -1,11 +1,9 @@
-import io
 import logging
 import unittest
 
 import mock
-from qgis.core import QgsFeature, QgsVectorLayer
+from qgis.core import QgsVectorLayer
 
-from catatom2osm import osmxml
 from catatom2osm.app import QgsSingleton
 from catatom2osm.geo.geometry import Geometry
 from catatom2osm.geo.layer.cons import ConsLayer

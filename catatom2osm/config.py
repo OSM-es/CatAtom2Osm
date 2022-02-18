@@ -11,7 +11,10 @@ app_name = "CatAtom2Osm"
 app_version = __version__
 app_author = "Javier Sanchez Portero"
 app_copyright = "2017, Javier Sanchez Portero"
-app_desc = "Tool to convert INSPIRE data sets from the Spanish Cadastre ATOM Services to OSM files"
+app_desc = (
+    "Tool to convert INSPIRE data sets from the Spanish Cadastre "
+    "ATOM Services to OSM files"
+)
 app_tags = ""
 
 
@@ -71,7 +74,8 @@ straight_thr = 2  # Threshold in degrees from straight angle to delete a vertex
 acute_thr = 10  # Remove vertices with an angle smaller than this value
 min_area = 0.05  # Delete geometries with an area smaller than this value
 addr_thr = 10  # Distance in meters to merge address node with building outline
-acute_inv = 5  # Remove geometries/rings that result invalid after removing any vertex with an angle smaller than this value
+acute_inv = 5  # Remove geometries/rings that result invalid after removing
+# any vertex with an angle smaller than this value
 dist_inv = 0.1  # Threshold in meters to filter angles for zig-zag and spikes
 entrance_thr = 0.4  # Minimum distance in meters from a entrance to the nearest corner
 warning_min_area = 1  # Area in m2 for small area warning
@@ -107,9 +111,16 @@ prov_url = {
     "CP": base_url["CP"] + "{code}/ES.SDGC.CP.atom_{code}.xml",
 }
 
-cadastre_doc_url = "http://ovc.catastro.meh.es/OVCServWeb/OVCWcfLibres/OVCFotoFachada.svc/RecuperarFotoFachadaGet?ReferenciaCatastral={}"
+cadastre_doc_url = (
+    "http://ovc.catastro.meh.es/OVCServWeb/OVCWcfLibres/OVCFotoFachada.svc/"
+    "RecuperarFotoFachadaGet?ReferenciaCatastral={}"
+)
 
-fixme_doc_url = "https://wiki.openstreetmap.org/wiki/ES:Catastro_espa%C3%B1ol/Importaci%C3%B3n_de_edificios/Gesti%C3%B3n_de_proyectos#Generar_y_corregir_los_archivos_a_importar"
+fixme_doc_url = (
+    "https://wiki.openstreetmap.org/wiki/ES:Catastro_espa%C3%B1ol/"
+    "Importaci%C3%B3n_de_edificios/Gesti%C3%B3n_de_proyectos#"
+    "Generar_y_corregir_los_archivos_a_importar"
+)
 
 no_number = "S-N"  # Regular expression to match addresses without number
 

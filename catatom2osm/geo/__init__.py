@@ -1,3 +1,4 @@
+# flake8: noqa
 BUFFER_SIZE = 512
 SIMPLIFY_BUILDING_PARTS = False
 

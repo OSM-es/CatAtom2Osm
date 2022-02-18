@@ -5,7 +5,6 @@ from importlib import reload
 from optparse import Values
 
 import mock
-from past.builtins import basestring
 from qgis.core import QgsVectorLayer
 
 from catatom2osm import app, config, osm
@@ -309,7 +308,7 @@ class TestCatAtom2Osm(unittest.TestCase):
         w1 = building.Way([(0, 0), (1, 0), (1, 1), (0, 0)], {"ref": "1"})
         # entrance exists, tags to node
         n2 = building.Node(2, 0)
-        w2 = building.Way([n2, (3, 0), (3, 1), (2, 0)], {"ref": "2"})
+        building.Way([n2, (3, 0), (3, 1), (2, 0)], {"ref": "2"})
         # entrance don't exists, tags to way
         w3 = building.Way([(4, 1), (5, 0), (5, 1), (4, 1)], {"ref": "3"})
         # entrance exists, tags to node in relation

@@ -1,14 +1,11 @@
 import logging
 import unittest
-from collections import Counter
 
 import mock
 from qgis.core import QgsFeature, QgsVectorLayer
 
 from catatom2osm.app import QgsSingleton
 from catatom2osm.geo.geometry import Geometry
-from catatom2osm.geo.layer.base import BaseLayer
-from catatom2osm.geo.layer.cons import ConsLayer
 from catatom2osm.geo.layer.zoning import ZoningLayer
 from catatom2osm.geo.point import Point
 
@@ -41,9 +38,11 @@ class TestZoningLayer(unittest.TestCase):
     @mock.patch("catatom2osm.geo.layer.base.log", m_log)
     @mock.patch("catatom2osm.geo.layer.base.tqdm", mock.MagicMock())
     def test_append(self):
-        bad_geoms = lambda l: [
-            f for f in l.getFeatures() if not f.geometry().isGeosValid()
-        ]
+        def bad_geoms(lyr):
+            return [
+                feat for feat in lyr.getFeatures() if not feat.geometry().isGeosValid()
+            ]
+
         self.assertGreater(len(bad_geoms(self.fixture)), 0)
         self.ulayer.append(self.fixture, level="M")
         self.rlayer.append(self.fixture, level="P")

@@ -110,8 +110,11 @@ class BaseLayer(QgsVectorLayer):
             >>> original_attributes = ['localId', 'specification', 'component_href']
             >>> original_values = [
             ...     '38.012.1.12.0295603CS6109N',
-            ...     'Parcel',
-            ...     '(3:#ES.SDGC.PD.38.012.38570,#ES.SDGC.TN.38.012.1,#ES.SDGC.AU.38.012)'
+            ...     'Parcel', (
+            ...         '(3:#ES.SDGC.PD.38.012.38570,'
+            ...         '#ES.SDGC.TN.38.012.1,'
+            ...         '#ES.SDGC.AU.38.012)'
+            ...     )
             ... ]
             >>> final_attributes = ['localId', 'spec', 'PD_id', 'TN_id', 'AU_id']
             >>> final_values = [

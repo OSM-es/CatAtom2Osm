@@ -1,7 +1,12 @@
+import logging
+
 from qgis.core import QgsFeature, QgsGeometry, QgsPointXY
 
+from catatom2osm.config import app_name
 from catatom2osm.geo.types import WKBMultiPolygon, WKBPolygon
 from catatom2osm.report import instance as report
+
+log = logging.getLogger(app_name)
 
 
 class Geometry(object):
