@@ -261,7 +261,7 @@ class PolygonLayer(BaseLayer):
             self.writer.deleteFeatures(to_clean)
             msg = _("Deleted %d invalid geometries in the '%s' layer")
             log.debug(msg, len(to_clean), self.name())
-            report.values['geom_invalid_' + self.name()] += len(to_clean)
+            report.inc('geom_invalid_' + self.name(), len(to_clean))
 
     def delete_invalid_geometries(self, query_small_area=lambda feat: True):
         """
