@@ -1,6 +1,9 @@
 Change log
 ==========
 
+**2022-2-18 (2.6.2)**
+* Fix errors #92, #93, #95, #96.
+
 **2022-2-17 (2.6.1)**
 * Adds municipality code to tasks project file.
 

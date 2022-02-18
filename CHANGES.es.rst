@@ -1,6 +1,9 @@
 Registro de cambios
 ===================
 
+**18-2-2022 (2.6.2)**
+* Corrige errores #92, #93, #95, #96.
+
 **17-2-2022 (2.6.1)**
 * Añade código de municipio a archivo de  proyecto.
 
