@@ -8,7 +8,7 @@ from catatom2osm.geo.layer.base import BaseLayer
 from catatom2osm.geo.types import WKBPoint
 
 
-class DebugWriter():
+class DebugWriter:
     """A QgsVectorFileWriter for debugging purposess."""
 
     def __init__(

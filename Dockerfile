@@ -50,7 +50,6 @@ FROM base AS prod_stage
 ONBUILD COPY . .
 
 FROM base AS dev_stage
-ENV BLACK_EXCLUDE_LIST="(\.venv|\.git|bin)"
 ONBUILD RUN echo "Skip copy"
 
 FROM ${APP_ENV}_stage AS final

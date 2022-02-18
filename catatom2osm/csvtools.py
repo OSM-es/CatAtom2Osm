@@ -13,12 +13,13 @@ def dict2csv(csv_path, a_dict, sort=None):
     Writes a dictionary to a csv file, optinally sorted by key (sort=0) or
     value (sort=1)
     """
-    with io.open(csv_path, 'w', encoding=encoding) as csv_file:
+    with io.open(csv_path, "w", encoding=encoding) as csv_file:
         dictitems = list(a_dict.items())
         if sort in [0, 1]:
-            dictitems.sort(key=lambda x:x[sort])
+            dictitems.sort(key=lambda x: x[sort])
         for (k, v) in dictitems:
-            csv_file.write("%s%s%s%s" % (k, delimiter, v, '\n'))
+            csv_file.write("%s%s%s%s" % (k, delimiter, v, "\n"))
+
 
 def csv2dict(csv_path, a_dict=None, exists=False):
     """Read a dictionary from a csv file"""
@@ -34,6 +35,7 @@ def csv2dict(csv_path, a_dict=None, exists=False):
     elif exists:
         raise IOError(msg)
     return a_dict
+
 
 def filter(csv_path, *args, query=lambda row, args: True, stop=False):
     """
@@ -55,6 +57,7 @@ def filter(csv_path, *args, query=lambda row, args: True, stop=False):
                 output.append(row)
     return output
 
+
 def search(csv_path, *args, query=lambda row, args: True):
     """
     Return first matched row in csv
@@ -66,10 +69,12 @@ def search(csv_path, *args, query=lambda row, args: True):
     """
     return filter(csv_path, *args, query=query, stop=True)
 
+
 def get_key(csv_path, key):
     """Get a row given first column value"""
     q = lambda row, args: row[0] == args[0]
     return search(csv_path, key, query=q)
+
 
 def startswith(csv_path, key):
     """Get rows which first column starts with key"""

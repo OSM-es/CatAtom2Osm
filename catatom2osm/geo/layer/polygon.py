@@ -20,7 +20,7 @@ log = logging.getLogger(config.app_name)
 class PolygonLayer(BaseLayer):
     """Base class for polygon layers"""
 
-    def __init__(self, path, baseName, providerLib = "ogr"):
+    def __init__(self, path, baseName, providerLib="ogr"):
         super(PolygonLayer, self).__init__(path, baseName, providerLib)
         # Distance in meters to merge nearest vertex
         self.dup_thr = config.dup_thr
@@ -73,11 +73,14 @@ class PolygonLayer(BaseLayer):
         if to_clean:
             self.writer.deleteFeatures(to_clean)
             self.writer.addFeatures(to_add)
-            log.debug(_("%d multi-polygons splitted into %d polygons in "
-                "the '%s' layer"), len(to_clean), len(to_add),
-                self.name())
-            report.values['multipart_geoms_' + self.name()] = len(to_clean)
-            report.values['exploded_parts_' + self.name()] = len(to_add)
+            log.debug(
+                _("%d multi-polygons splitted into %d polygons in " "the '%s' layer"),
+                len(to_clean),
+                len(to_add),
+                self.name(),
+            )
+            report.values["multipart_geoms_" + self.name()] = len(to_clean)
+            report.values["exploded_parts_" + self.name()] = len(to_add)
 
     @staticmethod
     def is_shared_segment(parents_per_vx, va, vb, feature_id):
@@ -90,7 +93,7 @@ class PolygonLayer(BaseLayer):
         parents += [gid for gid in parents_per_vx[vb.asWkt()] if gid != feature_id]
         return any([c > 1 for c in Counter(parents).values()])
 
-    def get_parents_per_vertex_and_geometries(self, expression=''):
+    def get_parents_per_vertex_and_geometries(self, expression=""):
         """
         Returns:
             (dict) parent fids for each vertex, (dict) geometry for each fid.
@@ -106,14 +109,14 @@ class PolygonLayer(BaseLayer):
                 parents_per_vertex[point.asWkt()].append(feature.id())
         return (parents_per_vertex, geometries)
 
-    def get_contacts_and_geometries(self, expression=''):
+    def get_contacts_and_geometries(self, expression=""):
         """
         Returns:
             (list) groups of polygons with at least one common node
             (dict) feature id: geometry
         """
-        parents_per_vertex, geometries = (
-            self.get_parents_per_vertex_and_geometries(expression)
+        parents_per_vertex, geometries = self.get_parents_per_vertex_and_geometries(
+            expression
         )
         adjs = []
         for (__, parents) in parents_per_vertex.items():
@@ -121,14 +124,14 @@ class PolygonLayer(BaseLayer):
                 adjs.append(parents)
         return (adjs, geometries)
 
-    def get_adjacents_and_geometries(self, expression=''):
+    def get_adjacents_and_geometries(self, expression=""):
         """
         Returns:
             (list) groups of adjacent polygons
             (dict) feature id: geometry
         """
-        parents_per_vertex, geometries = (
-            self.get_parents_per_vertex_and_geometries(expression)
+        parents_per_vertex, geometries = self.get_parents_per_vertex_and_geometries(
+            expression
         )
         adjs = []
         for (wkt, parents) in parents_per_vertex.items():
@@ -148,16 +151,14 @@ class PolygonLayer(BaseLayer):
 
     def topology(self):
         """For each vertex in a polygon layer, adds it to nearest segments."""
-        threshold = self.dist_thr # Distance threshold to create nodes
+        threshold = self.dist_thr  # Distance threshold to create nodes
         dup_thr = self.dup_thr
         straight_thr = self.straight_thr
         tp = 0
         td = 0
         if log.app_level <= logging.DEBUG:
             debshp = DebugWriter("debug_topology.shp", self)
-        geometries = {
-            f.id(): QgsGeometry(f.geometry()) for f in self.getFeatures()
-        }
+        geometries = {f.id(): QgsGeometry(f.geometry()) for f in self.getFeatures()}
         index = self.get_index()
         to_change = {}
         nodes = set()
@@ -170,9 +171,9 @@ class PolygonLayer(BaseLayer):
                     for fid in fids:
                         g = QgsGeometry(geometries[fid])
                         (p, ndx, ndxa, ndxb, dist_v) = g.closestVertex(point)
-                        (dist_s, closest, vertex) = (
-                            g.closestSegmentWithContext(point)[:3]
-                        )
+                        (dist_s, closest, vertex) = g.closestSegmentWithContext(point)[
+                            :3
+                        ]
                         va = Point(g.vertexAt(ndxa))
                         vb = Point(g.vertexAt(ndxb))
                         note = ""
@@ -183,8 +184,13 @@ class PolygonLayer(BaseLayer):
                                 g.deleteVertex(ndxa)
                                 note = "dupe refused by isGeosValid"
                                 if Geometry.is_valid(g):
-                                    note = "Merge dup. %.10f %.5f,%.5f->%.5f,%.5f" % \
-                                        (dist_a, va.x(), va.y(), point.x(), point.y())
+                                    note = "Merge dup. %.10f %.5f,%.5f->%.5f,%.5f" % (
+                                        dist_a,
+                                        va.x(),
+                                        va.y(),
+                                        point.x(),
+                                        point.y(),
+                                    )
                                     nodes.add(p)
                                     nodes.add(va)
                                     td += 1
@@ -192,8 +198,13 @@ class PolygonLayer(BaseLayer):
                                 g.deleteVertex(ndxb)
                                 note = "dupe refused by isGeosValid"
                                 if Geometry.is_valid(g):
-                                    note = "Merge dup. %.10f %.5f,%.5f->%.5f,%.5f" % \
-                                        (dist_b, vb.x(), vb.y(), point.x(), point.y())
+                                    note = "Merge dup. %.10f %.5f,%.5f->%.5f,%.5f" % (
+                                        dist_b,
+                                        vb.x(),
+                                        vb.y(),
+                                        point.x(),
+                                        point.y(),
+                                    )
                                     nodes.add(p)
                                     nodes.add(vb)
                                     td += 1
@@ -201,11 +212,18 @@ class PolygonLayer(BaseLayer):
                             g.moveVertex(point.x(), point.y(), ndx)
                             note = "dupe refused by isGeosValid"
                             if Geometry.is_valid(g):
-                                note = "Merge dup. %.10f %.5f,%.5f->%.5f,%.5f" % \
-                                    (dist_v, p.x(), p.y(), point.x(), point.y())
+                                note = "Merge dup. %.10f %.5f,%.5f->%.5f,%.5f" % (
+                                    dist_v,
+                                    p.x(),
+                                    p.y(),
+                                    point.x(),
+                                    point.y(),
+                                )
                                 nodes.add(p)
                                 td += 1
-                        elif dist_s < threshold**2 and closest != va and closest != vb:
+                        elif (
+                            dist_s < threshold**2 and closest != va and closest != vb
+                        ):
                             va = Point(g.vertexAt(vertex))
                             vb = Point(g.vertexAt(vertex - 1))
                             angle = abs(point.azimuth(va) - point.azimuth(vb))
@@ -215,10 +233,13 @@ class PolygonLayer(BaseLayer):
                                 if g.insertVertex(point.x(), point.y(), vertex):
                                     note = "Topo refused by isGeosValid"
                                     if Geometry.is_valid(g):
-                                        note = "Add topo %.6f %.5f,%.5f" % \
-                                            (dist_s, point.x(), point.y())
+                                        note = "Add topo %.6f %.5f,%.5f" % (
+                                            dist_s,
+                                            point.x(),
+                                            point.y(),
+                                        )
                                         tp += 1
-                        if note.startswith('Merge') or note.startswith('Add'):
+                        if note.startswith("Merge") or note.startswith("Add"):
                             to_change[fid] = g
                             geometries[fid] = g
                         if note and log.app_level <= logging.DEBUG:
@@ -231,13 +252,13 @@ class PolygonLayer(BaseLayer):
         if len(to_change) > 0:
             self.writer.changeGeometryValues(to_change)
         if td:
-            log.debug(_("Merged %d close vertices in the '%s' layer"), td,
-                self.name())
-            report.values['vertex_close_' + self.name()] = td
+            log.debug(_("Merged %d close vertices in the '%s' layer"), td, self.name())
+            report.values["vertex_close_" + self.name()] = td
         if tp:
-            log.debug(_("Created %d topological points in the '%s' layer"),
-                tp, self.name())
-            report.values['vertex_topo_' + self.name()] = tp
+            log.debug(
+                _("Created %d topological points in the '%s' layer"), tp, self.name()
+            )
+            report.values["vertex_topo_" + self.name()] = tp
 
     def merge_adjacent_polygons(self):
         """
@@ -261,7 +282,7 @@ class PolygonLayer(BaseLayer):
             self.writer.deleteFeatures(to_clean)
             msg = _("Deleted %d invalid geometries in the '%s' layer")
             log.debug(msg, len(to_clean), self.name())
-            report.inc('geom_invalid_' + self.name(), len(to_clean))
+            report.inc("geom_invalid_" + self.name(), len(to_clean))
 
     def delete_invalid_geometries(self, query_small_area=lambda feat: True):
         """
@@ -270,9 +291,7 @@ class PolygonLayer(BaseLayer):
         Also removes zig-zag and spike vertex (see Point.get_spike_context).
         """
         if log.app_level <= logging.DEBUG:
-            debshp = DebugWriter(
-                'debug_notvalid.shp', self, QgsFields(), WKBPolygon
-            )
+            debshp = DebugWriter("debug_notvalid.shp", self, QgsFields(), WKBPolygon)
             debshp2 = DebugWriter("debug_spikes.shp", self)
         to_change = {}
         to_clean = []
@@ -302,12 +321,19 @@ class PolygonLayer(BaseLayer):
                     continue
                 pn += 1
                 for i, ring in enumerate(polygon):
-                    if badgeom: break
+                    if badgeom:
+                        break
                     skip = False
                     for n, v in enumerate(ring[0:-1]):
                         (
-                            angle_v, angle_a, ndx, ndxa,
-                            is_acute, is_zigzag, is_spike, vx,
+                            angle_v,
+                            angle_a,
+                            ndx,
+                            ndxa,
+                            is_acute,
+                            is_zigzag,
+                            is_spike,
+                            vx,
                         ) = Point(v).get_spike_context(geom)
                         if skip or not is_acute:
                             skip = False
@@ -328,7 +354,7 @@ class PolygonLayer(BaseLayer):
                                 if log.app_level <= logging.DEBUG:
                                     debshp.addFeature(f)
                             break
-                        if len(ring) > 4: # (can delete vertexs)
+                        if len(ring) > 4:  # (can delete vertexs)
                             va = Point(geom.vertexAt(ndxa))
                             if is_zigzag:
                                 g = QgsGeometry(geom)
@@ -345,11 +371,17 @@ class PolygonLayer(BaseLayer):
                                     zz += 1
                                     to_change[fid] = g
                                 if log.app_level <= logging.DEBUG:
-                                    debshp2.add_point(va, 'zza %d %d %d %f' % (fid, ndx, ndxa, angle_a))
-                                    debshp2.add_point(v, 'zz %d %d %d %s' % (fid, ndx, len(ring), valid))
+                                    debshp2.add_point(
+                                        va,
+                                        "zza %d %d %d %f" % (fid, ndx, ndxa, angle_a),
+                                    )
+                                    debshp2.add_point(
+                                        v,
+                                        "zz %d %d %d %s" % (fid, ndx, len(ring), valid),
+                                    )
                             elif is_spike:
                                 g = QgsGeometry(geom)
-                                to_move[va] = vx #!
+                                to_move[va] = vx  #!
                                 g.moveVertex(vx.x(), vx.y(), ndxa)
                                 g.deleteVertex(ndx)
                                 valid = g.isGeosValid()
@@ -359,9 +391,14 @@ class PolygonLayer(BaseLayer):
                                     geom = g
                                     to_change[fid] = g
                                 if log.app_level <= logging.DEBUG:
-                                    debshp2.add_point(vx, 'vx %d %d' % (fid, ndx))
-                                    debshp2.add_point(va, 'va %d %d %d %f' % (fid, ndx, ndxa, angle_a))
-                                    debshp2.add_point(v, 'v %d %d %d %s' % (fid, ndx, len(ring), valid))
+                                    debshp2.add_point(vx, "vx %d %d" % (fid, ndx))
+                                    debshp2.add_point(
+                                        va, "va %d %d %d %f" % (fid, ndx, ndxa, angle_a)
+                                    )
+                                    debshp2.add_point(
+                                        v,
+                                        "v %d %d %d %s" % (fid, ndx, len(ring), valid),
+                                    )
                 geometries[fid] = geom
             if geom.area() < config.min_area and query_small_area(feat):
                 to_clean.append(fid)
@@ -371,7 +408,8 @@ class PolygonLayer(BaseLayer):
         pbar.close()
         if to_move:
             for fid, geom in geometries.items():
-                if fid in to_clean: continue
+                if fid in to_clean:
+                    continue
                 n = 0
                 v = Point(geom.vertexAt(n))
                 while v.x() != 0 or v.y() != 0:
@@ -379,8 +417,8 @@ class PolygonLayer(BaseLayer):
                         g = QgsGeometry(geom)
                         vx = to_move[v]
                         if log.app_level <= logging.DEBUG:
-                            debshp2.add_point(v, 'mv %d %d' % (fid, n))
-                            debshp2.add_point(vx, 'mvx %d %d' % (fid, n))
+                            debshp2.add_point(v, "mv %d %d" % (fid, n))
+                            debshp2.add_point(vx, "mvx %d %d" % (fid, n))
                         g.moveVertex(vx.x(), vx.y(), n)
                         if g.isGeosValid():
                             geom = g
@@ -392,24 +430,24 @@ class PolygonLayer(BaseLayer):
         if parts:
             msg = _("Deleted %d invalid part geometries in the '%s' layer")
             log.debug(msg, parts, self.name())
-            report.values['geom_parts_' + self.name()] = parts
+            report.values["geom_parts_" + self.name()] = parts
         if rings:
             msg = _("Deleted %d invalid ring geometries in the '%s' layer")
             log.debug(msg, rings, self.name())
-            report.values['geom_rings_' + self.name()] = rings
+            report.values["geom_rings_" + self.name()] = rings
         if to_clean:
             self.writer.deleteFeatures(to_clean)
             msg = _("Deleted %d invalid geometries in the '%s' layer")
             log.debug(msg, len(to_clean), self.name())
-            report.values['geom_invalid_' + self.name()] = len(to_clean)
+            report.values["geom_invalid_" + self.name()] = len(to_clean)
         if zz:
             msg = _("Deleted %d zig-zag vertices in the '%s' layer")
             log.debug(msg, zz, self.name())
-            report.values['vertex_zz_' + self.name()] = zz
+            report.values["vertex_zz_" + self.name()] = zz
         if spikes:
             msg = _("Deleted %d spike vertices in the '%s' layer")
             log.debug(msg, spikes, self.name())
-            report.values['vertex_spike_' + self.name()] = spikes
+            report.values["vertex_spike_" + self.name()] = spikes
 
     def simplify(self):
         """
@@ -426,25 +464,25 @@ class PolygonLayer(BaseLayer):
         killed = 0
         to_change = {}
         # Clean non corners
-        (parents_per_vertex, geometries) = (
-            self.get_parents_per_vertex_and_geometries()
-        )
+        (parents_per_vertex, geometries) = self.get_parents_per_vertex_and_geometries()
         pbar = self.get_progressbar(_("Simplify"), len(parents_per_vertex))
         for wkt, parents in parents_per_vertex.items():
             point = Point(wkt)
             # Test if this vertex is a 'corner' in any of its parent polygons
             for fid in parents:
                 geom = geometries[fid]
-                (angle, is_acute, is_corner, cath) = (
-                    point.get_corner_context(geom)
-                )
+                (angle, is_acute, is_corner, cath) = point.get_corner_context(geom)
                 debmsg = "angle=%.1f, is_acute=%s, is_corner=%s, cath=%.4f" % (
-                    angle, is_acute, is_corner, cath
+                    angle,
+                    is_acute,
+                    is_corner,
+                    cath,
                 )
-                if is_corner: break
+                if is_corner:
+                    break
             msg = "Keep"
             if not is_corner:
-                killed += 1      # delete the vertex from all its parents.
+                killed += 1  # delete the vertex from all its parents.
                 for fid in frozenset(parents):
                     g = QgsGeometry(geometries[fid])
                     (__, ndx, __, __, __) = g.closestVertex(point)
@@ -452,7 +490,7 @@ class PolygonLayer(BaseLayer):
                     v = g.vertexAt(ndx)
                     va = g.vertexAt(ndxa)
                     vb = g.vertexAt(ndxb)
-                    invalid_ring = (v == va or v == vb or va == vb)
+                    invalid_ring = v == va or v == vb or va == vb
                     g.deleteVertex(ndx)
                     msg = "Refused"
                     if Geometry.is_valid(g) and not invalid_ring:
@@ -461,7 +499,7 @@ class PolygonLayer(BaseLayer):
                         to_change[fid] = g
                         msg = "Deleted"
             if log.app_level <= logging.DEBUG:
-                debshp.add_point(point, msg + ' ' + debmsg)
+                debshp.add_point(point, msg + " " + debmsg)
             if len(to_change) > BUFFER_SIZE:
                 self.writer.changeGeometryValues(to_change)
                 to_change = {}
@@ -470,9 +508,10 @@ class PolygonLayer(BaseLayer):
         if len(to_change) > 0:
             self.writer.changeGeometryValues(to_change)
         if killed > 0:
-            log.debug(_("Simplified %d vertices in the '%s' layer"), killed,
-                self.name())
-            report.values['vertex_simplify_' + self.name()] = killed
+            log.debug(
+                _("Simplified %d vertices in the '%s' layer"), killed, self.name()
+            )
+            report.values["vertex_simplify_" + self.name()] = killed
 
     def merge_geometries(
         self, groups, geometries, sort=None, reverse=False, split=True
@@ -507,7 +546,7 @@ class PolygonLayer(BaseLayer):
                     g = Geometry.fromPolygonXY(part)
                     to_change[group[j]] = g
                     count_com += 1
-                to_clean += group[j + 1:]
+                to_clean += group[j + 1 :]
             else:
                 to_change[group[0]] = geom
                 count_com += 1
@@ -526,9 +565,7 @@ class PolygonLayer(BaseLayer):
 
     def difference(self, layer):
         """Calculate the difference of each geometry with those in layer"""
-        geometries = {
-            f.id(): QgsGeometry(f.geometry()) for f in layer.getFeatures()
-        }
+        geometries = {f.id(): QgsGeometry(f.geometry()) for f in layer.getFeatures()}
         index = layer.get_index()
         pbar = self.get_progressbar(_("Difference"), len(geometries))
         for feat in self.getFeatures():

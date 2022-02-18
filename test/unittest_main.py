@@ -5,6 +5,7 @@
 
 if __name__ == "__main__":
     import sys
+
     if sys.argv[0].endswith("__main__.py"):
         sys.argv[0] = "python -m unittest"
 
@@ -12,5 +13,5 @@ if __name__ == "__main__":
 
     from unittest.main import TestProgram, main  # , USAGE_AS_MAIN
 
-    #TestProgram.USAGE = USAGE_AS_MAIN
+    # TestProgram.USAGE = USAGE_AS_MAIN
     main(module=None)

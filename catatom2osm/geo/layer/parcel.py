@@ -1,8 +1,7 @@
 import logging
 from collections import defaultdict
 
-from qgis.core import (QgsFeature, QgsFeatureRequest, QgsField, QgsGeometry,
-                       QgsRectangle)
+from qgis.core import QgsFeature, QgsFeatureRequest, QgsField, QgsGeometry, QgsRectangle
 from qgis.PyQt.QtCore import QVariant
 
 from catatom2osm import config
@@ -27,16 +26,18 @@ class ParcelLayer(PolygonLayer):
     ):
         super(ParcelLayer, self).__init__(path, baseName, providerLib)
         if self.fields().isEmpty():
-            self.writer.addAttributes([
-                QgsField('localId', QVariant.String, len=14),
-                QgsField('parts', QVariant.Int),
-                QgsField('zone', QVariant.String, len=5),
-                QgsField('type', QVariant.String, len=10),
-                QgsField('muncode', QVariant.String, len=5),
-            ])
+            self.writer.addAttributes(
+                [
+                    QgsField("localId", QVariant.String, len=14),
+                    QgsField("parts", QVariant.Int),
+                    QgsField("zone", QVariant.String, len=5),
+                    QgsField("type", QVariant.String, len=10),
+                    QgsField("muncode", QVariant.String, len=5),
+                ]
+            )
             self.updateFields()
         self.mun_code = mun_code
-        self.rename = {'localId': 'inspireId_localId'}
+        self.rename = {"localId": "inspireId_localId"}
         self.source_date = source_date
         self.mun_code = mun_code
 
@@ -47,16 +48,14 @@ class ParcelLayer(PolygonLayer):
             if source is not None:
                 for f in source.getFeatures():
                     refs.append(ConsLayer.get_id(f))
-        to_clean = [
-            f.id() for f in self.getFeatures() if f['localId'] not in refs
-        ]
+        to_clean = [f.id() for f in self.getFeatures() if f["localId"] not in refs]
         if to_clean:
             self.writer.deleteFeatures(to_clean)
             log.debug(_("Removed %d void parcels"), len(to_clean))
 
     def create_missing_parcels(self, *sources, split=None):
         """Creates fake parcels for buildings not contained in any."""
-        pa_refs = [f['localId'] for f in self.getFeatures()]
+        pa_refs = [f["localId"] for f in self.getFeatures()]
         to_add = {}
         for source in sources:
             if source is None:
@@ -73,7 +72,7 @@ class ParcelLayer(PolygonLayer):
                         to_add[ref] = parcel
                     elif split is None or split.is_inside_area(geom):
                         parcel = QgsFeature(self.fields())
-                        parcel['localId'] = ref
+                        parcel["localId"] = ref
                         parcel.setGeometry(geom)
                         to_add[ref] = parcel
         if to_add:
@@ -84,7 +83,7 @@ class ParcelLayer(PolygonLayer):
         """Assigns to each parcel the code of the municipality"""
         to_change = {}
         for pa in self.getFeatures():
-            pa['muncode'] = muncode
+            pa["muncode"] = muncode
             to_change[pa.id()] = get_attributes(pa)
         if to_change:
             self.writer.changeAttributeValues(to_change)
@@ -97,7 +96,7 @@ class ParcelLayer(PolygonLayer):
         features = {f.id(): f for f in zoning.getFeatures()}
         to_change = {}
         for pa in self.getFeatures():
-            if pa['zone'] is None:
+            if pa["zone"] is None:
                 c = pa.geometry().centroid().asPoint()
                 bb = QgsRectangle(c, c)
                 fids = index.intersects(bb)
@@ -106,7 +105,7 @@ class ParcelLayer(PolygonLayer):
                     label = zoning.format_label(zone)
                     pa_label = self.get_zone(pa)
                     if pa_label == label or is_inside_area(pa, zone):
-                        pa['zone'] = label
+                        pa["zone"] = label
                         to_change[pa.id()] = get_attributes(pa)
                         break
         msg = _("Assigned %d zones from %s to parcels")
@@ -119,10 +118,10 @@ class ParcelLayer(PolygonLayer):
         to_change = {}
         m = 0
         for pa in self.getFeatures():
-            if pa['zone'] is None:
+            if pa["zone"] is None:
                 m += 1
-                pa['zone'] = self.get_zone(pa)
-            pa['type'] = _('Rustic') if len(pa['zone']) == 3 else _('Urban')
+                pa["zone"] = self.get_zone(pa)
+            pa["type"] = _("Rustic") if len(pa["zone"]) == 3 else _("Urban")
             to_change[pa.id()] = get_attributes(pa)
         if m:
             log.debug(_("There are %d parcels without zone"), m)
@@ -142,8 +141,8 @@ class ParcelLayer(PolygonLayer):
         pa_zone = {}
         for f in self.getFeatures():
             geometries[f.id()] = QgsGeometry(f.geometry())
-            pa_ids[f['localId']] = f.id()
-            pa_refs[f.id()] = f['localId']
+            pa_ids[f["localId"]] = f.id()
+            pa_refs[f.id()] = f["localId"]
             pa_zone[f.id()] = self.get_zone(f)
         adjs = defaultdict(list)
         for group in bu_groups:
@@ -151,10 +150,10 @@ class ParcelLayer(PolygonLayer):
             for bid in group:
                 ref = bu_refs[bid]
                 pids.add(pa_ids[ref])
-            k = '-'.join(set([pa_zone[fid] for fid in pids]))
+            k = "-".join(set([pa_zone[fid] for fid in pids]))
             adjs[k].append(pids)
-        mz_groups = {k for k in adjs.keys() if '-' in k}
-        mz_groups |= {z for k in mz_groups for z in k.split('-')}
+        mz_groups = {k for k in adjs.keys() if "-" in k}
+        mz_groups |= {z for k in mz_groups for z in k.split("-")}
         pa_groups = merge_groups([adj for z in mz_groups for adj in adjs[z]])
         for z, adj in adjs.items():
             if z not in mz_groups:
@@ -175,7 +174,7 @@ class ParcelLayer(PolygonLayer):
                 localid = pa_refs[fid]
                 tasks[localid] = targetid
                 pc += parts_count[localid]
-            fnx = self.writer.fieldNameIndex('parts')
+            fnx = self.writer.fieldNameIndex("parts")
             self.changeAttributeValue(group[0], fnx, pc)
         self.commitChanges()
         return tasks
@@ -186,8 +185,8 @@ class ParcelLayer(PolygonLayer):
         parcel.
         """
         parts_count = self.count_parts(buildings)
-        pa_groups, pa_refs, geometries = (
-            self.get_groups_by_adjacent_buildings(buildings)
+        pa_groups, pa_refs, geometries = self.get_groups_by_adjacent_buildings(
+            buildings
         )
         area = lambda fid: geometries[fid].area()
         self.merge_geometries(pa_groups, geometries, area, True, False)
@@ -201,15 +200,15 @@ class ParcelLayer(PolygonLayer):
             parts_count[buildings.get_id(f)] += 1
         to_change = {}
         for f in self.getFeatures():
-            f['parts'] = parts_count[f['localId']]
+            f["parts"] = parts_count[f["localId"]]
             to_change[f.id()] = get_attributes(f)
         self.writer.changeAttributeValues(to_change)
         return dict(parts_count)
 
     def get_zone(self, feat):
-        zone = feat['zone']
+        zone = feat["zone"]
         if zone is None:
-            localid = feat['localId']
+            localid = feat["localId"]
             zone = localid[0:5]
             if zone == self.mun_code:
                 zone = localid[6:9]
@@ -225,21 +224,22 @@ class ParcelLayer(PolygonLayer):
         zoning = defaultdict(list)
         for pa in self.getFeatures():
             geometries[pa.id()] = QgsGeometry(pa.geometry())
-            parts_count[pa['localId']] = pa['parts']
-            pa_refs[pa.id()] = pa['localId']
+            parts_count[pa["localId"]] = pa["parts"]
+            pa_refs[pa.id()] = pa["localId"]
             zoning[self.get_zone(pa)].append(pa.id())
         pa_groups = []
         visited = []
         for pa in self.getFeatures():
             if pa.id() in visited:
                 continue
-            pc = pa['parts']
+            pc = pa["parts"]
             geom = geometries[pa.id()]
             centro = geom.centroid()
             distance = lambda fid: centro.distance(geometries[fid].centroid())
             label = self.get_zone(pa)
             candidates = [
-                fid for fid in zoning[label]
+                fid
+                for fid in zoning[label]
                 if parts_count[pa_refs[fid]] <= max_parts - pc
                 and distance(fid) < buffer
             ]
@@ -258,8 +258,8 @@ class ParcelLayer(PolygonLayer):
 
     def merge_by_parts_count(self, max_parts, buffer):
         """Merge parcels in groups with less than max_parts"""
-        pa_groups, pa_refs, geometries, parts_count = (
-            self.get_groups_by_parts_count(max_parts, buffer)
+        pa_groups, pa_refs, geometries, parts_count = self.get_groups_by_parts_count(
+            max_parts, buffer
         )
         self.merge_geometries(pa_groups, geometries, None, False, False)
         tasks = self.update_parts_count(pa_groups, pa_refs, parts_count)

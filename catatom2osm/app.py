@@ -11,13 +11,13 @@ from collections import defaultdict
 
 # isort: off
 from past.builtins import basestring  # qgis/utils.py:744: DeprecationWarning
-# isort: on
 
+# isort: on
 import qgis.utils
 from qgis.core import QgsApplication, QgsGeometry, QgsVectorLayer
 
 qgis.utils.uninstallErrorHook()
-qgis_utils = getattr(qgis.utils, 'QGis', getattr(qgis.utils, 'Qgis', None))
+qgis_utils = getattr(qgis.utils, "QGis", getattr(qgis.utils, "Qgis", None))
 from osgeo import gdal
 
 from catatom2osm import cdau  # Used in get_auxiliary_addresses
@@ -26,26 +26,27 @@ from catatom2osm.report import instance as report
 
 log = logging.getLogger(config.app_name)
 if config.silence_gdal:
-    gdal.PushErrorHandler('CPLQuietErrorHandler')
+    gdal.PushErrorHandler("CPLQuietErrorHandler")
 
-tasks_folder = 'tasks'
+tasks_folder = "tasks"
 
 
 class QgsSingleton(QgsApplication):
     """Keeps a unique instance of QGIS for the application (and tests)"""
+
     _qgs = None
 
     def __new__(cls):
         if QgsSingleton._qgs is None:
             # Init qGis API
             QgsSingleton._qgs = QgsApplication([], False)
-            qgis_prefix = os.getenv('QGISHOME')
+            qgis_prefix = os.getenv("QGISHOME")
             if qgis_prefix:
                 QgsApplication.setPrefixPath(qgis_prefix, True)
             QgsApplication.initQgis()
             # sets GDAL to convert xlink references to fields but not resolve
-            gdal.SetConfigOption('GML_ATTRIBUTES_TO_OGR_FIELDS', 'YES')
-            gdal.SetConfigOption('GML_SKIP_RESOLVE_ELEMS', 'ALL')
+            gdal.SetConfigOption("GML_ATTRIBUTES_TO_OGR_FIELDS", "YES")
+            gdal.SetConfigOption("GML_SKIP_RESOLVE_ELEMS", "ALL")
         return QgsSingleton._qgs
 
 
@@ -77,11 +78,11 @@ class CatAtom2Osm(object):
         if not os.path.exists(self.tasks_path):
             os.makedirs(self.tasks_path)
         self.get_split()
-        self.highway_names_path = self.cat.get_path('highway_names.csv')
+        self.highway_names_path = self.cat.get_path("highway_names.csv")
         self.is_new = not os.path.exists(self.highway_names_path)
-        self.source = 'building'
+        self.source = "building"
         if self.options.address and not self.options.building:
-            self.source = 'address'
+            self.source = "address"
 
     @staticmethod
     def create_and_run(a_path, options):
@@ -92,12 +93,14 @@ class CatAtom2Osm(object):
     @staticmethod
     def get_task_comment(label):
         """Return comment for task with this label"""
-        comment = ' '.join((
-            config.changeset_tags['comment'],
-            report.mun_code,
-            report.mun_name,
-            label,
-        ))
+        comment = " ".join(
+            (
+                config.changeset_tags["comment"],
+                report.mun_code,
+                report.mun_name,
+                label,
+            )
+        )
         return comment
 
     def run(self):
@@ -136,28 +139,28 @@ class CatAtom2Osm(object):
     def add_comments(self):
         """Recover missing task files metadata after Josm editing."""
         folder = os.path.basename(self.tasks_path)
-        report_path = self.cat.get_path('report.json')
+        report_path = self.cat.get_path("report.json")
         if not os.path.exists(report_path):
             log.info(_("No report found"))
             return
         report.from_file(report_path)
         tasks = 0
         for fn in os.listdir(self.tasks_path):
-            if fn.endswith('.osm') or fn.endswith('.osm.gz'):
+            if fn.endswith(".osm") or fn.endswith(".osm.gz"):
                 tasks += 1
-                label = os.path.basename(fn).split('.')[0]
+                label = os.path.basename(fn).split(".")[0]
                 data = self.read_osm(folder, fn)
-                fixmes = sum([1 for e in data.elements if 'fixme' in e.tags])
+                fixmes = sum([1 for e in data.elements if "fixme" in e.tags])
                 if fixmes > 0:
                     log.warning(_("Check %d fixme tags"), fixmes)
                 oldtags = dict(data.tags)
                 data.tags.update(config.changeset_tags)
-                data.tags['comment'] = self.get_task_comment(label)
-                data.tags['generator'] = report.app_version
-                if 'building_date' in report.values:
-                    data.tags['source:date'] = report.building_date
-                if 'address_date' in report.values:
-                    data.tags['source:date:addr'] = report.address_date
+                data.tags["comment"] = self.get_task_comment(label)
+                data.tags["generator"] = report.app_version
+                if "building_date" in report.values:
+                    data.tags["source:date"] = report.building_date
+                if "address_date" in report.values:
+                    data.tags["source:date:addr"] = report.address_date
                 if data.tags != oldtags:
                     self.write_osm(data, folder, fn)
         if not tasks:
@@ -168,12 +171,12 @@ class CatAtom2Osm(object):
         self.split = None
         if self.options.split:
             fn = self.options.split
-            if fn.endswith('.osm'):
-                fn += '|layername=multipolygons'
-            split = geo.BaseLayer(fn, 'zoningsplit', 'ogr')
+            if fn.endswith(".osm"):
+                fn += "|layername=multipolygons"
+            split = geo.BaseLayer(fn, "zoningsplit", "ogr")
             if not split.isValid():
                 raise IOError("Can't open %s" % self.options.split)
-            self.split = geo.PolygonLayer('MultiPolygon', 'split', 'memory')
+            self.split = geo.PolygonLayer("MultiPolygon", "split", "memory")
             q = lambda f, __: f.geometry().wkbType() == geo.types.WKBMultiPolygon
             self.split.append(split, query=q)
             if self.split.featureCount() == 0:
@@ -197,7 +200,7 @@ class CatAtom2Osm(object):
                 pa = next(parcel_gml.search(f"localId = '{localid}'"))
             except StopIteration:
                 msg = _("Parcel '%s' does not exists") % localid
-                raise(ValueError(msg))
+                raise (ValueError(msg))
             bb = pa.geometry().boundingBox().buffered(config.parcel_buffer)
             g = QgsGeometry.fromRect(bb)
             q = lambda f, __: geo.aux.is_inside(f, g)
@@ -214,14 +217,12 @@ class CatAtom2Osm(object):
         self.parcel.delete_void_parcels(building_gml, other_gml)
         self.parcel.clean()
         self.parcel.create_missing_parcels(building_gml, other_gml, split=self.split)
-        self.tasks = {
-            f['localId']: f['localId'] for f in self.parcel.getFeatures()
-        }
+        self.tasks = {f["localId"]: f["localId"] for f in self.parcel.getFeatures()}
         self.building = geo.ConsLayer()
         self.building.source_date = building_gml.source_date
         q = None
         if self.split or self.options.parcel:
-            q = lambda f, kw: self.building.get_id(f) in kw['keys']
+            q = lambda f, kw: self.building.get_id(f) in kw["keys"]
         self.building.append(building_gml, query=q, keys=self.tasks.keys())
         del building_gml
         inbu = self.building.featureCount()
@@ -250,25 +251,25 @@ class CatAtom2Osm(object):
         tasks_u = 0
         to_clean = []
         for pa in self.parcel.getFeatures():
-            label = pa['localId']
+            label = pa["localId"]
             task = tasks.get(label, None)
             if task is None:
                 to_clean.append(pa.id())
                 continue
-            if len(pa['zone']) == 3:
+            if len(pa["zone"]) == 3:
                 tasks_r += 1
             else:
                 tasks_u += 1
             comment = self.get_task_comment(label)
-            task_osm = task.to_osm(upload='yes', tags={'comment': comment})
+            task_osm = task.to_osm(upload="yes", tags={"comment": comment})
             if self.options.address and self.options.building:
-                 self.merge_address(task_osm, self.address_osm)
+                self.merge_address(task_osm, self.address_osm)
             if self.options.address:
                 report.address_stats(task_osm)
             if self.options.building:
                 report.cons_stats(task_osm, label)
                 report.osm_stats(task_osm)
-            self.write_osm(task_osm, tasks_folder, label + '.osm.gz')
+            self.write_osm(task_osm, tasks_folder, label + ".osm.gz")
             del task
         if to_clean:
             self.parcel.writer.deleteFeatures(to_clean)
@@ -311,21 +312,21 @@ class CatAtom2Osm(object):
     def get_zoning(self):
         """Get zoning data"""
         zoning_gml = self.cat.read("cadastralzoning")
-        self.rustic_zoning = geo.ZoningLayer(baseName='rusticzoning')
-        self.urban_zoning = geo.ZoningLayer(baseName='urbanzoning')
-        q = lambda f, kw: self.urban_zoning.check_zone(f, kw['level'])
+        self.rustic_zoning = geo.ZoningLayer(baseName="rusticzoning")
+        self.urban_zoning = geo.ZoningLayer(baseName="urbanzoning")
+        q = lambda f, kw: self.urban_zoning.check_zone(f, kw["level"])
         if self.split or self.options.parcel:
             q = lambda f, kw: (
-                self.urban_zoning.check_zone(f, kw['level'])
+                self.urban_zoning.check_zone(f, kw["level"])
                 and self.parcel_query(f, kw)
             )
-        self.rustic_zoning.append(zoning_gml, query=q, level='P')
-        self.urban_zoning.append(zoning_gml, query=q, level='M')
+        self.rustic_zoning.append(zoning_gml, query=q, level="P")
+        self.urban_zoning.append(zoning_gml, query=q, level="M")
         del zoning_gml
 
     def get_boundary(self):
         """Get best boundary search area for overpass queries."""
-        fn = os.path.join(config.app_path, 'municipalities.csv')
+        fn = os.path.join(config.app_path, "municipalities.csv")
         __, id, name = csvtools.get_key(fn, self.cat.zip_code)
         self.boundary_search_area = id
         report.mun_name = name
@@ -336,15 +337,15 @@ class CatAtom2Osm(object):
         if not self.options.parcel:
             self.parcel.simplify()
             self.parcel.set_muncode(self.cat.zip_code)
-            fn = 'zoning.geojson'
+            fn = "zoning.geojson"
             self.export_layer(self.parcel, fn, target_crs_id=4326)
             report.tasks = self.parcel.featureCount()
 
     def export_poly(self):
         bpoly = geo.ZoningLayer()
-        bpoly.append(self.rustic_zoning, level='P')
+        bpoly.append(self.rustic_zoning, level="P")
         bpoly.reproject()
-        fn = self.cat.get_path('boundary.poly')
+        fn = self.cat.get_path("boundary.poly")
         bpoly.export_poly(fn)
         log.info(_("Generated '%s'"), fn)
         del bpoly
@@ -356,8 +357,8 @@ class CatAtom2Osm(object):
         self.building.explode_multi_parts()
         self.building.clean()
         if log.app_level <= logging.DEBUG:
-            fn = 'building.geojson'
-            self.export_layer(self.building, fn, 'GeoJSON', target_crs_id=4326)
+            fn = "building.geojson"
+            self.export_layer(self.building, fn, "GeoJSON", target_crs_id=4326)
         if self.options.building:
             self.building.validate(report.max_level, report.min_level)
 
@@ -375,30 +376,26 @@ class CatAtom2Osm(object):
         for k, v in self.tasks.items():
             self.tasks[k] = tasks2.get(v, v)
 
-
     def finish(self):
         """Generates final report"""
         options = self.options
         if log.app_level > logging.DEBUG:
-            geo.BaseLayer.delete_shp(self.cat.get_path('parcel.shp'))
-            geo.BaseLayer.delete_shp(self.cat.get_path('building.shp'))
+            geo.BaseLayer.delete_shp(self.cat.get_path("parcel.shp"))
+            geo.BaseLayer.delete_shp(self.cat.get_path("building.shp"))
         if report.fixme_stats():
             log.warning(_("Check %d fixme tags"), report.fixme_count)
-            fn = 'review.txt'
+            fn = "review.txt"
             with open(self.cat.get_path(fn), "w") as fo:
                 fixmes = report.get_tasks_with_fixmes()
-                fo.write(config.eol.join(fixmes) + config.eol
-                )
-                log.info(
-                    _("Generated '%s'") + '. ' + _("Please, check it"), fn
-                )
+                fo.write(config.eol.join(fixmes) + config.eol)
+                log.info(_("Generated '%s'") + ". " + _("Please, check it"), fn)
         if options.building:
             report.cons_end_stats()
         else:
-            report.clean_group('building')
+            report.clean_group("building")
         report.validate()
-        report.to_file(self.cat.get_path('report.txt'))
-        report.export(self.cat.get_path('report.json'))
+        report.to_file(self.cat.get_path("report.txt"))
+        report.export(self.cat.get_path("report.json"))
         self.move_project()
         log.info(_("Finished!"))
 
@@ -412,17 +409,18 @@ class CatAtom2Osm(object):
         """Reads Address GML dataset"""
         address_gml = self.cat.read("address")
         report.address_date = address_gml.source_date
-        if address_gml.writer.fieldNameIndex('component_href') == -1:
+        if address_gml.writer.fieldNameIndex("component_href") == -1:
             address_gml = self.cat.read("address", force_zip=True)
-            if address_gml.writer.fieldNameIndex('component_href') == -1:
-                msg = _(
-                    "Could not resolve joined tables for the '%s' layer"
-                ) % address_gml.name()
+            if address_gml.writer.fieldNameIndex("component_href") == -1:
+                msg = (
+                    _("Could not resolve joined tables for the '%s' layer")
+                    % address_gml.name()
+                )
                 raise IOError(msg)
         self.address = geo.AddressLayer(source_date=address_gml.source_date)
         q = None
         if self.split or self.options.parcel:
-            q = lambda f, kw: self.address.get_id(f) in kw['keys']
+            q = lambda f, kw: self.address.get_id(f) in kw["keys"]
             self.boundary_bbox = self.parcel.bounding_box()
         self.address.append(address_gml, query=q, keys=self.tasks.keys())
         del address_gml
@@ -438,26 +436,22 @@ class CatAtom2Osm(object):
             return
         postaldescriptor = self.cat.read("postaldescriptor")
         thoroughfarename = self.cat.read("thoroughfarename")
-        self.address.join_field(
-            postaldescriptor, 'PD_id', 'gml_id', ['postCode']
-        )
-        self.address.join_field(
-            thoroughfarename, 'TN_id', 'gml_id', ['text'], 'TN_'
-        )
+        self.address.join_field(postaldescriptor, "PD_id", "gml_id", ["postCode"])
+        self.address.join_field(thoroughfarename, "TN_id", "gml_id", ["text"], "TN_")
         del postaldescriptor, thoroughfarename
-        report.inp_zip_codes = self.address.count(unique='postCode')
-        report.inp_street_names = self.address.count(unique='TN_text')
+        report.inp_zip_codes = self.address.count(unique="postCode")
+        report.inp_street_names = self.address.count(unique="TN_text")
         self.get_auxiliary_addresses()
-        self.export_layer(self.address, 'address.geojson', target_crs_id=4326)
+        self.export_layer(self.address, "address.geojson", target_crs_id=4326)
         self.get_translations(self.address)
 
     def process_address(self):
         """Fix street names, conflate and move addresses"""
         highway_names = self.get_translations(self.address)
-        ia = self.address.translate_field('TN_text', highway_names)
+        ia = self.address.translate_field("TN_text", highway_names)
         if ia > 0:
             log.debug(_("Deleted %d addresses refused by street name"), ia)
-            report.values['ignored_addresses'] = ia
+            report.values["ignored_addresses"] = ia
         if not self.is_new and not self.options.manual:
             current_address = self.get_current_ad_osm()
             self.address.conflate(current_address)
@@ -467,40 +461,40 @@ class CatAtom2Osm(object):
 
     def stop_address(self):
         """Save current processing status and exits"""
-        self.export_layer(self.parcel, 'parcel.shp', driver_name='ESRI Shapefile')
-        self.export_layer(self.building, 'building.shp', driver_name='ESRI Shapefile')
+        self.export_layer(self.parcel, "parcel.shp", driver_name="ESRI Shapefile")
+        self.export_layer(self.building, "building.shp", driver_name="ESRI Shapefile")
         self.address.reproject()
         address_osm = self.address.to_osm()
-        self.write_osm(address_osm, 'address.osm')
-        fn = self.cat.get_path('tasks.csv')
+        self.write_osm(address_osm, "address.osm")
+        fn = self.cat.get_path("tasks.csv")
         csvtools.dict2csv(fn, self.tasks)
-        report.to_file(self.cat.get_path('report.txt'))
-        report.export(self.cat.get_path('report.json'))
+        report.to_file(self.cat.get_path("report.txt"))
+        report.export(self.cat.get_path("report.json"))
         msg = _("Generated '%s'") % self.highway_names_path
-        msg += '. ' + _("Please, check it and run again")
+        msg += ". " + _("Please, check it and run again")
         log.info(msg)
 
     def resume_address(self):
         """Resume processing for second run of addresses dataset"""
-        report.from_file(self.cat.get_path('report.json'))
-        fn = self.cat.get_path('tasks.csv')
+        report.from_file(self.cat.get_path("report.json"))
+        fn = self.cat.get_path("tasks.csv")
         self.tasks = csvtools.csv2dict(fn, exists=True)
-        fn = self.cat.get_path('parcel.shp')
-        parcel = geo.ParcelLayer(self.cat.zip_code, fn, providerLib='ogr')
+        fn = self.cat.get_path("parcel.shp")
+        parcel = geo.ParcelLayer(self.cat.zip_code, fn, providerLib="ogr")
         if not parcel.isValid() or parcel.featureCount() == 0:
             raise ValueError(_("No parcels data"))
         self.parcel = geo.ParcelLayer(self.cat.zip_code)
         self.parcel.append(parcel)
         del parcel
-        fn = self.cat.get_path('building.shp')
-        building = geo.ConsLayer(fn, providerLib='ogr')
+        fn = self.cat.get_path("building.shp")
+        building = geo.ConsLayer(fn, providerLib="ogr")
         if not building.isValid() or building.featureCount() == 0:
             raise ValueError(_("No buildings data"))
         self.building = geo.ConsLayer()
         self.building.append(building)
         del building
-        fn = self.cat.get_path('address.geojson')
-        address = geo.AddressLayer(fn, providerLib='ogr')
+        fn = self.cat.get_path("address.geojson")
+        address = geo.AddressLayer(fn, providerLib="ogr")
         if not address.isValid() or address.featureCount() == 0:
             raise ValueError(_("No addresses data"))
         self.address = geo.AddressLayer()
@@ -510,15 +504,12 @@ class CatAtom2Osm(object):
         self.address.reproject(self.building.crs())
         del address
 
-
     def get_auxiliary_addresses(self):
         """If exists, reads and conflate an auxiliary addresses data source"""
         for source in list(config.aux_address.keys()):
             if self.cat.zip_code[:2] in config.aux_address[source]:
                 aux_source = globals()[source]
-                aux_path = os.path.join(
-                    os.path.dirname(self.path), config.aux_path
-                )
+                aux_path = os.path.join(os.path.dirname(self.path), config.aux_path)
                 reader = aux_source.Reader(aux_path)
                 aux = reader.read(self.cat.zip_code[:2])
                 aux_source.conflate(aux, self.address, self.cat.zip_code)
@@ -538,31 +529,30 @@ class CatAtom2Osm(object):
             building_osm (Osm): OSM data set with buildings
             address_osm (Osm): OSM data set with addresses
         """
-        if 'source:date' in address_osm.tags:
-            building_osm.tags['source:date:addr'] = address_osm.tags[
-                'source:date']
+        if "source:date" in address_osm.tags:
+            building_osm.tags["source:date:addr"] = address_osm.tags["source:date"]
         address_index = defaultdict(list)
         building_index = defaultdict(list)
         for bu in building_osm.elements:
-            if 'ref' in bu.tags:
-                building_index[bu.tags['ref']].append(bu)
+            if "ref" in bu.tags:
+                building_index[bu.tags["ref"]].append(bu)
         for ad in address_osm.nodes:
-            if ad.tags['ref'] in building_index:
-                address_index[ad.tags['ref']].append(ad)
+            if ad.tags["ref"] in building_index:
+                address_index[ad.tags["ref"]].append(ad)
         md = 0
         for (ref, group) in list(building_index.items()):
             parcel_ad = []
             entrance_count = 0
             for ad in address_index[ref]:
                 entrance = False
-                if 'entrance' in ad.tags:
+                if "entrance" in ad.tags:
                     for w in building_osm.get_outline(group):
                         entrance = w.search_node(ad.x, ad.y)
                         if entrance:
-                            ad.tags['group'] = str(len(group))
+                            ad.tags["group"] = str(len(group))
                             entrance.tags.update(ad.tags)
-                            entrance.tags.pop('ref', None)
-                            entrance.tags.pop('image', None)
+                            entrance.tags.pop("ref", None)
+                            entrance.tags.pop("image", None)
                             break
                 if entrance:
                     entrance_count += 1
@@ -572,14 +562,12 @@ class CatAtom2Osm(object):
                 ad = parcel_ad.pop()
                 bu = group[0]
                 bu.tags.update(ad.tags)
-                bu.tags.pop('image', None)
-                bu.tags.pop('entrance', None)
+                bu.tags.pop("image", None)
+                bu.tags.pop("entrance", None)
             md += len(parcel_ad)
         if md > 0:
-            log.debug(
-                _("Refused %d 'parcel' addresses not unique for it building"),
-                md)
-            report.inc('not_unique_addresses', md)
+            log.debug(_("Refused %d 'parcel' addresses not unique for it building"), md)
+            report.inc("not_unique_addresses", md)
 
     def get_translations(self, address):
         """
@@ -595,7 +583,7 @@ class CatAtom2Osm(object):
         * 'highway_names.csv' is located in the outputh folder and contains
           corrections for original highway names.
         """
-        highway_types_path = os.path.join(config.app_path, 'highway_types.csv')
+        highway_types_path = os.path.join(config.app_path, "highway_types.csv")
         if not os.path.exists(highway_types_path):
             csvtools.dict2csv(highway_types_path, config.highway_types)
         else:
@@ -616,11 +604,13 @@ class CatAtom2Osm(object):
 
     def get_highway(self):
         """Gets OSM highways needed for street names conflation"""
-        ql = ['way["highway"]["name"]',
-              'relation["highway"]["name"]',
-              'way["place"="square"]["name"]',
-              'relation["place"="square"]["name"]']
-        highway_osm = self.read_osm('current_highway.osm', ql=ql)
+        ql = [
+            'way["highway"]["name"]',
+            'relation["highway"]["name"]',
+            'way["place"="square"]["name"]',
+            'relation["place"="square"]["name"]',
+        ]
+        highway_osm = self.read_osm("current_highway.osm", ql=ql)
         highway = geo.HighwayLayer()
         highway.read_from_osm(highway_osm)
         del highway_osm
@@ -633,25 +623,22 @@ class CatAtom2Osm(object):
             'wr["addr:street"]["addr:housenumber"][~"building"~".*"]',
             'nwr["addr:place"]["addr:housenumber"]',
         ]
-        address_osm = self.read_osm('current_address.osm', ql=ql)
+        address_osm = self.read_osm("current_address.osm", ql=ql)
         current_address = set()
         w = 0
         report.osm_addresses = 0
         for d in address_osm.elements:
-            if 'addr:housenumber' not in d.tags:
-                if 'addr:street' in d.tags or 'addr:place' in d.tags:
+            if "addr:housenumber" not in d.tags:
+                if "addr:street" in d.tags or "addr:place" in d.tags:
                     w += 1
-            elif 'addr:street' in d.tags:
-                current_address.add(
-                    d.tags['addr:street'] + d.tags['addr:housenumber'])
+            elif "addr:street" in d.tags:
+                current_address.add(d.tags["addr:street"] + d.tags["addr:housenumber"])
                 report.osm_addresses += 1
-            elif 'addr:place' in d.tags:
-                current_address.add(
-                    d.tags['addr:place'] + d.tags['addr:housenumber'])
+            elif "addr:place" in d.tags:
+                current_address.add(d.tags["addr:place"] + d.tags["addr:housenumber"])
                 report.osm_addresses += 1
         if w > 0:
-            msg = _(
-                "There are %d address without house number in the OSM data") % w
+            msg = _("There are %d address without house number in the OSM data") % w
             log.warning(msg)
             report.warnings.append(msg)
             report.osm_addresses_without_number = w
@@ -662,18 +649,24 @@ class CatAtom2Osm(object):
         Move to tasks all files needed for the project for backup in the
         repository. Use a subdirectory if it's a split municipality.
         """
-        fn = self.options.split or ''
+        fn = self.options.split or ""
         bkp_dir = os.path.splitext(os.path.basename(fn))[0]
         bkp_path = self.cat.get_path(tasks_folder, bkp_dir)
         if not os.path.exists(bkp_path):
             os.makedirs(bkp_path)
         move_files = [
-            'current_address.osm', 'current_highway.osm', 'highway_names.csv',
-            'tasks.csv',
+            "current_address.osm",
+            "current_highway.osm",
+            "highway_names.csv",
+            "tasks.csv",
         ]
         copy_files = [
-            'address.osm', 'address.geojson', 'zoning.geojson',
-            'report.txt', 'review.txt', 'report.json',
+            "address.osm",
+            "address.geojson",
+            "zoning.geojson",
+            "report.txt",
+            "review.txt",
+            "report.json",
         ]
         if self.options.split:
             copy_files.append(self.options.split)
@@ -686,9 +679,7 @@ class CatAtom2Osm(object):
             if os.path.exists(fn):
                 shutil.copy(fn, bkp_path)
 
-    def export_layer(
-        self, layer, filename, driver_name='GeoJSON', target_crs_id=None
-    ):
+    def export_layer(self, layer, filename, driver_name="GeoJSON", target_crs_id=None):
         """
         Export a vector layer.
 
@@ -716,7 +707,7 @@ class CatAtom2Osm(object):
         Returns
             Osm: OSM data set
         """
-        ql = kwargs.get('ql', False)
+        ql = kwargs.get("ql", False)
         osm_path = self.cat.get_path(*paths)
         filename = os.path.basename(osm_path)
         if not os.path.exists(osm_path):
@@ -724,17 +715,17 @@ class CatAtom2Osm(object):
                 return None
             log.info(_("Downloading '%s'") % filename)
             query = overpass.Query(self.boundary_search_area)
-            if hasattr(self, 'boundary_bbox') and self.boundary_bbox:
+            if hasattr(self, "boundary_bbox") and self.boundary_bbox:
                 query.set_search_area(self.boundary_bbox)
             query.add(ql)
             if log.app_level == logging.DEBUG:
                 query.download(osm_path, log)
             else:
                 query.download(osm_path)
-        if osm_path.endswith('.gz'):
-            fo = gzip.open(osm_path, 'rb')
+        if osm_path.endswith(".gz"):
+            fo = gzip.open(osm_path, "rb")
         else:
-            fo = open(osm_path, 'rb')
+            fo = open(osm_path, "rb")
         data = osmxml.deserialize(fo)
         fo.close()
         if len(data.elements) == 0:
@@ -742,9 +733,13 @@ class CatAtom2Osm(object):
             log.warning(msg)
             report.warnings.append(msg)
         else:
-            log.info(_("Read '%s': %d nodes, %d ways, %d relations"),
-                     filename, len(data.nodes), len(data.ways),
-                     len(data.relations))
+            log.info(
+                _("Read '%s': %d nodes, %d ways, %d relations"),
+                filename,
+                len(data.nodes),
+                len(data.ways),
+                len(data.relations),
+            )
         return data
 
     def write_osm(self, data, *paths):
@@ -757,11 +752,11 @@ class CatAtom2Osm(object):
                             (compress if ends with .gz)
         """
         for e in data.elements:
-            if 'ref' in e.tags:
-                del e.tags['ref']
+            if "ref" in e.tags:
+                del e.tags["ref"]
         data.merge_duplicated()
         osm_path = self.cat.get_path(*paths)
-        if osm_path.endswith('.gz'):
+        if osm_path.endswith(".gz"):
             file_obj = codecs.getwriter("utf-8")(gzip.open(osm_path, "w"))
         else:
             file_obj = io.open(osm_path, "w", encoding="utf-8")
@@ -769,6 +764,9 @@ class CatAtom2Osm(object):
         file_obj.close()
         msg = _("Generated '%s': %d nodes, %d ways, %d relations")
         log.info(
-            msg, os.path.basename(osm_path), len(data.nodes), len(data.ways),
+            msg,
+            os.path.basename(osm_path),
+            len(data.nodes),
+            len(data.ways),
             len(data.relations),
         )

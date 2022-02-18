@@ -25,7 +25,7 @@ class Geometry(object):
     def fromPolygonXY(polygon):
         try:
             return QgsGeometry.fromPolygonXY(
-                 [[QgsPointXY(p) for p in r] for r in polygon]
+                [[QgsPointXY(p) for p in r] for r in polygon]
             )
         except AttributeError:
             return QgsGeometry.fromPolygon(polygon)
@@ -60,8 +60,10 @@ class Geometry(object):
     def get_vertices_list(feature):
         """Returns list of all distinct vertices in feature geometry"""
         return [
-            point for part in Geometry.get_multipolygon(feature)
-            for ring in part for point in ring[0:-1]
+            point
+            for part in Geometry.get_multipolygon(feature)
+            for ring in part
+            for point in ring[0:-1]
         ]
 
     @staticmethod
@@ -70,7 +72,8 @@ class Geometry(object):
         Returns list of all distinct vertices in feature geometry outer rings
         """
         return [
-            point for part in Geometry.get_multipolygon(feature)
+            point
+            for part in Geometry.get_multipolygon(feature)
             for point in part[0][0:-1]
         ]
 
@@ -96,7 +99,6 @@ class Geometry(object):
                 feature.setGeometry(geom)
         return geom.isGeosValid()
 
-
     @staticmethod
     def merge_adjacent_features(group):
         """Combine all geometries in group of features"""
@@ -106,7 +108,7 @@ class Geometry(object):
             if g.isGeosValid():
                 geom = geom.combine(g) if geom else g
             else:
-                msg = _("The geometry of zone '%s' is not valid") % p['label']
+                msg = _("The geometry of zone '%s' is not valid") % p["label"]
                 log.warning(msg)
                 report.warnings.append(msg)
         return geom

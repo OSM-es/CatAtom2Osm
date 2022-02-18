@@ -41,7 +41,7 @@ class Reader(object):
     def get_metadata(self, md_path, zip_path=""):
         """Get the metadata of the source file"""
         if os.path.exists(md_path):
-            with open(md_path, 'rb') as f:
+            with open(md_path, "rb") as f:
                 text = f.read()
         else:
             try:
@@ -52,53 +52,60 @@ class Reader(object):
         root = etree.fromstring(text)
         is_empty = len(root) == 0 or len(root[0]) == 0
         namespace = {
-            'gco': 'http://www.isotc211.org/2005/gco', 
-            'gmd': 'http://www.isotc211.org/2005/gmd'
+            "gco": "http://www.isotc211.org/2005/gco",
+            "gmd": "http://www.isotc211.org/2005/gmd",
         }
-        if hasattr(root, 'nsmap'):
+        if hasattr(root, "nsmap"):
             namespace = root.nsmap
-        src_date = root.find('gmd:dateStamp/gco:Date', namespace)
+        src_date = root.find("gmd:dateStamp/gco:Date", namespace)
         if is_empty or src_date == None:
             raise IOError(_("Could not read metadata from '%s'") % md_path)
         self.src_date = src_date.text
-        gml_title = root.find('.//gmd:title/gco:CharacterString', namespace)
-        self.cat_mun = gml_title.text.split('-')[-1].split('(')[0].strip()
-        gml_code = root.find('.//gmd:code/gco:CharacterString', namespace)
-        self.crs_ref = int(gml_code.text.split('/')[-1])
+        gml_title = root.find(".//gmd:title/gco:CharacterString", namespace)
+        self.cat_mun = gml_title.text.split("-")[-1].split("(")[0].strip()
+        gml_code = root.find(".//gmd:code/gco:CharacterString", namespace)
+        self.crs_ref = int(gml_code.text.split("/")[-1])
 
     def get_atom_file(self, url):
         """
         Given the url of a Cadastre ATOM service, tries to download the ZIP
         file for self.zip_code
         """
-        s = re.search(r'INSPIRE/(\w+)/', url)
-        log.debug(_("Searching the url for the '%s' layer of '%s'..."), 
-            s.group(1), self.zip_code)
+        s = re.search(r"INSPIRE/(\w+)/", url)
+        log.debug(
+            _("Searching the url for the '%s' layer of '%s'..."),
+            s.group(1),
+            self.zip_code,
+        )
         response = download.get_response(url)
-        s = re.search(r'http.+/%s.+zip' % self.zip_code, response.text)
+        s = re.search(r"http.+/%s.+zip" % self.zip_code, response.text)
         if not s:
             raise ValueError(_("Zip code '%s' don't exists") % self.zip_code)
         url = s.group(0)
-        filename = url.split('/')[-1]
+        filename = url.split("/")[-1]
         out_path = self.get_path(filename)
         log.info(_("Downloading '%s'"), out_path)
         download.wget(url, out_path)
 
     def get_layer_paths(self, layername):
-        if layername in ['building', 'buildingpart', 'otherconstruction']:
-            group = 'BU'
-        elif layername in ['cadastralparcel', 'cadastralzoning']:
-            group = 'CP'
-        elif layername in ['address', 'thoroughfarename', 'postaldescriptor', 
-                'adminunitname']:
-            group = 'AD' 
+        if layername in ["building", "buildingpart", "otherconstruction"]:
+            group = "BU"
+        elif layername in ["cadastralparcel", "cadastralzoning"]:
+            group = "CP"
+        elif layername in [
+            "address",
+            "thoroughfarename",
+            "postaldescriptor",
+            "adminunitname",
+        ]:
+            group = "AD"
         else:
             raise ValueError(_("Unknow layer name '%s'") % layername)
         gml_fn = ".".join((config.fn_prefix, group, self.zip_code, layername, "gml"))
-        if group == 'AD':
+        if group == "AD":
             gml_fn = ".".join((config.fn_prefix, group, self.zip_code, "gml"))
         md_fn = ".".join((config.fn_prefix, group, "MD", self.zip_code, "xml"))
-        if group == 'CP':
+        if group == "CP":
             md_fn = ".".join((config.fn_prefix, group, "MD.", self.zip_code, "xml"))
         zip_fn = ".".join((config.fn_prefix, group, self.zip_code, "zip"))
         md_path = self.get_path(md_fn)
@@ -113,19 +120,19 @@ class Reader(object):
         if os.path.exists(zip_path):
             zf = zipfile.ZipFile(zip_path)
             gml_fp = self.get_path_from_zip(zf, gml_path)
-            fo = zf.open(gml_fp, 'r')
+            fo = zf.open(gml_fp, "r")
         else:
-            fo = open(gml_path, 'rb')
+            fo = open(gml_path, "rb")
         text = fo.read(2000)
         fo.close()
-        parser = etree.XMLPullParser(['start', 'end'])
+        parser = etree.XMLPullParser(["start", "end"])
         parser.feed(text)
         events = list(parser.read_events())
-        return len([event for event, elem in events if event == 'start']) < 3
+        return len([event for event, elem in events if event == "start"]) < 3
 
     def get_path_from_zip(self, zf, a_path):
         """Return full path in zip of this file name"""
-        fn = os.path.basename(a_path).split('|')[0]
+        fn = os.path.basename(a_path).split("|")[0]
         for name in zf.namelist():
             if name.endswith(fn):
                 return name
@@ -136,10 +143,10 @@ class Reader(object):
         try:
             zf = zipfile.ZipFile(zip_path)
             gml_fp = self.get_path_from_zip(zf, gml_path)
-            vsizip_path = "/".join(('/vsizip', zip_path, gml_fp)).replace('\\', '/')
-            if group == 'AD':
+            vsizip_path = "/".join(("/vsizip", zip_path, gml_fp)).replace("\\", "/")
+            if group == "AD":
                 vsizip_path += "|layername=" + layername
-            gml = geo.BaseLayer(vsizip_path, layername+'.gml', 'ogr')
+            gml = geo.BaseLayer(vsizip_path, layername + ".gml", "ogr")
             if not gml.isValid():
                 gml = None
         except IOError:
@@ -151,7 +158,7 @@ class Reader(object):
         Downloads the file for a a Cadastre layername.
 
         Args:
-            layername (str): Short name of the Cadastre layer. Any of 
+            layername (str): Short name of the Cadastre layer. Any of
                 'building', 'cadastralzoning', 'address'
         """
         (md_path, gml_path, zip_path, group) = self.get_layer_paths(layername)
@@ -160,14 +167,14 @@ class Reader(object):
 
     def read(self, layername, allow_empty=False, force_zip=False):
         """
-        Create a QGIS vector layer for a Cadastre layername. Derives the GML 
+        Create a QGIS vector layer for a Cadastre layername. Derives the GML
         filename from layername. Downloads the file if not is present. First try
         to read the ZIP file, if fails try with the GML file.
 
         Args:
-            layername (str): Short name of the Cadastre layer. Any of 
+            layername (str): Short name of the Cadastre layer. Any of
                 'building', 'buildingpart', 'otherconstruction',
-                'cadastralparcel', 'cadastralzoning', 'address', 
+                'cadastralparcel', 'cadastralzoning', 'address',
                 'thoroughfarename', 'postaldescriptor', 'adminunitname'
             allow_empty (bool): If False (default), raise a exception for empty
                 layer, else returns None
@@ -189,7 +196,7 @@ class Reader(object):
                 return None
         gml = self.get_gml_from_zip(gml_path, zip_path, group, layername)
         if gml is None:
-            gml = geo.BaseLayer(gml_path, layername+'.gml', 'ogr')
+            gml = geo.BaseLayer(gml_path, layername + ".gml", "ogr")
             if not gml.isValid():
                 raise IOError(_("Failed to load layer '%s'") % gml_path)
         crs = QgsCoordinateReferenceSystem.fromEpsgId(self.crs_ref)

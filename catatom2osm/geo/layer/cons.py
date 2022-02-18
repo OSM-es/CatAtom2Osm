@@ -20,72 +20,79 @@ log = logging.getLogger(config.app_name)
 class ConsLayer(PolygonLayer):
     """Class for constructions"""
 
-    def __init__(self, path="MultiPolygon", baseName="building",
-                 providerLib="memory", source_date=None):
+    def __init__(
+        self,
+        path="MultiPolygon",
+        baseName="building",
+        providerLib="memory",
+        source_date=None,
+    ):
         super(ConsLayer, self).__init__(path, baseName, providerLib)
         if self.fields().isEmpty():
-            self.writer.addAttributes([
-                QgsField('localId', QVariant.String, len=254),
-                QgsField('condition', QVariant.String, len=254),
-                QgsField('image', QVariant.String, len=254),
-                QgsField('currentUse', QVariant.String, len=254),
-                QgsField('bu_units', QVariant.Int),
-                QgsField('dwellings', QVariant.Int),
-                QgsField('lev_above', QVariant.Int),
-                QgsField('lev_below', QVariant.Int),
-                QgsField('nature', QVariant.String, len=254),
-                QgsField('task', QVariant.String, len=254),
-                QgsField('fixme', QVariant.String, len=254),
-                QgsField('layer', QVariant.Int),
-            ])
+            self.writer.addAttributes(
+                [
+                    QgsField("localId", QVariant.String, len=254),
+                    QgsField("condition", QVariant.String, len=254),
+                    QgsField("image", QVariant.String, len=254),
+                    QgsField("currentUse", QVariant.String, len=254),
+                    QgsField("bu_units", QVariant.Int),
+                    QgsField("dwellings", QVariant.Int),
+                    QgsField("lev_above", QVariant.Int),
+                    QgsField("lev_below", QVariant.Int),
+                    QgsField("nature", QVariant.String, len=254),
+                    QgsField("task", QVariant.String, len=254),
+                    QgsField("fixme", QVariant.String, len=254),
+                    QgsField("layer", QVariant.Int),
+                ]
+            )
             self.updateFields()
         self.rename = {
-            'condition': 'conditionOfConstruction',
-            'image': 'documentLink',
-            'bu_units': 'numberOfBuildingUnits',
-            'dwellings': 'numberOfDwellings',
-            'lev_above': 'numberOfFloorsAboveGround',
-            'lev_below': 'numberOfFloorsBelowGround',
-            'nature': 'constructionNature'
+            "condition": "conditionOfConstruction",
+            "image": "documentLink",
+            "bu_units": "numberOfBuildingUnits",
+            "dwellings": "numberOfDwellings",
+            "lev_above": "numberOfFloorsAboveGround",
+            "lev_below": "numberOfFloorsBelowGround",
+            "nature": "constructionNature",
         }
         self.source_date = source_date
 
     @staticmethod
     def is_building(feature):
         """Building features have not any underscore in its localId field"""
-        return '_' not in feature['localId']
+        return "_" not in feature["localId"]
 
     @staticmethod
     def is_part(feature):
         """Part features have '_part' in its localId field"""
-        return '_part' in feature['localId']
+        return "_part" in feature["localId"]
 
     @staticmethod
     def is_pool(feature):
         """Pool features have '_PI.' in its localId field"""
-        return '_PI.' in feature['localId']
+        return "_PI." in feature["localId"]
 
     @staticmethod
     def get_id(feat):
         """Trim to parcel id"""
-        return feat['localId'].split('_')[0].split('.')[-1]
+        return feat["localId"].split("_")[0].split(".")[-1]
 
     def explode_multi_parts(self, address=False):
         request = QgsFeatureRequest()
         if address:
             refs = {self.get_id(ad) for ad in address.getFeatures()}
-            fids = [f.id() for f in self.getFeatures() if
-                    f['localId'] not in refs]
+            fids = [f.id() for f in self.getFeatures() if f["localId"] not in refs]
             request.setFilterFids(fids)
         super(ConsLayer, self).explode_multi_parts(request)
 
-    def to_osm(self, data=None, tags={}, upload='never'):
+    def to_osm(self, data=None, tags={}, upload="never"):
         """Export to OSM"""
-        return super(ConsLayer, self).to_osm(translate.building_tags, data,
-                                             tags=tags, upload=upload)
+        return super(ConsLayer, self).to_osm(
+            translate.building_tags, data, tags=tags, upload=upload
+        )
 
     def index_of_parts(self):
-        """ Index parts of building by building localid. """
+        """Index parts of building by building localid."""
         parts = defaultdict(list)
         for part in self.search("regexp_match(localId, '_part')"):
             localId = self.get_id(part)
@@ -93,7 +100,7 @@ class ConsLayer(PolygonLayer):
         return parts
 
     def index_of_pools(self):
-        """ Index pools in building parcel by building localid. """
+        """Index pools in building parcel by building localid."""
         pools = defaultdict(list)
         for pool in self.search("regexp_match(localId, '_PI')"):
             localId = self.get_id(pool)
@@ -110,7 +117,7 @@ class ConsLayer(PolygonLayer):
         parts = defaultdict(list)
         for feature in self.getFeatures():
             if self.is_building(feature):
-                buildings[feature['localId']].append(feature)
+                buildings[feature["localId"]].append(feature)
             elif self.is_part(feature):
                 localId = self.get_id(feature)
                 parts[localId].append(feature)
@@ -118,11 +125,10 @@ class ConsLayer(PolygonLayer):
 
     def remove_parts_wo_building(self):
         """Remove building parts without building."""
-        bu_refs = [
-            f['localId'] for f in self.getFeatures() if self.is_building(f)
-        ]
+        bu_refs = [f["localId"] for f in self.getFeatures() if self.is_building(f)]
         to_clean = [
-            f.id() for f in self.getFeatures()
+            f.id()
+            for f in self.getFeatures()
             if self.is_part(f) and self.get_id(f) not in bu_refs
         ]
         if to_clean:
@@ -138,14 +144,12 @@ class ConsLayer(PolygonLayer):
         """
         to_clean_o = []
         to_clean_b = []
-        buildings = {f['localId']: f for f in self.getFeatures() if
-                     self.is_building(f)}
-        pbar = self.get_progressbar(_("Remove outside parts"),
-                                    self.featureCount())
+        buildings = {f["localId"]: f for f in self.getFeatures() if self.is_building(f)}
+        pbar = self.get_progressbar(_("Remove outside parts"), self.featureCount())
         for feat in self.getFeatures():
             if self.is_part(feat):
                 ref = self.get_id(feat)
-                if feat['lev_above'] == 0 and feat['lev_below'] != 0:
+                if feat["lev_above"] == 0 and feat["lev_below"] != 0:
                     to_clean_b.append(feat.id())
                 elif ref in buildings:
                     bu = buildings[ref]
@@ -156,13 +160,15 @@ class ConsLayer(PolygonLayer):
         if len(to_clean_o) + len(to_clean_b) > 0:
             self.writer.deleteFeatures(to_clean_o + to_clean_b)
         if len(to_clean_o) > 0:
-            log.debug(_("Removed %d building parts outside the outline"),
-                      len(to_clean_o))
+            log.debug(
+                _("Removed %d building parts outside the outline"), len(to_clean_o)
+            )
             report.outside_parts = len(to_clean_o)
         if len(to_clean_b) > 0:
             log.debug(
                 _("Deleted %d building parts with no floors above ground"),
-                len(to_clean_b))
+                len(to_clean_b),
+            )
             report.underground_parts = len(to_clean_b)
 
     def get_parts(self, outline, parts):
@@ -176,9 +182,11 @@ class ConsLayer(PolygonLayer):
         parts_for_level = defaultdict(list)
         for part in parts:
             if is_inside(part, outline):
-                level = (part['lev_above'] or 0, part['lev_below'] or 0)
-                if level[0] > max_level: max_level = level[0]
-                if level[1] > min_level: min_level = level[1]
+                level = (part["lev_above"] or 0, part["lev_below"] or 0)
+                if level[0] > max_level:
+                    max_level = level[0]
+                if level[1] > min_level:
+                    min_level = level[1]
                 parts_for_level[level].append(part)
         return parts_for_level, max_level, min_level
 
@@ -199,8 +207,8 @@ class ConsLayer(PolygonLayer):
         to_change_g = {}
         parts_for_level, max_level, min_level = self.get_parts(outline, parts)
         parts_area = 0
-        outline['lev_above'] = max_level
-        outline['lev_below'] = min_level
+        outline["lev_above"] = max_level
+        outline["lev_below"] = min_level
         building_area = round(outline.geometry().area(), 0)
         for (level, parts) in parts_for_level.items():
             check_area = False
@@ -208,16 +216,15 @@ class ConsLayer(PolygonLayer):
                 part_area = part.geometry().area()
                 parts_area += part_area
                 if round(part_area, 0) > building_area:
-                    part['fixme'] = _('This part is bigger than its building')
+                    part["fixme"] = _("This part is bigger than its building")
                     to_change[part.id()] = get_attributes(part)
                     check_area = True
             if check_area:
                 continue
             if len(parts_for_level) == 1 or (
-                    level == (max_level, min_level) and SIMPLIFY_BUILDING_PARTS
+                level == (max_level, min_level) and SIMPLIFY_BUILDING_PARTS
             ):
-                to_clean = [p.id() for p in
-                            parts_for_level[max_level, min_level]]
+                to_clean = [p.id() for p in parts_for_level[max_level, min_level]]
             else:
                 geom = Geometry.merge_adjacent_features(parts)
                 poly = Geometry.get_multipolygon(geom)
@@ -229,8 +236,7 @@ class ConsLayer(PolygonLayer):
                         else:
                             to_clean_g.append(part.id())
         if len(parts_for_level) > 1 and round(parts_area, 0) != building_area:
-            outline['fixme'] = _(
-                "Building parts don't fill the building outline")
+            outline["fixme"] = _("Building parts don't fill the building outline")
         to_change[outline.id()] = get_attributes(outline)
         return to_clean, to_clean_g, to_change, to_change_g
 
@@ -253,8 +259,7 @@ class ConsLayer(PolygonLayer):
                 else:
                     delete_rings.append(i)
         if delete_rings:
-            new_poly = [ring for i, ring in enumerate(poly) \
-                        if i not in delete_rings]
+            new_poly = [ring for i, ring in enumerate(poly) if i not in delete_rings]
             new_geom = Geometry().fromPolygonXY(new_poly)
         return delete, new_geom
 
@@ -281,12 +286,12 @@ class ConsLayer(PolygonLayer):
         t_buildings = self.count("not regexp_match(localId, '_')")
         pbar = self.get_progressbar(_("Merge building parts"), t_buildings)
         for building in self.search("not regexp_match(localId, '_')"):
-            ref = building['localId']
+            ref = building["localId"]
             it_pools = pools[ref]
             it_parts = parts[ref]
             for pool in it_pools:
-                if pool['layer'] != 1 and is_inside(pool, building):
-                    pool['layer'] = 1
+                if pool["layer"] != 1 and is_inside(pool, building):
+                    pool["layer"] = 1
                     to_change[pool.id()] = get_attributes(pool)
                     pools_on_roofs += 1
                 del_building, new_geom = self.remove_inner_rings(building, pool)
@@ -324,20 +329,20 @@ class ConsLayer(PolygonLayer):
         if to_clean:
             self.writer.deleteFeatures(to_clean)
         if pools_on_roofs:
-            log.debug(_("Located %d swimming pools over a building"),
-                      pools_on_roofs)
+            log.debug(_("Located %d swimming pools over a building"), pools_on_roofs)
             report.pools_on_roofs = pools_on_roofs
         if buildings_in_pools:
             log.debug(
                 _("Deleted %d buildings coincidents with a swimming pool"),
-                buildings_in_pools)
+                buildings_in_pools,
+            )
             report.buildings_in_pools = buildings_in_pools
         if levels_to_outline:
-            log.debug(_("Translated %d level values to the outline"),
-                      levels_to_outline)
+            log.debug(_("Translated %d level values to the outline"), levels_to_outline)
         if parts_merged_to_building:
-            log.debug(_("Merged %d building parts to the outline"),
-                      parts_merged_to_building)
+            log.debug(
+                _("Merged %d building parts to the outline"), parts_merged_to_building
+            )
             report.parts_to_outline = parts_merged_to_building
         if adjacent_parts_deleted:
             log.debug(_("Merged %d adjacent parts"), adjacent_parts_deleted)
@@ -349,7 +354,7 @@ class ConsLayer(PolygonLayer):
         merge building parts and simplify vertices.
         """
         self.delete_invalid_geometries(
-            query_small_area=lambda feat: '_part' not in feat['localId']
+            query_small_area=lambda feat: "_part" not in feat["localId"]
         )
         self.topology()
         self.merge_building_parts()
@@ -357,8 +362,13 @@ class ConsLayer(PolygonLayer):
         self.delete_small_geometries()
 
     def move_entrance(
-            self, ad, ad_buildings, ad_parts, to_move, to_insert,
-            parents_per_vx,
+        self,
+        ad,
+        ad_buildings,
+        ad_parts,
+        to_move,
+        to_insert,
+        parents_per_vx,
     ):
         """
         Auxiliary method to move entrance to the nearest building and part.
@@ -368,7 +378,7 @@ class ConsLayer(PolygonLayer):
         building ('shared').
         """
         point = ad.geometry().asPoint()
-        distance = 9E9
+        distance = 9e9
         for bu in ad_buildings:
             bg = bu.geometry()
             d, c, v = bg.closestSegmentWithContext(point)[:3]
@@ -378,17 +388,17 @@ class ConsLayer(PolygonLayer):
         bid = building.id()
         va = Point(bg.vertexAt(vertex - 1))
         vb = Point(bg.vertexAt(vertex))
-        if distance > config.addr_thr ** 2:
-            ad['spec'] = 'remote'
+        if distance > config.addr_thr**2:
+            ad["spec"] = "remote"
         elif vertex > len(Geometry.get_multipolygon(bg)[0][0]):
-            ad['spec'] = 'inner'
+            ad["spec"] = "inner"
         elif (
-                closest.sqrDist(va) < config.entrance_thr ** 2
-                or closest.sqrDist(vb) < config.entrance_thr ** 2
+            closest.sqrDist(va) < config.entrance_thr**2
+            or closest.sqrDist(vb) < config.entrance_thr**2
         ):
-            ad['spec'] = 'corner'
+            ad["spec"] = "corner"
         elif PolygonLayer.is_shared_segment(parents_per_vx, va, vb, bid):
-            ad['spec'] = 'shared'
+            ad["spec"] = "shared"
         else:
             dg = Geometry.fromPointXY(closest)
             to_move[ad.id()] = dg
@@ -434,14 +444,19 @@ class ConsLayer(PolygonLayer):
                 to_clean.append(ad.id())
                 oa += 1
             else:
-                if ad['spec'] == 'Entrance':
+                if ad["spec"] == "Entrance":
                     self.move_entrance(
-                        ad, ad_buildings, ad_parts, to_move, to_insert, ppv,
+                        ad,
+                        ad_buildings,
+                        ad_parts,
+                        to_move,
+                        to_insert,
+                        ppv,
                     )
-                if ad['spec'] != 'Entrance' and building_count > 1:
+                if ad["spec"] != "Entrance" and building_count > 1:
                     to_clean.append(ad.id())
                     mp += 1
-                if ad['spec'] != 'Parcel' and building_count == 1:
+                if ad["spec"] != "Parcel" and building_count == 1:
                     to_change[ad.id()] = get_attributes(ad)
             if len(to_insert) > BUFFER_SIZE:
                 self.writer.changeGeometryValues(to_insert)
@@ -473,22 +488,23 @@ class ConsLayer(PolygonLayer):
             geom = feat.geometry()
             errors = geom.validateGeometry()
             if errors:
-                feat['fixme'] = _('GEOS validation') + ': ' + \
-                                '; '.join([e.what() for e in errors])
+                feat["fixme"] = (
+                    _("GEOS validation") + ": " + "; ".join([e.what() for e in errors])
+                )
                 to_change[feat.id()] = get_attributes(feat)
             if ConsLayer.is_building(feat):
-                localid = feat['localId']
-                if isinstance(feat['lev_above'], int) and feat['lev_above'] > 0:
-                    max_level[localid] = feat['lev_above']
-                if isinstance(feat['lev_below'], int) and feat['lev_below'] > 0:
-                    min_level[localid] = feat['lev_below']
+                localid = feat["localId"]
+                if isinstance(feat["lev_above"], int) and feat["lev_above"] > 0:
+                    max_level[localid] = feat["lev_above"]
+                if isinstance(feat["lev_below"], int) and feat["lev_below"] > 0:
+                    min_level[localid] = feat["lev_below"]
                 if feat.id() not in to_change:
                     area = geom.area()
                     if area < config.warning_min_area:
-                        feat['fixme'] = _("Check, area too small")
+                        feat["fixme"] = _("Check, area too small")
                         to_change[feat.id()] = get_attributes(feat)
                     if area > config.warning_max_area:
-                        feat['fixme'] = _("Check, area too big")
+                        feat["fixme"] = _("Check, area too big")
                         to_change[feat.id()] = get_attributes(feat)
         if to_change:
             self.writer.changeAttributeValues(to_change)
@@ -501,20 +517,18 @@ class ConsLayer(PolygonLayer):
         if len(current_bu_osm.elements) == 0:
             return
         index = self.get_index()
-        geometries = {f.id(): QgsGeometry(f.geometry()) for f in
-                      self.getFeatures()}
+        geometries = {f.id(): QgsGeometry(f.geometry()) for f in self.getFeatures()}
         num_buildings = 0
         conflicts = 0
         to_clean = set()
         pbar = self.get_progressbar(_("Conflate"), len(current_bu_osm.elements))
         for el in current_bu_osm.elements:
             poly = None
-            is_pool = 'leisure' in el.tags and el.tags[
-                'leisure'] == 'swimming_pool'
-            is_building = 'building' in el.tags
-            if el.type == 'way' and el.is_closed() and (is_building or is_pool):
+            is_pool = "leisure" in el.tags and el.tags["leisure"] == "swimming_pool"
+            is_building = "building" in el.tags
+            if el.type == "way" and el.is_closed() and (is_building or is_pool):
                 poly = [[map(Point, el.geometry())]]
-            elif el.type == 'relation' and (is_building or is_pool):
+            elif el.type == "relation" and (is_building or is_pool):
                 poly = [[map(Point, w)] for w in el.outer_geometry()]
             if poly:
                 num_buildings += 1
@@ -529,21 +543,23 @@ class ConsLayer(PolygonLayer):
                     conflict = False
                     for fid in fids:
                         fg = geometries[fid]
-                        if geom.contains(fg) or fg.contains(
-                                geom) or geom.overlaps(fg):
+                        if geom.contains(fg) or fg.contains(geom) or geom.overlaps(fg):
                             conflict = True
                             conflicts += 1
                             break
                     if delete and not conflict:
                         to_clean.add(el)
                     if not delete and conflict:
-                        el.tags['conflict'] = 'yes'
+                        el.tags["conflict"] = "yes"
             pbar.update()
         pbar.close()
         for el in to_clean:
             current_bu_osm.remove(el)
-        log.debug(_("Detected %d conflicts in %d buildings/pools from OSM"),
-                  conflicts, num_buildings)
+        log.debug(
+            _("Detected %d conflicts in %d buildings/pools from OSM"),
+            conflicts,
+            num_buildings,
+        )
         report.osm_buildings = num_buildings
         report.osm_building_conflicts = conflicts
         return len(to_clean) > 0

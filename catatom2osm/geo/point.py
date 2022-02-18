@@ -20,8 +20,9 @@ class Point(QgsPointXY):
 
     def boundingBox(self, radius):
         """Returns a bounding box of 2*radius centered in point."""
-        return QgsRectangle(self.x() - radius, self.y() - radius,
-                        self.x() + radius, self.y() + radius)
+        return QgsRectangle(
+            self.x() - radius, self.y() - radius, self.x() + radius, self.y() + radius
+        )
 
     def get_angle(self, geom):
         """
@@ -35,13 +36,18 @@ class Point(QgsPointXY):
             (float) Angle between the vertex and their adjacents,
         """
         (point, ndx, ndxa, ndxb, dist) = geom.closestVertex(Point(self))
-        va = Point(geom.vertexAt(ndxa)) # previous vertex
-        vb = Point(geom.vertexAt(ndxb)) # next vertex
+        va = Point(geom.vertexAt(ndxa))  # previous vertex
+        vb = Point(geom.vertexAt(ndxb))  # next vertex
         angle = abs(point.azimuth(va) - point.azimuth(vb))
         return angle
 
-    def get_corner_context(self, geom, acute_thr=config.acute_thr,
-            straight_thr=config.straight_thr, cath_thr=config.dist_thr):
+    def get_corner_context(
+        self,
+        geom,
+        acute_thr=config.acute_thr,
+        straight_thr=config.straight_thr,
+        cath_thr=config.dist_thr,
+    ):
         """
         For the vertex in a geometry nearest to this point, give context to
         determine if it is a corner (the angle differs by more than straight_thr
@@ -61,8 +67,8 @@ class Point(QgsPointXY):
             (float) Distance to the nearest segment.
         """
         (point, ndx, ndxa, ndxb, dist) = geom.closestVertex(Point(self))
-        va = Point(geom.vertexAt(ndxa)) # previous vertex
-        vb = Point(geom.vertexAt(ndxb)) # next vertex
+        va = Point(geom.vertexAt(ndxa))  # previous vertex
+        vb = Point(geom.vertexAt(ndxb))  # next vertex
         angle = abs(point.azimuth(va) - point.azimuth(vb))
         a = abs(va.azimuth(point) - va.azimuth(vb))
         h = math.sqrt(va.sqrDist(point))
@@ -71,8 +77,13 @@ class Point(QgsPointXY):
         is_acute = angle < acute_thr if angle < 180 else 360 - angle < acute_thr
         return (angle, is_acute, is_corner, c)
 
-    def get_spike_context(self, geom, acute_thr=config.acute_inv,
-                          straight_thr=config.straight_thr, threshold=config.dist_inv):
+    def get_spike_context(
+        self,
+        geom,
+        acute_thr=config.acute_inv,
+        straight_thr=config.straight_thr,
+        threshold=config.dist_inv,
+    ):
         """
         For the vertex in a geometry nearest to this point, give context to
         determine if its a zig-zag or a spike. It's a zig-zag if both the angles
@@ -99,8 +110,8 @@ class Point(QgsPointXY):
             (Point) vx = projection of va over the segment v-vb.
         """
         (v, ndx, ndxa, ndxb, dist) = geom.closestVertex(Point(self))
-        va = Point(geom.vertexAt(ndxa)) # previous vertex
-        vb = Point(geom.vertexAt(ndxb)) # next vertex
+        va = Point(geom.vertexAt(ndxa))  # previous vertex
+        vb = Point(geom.vertexAt(ndxb))  # next vertex
         angle_v = abs(v.azimuth(va) - v.azimuth(vb))
         na = angle_v if angle_v < 180 else 360 - angle_v
         is_acute = na < acute_thr
@@ -108,7 +119,7 @@ class Point(QgsPointXY):
             return angle_v, None, ndx, None, is_acute, False, False, None
         dist_a = math.sqrt(va.sqrDist(v))
         dist_b = math.sqrt(vb.sqrDist(v))
-        if dist_a > dist_b: # set va as the closest adjacent
+        if dist_a > dist_b:  # set va as the closest adjacent
             vc = va
             dist_c = dist_a
             va = vb
@@ -122,13 +133,23 @@ class Point(QgsPointXY):
         is_spike = abs(180 - angle_a) > straight_thr and c < threshold
         if is_zigzag:
             return (
-                angle_v, angle_a, ndx, ndxa,
-                is_acute, is_zigzag, is_spike, None,
+                angle_v,
+                angle_a,
+                ndx,
+                ndxa,
+                is_acute,
+                is_zigzag,
+                is_spike,
+                None,
             )
         gamma = abs(90 + angle_v - angle_a)
-        dx = abs(dist_a * (
-            math.cos(math.radians(angle_v)) + math.tan(math.radians(gamma)
-        ) * math.sin(math.radians(angle_v))))
+        dx = abs(
+            dist_a
+            * (
+                math.cos(math.radians(angle_v))
+                + math.tan(math.radians(gamma)) * math.sin(math.radians(angle_v))
+            )
+        )
         x = v.x() + (vb.x() - v.x()) * dx / dist_b
         y = v.y() + (vb.y() - v.y()) * dx / dist_b
         vx = Point(x, y)

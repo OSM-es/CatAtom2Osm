@@ -2,10 +2,20 @@ import logging
 import os
 import re
 
-from qgis.core import (QgsCoordinateReferenceSystem, QgsCoordinateTransform,
-                       QgsExpression, QgsFeature, QgsFeatureRequest, QgsFields,
-                       QgsGeometry, QgsProject, QgsSpatialIndex,
-                       QgsVectorFileWriter, QgsVectorLayer, QgsWkbTypes)
+from qgis.core import (
+    QgsCoordinateReferenceSystem,
+    QgsCoordinateTransform,
+    QgsExpression,
+    QgsFeature,
+    QgsFeatureRequest,
+    QgsFields,
+    QgsGeometry,
+    QgsProject,
+    QgsSpatialIndex,
+    QgsVectorFileWriter,
+    QgsVectorLayer,
+    QgsWkbTypes,
+)
 from tqdm import tqdm
 
 from catatom2osm import config, osm, translate
@@ -22,12 +32,12 @@ log = logging.getLogger(config.app_name)
 class BaseLayer(QgsVectorLayer):
     """Base class for application layers"""
 
-    def __init__(self, path, baseName, providerLib = "ogr"):
+    def __init__(self, path, baseName, providerLib="ogr"):
         super(BaseLayer, self).__init__(path, baseName, providerLib)
         self.writer = self.dataProvider()
-        self.rename={}
-        self.resolve={}
-        self.reference_matchs={}
+        self.rename = {}
+        self.resolve = {}
+        self.reference_matchs = {}
 
     @staticmethod
     def get_writer(name, crs, fields=QgsFields(), geom_type=WKBMultiPolygon):
@@ -43,16 +53,14 @@ class BaseLayer(QgsVectorLayer):
     def create_shp(name, crs, fields=QgsFields(), geom_type=WKBMultiPolygon):
         writer = BaseLayer.get_writer(name, crs, fields, geom_type)
         if writer.hasError() != QgsVectorFileWriter.NoError:
-            msg = _(
-                "Error when creating shapefile: '%s'"
-            ) % writer.errorMessage()
+            msg = _("Error when creating shapefile: '%s'") % writer.errorMessage()
             raise IOError(msg)
         return writer
 
     @staticmethod
     def delete_shp(path):
         QgsVectorFileWriter.deleteShapeFile(path)
-        path = os.path.splitext(path)[0] + '.cpg'
+        path = os.path.splitext(path)[0] + ".cpg"
         if os.path.exists(path):
             os.remove(path)
 
@@ -129,7 +137,7 @@ class BaseLayer(QgsVectorLayer):
                 (src_attr, reference_match) = resolve[dst_attr]
                 src_val = feature[src_attr]
                 if isinstance(src_val, (list,)):
-                    src_val = ' '.join(src_val)
+                    src_val = " ".join(src_val)
                 match = re.search(reference_match, src_val)
                 if match:
                     dst_ft[dst_attr] = match.group(0)
@@ -170,8 +178,7 @@ class BaseLayer(QgsVectorLayer):
             geom = feature.geometry()
             if not query or query(feature, kwargs):
                 if (
-                    geom.wkbType() == WKBPoint
-                    or len(Geometry.get_multipolygon(geom))
+                    geom.wkbType() == WKBPoint or len(Geometry.get_multipolygon(geom))
                 ) >= 1:
                     to_add.append(self.copy_feature(feature, rename, resolve))
                     total += 1
@@ -184,7 +191,7 @@ class BaseLayer(QgsVectorLayer):
             self.writer.addFeatures(to_add)
         if total:
             msg = _("Loaded %d features in '%s' from '%s'")
-            log.debug (msg, total, self.name(), layer.name())
+            log.debug(msg, total, self.name(), layer.name())
 
     def reproject(self, target_crs=None):
         """Reproject all features in this layer to a new CRS.
@@ -210,18 +217,27 @@ class BaseLayer(QgsVectorLayer):
             self.writer.changeGeometryValues(to_change)
         self.setCrs(target_crs)
         self.updateExtents()
-        if self.writer.storageType() == 'ESRI Shapefile':
-            path = self.writer.dataSourceUri().split('|')[0]
+        if self.writer.storageType() == "ESRI Shapefile":
+            path = self.writer.dataSourceUri().split("|")[0]
             path = os.path.splitext(path)[0]
-            if os.path.exists(path + '.prj'):
-                os.remove(path + '.prj')
-            if os.path.exists(path + '.qpj'):
-                os.remove(path + '.qpj')
-        log.debug(_("Reprojected the '%s' layer to '%s' CRS"),
-            self.name(), target_crs.description())
+            if os.path.exists(path + ".prj"):
+                os.remove(path + ".prj")
+            if os.path.exists(path + ".qpj"):
+                os.remove(path + ".qpj")
+        log.debug(
+            _("Reprojected the '%s' layer to '%s' CRS"),
+            self.name(),
+            target_crs.description(),
+        )
 
-    def join_field(self, source_layer, target_field_name, join_field_name,
-            field_names_subset, prefix = ""):
+    def join_field(
+        self,
+        source_layer,
+        target_field_name,
+        join_field_name,
+        field_names_subset,
+        prefix="",
+    ):
         """
         Replaces qgis table join mechanism becouse I'm not able to work with it
         in standalone script mode (without GUI).
@@ -273,8 +289,7 @@ class BaseLayer(QgsVectorLayer):
         if len(to_change) > 0:
             self.writer.changeAttributeValues(to_change)
         if total:
-            log.debug(_("Joined '%s' to '%s'"), source_layer.name(),
-                self.name())
+            log.debug(_("Joined '%s' to '%s'"), source_layer.name(), self.name())
 
     def translate_field(self, field_name, translations, clean=True):
         """
@@ -291,7 +306,7 @@ class BaseLayer(QgsVectorLayer):
             to_change = {}
             for feat in self.getFeatures():
                 value = feat[field_name]
-                if value in translations and translations[value] != '':
+                if value in translations and translations[value] != "":
                     new_value = translations[value]
                     feat[field_name] = new_value
                     to_change[feat.id()] = get_attributes(feat)
@@ -312,7 +327,7 @@ class BaseLayer(QgsVectorLayer):
 
     def bounding_box(self, expression=None):
         """Returns bounding box in overpass format of matching features using
-        an expression or all features if expression is None. """
+        an expression or all features if expression is None."""
         if expression is None:
             self.selectAll()
         else:
@@ -340,7 +355,7 @@ class BaseLayer(QgsVectorLayer):
                 p2.asPoint().y() + config.bbox_buffer,
                 p2.asPoint().x() + config.bbox_buffer,
             ]
-            bbox = '{:.8f},{:.8f},{:.8f},{:.8f}'.format(*bbox)
+            bbox = "{:.8f},{:.8f},{:.8f},{:.8f}".format(*bbox)
         return bbox
 
     def export(
@@ -363,7 +378,7 @@ class BaseLayer(QgsVectorLayer):
         else:
             target_crs = QgsCoordinateReferenceSystem.fromEpsgId(target_crs_id)
         if os.path.exists(path) and overwrite:
-            if driver_name == 'ESRI Shapefile':
+            if driver_name == "ESRI Shapefile":
                 QgsVectorFileWriter.deleteShapeFile(path)
             else:
                 os.remove(path)
@@ -378,7 +393,7 @@ class BaseLayer(QgsVectorLayer):
         tags_translation=translate.all_tags,
         data=None,
         tags={},
-        upload='never',
+        upload="never",
     ):
         """
         Export this layer to an Osm data set
@@ -394,7 +409,7 @@ class BaseLayer(QgsVectorLayer):
             Osm: OSM data set
         """
         if data is None:
-            generator = config.app_name + ' ' + config.app_version
+            generator = config.app_name + " " + config.app_version
             data = osm.Osm(upload, generator=generator)
             nodes = ways = relations = 0
         else:
@@ -417,30 +432,36 @@ class BaseLayer(QgsVectorLayer):
                     e = data.MultiPolygon(mp)
             else:
                 msg = _("Detected a %s geometry in the '%s' layer") % (
-                    QgsWkbTypes.displayString(geom.wkbType()), self.name()
+                    QgsWkbTypes.displayString(geom.wkbType()),
+                    self.name(),
                 )
                 log.warning(msg)
                 report.warnings.append(msg)
-            if e: e.tags.update(tags_translation(feature))
+            if e:
+                e.tags.update(tags_translation(feature))
         changeset_tags = dict(config.changeset_tags, **tags)
         for (key, value) in changeset_tags.items():
             data.tags[key] = value
-        if getattr(self, 'source_date', False):
-            data.tags['source:date'] = self.source_date
-        log.debug(_("Loaded %d nodes, %d ways, %d relations from '%s' layer"),
-            len(data.nodes) - nodes, len(data.ways) - ways,
-            len(data.relations) - relations, self.name())
+        if getattr(self, "source_date", False):
+            data.tags["source:date"] = self.source_date
+        log.debug(
+            _("Loaded %d nodes, %d ways, %d relations from '%s' layer"),
+            len(data.nodes) - nodes,
+            len(data.ways) - ways,
+            len(data.relations) - relations,
+            self.name(),
+        )
         return data
 
-    def search(self, expression=''):
+    def search(self, expression=""):
         """Returns a features iterator for this search expression"""
-        if expression == '':
+        if expression == "":
             return self.getFeatures()
         exp = QgsExpression(expression)
         request = QgsFeatureRequest(exp)
         return self.getFeatures(request)
 
-    def count(self, expression='', unique=''):
+    def count(self, expression="", unique=""):
         """Returns number of features for this search expression"""
         count = 0
         exists = set()
@@ -457,7 +478,7 @@ class BaseLayer(QgsVectorLayer):
         """Return progress bar with 'description' for 'total' iterations"""
         leave = log.app_level <= logging.DEBUG
         fn = os.path.basename(self.source())
-        if self.writer.name() == 'memory':
+        if self.writer.name() == "memory":
             fn = self.name()
         pbar = tqdm(total=total, leave=leave)
         pbar.set_description(description)

@@ -12,18 +12,17 @@ qgs = QgsSingleton()
 
 
 class TestDebugWriter(unittest.TestCase):
-
     def tearDown(self):
-        BaseLayer.delete_shp('test')
+        BaseLayer.delete_shp("test")
 
     def test_init(self):
         layer = HighwayLayer()
-        db = DebugWriter('test', layer, 'memory')
-        self.assertEqual(db.fields[0].name(), 'note')
+        db = DebugWriter("test", layer, "memory")
+        self.assertEqual(db.fields[0].name(), "note")
         self.assertEqual(db.writer.hasError(), 0)
 
     def test_add_point(self):
         layer = HighwayLayer()
-        db = DebugWriter('test', layer, 'memory')
-        db.add_point(Point(0, 0), 'foobar')
+        db = DebugWriter("test", layer, "memory")
+        db.add_point(Point(0, 0), "foobar")
         db.add_point(Point(0, 0))
