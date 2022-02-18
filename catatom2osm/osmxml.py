@@ -29,26 +29,26 @@ def serialize(outfile, data):
     if data.tags:
         e = etree.Element('changeset')
         for (key, value) in data.tags.items():
-            e.append(etree.Element('tag', dict(k=key, v=value)))
+            e.append(etree.Element('tag', dict(k=key, v=str(value))))
         write_elem(outfile, e)
     for node in data.nodes:
         e = etree.Element('node', node.attrs)
         for key, value in node.tags.items():
-            e.append(etree.Element('tag', dict(k=key, v=value)))
+            e.append(etree.Element('tag', dict(k=key, v=str(value))))
         write_elem(outfile, e)
     for way in data.ways:
         e = etree.Element('way', way.attrs)
         for node in way.nodes:
             e.append(etree.Element('nd', dict(ref=str(node.id))))
         for key, value in way.tags.items():
-            e.append(etree.Element('tag', dict(k=key, v=value)))
+            e.append(etree.Element('tag', dict(k=key, v=str(value))))
         write_elem(outfile, e)
     for rel in data.relations:
         e = etree.Element('relation', rel.attrs)
         for m in rel.members:
             e.append(etree.Element('member', m.attrs))
         for key, value in rel.tags.items():
-            e.append(etree.Element('tag', dict(k=key, v=value)))
+            e.append(etree.Element('tag', dict(k=key, v=str(value))))
         write_elem(outfile, e)
     outfile.write("</osm>\n")
         
