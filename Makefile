@@ -133,4 +133,3 @@ publish: build dtest dstyle  ## Push last version to GitHub and Docker Hub
 	@docker tag catatom2osm:latest egofer/catatom2osm:$(VERSION)
 	@docker push egofer/catatom2osm
 	@docker push egofer/catatom2osm:$(VERSION)
-
