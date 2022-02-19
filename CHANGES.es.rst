@@ -1,6 +1,9 @@
 Registro de cambios
 ===================
 
+**19-2-2022 (2.6.3)**
+* Integra comprobación estilo de código en publicación #77.
+
 **18-2-2022 (2.6.2)**
 * Corrige errores #92, #93, #95, #96.
 

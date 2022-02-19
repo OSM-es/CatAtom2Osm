@@ -1,6 +1,9 @@
 Change log
 ==========
 
+**2022-2-19 (2.6.3)**
+* Integrate code style checking into publishing #77.
+
 **2022-2-18 (2.6.2)**
 * Fix errors #92, #93, #95, #96.
 
