@@ -19,6 +19,7 @@ from qgis.core import (
 from tqdm import tqdm
 
 from catatom2osm import config, osm, translate
+from catatom2osm.exceptions import CatIOError
 from catatom2osm.geo import BUFFER_SIZE
 from catatom2osm.geo.aux import get_attributes
 from catatom2osm.geo.geometry import Geometry
@@ -54,7 +55,7 @@ class BaseLayer(QgsVectorLayer):
         writer = BaseLayer.get_writer(name, crs, fields, geom_type)
         if writer.hasError() != QgsVectorFileWriter.NoError:
             msg = _("Error when creating shapefile: '%s'") % writer.errorMessage()
-            raise IOError(msg)
+            raise CatIOError(msg)
         return writer
 
     @staticmethod

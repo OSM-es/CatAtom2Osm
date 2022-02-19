@@ -4,6 +4,7 @@ import io
 import os
 
 from catatom2osm.config import delimiter, encoding
+from catatom2osm.exceptions import CatIOError
 
 
 def dict2csv(csv_path, a_dict, sort=None):
@@ -29,10 +30,10 @@ def csv2dict(csv_path, a_dict=None, exists=False):
             csv_reader = csv.reader(csv_file, delimiter=str(delimiter))
             for row in csv_reader:
                 if len(row) < 2:
-                    raise IOError(msg)
+                    raise CatIOError(msg)
                 a_dict[row[0]] = row[1]
     elif exists:
-        raise IOError(msg)
+        raise CatIOError(msg)
     return a_dict
 
 

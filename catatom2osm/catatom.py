@@ -8,6 +8,7 @@ from lxml import etree
 from qgis.core import QgsCoordinateReferenceSystem
 
 from catatom2osm import config, download, geo
+from catatom2osm.exceptions import CatIOError, CatValueError
 
 log = logging.getLogger(config.app_name)
 
@@ -25,16 +26,17 @@ class Reader(object):
         self.path = a_path
         m = re.match(r"^\d{5}$", os.path.split(a_path)[-1])
         if not m:
-            raise ValueError(_("Last directory name must be a 5 digits ZIP code"))
+            msg = _("Last directory name must be a 5 digits ZIP code")
+            raise CatValueError(msg)
         self.zip_code = m.group()
         self.prov_code = self.zip_code[0:2]
         if self.prov_code not in config.prov_codes:
-            msg = _("Province code '%s' not valid") % self.prov_code
-            raise ValueError(msg)
+            msg = _("Province code '%s' is not valid") % self.prov_code
+            raise CatValueError(msg)
         if not os.path.exists(a_path):
             os.makedirs(a_path)
         if not os.path.isdir(a_path):
-            raise IOError(_("Not a directory: '%s'") % a_path)
+            raise CatIOError(_("Not a directory: '%s'") % a_path)
 
     def get_path(self, *paths):
         """Get path from components relative to self.path."""
@@ -50,7 +52,7 @@ class Reader(object):
                 zf = zipfile.ZipFile(zip_path)
                 text = zf.read(self.get_path_from_zip(zf, md_path))
             except IOError:
-                raise IOError(_("Could not read metadata from '%s'") % md_path)
+                raise CatIOError(_("Could not read metadata from '%s'") % md_path)
         root = etree.fromstring(text)
         is_empty = len(root) == 0 or len(root[0]) == 0
         namespace = {
@@ -61,7 +63,7 @@ class Reader(object):
             namespace = root.nsmap
         src_date = root.find("gmd:dateStamp/gco:Date", namespace)
         if is_empty or src_date is None:
-            raise IOError(_("Could not read metadata from '%s'") % md_path)
+            raise CatIOError(_("Could not read metadata from '%s'") % md_path)
         self.src_date = src_date.text
         gml_title = root.find(".//gmd:title/gco:CharacterString", namespace)
         self.cat_mun = gml_title.text.split("-")[-1].split("(")[0].strip()
@@ -84,7 +86,7 @@ class Reader(object):
         s = re.search(r"http.+/%s.+zip" % self.zip_code, response.text)
         if not s:
             msg = _("Municipality code '%s' don't exists") % self.zip_code
-            raise ValueError(msg)
+            raise CatValueError(msg)
         url = s.group(0)
         filename = url.split("/")[-1]
         out_path = self.get_path(filename)
@@ -104,7 +106,7 @@ class Reader(object):
         ]:
             group = "AD"
         else:
-            raise ValueError(_("Unknow layer name '%s'") % layername)
+            raise CatValueError(_("Unknow layer name '%s'") % layername)
         gml_fn = ".".join((config.fn_prefix, group, self.zip_code, layername, "gml"))
         if group == "AD":
             gml_fn = ".".join((config.fn_prefix, group, self.zip_code, "gml"))
@@ -198,7 +200,7 @@ class Reader(object):
         self.get_metadata(md_path, zip_path)
         if self.is_empty(gml_path, zip_path):
             if not allow_empty:
-                raise IOError(_("The layer '%s' is empty") % gml_path)
+                raise CatIOError(_("The layer '%s' is empty") % gml_path)
             else:
                 log.info(_("The layer '%s' is empty"), gml_path)
                 return None
@@ -206,10 +208,10 @@ class Reader(object):
         if gml is None:
             gml = geo.BaseLayer(gml_path, layername + ".gml", "ogr")
             if not gml.isValid():
-                raise IOError(_("Failed to load layer '%s'") % gml_path)
+                raise CatIOError(_("Failed to load layer '%s'") % gml_path)
         crs = QgsCoordinateReferenceSystem.fromEpsgId(self.crs_ref)
         if not crs.isValid():
-            raise IOError(_("Could not determine the CRS of '%s'") % gml_path)
+            raise CatIOError(_("Could not determine the CRS of '%s'") % gml_path)
         gml.setCrs(crs)
         log.info(_("Read %d features in '%s'"), gml.featureCount(), gml_path)
         gml.source_date = self.src_date

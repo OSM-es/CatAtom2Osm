@@ -9,6 +9,7 @@ from requests.exceptions import ConnectionError
 os.environ["LANGUAGE"] = "C"
 
 from catatom2osm import catatom, config
+from catatom2osm.exceptions import CatIOError, CatValueError
 
 
 def raiseException():
@@ -78,18 +79,18 @@ class TestCatAtom(unittest.TestCase):
     def test_init(self, m_os):
         m_os.path.split = lambda x: x.split("/")
         self.m_cat.init = get_func(catatom.Reader.__init__)
-        with self.assertRaises(ValueError) as cm:
+        with self.assertRaises(CatValueError) as cm:
             self.m_cat.init(self.m_cat, "09999/xxxxx")
         self.assertIn("directory name", str(cm.exception))
-        with self.assertRaises(ValueError) as cm:
+        with self.assertRaises(CatValueError) as cm:
             self.m_cat.init(self.m_cat, "xxx/999")
         self.assertIn("directory name", str(cm.exception))
-        with self.assertRaises(ValueError) as cm:
+        with self.assertRaises(CatValueError) as cm:
             self.m_cat.init(self.m_cat, "xxx/99999")
         self.assertIn("Province code", str(cm.exception))
         m_os.path.exists.return_value = True
         m_os.path.isdir.return_value = False
-        with self.assertRaises(IOError) as cm:
+        with self.assertRaises(CatIOError) as cm:
             self.m_cat.init(self.m_cat, "xxx/12345")
         self.assertIn("Not a directory", str(cm.exception))
         m_os.makedirs.assert_not_called()
@@ -137,7 +138,7 @@ class TestCatAtom(unittest.TestCase):
         del m_etree.fromstring.return_value.root
         m_etree.fromstring.return_value.__len__.return_value = 0
         m_has.return_value = False
-        with self.assertRaises(IOError):
+        with self.assertRaises(CatIOError):
             self.m_cat.get_metadata(self.m_cat, "foo")
         ns = m_etree.fromstring().find.call_args_list[0][0][1]
         self.assertEqual(set(ns.keys()), {"gco", "gmd"})
@@ -155,12 +156,12 @@ class TestCatAtom(unittest.TestCase):
             "httpfobar/38001bartazzip", "lorem/38001bartazzip"
         )
         self.m_cat.zip_code = "38002"
-        with self.assertRaises(ValueError):
+        with self.assertRaises(CatValueError):
             self.m_cat.get_atom_file(self.m_cat, url)
 
     def test_get_layer_paths(self):
         self.m_cat.get_layer_paths = get_func(catatom.Reader.get_layer_paths)
-        with self.assertRaises(ValueError):
+        with self.assertRaises(CatValueError):
             self.m_cat.get_layer_paths(self.m_cat, "foobar")
         self.m_cat.path = "foo"
         self.m_cat.zip_code = "bar"
@@ -232,7 +233,7 @@ class TestCatAtom(unittest.TestCase):
         self.m_cat.get_gml_from_zip.assert_called_once_with("2", "3", g, "foobar")
 
         m_os.path.exists.side_effect = [False, True]
-        with self.assertRaises(IOError) as cm:
+        with self.assertRaises(CatIOError) as cm:
             self.m_cat.read(self.m_cat, "foobar", force_zip=True)
         self.m_cat.get_atom_file.assert_called_with(url)
         self.assertIn("empty", str(cm.exception))
@@ -241,13 +242,13 @@ class TestCatAtom(unittest.TestCase):
         m_qgscrs.return_value.isValid.return_value = False
         m_os.path.exists.side_effect = None
         self.m_cat.is_empty.return_value = False
-        with self.assertRaises(IOError) as cm:
+        with self.assertRaises(CatIOError) as cm:
             self.m_cat.read(self.m_cat, "foobar")
         self.assertIn("Could not determine the CRS", str(cm.exception))
 
         m_layer.BaseLayer.return_value.isValid.return_value = False
         self.m_cat.get_gml_from_zip.return_value = None
-        with self.assertRaises(IOError) as cm:
+        with self.assertRaises(CatIOError) as cm:
             self.m_cat.read(self.m_cat, "foobar")
         self.assertIn("Failed to load", str(cm.exception))
 

@@ -3,9 +3,9 @@ import argparse
 import logging
 import os
 import sys
-from zipfile import BadZipfile
 
 from catatom2osm import config, csvtools
+from catatom2osm.exceptions import CatException, CatValueError
 
 log = config.get_logger()
 
@@ -48,7 +48,8 @@ def process(options):
         else:
             prov_code = "{:>02}".format(options.list)
             if prov_code not in config.prov_codes.keys():
-                raise ValueError(_("Province code '%s' not valid") % prov_code)
+                msg = _("Province code '%s' is not valid") % prov_code
+                raise CatValueError(msg)
             office = config.prov_codes[prov_code]
             title = _("Territorial office %s - %s") % (prov_code, office)
             print(title)
@@ -182,20 +183,10 @@ def run():
         parser.print_help()
         print()
         print(examples)
-    elif log.app_level == logging.DEBUG:
-        process(options)
     else:
         try:
             process(options)
-        except (
-            AttributeError,
-            BadZipfile,
-            IndexError,
-            IOError,
-            KeyError,
-            TypeError,
-            ValueError,
-        ) as e:
+        except CatException as e:
             msg = e.message if getattr(e, "message", "") else str(e)
             log.error(msg)
 

@@ -5,6 +5,7 @@ import mock
 
 from catatom2osm import cdau, config
 from catatom2osm.app import QgsSingleton
+from catatom2osm.exceptions import CatIOError, CatValueError
 
 qgs = QgsSingleton()
 os.environ["LANGUAGE"] = "C"
@@ -53,7 +54,7 @@ class TestCdau(unittest.TestCase):
         self.m_cdau.init = get_func(cdau.Reader.__init__)
         m_os.path.exists.return_value = True
         m_os.path.isdir.return_value = False
-        with self.assertRaises(IOError) as cm:
+        with self.assertRaises(CatIOError) as cm:
             self.m_cdau.init(self.m_cdau, "foobar")
         self.assertIn("Not a directory", str(cm.exception))
         m_os.makedirs.assert_not_called()
@@ -67,7 +68,7 @@ class TestCdau(unittest.TestCase):
     @mock.patch("catatom2osm.cdau.download")
     def test_read(self, m_download, m_layer, m_os):
         self.m_cdau.read = get_func(cdau.Reader.read)
-        with self.assertRaises(ValueError) as cm:
+        with self.assertRaises(CatValueError) as cm:
             self.m_cdau.read(self.m_cdau, "38")
         self.assertIn("Province code", str(cm.exception))
 
@@ -84,7 +85,7 @@ class TestCdau(unittest.TestCase):
 
         m_os.path.exists.return_value = False
         csv.isValid.return_value = False
-        with self.assertRaises(IOError) as cm:
+        with self.assertRaises(CatIOError) as cm:
             self.m_cdau.read(self.m_cdau, "29")
         self.assertIn("Failed to load layer", str(cm.exception))
         fn = cdau.csv_name.format("Malaga")
@@ -111,7 +112,7 @@ class TestCdau(unittest.TestCase):
         m_open.assert_called_once_with("xxx", "w")
         fo.write.assert_called_once_with("2018-03-05")
         resp.text = ""
-        with self.assertRaises(IOError):
+        with self.assertRaises(CatIOError):
             self.m_cdau.get_metadata(self.m_cdau, "xxx")
         m_open.reset_mock()
         m_open.return_value.__enter__.return_value.read.return_value = "foobar"

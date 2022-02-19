@@ -8,6 +8,7 @@ import mock
 from qgis.core import QgsVectorLayer
 
 from catatom2osm import app, config, osm
+from catatom2osm.exceptions import CatIOError
 
 qgs = app.QgsSingleton()
 os.environ["LANGUAGE"] = "C"
@@ -225,7 +226,7 @@ class TestCatAtom2Osm(unittest.TestCase):
         output = m_log.info.call_args_list[0][0][0]
         self.assertIn("Generated", output)
         m_layer.export.return_value = False
-        with self.assertRaises(IOError):
+        with self.assertRaises(CatIOError):
             self.m_app.export_layer(
                 self.m_app, m_layer, "bar", "taz", target_crs_id=None
             )

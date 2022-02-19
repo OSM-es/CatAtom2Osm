@@ -8,6 +8,7 @@ from datetime import datetime
 from qgis.core import QgsCoordinateReferenceSystem, QgsFeature
 
 from catatom2osm import config, download, geo
+from catatom2osm.exceptions import CatIOError, CatValueError
 from catatom2osm.report import instance as report
 
 log = logging.getLogger(config.app_name)
@@ -165,7 +166,7 @@ class Reader(object):
         if not os.path.exists(a_path):
             os.makedirs(a_path)
         if not os.path.isdir(a_path):
-            raise IOError(_("Not a directory: '%s'") % a_path)
+            raise CatIOError(_("Not a directory: '%s'") % a_path)
         self.crs_ref = cdau_crs
         self.src_date = None
 
@@ -184,13 +185,14 @@ class Reader(object):
                     s.group(1), "%d de %B de %Y"
                 ).strftime("%Y-%m-%d")
             except Exception:
-                raise IOError(_("Could not read metadata from '%s'") % "CDAU")
+                raise CatIOError(_("Could not read metadata from '%s'") % "CDAU")
             with open(md_path, "w") as fo:
                 fo.write(self.src_date)
 
     def read(self, prov_code):
         if prov_code not in list(andalucia.keys()):
-            raise ValueError(_("Province code '%s' not valid") % prov_code)
+            msg = _("Province code '%s' is not valid") % prov_code
+            raise CatValueError(msg)
         csv_fn = csv_name.format(andalucia[prov_code])
         csv_path = os.path.join(self.path, csv_fn)
         url = cdau_url.format(csv_fn)
@@ -199,7 +201,7 @@ class Reader(object):
             download.wget(url, csv_path)
         csv = geo.BaseLayer(csv_path, csv_fn, "ogr")
         if not csv.isValid():
-            raise IOError(_("Failed to load layer '%s'") % csv_path)
+            raise CatIOError(_("Failed to load layer '%s'") % csv_path)
         csv.setCrs(QgsCoordinateReferenceSystem.fromEpsgId(cdau_crs))
         log.info(_("Read %d features in '%s'"), csv.featureCount(), csv_path)
         self.get_metadata(csv_path.replace(".csv", ".txt"))

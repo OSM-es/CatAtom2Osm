@@ -4,6 +4,7 @@ from tempfile import mkstemp
 
 from catatom2osm import csvtools
 from catatom2osm.config import delimiter, encoding
+from catatom2osm.exceptions import CatIOError
 
 
 class TestCsvTools(unittest.TestCase):
@@ -18,7 +19,7 @@ class TestCsvTools(unittest.TestCase):
         _, tmp_path = mkstemp()
         with io.open(tmp_path, "w", encoding=encoding) as csv_file:
             csv_file.write("a;1\nb;2")
-        with self.assertRaises(IOError):
+        with self.assertRaises(CatIOError):
             csvtools.csv2dict(tmp_path, {})
 
     def test_dict2csv(self):

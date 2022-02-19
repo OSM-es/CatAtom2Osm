@@ -7,6 +7,7 @@ from test.tools import capture
 import mock
 
 from catatom2osm import __main__, config
+from catatom2osm.exceptions import CatIOError
 
 logging.disable(logging.WARNING)
 os.environ["LANGUAGE"] = "C"
@@ -14,7 +15,7 @@ config.install_gettext("catato2osm", "")
 
 
 def raiseIOError(*args, **kwargs):
-    raise IOError("bartaz")
+    raise CatIOError("bartaz")
 
 
 def raiseImportError(*args, **kwargs):

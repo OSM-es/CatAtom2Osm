@@ -2,6 +2,7 @@
 import re
 
 from catatom2osm import download
+from catatom2osm.exceptions import CatIOError
 
 api_servers = [
     "http://overpass-api.de/api/interpreter?",
@@ -90,7 +91,7 @@ class Query(object):
                 return
             except IOError:
                 pass
-        raise IOError("Can't read from any Overpass server'")
+        raise CatIOError("Can't read from any Overpass server'")
 
     def read(self):
         """Return query results."""

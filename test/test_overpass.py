@@ -2,6 +2,7 @@ import unittest
 
 import mock
 
+from catatom2osm.exceptions import CatIOError
 from catatom2osm.overpass import Query, api_servers
 
 
@@ -69,17 +70,17 @@ class TestQuery(unittest.TestCase):
     @mock.patch("catatom2osm.overpass.download")
     def test_download(self, m_download):
         def raises_io(*args):
-            raise IOError()
+            raise CatIOError()
 
         def raises_io1(url, fn):
             if url == api_servers[0]:
-                raise IOError()
+                raise CatIOError()
 
         q = Query("1,2,3,4").add("foo")
         q.download("bar")
         m_download.wget.assert_called_once_with(q.get_url(0), "bar")
         m_download.wget = raises_io
-        with self.assertRaises(IOError):
+        with self.assertRaises(CatIOError):
             q.download("bar")
         m_download.wget = raises_io1
         q.download("bar")

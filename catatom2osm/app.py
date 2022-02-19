@@ -17,6 +17,7 @@ from qgis.core import QgsApplication, QgsGeometry, QgsVectorLayer
 
 from catatom2osm import cdau  # NOQA: F401 - Used in get_auxiliary_addresses
 from catatom2osm import catatom, config, csvtools, geo, osmxml, overpass
+from catatom2osm.exceptions import CatIOError, CatValueError
 from catatom2osm.report import instance as report
 
 qgis.utils.uninstallErrorHook()
@@ -169,13 +170,13 @@ class CatAtom2Osm(object):
                 fn += "|layername=multipolygons"
             split = geo.BaseLayer(fn, "zoningsplit", "ogr")
             if not split.isValid():
-                raise IOError("Can't open %s" % self.options.split)
+                raise CatIOError("Can't open %s" % self.options.split)
             self.split = geo.PolygonLayer("MultiPolygon", "split", "memory")
             q = lambda f, __: f.geometry().wkbType() == geo.types.WKBMultiPolygon
             self.split.append(split, query=q)
             if self.split.featureCount() == 0:
-                msg = _("'%s' does not include any zone") % self.options.split
-                raise ValueError(msg)
+                msg = _("'%s' does not include any polygon") % self.options.split
+                raise CatValueError(msg)
 
     def get_parcel(self):
         """Get parcels dataset."""
@@ -194,7 +195,7 @@ class CatAtom2Osm(object):
                 pa = next(parcel_gml.search(f"localId = '{localid}'"))
             except StopIteration:
                 msg = _("Parcel '%s' does not exists") % localid
-                raise (ValueError(msg))
+                raise CatValueError(msg)
             bb = pa.geometry().boundingBox().buffered(config.parcel_buffer)
             g = QgsGeometry.fromRect(bb)
             q = lambda f, __: geo.aux.is_inside(f, g)
@@ -202,7 +203,7 @@ class CatAtom2Osm(object):
         self.parcel.append(parcel_gml, query=q)
         del parcel_gml
         if self.parcel.featureCount() == 0:
-            raise ValueError(_("No parcels data"))
+            raise CatValueError(_("No parcels data"))
 
     def get_building(self):
         """Merge building, parts and pools."""
@@ -221,7 +222,7 @@ class CatAtom2Osm(object):
         del building_gml
         inbu = self.building.featureCount()
         if inbu == 0:
-            raise ValueError(_("No buildings data"))
+            raise CatValueError(_("No buildings data"))
         if other_gml:
             self.building.append(other_gml, query=q, keys=self.tasks.keys())
             del other_gml
@@ -322,7 +323,7 @@ class CatAtom2Osm(object):
         result = csvtools.get_key(fn, self.cat.zip_code)
         if not result:
             msg = _("Municipality code '%s' don't exists") % self.cat.zip_code
-            raise ValueError(msg)
+            raise CatValueError(msg)
         __, id, name = result
         self.boundary_search_area = id
         report.mun_name = name
@@ -412,7 +413,7 @@ class CatAtom2Osm(object):
                     _("Could not resolve joined tables for the '%s' layer")
                     % address_gml.name()
                 )
-                raise IOError(msg)
+                raise CatIOError(msg)
         self.address = geo.AddressLayer(source_date=address_gml.source_date)
         q = None
         if self.split or self.options.parcel:
@@ -427,7 +428,7 @@ class CatAtom2Osm(object):
         if report.inp_address == 0:
             msg = _("No addresses data")
             if not self.options.building:
-                raise ValueError(msg)
+                raise CatValueError(msg)
             log.info(msg)
             return
         postaldescriptor = self.cat.read("postaldescriptor")
@@ -478,21 +479,21 @@ class CatAtom2Osm(object):
         fn = self.cat.get_path("parcel.shp")
         parcel = geo.ParcelLayer(self.cat.zip_code, fn, providerLib="ogr")
         if not parcel.isValid() or parcel.featureCount() == 0:
-            raise ValueError(_("No parcels data"))
+            raise CatValueError(_("No parcels data"))
         self.parcel = geo.ParcelLayer(self.cat.zip_code)
         self.parcel.append(parcel)
         del parcel
         fn = self.cat.get_path("building.shp")
         building = geo.ConsLayer(fn, providerLib="ogr")
         if not building.isValid() or building.featureCount() == 0:
-            raise ValueError(_("No buildings data"))
+            raise CatValueError(_("No buildings data"))
         self.building = geo.ConsLayer()
         self.building.append(building)
         del building
         fn = self.cat.get_path("address.geojson")
         address = geo.AddressLayer(fn, providerLib="ogr")
         if not address.isValid() or address.featureCount() == 0:
-            raise ValueError(_("No addresses data"))
+            raise CatValueError(_("No addresses data"))
         self.address = geo.AddressLayer()
         self.address.rename = {}
         self.address.resolve = {}
@@ -693,7 +694,7 @@ class CatAtom2Osm(object):
         if layer.export(out_path, driver_name, target_crs_id=target_crs_id):
             log.info(_("Generated '%s'"), filename)
         else:
-            raise IOError(_("Failed to write layer: '%s'") % filename)
+            raise CatIOError(_("Failed to write layer: '%s'") % filename)
 
     def read_osm(self, *paths, **kwargs):
         """
