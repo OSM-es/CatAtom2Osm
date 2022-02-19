@@ -118,12 +118,8 @@ uninstall:  ## Remove application simbolic link
 dtest:  ## Run tests in docker dev image and exit
 	@docker run --rm -it -v $(PWD):/opt/CatAtom2Osm -v $(PWD)/results:/catastro -w /opt/CatAtom2Osm catatom2osm:dev make test
 
-.PHONY: dstyle
-dstyle:  ## Check style in docker dev image and exit
-	@docker run --rm -it -v $(PWD):/opt/CatAtom2Osm -v $(PWD)/results:/catastro -w /opt/CatAtom2Osm catatom2osm:dev make style
-
 .PHONY: publish
-publish: build dtest dstyle  ## Push last version to GitHub and Docker Hub
+publish: build dtest  ## Push last version to GitHub and Docker Hub
 	@echo $(VERSION)
 	@echo "Pulsa una tecla para continuar"
 	@read
