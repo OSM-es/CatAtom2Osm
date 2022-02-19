@@ -100,16 +100,15 @@ class CatAtom2Osm(object):
 
     def run(self):
         """Launch the app processing."""
+        self.get_boundary()
         if self.options.comment:
             self.add_comments()
             return
         if self.options.address and not self.is_new:
             log.info(_("Resume processing '%s'"), report.mun_code)
-            self.get_boundary()
             self.resume_address()
         else:
             log.info(_("Start processing '%s'"), report.mun_code)
-            self.get_boundary()
             self.get_parcel()
             self.get_building()
             self.get_zoning()
@@ -320,7 +319,11 @@ class CatAtom2Osm(object):
     def get_boundary(self):
         """Get best boundary search area for overpass queries."""
         fn = os.path.join(config.app_path, "municipalities.csv")
-        __, id, name = csvtools.get_key(fn, self.cat.zip_code)
+        result = csvtools.get_key(fn, self.cat.zip_code)
+        if not result:
+            msg = _("Municipality code '%s' don't exists") % self.cat.zip_code
+            raise ValueError(msg)
+        __, id, name = result
         self.boundary_search_area = id
         report.mun_name = name
         log.info(_("Municipality: '%s'"), name)

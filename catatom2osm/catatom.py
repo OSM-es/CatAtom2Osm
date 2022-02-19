@@ -83,7 +83,8 @@ class Reader(object):
         response = download.get_response(url)
         s = re.search(r"http.+/%s.+zip" % self.zip_code, response.text)
         if not s:
-            raise ValueError(_("Zip code '%s' don't exists") % self.zip_code)
+            msg = _("Municipality code '%s' don't exists") % self.zip_code
+            raise ValueError(msg)
         url = s.group(0)
         filename = url.split("/")[-1]
         out_path = self.get_path(filename)
