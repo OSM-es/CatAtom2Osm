@@ -1,6 +1,9 @@
 Change log
 ==========
 
+**2022-2-19 (2.6.4)**
+* Integrate code style checking in each commit #77.
+
 **2022-2-19 (2.6.3)**
 * Integrate code style checking into publishing #77.
 
