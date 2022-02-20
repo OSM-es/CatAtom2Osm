@@ -1,6 +1,9 @@
 Registro de cambios
 ===================
 
+**20-2-2022 (2.6.5)**
+* Detecta códigos de municipio incorrectos #98.
+
 **19-2-2022 (2.6.4)**
 * Integra comprobación de estilo de código en cada commit #77.
 
