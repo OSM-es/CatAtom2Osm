@@ -137,6 +137,10 @@ class Reader(object):
         parser = etree.XMLPullParser(["start", "end"])
         parser.feed(text)
         events = list(parser.read_events())
+        try:
+            parser.close()
+        except etree.XMLSyntaxError:
+            pass
         return len([event for event, elem in events if event == "start"]) < 3
 
     def get_path_from_zip(self, zf, a_path):
@@ -204,6 +208,7 @@ class Reader(object):
             else:
                 log.info(_("The layer '%s' is empty"), gml_path)
                 return None
+        return
         gml = self.get_gml_from_zip(gml_path, zip_path, group, layername)
         if gml is None:
             gml = geo.BaseLayer(gml_path, layername + ".gml", "ogr")
