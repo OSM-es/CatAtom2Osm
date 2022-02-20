@@ -208,7 +208,6 @@ class Reader(object):
             else:
                 log.info(_("The layer '%s' is empty"), gml_path)
                 return None
-        return
         gml = self.get_gml_from_zip(gml_path, zip_path, group, layername)
         if gml is None:
             gml = geo.BaseLayer(gml_path, layername + ".gml", "ogr")
