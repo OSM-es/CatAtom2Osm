@@ -1,6 +1,9 @@
 Change log
 ==========
 
+**2022-2-21 (2.6.7)**
+* Fix error applying topology to bad parts.
+
 **2022-2-21 (2.6.6)**
 * Fix error assigning abandoned buildings tag.
 

@@ -1,6 +1,9 @@
 Registro de cambios
 ===================
 
+**21-2-2022 (2.6.7)**
+* Corrige error al aplicar topología a partes incorrectas.
+
 **21-2-2022 (2.6.6)**
 * Corrige error asignando etiqueta a edificios abandonados.
 

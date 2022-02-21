@@ -173,6 +173,8 @@ class PolygonLayer(BaseLayer):
         nodes = set()
         pbar = self.get_progressbar(_("Topology"), len(geometries))
         for (gid, geom) in geometries.items():
+            if geom.area() < config.min_area:
+                continue
             for point in frozenset(Geometry.get_outer_vertices(geom)):
                 if point not in nodes:
                     area_of_candidates = Point(point).boundingBox(threshold)
