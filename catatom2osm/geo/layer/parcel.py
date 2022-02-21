@@ -103,6 +103,8 @@ class ParcelLayer(PolygonLayer):
                     label = zoning.format_label(zone)
                     pa_label = self.get_zone(pa)
                     if pa_label == label or is_inside_area(pa, zone):
+                        if str(label) == "inf":
+                            label = pa_label
                         pa["zone"] = label
                         to_change[pa.id()] = get_attributes(pa)
                         break
