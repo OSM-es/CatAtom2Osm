@@ -1,6 +1,9 @@
 Registro de cambios
 ===================
 
+**21-2-2022 (2.6.6)**
+* Corrige error asignando etiqueta a edificios abandonados.
+
 **20-2-2022 (2.6.5)**
 * Detecta códigos de municipio incorrectos #98.
 
