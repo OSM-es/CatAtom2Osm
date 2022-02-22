@@ -1,6 +1,9 @@
 Change log
 ==========
 
+**2022-2-22 (2.6.8)**
+* Fix errors #99, #100, #101, #102.
+
 **2022-2-21 (2.6.7)**
 * Fix error applying topology to bad parts.
 
