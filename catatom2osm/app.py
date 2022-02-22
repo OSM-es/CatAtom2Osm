@@ -16,7 +16,7 @@ from osgeo import gdal
 from qgis.core import QgsApplication, QgsGeometry, QgsVectorLayer
 
 from catatom2osm import cdau  # NOQA: F401 - Used in get_auxiliary_addresses
-from catatom2osm import catatom, config, csvtools, geo, osmxml, overpass
+from catatom2osm import catatom, cbcn, config, csvtools, geo, osmxml, overpass
 from catatom2osm.exceptions import CatIOError, CatValueError
 from catatom2osm.report import instance as report
 
@@ -77,6 +77,7 @@ class CatAtom2Osm(object):
         self.highway_names_path = self.cat.get_path("highway_names.csv")
         self.is_new = not os.path.exists(self.highway_names_path)
         self.source = "building"
+        self.aux_path = os.path.join(os.path.dirname(self.path), config.aux_path)
         if self.options.address and not self.options.building:
             self.source = "address"
 
@@ -402,8 +403,28 @@ class CatAtom2Osm(object):
             if isinstance(getattr(self, propname), QgsVectorLayer):
                 delattr(self, propname)
 
+    def get_cbcn(self):
+        """Read CartoBCN addresses."""
+        reader = cbcn.Reader(self.aux_path)
+        cbcn_src = reader.read()
+        self.address = cbcn.get_address(cbcn_src, self.parcel)
+        del cbcn_src
+        report.inp_address = self.address.featureCount()
+        report.inp_address_entrance = report.inp_address
+        report.inp_address_parcel = 0
+        self.address.remove_address_wo_building(self.building)
+        report.inp_zip_codes = 0
+        report.inp_street_names = self.address.count(unique="TN_text")
+        if self.split or self.options.parcel:
+            self.boundary_bbox = self.parcel.bounding_box()
+        self.export_layer(self.address, "address.geojson", target_crs_id=4326)
+        self.get_translations(self.address)
+
     def get_address(self):
         """Read Address GML dataset."""
+        if self.cat.zip_code == "08900":
+            self.get_cbcn()
+            return
         address_gml = self.cat.read("address")
         report.address_date = address_gml.source_date
         if address_gml.writer.fieldNameIndex("component_href") == -1:
@@ -506,8 +527,7 @@ class CatAtom2Osm(object):
         for source in list(config.aux_address.keys()):
             if self.cat.zip_code[:2] in config.aux_address[source]:
                 aux_source = globals()[source]
-                aux_path = os.path.join(os.path.dirname(self.path), config.aux_path)
-                reader = aux_source.Reader(aux_path)
+                reader = aux_source.Reader(self.aux_path)
                 aux = reader.read(self.cat.zip_code[:2])
                 aux_source.conflate(aux, self.address, self.cat.zip_code)
 

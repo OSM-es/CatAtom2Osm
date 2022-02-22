@@ -34,7 +34,7 @@ meta_url = (
     "https://www.callejerodeandalucia.es/portal/informaci%C3%B3n-alfanum%C3%A9rica"
 )
 cdau_crs = 25830
-cdau_thr = 5  # Threhold in meters to conflate Cadastre addresses
+cdau_thr = 5  # Threshold in meters to conflate Cadastre addresses
 cod_mun_trans = {
     "04": {40: 901, 104: 902, 105: 903, 900: 13},
     "11": {43: 901, 44: 902, 45: 903, 900: 12},
@@ -157,7 +157,7 @@ class Reader(object):
 
     def __init__(self, a_path):
         """
-        Construct a reader.
+        Construct a CDAU reader.
 
         Args:
             a_path (str): Directory where the source files are located.
@@ -175,11 +175,11 @@ class Reader(object):
             with open(md_path, "r") as fo:
                 self.src_date = fo.read()
         else:
-            response = download.get_response(meta_url)
-            s = re.search(
-                r"fecha de referencia.*([0-9]{1,2}\sde\s.+\sde\s[0-9]{4})",
-                response.text,
-            )
+            with download.get_response(meta_url) as response:
+                s = re.search(
+                    r"fecha de referencia.*([0-9]{1,2}\sde\s.+\sde\s[0-9]{4})",
+                    response.text,
+                )
             try:
                 self.src_date = datetime.strptime(
                     s.group(1), "%d de %B de %Y"
@@ -195,9 +195,9 @@ class Reader(object):
             raise CatValueError(msg)
         csv_fn = csv_name.format(andalucia[prov_code])
         csv_path = os.path.join(self.path, csv_fn)
-        url = cdau_url.format(csv_fn)
         if not os.path.exists(csv_path):
             log.info(_("Downloading '%s'"), csv_path)
+            url = cdau_url.format(csv_fn)
             download.wget(url, csv_path)
         csv = geo.BaseLayer(csv_path, csv_fn, "ogr")
         if not csv.isValid():

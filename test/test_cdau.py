@@ -102,7 +102,7 @@ class TestCdau(unittest.TestCase):
             'ficheros es el 5 de marzo de 2018.</p> </div> <h3 class="tituloCaja">'
             "Enlaces relacionados</h3>"
         )
-        m_download.get_response.return_value = resp
+        m_download.get_response.return_value.__enter__.return_value = resp
         fo = mock.MagicMock()
         m_open.return_value.__enter__.return_value = fo
         m_os.path.exists.return_value = False
