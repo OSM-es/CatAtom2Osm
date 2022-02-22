@@ -1,6 +1,9 @@
 Registro de cambios
 ===================
 
+**22-2-2022 (2.6.8)**
+* Corrige varios errores #99, #100, #101, #102.
+
 **21-2-2022 (2.6.7)**
 * Corrige error al aplicar topología a partes incorrectas.
 
