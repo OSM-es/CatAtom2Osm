@@ -59,6 +59,8 @@ class Reader(object):
             text = fo.read()
         except IOError:
             raise CatIOError(_("Could not read metadata from '%s'") % md_path)
+        finally:
+            fo.close()
         root = etree.fromstring(text)
         is_empty = len(root) == 0 or len(root[0]) == 0
         namespace = {
@@ -112,7 +114,7 @@ class Reader(object):
         ]:
             group = "AD"
         else:
-            raise CatValueError(_("Unknow layer name '%s'") % layername)
+            raise CatValueError(_("Unknown layer name '%s'") % layername)
         gml_fn = ".".join((config.fn_prefix, group, self.zip_code, layername, "gml"))
         if group == "AD":
             gml_fn = ".".join((config.fn_prefix, group, self.zip_code, "gml"))
@@ -172,11 +174,26 @@ class Reader(object):
         with self.get_file_object(gml_path, zip_path) as fo:
             data = fo.read()
         try:
-            data.decode('ascii')
+            data.decode("ascii")
         except UnicodeDecodeError:
             text = data.decode("ISO-8859-1")
             with open(gml_path, "w") as fo:
                 fo.write(text)
+
+    def fix_amp(self, gml_path, zip_path):
+        """Test if source needs to be escape ampersand."""
+        with self.get_file_object(gml_path, zip_path) as fo:
+            data = fo.read()
+        save = False
+        if b"&<" in data:
+            data = re.sub(b"&<", b"&amp;<", data)
+            save = True
+        if b"&F" in data:
+            data = re.sub(b"&F", b"&amp;F", data)
+            save = True
+        if save:
+            with open(gml_path, "wb") as fo:
+                fo.write(data)
 
     def download(self, layername):
         """
@@ -215,6 +232,8 @@ class Reader(object):
             self.get_atom_file(url)
         if layername == "cadastralparcel":
             self.fix_encoding(gml_path, zip_path)
+        if layername == "address":
+            self.fix_amp(gml_path, zip_path)
         self.get_metadata(md_path, zip_path)
         if self.is_empty(gml_path, zip_path):
             if not allow_empty:
@@ -222,7 +241,10 @@ class Reader(object):
             else:
                 log.info(_("The layer '%s' is empty"), gml_path)
                 return None
-        gml = geo.BaseLayer(gml_path, layername + ".gml", "ogr")
+        fn = gml_path
+        if group == "AD":
+            fn += "|layername=" + layername
+        gml = geo.BaseLayer(fn, layername + ".gml", "ogr")
         if not gml.isValid():
             gml = self.get_gml_from_zip(gml_path, zip_path, group, layername)
             if gml is None:
