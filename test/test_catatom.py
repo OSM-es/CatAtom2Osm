@@ -4,6 +4,7 @@ import random
 import unittest
 
 import mock
+import zipfile
 from requests.exceptions import ConnectionError
 
 os.environ["LANGUAGE"] = "C"
@@ -104,37 +105,35 @@ class TestCatAtom(unittest.TestCase):
 
     @mock.patch("catatom2osm.catatom.os")
     @mock.patch("catatom2osm.catatom.open")
-    def test_get_metadata_from_xml(self, m_open, m_os):
-        self.m_cat.get_metadata = get_func(catatom.Reader.get_metadata)
+    def test_get_file_object(self, m_open, m_os):
+        self.m_cat.get_file_object = get_func(catatom.Reader.get_file_object)
         m_os.path.exists.return_value = True
-        m_open.return_value.__enter__.return_value.read.return_value = metadata
-        self.m_cat.get_metadata(self.m_cat, "foo")
+        self.m_cat.get_file_object(self.m_cat, "foo")
         m_open.assert_called_once_with("foo", "rb")
-        self.assertEqual(self.m_cat.src_date, "2017-02-25")
-        self.assertEqual(self.m_cat.cat_mun, "TAZ")
-        self.assertEqual(self.m_cat.crs_ref, 32628)
 
     @mock.patch("catatom2osm.catatom.os")
-    @mock.patch("catatom2osm.catatom.open")
     @mock.patch("catatom2osm.catatom.zipfile")
-    def test_get_metadata_from_zip(self, m_zip, m_open, m_os):
-        self.m_cat.get_metadata = get_func(catatom.Reader.get_metadata)
+    def test_get_file_object_zip(self, m_zip, m_os):
+        self.m_cat.get_file_object = get_func(catatom.Reader.get_file_object)
         m_os.path.exists.return_value = False
-        m_zip.ZipFile.return_value.read.return_value = metadata
         self.m_cat.get_path_from_zip.return_value = "foo"
-        self.m_cat.get_metadata(self.m_cat, "foo", "bar")
-        m_zip.ZipFile().read.assert_called_once_with("foo")
+        self.m_cat.get_file_object(self.m_cat, "foo", "bar")
+        m_zip.ZipFile().__enter__().open.assert_called_once_with("foo", "r")
+
+    def test_get_metadata(self):
+        m_gfo = mock.MagicMock()
+        m_gfo.return_value.read.return_value = metadata
+        self.m_cat.get_file_object = m_gfo
+        self.m_cat.get_metadata = get_func(catatom.Reader.get_metadata)
+        self.m_cat.get_metadata(self.m_cat, "foo")
         self.assertEqual(self.m_cat.src_date, "2017-02-25")
         self.assertEqual(self.m_cat.cat_mun, "TAZ")
         self.assertEqual(self.m_cat.crs_ref, 32628)
 
-    @mock.patch("catatom2osm.catatom.os")
-    @mock.patch("catatom2osm.catatom.open")
     @mock.patch("catatom2osm.catatom.etree")
     @mock.patch("catatom2osm.catatom.hasattr")
-    def test_get_metadata_empty(self, m_has, m_etree, m_open, m_os):
+    def test_get_metadata_empty(self, m_has, m_etree):
         self.m_cat.get_metadata = get_func(catatom.Reader.get_metadata)
-        m_os.path.exists.return_value = True
         del m_etree.fromstring.return_value.root
         m_etree.fromstring.return_value.__len__.return_value = 0
         m_has.return_value = False
@@ -213,6 +212,7 @@ class TestCatAtom(unittest.TestCase):
         self.m_cat.crs_ref = "32628"
         self.m_cat.prov_code = "99"
         self.m_cat.src_date = "bar"
+        m_layer.BaseLayer.return_value.isValid.return_value = False
         gml = self.m_cat.read(self.m_cat, "foobar")
         self.m_cat.get_layer_paths.assert_called_once_with("foobar")
         self.m_cat.get_atom_file.assert_not_called()
@@ -238,7 +238,6 @@ class TestCatAtom(unittest.TestCase):
         self.m_cat.get_atom_file.assert_called_with(url)
         self.assertIn("empty", str(cm.exception))
 
-        m_layer.BaseLayer.return_value.crs.return_value.isValid.return_value = False
         m_qgscrs.return_value.isValid.return_value = False
         m_os.path.exists.side_effect = None
         self.m_cat.is_empty.return_value = False
@@ -246,28 +245,31 @@ class TestCatAtom(unittest.TestCase):
             self.m_cat.read(self.m_cat, "foobar")
         self.assertIn("Could not determine the CRS", str(cm.exception))
 
+        self.m_cat.get_gml_from_zip.return_value = None
         m_layer.BaseLayer.return_value.isValid.return_value = False
         self.m_cat.get_gml_from_zip.return_value = None
         with self.assertRaises(CatIOError) as cm:
             self.m_cat.read(self.m_cat, "foobar")
         self.assertIn("Failed to load", str(cm.exception))
 
-        self.m_cat.get_gml_from_zip.return_value = None
-        m_layer.BaseLayer.return_value.isValid.return_value = True
-        m_qgscrs.return_value.isValid.return_value = True
-        gml = self.m_cat.read(self.m_cat, "foobar")
-        self.assertEqual(gml, m_layer.BaseLayer.return_value)
-
     def test_is_empty(self):
+        with zipfile.ZipFile("test/fixtures/empty.zip", "r") as zf:
+            fo = zf.open("empty.gml", "r")
+        self.m_cat.get_file_object.return_value = fo
         self.m_cat.is_empty = get_func(catatom.Reader.is_empty)
         self.m_cat.get_path_from_zip.return_value = "empty.gml"
-        fn = "test/fixtures/empty.gml"
-        test = self.m_cat.is_empty(self.m_cat, fn, "test/empty.zip")
+        test = self.m_cat.is_empty(self.m_cat, "foo", "bar")
+        fo.close()
         self.assertTrue(test)
-        test = self.m_cat.is_empty(self.m_cat, "test/fixtures/empty.gml", "")
+        fo = open("test/fixtures/empty.gml", "rb")
+        self.m_cat.get_file_object.return_value = fo
+        test = self.m_cat.is_empty(self.m_cat, "foo", "bar")
+        fo.close()
         self.assertTrue(test)
-        fn = "test/fixtures/building.gml"
-        test = self.m_cat.is_empty(self.m_cat, fn, "")
+        fo = open("test/fixtures/building.gml", "rb")
+        self.m_cat.get_file_object.return_value = fo
+        test = self.m_cat.is_empty(self.m_cat, "foo", "bar")
+        fo.close()
         self.assertFalse(test)
 
     @mock.patch("catatom2osm.catatom.zipfile")
@@ -297,7 +299,7 @@ class TestCatAtom(unittest.TestCase):
     def test_get_gml_from_zip(self, m_layer, m_zip):
         m_layer.BaseLayer.return_value.isValid.return_value = True
         zf = mock.MagicMock()
-        m_zip.ZipFile.return_value = zf
+        m_zip.ZipFile.return_value.__enter__.return_value = zf
         self.m_cat.get_path_from_zip.return_value = "bar/gml_path"
         self.m_cat.get_gml_from_zip = get_func(catatom.Reader.get_gml_from_zip)
         gml = self.m_cat.get_gml_from_zip(

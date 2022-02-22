@@ -42,17 +42,23 @@ class Reader(object):
         """Get path from components relative to self.path."""
         return os.path.join(self.path, *paths)
 
+    def get_file_object(self, gml_path, zip_path=""):
+        """Get handler for gml_path (if exist) or for zip_path."""
+        if os.path.exists(gml_path):
+            fo = open(gml_path, "rb")
+        else:
+            with zipfile.ZipFile(zip_path, "r") as zf:
+                gml_fp = self.get_path_from_zip(zf, gml_path)
+                fo = zf.open(gml_fp, "r")
+        return fo
+
     def get_metadata(self, md_path, zip_path=""):
         """Get the metadata of the source file."""
-        if os.path.exists(md_path):
-            with open(md_path, "rb") as f:
-                text = f.read()
-        else:
-            try:
-                zf = zipfile.ZipFile(zip_path)
-                text = zf.read(self.get_path_from_zip(zf, md_path))
-            except IOError:
-                raise CatIOError(_("Could not read metadata from '%s'") % md_path)
+        fo = self.get_file_object(md_path, zip_path)
+        try:
+            text = fo.read()
+        except IOError:
+            raise CatIOError(_("Could not read metadata from '%s'") % md_path)
         root = etree.fromstring(text)
         is_empty = len(root) == 0 or len(root[0]) == 0
         namespace = {
@@ -126,15 +132,10 @@ class Reader(object):
         Cadastre empty files (usually otherconstruction) comes with a null
         feature and results in a non valid layer in QGIS.
         """
-        if os.path.exists(zip_path):
-            zf = zipfile.ZipFile(zip_path)
-            gml_fp = self.get_path_from_zip(zf, gml_path)
-            fo = zf.open(gml_fp, "r")
-        else:
-            fo = open(gml_path, "rb")
+        fo = self.get_file_object(gml_path, zip_path)
         text = fo.read(2000)
         fo.close()
-        parser = etree.XMLPullParser(["start", "end"])
+        parser = etree.XMLPullParser(["start"])
         parser.feed(text)
         events = list(parser.read_events())
         try:
@@ -154,8 +155,8 @@ class Reader(object):
     def get_gml_from_zip(self, gml_path, zip_path, group, layername):
         """Return gml layer from zip if exists and is valid or none."""
         try:
-            zf = zipfile.ZipFile(zip_path)
-            gml_fp = self.get_path_from_zip(zf, gml_path)
+            with zipfile.ZipFile(zip_path) as zf:
+                gml_fp = self.get_path_from_zip(zf, gml_path)
             vsizip_path = "/".join(("/vsizip", zip_path, gml_fp)).replace("\\", "/")
             if group == "AD":
                 vsizip_path += "|layername=" + layername
@@ -165,6 +166,17 @@ class Reader(object):
         except IOError:
             gml = None
         return gml
+
+    def fix_encoding(self, gml_path, zip_path):
+        """Test if source needs to be converted to utf-8."""
+        with self.get_file_object(gml_path, zip_path) as fo:
+            data = fo.read()
+        try:
+            data.decode('ascii')
+        except UnicodeDecodeError:
+            text = data.decode("ISO-8859-1")
+            with open(gml_path, "w") as fo:
+                fo.write(text)
 
     def download(self, layername):
         """
@@ -201,6 +213,8 @@ class Reader(object):
         url = config.prov_url[group].format(code=self.prov_code)
         if not os.path.exists(zip_path) and (not os.path.exists(gml_path) or force_zip):
             self.get_atom_file(url)
+        if layername == "cadastralparcel":
+            self.fix_encoding(gml_path, zip_path)
         self.get_metadata(md_path, zip_path)
         if self.is_empty(gml_path, zip_path):
             if not allow_empty:
@@ -208,10 +222,10 @@ class Reader(object):
             else:
                 log.info(_("The layer '%s' is empty"), gml_path)
                 return None
-        gml = self.get_gml_from_zip(gml_path, zip_path, group, layername)
-        if gml is None:
-            gml = geo.BaseLayer(gml_path, layername + ".gml", "ogr")
-            if not gml.isValid():
+        gml = geo.BaseLayer(gml_path, layername + ".gml", "ogr")
+        if not gml.isValid():
+            gml = self.get_gml_from_zip(gml_path, zip_path, group, layername)
+            if gml is None:
                 raise CatIOError(_("Failed to load layer '%s'") % gml_path)
         crs = QgsCoordinateReferenceSystem.fromEpsgId(self.crs_ref)
         if not crs.isValid():
