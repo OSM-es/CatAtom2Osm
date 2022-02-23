@@ -1,5 +1,6 @@
 """Main application processes."""
 import codecs
+import glob
 import gzip
 import io
 import logging
@@ -70,9 +71,11 @@ class CatAtom2Osm(object):
         log.debug(_("Using GDAL %s"), report.gdal_version)
         if self.options.zoning:
             self.options.address = False
+        print(tasks_folder)
         self.tasks_path = self.cat.get_path(tasks_folder)
-        if not os.path.exists(self.tasks_path):
-            os.makedirs(self.tasks_path)
+        fn = self.options.split or ""
+        bkp_dir = os.path.splitext(os.path.basename(fn))[0]
+        self.bkp_path = self.cat.get_path(tasks_folder, bkp_dir)
         self.get_split()
         self.highway_names_path = self.cat.get_path("highway_names.csv")
         self.is_new = not os.path.exists(self.highway_names_path)
@@ -125,11 +128,10 @@ class CatAtom2Osm(object):
         if self.options.address:
             self.process_address()
             self.address.reproject()
+        if not self.options.zoning:
+            self.building.reproject()
+            self.process_tasks(getattr(self, self.source))
         self.output_zoning()
-        if self.options.zoning:
-            return
-        self.building.reproject()
-        self.process_tasks(getattr(self, self.source))
         self.finish()
 
     def add_comments(self):
@@ -242,10 +244,13 @@ class CatAtom2Osm(object):
 
     def process_tasks(self, source):
         """Convert to osm for each task."""
+        if not os.path.exists(self.tasks_path):
+            os.makedirs(self.tasks_path)
         tasks = self.get_tasks(source)
         tasks_r = 0
         tasks_u = 0
         to_clean = []
+        to_change = {}
         for pa in self.parcel.getFeatures():
             label = pa["localId"]
             task = tasks.get(label, None)
@@ -265,11 +270,21 @@ class CatAtom2Osm(object):
             if self.options.building:
                 report.cons_stats(task_osm, label)
                 report.osm_stats(task_osm)
+            fp = self.cat.get_path(tasks_folder, label)
+            if self.split and os.path.exists(fp + ".osm.gz"):
+                if not os.path.exists(self.bkp_path):
+                    n = len(glob(fp + "*.osm.gz"))
+                    label = f"{label}-{n}"
+                    pa["localId"] = label
+                    to_change[pa.id()] = geo.aux.get_attributes(pa)
             self.write_osm(task_osm, tasks_folder, label + ".osm.gz")
             del task
         if to_clean:
             self.parcel.writer.deleteFeatures(to_clean)
             log.debug(_("Removed %d void parcels"), len(to_clean))
+        if to_change:
+            self.parcel.writer.changeAttributeValues(to_change)
+            log.debug(_("Conflict with %d existing tasks"), len(to_change))
         msg = _("Generated %d rustic and %d urban tasks files")
         log.debug(msg, tasks_r, tasks_u)
         report.tasks_r = tasks_r
@@ -670,11 +685,8 @@ class CatAtom2Osm(object):
 
         Use a subdirectory if it's a split municipality.
         """
-        fn = self.options.split or ""
-        bkp_dir = os.path.splitext(os.path.basename(fn))[0]
-        bkp_path = self.cat.get_path(tasks_folder, bkp_dir)
-        if not os.path.exists(bkp_path):
-            os.makedirs(bkp_path)
+        if not os.path.exists(self.bkp_path):
+            os.makedirs(self.bkp_path)
         move_files = [
             "current_address.osm",
             "current_highway.osm",
@@ -694,11 +706,11 @@ class CatAtom2Osm(object):
         for f in move_files:
             fn = self.cat.get_path(f)
             if os.path.exists(fn):
-                os.rename(fn, os.path.join(bkp_path, f))
+                os.rename(fn, os.path.join(self.bkp_path, f))
         for f in copy_files:
             fn = self.cat.get_path(f)
             if os.path.exists(fn):
-                shutil.copy(fn, bkp_path)
+                shutil.copy(fn, self.bkp_path)
 
     def export_layer(self, layer, filename, driver_name="GeoJSON", target_crs_id=None):
         """

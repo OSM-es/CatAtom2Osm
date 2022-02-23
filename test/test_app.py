@@ -71,13 +71,14 @@ class TestCatAtom2Osm(unittest.TestCase):
     @mock.patch("catatom2osm.app.report")
     @mock.patch("catatom2osm.app.os")
     def test_init(self, m_os, m_report, m_cat):
-        m_cat.return_value.get_path = lambda x: "foo/" + x
+        m_cat.return_value.get_path = lambda *args: "foo/" + "/".join(args)
         m_os.path.exists.return_value = False
+        m_os.path.splitext.return_value = [""]
+        self.m_app.options.split = None
         self.m_app.init = get_func(app.CatAtom2Osm.__init__)
         self.m_app.init(self.m_app, "xxx/12345", self.m_app.options)
         m_cat.assert_called_once_with("xxx/12345")
         self.assertEqual(self.m_app.path, m_cat().path)
-        m_os.makedirs.assert_called_once_with("foo/tasks")
 
     @mock.patch("catatom2osm.app.gdal")
     def test_gdal(self, m_gdal):
