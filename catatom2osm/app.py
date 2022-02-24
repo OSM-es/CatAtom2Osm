@@ -535,6 +535,8 @@ class CatAtom2Osm(object):
         self.address.append(address)
         self.address.reproject(self.building.crs())
         del address
+        if self.split or self.options.parcel:
+            self.boundary_bbox = self.parcel.bounding_box()
 
     def get_auxiliary_addresses(self):
         """Read and conflate auxiliary sources of addresses data."""
