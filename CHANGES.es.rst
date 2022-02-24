@@ -1,6 +1,11 @@
 Registro de cambios
 ===================
 
+**24-2-2022 (2.7.0)**
+* Incorpora direcciones Carto BCN #35.
+* Preserva tareas existentes al procesar por zonas.
+
+
 **22-2-2022 (2.6.8)**
 * Corrige varios errores #99, #100, #101, #102.
 

@@ -71,7 +71,6 @@ class CatAtom2Osm(object):
         log.debug(_("Using GDAL %s"), report.gdal_version)
         if self.options.zoning:
             self.options.address = False
-        print(tasks_folder)
         self.tasks_path = self.cat.get_path(tasks_folder)
         fn = self.options.split or ""
         bkp_dir = os.path.splitext(os.path.basename(fn))[0]

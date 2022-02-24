@@ -1,6 +1,10 @@
 Change log
 ==========
 
+**2022-2-24 (2.7.0)**
+* Add Carto BCN addresses #35
+* Preserve existing task files in zone processing
+
 **2022-2-22 (2.6.8)**
 * Fix errors #99, #100, #101, #102.
 
