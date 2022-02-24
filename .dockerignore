@@ -6,6 +6,9 @@ __pycache__/
 # C extensions
 *.so
 
+# Backup files # 
+*.bak 
+
 # Distribution / packaging
 .Python
 env/
@@ -43,7 +46,7 @@ htmlcov/
 .cache
 nosetests.xml
 coverage.xml
-*,cover
+*.cover
 .hypothesis/
 
 # Translations
@@ -61,7 +64,7 @@ instance/
 .scrapy
 
 # Sphinx documentation
-# docs/_build/
+docs/_build/
 
 # PyBuilder
 target/
