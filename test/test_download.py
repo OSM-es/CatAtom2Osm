@@ -39,8 +39,7 @@ class TestWget(unittest.TestCase):
         mock_gr.return_value.iter_content = range
         mock_gr.return_value.headers = {"Content-Length": "99999"}
         file_mock = mock.MagicMock()
-        mock_open.return_value = mock.MagicMock()
-        mock_open.return_value = file_mock
+        mock_open.return_value.__enter__.return_value = file_mock
         wget("foo", "bar")
         self.assertEqual(file_mock.write.call_count, chunk_size)
         mock_pb.assert_called_once_with(
@@ -55,8 +54,7 @@ class TestWget(unittest.TestCase):
         mock_gr.return_value.iter_content = range
         mock_gr.return_value.headers = {}
         file_mock = mock.MagicMock()
-        mock_open.return_value = mock.MagicMock()
-        mock_open.return_value = file_mock
+        mock_open.return_value.__enter__.return_value = file_mock
         wget("foo", "bar")
         self.assertEqual(file_mock.write.call_count, chunk_size)
         mock_pb.assert_called_once_with(

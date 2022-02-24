@@ -28,10 +28,9 @@ def wget(url, filename):
     )
     pbar.set_description(_("Downloading"))
     pbar.set_postfix(file=os.path.basename(filename), refresh=False)
-    fo = open(filename, "wb")
-    for chunk in response.iter_content(chunk_size):
-        pbar.update(chunk_size)
-        fo.write(chunk)
+    with open(filename, "wb") as fo:
+        for chunk in response.iter_content(chunk_size):
+            pbar.update(chunk_size)
+            fo.write(chunk)
     pbar.close()
-    fo.close()
     response.close()

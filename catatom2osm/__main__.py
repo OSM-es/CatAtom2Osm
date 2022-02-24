@@ -3,6 +3,9 @@ import argparse
 import logging
 import os
 import sys
+from zipfile import BadZipfile
+
+from requests.exceptions import RequestException
 
 from catatom2osm import config, csvtools
 from catatom2osm.exceptions import CatException, CatValueError
@@ -186,7 +189,7 @@ def run():
     else:
         try:
             process(options)
-        except CatException as e:
+        except (BadZipfile, CatException, RequestException) as e:
             msg = e.message if getattr(e, "message", "") else str(e)
             log.error(msg)
 
