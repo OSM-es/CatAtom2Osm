@@ -1,14 +1,15 @@
 """CatAtom2Osm command line entry point."""
 import argparse
 import logging
-import os
 import sys
 from zipfile import BadZipfile
 
 from requests.exceptions import RequestException
 
-from catatom2osm import config, csvtools
-from catatom2osm.exceptions import CatException, CatValueError
+from catatom2osm import boundary, config
+from catatom2osm.app import CatAtom2Osm, QgsSingleton
+from catatom2osm.catatom import Reader
+from catatom2osm.exceptions import CatException
 
 log = config.get_logger()
 
@@ -42,35 +43,14 @@ examples = _(
 
 def process(options):
     if options.list:
-        if options.list == "99":
-            title = _("Territorial office")
-            print(title)
-            print("=" * len(title))
-            for code, prov in config.prov_codes.items():
-                print(f"{code} {prov}")
-        else:
-            prov_code = "{:>02}".format(options.list)
-            if prov_code not in config.prov_codes.keys():
-                msg = _("Province code '%s' is not valid") % prov_code
-                raise CatValueError(msg)
-            office = config.prov_codes[prov_code]
-            title = _("Territorial office %s - %s") % (prov_code, office)
-            print(title)
-            print("=" * len(title))
-            fn = os.path.join(config.app_path, "municipalities.csv")
-            for mun in csvtools.startswith(fn, prov_code):
-                print(f"{mun[0]} {mun[2]}")
+        boundary.list_code(options.list)
     elif options.download:
-        from catatom2osm.catatom import Reader
-
         for a_path in options.path:
             cat = Reader(a_path)
             cat.download("address")
             cat.download("cadastralzoning")
             cat.download("building")
     else:
-        from catatom2osm.app import CatAtom2Osm, QgsSingleton
-
         qgs = QgsSingleton()
         for a_path in options.path:
             o = argparse.Namespace(**options.__dict__)

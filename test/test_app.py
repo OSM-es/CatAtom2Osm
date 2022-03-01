@@ -339,11 +339,13 @@ class TestCatAtom2Osm(unittest.TestCase):
         self.assertEqual(building.tags["source:date:addr"], address.tags["source:date"])
 
     @mock.patch("catatom2osm.app.os")
+    @mock.patch("catatom2osm.app.config")
     @mock.patch("catatom2osm.app.csvtools")
-    def test_get_translations(self, m_csv, m_os):
+    def test_get_translations(self, m_csv, m_config, m_os):
         m_os.path.join = lambda *args: "/".join(args)
         self.m_app.get_translations = get_func(app.CatAtom2Osm.get_translations)
-        config.app_path = "foo"
+        m_config.app_path = "foo"
+        m_config.highway_types = "bar"
         m_csv.csv2dict.return_value = {"RAZ": " raz "}
         m_os.path.exists.return_value = True
         address = mock.MagicMock()
@@ -351,7 +353,7 @@ class TestCatAtom2Osm(unittest.TestCase):
         m_csv.dict2csv.assert_not_called()
         m_csv.csv2dict.assert_has_calls(
             [
-                mock.call("foo/highway_types.csv", config.highway_types),
+                mock.call("foo/highway_types.csv", "bar"),
                 mock.call("33333/highway_names.csv", {}),
             ]
         )
@@ -367,7 +369,7 @@ class TestCatAtom2Osm(unittest.TestCase):
         m_csv.csv2dict.assert_not_called()
         m_csv.dict2csv.assert_has_calls(
             [
-                mock.call("foo/highway_types.csv", config.highway_types),
+                mock.call("foo/highway_types.csv", "bar"),
                 mock.call("33333/highway_names.csv", {"TAZ": "taz"}, sort=1),
             ]
         )

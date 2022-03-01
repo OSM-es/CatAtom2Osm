@@ -17,7 +17,7 @@ from osgeo import gdal
 from qgis.core import QgsApplication, QgsGeometry, QgsVectorLayer
 
 from catatom2osm import cdau  # NOQA: F401 - Used in get_auxiliary_addresses
-from catatom2osm import catatom, cbcn, config, csvtools, geo, osmxml, overpass
+from catatom2osm import boundary, catatom, cbcn, config, csvtools, geo, osmxml, overpass
 from catatom2osm.exceptions import CatIOError, CatValueError
 from catatom2osm.report import instance as report
 
@@ -72,10 +72,11 @@ class CatAtom2Osm(object):
         if self.options.zoning:
             self.options.address = False
         self.tasks_path = self.cat.get_path(tasks_folder)
+        self.get_boundary()
+        self.get_split()
         fn = self.options.split or ""
         bkp_dir = os.path.splitext(os.path.basename(fn))[0]
         self.bkp_path = self.cat.get_path(tasks_folder, bkp_dir)
-        self.get_split()
         self.highway_names_path = self.cat.get_path("highway_names.csv")
         self.is_new = not os.path.exists(self.highway_names_path)
         self.source = "building"
@@ -104,7 +105,6 @@ class CatAtom2Osm(object):
 
     def run(self):
         """Launch the app processing."""
-        self.get_boundary()
         if self.options.comment:
             self.add_comments()
             return
@@ -172,7 +172,14 @@ class CatAtom2Osm(object):
                 fn += "|layername=multipolygons"
             split = geo.BaseLayer(fn, "zoningsplit", "ogr")
             if not split.isValid():
-                raise CatIOError("Can't open %s" % self.options.split)
+                msg = "Can't open %s" % self.options.split
+                if os.path.basename(fn) == fn and "." not in fn:
+                    fn = boundary.get_boundary(self.path, self.boundary_search_area, fn)
+                    split = geo.BaseLayer(fn, "zoningsplit", "ogr")
+                    if not split.isValid():
+                        raise CatIOError(msg)
+                else:
+                    raise CatIOError(msg)
             self.split = geo.PolygonLayer("MultiPolygon", "split", "memory")
             q = lambda f, __: f.geometry().wkbType() == geo.types.WKBMultiPolygon
             self.split.append(split, query=q)
@@ -334,12 +341,7 @@ class CatAtom2Osm(object):
 
     def get_boundary(self):
         """Get best boundary search area for overpass queries."""
-        fn = os.path.join(config.app_path, "municipalities.csv")
-        result = csvtools.get_key(fn, self.cat.zip_code)
-        if not result:
-            msg = _("Municipality code '%s' don't exists") % self.cat.zip_code
-            raise CatValueError(msg)
-        __, id, name = result
+        id, name = boundary.get_municipality(self.cat.zip_code)
         self.boundary_search_area = id
         report.mun_name = name
         log.info(_("Municipality: '%s'"), name)

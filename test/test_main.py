@@ -59,8 +59,8 @@ class TestMain(unittest.TestCase):
         self.assertIn("Can't use split file", output)
 
     @mock.patch("catatom2osm.__main__.sys.argv", ["catatom2osm.py", "33333"])
-    @mock.patch("catatom2osm.app.QgsSingleton", mock.MagicMock)
-    @mock.patch("catatom2osm.app.CatAtom2Osm.create_and_run")
+    @mock.patch("catatom2osm.__main__.QgsSingleton", mock.MagicMock)
+    @mock.patch("catatom2osm.__main__.CatAtom2Osm.create_and_run")
     def test_default(self, mockcat):
         __main__.run()
         self.assertTrue(mockcat.called)
@@ -69,8 +69,8 @@ class TestMain(unittest.TestCase):
         self.compareOptions(options)
 
     @mock.patch("catatom2osm.__main__.sys.argv", ["catatom2osm.py", "33333", "-b"])
-    @mock.patch("catatom2osm.app.QgsSingleton", mock.MagicMock)
-    @mock.patch("catatom2osm.app.CatAtom2Osm.create_and_run")
+    @mock.patch("catatom2osm.__main__.QgsSingleton", mock.MagicMock)
+    @mock.patch("catatom2osm.__main__.CatAtom2Osm.create_and_run")
     def test_building(self, mockcat):
         __main__.run()
         self.options.args = "33333 -b"
@@ -80,7 +80,7 @@ class TestMain(unittest.TestCase):
         self.compareOptions(options)
 
     @mock.patch("catatom2osm.__main__.sys.argv", ["catatom2osm.py", "-w", "33333"])
-    @mock.patch("catatom2osm.app.catatom.Reader")
+    @mock.patch("catatom2osm.__main__.Reader")
     def test_download(self, mockcat):
         cat = mock.MagicMock()
         mockcat.return_value = cat
@@ -100,28 +100,3 @@ class TestMain(unittest.TestCase):
     def test_list_error(self, mocklog):
         __main__.run()
         self.assertTrue(mocklog.called)
-
-    @mock.patch("catatom2osm.__main__.sys.argv", ["catatom2osm.py", "foobar"])
-    @mock.patch("catatom2osm.app.QgsSingleton", mock.MagicMock)
-    @mock.patch("catatom2osm.app.CatAtom2Osm")
-    @mock.patch("catatom2osm.__main__.log.error")
-    def test_IOError(self, mocklog, mockcat):
-        mockcat.create_and_run = raiseIOError
-        __main__.run()
-        output = mocklog.call_args_list[0][0][0]
-        self.assertEqual(output, "bartaz")
-
-    @mock.patch(
-        "catatom2osm.__main__.sys.argv",
-        ["catatom2osm.py", "33333", "--log=DEBUG"],
-    )
-    @mock.patch("catatom2osm.app.QgsSingleton", mock.MagicMock)
-    @mock.patch("catatom2osm.app.CatAtom2Osm")
-    @mock.patch("catatom2osm.__main__.log")
-    def test_debug(self, mocklog, mockcat):
-        mockcat.create_and_run = raiseImportError
-        mocklog.app_level = logging.DEBUG
-        with self.assertRaises(ImportError):
-            __main__.run()
-        mocklog.setLevel.assert_called_once_with(logging.DEBUG)
-        mocklog.error.assert_not_called()
