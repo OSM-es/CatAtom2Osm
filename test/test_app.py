@@ -67,10 +67,10 @@ class TestCatAtom2Osm(unittest.TestCase):
         self.m_app.is_new = False
         self.m_app.cat.get_path = lambda *args: self.m_app.path + "/" + "/".join(args)
 
+    @mock.patch("catatom2osm.app.report", mock.MagicMock())
     @mock.patch("catatom2osm.catatom.Reader")
-    @mock.patch("catatom2osm.app.report")
     @mock.patch("catatom2osm.app.os")
-    def test_init(self, m_os, m_report, m_cat):
+    def test_init(self, m_os, m_cat):
         m_cat.return_value.get_path = lambda *args: "foo/" + "/".join(args)
         m_os.path.exists.return_value = False
         m_os.path.splitext.return_value = [""]
@@ -131,8 +131,10 @@ class TestCatAtom2Osm(unittest.TestCase):
         self.m_app.process_building(self.m_app)
         self.m_app.building.move_address.assert_not_called()
 
-    @mock.patch("catatom2osm.app.report")
-    def test_process_tasks(self, m_report):
+    @mock.patch("catatom2osm.app.report", mock.MagicMock())
+    @mock.patch("catatom2osm.app.os")
+    def test_process_tasks(self, m_os):
+        m_os.path.exists.return_value = True
         self.m_app.get_tasks.return_value = {
             "123456A": mock.MagicMock(),
             "123456B": mock.MagicMock(),
@@ -156,10 +158,10 @@ class TestCatAtom2Osm(unittest.TestCase):
             task.to_osm.assert_called_with(upload="yes", tags={"comment": "X" + label})
         self.assertEqual(self.m_app.merge_address.call_count, 5)
 
+    @mock.patch("catatom2osm.app.report", mock.MagicMock())
     @mock.patch("catatom2osm.app.os")
     @mock.patch("catatom2osm.app.type")
-    @mock.patch("catatom2osm.app.report")
-    def test_get_tasks(self, m_report, m_type, m_os):
+    def test_get_tasks(self, m_type, m_os):
         m_os.path.join = lambda *args: "/".join(args)
         m_os.listdir.return_value = ["1", "2", "3"]
         layer_class = mock.MagicMock()
@@ -192,8 +194,7 @@ class TestCatAtom2Osm(unittest.TestCase):
             ]
         )
 
-    @mock.patch("catatom2osm.app.geo")
-    def test_process_parcel(self, m_layer):
+    def test_process_parcel(self):
         self.m_app.tasks = {"a": "a", "b": "b", "c": "c", "d": "d", "e": "e"}
         self.m_app.parcel.merge_by_adjacent_buildings.return_value = {
             "b": "a",
@@ -216,9 +217,8 @@ class TestCatAtom2Osm(unittest.TestCase):
         del self.m_app.qgs
         self.m_app.exit(self.m_app)
 
-    @mock.patch("catatom2osm.app.os")
     @mock.patch("catatom2osm.app.log")
-    def test_export_layer(self, m_log, m_os):
+    def test_export_layer(self, m_log):
         m_layer = mock.MagicMock()
         m_layer.export.return_value = True
         self.m_app.export_layer = get_func(app.CatAtom2Osm.export_layer)
@@ -258,12 +258,11 @@ class TestCatAtom2Osm(unittest.TestCase):
         output = m_log.info.call_args_list[0][0][0]
         self.assertIn("Downloading", output)
 
-    @mock.patch("catatom2osm.app.os")
     @mock.patch("catatom2osm.app.osmxml")
     @mock.patch("catatom2osm.app.codecs")
     @mock.patch("catatom2osm.app.io")
     @mock.patch("catatom2osm.app.gzip")
-    def test_write_osm(self, m_gz, m_io, m_codecs, m_xml, m_os):
+    def test_write_osm(self, m_gz, m_io, m_codecs, m_xml):
         m_xml.serialize.return_value = "taz"
         data = osm.Osm()
         data.Node(0, 0, {"ref": "1"})

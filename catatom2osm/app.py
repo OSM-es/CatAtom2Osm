@@ -168,11 +168,17 @@ class CatAtom2Osm(object):
         self.split = None
         if self.options.split:
             fn = self.options.split
+            if not os.path.exists(fn):
+                if "." not in os.path.basename(fn):
+                    fn += ".osm"
+                if not os.path.exists(fn) and fn == os.path.basename(fn):
+                    fn = self.cat.get_path(fn)
             if fn.endswith(".osm"):
                 fn += "|layername=multipolygons"
             split = geo.BaseLayer(fn, "zoningsplit", "ogr")
             if not split.isValid():
                 msg = "Can't open %s" % self.options.split
+                fn = self.options.split
                 if os.path.basename(fn) == fn and "." not in fn:
                     fn = boundary.get_boundary(self.path, self.boundary_search_area, fn)
                     split = geo.BaseLayer(fn, "zoningsplit", "ogr")
