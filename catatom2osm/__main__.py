@@ -37,7 +37,12 @@ examples = _(
   catatom2osm -s Atocha.geojson 28900
     It processes the Atocha neighborhood delimited by a geojson file with
     its administrative limit. Pass only the zones that have more than 50%
-    of their area within the limit."""
+    of their area within the limit.
+  catatom2osm -l 28900
+    List OSM administrative boundaries available in Madrid
+  catatom2osm -s Atocha 28900
+    Downloads administrative boundary of Atocha neighborhood in Madrid and
+    process it."""
 )
 
 
@@ -77,11 +82,14 @@ def run():
         "-l",
         "--list",
         dest="list",
-        metavar="PROV",
+        metavar="PROV/MUN",
         nargs="?",
         default="",
         const="99",
-        help=_("List province codes or municipality codes for PROV (2 digits)"),
+        help=_(
+            "List province codes or municipality codes for PROV (2 digits) "
+            "or administrative boundaries for MUN (5 digits)"
+        ),
     )
     parser.add_argument(
         "-b",
@@ -118,7 +126,10 @@ def run():
         "-s",
         "--split",
         dest="split",
-        help=_("Process data in the parcels delimited by SPLIT file"),
+        help=_(
+            "Process data in the parcels delimited by SPLIT "
+            "(file / administrative boundary OSM id or name)"
+        ),
     )
     parser.add_argument(
         "-m",

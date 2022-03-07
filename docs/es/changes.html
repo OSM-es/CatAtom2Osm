@@ -15,7 +15,7 @@
   <link rel="stylesheet" type="text/css" href="_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>Registro de cambios &#8212; documentación de CatAtom2Osm - 2.6.3.dev.5</title>
+    <title>Registro de cambios &#8212; documentación de CatAtom2Osm - 2.8.0</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/guzzle.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="install.html" title="Instalación"
              accesskey="P">anterior</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">documentación de CatAtom2Osm - 2.6.3.dev.5</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">documentación de CatAtom2Osm - 2.8.0</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Registro de cambios</a></li> 
       </ul>
     </div>
@@ -100,26 +100,43 @@
             
   <section id="registro-de-cambios">
 <h1>Registro de cambios<a class="headerlink" href="#registro-de-cambios" title="Enlazar permanentemente con este título">¶</a></h1>
-<p><strong>18-2-2022 (2.6.2)</strong>
+<p><strong>07-03-2022 (2.8.0)</strong>
+* Descarga archivos de límites administrativos para división de municipios.</p>
+<p><strong>24-02-2022 (2.7.0)</strong>
+* Incorpora direcciones Carto BCN #35.
+* Preserva tareas existentes al procesar por zonas.</p>
+<p><strong>22-02-2022 (2.6.8)</strong>
+* Corrige varios errores #99, #100, #101, #102.</p>
+<p><strong>21-02-2022 (2.6.7)</strong>
+* Corrige error al aplicar topología a partes incorrectas.</p>
+<p><strong>21-02-2022 (2.6.6)</strong>
+* Corrige error asignando etiqueta a edificios abandonados.</p>
+<p><strong>20-02-2022 (2.6.5)</strong>
+* Detecta códigos de municipio incorrectos #98.</p>
+<p><strong>19-02-2022 (2.6.4)</strong>
+* Integra comprobación de estilo de código en cada commit #77.</p>
+<p><strong>19-02-2022 (2.6.3)</strong>
+* Integra comprobación de estilo de código en publicación #77.</p>
+<p><strong>18-02-2022 (2.6.2)</strong>
 * Corrige errores #92, #93, #95, #96.</p>
-<p><strong>17-2-2022 (2.6.1)</strong>
+<p><strong>17-02-2022 (2.6.1)</strong>
 * Añade código de municipio a archivo de  proyecto.</p>
-<p><strong>16-2-2022 (2.6.0)</strong>
+<p><strong>16-02-2022 (2.6.0)</strong>
 * Repartir los archivos de tareas por parcelas en lugar de zonas.
 * Generar proyectos conteniendo sólo direcciones.
 * Añade al proyecto recuento de partes de edificio como indicativo de complejidad de la tarea.
 * Se abandona opción -o dividir proyecto usando códigos de zonas.</p>
-<p><strong>05-1-2022 (2.5.3)</strong>
+<p><strong>05-01-2022 (2.5.3)</strong>
 * Corrige coordenadas CDAU</p>
-<p><strong>03-1-2022 (2.5.2)</strong>
+<p><strong>03-01-2022 (2.5.2)</strong>
 * Incluye Jerez de la Frontera en CDAU</p>
-<p><strong>03-1-2022 (2.5.1)</strong>
+<p><strong>03-01-2022 (2.5.1)</strong>
 * Corrige referencia a layer</p>
-<p><strong>30-1-2022 (2.5.0)</strong>
+<p><strong>30-01-2022 (2.5.0)</strong>
 * Procesa con capas en memoria mucho más rápido.
 * Evita mover entradas a paredes compartidas con otro edificio.
 * Deja de generar salida para visualizar combinación de edificios.</p>
-<p><strong>23-1-2022 (2.4.0)</strong>
+<p><strong>23-01-2022 (2.4.0)</strong>
 * Elimina partes sin edificio asociado #86</p>
 <p><strong>22-01-2022 (2.3.0)</strong>
 * Corrige error asignando entradas múltiples a edificio
@@ -138,22 +155,22 @@
 * Corrige nombre de carpeta para opción -o</p>
 <p><strong>20-01-2022 (2.2.0)</strong>
 * Almacenar nombres de municipio y áreas de búsqueda #82 #87</p>
-<p><strong>16-1-2022 (2.1.0)</strong>
+<p><strong>16-01-2022 (2.1.0)</strong>
 * Añade direcciones tipo entrada asociadas a varios edificios
 * Corrige error moviendo proyecto
 * Corrige error por mantener shapefiles en modo depuración</p>
-<p><strong>14-1-2022 (2.0.0)</strong>
+<p><strong>14-01-2022 (2.0.0)</strong>
 * Actualiza a Ubuntu 20.04 / QGIS3 / python3 #67.
 * Simplifica la interfaz de línea de comandos.
 * Permite procesar sólo direcciones por tareas (-d).</p>
-<p><strong>10-1-2022 (1.9.3)</strong>
+<p><strong>10-01-2022 (1.9.3)</strong>
 * Corrige error eliminando elementos OSM.</p>
-<p><strong>10-1-2022 (1.9.2)</strong>
+<p><strong>10-01-2022 (1.9.2)</strong>
 * Corrige área de búsqueda de overpass para la opción -s.</p>
-<p><strong>8-1-2022 (1.9.1)</strong>
+<p><strong>08-01-2022 (1.9.1)</strong>
 * El polígono de recorte incluye zonas si el área superpuesta es mayor que el 50%.
 * Corrige error renombrando proyecto.</p>
-<p><strong>8-1-2022 (1.9.0)</strong>
+<p><strong>08-01-2022 (1.9.0)</strong>
 * Opción para dividir un municipio grande usando un archivo (#78)
 * Corrección y mejora de rendimiento de opción -o (#73)</p>
 <p><strong>21-12-2021 (1.8.7)</strong>
@@ -421,7 +438,7 @@
         <li class="right" >
           <a href="install.html" title="Instalación"
              >anterior</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">documentación de CatAtom2Osm - 2.6.3.dev.5</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">documentación de CatAtom2Osm - 2.8.0</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Registro de cambios</a></li> 
       </ul>
     </div>

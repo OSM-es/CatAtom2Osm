@@ -15,7 +15,7 @@
   <link rel="stylesheet" type="text/css" href="_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>Change log &#8212; CatAtom2Osm 2.6.3.dev.5 documentation</title>
+    <title>Change log &#8212; CatAtom2Osm 2.8.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/guzzle.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -45,7 +45,7 @@
         <li class="right" >
           <a href="install.html" title="Install"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">CatAtom2Osm 2.6.3.dev.5 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">CatAtom2Osm 2.8.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Change log</a></li> 
       </ul>
     </div>
@@ -99,28 +99,45 @@
             
   <section id="change-log">
 <h1>Change log<a class="headerlink" href="#change-log" title="Permalink to this headline">¶</a></h1>
-<p><strong>2022-2-18 (2.6.2)</strong>
+<p><strong>2022-03-07 (2.8.0)</strong>
+* Download administrative boundaries to split municipalities</p>
+<p><strong>2022-02-24 (2.7.0)</strong>
+* Add Carto BCN addresses #35
+* Preserve existing task files in zone processing</p>
+<p><strong>2022-02-22 (2.6.8)</strong>
+* Fix errors #99, #100, #101, #102.</p>
+<p><strong>2022-02-21 (2.6.7)</strong>
+* Fix error applying topology to bad parts.</p>
+<p><strong>2022-02-21 (2.6.6)</strong>
+* Fix error assigning abandoned buildings tag.</p>
+<p><strong>2022-02-20 (2.6.5)</strong>
+* Detect bad municipality codes #98.</p>
+<p><strong>2022-02-19 (2.6.4)</strong>
+* Integrate code style checking in each commit #77.</p>
+<p><strong>2022-02-19 (2.6.3)</strong>
+* Integrate code style checking into publishing #77.</p>
+<p><strong>2022-02-18 (2.6.2)</strong>
 * Fix errors #92, #93, #95, #96.</p>
-<p><strong>2022-2-17 (2.6.1)</strong>
+<p><strong>2022-02-17 (2.6.1)</strong>
 * Adds municipality code to tasks project file.</p>
-<p><strong>2022-2-16 (2.6.0)</strong>
+<p><strong>2022-02-16 (2.6.0)</strong>
 * Distribute task files using parcels instead of zones.
 * Generate projects containing only addresses.
 * Adds parts count to project as a task complexity indicator.
 * The option -o split using zone codes is abandoned.</p>
 <p><strong>2022-1-05 (2.5.3)</strong>
 * Fixs CDAU coordinates</p>
-<p><strong>2022-2-03 (2.5.2)</strong>
+<p><strong>2022-02-03 (2.5.2)</strong>
 * Includes Jerez de la Frontera in CDAU</p>
-<p><strong>2022-2-03 (2.5.1)</strong>
+<p><strong>2022-02-03 (2.5.1)</strong>
 * Fix reference to layer</p>
-<p><strong>2022-1-30 (2.5.0)</strong>
+<p><strong>2022-01-30 (2.5.0)</strong>
 * Process much faster unsing in memory layers.
 * Avoids to move entrances to shared wall between buildings.
 * Don’t generate output to view building conflation.</p>
-<p><strong>2022-1-23 (2.4.0)</strong>
+<p><strong>2022-01-23 (2.4.0)</strong>
 * Remove parts without associated building #86</p>
-<p><strong>2022-1-22 (2.3.0)</strong>
+<p><strong>2022-01-22 (2.3.0)</strong>
 * Fix bug assigning multiple entrances to building
 * Creates backup subdirectory for split municipalities
 * Fix addresses stats for split municipalities
@@ -129,30 +146,30 @@
 * Avoids incorrect message for -z option
 * Process of buildings without zone #88
 * Split zoning with -o is used</p>
-<p><strong>2022-1-21 (2.2.2)</strong>
+<p><strong>2022-01-21 (2.2.2)</strong>
 * Improves definition of bounding box to search in Overpass</p>
-<p><strong>2022-1-20 (2.2.1)</strong>
+<p><strong>2022-01-20 (2.2.1)</strong>
 * Raises error for non-existing -o zones
 * Flux control for no data to process
 * Fix subdirectory name for -o option</p>
-<p><strong>2022-1-20 (2.2.0)</strong>
+<p><strong>2022-01-20 (2.2.0)</strong>
 * Store municipality names and search areas #82 #87</p>
-<p><strong>2022-1-16 (2.1.0)</strong>
+<p><strong>2022-01-16 (2.1.0)</strong>
 * Add entrance addresses associated with multiple buildings
 * Fix bug moving the project
 * Fix bug for keeping shapefiles in debug mode</p>
-<p><strong>2022-1-14 (2.0.0)</strong>
+<p><strong>2022-01-14 (2.0.0)</strong>
 * Update to Ubuntu 20.04 / QGIS3 / python3 #67.
 * Simplify CLI.
 * Allow to process tasks for addresses only (-d).</p>
-<p><strong>2022-1-11 (1.9.3)</strong>
+<p><strong>2022-01-11 (1.9.3)</strong>
 * Fix error deleting osm elements.</p>
-<p><strong>2022-1-10 (1.9.2)</strong>
+<p><strong>2022-01-10 (1.9.2)</strong>
 * Fix overpass search area for -s option.</p>
-<p><strong>2022-1-8 (1.9.1)</strong>
+<p><strong>2022-01-8 (1.9.1)</strong>
 * Clip polygon includes zones if overlapped area is greater than 50%.
 * Fix error renaming the project.</p>
-<p><strong>2022-1-8 (1.9.0)</strong>
+<p><strong>2022-01-8 (1.9.0)</strong>
 * Option to split big municipallities using a file (#78)
 * Fix and perfomance improvement of -o option (#73)</p>
 <p><strong>2021-12-21 (1.8.7)</strong>
@@ -422,7 +439,7 @@
         <li class="right" >
           <a href="install.html" title="Install"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">CatAtom2Osm 2.6.3.dev.5 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">CatAtom2Osm 2.8.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Change log</a></li> 
       </ul>
     </div>

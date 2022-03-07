@@ -1,35 +1,38 @@
 Change log
 ==========
 
-**2022-2-24 (2.7.0)**
+**2022-03-07 (2.8.0)**
+* Download administrative boundaries to split municipalities
+
+**2022-02-24 (2.7.0)**
 * Add Carto BCN addresses #35
 * Preserve existing task files in zone processing
 
-**2022-2-22 (2.6.8)**
+**2022-02-22 (2.6.8)**
 * Fix errors #99, #100, #101, #102.
 
-**2022-2-21 (2.6.7)**
+**2022-02-21 (2.6.7)**
 * Fix error applying topology to bad parts.
 
-**2022-2-21 (2.6.6)**
+**2022-02-21 (2.6.6)**
 * Fix error assigning abandoned buildings tag.
 
-**2022-2-20 (2.6.5)**
+**2022-02-20 (2.6.5)**
 * Detect bad municipality codes #98.
 
-**2022-2-19 (2.6.4)**
+**2022-02-19 (2.6.4)**
 * Integrate code style checking in each commit #77.
 
-**2022-2-19 (2.6.3)**
+**2022-02-19 (2.6.3)**
 * Integrate code style checking into publishing #77.
 
-**2022-2-18 (2.6.2)**
+**2022-02-18 (2.6.2)**
 * Fix errors #92, #93, #95, #96.
 
-**2022-2-17 (2.6.1)**
+**2022-02-17 (2.6.1)**
 * Adds municipality code to tasks project file.
 
-**2022-2-16 (2.6.0)**
+**2022-02-16 (2.6.0)**
 * Distribute task files using parcels instead of zones.
 * Generate projects containing only addresses.
 * Adds parts count to project as a task complexity indicator.
@@ -38,21 +41,21 @@ Change log
 **2022-1-05 (2.5.3)**
 * Fixs CDAU coordinates
 
-**2022-2-03 (2.5.2)**
+**2022-02-03 (2.5.2)**
 * Includes Jerez de la Frontera in CDAU
 
-**2022-2-03 (2.5.1)**
+**2022-02-03 (2.5.1)**
 * Fix reference to layer
 
-**2022-1-30 (2.5.0)**
+**2022-01-30 (2.5.0)**
 * Process much faster unsing in memory layers.
 * Avoids to move entrances to shared wall between buildings.
 * Don't generate output to view building conflation.
 
-**2022-1-23 (2.4.0)**
+**2022-01-23 (2.4.0)**
 * Remove parts without associated building #86
 
-**2022-1-22 (2.3.0)**
+**2022-01-22 (2.3.0)**
 * Fix bug assigning multiple entrances to building
 * Creates backup subdirectory for split municipalities
 * Fix addresses stats for split municipalities
@@ -62,38 +65,38 @@ Change log
 * Process of buildings without zone #88
 * Split zoning with -o is used
 
-**2022-1-21 (2.2.2)**
+**2022-01-21 (2.2.2)**
 * Improves definition of bounding box to search in Overpass
 
-**2022-1-20 (2.2.1)**
+**2022-01-20 (2.2.1)**
 * Raises error for non-existing -o zones
 * Flux control for no data to process
 * Fix subdirectory name for -o option
 
-**2022-1-20 (2.2.0)**
+**2022-01-20 (2.2.0)**
 * Store municipality names and search areas #82 #87
 
-**2022-1-16 (2.1.0)**
+**2022-01-16 (2.1.0)**
 * Add entrance addresses associated with multiple buildings
 * Fix bug moving the project
 * Fix bug for keeping shapefiles in debug mode
 
-**2022-1-14 (2.0.0)**
+**2022-01-14 (2.0.0)**
 * Update to Ubuntu 20.04 / QGIS3 / python3 #67.
 * Simplify CLI.
 * Allow to process tasks for addresses only (-d).
 
-**2022-1-11 (1.9.3)**
+**2022-01-11 (1.9.3)**
 * Fix error deleting osm elements.
 
-**2022-1-10 (1.9.2)**
+**2022-01-10 (1.9.2)**
 * Fix overpass search area for -s option.
 
-**2022-1-8 (1.9.1)**
+**2022-01-8 (1.9.1)**
 * Clip polygon includes zones if overlapped area is greater than 50%.
 * Fix error renaming the project.
 
-**2022-1-8 (1.9.0)**
+**2022-01-8 (1.9.0)**
 * Option to split big municipallities using a file (#78)
 * Fix and perfomance improvement of -o option (#73)
 

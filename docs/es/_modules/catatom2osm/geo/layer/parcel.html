@@ -14,7 +14,7 @@
   <link rel="stylesheet" type="text/css" href="../../../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.geo.layer.parcel &#8212; documentación de CatAtom2Osm - 2.6.3.dev.5</title>
+    <title>catatom2osm.geo.layer.parcel &#8212; documentación de CatAtom2Osm - 2.8.0</title>
     <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/guzzle.css" />
     <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">documentación de CatAtom2Osm - 2.6.3.dev.5</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">documentación de CatAtom2Osm - 2.8.0</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Código de módulo</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.geo.layer.parcel</a></li> 
       </ul>
@@ -185,6 +185,8 @@
                     <span class="n">label</span> <span class="o">=</span> <span class="n">zoning</span><span class="o">.</span><span class="n">format_label</span><span class="p">(</span><span class="n">zone</span><span class="p">)</span>
                     <span class="n">pa_label</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_zone</span><span class="p">(</span><span class="n">pa</span><span class="p">)</span>
                     <span class="k">if</span> <span class="n">pa_label</span> <span class="o">==</span> <span class="n">label</span> <span class="ow">or</span> <span class="n">is_inside_area</span><span class="p">(</span><span class="n">pa</span><span class="p">,</span> <span class="n">zone</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">label</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;inf&quot;</span><span class="p">:</span>
+                            <span class="n">label</span> <span class="o">=</span> <span class="n">pa_label</span>
                         <span class="n">pa</span><span class="p">[</span><span class="s2">&quot;zone&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">label</span>
                         <span class="n">to_change</span><span class="p">[</span><span class="n">pa</span><span class="o">.</span><span class="n">id</span><span class="p">()]</span> <span class="o">=</span> <span class="n">get_attributes</span><span class="p">(</span><span class="n">pa</span><span class="p">)</span>
                         <span class="k">break</span>
@@ -369,7 +371,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">documentación de CatAtom2Osm - 2.6.3.dev.5</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">documentación de CatAtom2Osm - 2.8.0</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" >Código de módulo</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.geo.layer.parcel</a></li> 
       </ul>

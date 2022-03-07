@@ -1,56 +1,58 @@
 Registro de cambios
 ===================
 
-**24-2-2022 (2.7.0)**
+**07-03-2022 (2.8.0)**
+* Descarga archivos de límites administrativos para división de municipios.
+
+**24-02-2022 (2.7.0)**
 * Incorpora direcciones Carto BCN #35.
 * Preserva tareas existentes al procesar por zonas.
 
-
-**22-2-2022 (2.6.8)**
+**22-02-2022 (2.6.8)**
 * Corrige varios errores #99, #100, #101, #102.
 
-**21-2-2022 (2.6.7)**
+**21-02-2022 (2.6.7)**
 * Corrige error al aplicar topología a partes incorrectas.
 
-**21-2-2022 (2.6.6)**
+**21-02-2022 (2.6.6)**
 * Corrige error asignando etiqueta a edificios abandonados.
 
-**20-2-2022 (2.6.5)**
+**20-02-2022 (2.6.5)**
 * Detecta códigos de municipio incorrectos #98.
 
-**19-2-2022 (2.6.4)**
+**19-02-2022 (2.6.4)**
 * Integra comprobación de estilo de código en cada commit #77.
 
-**19-2-2022 (2.6.3)**
+**19-02-2022 (2.6.3)**
 * Integra comprobación de estilo de código en publicación #77.
 
-**18-2-2022 (2.6.2)**
+**18-02-2022 (2.6.2)**
 * Corrige errores #92, #93, #95, #96.
 
-**17-2-2022 (2.6.1)**
+**17-02-2022 (2.6.1)**
 * Añade código de municipio a archivo de  proyecto.
 
-**16-2-2022 (2.6.0)**
+**16-02-2022 (2.6.0)**
 * Repartir los archivos de tareas por parcelas en lugar de zonas.
 * Generar proyectos conteniendo sólo direcciones.
 * Añade al proyecto recuento de partes de edificio como indicativo de complejidad de la tarea.
 * Se abandona opción -o dividir proyecto usando códigos de zonas.
 
-**05-1-2022 (2.5.3)**
+**05-01-2022 (2.5.3)**
 * Corrige coordenadas CDAU
 
-**03-1-2022 (2.5.2)**
+**03-01-2022 (2.5.2)**
 * Incluye Jerez de la Frontera en CDAU
 
-**03-1-2022 (2.5.1)**
+**03-01-2022 (2.5.1)**
 * Corrige referencia a layer
 
-**30-1-2022 (2.5.0)**
+**30-01-2022 (2.5.0)**
 * Procesa con capas en memoria mucho más rápido.
 * Evita mover entradas a paredes compartidas con otro edificio.
 * Deja de generar salida para visualizar combinación de edificios.
 
-**23-1-2022 (2.4.0)**
+**23-01-2022 (2.4.0)**
 * Elimina partes sin edificio asociado #86
 
 **22-01-2022 (2.3.0)**
@@ -74,27 +76,27 @@ Registro de cambios
 **20-01-2022 (2.2.0)**
 * Almacenar nombres de municipio y áreas de búsqueda #82 #87
 
-**16-1-2022 (2.1.0)**
+**16-01-2022 (2.1.0)**
 * Añade direcciones tipo entrada asociadas a varios edificios
 * Corrige error moviendo proyecto
 * Corrige error por mantener shapefiles en modo depuración
 
-**14-1-2022 (2.0.0)**
+**14-01-2022 (2.0.0)**
 * Actualiza a Ubuntu 20.04 / QGIS3 / python3 #67.
 * Simplifica la interfaz de línea de comandos.
 * Permite procesar sólo direcciones por tareas (-d).
 
-**10-1-2022 (1.9.3)**
+**10-01-2022 (1.9.3)**
 * Corrige error eliminando elementos OSM.
 
-**10-1-2022 (1.9.2)**
+**10-01-2022 (1.9.2)**
 * Corrige área de búsqueda de overpass para la opción -s.
 
-**8-1-2022 (1.9.1)**
+**08-01-2022 (1.9.1)**
 * El polígono de recorte incluye zonas si el área superpuesta es mayor que el 50%.
 * Corrige error renombrando proyecto.
 
-**8-1-2022 (1.9.0)**
+**08-01-2022 (1.9.0)**
 * Opción para dividir un municipio grande usando un archivo (#78)
 * Corrección y mejora de rendimiento de opción -o (#73)
 

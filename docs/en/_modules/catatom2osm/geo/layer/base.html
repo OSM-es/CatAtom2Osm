@@ -14,7 +14,7 @@
   <link rel="stylesheet" type="text/css" href="../../../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.geo.layer.base &#8212; CatAtom2Osm 2.6.3.dev.5 documentation</title>
+    <title>catatom2osm.geo.layer.base &#8212; CatAtom2Osm 2.8.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/guzzle.css" />
     <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">CatAtom2Osm 2.6.3.dev.5 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">CatAtom2Osm 2.8.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.geo.layer.base</a></li> 
       </ul>
@@ -100,6 +100,7 @@
 <span class="kn">from</span> <span class="nn">tqdm</span> <span class="k">import</span> <span class="n">tqdm</span>
 
 <span class="kn">from</span> <span class="nn">catatom2osm</span> <span class="k">import</span> <span class="n">config</span><span class="p">,</span> <span class="n">osm</span><span class="p">,</span> <span class="n">translate</span>
+<span class="kn">from</span> <span class="nn">catatom2osm.exceptions</span> <span class="k">import</span> <span class="n">CatIOError</span>
 <span class="kn">from</span> <span class="nn">catatom2osm.geo</span> <span class="k">import</span> <span class="n">BUFFER_SIZE</span>
 <span class="kn">from</span> <span class="nn">catatom2osm.geo.aux</span> <span class="k">import</span> <span class="n">get_attributes</span>
 <span class="kn">from</span> <span class="nn">catatom2osm.geo.geometry</span> <span class="k">import</span> <span class="n">Geometry</span>
@@ -135,7 +136,7 @@
         <span class="n">writer</span> <span class="o">=</span> <span class="n">BaseLayer</span><span class="o">.</span><span class="n">get_writer</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">crs</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">geom_type</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">writer</span><span class="o">.</span><span class="n">hasError</span><span class="p">()</span> <span class="o">!=</span> <span class="n">QgsVectorFileWriter</span><span class="o">.</span><span class="n">NoError</span><span class="p">:</span>
             <span class="n">msg</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Error when creating shapefile: &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="n">writer</span><span class="o">.</span><span class="n">errorMessage</span><span class="p">()</span>
-            <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">CatIOError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">writer</span></div>
 
 <div class="viewcode-block" id="BaseLayer.delete_shp"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.base.html#catatom2osm.geo.layer.base.BaseLayer.delete_shp">[docs]</a>    <span class="nd">@staticmethod</span>
@@ -212,7 +213,10 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">updateFields</span><span class="p">()</span>
         <span class="n">dst_fields</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">()</span>
         <span class="n">dst_ft</span> <span class="o">=</span> <span class="n">QgsFeature</span><span class="p">(</span><span class="n">dst_fields</span><span class="p">)</span>
-        <span class="n">dst_ft</span><span class="o">.</span><span class="n">setGeometry</span><span class="p">(</span><span class="n">feature</span><span class="o">.</span><span class="n">geometry</span><span class="p">())</span>
+        <span class="n">geom</span> <span class="o">=</span> <span class="n">feature</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">geom</span><span class="o">.</span><span class="n">isGeosValid</span><span class="p">():</span>
+            <span class="n">geom</span> <span class="o">=</span> <span class="n">geom</span><span class="o">.</span><span class="n">makeValid</span><span class="p">()</span>
+        <span class="n">dst_ft</span><span class="o">.</span><span class="n">setGeometry</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span>
         <span class="n">src_attrs</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">()</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">feature</span><span class="o">.</span><span class="n">fields</span><span class="p">()]</span>
         <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">dst_fields</span><span class="o">.</span><span class="n">toList</span><span class="p">():</span>
             <span class="n">dst_attr</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">()</span>
@@ -584,7 +588,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">CatAtom2Osm 2.6.3.dev.5 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">CatAtom2Osm 2.8.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.geo.layer.base</a></li> 
       </ul>

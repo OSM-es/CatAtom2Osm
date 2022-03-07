@@ -15,7 +15,7 @@
   <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.catatom module &#8212; CatAtom2Osm 2.6.3.dev.5 documentation</title>
+    <title>catatom2osm.catatom module &#8212; CatAtom2Osm 2.8.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/guzzle.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
@@ -25,7 +25,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="catatom2osm.cbcn module" href="catatom2osm.cbcn.html" />
-    <link rel="prev" title="catatom2osm.app module" href="catatom2osm.app.html" />
+    <link rel="prev" title="catatom2osm.boundary module" href="catatom2osm.boundary.html" />
   
    
 
@@ -43,9 +43,9 @@
           <a href="catatom2osm.cbcn.html" title="catatom2osm.cbcn module"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="catatom2osm.app.html" title="catatom2osm.app module"
+          <a href="catatom2osm.boundary.html" title="catatom2osm.boundary module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 2.6.3.dev.5 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 2.8.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../api.html" >API reference</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="modules.html" >CatAtom2Osm</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="catatom2osm.html" accesskey="U">catatom2osm package</a> &#187;</li>
@@ -60,8 +60,8 @@
   <div id="left-column">
     <div class="sphinxsidebar">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="catatom2osm.app.html"
-                        title="previous chapter">catatom2osm.app module</a></p>
+  <p class="topless"><a href="catatom2osm.boundary.html"
+                        title="previous chapter">catatom2osm.boundary module</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="catatom2osm.cbcn.html"
                         title="next chapter">catatom2osm.cbcn module</a></p>
@@ -127,10 +127,28 @@
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="catatom2osm.catatom.Reader.fix_amp">
+<span class="sig-name descname"><span class="pre">fix_amp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gml_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zip_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/catatom.html#Reader.fix_amp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.catatom.Reader.fix_amp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test if source needs to be escape ampersand.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="catatom2osm.catatom.Reader.fix_encoding">
+<span class="sig-name descname"><span class="pre">fix_encoding</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gml_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zip_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/catatom.html#Reader.fix_encoding"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.catatom.Reader.fix_encoding" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test if source needs to be converted to utf-8.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="catatom2osm.catatom.Reader.get_atom_file">
 <span class="sig-name descname"><span class="pre">get_atom_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/catatom.html#Reader.get_atom_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.catatom.Reader.get_atom_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Try to download the ZIP file for self.zip_code.</p>
 <p>Given the url of a Cadastre ATOM service.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="catatom2osm.catatom.Reader.get_file_object">
+<span class="sig-name descname"><span class="pre">get_file_object</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gml_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zip_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/catatom.html#Reader.get_file_object"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#catatom2osm.catatom.Reader.get_file_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get handler for gml_path (if exist) or for zip_path.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -207,7 +225,7 @@ layer, else returns None</p></li>
   <div class="footer-relations">
     
       <div class="pull-left">
-        <a class="btn btn-default" href="catatom2osm.app.html" title="previous chapter (use the left arrow)">catatom2osm.app module</a>
+        <a class="btn btn-default" href="catatom2osm.boundary.html" title="previous chapter (use the left arrow)">catatom2osm.boundary module</a>
       </div>
     
       <div class="pull-right">
@@ -232,9 +250,9 @@ layer, else returns None</p></li>
           <a href="catatom2osm.cbcn.html" title="catatom2osm.cbcn module"
              >next</a> |</li>
         <li class="right" >
-          <a href="catatom2osm.app.html" title="catatom2osm.app module"
+          <a href="catatom2osm.boundary.html" title="catatom2osm.boundary module"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 2.6.3.dev.5 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CatAtom2Osm 2.8.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../api.html" >API reference</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="modules.html" >CatAtom2Osm</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="catatom2osm.html" >catatom2osm package</a> &#187;</li>

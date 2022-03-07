@@ -14,7 +14,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>test.test_overpass &#8212; documentación de CatAtom2Osm - 2.6.3.dev.5</title>
+    <title>test.test_overpass &#8212; documentación de CatAtom2Osm - 2.8.0</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/guzzle.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.6.3.dev.5</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.8.0</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Código de módulo</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">test.test_overpass</a></li> 
       </ul>
@@ -84,6 +84,7 @@
 
 <span class="kn">import</span> <span class="nn">mock</span>
 
+<span class="kn">from</span> <span class="nn">catatom2osm.exceptions</span> <span class="k">import</span> <span class="n">CatIOError</span>
 <span class="kn">from</span> <span class="nn">catatom2osm.overpass</span> <span class="k">import</span> <span class="n">Query</span><span class="p">,</span> <span class="n">api_servers</span>
 
 
@@ -151,17 +152,17 @@
 <div class="viewcode-block" id="TestQuery.test_download"><a class="viewcode-back" href="../../api/test.test_overpass.html#test.test_overpass.TestQuery.test_download">[documentos]</a>    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s2">&quot;catatom2osm.overpass.download&quot;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">test_download</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m_download</span><span class="p">):</span>
         <span class="k">def</span> <span class="nf">raises_io</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">IOError</span><span class="p">()</span>
+            <span class="k">raise</span> <span class="n">CatIOError</span><span class="p">()</span>
 
         <span class="k">def</span> <span class="nf">raises_io1</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">fn</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">url</span> <span class="o">==</span> <span class="n">api_servers</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
-                <span class="k">raise</span> <span class="ne">IOError</span><span class="p">()</span>
+                <span class="k">raise</span> <span class="n">CatIOError</span><span class="p">()</span>
 
         <span class="n">q</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="s2">&quot;1,2,3,4&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">)</span>
         <span class="n">q</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="s2">&quot;bar&quot;</span><span class="p">)</span>
         <span class="n">m_download</span><span class="o">.</span><span class="n">wget</span><span class="o">.</span><span class="n">assert_called_once_with</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">get_url</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="s2">&quot;bar&quot;</span><span class="p">)</span>
         <span class="n">m_download</span><span class="o">.</span><span class="n">wget</span> <span class="o">=</span> <span class="n">raises_io</span>
-        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="ne">IOError</span><span class="p">):</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="n">CatIOError</span><span class="p">):</span>
             <span class="n">q</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="s2">&quot;bar&quot;</span><span class="p">)</span>
         <span class="n">m_download</span><span class="o">.</span><span class="n">wget</span> <span class="o">=</span> <span class="n">raises_io1</span>
         <span class="n">q</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="s2">&quot;bar&quot;</span><span class="p">)</span></div>
@@ -189,7 +190,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.6.3.dev.5</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.8.0</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Código de módulo</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">test.test_overpass</a></li> 
       </ul>

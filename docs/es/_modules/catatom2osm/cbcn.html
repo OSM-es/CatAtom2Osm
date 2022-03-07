@@ -1,0 +1,274 @@
+
+<!DOCTYPE html>
+
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- Licensed under the Apache 2.0 License -->
+  <link rel="stylesheet" type="text/css" href="../../_static/fonts/open-sans/stylesheet.css" />
+  <!-- Licensed under the SIL Open Font License -->
+  <link rel="stylesheet" type="text/css" href="../../_static/fonts/source-serif-pro/source-serif-pro.css" />
+  <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>catatom2osm.cbcn &#8212; documentación de CatAtom2Osm - 2.8.0</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/guzzle.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/translations.js"></script>
+    <link rel="index" title="Índice" href="../../genindex.html" />
+    <link rel="search" title="Búsqueda" href="../../search.html" />
+  
+   
+
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navegación</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="Índice General"
+             accesskey="I">índice</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Índice de Módulos Python"
+             >módulos</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.8.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Código de módulo</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">catatom2osm.cbcn</a></li> 
+      </ul>
+    </div>
+    <div class="container-wrapper">
+
+      <div id="mobile-toggle">
+        <a href="#"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
+      </div>
+  <div id="left-column">
+    <div class="sphinxsidebar">
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <div id="main-search">
+      <form class="form-inline" action="../../search.html" method="GET" role="form">
+        <div class="input-group">
+          <input name="q" type="text" class="form-control" placeholder="Search...">
+        </div>
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+        <div id="right-column">
+          
+          <div role="navigation" aria-label="breadcrumbs navigation">
+            <ol class="breadcrumb">
+              <li><a href="../../index.html">Docs</a></li>
+              
+                <li><a href="../index.html">Código de módulo</a></li>
+              
+              <li>catatom2osm.cbcn</li>
+            </ol>
+          </div>
+          
+          <div class="document clearer body">
+            
+  <h1>Código fuente para catatom2osm.cbcn</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Reader of Carto BCN addresses.&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span>
+
+<span class="kn">from</span> <span class="nn">qgis.core</span> <span class="k">import</span> <span class="n">QgsFeature</span>
+
+<span class="kn">from</span> <span class="nn">catatom2osm</span> <span class="k">import</span> <span class="n">config</span><span class="p">,</span> <span class="n">download</span>
+<span class="kn">from</span> <span class="nn">catatom2osm.exceptions</span> <span class="k">import</span> <span class="n">CatIOError</span>
+<span class="kn">from</span> <span class="nn">catatom2osm.geo</span> <span class="k">import</span> <span class="n">AddressLayer</span><span class="p">,</span> <span class="n">BaseLayer</span><span class="p">,</span> <span class="n">Point</span>
+<span class="kn">from</span> <span class="nn">catatom2osm.geo.aux</span> <span class="k">import</span> <span class="n">is_inside</span>
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">app_name</span><span class="p">)</span>
+
+<span class="n">cbcn_thr</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># Threshold in meters to search for Cadastre parcel</span>
+
+<span class="n">highway_types_equiv</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;Av&quot;</span><span class="p">:</span> <span class="s2">&quot;Avinguda&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Bda&quot;</span><span class="p">:</span> <span class="s2">&quot;Baixada&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;C&quot;</span><span class="p">:</span> <span class="s2">&quot;Carrer&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Cro&quot;</span><span class="p">:</span> <span class="s2">&quot;Carreró&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Csta&quot;</span><span class="p">:</span> <span class="s2">&quot;Costa&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Ctra&quot;</span><span class="p">:</span> <span class="s2">&quot;Carretera&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Dav&quot;</span><span class="p">:</span> <span class="s2">&quot;Davallada&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Drec&quot;</span><span class="p">:</span> <span class="s2">&quot;Drecera&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Esc&quot;</span><span class="p">:</span> <span class="s2">&quot;Escales&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Escu&quot;</span><span class="p">:</span> <span class="s2">&quot;Escullera&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Esp&quot;</span><span class="p">:</span> <span class="s2">&quot;Espigó&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;G.V.&quot;</span><span class="p">:</span> <span class="s2">&quot;Gran Via&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Jard&quot;</span><span class="p">:</span> <span class="s2">&quot;Jardins&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Pdis&quot;</span><span class="p">:</span> <span class="s2">&quot;Passadís&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Pg&quot;</span><span class="p">:</span> <span class="s2">&quot;Passeig&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Pl&quot;</span><span class="p">:</span> <span class="s2">&quot;Plaça&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Plta&quot;</span><span class="p">:</span> <span class="s2">&quot;Placeta&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Ptge&quot;</span><span class="p">:</span> <span class="s2">&quot;Passatge&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Ptja&quot;</span><span class="p">:</span> <span class="s2">&quot;Platja&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Rbla&quot;</span><span class="p">:</span> <span class="s2">&quot;Rambla&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Rda&quot;</span><span class="p">:</span> <span class="s2">&quot;Ronda&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Rier&quot;</span><span class="p">:</span> <span class="s2">&quot;Riera&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="s2">&quot;Torrent&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Trav&quot;</span><span class="p">:</span> <span class="s2">&quot;Travessera&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Trvs&quot;</span><span class="p">:</span> <span class="s2">&quot;Travessia&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Viad&quot;</span><span class="p">:</span> <span class="s2">&quot;Viaducte&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="get_cat_address"><a class="viewcode-back" href="../../api/catatom2osm.cbcn.html#catatom2osm.cbcn.get_cat_address">[documentos]</a><span class="k">def</span> <span class="nf">get_cat_address</span><span class="p">(</span><span class="n">ad</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Convert CBCN addresses to Cadastre attributes.&quot;&quot;&quot;</span>
+    <span class="n">attr</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">tip_via</span> <span class="o">=</span> <span class="n">ad</span><span class="p">[</span><span class="s2">&quot;NOM_VIA&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">nom_tip_via</span> <span class="o">=</span> <span class="n">highway_types_equiv</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">tip_via</span><span class="p">,</span> <span class="n">tip_via</span><span class="p">)</span>
+    <span class="n">nom_via</span> <span class="o">=</span> <span class="n">ad</span><span class="p">[</span><span class="s2">&quot;NOM_VIA&quot;</span><span class="p">][</span><span class="nb">len</span><span class="p">(</span><span class="n">tip_via</span><span class="p">)</span> <span class="p">:]</span>
+    <span class="n">attr</span><span class="p">[</span><span class="s2">&quot;TN_text&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nom_tip_via</span> <span class="o">+</span> <span class="n">nom_via</span>
+    <span class="n">attr</span><span class="p">[</span><span class="s2">&quot;spec&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Entrance&quot;</span>
+    <span class="n">attr</span><span class="p">[</span><span class="s2">&quot;designator&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ad</span><span class="p">[</span><span class="s2">&quot;LITERAL&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">attr</span></div>
+
+
+<div class="viewcode-block" id="get_address"><a class="viewcode-back" href="../../api/catatom2osm.cbcn.html#catatom2osm.cbcn.get_address">[documentos]</a><span class="k">def</span> <span class="nf">get_address</span><span class="p">(</span><span class="n">cbcn</span><span class="p">,</span> <span class="n">parcel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get  Cadastre style addresses from CBCN dataset.&quot;&quot;&quot;</span>
+    <span class="n">address</span> <span class="o">=</span> <span class="n">AddressLayer</span><span class="p">()</span>
+    <span class="n">address</span><span class="o">.</span><span class="n">rename</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">address</span><span class="o">.</span><span class="n">resolve</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">address</span><span class="o">.</span><span class="n">setCrs</span><span class="p">(</span><span class="n">cbcn</span><span class="o">.</span><span class="n">crs</span><span class="p">())</span>
+    <span class="n">address</span><span class="o">.</span><span class="n">startEditing</span><span class="p">()</span>
+    <span class="n">index</span> <span class="o">=</span> <span class="n">parcel</span><span class="o">.</span><span class="n">get_index</span><span class="p">()</span>
+    <span class="n">pa_feat</span> <span class="o">=</span> <span class="p">{</span><span class="n">f</span><span class="o">.</span><span class="n">id</span><span class="p">():</span> <span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">parcel</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">()}</span>
+    <span class="k">for</span> <span class="n">ad</span> <span class="ow">in</span> <span class="n">cbcn</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">ad</span><span class="p">[</span><span class="s2">&quot;NOM_VIA&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># NOQA</span>
+            <span class="k">continue</span>
+        <span class="n">attr</span> <span class="o">=</span> <span class="n">get_cat_address</span><span class="p">(</span><span class="n">ad</span><span class="p">)</span>
+        <span class="n">pt</span> <span class="o">=</span> <span class="n">Point</span><span class="p">(</span><span class="n">ad</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span><span class="o">.</span><span class="n">asPoint</span><span class="p">())</span>
+        <span class="n">area_of_candidates</span> <span class="o">=</span> <span class="n">pt</span><span class="o">.</span><span class="n">boundingBox</span><span class="p">(</span><span class="n">cbcn_thr</span><span class="p">)</span>
+        <span class="n">fids</span> <span class="o">=</span> <span class="n">index</span><span class="o">.</span><span class="n">intersects</span><span class="p">(</span><span class="n">area_of_candidates</span><span class="p">)</span>
+        <span class="n">parcel</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">sep</span> <span class="o">=</span> <span class="n">cbcn_thr</span>
+        <span class="k">for</span> <span class="n">fid</span> <span class="ow">in</span> <span class="n">fids</span><span class="p">:</span>
+            <span class="n">dist</span> <span class="o">=</span> <span class="n">pa_feat</span><span class="p">[</span><span class="n">fid</span><span class="p">]</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span><span class="o">.</span><span class="n">closestSegmentWithContext</span><span class="p">(</span><span class="n">pt</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">is_inside</span><span class="p">(</span><span class="n">ad</span><span class="p">,</span> <span class="n">pa_feat</span><span class="p">[</span><span class="n">fid</span><span class="p">]):</span>
+                <span class="n">parcel</span> <span class="o">=</span> <span class="n">pa_feat</span><span class="p">[</span><span class="n">fid</span><span class="p">]</span>
+                <span class="k">break</span>
+            <span class="k">elif</span> <span class="n">dist</span> <span class="o">&lt;</span> <span class="n">sep</span><span class="p">:</span>
+                <span class="n">parcel</span> <span class="o">=</span> <span class="n">pa_feat</span><span class="p">[</span><span class="n">fid</span><span class="p">]</span>
+                <span class="n">sep</span> <span class="o">=</span> <span class="n">dist</span>
+        <span class="k">if</span> <span class="n">parcel</span><span class="p">:</span>
+            <span class="n">ref</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{ad[&#39;CODICARRER&#39;]}</span><span class="s2">.</span><span class="si">{attr[&#39;designator&#39;]}</span><span class="s2">.</span><span class="si">{parcel[&#39;localId&#39;]}</span><span class="s2">&quot;</span>
+            <span class="n">attr</span><span class="p">[</span><span class="s2">&quot;localId&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ref</span>
+            <span class="n">feat</span> <span class="o">=</span> <span class="n">QgsFeature</span><span class="p">(</span><span class="n">address</span><span class="o">.</span><span class="n">fields</span><span class="p">())</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">attr</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+                <span class="n">feat</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="n">feat</span><span class="o">.</span><span class="n">setGeometry</span><span class="p">(</span><span class="n">ad</span><span class="o">.</span><span class="n">geometry</span><span class="p">())</span>
+            <span class="n">address</span><span class="o">.</span><span class="n">addFeature</span><span class="p">(</span><span class="n">feat</span><span class="p">)</span>
+    <span class="n">address</span><span class="o">.</span><span class="n">commitChanges</span><span class="p">()</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Read </span><span class="si">%d</span><span class="s2"> features in &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">address</span><span class="o">.</span><span class="n">featureCount</span><span class="p">(),</span> <span class="n">address</span><span class="o">.</span><span class="n">name</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">address</span></div>
+
+
+<div class="viewcode-block" id="Reader"><a class="viewcode-back" href="../../api/catatom2osm.cbcn.html#catatom2osm.cbcn.Reader">[documentos]</a><span class="k">class</span> <span class="nc">Reader</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Class to download and read Carto BCN SHP file.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a_path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Construct a CBCN reader.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            a_path (str): Directory where the source files are located.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">a_path</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">a_path</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">a_path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">a_path</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">CatIOError</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Not a directory: &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="n">a_path</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cbcn_fn</span> <span class="o">=</span> <span class="s2">&quot;0501040100_Adreces.zip&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;https://opendata-ajuntament.barcelona.cat/&quot;</span>
+            <span class="s2">&quot;data/dataset/6b5cfa7b-1d8d-45f0-990a-d1844d43ffd1/&quot;</span>
+            <span class="s2">&quot;resource/6bfe63d8-8c6c-4cde-aaa3-b7c48fa66e34/download&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">meta_url</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;https://opendata-ajuntament.barcelona.cat/&quot;</span>
+            <span class="s2">&quot;data/es/dataset/taula-direle/&quot;</span>
+            <span class="s2">&quot;resource/6bfe63d8-8c6c-4cde-aaa3-b7c48fa66e34&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">src_date</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="Reader.get_metadata"><a class="viewcode-back" href="../../api/catatom2osm.cbcn.html#catatom2osm.cbcn.Reader.get_metadata">[documentos]</a>    <span class="k">def</span> <span class="nf">get_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">fn</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cbcn_fn</span> <span class="o">+</span> <span class="s2">&quot;.txt&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fo</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">src_date</span> <span class="o">=</span> <span class="n">fo</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">download</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">meta_url</span><span class="p">)</span> <span class="k">as</span> <span class="n">response</span><span class="p">:</span>
+                <span class="n">s</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+                    <span class="sa">r</span><span class="s2">&quot;Fecha publicación&lt;/th&gt;[\n\r ]*&lt;td&gt;([\d/]+)&quot;</span><span class="p">,</span>
+                    <span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">src_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="s2">&quot;</span><span class="si">%d</span><span class="s2">/%m/%Y&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span>
+                    <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">CatIOError</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Could not read metadata from &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="s2">&quot;Carto BCN&quot;</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fo</span><span class="p">:</span>
+                <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">src_date</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Reader.read"><a class="viewcode-back" href="../../api/catatom2osm.cbcn.html#catatom2osm.cbcn.Reader.read">[documentos]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">fn</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cbcn_fn</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Downloading &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">cbcn_fn</span><span class="p">)</span>
+            <span class="n">download</span><span class="o">.</span><span class="n">wget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">fn</span><span class="p">)</span>
+        <span class="n">cbcn</span> <span class="o">=</span> <span class="n">BaseLayer</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="s2">&quot;cbcn&quot;</span><span class="p">,</span> <span class="s2">&quot;ogr&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">cbcn</span><span class="o">.</span><span class="n">isValid</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="n">CatIOError</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Failed to load layer &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">cbcn_fn</span><span class="p">)</span>
+        <span class="n">cbcn</span><span class="o">.</span><span class="n">setProviderEncoding</span><span class="p">(</span><span class="s2">&quot;ISO-8859-1&quot;</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Read </span><span class="si">%d</span><span class="s2"> features in &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">),</span> <span class="n">cbcn</span><span class="o">.</span><span class="n">featureCount</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">cbcn_fn</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_metadata</span><span class="p">()</span>
+        <span class="n">cbcn</span><span class="o">.</span><span class="n">source_date</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">src_date</span>
+        <span class="k">return</span> <span class="n">cbcn</span></div></div>
+</pre></div>
+
+          </div>
+            
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navegación</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="Índice General"
+             >índice</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Índice de Módulos Python"
+             >módulos</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.8.0</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Código de módulo</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">catatom2osm.cbcn</a></li> 
+      </ul>
+    </div>
+<script type="text/javascript">
+  $("#mobile-toggle a").click(function () {
+    $("#left-column").toggle();
+  });
+</script>
+<script type="text/javascript" src="../../_static/js/bootstrap.js"></script>
+  <div class="footer">
+    &copy; Copyright 2017, Javier Sanchez Portero. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  </body>
+</html>

@@ -14,7 +14,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.cdau &#8212; documentación de CatAtom2Osm - 2.6.3.dev.5</title>
+    <title>catatom2osm.cdau &#8212; documentación de CatAtom2Osm - 2.8.0</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/guzzle.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.6.3.dev.5</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.8.0</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Código de módulo</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.cdau</a></li> 
       </ul>
@@ -90,6 +90,7 @@
 <span class="kn">from</span> <span class="nn">qgis.core</span> <span class="k">import</span> <span class="n">QgsCoordinateReferenceSystem</span><span class="p">,</span> <span class="n">QgsFeature</span>
 
 <span class="kn">from</span> <span class="nn">catatom2osm</span> <span class="k">import</span> <span class="n">config</span><span class="p">,</span> <span class="n">download</span><span class="p">,</span> <span class="n">geo</span>
+<span class="kn">from</span> <span class="nn">catatom2osm.exceptions</span> <span class="k">import</span> <span class="n">CatIOError</span><span class="p">,</span> <span class="n">CatValueError</span>
 <span class="kn">from</span> <span class="nn">catatom2osm.report</span> <span class="k">import</span> <span class="n">instance</span> <span class="k">as</span> <span class="n">report</span>
 
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">app_name</span><span class="p">)</span>
@@ -115,7 +116,7 @@
     <span class="s2">&quot;https://www.callejerodeandalucia.es/portal/informaci%C3%B3n-alfanum%C3%A9rica&quot;</span>
 <span class="p">)</span>
 <span class="n">cdau_crs</span> <span class="o">=</span> <span class="mi">25830</span>
-<span class="n">cdau_thr</span> <span class="o">=</span> <span class="mi">5</span>  <span class="c1"># Threhold in meters to conflate Cadastre addresses</span>
+<span class="n">cdau_thr</span> <span class="o">=</span> <span class="mi">5</span>  <span class="c1"># Threshold in meters to conflate Cadastre addresses</span>
 <span class="n">cod_mun_trans</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;04&quot;</span><span class="p">:</span> <span class="p">{</span><span class="mi">40</span><span class="p">:</span> <span class="mi">901</span><span class="p">,</span> <span class="mi">104</span><span class="p">:</span> <span class="mi">902</span><span class="p">,</span> <span class="mi">105</span><span class="p">:</span> <span class="mi">903</span><span class="p">,</span> <span class="mi">900</span><span class="p">:</span> <span class="mi">13</span><span class="p">},</span>
     <span class="s2">&quot;11&quot;</span><span class="p">:</span> <span class="p">{</span><span class="mi">43</span><span class="p">:</span> <span class="mi">901</span><span class="p">,</span> <span class="mi">44</span><span class="p">:</span> <span class="mi">902</span><span class="p">,</span> <span class="mi">45</span><span class="p">:</span> <span class="mi">903</span><span class="p">,</span> <span class="mi">900</span><span class="p">:</span> <span class="mi">12</span><span class="p">},</span>
@@ -238,7 +239,7 @@
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a_path</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Construct a reader.</span>
+<span class="sd">        Construct a CDAU reader.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            a_path (str): Directory where the source files are located.</span>
@@ -247,7 +248,7 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">a_path</span><span class="p">):</span>
             <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">a_path</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">a_path</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Not a directory: &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="n">a_path</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">CatIOError</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Not a directory: &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="n">a_path</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">crs_ref</span> <span class="o">=</span> <span class="n">cdau_crs</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">src_date</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -256,32 +257,33 @@
             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">md_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fo</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">src_date</span> <span class="o">=</span> <span class="n">fo</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">response</span> <span class="o">=</span> <span class="n">download</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">meta_url</span><span class="p">)</span>
-            <span class="n">s</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
-                <span class="sa">r</span><span class="s2">&quot;fecha de referencia.*([0-9]{1,2}\sde\s.+\sde\s[0-9]</span><span class="si">{4}</span><span class="s2">)&quot;</span><span class="p">,</span>
-                <span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">,</span>
-            <span class="p">)</span>
+            <span class="k">with</span> <span class="n">download</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">meta_url</span><span class="p">)</span> <span class="k">as</span> <span class="n">response</span><span class="p">:</span>
+                <span class="n">s</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+                    <span class="sa">r</span><span class="s2">&quot;fecha de referencia.*([0-9]{1,2}\sde\s.+\sde\s[0-9]</span><span class="si">{4}</span><span class="s2">)&quot;</span><span class="p">,</span>
+                    <span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">,</span>
+                <span class="p">)</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">src_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span>
                     <span class="n">s</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="s2">&quot;</span><span class="si">%d</span><span class="s2"> de %B de %Y&quot;</span>
                 <span class="p">)</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Could not read metadata from &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="s2">&quot;CDAU&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="n">CatIOError</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Could not read metadata from &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="s2">&quot;CDAU&quot;</span><span class="p">)</span>
             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">md_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fo</span><span class="p">:</span>
                 <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">src_date</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Reader.read"><a class="viewcode-back" href="../../api/catatom2osm.cdau.html#catatom2osm.cdau.Reader.read">[documentos]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prov_code</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">prov_code</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">andalucia</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Province code &#39;</span><span class="si">%s</span><span class="s2">&#39; not valid&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="n">prov_code</span><span class="p">)</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Province code &#39;</span><span class="si">%s</span><span class="s2">&#39; is not valid&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="n">prov_code</span>
+            <span class="k">raise</span> <span class="n">CatValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
         <span class="n">csv_fn</span> <span class="o">=</span> <span class="n">csv_name</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">andalucia</span><span class="p">[</span><span class="n">prov_code</span><span class="p">])</span>
         <span class="n">csv_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="n">csv_fn</span><span class="p">)</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="n">cdau_url</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">csv_fn</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">csv_path</span><span class="p">):</span>
             <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Downloading &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">),</span> <span class="n">csv_path</span><span class="p">)</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="n">cdau_url</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">csv_fn</span><span class="p">)</span>
             <span class="n">download</span><span class="o">.</span><span class="n">wget</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">csv_path</span><span class="p">)</span>
         <span class="n">csv</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">BaseLayer</span><span class="p">(</span><span class="n">csv_path</span><span class="p">,</span> <span class="n">csv_fn</span><span class="p">,</span> <span class="s2">&quot;ogr&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">csv</span><span class="o">.</span><span class="n">isValid</span><span class="p">():</span>
-            <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Failed to load layer &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="n">csv_path</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">CatIOError</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Failed to load layer &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="n">csv_path</span><span class="p">)</span>
         <span class="n">csv</span><span class="o">.</span><span class="n">setCrs</span><span class="p">(</span><span class="n">QgsCoordinateReferenceSystem</span><span class="o">.</span><span class="n">fromEpsgId</span><span class="p">(</span><span class="n">cdau_crs</span><span class="p">))</span>
         <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Read </span><span class="si">%d</span><span class="s2"> features in &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">),</span> <span class="n">csv</span><span class="o">.</span><span class="n">featureCount</span><span class="p">(),</span> <span class="n">csv_path</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">get_metadata</span><span class="p">(</span><span class="n">csv_path</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;.txt&quot;</span><span class="p">))</span>
@@ -369,7 +371,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.6.3.dev.5</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.8.0</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Código de módulo</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.cdau</a></li> 
       </ul>

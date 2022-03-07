@@ -15,7 +15,7 @@
   <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.cbcn module &#8212; documentación de CatAtom2Osm - 2.6.3.dev.5</title>
+    <title>catatom2osm.cbcn module &#8212; documentación de CatAtom2Osm - 2.8.0</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/guzzle.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="catatom2osm.catatom.html" title="catatom2osm.catatom module"
              accesskey="P">anterior</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">documentación de CatAtom2Osm - 2.6.3.dev.5</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">documentación de CatAtom2Osm - 2.8.0</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../api.html" >Referencia API</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="modules.html" >CatAtom2Osm</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="catatom2osm.html" accesskey="U">catatom2osm package</a> &#187;</li>
@@ -110,6 +110,35 @@
   <section id="module-catatom2osm.cbcn">
 <span id="catatom2osm-cbcn-module"></span><h1>catatom2osm.cbcn module<a class="headerlink" href="#module-catatom2osm.cbcn" title="Enlazar permanentemente con este título">¶</a></h1>
 <p>Reader of Carto BCN addresses.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="catatom2osm.cbcn.Reader">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">catatom2osm.cbcn.</span></span><span class="sig-name descname"><span class="pre">Reader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/cbcn.html#Reader"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.cbcn.Reader" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class to download and read Carto BCN SHP file.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="catatom2osm.cbcn.Reader.get_metadata">
+<span class="sig-name descname"><span class="pre">get_metadata</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/cbcn.html#Reader.get_metadata"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.cbcn.Reader.get_metadata" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="catatom2osm.cbcn.Reader.read">
+<span class="sig-name descname"><span class="pre">read</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/cbcn.html#Reader.read"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.cbcn.Reader.read" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="catatom2osm.cbcn.get_address">
+<span class="sig-prename descclassname"><span class="pre">catatom2osm.cbcn.</span></span><span class="sig-name descname"><span class="pre">get_address</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cbcn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parcel</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/cbcn.html#get_address"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.cbcn.get_address" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Get  Cadastre style addresses from CBCN dataset.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="catatom2osm.cbcn.get_cat_address">
+<span class="sig-prename descclassname"><span class="pre">catatom2osm.cbcn.</span></span><span class="sig-name descname"><span class="pre">get_cat_address</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ad</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/cbcn.html#get_cat_address"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.cbcn.get_cat_address" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Convert CBCN addresses to Cadastre attributes.</p>
+</dd></dl>
+
 </section>
 
 
@@ -145,7 +174,7 @@
         <li class="right" >
           <a href="catatom2osm.catatom.html" title="catatom2osm.catatom module"
              >anterior</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">documentación de CatAtom2Osm - 2.6.3.dev.5</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">documentación de CatAtom2Osm - 2.8.0</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../api.html" >Referencia API</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="modules.html" >CatAtom2Osm</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="catatom2osm.html" >catatom2osm package</a> &#187;</li>

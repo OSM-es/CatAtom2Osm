@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: CatAtom2Osm\n"
-"POT-Creation-Date: 2022-03-01 19:20+0000\n"
+"POT-Creation-Date: 2022-03-07 09:29+0000\n"
 "PO-Revision-Date: 2017-05-28 19:23+WEST\n"
 "Last-Translator: Javier Sánchez <javiersanp@gmail.com>\n"
 "Language: es\n"
@@ -52,7 +52,12 @@ msgid ""
 "  catatom2osm -s Atocha.geojson 28900\n"
 "    It processes the Atocha neighborhood delimited by a geojson file with\n"
 "    its administrative limit. Pass only the zones that have more than 50%\n"
-"    of their area within the limit."
+"    of their area within the limit.\n"
+"  catatom2osm -l 28900\n"
+"    List OSM administrative boundaries available in Madrid\n"
+"  catatom2osm -s Atocha 28900\n"
+"    Downloads administrative boundary of Atocha neighborhood in Madrid and\n"
+"    process it."
 msgstr ""
 "Ejemplos:\n"
 "  catatom2osm 05015\n"
@@ -65,61 +70,73 @@ msgstr ""
 "    Lista los códigos de municipio en la provincia 05 Ávila.\n"
 "  catatom2osm -b 05015\n"
 "    Procesa sólo los edificios (sin direcciones).\n"
+"  catatom2osm -l 28900\n"
+"    Lista los límites administrativos disponibles para Madrid en OSM.\n"
 "  catatom2osm -s Atocha.geojson 28900\n"
 "    Procesa el barrio de Atocha delimitado por un archivo geojson con su\n"
 "    límite administrativo. Entran las zonas que tengan más de un 50% de su\n"
-"    área dentro del límite."
+"    área dentro del límite.  catatom2osm -s Atocha.geojson 28900\n"
+"    Descarga los límites administrativos del barrio de Atocha en Madrid y\n"
+"    lo procesa."
 
-#: catatom2osm/__main__.py:67
+#: catatom2osm/__main__.py:72
 msgid "Directories for input and output files"
 msgstr "Directorios para los archivos de entrada y salida."
 
-#: catatom2osm/__main__.py:74
+#: catatom2osm/__main__.py:79
 msgid "Show program's version number and exit"
 msgstr "Muestra la versión del programa y sale"
 
-#: catatom2osm/__main__.py:84
-msgid "List province codes or municipality codes for PROV (2 digits)"
-msgstr "Lista códigos de provincia o de municipios en PROV (2 dígitos)"
+#: catatom2osm/__main__.py:89
+msgid ""
+"List province codes or municipality codes for PROV (2 digits) or "
+"administrative boundaries for MUN (5 digits)"
+msgstr ""
+"Lista códigos de provincia o de municipios en PROV (2 dígitos) o"
+"límites administrativos para MUN (5 dígitos)"
 
-#: catatom2osm/__main__.py:91
+#: catatom2osm/__main__.py:99
 msgid "Process only the building dataset"
 msgstr "Procesa sólo el conjunto de datos de edificios"
 
-#: catatom2osm/__main__.py:98
+#: catatom2osm/__main__.py:106
 msgid "Process only the address dataset"
 msgstr "Procesa sólo el conjunto de datos de direcciones"
 
-#: catatom2osm/__main__.py:105
+#: catatom2osm/__main__.py:113
 msgid "Process only the tasks definition file"
 msgstr "Procesa sólo el archivo de definición de tareas"
 
-#: catatom2osm/__main__.py:121
-msgid "Process data in the parcels delimited by SPLIT file"
-msgstr "Procesa los datos en las zonas delimitadas por el archivo SPLIT"
+#: catatom2osm/__main__.py:129
+msgid ""
+"Process data in the parcels delimited by SPLIT (file / administrative "
+"boundary OSM id or name)"
+msgstr ""
+"Procesa los datos en las zonas delimitadas por SPLIT (archivo / id OSM o "
+"nombre del límite administrativo)"
 
-#: catatom2osm/__main__.py:128
+#: catatom2osm/__main__.py:139
 msgid "Disable conflation with OSM data"
 msgstr "Desactiva la combinación con datos de OSM"
 
-#: catatom2osm/__main__.py:135
+#: catatom2osm/__main__.py:146
 msgid "Recovers the metadata of the tasks"
 msgstr "Recupera los metadatos de las tareas"
 
-#: catatom2osm/__main__.py:142
+#: catatom2osm/__main__.py:153
 msgid "Download only"
 msgstr "Solo descargar"
 
-#: catatom2osm/__main__.py:150
+#: catatom2osm/__main__.py:161
 msgid "Select the log level between DEBUG, INFO, WARNING, ERROR or CRITICAL."
 msgstr ""
 "Selecciona el nivel de registro entre DEBUG, INFO, WARNING, ERROR o CRITICAL."
 
-#: catatom2osm/__main__.py:162
+#: catatom2osm/__main__.py:173
 msgid "Using Python %s.%s.%s"
 msgstr "Usando Python %s.%s.%s"
 
-#: catatom2osm/__main__.py:164
+#: catatom2osm/__main__.py:175
 msgid "Can't use split file with multiple municipalities"
 msgstr "No se pueden usar archivo de límites para varios municipios"
 
