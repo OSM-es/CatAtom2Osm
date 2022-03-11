@@ -1,6 +1,9 @@
 Change log
 ==========
 
+**2022-03-11 (2.8.1)**
+* Error loading project due to acute symbols
+
 **2022-03-07 (2.8.0)**
 * Download administrative boundaries to split municipalities
 

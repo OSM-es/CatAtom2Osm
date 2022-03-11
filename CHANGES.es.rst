@@ -1,6 +1,9 @@
 Registro de cambios
 ===================
 
+**11-03-2022 (2.8.1)**
+* Error cargando proyecto por acentos.
+
 **07-03-2022 (2.8.0)**
 * Descarga archivos de límites administrativos para división de municipios.
 
