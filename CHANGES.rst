@@ -1,6 +1,9 @@
 Change log
 ==========
 
+**2022-03-14 (2.8.2)**
+* Remove debug tag left by mistake
+
 **2022-03-11 (2.8.1)**
 * Error loading project due to acute symbols
 

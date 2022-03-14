@@ -1,6 +1,9 @@
 Registro de cambios
 ===================
 
+**14-03-2022 (2.8.2)**
+* Elimina etiqueta de depuración dejada por error.
+
 **11-03-2022 (2.8.1)**
 * Error cargando proyecto por acentos.
 

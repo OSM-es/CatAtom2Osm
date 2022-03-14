@@ -591,7 +591,6 @@ class CatAtom2Osm(object):
                     for w in building_osm.get_outline(group):
                         entrance = w.search_node(ad.x, ad.y)
                         if entrance:
-                            ad.tags["group"] = str(len(group))
                             entrance.tags.update(ad.tags)
                             entrance.tags.pop("ref", None)
                             entrance.tags.pop("image", None)
