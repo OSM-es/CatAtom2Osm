@@ -162,9 +162,26 @@ def run():
             "Select the log level between " "DEBUG, INFO, WARNING, ERROR or CRITICAL."
         ),
     )
+    parser.add_argument(
+        "-f",
+        "--config-file",
+        dest="config_file",
+        default="config.json",
+        help=_("Path to the user configuration file. Defaults to %(default)s"),
+    )
+    parser.add_argument(
+        "-g",
+        "--generate-config",
+        dest="generate_config",
+        action="store_true",
+        help=_("Output a sample config file with the default user configuration"),
+    )
     # Reserved -i --info, -p --push, -u --urban, -r --rustic
     options = parser.parse_args()
     options.args = " ".join(sys.argv[1:])
+    config.get_user_config(options.config_file)
+    if options.generate_config:
+        config.generate_default_user_config()
     if not options.building and not options.address:
         options.address = True
         options.building = True
@@ -173,7 +190,7 @@ def run():
     log.debug(_("Using Python %s.%s.%s"), *sys.version_info[:3])
     if options.split and len(options.path) > 1:
         log.error(_("Can't use split file with multiple municipalities"))
-    elif len(options.path) == 0 and not options.list:
+    elif len(options.path) == 0 and not options.list and not options.generate_config:
         parser.print_help()
         print()
         print(examples)
