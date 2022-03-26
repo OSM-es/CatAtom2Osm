@@ -61,10 +61,6 @@ def process(options):
             options.config_file = config.default_config_file
         if options.config_file:
             config.get_user_config(options.config_file)
-        print(config.warning_min_area)
-        print(config.warning_max_area)
-        print(config.excluded_types)
-        return
         qgs = QgsSingleton()
         for a_path in options.path:
             o = argparse.Namespace(**options.__dict__)
@@ -197,7 +193,7 @@ def run():
         config.generate_default_user_config()
     elif options.split and len(options.path) > 1:
         log.error(_("Can't use split file with multiple municipalities"))
-    elif len(options.path) == 0 and not options.list:
+    elif len(options.path) == 0 and not options.list and not options.generate_config:
         parser.print_help()
         print()
         print(examples)
