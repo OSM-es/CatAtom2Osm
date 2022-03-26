@@ -167,12 +167,13 @@ def run():
             "Select the log level between " "DEBUG, INFO, WARNING, ERROR or CRITICAL."
         ),
     )
+    msg = _("Path to the user configuration file. Defaults to '%s'")
     parser.add_argument(
         "-f",
         "--config-file",
         dest="config_file",
         default=False,
-        help=_("Path to the user configuration file. Defaults to %(default)s"),
+        help=msg % config.default_config_file,
     )
     parser.add_argument(
         "-g",

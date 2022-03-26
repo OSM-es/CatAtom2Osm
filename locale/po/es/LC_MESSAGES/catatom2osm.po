@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: CatAtom2Osm\n"
-"POT-Creation-Date: 2022-03-07 09:29+0000\n"
+"POT-Creation-Date: 2022-03-26 19:17+0000\n"
 "PO-Revision-Date: 2017-05-28 19:23+WEST\n"
 "Last-Translator: Javier Sánchez <javiersanp@gmail.com>\n"
 "Language: es\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Generated-By: pygettext.py 1.5\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: catatom2osm/__main__.py:16
+#: catatom2osm/__main__.py:17
 msgid ""
 "catatom2osm [OPTION]... [PATHS]\n"
 "  The argument PATHS states for directories to process municipalities. The "
@@ -36,7 +36,7 @@ msgstr ""
 "  Si el programa no encuentra los archivos de entrada los descargará de los\n"
 "  Servicios INSPIRE del Catastro Español."
 
-#: catatom2osm/__main__.py:25
+#: catatom2osm/__main__.py:26
 msgid ""
 "Examples:\n"
 "  catatom2osm 05015\n"
@@ -79,35 +79,35 @@ msgstr ""
 "    Descarga los límites administrativos del barrio de Atocha en Madrid y\n"
 "    lo procesa."
 
-#: catatom2osm/__main__.py:72
+#: catatom2osm/__main__.py:77
 msgid "Directories for input and output files"
 msgstr "Directorios para los archivos de entrada y salida."
 
-#: catatom2osm/__main__.py:79
+#: catatom2osm/__main__.py:84
 msgid "Show program's version number and exit"
 msgstr "Muestra la versión del programa y sale"
 
-#: catatom2osm/__main__.py:89
+#: catatom2osm/__main__.py:94
 msgid ""
 "List province codes or municipality codes for PROV (2 digits) or "
 "administrative boundaries for MUN (5 digits)"
 msgstr ""
-"Lista códigos de provincia o de municipios en PROV (2 dígitos) o"
-"límites administrativos para MUN (5 dígitos)"
+"Lista códigos de provincia o de municipios en PROV (2 dígitos) olímites "
+"administrativos para MUN (5 dígitos)"
 
-#: catatom2osm/__main__.py:99
+#: catatom2osm/__main__.py:104
 msgid "Process only the building dataset"
 msgstr "Procesa sólo el conjunto de datos de edificios"
 
-#: catatom2osm/__main__.py:106
+#: catatom2osm/__main__.py:111
 msgid "Process only the address dataset"
 msgstr "Procesa sólo el conjunto de datos de direcciones"
 
-#: catatom2osm/__main__.py:113
+#: catatom2osm/__main__.py:118
 msgid "Process only the tasks definition file"
 msgstr "Procesa sólo el archivo de definición de tareas"
 
-#: catatom2osm/__main__.py:129
+#: catatom2osm/__main__.py:134
 msgid ""
 "Process data in the parcels delimited by SPLIT (file / administrative "
 "boundary OSM id or name)"
@@ -115,28 +115,32 @@ msgstr ""
 "Procesa los datos en las zonas delimitadas por SPLIT (archivo / id OSM o "
 "nombre del límite administrativo)"
 
-#: catatom2osm/__main__.py:139
+#: catatom2osm/__main__.py:144
 msgid "Disable conflation with OSM data"
 msgstr "Desactiva la combinación con datos de OSM"
 
-#: catatom2osm/__main__.py:146
+#: catatom2osm/__main__.py:151
 msgid "Recovers the metadata of the tasks"
 msgstr "Recupera los metadatos de las tareas"
 
-#: catatom2osm/__main__.py:153
+#: catatom2osm/__main__.py:158
 msgid "Download only"
 msgstr "Solo descargar"
 
-#: catatom2osm/__main__.py:161
+#: catatom2osm/__main__.py:166
 msgid "Select the log level between DEBUG, INFO, WARNING, ERROR or CRITICAL."
 msgstr ""
 "Selecciona el nivel de registro entre DEBUG, INFO, WARNING, ERROR o CRITICAL."
 
-#: catatom2osm/__main__.py:173
-msgid "Using Python %s.%s.%s"
-msgstr "Usando Python %s.%s.%s"
+#: catatom2osm/__main__.py:170
+msgid "Path to the user configuration file. Defaults to '%s'"
+msgstr "Ruta al archivo de configuración. Por defecto es '%s'"
 
-#: catatom2osm/__main__.py:175
+#: catatom2osm/__main__.py:183
+msgid "Output a sample config file with the default user configuration"
+msgstr "Genera un archivo de muestra con la configuración por defecto"
+
+#: catatom2osm/__main__.py:196
 msgid "Can't use split file with multiple municipalities"
 msgstr "No se pueden usar archivo de límites para varios municipios"
 
@@ -201,7 +205,7 @@ msgid "Municipality: '%s'"
 msgstr "Municipio: '%s'"
 
 #: catatom2osm/app.py:370 catatom2osm/app.py:411 catatom2osm/app.py:513
-#: catatom2osm/app.py:736
+#: catatom2osm/app.py:735
 msgid "Generated '%s'"
 msgstr "Generado '%s'"
 
@@ -229,32 +233,32 @@ msgstr "Eliminadas %d direcciones rechazadas por nombre de vial"
 msgid "Please, check it and run again"
 msgstr "Por favor, compruébelo y ejecute de nuevo"
 
-#: catatom2osm/app.py:611
+#: catatom2osm/app.py:610
 msgid "Refused %d 'parcel' addresses not unique for it building"
 msgstr "Rechazadas %d direcciones tipo parcela no únicas para su edificio"
 
-#: catatom2osm/app.py:685
+#: catatom2osm/app.py:684
 msgid "There are %d address without house number in the OSM data"
 msgstr "Existen %d direcciones sin número de portal en OSM"
 
-#: catatom2osm/app.py:738
+#: catatom2osm/app.py:737
 msgid "Failed to write layer: '%s'"
 msgstr "Error al escribir la capa: '%s'"
 
-#: catatom2osm/app.py:759 catatom2osm/catatom.py:101 catatom2osm/cbcn.py:151
+#: catatom2osm/app.py:758 catatom2osm/catatom.py:101 catatom2osm/cbcn.py:151
 #: catatom2osm/cdau.py:199
 msgid "Downloading '%s'"
 msgstr "Descargando '%s'"
 
-#: catatom2osm/app.py:775
+#: catatom2osm/app.py:774
 msgid "No OSM data were obtained from '%s'"
 msgstr "No se obtuvieron datos OSM de '%s'"
 
-#: catatom2osm/app.py:780
+#: catatom2osm/app.py:779
 msgid "Read '%s': %d nodes, %d ways, %d relations"
 msgstr "Leído '%s': %d nodos, %d vías, %d relaciones"
 
-#: catatom2osm/app.py:808
+#: catatom2osm/app.py:807
 msgid "Generated '%s': %d nodes, %d ways, %d relations"
 msgstr "Generado '%s': %d nodos, %d vías, %d relaciones"
 
@@ -332,6 +336,68 @@ msgstr "Reemplazadas %d direcciones de '%s'"
 #: catatom2osm/cdau.py:270
 msgid "Added %d addresses from '%s'"
 msgstr "Añadidas %d direcciones de '%s'"
+
+#: catatom2osm/config.py:639
+msgid ""
+"# language:\n"
+"#   Language to translate thoroughfare names: es_ES ca_ES gl_ES\n"
+"# highway_types:\n"
+"#   Dictionary to translate thoroughfare types\n"
+"# place_types:\n"
+"#   List of highway types to translate as place addresses (addr:place)\n"
+"# remove_place_from_name:\n"
+"#   List of highway types to remove from the name\n"
+"# excluded_types\n"
+"#   List of highway types not to be parsed\n"
+"# warning_min_area:\n"
+"#   Area in m² for small area warning\n"
+"# warning_max_area:\n"
+"#   Area in m² for big area warning\n"
+"# parcel_parts:\n"
+"#   Number of building parts to agregate parcels\n"
+"# parcel_dist:\n"
+"#   Distance in meters to agregate parcels\n"
+msgstr ""
+"# language:\n"
+"#   Idioma para traducir los nombres de viales: es_ES ca_ES gl_ES\n"
+"# highway_types:\n"
+"#   Diccionario para traducir los tipos de vias\n"
+"# place_types:\n"
+"#   lista de tipos de vía que se traducen a direcciones de lugar (addr:"
+"place)\n"
+"# remove_place_from_name:\n"
+"#   Lista de tipos de vía a eliminar del nombre\n"
+"# excluded_types\n"
+"#   Lista de tipos de vía que no se analizarán\n"
+"# warning_min_area:\n"
+"#   Área en m² para el aviso de área pequeña\n"
+"# warning_max_area:\n"
+"#   Área en m² para el aviso de área grande\n"
+"# parcel_parts:\n"
+"#   Número de partes de edificio para agregar parcelas\n"
+"# parcel_dist:\n"
+"#   Distancia en metros para agregar parcelas\n"
+
+#: catatom2osm/config.py:719
+msgid "Config file '%s' exists. Delete it if you want to overwrite."
+msgstr ""
+"El fichero de configuración '%s' existe. Bórralo si quieres sobreescribirlo."
+
+#: catatom2osm/config.py:726
+msgid "Config file saved as '%s'"
+msgstr "Fichero de configuración guardado como '%s'"
+
+#: catatom2osm/config.py:728
+msgid "Couldn't save the sample config file"
+msgstr "No se pudo grabar el fichero de configuración"
+
+#: catatom2osm/config.py:744
+msgid "Can't read '%s'"
+msgstr "No se pudo leer '%s'"
+
+#: catatom2osm/config.py:747
+msgid "Config file '%s' not found"
+msgstr "Fichero de configuración '%s' no encontrado"
 
 #: catatom2osm/csvtools.py:27
 msgid "Failed to load CSV file '%s'"
@@ -497,7 +563,7 @@ msgstr "Rústica"
 msgid "Urban"
 msgstr "Urbana"
 
-#: catatom2osm/geo/layer/parcel.py:127
+#: catatom2osm/geo/layer/parcel.py:128
 msgid "There are %d parcels without zone"
 msgstr "Existen %d parcelas sin zona"
 

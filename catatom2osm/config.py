@@ -723,7 +723,7 @@ def generate_default_user_config():
         with open(default_config_file, "w") as outfile:
             outfile.write(get_config_comment())
             outfile.write(yaml_object)
-        print(_("Config file saved as '%s'" % default_config_file))
+        print(_("Config file saved as '%s'") % default_config_file)
     except Exception:
         print(_("Couldn't save the sample config file"))
 
@@ -741,7 +741,7 @@ def get_user_config(path):
         for key in default_user_config.keys() & user_config.keys():
             globals()[key] = user_config[key]
     except yaml.YAMLError as e:
-        msg = _("Can't read '%s'" % path)
+        msg = _("Can't read '%s'") % path
         raise (CatConfigError(msg + ": " + str(e)))
     except FileNotFoundError:
         log.warning(_("Config file '%s' not found"), path)
