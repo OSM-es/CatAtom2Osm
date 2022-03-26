@@ -7,6 +7,7 @@ import os
 import sys
 
 from catatom2osm import __version__
+from catatom2osm.exceptions import CatConfigError
 
 app_name = "CatAtom2Osm"
 app_version = __version__
@@ -16,55 +17,23 @@ app_desc = (
     "Tool to convert INSPIRE data sets from the Spanish Cadastre "
     "ATOM Services to OSM files"
 )
-app_tags = ""
-
-
-def install_gettext(app_name, localedir):
-    try:
-        gettext.install(app_name.lower(), localedir=localedir, unicode=1)
-    except TypeError:
-        gettext.install(app_name.lower(), localedir=localedir)
-    gettext.bindtextdomain("argparse", localedir)
-    gettext.textdomain("argparse")
 
 
 app_path = os.path.dirname(__file__)
 localedir = os.path.join(os.path.dirname(app_path), "locale", "po")
 platform = sys.platform
 eol = "\n"
+delimiter = "\t"
 
-install_gettext(app_name, localedir)
 
 log_level = "INFO"  # Default log level
 log_file = "catatom2osm.log"
 log_format = "%(asctime)s - %(levelname)s - %(message)s"
 
-
-def get_logger():
-    log = logging.getLogger(app_name)
-    formatter = logging.Formatter(log_format)
-    fh = logging.FileHandler(log_file)
-    fh.setLevel(logging.DEBUG)
-    fh.setFormatter(formatter)
-    log.addHandler(fh)
-    return log
-
-
-def set_log_level(log, log_level):
-    formatter = logging.Formatter(log_format)
-    ch = logging.StreamHandler(sys.stderr)
-    ch.setLevel(log_level)
-    ch.setFormatter(formatter)
-    log.addHandler(ch)
-    log.setLevel(logging.DEBUG)
-    log.app_level = log_level
-
-
 fn_prefix = "A.ES.SDGC"  # Inspire Atom file name prefix
 
 silence_gdal = False
 
-delimiter = "\t"
 dup_thr = 0.012  # Distance in meters to merge nearest vertexs.
 # 0.011 is about 1E-7 degrees in latitude
 dist_thr = 0.02  # Threshold in meters for vertex simplification and topological points.
@@ -662,6 +631,8 @@ default_excluded_types = ["DS", "ER"]
 default_warning_min_area = 1  # Area in m2 for small area warning
 default_warning_max_area = 30000  # Area in m2 for big area warning
 
+default_config_file = "config.json"
+
 default_user_config = {
     "language": default_language,
     "highway_types": default_highway_types,
@@ -677,32 +648,73 @@ for key, value in default_user_config.items():
     globals()[key] = value
 
 
-# Generate a config JSON object populated with the default values in the dict
-# default_user_config, and save it to a new default_config.json file
+def install_gettext(app_name, localedir):
+    """Install internationalization services."""
+    gettext.install(app_name.lower(), localedir=localedir)
+    gettext.bindtextdomain("argparse", localedir)
+    gettext.textdomain("argparse")
+
+
+install_gettext(app_name, localedir)
+
+
+def setup_logger():
+    """Configure the application logger."""
+    log = logging.getLogger(app_name)
+    formatter = logging.Formatter(log_format)
+    fh = logging.FileHandler(log_file)
+    fh.setLevel(logging.DEBUG)
+    fh.setFormatter(formatter)
+    log.addHandler(fh)
+    return log
+
+
+def set_log_level(log, log_level):
+    """Configure console logger and level."""
+    formatter = logging.Formatter(log_format)
+    ch = logging.StreamHandler(sys.stderr)
+    ch.setLevel(log_level)
+    ch.setFormatter(formatter)
+    log.addHandler(ch)
+    log.setLevel(logging.DEBUG)
+    log.app_level = log_level
+
+
 def generate_default_user_config():
+    """Export default user config.
+
+    Generate a config JSON object populated with the default values in the dict
+    default_user_config, and save it to a new default_config.json file
+    """
     json_object = json.dumps(default_user_config, indent=4, ensure_ascii=False)
 
+    if os.path.exists(default_config_file):
+        msg = _("Config file '%s' exists. Delete it if you want to overwrite.")
+        print(msg % default_config_file)
+        return
     try:
-        with open("default_config.json", "w") as outfile:
+        with open(default_config_file, "w") as outfile:
             outfile.write(json_object)
             outfile.write("\n")
-
-        print(_("Config file saved as default_config.json"))
-    except:
+        print(_("Config file saved as '%s'" % default_config_file))
+    except Exception:
         print(_("Couldn't save the sample config file"))
 
 
-# Read the user-provided config file in path, overwriting all global variables that
-# are present there that exist in the default_user_config dict
 def get_user_config(path):
-    log = get_logger()
+    """Read the user-provided config file in path.
+
+    Overwrites all variables that exist in the default_user_config dict.
+    """
+    log = logging.getLogger(app_name)
 
     try:
         with open(path, "r") as config_file:
             user_config = json.load(config_file)
-
-        # Overwrite all keys that exist both in the default dict and in the user-provided dict
         for key in default_user_config.keys() & user_config.keys():
             globals()[key] = user_config[key]
+    except json.decoder.JSONDecodeError as e:
+        msg = _("Can't read '%s'" % path)
+        raise (CatConfigError(msg + ". " + str(e)))
     except FileNotFoundError:
-        log.warning(_("Config file %s not found"), path)
+        log.warning(_("Config file '%s' not found"), path)

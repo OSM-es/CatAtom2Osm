@@ -1,6 +1,7 @@
 """CatAtom2Osm command line entry point."""
 import argparse
 import logging
+import os
 import sys
 from zipfile import BadZipfile
 
@@ -11,7 +12,7 @@ from catatom2osm.app import CatAtom2Osm, QgsSingleton
 from catatom2osm.catatom import Reader
 from catatom2osm.exceptions import CatException
 
-log = config.get_logger()
+log = config.setup_logger()
 
 usage = _(
     """catatom2osm [OPTION]... [PATHS]
@@ -56,6 +57,14 @@ def process(options):
             cat.download("cadastralzoning")
             cat.download("building")
     else:
+        if not options.config_file and os.path.exists(config.default_config_file):
+            options.config_file = config.default_config_file
+        if options.config_file:
+            config.get_user_config(options.config_file)
+        print(config.warning_min_area)
+        print(config.warning_max_area)
+        print(config.excluded_types)
+        return
         qgs = QgsSingleton()
         for a_path in options.path:
             o = argparse.Namespace(**options.__dict__)
@@ -166,7 +175,7 @@ def run():
         "-f",
         "--config-file",
         dest="config_file",
-        default="config.json",
+        default=False,
         help=_("Path to the user configuration file. Defaults to %(default)s"),
     )
     parser.add_argument(
@@ -179,18 +188,16 @@ def run():
     # Reserved -i --info, -p --push, -u --urban, -r --rustic
     options = parser.parse_args()
     options.args = " ".join(sys.argv[1:])
-    config.get_user_config(options.config_file)
-    if options.generate_config:
-        config.generate_default_user_config()
+    log_level = getattr(logging, options.log_level.upper())
+    config.set_log_level(log, log_level)
     if not options.building and not options.address:
         options.address = True
         options.building = True
-    log_level = getattr(logging, options.log_level.upper())
-    config.set_log_level(log, log_level)
-    log.debug(_("Using Python %s.%s.%s"), *sys.version_info[:3])
-    if options.split and len(options.path) > 1:
+    if options.generate_config:
+        config.generate_default_user_config()
+    elif options.split and len(options.path) > 1:
         log.error(_("Can't use split file with multiple municipalities"))
-    elif len(options.path) == 0 and not options.list and not options.generate_config:
+    elif len(options.path) == 0 and not options.list:
         parser.print_help()
         print()
         print(examples)
