@@ -1,10 +1,11 @@
 ﻿"""Application preferences."""
 import gettext
-import json
 import locale
 import logging
 import os
 import sys
+
+import yaml
 
 from catatom2osm import __version__
 from catatom2osm.exceptions import CatConfigError
@@ -47,8 +48,6 @@ dist_inv = 0.1  # Threshold in meters to filter angles for zig-zag and spikes
 entrance_thr = 0.4  # Minimum distance in meters from a entrance to the nearest corner
 bbox_buffer = 0.002  # Buffer in degrees around overpass bounding boxes
 parcel_buffer = 200  # Buffer in meters around parcel to search adjacents
-parcel_parts = 20  # Number of building parts to agregate parcels
-parcel_dist = 1000  # Distance in meters to agregate parcels
 
 changeset_tags = {
     "comment": "#Spanish_Cadastre_Buildings_Import",
@@ -630,8 +629,34 @@ default_excluded_types = ["DS", "ER"]
 
 default_warning_min_area = 1  # Area in m2 for small area warning
 default_warning_max_area = 30000  # Area in m2 for big area warning
+default_parcel_parts = 20  # Number of building parts to agregate parcels
+default_parcel_dist = 1000  # Distance in meters to agregate parcels
 
-default_config_file = "config.json"
+default_config_file = "config.yaml"
+
+
+def get_config_comment():
+    return _(
+        "# language:\n"
+        "#   Language to translate thoroughfare names: es_ES ca_ES gl_ES\n"
+        "# highway_types:\n"
+        "#   Dictionary to translate thoroughfare types\n"
+        "# place_types:\n"
+        "#   List of highway types to translate as place addresses (addr:place)\n"
+        "# remove_place_from_name:\n"
+        "#   List of highway types to remove from the name\n"
+        "# excluded_types\n"
+        "#   List of highway types not to be parsed\n"
+        "# warning_min_area:\n"
+        "#   Area in m² for small area warning\n"
+        "# warning_max_area:\n"
+        "#   Area in m² for big area warning\n"
+        "# parcel_parts:\n"
+        "#   Number of building parts to agregate parcels\n"
+        "# parcel_dist:\n"
+        "#   Distance in meters to agregate parcels\n"
+    )
+
 
 default_user_config = {
     "language": default_language,
@@ -641,6 +666,8 @@ default_user_config = {
     "excluded_types": default_excluded_types,
     "warning_min_area": default_warning_min_area,
     "warning_max_area": default_warning_max_area,
+    "parcel_parts": default_parcel_parts,
+    "parcel_dist": default_parcel_dist,
 }
 
 # Define global variables whose name matches the keys of the default_user_config dict
@@ -683,10 +710,10 @@ def set_log_level(log, log_level):
 def generate_default_user_config():
     """Export default user config.
 
-    Generate a config JSON object populated with the default values in the dict
-    default_user_config, and save it to a new default_config.json file
+    Generate a config YAML object populated with the default values in the dict
+    default_user_config, and save it to `default_config_file`
     """
-    json_object = json.dumps(default_user_config, indent=4, ensure_ascii=False)
+    yaml_object = yaml.dump(default_user_config, sort_keys=False, allow_unicode=True)
 
     if os.path.exists(default_config_file):
         msg = _("Config file '%s' exists. Delete it if you want to overwrite.")
@@ -694,8 +721,8 @@ def generate_default_user_config():
         return
     try:
         with open(default_config_file, "w") as outfile:
-            outfile.write(json_object)
-            outfile.write("\n")
+            outfile.write(get_config_comment())
+            outfile.write(yaml_object)
         print(_("Config file saved as '%s'" % default_config_file))
     except Exception:
         print(_("Couldn't save the sample config file"))
@@ -710,11 +737,11 @@ def get_user_config(path):
 
     try:
         with open(path, "r") as config_file:
-            user_config = json.load(config_file)
+            user_config = yaml.safe_load(config_file)
         for key in default_user_config.keys() & user_config.keys():
             globals()[key] = user_config[key]
-    except json.decoder.JSONDecodeError as e:
+    except yaml.YAMLError as e:
         msg = _("Can't read '%s'" % path)
-        raise (CatConfigError(msg + ". " + str(e)))
+        raise (CatConfigError(msg + ": " + str(e)))
     except FileNotFoundError:
         log.warning(_("Config file '%s' not found"), path)
