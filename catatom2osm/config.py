@@ -1,5 +1,6 @@
 ﻿"""Application preferences."""
 import gettext
+import json
 import locale
 import logging
 import os
@@ -27,9 +28,6 @@ def install_gettext(app_name, localedir):
     gettext.textdomain("argparse")
 
 
-language, encoding = locale.getdefaultlocale()
-language = language or "es_ES"
-encoding = encoding or "UTF-8"
 app_path = os.path.dirname(__file__)
 localedir = os.path.join(os.path.dirname(app_path), "locale", "po")
 platform = sys.platform
@@ -78,8 +76,6 @@ acute_inv = 5  # Remove geometries/rings that result invalid after removing
 # any vertex with an angle smaller than this value
 dist_inv = 0.1  # Threshold in meters to filter angles for zig-zag and spikes
 entrance_thr = 0.4  # Minimum distance in meters from a entrance to the nearest corner
-warning_min_area = 1  # Area in m2 for small area warning
-warning_max_area = 30000  # Area in m2 for big area warning
 bbox_buffer = 0.002  # Buffer in degrees around overpass bounding boxes
 parcel_buffer = 200  # Buffer in meters around parcel to search adjacents
 parcel_parts = 20  # Number of building parts to agregate parcels
@@ -583,24 +579,6 @@ place_types_d = {
     ],
 }
 
-# language is defined in system locales
-available_langs = highway_types_d.keys()
-language = language if language in available_langs else "es_ES"
-
-# Dictionary for default 'highway_types.csv'
-highway_types = highway_types_d[language]
-
-# List of highway types to translate as place addresses
-place_types = place_types_d["es_ES"]
-if language != "es_ES":
-    place_types += place_types_d[language]
-
-# List of place types to remove from the name
-remove_place_from_name = [place_types[26]]
-
-# List of highway types not to be parsed
-excluded_types = ["DS", "ER"]
-
 aux_address = {"cdau": ["04", "11", "14", "18", "21", "23", "29", "41", "53"]}
 aux_path = "auxsrcs"
 
@@ -658,3 +636,73 @@ prov_codes = {
     "55": "Ceuta",
     "56": "Melilla",
 }
+
+# DEFAULT USER CONFIG
+
+# language is defined in system locales
+available_langs = highway_types_d.keys()
+default_language, encoding = locale.getdefaultlocale()
+default_language = default_language if default_language in available_langs else "es_ES"
+encoding = encoding or "UTF-8"
+
+# Dictionary for default 'highway_types.csv'
+default_highway_types = highway_types_d[default_language]
+
+# List of highway types to translate as place addresses
+default_place_types = place_types_d["es_ES"]
+if default_language != "es_ES":
+    default_place_types += place_types_d[default_language]
+
+# List of place types to remove from the name
+default_remove_place_from_name = [default_place_types[26]]
+
+# List of highway types not to be parsed
+default_excluded_types = ["DS", "ER"]
+
+default_warning_min_area = 1  # Area in m2 for small area warning
+default_warning_max_area = 30000  # Area in m2 for big area warning
+
+default_user_config = {
+    "language": default_language,
+    "highway_types": default_highway_types,
+    "place_types": default_place_types,
+    "remove_place_from_name": default_remove_place_from_name,
+    "excluded_types": default_excluded_types,
+    "warning_min_area": default_warning_min_area,
+    "warning_max_area": default_warning_max_area,
+}
+
+# Define global variables whose name matches the keys of the default_user_config dict
+for key, value in default_user_config.items():
+    globals()[key] = value
+
+
+# Generate a config JSON object populated with the default values in the dict
+# default_user_config, and save it to a new default_config.json file
+def generate_default_user_config():
+    json_object = json.dumps(default_user_config, indent=4, ensure_ascii=False)
+
+    try:
+        with open("default_config.json", "w") as outfile:
+            outfile.write(json_object)
+            outfile.write("\n")
+
+        print(_("Config file saved as default_config.json"))
+    except:
+        print(_("Couldn't save the sample config file"))
+
+
+# Read the user-provided config file in path, overwriting all global variables that
+# are present there that exist in the default_user_config dict
+def get_user_config(path):
+    log = get_logger()
+
+    try:
+        with open(path, "r") as config_file:
+            user_config = json.load(config_file)
+
+        # Overwrite all keys that exist both in the default dict and in the user-provided dict
+        for key in default_user_config.keys() & user_config.keys():
+            globals()[key] = user_config[key]
+    except FileNotFoundError:
+        log.warning(_("Config file %s not found"), path)
