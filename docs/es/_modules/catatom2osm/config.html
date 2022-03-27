@@ -14,7 +14,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.config &#8212; documentación de CatAtom2Osm - 2.8.0</title>
+    <title>catatom2osm.config &#8212; documentación de CatAtom2Osm - 2.8.2</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/guzzle.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.8.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.8.2</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Código de módulo</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.config</a></li> 
       </ul>
@@ -87,7 +87,10 @@
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 
+<span class="kn">import</span> <span class="nn">yaml</span>
+
 <span class="kn">from</span> <span class="nn">catatom2osm</span> <span class="k">import</span> <span class="n">__version__</span>
+<span class="kn">from</span> <span class="nn">catatom2osm.exceptions</span> <span class="k">import</span> <span class="n">CatConfigError</span>
 
 <span class="n">app_name</span> <span class="o">=</span> <span class="s2">&quot;CatAtom2Osm&quot;</span>
 <span class="n">app_version</span> <span class="o">=</span> <span class="n">__version__</span>
@@ -97,58 +100,23 @@
     <span class="s2">&quot;Tool to convert INSPIRE data sets from the Spanish Cadastre &quot;</span>
     <span class="s2">&quot;ATOM Services to OSM files&quot;</span>
 <span class="p">)</span>
-<span class="n">app_tags</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
 
-<div class="viewcode-block" id="install_gettext"><a class="viewcode-back" href="../../api/catatom2osm.config.html#catatom2osm.config.install_gettext">[documentos]</a><span class="k">def</span> <span class="nf">install_gettext</span><span class="p">(</span><span class="n">app_name</span><span class="p">,</span> <span class="n">localedir</span><span class="p">):</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">gettext</span><span class="o">.</span><span class="n">install</span><span class="p">(</span><span class="n">app_name</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="n">localedir</span><span class="o">=</span><span class="n">localedir</span><span class="p">,</span> <span class="n">unicode</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
-        <span class="n">gettext</span><span class="o">.</span><span class="n">install</span><span class="p">(</span><span class="n">app_name</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="n">localedir</span><span class="o">=</span><span class="n">localedir</span><span class="p">)</span>
-    <span class="n">gettext</span><span class="o">.</span><span class="n">bindtextdomain</span><span class="p">(</span><span class="s2">&quot;argparse&quot;</span><span class="p">,</span> <span class="n">localedir</span><span class="p">)</span>
-    <span class="n">gettext</span><span class="o">.</span><span class="n">textdomain</span><span class="p">(</span><span class="s2">&quot;argparse&quot;</span><span class="p">)</span></div>
-
-
-<span class="n">language</span><span class="p">,</span> <span class="n">encoding</span> <span class="o">=</span> <span class="n">locale</span><span class="o">.</span><span class="n">getdefaultlocale</span><span class="p">()</span>
-<span class="n">language</span> <span class="o">=</span> <span class="n">language</span> <span class="ow">or</span> <span class="s2">&quot;es_ES&quot;</span>
-<span class="n">encoding</span> <span class="o">=</span> <span class="n">encoding</span> <span class="ow">or</span> <span class="s2">&quot;UTF-8&quot;</span>
 <span class="n">app_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
 <span class="n">localedir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">app_path</span><span class="p">),</span> <span class="s2">&quot;locale&quot;</span><span class="p">,</span> <span class="s2">&quot;po&quot;</span><span class="p">)</span>
 <span class="n">platform</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span>
 <span class="n">eol</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+<span class="n">delimiter</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span>
 
-<span class="n">install_gettext</span><span class="p">(</span><span class="n">app_name</span><span class="p">,</span> <span class="n">localedir</span><span class="p">)</span>
 
 <span class="n">log_level</span> <span class="o">=</span> <span class="s2">&quot;INFO&quot;</span>  <span class="c1"># Default log level</span>
 <span class="n">log_file</span> <span class="o">=</span> <span class="s2">&quot;catatom2osm.log&quot;</span>
 <span class="n">log_format</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%(asctime)s</span><span class="s2"> - </span><span class="si">%(levelname)s</span><span class="s2"> - </span><span class="si">%(message)s</span><span class="s2">&quot;</span>
 
-
-<div class="viewcode-block" id="get_logger"><a class="viewcode-back" href="../../api/catatom2osm.config.html#catatom2osm.config.get_logger">[documentos]</a><span class="k">def</span> <span class="nf">get_logger</span><span class="p">():</span>
-    <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">app_name</span><span class="p">)</span>
-    <span class="n">formatter</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="n">log_format</span><span class="p">)</span>
-    <span class="n">fh</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="p">(</span><span class="n">log_file</span><span class="p">)</span>
-    <span class="n">fh</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
-    <span class="n">fh</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>
-    <span class="n">log</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">fh</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">log</span></div>
-
-
-<div class="viewcode-block" id="set_log_level"><a class="viewcode-back" href="../../api/catatom2osm.config.html#catatom2osm.config.set_log_level">[documentos]</a><span class="k">def</span> <span class="nf">set_log_level</span><span class="p">(</span><span class="n">log</span><span class="p">,</span> <span class="n">log_level</span><span class="p">):</span>
-    <span class="n">formatter</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="n">log_format</span><span class="p">)</span>
-    <span class="n">ch</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
-    <span class="n">ch</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">log_level</span><span class="p">)</span>
-    <span class="n">ch</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>
-    <span class="n">log</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">ch</span><span class="p">)</span>
-    <span class="n">log</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
-    <span class="n">log</span><span class="o">.</span><span class="n">app_level</span> <span class="o">=</span> <span class="n">log_level</span></div>
-
-
 <span class="n">fn_prefix</span> <span class="o">=</span> <span class="s2">&quot;A.ES.SDGC&quot;</span>  <span class="c1"># Inspire Atom file name prefix</span>
 
 <span class="n">silence_gdal</span> <span class="o">=</span> <span class="kc">False</span>
 
-<span class="n">delimiter</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span>
 <span class="n">dup_thr</span> <span class="o">=</span> <span class="mf">0.012</span>  <span class="c1"># Distance in meters to merge nearest vertexs.</span>
 <span class="c1"># 0.011 is about 1E-7 degrees in latitude</span>
 <span class="n">dist_thr</span> <span class="o">=</span> <span class="mf">0.02</span>  <span class="c1"># Threshold in meters for vertex simplification and topological points.</span>
@@ -160,12 +128,8 @@
 <span class="c1"># any vertex with an angle smaller than this value</span>
 <span class="n">dist_inv</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="c1"># Threshold in meters to filter angles for zig-zag and spikes</span>
 <span class="n">entrance_thr</span> <span class="o">=</span> <span class="mf">0.4</span>  <span class="c1"># Minimum distance in meters from a entrance to the nearest corner</span>
-<span class="n">warning_min_area</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># Area in m2 for small area warning</span>
-<span class="n">warning_max_area</span> <span class="o">=</span> <span class="mi">30000</span>  <span class="c1"># Area in m2 for big area warning</span>
 <span class="n">bbox_buffer</span> <span class="o">=</span> <span class="mf">0.002</span>  <span class="c1"># Buffer in degrees around overpass bounding boxes</span>
 <span class="n">parcel_buffer</span> <span class="o">=</span> <span class="mi">200</span>  <span class="c1"># Buffer in meters around parcel to search adjacents</span>
-<span class="n">parcel_parts</span> <span class="o">=</span> <span class="mi">20</span>  <span class="c1"># Number of building parts to agregate parcels</span>
-<span class="n">parcel_dist</span> <span class="o">=</span> <span class="mi">1000</span>  <span class="c1"># Distance in meters to agregate parcels</span>
 
 <span class="n">changeset_tags</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;#Spanish_Cadastre_Buildings_Import&quot;</span><span class="p">,</span>
@@ -665,24 +629,6 @@
     <span class="p">],</span>
 <span class="p">}</span>
 
-<span class="c1"># language is defined in system locales</span>
-<span class="n">available_langs</span> <span class="o">=</span> <span class="n">highway_types_d</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
-<span class="n">language</span> <span class="o">=</span> <span class="n">language</span> <span class="k">if</span> <span class="n">language</span> <span class="ow">in</span> <span class="n">available_langs</span> <span class="k">else</span> <span class="s2">&quot;es_ES&quot;</span>
-
-<span class="c1"># Dictionary for default &#39;highway_types.csv&#39;</span>
-<span class="n">highway_types</span> <span class="o">=</span> <span class="n">highway_types_d</span><span class="p">[</span><span class="n">language</span><span class="p">]</span>
-
-<span class="c1"># List of highway types to translate as place addresses</span>
-<span class="n">place_types</span> <span class="o">=</span> <span class="n">place_types_d</span><span class="p">[</span><span class="s2">&quot;es_ES&quot;</span><span class="p">]</span>
-<span class="k">if</span> <span class="n">language</span> <span class="o">!=</span> <span class="s2">&quot;es_ES&quot;</span><span class="p">:</span>
-    <span class="n">place_types</span> <span class="o">+=</span> <span class="n">place_types_d</span><span class="p">[</span><span class="n">language</span><span class="p">]</span>
-
-<span class="c1"># List of place types to remove from the name</span>
-<span class="n">remove_place_from_name</span> <span class="o">=</span> <span class="p">[</span><span class="n">place_types</span><span class="p">[</span><span class="mi">26</span><span class="p">]]</span>
-
-<span class="c1"># List of highway types not to be parsed</span>
-<span class="n">excluded_types</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;DS&quot;</span><span class="p">,</span> <span class="s2">&quot;ER&quot;</span><span class="p">]</span>
-
 <span class="n">aux_address</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;cdau&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;04&quot;</span><span class="p">,</span> <span class="s2">&quot;11&quot;</span><span class="p">,</span> <span class="s2">&quot;14&quot;</span><span class="p">,</span> <span class="s2">&quot;18&quot;</span><span class="p">,</span> <span class="s2">&quot;21&quot;</span><span class="p">,</span> <span class="s2">&quot;23&quot;</span><span class="p">,</span> <span class="s2">&quot;29&quot;</span><span class="p">,</span> <span class="s2">&quot;41&quot;</span><span class="p">,</span> <span class="s2">&quot;53&quot;</span><span class="p">]}</span>
 <span class="n">aux_path</span> <span class="o">=</span> <span class="s2">&quot;auxsrcs&quot;</span>
 
@@ -740,6 +686,147 @@
     <span class="s2">&quot;55&quot;</span><span class="p">:</span> <span class="s2">&quot;Ceuta&quot;</span><span class="p">,</span>
     <span class="s2">&quot;56&quot;</span><span class="p">:</span> <span class="s2">&quot;Melilla&quot;</span><span class="p">,</span>
 <span class="p">}</span>
+
+<span class="c1"># DEFAULT USER CONFIG</span>
+
+<span class="c1"># language is defined in system locales</span>
+<span class="n">available_langs</span> <span class="o">=</span> <span class="n">highway_types_d</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<span class="n">default_language</span><span class="p">,</span> <span class="n">encoding</span> <span class="o">=</span> <span class="n">locale</span><span class="o">.</span><span class="n">getdefaultlocale</span><span class="p">()</span>
+<span class="n">default_language</span> <span class="o">=</span> <span class="n">default_language</span> <span class="k">if</span> <span class="n">default_language</span> <span class="ow">in</span> <span class="n">available_langs</span> <span class="k">else</span> <span class="s2">&quot;es_ES&quot;</span>
+<span class="n">encoding</span> <span class="o">=</span> <span class="n">encoding</span> <span class="ow">or</span> <span class="s2">&quot;UTF-8&quot;</span>
+
+<span class="c1"># Dictionary for default &#39;highway_types.csv&#39;</span>
+<span class="n">default_highway_types</span> <span class="o">=</span> <span class="n">highway_types_d</span><span class="p">[</span><span class="n">default_language</span><span class="p">]</span>
+
+<span class="c1"># List of highway types to translate as place addresses</span>
+<span class="n">default_place_types</span> <span class="o">=</span> <span class="n">place_types_d</span><span class="p">[</span><span class="s2">&quot;es_ES&quot;</span><span class="p">]</span>
+<span class="k">if</span> <span class="n">default_language</span> <span class="o">!=</span> <span class="s2">&quot;es_ES&quot;</span><span class="p">:</span>
+    <span class="n">default_place_types</span> <span class="o">+=</span> <span class="n">place_types_d</span><span class="p">[</span><span class="n">default_language</span><span class="p">]</span>
+
+<span class="c1"># List of place types to remove from the name</span>
+<span class="n">default_remove_place_from_name</span> <span class="o">=</span> <span class="p">[</span><span class="n">default_place_types</span><span class="p">[</span><span class="mi">26</span><span class="p">]]</span>
+
+<span class="c1"># List of highway types not to be parsed</span>
+<span class="n">default_excluded_types</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;DS&quot;</span><span class="p">,</span> <span class="s2">&quot;ER&quot;</span><span class="p">]</span>
+
+<span class="n">default_warning_min_area</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># Area in m2 for small area warning</span>
+<span class="n">default_warning_max_area</span> <span class="o">=</span> <span class="mi">30000</span>  <span class="c1"># Area in m2 for big area warning</span>
+<span class="n">default_parcel_parts</span> <span class="o">=</span> <span class="mi">20</span>  <span class="c1"># Number of building parts to agregate parcels</span>
+<span class="n">default_parcel_dist</span> <span class="o">=</span> <span class="mi">1000</span>  <span class="c1"># Distance in meters to agregate parcels</span>
+
+<span class="n">default_config_file</span> <span class="o">=</span> <span class="s2">&quot;config.yaml&quot;</span>
+
+
+<div class="viewcode-block" id="get_config_comment"><a class="viewcode-back" href="../../api/catatom2osm.config.html#catatom2osm.config.get_config_comment">[documentos]</a><span class="k">def</span> <span class="nf">get_config_comment</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">_</span><span class="p">(</span>
+        <span class="s2">&quot;# language:</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;#   Language to translate thoroughfare names: es_ES ca_ES gl_ES</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;# highway_types:</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;#   Dictionary to translate thoroughfare types</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;# place_types:</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;#   List of highway types to translate as place addresses (addr:place)</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;# remove_place_from_name:</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;#   List of highway types to remove from the name</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;# excluded_types</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;#   List of highway types not to be parsed</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;# warning_min_area:</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;#   Area in m² for small area warning</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;# warning_max_area:</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;#   Area in m² for big area warning</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;# parcel_parts:</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;#   Number of building parts to agregate parcels</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;# parcel_dist:</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;#   Distance in meters to agregate parcels</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="p">)</span></div>
+
+
+<span class="n">default_user_config</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;language&quot;</span><span class="p">:</span> <span class="n">default_language</span><span class="p">,</span>
+    <span class="s2">&quot;highway_types&quot;</span><span class="p">:</span> <span class="n">default_highway_types</span><span class="p">,</span>
+    <span class="s2">&quot;place_types&quot;</span><span class="p">:</span> <span class="n">default_place_types</span><span class="p">,</span>
+    <span class="s2">&quot;remove_place_from_name&quot;</span><span class="p">:</span> <span class="n">default_remove_place_from_name</span><span class="p">,</span>
+    <span class="s2">&quot;excluded_types&quot;</span><span class="p">:</span> <span class="n">default_excluded_types</span><span class="p">,</span>
+    <span class="s2">&quot;warning_min_area&quot;</span><span class="p">:</span> <span class="n">default_warning_min_area</span><span class="p">,</span>
+    <span class="s2">&quot;warning_max_area&quot;</span><span class="p">:</span> <span class="n">default_warning_max_area</span><span class="p">,</span>
+    <span class="s2">&quot;parcel_parts&quot;</span><span class="p">:</span> <span class="n">default_parcel_parts</span><span class="p">,</span>
+    <span class="s2">&quot;parcel_dist&quot;</span><span class="p">:</span> <span class="n">default_parcel_dist</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="c1"># Define global variables whose name matches the keys of the default_user_config dict</span>
+<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">default_user_config</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">globals</span><span class="p">()[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+
+<div class="viewcode-block" id="install_gettext"><a class="viewcode-back" href="../../api/catatom2osm.config.html#catatom2osm.config.install_gettext">[documentos]</a><span class="k">def</span> <span class="nf">install_gettext</span><span class="p">(</span><span class="n">app_name</span><span class="p">,</span> <span class="n">localedir</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Install internationalization services.&quot;&quot;&quot;</span>
+    <span class="n">gettext</span><span class="o">.</span><span class="n">install</span><span class="p">(</span><span class="n">app_name</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="n">localedir</span><span class="o">=</span><span class="n">localedir</span><span class="p">)</span>
+    <span class="n">gettext</span><span class="o">.</span><span class="n">bindtextdomain</span><span class="p">(</span><span class="s2">&quot;argparse&quot;</span><span class="p">,</span> <span class="n">localedir</span><span class="p">)</span>
+    <span class="n">gettext</span><span class="o">.</span><span class="n">textdomain</span><span class="p">(</span><span class="s2">&quot;argparse&quot;</span><span class="p">)</span></div>
+
+
+<span class="n">install_gettext</span><span class="p">(</span><span class="n">app_name</span><span class="p">,</span> <span class="n">localedir</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="setup_logger"><a class="viewcode-back" href="../../api/catatom2osm.config.html#catatom2osm.config.setup_logger">[documentos]</a><span class="k">def</span> <span class="nf">setup_logger</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Configure the application logger.&quot;&quot;&quot;</span>
+    <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">app_name</span><span class="p">)</span>
+    <span class="n">formatter</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="n">log_format</span><span class="p">)</span>
+    <span class="n">fh</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="p">(</span><span class="n">log_file</span><span class="p">)</span>
+    <span class="n">fh</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+    <span class="n">fh</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">fh</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">log</span></div>
+
+
+<div class="viewcode-block" id="set_log_level"><a class="viewcode-back" href="../../api/catatom2osm.config.html#catatom2osm.config.set_log_level">[documentos]</a><span class="k">def</span> <span class="nf">set_log_level</span><span class="p">(</span><span class="n">log</span><span class="p">,</span> <span class="n">log_level</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Configure console logger and level.&quot;&quot;&quot;</span>
+    <span class="n">formatter</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="n">log_format</span><span class="p">)</span>
+    <span class="n">ch</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+    <span class="n">ch</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">log_level</span><span class="p">)</span>
+    <span class="n">ch</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">ch</span><span class="p">)</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">app_level</span> <span class="o">=</span> <span class="n">log_level</span></div>
+
+
+<div class="viewcode-block" id="generate_default_user_config"><a class="viewcode-back" href="../../api/catatom2osm.config.html#catatom2osm.config.generate_default_user_config">[documentos]</a><span class="k">def</span> <span class="nf">generate_default_user_config</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Export default user config.</span>
+
+<span class="sd">    Generate a config YAML object populated with the default values in the dict</span>
+<span class="sd">    default_user_config, and save it to `default_config_file`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">yaml_object</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">default_user_config</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">allow_unicode</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">default_config_file</span><span class="p">):</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Config file &#39;</span><span class="si">%s</span><span class="s2">&#39; exists. Delete it if you want to overwrite.&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">msg</span> <span class="o">%</span> <span class="n">default_config_file</span><span class="p">)</span>
+        <span class="k">return</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">default_config_file</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">outfile</span><span class="p">:</span>
+            <span class="n">outfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">get_config_comment</span><span class="p">())</span>
+            <span class="n">outfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">yaml_object</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Config file saved as &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="n">default_config_file</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Couldn&#39;t save the sample config file&quot;</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="get_user_config"><a class="viewcode-back" href="../../api/catatom2osm.config.html#catatom2osm.config.get_user_config">[documentos]</a><span class="k">def</span> <span class="nf">get_user_config</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Read the user-provided config file in path.</span>
+
+<span class="sd">    Overwrites all variables that exist in the default_user_config dict.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">app_name</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">config_file</span><span class="p">:</span>
+            <span class="n">user_config</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">config_file</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">default_user_config</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="o">&amp;</span> <span class="n">user_config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="nb">globals</span><span class="p">()[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_config</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+    <span class="k">except</span> <span class="n">yaml</span><span class="o">.</span><span class="n">YAMLError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Can&#39;t read &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="n">path</span>
+        <span class="k">raise</span> <span class="p">(</span><span class="n">CatConfigError</span><span class="p">(</span><span class="n">msg</span> <span class="o">+</span> <span class="s2">&quot;: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)))</span>
+    <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Config file &#39;</span><span class="si">%s</span><span class="s2">&#39; not found&quot;</span><span class="p">),</span> <span class="n">path</span><span class="p">)</span></div>
 </pre></div>
 
           </div>
@@ -756,7 +843,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.8.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.8.2</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Código de módulo</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.config</a></li> 
       </ul>

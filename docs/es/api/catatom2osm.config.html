@@ -15,7 +15,7 @@
   <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.config module &#8212; documentación de CatAtom2Osm - 2.8.0</title>
+    <title>catatom2osm.config module &#8212; documentación de CatAtom2Osm - 2.8.2</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/guzzle.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="catatom2osm.cdau.html" title="catatom2osm.cdau module"
              accesskey="P">anterior</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">documentación de CatAtom2Osm - 2.8.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">documentación de CatAtom2Osm - 2.8.2</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../api.html" >Referencia API</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="modules.html" >CatAtom2Osm</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="catatom2osm.html" accesskey="U">catatom2osm package</a> &#187;</li>
@@ -111,19 +111,42 @@
 <span id="catatom2osm-config-module"></span><h1>catatom2osm.config module<a class="headerlink" href="#module-catatom2osm.config" title="Enlazar permanentemente con este título">¶</a></h1>
 <p>Application preferences.</p>
 <dl class="py function">
-<dt class="sig sig-object py" id="catatom2osm.config.get_logger">
-<span class="sig-prename descclassname"><span class="pre">catatom2osm.config.</span></span><span class="sig-name descname"><span class="pre">get_logger</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/config.html#get_logger"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.config.get_logger" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dt class="sig sig-object py" id="catatom2osm.config.generate_default_user_config">
+<span class="sig-prename descclassname"><span class="pre">catatom2osm.config.</span></span><span class="sig-name descname"><span class="pre">generate_default_user_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/config.html#generate_default_user_config"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.config.generate_default_user_config" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Export default user config.</p>
+<p>Generate a config YAML object populated with the default values in the dict
+default_user_config, and save it to <cite>default_config_file</cite></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="catatom2osm.config.get_config_comment">
+<span class="sig-prename descclassname"><span class="pre">catatom2osm.config.</span></span><span class="sig-name descname"><span class="pre">get_config_comment</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/config.html#get_config_comment"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.config.get_config_comment" title="Enlazar permanentemente con esta definición">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="catatom2osm.config.get_user_config">
+<span class="sig-prename descclassname"><span class="pre">catatom2osm.config.</span></span><span class="sig-name descname"><span class="pre">get_user_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/config.html#get_user_config"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.config.get_user_config" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Read the user-provided config file in path.</p>
+<p>Overwrites all variables that exist in the default_user_config dict.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="catatom2osm.config.install_gettext">
 <span class="sig-prename descclassname"><span class="pre">catatom2osm.config.</span></span><span class="sig-name descname"><span class="pre">install_gettext</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">localedir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/config.html#install_gettext"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.config.install_gettext" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Install internationalization services.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="catatom2osm.config.set_log_level">
 <span class="sig-prename descclassname"><span class="pre">catatom2osm.config.</span></span><span class="sig-name descname"><span class="pre">set_log_level</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">log</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_level</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/config.html#set_log_level"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.config.set_log_level" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Configure console logger and level.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="catatom2osm.config.setup_logger">
+<span class="sig-prename descclassname"><span class="pre">catatom2osm.config.</span></span><span class="sig-name descname"><span class="pre">setup_logger</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/catatom2osm/config.html#setup_logger"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#catatom2osm.config.setup_logger" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Configure the application logger.</p>
+</dd></dl>
 
 </section>
 
@@ -160,7 +183,7 @@
         <li class="right" >
           <a href="catatom2osm.cdau.html" title="catatom2osm.cdau module"
              >anterior</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">documentación de CatAtom2Osm - 2.8.0</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">documentación de CatAtom2Osm - 2.8.2</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../api.html" >Referencia API</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="modules.html" >CatAtom2Osm</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="catatom2osm.html" >catatom2osm package</a> &#187;</li>

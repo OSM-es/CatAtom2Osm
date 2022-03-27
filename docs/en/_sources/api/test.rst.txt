@@ -18,6 +18,7 @@ Submodules
    test.test_app
    test.test_catatom
    test.test_cdau
+   test.test_config
    test.test_csvtools
    test.test_download
    test.test_hgwnames
