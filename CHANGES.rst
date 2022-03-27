@@ -1,6 +1,9 @@
 Change log
 ==========
 
+**2022-03-27 (2.9.0)**
+* Add user configuration file
+
 **2022-03-14 (2.8.2)**
 * Remove debug tag left by mistake
 

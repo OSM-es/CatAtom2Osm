@@ -1,6 +1,9 @@
 Registro de cambios
 ===================
 
+**27-03-2022 (2.9.0)**
+* Añade archivo de cofiguración de usuario.
+
 **14-03-2022 (2.8.2)**
 * Elimina etiqueta de depuración dejada por error.
 
