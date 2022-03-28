@@ -1,6 +1,9 @@
 Registro de cambios
 ===================
 
+**28-03-2022 (2.9.1)**
+* Renombra módulo geo.aux, no es válido en Windows.
+
 **27-03-2022 (2.9.0)**
 * Añade archivo de cofiguración de usuario.
 

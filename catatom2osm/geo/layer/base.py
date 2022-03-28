@@ -21,9 +21,9 @@ from tqdm import tqdm
 from catatom2osm import config, osm, translate
 from catatom2osm.exceptions import CatIOError
 from catatom2osm.geo import BUFFER_SIZE
-from catatom2osm.geo.aux import get_attributes
 from catatom2osm.geo.geometry import Geometry
 from catatom2osm.geo.point import Point
+from catatom2osm.geo.tools import get_attributes
 from catatom2osm.geo.types import WKBMultiPolygon, WKBPoint, WKBPolygon
 from catatom2osm.report import instance as report
 

@@ -213,7 +213,7 @@ class CatAtom2Osm(object):
                 raise CatValueError(msg)
             bb = pa.geometry().boundingBox().buffered(config.parcel_buffer)
             g = QgsGeometry.fromRect(bb)
-            q = lambda f, __: geo.aux.is_inside(f, g)
+            q = lambda f, __: geo.tools.is_inside(f, g)
         self.parcel_query = q
         self.parcel.append(parcel_gml, query=q)
         del parcel_gml
@@ -288,7 +288,7 @@ class CatAtom2Osm(object):
                     n = len(glob(fp + "*.osm.gz"))
                     label = f"{label}-{n}"
                     pa["localId"] = label
-                    to_change[pa.id()] = geo.aux.get_attributes(pa)
+                    to_change[pa.id()] = geo.tools.get_attributes(pa)
             self.write_osm(task_osm, tasks_folder, label + ".osm.gz")
             del task
         if to_clean:

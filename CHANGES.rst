@@ -1,6 +1,9 @@
 Change log
 ==========
 
+**2022-03-28 (2.9.1)**
+* Rename geo.aux, not a valid Windows name
+
 **2022-03-27 (2.9.0)**
 * Add user configuration file
 

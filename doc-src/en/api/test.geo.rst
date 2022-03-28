@@ -15,10 +15,10 @@ Submodules
 .. toctree::
    :maxdepth: 4
 
-   test.geo.test_aux
    test.geo.test_debug
    test.geo.test_geometry
    test.geo.test_point
+   test.geo.test_tools
 
 Module contents
 ---------------

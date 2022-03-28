@@ -5,10 +5,10 @@ from qgis.core import QgsFeature, QgsField, QgsGeometry, QgsRectangle
 from qgis.PyQt.QtCore import QVariant
 
 from catatom2osm import config
-from catatom2osm.geo.aux import get_attributes, is_inside_area, merge_groups
 from catatom2osm.geo.geometry import Geometry
 from catatom2osm.geo.layer.cons import ConsLayer
 from catatom2osm.geo.layer.polygon import PolygonLayer
+from catatom2osm.geo.tools import get_attributes, is_inside_area, merge_groups
 
 log = logging.getLogger(config.app_name)
 

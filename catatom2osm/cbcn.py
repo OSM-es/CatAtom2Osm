@@ -9,7 +9,7 @@ from qgis.core import QgsFeature
 from catatom2osm import config, download
 from catatom2osm.exceptions import CatIOError
 from catatom2osm.geo import AddressLayer, BaseLayer, Point
-from catatom2osm.geo.aux import is_inside
+from catatom2osm.geo.tools import is_inside
 
 log = logging.getLogger(config.app_name)
 

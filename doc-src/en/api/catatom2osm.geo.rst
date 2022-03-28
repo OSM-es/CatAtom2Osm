@@ -15,10 +15,10 @@ Submodules
 .. toctree::
    :maxdepth: 4
 
-   catatom2osm.geo.aux
    catatom2osm.geo.debug
    catatom2osm.geo.geometry
    catatom2osm.geo.point
+   catatom2osm.geo.tools
    catatom2osm.geo.types
 
 Module contents

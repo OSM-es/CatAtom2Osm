@@ -6,10 +6,10 @@ from qgis.PyQt.QtCore import QVariant
 
 from catatom2osm import config, translate
 from catatom2osm.geo import BUFFER_SIZE, SIMPLIFY_BUILDING_PARTS
-from catatom2osm.geo.aux import get_attributes, is_inside
 from catatom2osm.geo.geometry import Geometry
 from catatom2osm.geo.layer.polygon import PolygonLayer
 from catatom2osm.geo.point import Point
+from catatom2osm.geo.tools import get_attributes, is_inside
 from catatom2osm.report import instance as report
 
 log = logging.getLogger(config.app_name)

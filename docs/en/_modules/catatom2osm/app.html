@@ -14,7 +14,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.app &#8212; CatAtom2Osm 2.8.2 documentation</title>
+    <title>catatom2osm.app &#8212; CatAtom2Osm 2.9.1 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/guzzle.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.8.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.9.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.app</a></li> 
       </ul>
@@ -294,7 +294,7 @@
                 <span class="k">raise</span> <span class="n">CatValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
             <span class="n">bb</span> <span class="o">=</span> <span class="n">pa</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span><span class="o">.</span><span class="n">boundingBox</span><span class="p">()</span><span class="o">.</span><span class="n">buffered</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">parcel_buffer</span><span class="p">)</span>
             <span class="n">g</span> <span class="o">=</span> <span class="n">QgsGeometry</span><span class="o">.</span><span class="n">fromRect</span><span class="p">(</span><span class="n">bb</span><span class="p">)</span>
-            <span class="n">q</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">f</span><span class="p">,</span> <span class="n">__</span><span class="p">:</span> <span class="n">geo</span><span class="o">.</span><span class="n">aux</span><span class="o">.</span><span class="n">is_inside</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">g</span><span class="p">)</span>
+            <span class="n">q</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">f</span><span class="p">,</span> <span class="n">__</span><span class="p">:</span> <span class="n">geo</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">is_inside</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">g</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parcel_query</span> <span class="o">=</span> <span class="n">q</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parcel</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">parcel_gml</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="n">q</span><span class="p">)</span>
         <span class="k">del</span> <span class="n">parcel_gml</span>
@@ -369,7 +369,7 @@
                     <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="n">fp</span> <span class="o">+</span> <span class="s2">&quot;*.osm.gz&quot;</span><span class="p">))</span>
                     <span class="n">label</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{label}</span><span class="s2">-</span><span class="si">{n}</span><span class="s2">&quot;</span>
                     <span class="n">pa</span><span class="p">[</span><span class="s2">&quot;localId&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">label</span>
-                    <span class="n">to_change</span><span class="p">[</span><span class="n">pa</span><span class="o">.</span><span class="n">id</span><span class="p">()]</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">aux</span><span class="o">.</span><span class="n">get_attributes</span><span class="p">(</span><span class="n">pa</span><span class="p">)</span>
+                    <span class="n">to_change</span><span class="p">[</span><span class="n">pa</span><span class="o">.</span><span class="n">id</span><span class="p">()]</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">get_attributes</span><span class="p">(</span><span class="n">pa</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">write_osm</span><span class="p">(</span><span class="n">task_osm</span><span class="p">,</span> <span class="n">tasks_folder</span><span class="p">,</span> <span class="n">label</span> <span class="o">+</span> <span class="s2">&quot;.osm.gz&quot;</span><span class="p">)</span>
             <span class="k">del</span> <span class="n">task</span>
         <span class="k">if</span> <span class="n">to_clean</span><span class="p">:</span>
@@ -909,7 +909,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.8.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.9.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.app</a></li> 
       </ul>
