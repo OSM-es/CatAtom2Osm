@@ -32,7 +32,7 @@
 ; MUI end ------
 
 Name "${PRODUCT_NAME}"
-OutFile "CatAtom2Osm.exe"
+OutFile "bin\catatom2osm.exe"
 InstallDir "$PROGRAMFILES\CatAtom2Osm"
 ShowInstDetails show
 ShowUnInstDetails show
@@ -41,8 +41,8 @@ ShowUnInstDetails show
 Section "Principal" SEC01
   SetOutPath "$INSTDIR"
   SetOverwrite ifnewer
-  File "..\CatAtom2Osm\bin\catatom2osm.bat"
-  File "..\CatAtom2Osm\bin\catatom2osm.ps1"
+  File "bin\catatom2osm.bat"
+  File "bin\catatom2osm.ps1"
 SectionEnd
 
 Section -Post
