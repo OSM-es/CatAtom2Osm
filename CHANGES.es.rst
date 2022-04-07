@@ -1,7 +1,7 @@
 Registro de cambios
 ===================
 
-**29-03-2022 (2.9.2)**
+**07-04-2022 (2.9.2)**
 * Coge locale del sistema en los scripts de Windows.
 
 **28-03-2022 (2.9.1)**
