@@ -693,7 +693,7 @@ def setup_logger(name="", log_path=""):
     fh.setLevel(logging.DEBUG)
     fh.setFormatter(formatter)
     log.addHandler(fh)
-    log.app_level = log_level
+    log.app_level = getattr(logging, log_level)
     return log
 
 
