@@ -1,6 +1,9 @@
 Registro de cambios
 ===================
 
+**09-04-2022 (2.9.3)**
+* Registros separados por proceso.
+
 **07-04-2022 (2.9.2)**
 * Coge locale del sistema en los scripts de Windows.
 

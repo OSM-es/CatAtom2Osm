@@ -685,9 +685,9 @@ def install_gettext(app_name, localedir):
 install_gettext(app_name, localedir)
 
 
-def setup_logger():
+def setup_logger(name=""):
     """Configure the application logger."""
-    log = logging.getLogger(app_name)
+    log = logging.getLogger(name or app_name)
     formatter = logging.Formatter(log_format)
     fh = logging.FileHandler(log_file)
     fh.setLevel(logging.DEBUG)

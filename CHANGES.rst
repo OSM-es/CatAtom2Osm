@@ -1,6 +1,9 @@
 Change log
 ==========
 
+**2022-04-09 (2.9.3)**
+* Log separated by process
+
 **2022-04-07 (2.9.2)**
 * Take system locale in Windows scripts
 
