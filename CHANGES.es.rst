@@ -1,6 +1,10 @@
 Registro de cambios
 ===================
 
+**12-04-2022 (2.9.4)
+* Actualiza documentación LEEME
+* Anota en el log valores de configuración inválidos (#108)
+
 **09-04-2022 (2.9.3)**
 * Registros separados por proceso.
 

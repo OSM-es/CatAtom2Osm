@@ -1,6 +1,10 @@
 Change log
 ==========
 
+**2022-04-12 (2.9.4)**
+* Update readme help
+* Warning for invalid config settings (#108)
+
 **2022-04-09 (2.9.3)**
 * Log separated by process
 
