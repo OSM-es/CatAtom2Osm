@@ -35,7 +35,8 @@ class TestConfig(unittest.TestCase):
         m_open.assert_not_called()
         self.assertIn("exists. Delete", m_print.call_args_list[0][0][0])
 
-    def test_get_user_config(self):
+    @mock.patch("catatom2osm.config.logging")
+    def test_get_user_config(self, m_logging):
         data = "warning_min_area: 1234\n"
         data += "foo: bar\n"
         m_open = mock.mock_open(read_data=data)
@@ -44,6 +45,9 @@ class TestConfig(unittest.TestCase):
         m_open.assert_called_once_with("taz", "r")
         self.assertEqual(config.warning_min_area, 1234)
         self.assertFalse(hasattr(config, "foo"))
+        m_logging.getLogger().warning.assert_called_once_with(
+            "Config key 'foo' is not valid"
+        )
 
     def test_get_user_config_error(self):
         data = "foo: ["
