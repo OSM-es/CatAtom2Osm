@@ -2,6 +2,7 @@ Registro de cambios
 ===================
 
 **13-04-2022 (2.9.4)
+* Actualiza ficheros de traducción y añade instrucciones para nuevos colaboradores (#109)
 * Actualiza documentación LEEME
 * Anota en el log valores de configuración inválidos (#108)
 

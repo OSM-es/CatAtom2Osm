@@ -2,6 +2,7 @@ Change log
 ==========
 
 **2022-04-13 (2.9.4)**
+* Update locale, CONTRIBUTING (#109)
 * Update readme help
 * Warning for invalid config settings (#108)
 
