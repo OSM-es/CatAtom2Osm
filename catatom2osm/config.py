@@ -739,8 +739,12 @@ def get_user_config(path):
     try:
         with open(path, "r") as config_file:
             user_config = yaml.safe_load(config_file)
-        for key in default_user_config.keys() & user_config.keys():
-            globals()[key] = user_config[key]
+        default_keys = default_user_config.keys()
+        for key in user_config.keys():
+            if key in default_keys:
+                globals()[key] = user_config[key]
+            else:
+                log.warning(_("Config key '%s' is not valid") % key)
     except yaml.YAMLError as e:
         msg = _("Can't read '%s'") % path
         raise (CatConfigError(msg + ": " + str(e)))

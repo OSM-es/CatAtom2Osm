@@ -38,7 +38,7 @@ def list_municipalities(code):
         print(f"{mun[0]} {mun[2]}")
 
 
-def list_districts(code):
+def get_districts(code):
     id, name = get_municipality(code)
     query = overpass.Query(id)
     query.add('wr["boundary"="administrative"]["admin_level"="9"]')
@@ -70,13 +70,22 @@ def list_districts(code):
                     ward.append(e)
     by_name_dist = lambda d: d["boundary"].tags.get("name", "")
     by_name_ward = lambda w: w.tags.get("name", "")
+    districts = []
     for d in sorted(district.values(), key=by_name_dist):
         e = d["boundary"]
-        print(e.id, _("District"), e.tags.get("name", ""))
+        districts.append((False, str(e.id), _("District"), e.tags.get("name", "")))
         for m in sorted(d["subarea"], key=by_name_ward):
-            print("", m.id, _("Ward"), m.tags.get("name", ""))
+            districts.append((True, str(m.id), _("Ward"), m.tags.get("name", "")))
     for w in sorted(ward, key=by_name_ward):
-        print(w.id, _("Ward"), w.tags.get("name", ""))
+        districts.append((False, str(w.id), _("Ward"), w.tags.get("name", "")))
+    return districts
+
+
+def list_districts(code):
+    districts = get_districts(code)
+    for row in districts:
+        tab = "  " if row[0] else ""
+        print(tab + " ".join(row[1:]))
 
 
 def get_municipality(code):

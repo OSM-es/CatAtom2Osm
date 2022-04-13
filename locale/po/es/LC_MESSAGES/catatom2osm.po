@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: CatAtom2Osm\n"
-"POT-Creation-Date: 2022-03-26 19:17+0000\n"
+"POT-Creation-Date: 2022-04-13 12:11+0000\n"
 "PO-Revision-Date: 2017-05-28 19:23+WEST\n"
 "Last-Translator: Javier Sánchez <javiersanp@gmail.com>\n"
 "Language: es\n"
@@ -92,7 +92,7 @@ msgid ""
 "List province codes or municipality codes for PROV (2 digits) or "
 "administrative boundaries for MUN (5 digits)"
 msgstr ""
-"Lista códigos de provincia o de municipios en PROV (2 dígitos) olímites "
+"Lista códigos de provincia o de municipios en PROV (2 dígitos) o límites "
 "administrativos para MUN (5 dígitos)"
 
 #: catatom2osm/__main__.py:104
@@ -152,113 +152,113 @@ msgstr "Inicializada la API de QGIS %s"
 msgid "Using GDAL %s"
 msgstr "Usando GDAL %s"
 
-#: catatom2osm/app.py:112
+#: catatom2osm/app.py:115
 msgid "Resume processing '%s'"
 msgstr "Reanuda el procesado de '%s'"
 
-#: catatom2osm/app.py:115
+#: catatom2osm/app.py:118
 msgid "Start processing '%s'"
 msgstr "Comienza el procesado de '%s'"
 
-#: catatom2osm/app.py:141
+#: catatom2osm/app.py:144
 msgid "No report found"
 msgstr "No se ha encontrado 'report.txt'"
 
-#: catatom2osm/app.py:152 catatom2osm/app.py:406
+#: catatom2osm/app.py:155 catatom2osm/app.py:409
 msgid "Check %d fixme tags"
 msgstr "Revisa %d etiquetas fixme"
 
-#: catatom2osm/app.py:164
+#: catatom2osm/app.py:167
 msgid "No tasks found"
 msgstr "No hay tareas"
 
-#: catatom2osm/app.py:193
+#: catatom2osm/app.py:196
 msgid "'%s' does not include any polygon"
 msgstr "'%s' no incluye ninguna polígono"
 
-#: catatom2osm/app.py:212
+#: catatom2osm/app.py:215
 msgid "Parcel '%s' does not exists"
 msgstr "La parcela '%s' no existe"
 
-#: catatom2osm/app.py:221 catatom2osm/app.py:525
+#: catatom2osm/app.py:224 catatom2osm/app.py:528
 msgid "No parcels data"
 msgstr "No hay parcelas"
 
-#: catatom2osm/app.py:240 catatom2osm/app.py:532
+#: catatom2osm/app.py:243 catatom2osm/app.py:535
 msgid "No buildings data"
 msgstr "No hay edificios"
 
-#: catatom2osm/app.py:296 catatom2osm/geo/layer/parcel.py:54
+#: catatom2osm/app.py:299 catatom2osm/geo/layer/parcel.py:54
 msgid "Removed %d void parcels"
 msgstr "Eliminadas %d parcelas vacías"
 
-#: catatom2osm/app.py:299
+#: catatom2osm/app.py:302
 msgid "Conflict with %d existing tasks"
 msgstr "Conflicto con %d tareas existentes"
 
-#: catatom2osm/app.py:300
+#: catatom2osm/app.py:303
 msgid "Generated %d rustic and %d urban tasks files"
 msgstr "Generados %d archivos de tareas de rústica y %d de urbana"
 
-#: catatom2osm/app.py:353
+#: catatom2osm/app.py:356
 msgid "Municipality: '%s'"
 msgstr "Municipio: '%s'"
 
-#: catatom2osm/app.py:370 catatom2osm/app.py:411 catatom2osm/app.py:513
-#: catatom2osm/app.py:735
+#: catatom2osm/app.py:373 catatom2osm/app.py:414 catatom2osm/app.py:516
+#: catatom2osm/app.py:738
 msgid "Generated '%s'"
 msgstr "Generado '%s'"
 
-#: catatom2osm/app.py:411
+#: catatom2osm/app.py:414
 msgid "Please, check it"
 msgstr "Por favor, compruébelo"
 
-#: catatom2osm/app.py:420
+#: catatom2osm/app.py:423
 msgid "Finished!"
 msgstr "¡Terminado!"
 
-#: catatom2osm/app.py:456
+#: catatom2osm/app.py:459
 msgid "Could not resolve joined tables for the '%s' layer"
 msgstr "No se pudieron resolver las tablas combinadas para la capa '%s'"
 
-#: catatom2osm/app.py:472 catatom2osm/app.py:539
+#: catatom2osm/app.py:475 catatom2osm/app.py:542
 msgid "No addresses data"
 msgstr "No hay direcciones"
 
-#: catatom2osm/app.py:493
+#: catatom2osm/app.py:496
 msgid "Deleted %d addresses refused by street name"
 msgstr "Eliminadas %d direcciones rechazadas por nombre de vial"
 
-#: catatom2osm/app.py:514
+#: catatom2osm/app.py:517
 msgid "Please, check it and run again"
 msgstr "Por favor, compruébelo y ejecute de nuevo"
 
-#: catatom2osm/app.py:610
+#: catatom2osm/app.py:613
 msgid "Refused %d 'parcel' addresses not unique for it building"
 msgstr "Rechazadas %d direcciones tipo parcela no únicas para su edificio"
 
-#: catatom2osm/app.py:684
+#: catatom2osm/app.py:687
 msgid "There are %d address without house number in the OSM data"
 msgstr "Existen %d direcciones sin número de portal en OSM"
 
-#: catatom2osm/app.py:737
+#: catatom2osm/app.py:740
 msgid "Failed to write layer: '%s'"
 msgstr "Error al escribir la capa: '%s'"
 
-#: catatom2osm/app.py:758 catatom2osm/catatom.py:101 catatom2osm/cbcn.py:151
+#: catatom2osm/app.py:761 catatom2osm/catatom.py:101 catatom2osm/cbcn.py:151
 #: catatom2osm/cdau.py:199
 msgid "Downloading '%s'"
 msgstr "Descargando '%s'"
 
-#: catatom2osm/app.py:774
+#: catatom2osm/app.py:777
 msgid "No OSM data were obtained from '%s'"
 msgstr "No se obtuvieron datos OSM de '%s'"
 
-#: catatom2osm/app.py:779
+#: catatom2osm/app.py:782
 msgid "Read '%s': %d nodes, %d ways, %d relations"
 msgstr "Leído '%s': %d nodos, %d vías, %d relaciones"
 
-#: catatom2osm/app.py:807
+#: catatom2osm/app.py:810
 msgid "Generated '%s': %d nodes, %d ways, %d relations"
 msgstr "Generado '%s': %d nodos, %d vías, %d relaciones"
 
@@ -274,15 +274,15 @@ msgstr "El Código Provincial '%s' no es válido"
 msgid "Territorial office %s - %s"
 msgstr "Oficina territorial %s - %s"
 
-#: catatom2osm/boundary.py:75
+#: catatom2osm/boundary.py:76
 msgid "District"
 msgstr "Distrito"
 
-#: catatom2osm/boundary.py:77 catatom2osm/boundary.py:79
+#: catatom2osm/boundary.py:78 catatom2osm/boundary.py:80
 msgid "Ward"
 msgstr "Barrio"
 
-#: catatom2osm/boundary.py:86 catatom2osm/catatom.py:96
+#: catatom2osm/boundary.py:95 catatom2osm/catatom.py:96
 msgid "Municipality code '%s' don't exists"
 msgstr "El código de municipio '%s' no existe"
 
@@ -378,24 +378,29 @@ msgstr ""
 "# parcel_dist:\n"
 "#   Distancia en metros para agregar parcelas\n"
 
-#: catatom2osm/config.py:719
+#: catatom2osm/config.py:720
 msgid "Config file '%s' exists. Delete it if you want to overwrite."
 msgstr ""
 "El fichero de configuración '%s' existe. Bórralo si quieres sobreescribirlo."
 
-#: catatom2osm/config.py:726
+#: catatom2osm/config.py:727
 msgid "Config file saved as '%s'"
 msgstr "Fichero de configuración guardado como '%s'"
 
-#: catatom2osm/config.py:728
+#: catatom2osm/config.py:729
 msgid "Couldn't save the sample config file"
 msgstr "No se pudo grabar el fichero de configuración"
 
-#: catatom2osm/config.py:744
+#: catatom2osm/config.py:747
+#, fuzzy
+msgid "Config key '%s' is not valid"
+msgstr "La clave de configuración '%s' no es válida"
+
+#: catatom2osm/config.py:749
 msgid "Can't read '%s'"
 msgstr "No se pudo leer '%s'"
 
-#: catatom2osm/config.py:747
+#: catatom2osm/config.py:752
 msgid "Config file '%s' not found"
 msgstr "Fichero de configuración '%s' no encontrado"
 
