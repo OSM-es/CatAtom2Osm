@@ -27,4 +27,16 @@ To run code styling on each commit, install in your host https://pre-commit.com/
     pip install pre-commit
     pre-commit install
 
+If you update existing user-facing strings or add new ones, you can translate them following this procedure. First, enter the docker container:
+
+    make shell
+
+Then, generate the translation files:
+
+    make msg
+
+You can now edit the modified files; e.g., `locale/po/es/LC_MESSAGES/catatom2osm.po`. After you're done, compile the translations once again from the shell:
+
+    make msg
+
 A tutorial is available here https://asciinema.org/a/459636
