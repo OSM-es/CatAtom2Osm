@@ -14,7 +14,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>test.test_config &#8212; documentación de CatAtom2Osm - 2.9.1</title>
+    <title>test.test_config &#8212; documentación de CatAtom2Osm - 2.9.4</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/guzzle.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.9.1</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.9.4</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Código de módulo</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">test.test_config</a></li> 
       </ul>
@@ -117,7 +117,8 @@
         <span class="n">m_open</span><span class="o">.</span><span class="n">assert_not_called</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s2">&quot;exists. Delete&quot;</span><span class="p">,</span> <span class="n">m_print</span><span class="o">.</span><span class="n">call_args_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span></div>
 
-<div class="viewcode-block" id="TestConfig.test_get_user_config"><a class="viewcode-back" href="../../api/test.test_config.html#test.test_config.TestConfig.test_get_user_config">[documentos]</a>    <span class="k">def</span> <span class="nf">test_get_user_config</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestConfig.test_get_user_config"><a class="viewcode-back" href="../../api/test.test_config.html#test.test_config.TestConfig.test_get_user_config">[documentos]</a>    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s2">&quot;catatom2osm.config.logging&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">test_get_user_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m_logging</span><span class="p">):</span>
         <span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;warning_min_area: 1234</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="n">data</span> <span class="o">+=</span> <span class="s2">&quot;foo: bar</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="n">m_open</span> <span class="o">=</span> <span class="n">mock</span><span class="o">.</span><span class="n">mock_open</span><span class="p">(</span><span class="n">read_data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
@@ -125,7 +126,10 @@
             <span class="n">config</span><span class="o">.</span><span class="n">get_user_config</span><span class="p">(</span><span class="s2">&quot;taz&quot;</span><span class="p">)</span>
         <span class="n">m_open</span><span class="o">.</span><span class="n">assert_called_once_with</span><span class="p">(</span><span class="s2">&quot;taz&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">warning_min_area</span><span class="p">,</span> <span class="mi">1234</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertFalse</span><span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="s2">&quot;foo&quot;</span><span class="p">))</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertFalse</span><span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="s2">&quot;foo&quot;</span><span class="p">))</span>
+        <span class="n">m_logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span><span class="o">.</span><span class="n">warning</span><span class="o">.</span><span class="n">assert_called_once_with</span><span class="p">(</span>
+            <span class="s2">&quot;Config key &#39;foo&#39; is not valid&quot;</span>
+        <span class="p">)</span></div>
 
 <div class="viewcode-block" id="TestConfig.test_get_user_config_error"><a class="viewcode-back" href="../../api/test.test_config.html#test.test_config.TestConfig.test_get_user_config_error">[documentos]</a>    <span class="k">def</span> <span class="nf">test_get_user_config_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;foo: [&quot;</span>
@@ -161,7 +165,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.9.1</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.9.4</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Código de módulo</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">test.test_config</a></li> 
       </ul>

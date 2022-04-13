@@ -15,7 +15,7 @@
   <link rel="stylesheet" type="text/css" href="_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>Read me &#8212; CatAtom2Osm 2.9.1 documentation</title>
+    <title>Read me &#8212; CatAtom2Osm 2.9.4 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/guzzle.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -45,7 +45,7 @@
         <li class="right" >
           <a href="index.html" title="Welcome to CatAtom2Osm’s documentation!"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">CatAtom2Osm 2.9.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">CatAtom2Osm 2.9.4 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Read me</a></li> 
       </ul>
     </div>
@@ -134,33 +134,32 @@
 <blockquote>
 <div><p>catatom2osm &lt;paths&gt;</p>
 </div></blockquote>
-<p>The argument path states the directory for input and output files.
-The directory name shall start with 5 digits (GGMMM) matching the Cadastral
-Provincial Office and Municipality Code. If the program don’t find the input
-files it will download them for you from the INSPIRE Services of the Spanish
-Cadastre.</p>
+<p>The argument PATHS states for directories to process municipalities. The last
+directory in each path shall be 5 digits (GGMMM) matching the Cadastral codes
+for Provincial Office (GG) and Municipality (MMM). If the program don’t find
+the input files it will download them for you from the INSPIRE Services of
+the Spanish Cadastre.</p>
 <p><strong>Options</strong>:</p>
 <ul class="simple">
 <li><p>-h, –help                Show this help message and exit</p></li>
-<li><p>-v, –version             Print CatAtom2Osm version and exit</p></li>
-<li><p>-l [prov], –list [prov]  List available municipalities given the two digits province code</p></li>
-<li><p>--list-zones              List zone labels in the municipality.</p></li>
-<li><p>-t, –tasks               Splits constructions into tasks files (default, implies -z)</p></li>
-<li><p>-c, –comment             Recovers the metadata of the tasks</p></li>
-<li><p>-b, –building            Process buildings to a single file instead of tasks</p></li>
-<li><p>-d, –address             Process the address dataset</p></li>
-<li><p>-z, –zoning              Process the cadastral zoning dataset.</p></li>
-<li><p>-p, –parcel              Process the cadastral parcel dataset</p></li>
-<li><p>-a, –all                 Process all datasets (equivalent to -bdptz)</p></li>
-<li><p>-o labels, –zone labels  Process zones given its labels</p></li>
+<li><p>-v, –version             Show program’s version number and exit</p></li>
+<li><p>-l, –list                List province codes</p></li>
+<li><p>-l [PROV], –list [PROV]  List available municipality codes for PROV (2 digits)</p></li>
+<li><p>-l [MUN], –list [MUN]    List administrative boundaries for MUN (5 digits)</p></li>
+<li><p>-b, –building            Process only the building dataset</p></li>
+<li><p>-d, –address             Process only the address dataset</p></li>
+<li><p>-z, –zoning              Process only the tasks definition file</p></li>
+<li><p>-s SPLIT, –split SPLIT   Process data in the parcels delimited by SPLIT (file / administrative boundary OSM id or name)</p></li>
 <li><p>-m, –manual              Dissable conflation with OSM data</p></li>
+<li><p>-c, –comment             Recovers the metadata of the tasks</p></li>
 <li><p>-w, –download            Download only</p></li>
 <li><p>--log=log_level           Select the log level between DEBUG, INFO, WARNING, ERROR or CRITICAL</p></li>
 </ul>
+<p>More info about the split option in the [wiki](Más información sobre dividir municipio en la [wiki](<a class="reference external" href="https://wiki.openstreetmap.org/wiki/ES:Catastro_espa%C3%B1ol/Importaci%C3%B3n_de_edificios/Gesti%C3%B3n_de_proyectos#Anexo:_Modificar_proyectos">https://wiki.openstreetmap.org/wiki/ES:Catastro_espa%C3%B1ol/Importaci%C3%B3n_de_edificios/Gesti%C3%B3n_de_proyectos#Anexo:_Modificar_proyectos</a>) (es)</p>
 </section>
 <section id="settings">
 <h2>Settings<a class="headerlink" href="#settings" title="Permalink to this headline">¶</a></h2>
-<p>The software use the system locales to select the language to use translating the throughfare types. To use another language, set the LANG environment variable.</p>
+<p>The software use the system locales to select the language to use translating the throughfare types. To use another language, set the LANG environment variable. For example, in Linux:</p>
 <blockquote>
 <div><p>LANG=es_ES.UTF-8; catatom2osm</p>
 </div></blockquote>
@@ -173,6 +172,31 @@ Cadastre.</p>
 <div><p>LANG=gl_ES.UTF-8; catatom2osm</p>
 </div></blockquote>
 <p>Forces to use Galician</p>
+<p>In the Windows terminal (CMD):</p>
+<blockquote>
+<div><p>set LANG=ca_ES.UTF-8 &amp;&amp; catatom2osm</p>
+</div></blockquote>
+<p>In PowerShell:</p>
+<blockquote>
+<div><p>${LANG}=”ca_ES.UTF-8”; catatom2osm</p>
+</div></blockquote>
+<p>For more options and permanent settings use the config file.</p>
+<p>To create a template:</p>
+<blockquote>
+<div><p>catatom2osm -g</p>
+</div></blockquote>
+<p>These are the available options:</p>
+<ul class="simple">
+<li><p>language: Language to translate thoroughfare names: es_ES ca_ES gl_ES</p></li>
+<li><p>highway_types: Dictionary to translate thoroughfare types</p></li>
+<li><p>place_types: List of highway types to translate as place addresses (addr:place)</p></li>
+<li><p>remove_place_from_name: List of highway types to remove from the name</p></li>
+<li><p>excluded_types List of highway types not to be parsed</p></li>
+<li><p>warning_min_area: Area in m² for small area warning</p></li>
+<li><p>warning_max_area: Area in m² for big area warning</p></li>
+<li><p>parcel_parts: Number of building parts to agregate parcels</p></li>
+<li><p>parcel_dist: Distance in meters to agregate parcels</p></li>
+</ul>
 </section>
 <section id="documentation">
 <h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h2>
@@ -214,7 +238,7 @@ Cadastre.</p>
         <li class="right" >
           <a href="index.html" title="Welcome to CatAtom2Osm’s documentation!"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">CatAtom2Osm 2.9.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">CatAtom2Osm 2.9.4 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Read me</a></li> 
       </ul>
     </div>

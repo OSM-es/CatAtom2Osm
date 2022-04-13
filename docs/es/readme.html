@@ -15,7 +15,7 @@
   <link rel="stylesheet" type="text/css" href="_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>Léeme &#8212; documentación de CatAtom2Osm - 2.9.1</title>
+    <title>Léeme &#8212; documentación de CatAtom2Osm - 2.9.4</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/guzzle.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="index.html" title="¡Bienvenido a la documentación de CatAtom2Osm!"
              accesskey="P">anterior</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">documentación de CatAtom2Osm - 2.9.1</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">documentación de CatAtom2Osm - 2.9.4</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Léeme</a></li> 
       </ul>
     </div>
@@ -135,35 +135,36 @@ a archivos OSM. Esto es parte de una importación en curso:</p>
 <h2>Uso<a class="headerlink" href="#uso" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>Para ejecutar la aplicación:</p>
 <blockquote>
-<div><p>catatom2osm &lt;rutas&gt;</p>
+<div><p>catatom2osm [OPCIÓN]… [RUTAS]</p>
 </div></blockquote>
-<p>El argumento ruta indica el directorio para los ficheros de entrada y salida.
-El nombre del directorio debe comenzar con 5 dígitos (GGMMM) correspondientes
-al Código de Oficina Provincial del Catastro y Código de Municipio. Si el
-programa no encuentra los archivos de entrada los descargará de los Servicios
-INSPIRE del Catastro Español.</p>
+<p>El argumento RUTAS indica los directorios para procesar municipios.
+El nombre del último directorio en cada ruta debe ser 5 dígitos (GGMMM)
+correspondientes al código de Oficina Provincial (GG) y Municipio (MMM).
+Si el programa no encuentra los archivos de entrada los descargará de los
+Servicios INSPIRE del Catastro Español.</p>
 <p><strong>Opciones</strong>:</p>
 <ul class="simple">
-<li><p>-h, –help                Muestra este mensaje de ayuda y termina</p></li>
-<li><p>-v, –version             Imprime la versión de CatAtom2Osm y termina</p></li>
-<li><p>-l [prov], –list [prov]  Lista los municipios disponibles para el código provincial de dos dígitos</p></li>
-<li><p>--list-zones              Lista las etiquetas de las zonas del municipio</p></li>
-<li><p>-t, –tasks               Reparte las construcciones en archivos de tareas (predeterminada, implica -z)</p></li>
-<li><p>-c, –comment             Recupera los metadatos de las tareas</p></li>
-<li><p>-b, –building            Procesa los edificios a un archivo individual en lugar de tareas</p></li>
-<li><p>-d, –address             Procesa el conjunto de datos de direcciones</p></li>
-<li><p>-z, –zoning              Procesa el conjunto de datos de zonificación catastral</p></li>
-<li><p>-p, –parcel              Procesa el conjunto de datos de parcelas catastrales</p></li>
-<li><p>-a, –all                 Procesa todos los conjuntos de datos (equivalente a -bdptz)</p></li>
-<li><p>-o labels, –zone labels  Procesa zonas dadas sus etiquetas</p></li>
+<li><p>-h, –help                Muestra este mensaje de ayuda y sale</p></li>
+<li><p>-v, –version             Muestra la versión del programa y sale</p></li>
+<li><p>-l, –list                Lista códigos de provincia</p></li>
+<li><p>-l [PROV], –list [PROV]  Lista códigos de municipios en PROV (2 dígitos)</p></li>
+<li><p>-l [MUN], –list [MUN]    Lista límites administrativos para MUN (5 dígitos)</p></li>
+<li><p>-b, –building            Procesa sólo el conjunto de datos de edificios</p></li>
+<li><p>-d, –address             Procesa sólo el conjunto de datos de direcciones</p></li>
+<li><p>-z, –zoning              Procesa sólo el conjunto de datos de tareas</p></li>
+<li><p>-s SPLIT, –split SPLIT   Procesa los datos en las zonas delimitadas por SPLIT (archivo / id OSM o nombre del límite administrativo)</p></li>
 <li><p>-m, –manual              Desactiva la combinación con datos OSM</p></li>
+<li><p>-c, –comment             Recupera los metadatos de las tareas</p></li>
 <li><p>-w, –download            Solo descargar</p></li>
 <li><p>--log=log_level           Selecciona el nivel de registro entre DEBUG, INFO, WARNING, ERROR o CRITICAL.</p></li>
+<li><p>-f CONFIG_FILE, –config-file CONFIG_FILE  Ruta al archivo de configuración. Por defecto es “config.yaml”</p></li>
+<li><p>-g, –generate-config     Genera un archivo de muestra con la configuración por defecto</p></li>
 </ul>
+<p>Más información sobre la opción “split” en la [wiki](<a class="reference external" href="https://wiki.openstreetmap.org/wiki/ES:Catastro_espa%C3%B1ol/Importaci%C3%B3n_de_edificios/Gesti%C3%B3n_de_proyectos#Anexo:_Modificar_proyectos">https://wiki.openstreetmap.org/wiki/ES:Catastro_espa%C3%B1ol/Importaci%C3%B3n_de_edificios/Gesti%C3%B3n_de_proyectos#Anexo:_Modificar_proyectos</a>)</p>
 </section>
 <section id="configuracion">
 <h2>Configuración<a class="headerlink" href="#configuracion" title="Enlazar permanentemente con este título">¶</a></h2>
-<p>El programa usa la configuración de localización del sistema para seleccionar el idioma en la traducción de los tipos de nombres de viales. Si quieres usar otro, asigna la variable de entorno LANG.</p>
+<p>El programa usa la configuración de localización del sistema para seleccionar el idioma en la traducción de los tipos de nombres de viales. Si quieres usar otro, asigna la variable de entorno LANG. Por ejemplo, en Linux:</p>
 <blockquote>
 <div><p>LANG=es_ES.UTF-8; catatom2osm</p>
 </div></blockquote>
@@ -176,6 +177,31 @@ INSPIRE del Catastro Español.</p>
 <div><p>LANG=gl_ES.UTF-8; catatom2osm</p>
 </div></blockquote>
 <p>Para forzar a usar Gallego.</p>
+<p>En la ventana de comandos de Windows (CMD):</p>
+<blockquote>
+<div><p>set LANG=ca_ES.UTF-8 &amp;&amp; catatom2osm</p>
+</div></blockquote>
+<p>En PowerShell:</p>
+<blockquote>
+<div><p>${LANG}=»ca_ES.UTF-8»; catatom2osm</p>
+</div></blockquote>
+<p>Para más opciones y cambios permantes, usa el archivo de configuración.</p>
+<p>Crea una plantilla del archivo con:</p>
+<blockquote>
+<div><p>catatom2osm -g</p>
+</div></blockquote>
+<p>Estos son los parámetros a modificar:</p>
+<ul class="simple">
+<li><p>language: Idioma para traducir los nombres de viales: es_ES ca_ES gl_ES</p></li>
+<li><p>highway_types: Diccionario para traducir los tipos de vias.</p></li>
+<li><p>place_types: lista de tipos de vía que se traducen a direcciones de lugar (addr:place).</p></li>
+<li><p>remove_place_from_name: Lista de tipos de vía a eliminar del nombre.</p></li>
+<li><p>excluded_types: Lista de tipos de vía que no se analizarán.</p></li>
+<li><p>warning_min_area: Área en m² para el aviso de área pequeña.</p></li>
+<li><p>warning_max_area: Área en m² para el aviso de área grande.</p></li>
+<li><p>parcel_parts: Número de partes de edificio para agregar parcelas.</p></li>
+<li><p>parcel_dist: Distancia en metros para agregar parcelas.</p></li>
+</ul>
 </section>
 <section id="documentacion">
 <h2>Documentación<a class="headerlink" href="#documentacion" title="Enlazar permanentemente con este título">¶</a></h2>
@@ -217,7 +243,7 @@ INSPIRE del Catastro Español.</p>
         <li class="right" >
           <a href="index.html" title="¡Bienvenido a la documentación de CatAtom2Osm!"
              >anterior</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">documentación de CatAtom2Osm - 2.9.1</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">documentación de CatAtom2Osm - 2.9.4</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Léeme</a></li> 
       </ul>
     </div>

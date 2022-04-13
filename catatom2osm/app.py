@@ -69,6 +69,9 @@ class CatAtom2Osm(object):
         report.gdal_version = gdal.__version__
         log.debug(_("Initialized QGIS %s API"), report.qgs_version)
         log.debug(_("Using GDAL %s"), report.gdal_version)
+        if not options.building and not options.address:
+            options.address = True
+            options.building = True
         if self.options.zoning:
             self.options.address = False
         self.tasks_path = self.cat.get_path(tasks_folder)

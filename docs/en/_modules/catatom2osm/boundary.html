@@ -14,7 +14,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.boundary &#8212; CatAtom2Osm 2.9.1 documentation</title>
+    <title>catatom2osm.boundary &#8212; CatAtom2Osm 2.9.4 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/guzzle.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.9.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.9.4 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.boundary</a></li> 
       </ul>
@@ -119,7 +119,7 @@
         <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;</span><span class="si">{mun[0]}</span><span class="s2"> </span><span class="si">{mun[2]}</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="list_districts"><a class="viewcode-back" href="../../api/catatom2osm.boundary.html#catatom2osm.boundary.list_districts">[docs]</a><span class="k">def</span> <span class="nf">list_districts</span><span class="p">(</span><span class="n">code</span><span class="p">):</span>
+<div class="viewcode-block" id="get_districts"><a class="viewcode-back" href="../../api/catatom2osm.boundary.html#catatom2osm.boundary.get_districts">[docs]</a><span class="k">def</span> <span class="nf">get_districts</span><span class="p">(</span><span class="n">code</span><span class="p">):</span>
     <span class="nb">id</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="n">get_municipality</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
     <span class="n">query</span> <span class="o">=</span> <span class="n">overpass</span><span class="o">.</span><span class="n">Query</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
     <span class="n">query</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;wr[&quot;boundary&quot;=&quot;administrative&quot;][&quot;admin_level&quot;=&quot;9&quot;]&#39;</span><span class="p">)</span>
@@ -151,13 +151,22 @@
                     <span class="n">ward</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
     <span class="n">by_name_dist</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">d</span><span class="p">:</span> <span class="n">d</span><span class="p">[</span><span class="s2">&quot;boundary&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
     <span class="n">by_name_ward</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">w</span><span class="p">:</span> <span class="n">w</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">districts</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">district</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="n">by_name_dist</span><span class="p">):</span>
         <span class="n">e</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s2">&quot;boundary&quot;</span><span class="p">]</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;District&quot;</span><span class="p">),</span> <span class="n">e</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+        <span class="n">districts</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="kc">False</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">id</span><span class="p">),</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;District&quot;</span><span class="p">),</span> <span class="n">e</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)))</span>
         <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;subarea&quot;</span><span class="p">],</span> <span class="n">key</span><span class="o">=</span><span class="n">by_name_ward</span><span class="p">):</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Ward&quot;</span><span class="p">),</span> <span class="n">m</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+            <span class="n">districts</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="kc">True</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">id</span><span class="p">),</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Ward&quot;</span><span class="p">),</span> <span class="n">m</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)))</span>
     <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">ward</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">by_name_ward</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Ward&quot;</span><span class="p">),</span> <span class="n">w</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span></div>
+        <span class="n">districts</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="kc">False</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">id</span><span class="p">),</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Ward&quot;</span><span class="p">),</span> <span class="n">w</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="n">districts</span></div>
+
+
+<div class="viewcode-block" id="list_districts"><a class="viewcode-back" href="../../api/catatom2osm.boundary.html#catatom2osm.boundary.list_districts">[docs]</a><span class="k">def</span> <span class="nf">list_districts</span><span class="p">(</span><span class="n">code</span><span class="p">):</span>
+    <span class="n">districts</span> <span class="o">=</span> <span class="n">get_districts</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">districts</span><span class="p">:</span>
+        <span class="n">tab</span> <span class="o">=</span> <span class="s2">&quot;  &quot;</span> <span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">tab</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))</span></div>
 
 
 <div class="viewcode-block" id="get_municipality"><a class="viewcode-back" href="../../api/catatom2osm.boundary.html#catatom2osm.boundary.get_municipality">[docs]</a><span class="k">def</span> <span class="nf">get_municipality</span><span class="p">(</span><span class="n">code</span><span class="p">):</span>
@@ -206,7 +215,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.9.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.9.4 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.boundary</a></li> 
       </ul>
