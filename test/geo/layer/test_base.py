@@ -69,7 +69,7 @@ class TestBaseLayer(unittest.TestCase):
         self.assertTrue(feature.geometry().equals(new_fet.geometry()))
 
     @mock.patch("catatom2osm.geo.layer.base.log", m_log)
-    @mock.patch("catatom2osm.geo.layer.base.tqdm", mock.MagicMock())
+    @mock.patch("catatom2osm.geo.layer.base.progressbar", mock.MagicMock())
     def test_append_with_rename(self):
         rename = {"A": "gml_id", "B": "value"}
         self.layer.append(self.fixture, rename)
@@ -79,7 +79,7 @@ class TestBaseLayer(unittest.TestCase):
         self.assertEqual(feature["gml_id"], new_fet["A"])
 
     @mock.patch("catatom2osm.geo.layer.base.log", m_log)
-    @mock.patch("catatom2osm.geo.layer.base.tqdm", mock.MagicMock())
+    @mock.patch("catatom2osm.geo.layer.base.progressbar", mock.MagicMock())
     def test_append_all_fields(self):
         layer = BaseLayer("Polygon", "test", "memory")
         self.assertTrue(layer.isValid())
@@ -90,7 +90,7 @@ class TestBaseLayer(unittest.TestCase):
         self.assertEqual(feature["localId"], new_fet["localId"])
 
     @mock.patch("catatom2osm.geo.layer.base.log", m_log)
-    @mock.patch("catatom2osm.geo.layer.base.tqdm", mock.MagicMock())
+    @mock.patch("catatom2osm.geo.layer.base.progressbar", mock.MagicMock())
     def test_append_with_query(self):
         layer = BaseLayer("Polygon", "test", "memory")
         self.assertTrue(layer.isValid())
@@ -101,7 +101,7 @@ class TestBaseLayer(unittest.TestCase):
         self.assertEqual(layer.featureCount(), 2)
 
     @mock.patch("catatom2osm.geo.layer.base.log", m_log)
-    @mock.patch("catatom2osm.geo.layer.base.tqdm", mock.MagicMock())
+    @mock.patch("catatom2osm.geo.layer.base.progressbar", mock.MagicMock())
     def test_append_void(self):
         layer = BaseLayer("Polygon", "test", "memory")
         self.assertTrue(layer.isValid())
@@ -111,7 +111,7 @@ class TestBaseLayer(unittest.TestCase):
         layer.append(self.fixture, query=declined_filter)
         self.assertEqual(layer.featureCount(), 0)
 
-    @mock.patch("catatom2osm.geo.layer.base.tqdm", mock.MagicMock())
+    @mock.patch("catatom2osm.geo.layer.base.progressbar", mock.MagicMock())
     @mock.patch("catatom2osm.geo.layer.base.Geometry")
     def test_append_void_geometry(self, m_geom):
         m_geom.get_multipolygon.return_value = []
@@ -139,7 +139,7 @@ class TestBaseLayer(unittest.TestCase):
         # Works in QGIS 2.18.17 but not in 3.16.3
         # self.assertEqual(self.layer.featureCount(), 0)
 
-    @mock.patch("catatom2osm.geo.layer.base.tqdm", mock.MagicMock())
+    @mock.patch("catatom2osm.geo.layer.base.progressbar", mock.MagicMock())
     def test_translate_field(self):
         ascii_uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
         feat = next(self.fixture.getFeatures())
@@ -167,7 +167,7 @@ class TestBaseLayer(unittest.TestCase):
         self.assertGreater(self.layer.featureCount(), 0)
 
     @mock.patch("catatom2osm.geo.layer.base.log", m_log)
-    @mock.patch("catatom2osm.geo.layer.base.tqdm", mock.MagicMock())
+    @mock.patch("catatom2osm.geo.layer.base.progressbar", mock.MagicMock())
     def test_boundig_box(self):
         layer = BaseLayer("Polygon", "test", "memory")
         self.assertTrue(layer.isValid())
@@ -177,7 +177,7 @@ class TestBaseLayer(unittest.TestCase):
         self.assertEqual(layer.bounding_box(), bbox)
 
     @mock.patch("catatom2osm.geo.layer.base.log", m_log)
-    @mock.patch("catatom2osm.geo.layer.base.tqdm", mock.MagicMock())
+    @mock.patch("catatom2osm.geo.layer.base.progressbar", mock.MagicMock())
     def test_reproject(self):
         layer = BaseLayer("Polygon", "test", "memory")
         self.assertTrue(layer.isValid())

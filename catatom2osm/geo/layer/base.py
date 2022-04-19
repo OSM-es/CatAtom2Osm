@@ -16,9 +16,8 @@ from qgis.core import (
     QgsVectorLayer,
     QgsWkbTypes,
 )
-from tqdm import tqdm
 
-from catatom2osm import config, osm, translate
+from catatom2osm import config, osm, progressbar, translate
 from catatom2osm.exceptions import CatIOError
 from catatom2osm.geo import BUFFER_SIZE
 from catatom2osm.geo.geometry import Geometry
@@ -483,11 +482,10 @@ class BaseLayer(QgsVectorLayer):
 
     def get_progressbar(self, description, total=None):
         """Return progress bar with 'description' for 'total' iterations."""
-        leave = log.app_level <= logging.DEBUG
         fn = os.path.basename(self.source())
         if self.writer.name() == "memory":
             fn = self.name()
-        pbar = tqdm(total=total, leave=leave)
+        pbar = progressbar.get(total=total)
         pbar.set_description(description)
         pbar.set_postfix(file=fn, refresh=False)
         return pbar

@@ -15,7 +15,7 @@ m_log.app_level = logging.INFO
 
 
 class TestZoningLayer(unittest.TestCase):
-    @mock.patch("catatom2osm.geo.layer.base.tqdm", mock.MagicMock())
+    @mock.patch("catatom2osm.geo.layer.base.progressbar", mock.MagicMock())
     def setUp(self):
         fn = "test/fixtures/zoning.gml"
         self.fixture = QgsVectorLayer(fn, "zoning", "ogr")
@@ -36,7 +36,7 @@ class TestZoningLayer(unittest.TestCase):
         ZoningLayer.delete_shp("rustic_zoning.shp")
 
     @mock.patch("catatom2osm.geo.layer.base.log", m_log)
-    @mock.patch("catatom2osm.geo.layer.base.tqdm", mock.MagicMock())
+    @mock.patch("catatom2osm.geo.layer.base.progressbar", mock.MagicMock())
     def test_append(self):
         def bad_geoms(lyr):
             return [
@@ -54,7 +54,7 @@ class TestZoningLayer(unittest.TestCase):
         self.assertEqual(len(bad_geoms(self.rlayer)), 0)
 
     @mock.patch("catatom2osm.geo.layer.base.log", m_log)
-    @mock.patch("catatom2osm.geo.layer.base.tqdm", mock.MagicMock())
+    @mock.patch("catatom2osm.geo.layer.base.progressbar", mock.MagicMock())
     def test_is_inside_full(self):
         self.ulayer.append(self.fixture, level="M")
         zone = Geometry.fromPolygonXY(
@@ -72,7 +72,7 @@ class TestZoningLayer(unittest.TestCase):
         self.assertTrue(self.ulayer.is_inside(feat))
 
     @mock.patch("catatom2osm.geo.layer.base.log", m_log)
-    @mock.patch("catatom2osm.geo.layer.base.tqdm", mock.MagicMock())
+    @mock.patch("catatom2osm.geo.layer.base.progressbar", mock.MagicMock())
     def test_is_inside_part(self):
         self.ulayer.append(self.fixture, level="M")
         feat = QgsFeature(self.ulayer.fields())
@@ -90,7 +90,7 @@ class TestZoningLayer(unittest.TestCase):
         self.assertTrue(self.ulayer.is_inside(feat))
 
     @mock.patch("catatom2osm.geo.layer.base.log", m_log)
-    @mock.patch("catatom2osm.geo.layer.base.tqdm", mock.MagicMock())
+    @mock.patch("catatom2osm.geo.layer.base.progressbar", mock.MagicMock())
     def test_is_inside_false(self):
         self.ulayer.append(self.fixture, level="M")
         feat = QgsFeature(self.ulayer.fields())
@@ -108,7 +108,7 @@ class TestZoningLayer(unittest.TestCase):
         self.assertFalse(self.ulayer.is_inside(feat))
 
     @mock.patch("catatom2osm.geo.layer.base.log", m_log)
-    @mock.patch("catatom2osm.geo.layer.base.tqdm", mock.MagicMock())
+    @mock.patch("catatom2osm.geo.layer.base.progressbar", mock.MagicMock())
     def test_get_adjacents_and_geometries(self):
         self.ulayer.append(self.fixture, level="M")
         (groups, geometries) = self.ulayer.get_adjacents_and_geometries()

@@ -43,7 +43,7 @@ class TestAddressLayer(unittest.TestCase):
         AddressLayer.delete_shp("test_layer.shp")
 
     @mock.patch("catatom2osm.geo.layer.base.log", m_log)
-    @mock.patch("catatom2osm.geo.layer.base.tqdm", mock.MagicMock())
+    @mock.patch("catatom2osm.geo.layer.base.progressbar", mock.MagicMock())
     def test_append(self):
         self.layer.append(self.address_gml)
         feat = next(self.layer.getFeatures())
@@ -58,7 +58,7 @@ class TestAddressLayer(unittest.TestCase):
             self.assertEqual(feat[attr], value)
 
     @mock.patch("catatom2osm.geo.layer.base.log", m_log)
-    @mock.patch("catatom2osm.geo.layer.base.tqdm", mock.MagicMock())
+    @mock.patch("catatom2osm.geo.layer.base.progressbar", mock.MagicMock())
     def test_join_field(self):
         self.layer.append(self.address_gml)
         self.layer.join_field(self.tn_gml, "TN_id", "gml_id", ["text"], "TN_")
@@ -71,7 +71,7 @@ class TestAddressLayer(unittest.TestCase):
             self.assertEqual(feat[attr], value)
 
     @mock.patch("catatom2osm.geo.layer.base.log", m_log)
-    @mock.patch("catatom2osm.geo.layer.base.tqdm", mock.MagicMock())
+    @mock.patch("catatom2osm.geo.layer.base.progressbar", mock.MagicMock())
     def test_join_field_size(self):
         layer = PolygonLayer("Point", "test", "memory")
         layer.dataProvider().addAttributes([QgsField("A", QVariant.String, len=255)])
@@ -81,13 +81,13 @@ class TestAddressLayer(unittest.TestCase):
         self.assertEqual(self.layer.fields().field("TN_A").length(), 254)
 
     @mock.patch("catatom2osm.geo.layer.base.log", m_log)
-    @mock.patch("catatom2osm.geo.layer.base.tqdm", mock.MagicMock())
+    @mock.patch("catatom2osm.geo.layer.base.progressbar", mock.MagicMock())
     def test_join_void(self):
         self.layer.join_field(self.tn_gml, "TN_id", "gml_id", ["text"], "TN_")
         self.assertEqual(self.layer.featureCount(), 0)
 
     @mock.patch("catatom2osm.geo.layer.base.log", m_log)
-    @mock.patch("catatom2osm.geo.layer.base.tqdm", mock.MagicMock())
+    @mock.patch("catatom2osm.geo.layer.base.progressbar", mock.MagicMock())
     def test_to_osm(self):
         self.layer.append(self.address_gml)
         self.layer.join_field(self.tn_gml, "TN_id", "gml_id", ["text"], "TN_")
@@ -110,7 +110,7 @@ class TestAddressLayer(unittest.TestCase):
             self.assertEqual(feat["TN_text"] + feat["designator"], t)
 
     @mock.patch("catatom2osm.geo.layer.base.log", m_log)
-    @mock.patch("catatom2osm.geo.layer.base.tqdm", mock.MagicMock())
+    @mock.patch("catatom2osm.geo.layer.base.progressbar", mock.MagicMock())
     def test_conflate(self):
         self.layer.append(self.address_gml)
         self.layer.join_field(self.tn_gml, "TN_id", "gml_id", ["text"], "TN_")

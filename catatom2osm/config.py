@@ -30,6 +30,12 @@ delimiter = "\t"
 log_level = "INFO"  # Default log level
 log_file = "catatom2osm.log"
 log_format = "%(asctime)s - %(levelname)s - %(message)s"
+show_progress_bars = os.getenv("Ca2O_SHOW_PROGRESS_BARS", "true").lower() in (
+    "yes",
+    "true",
+    "t",
+    "1",
+)
 
 fn_prefix = "A.ES.SDGC"  # Inspire Atom file name prefix
 

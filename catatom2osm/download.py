@@ -1,7 +1,8 @@
 import os
 
 import requests
-from tqdm import tqdm
+
+from catatom2osm import progressbar
 
 number_of_retries = 3
 default_timeout = 30
@@ -23,8 +24,8 @@ def wget(url, filename):
     total = 0
     if "Content-Length" in response.headers:
         total = int(response.headers["Content-Length"])
-    pbar = tqdm(
-        total=total, unit="B", unit_scale=True, unit_divisor=chunk_size, leave=False
+    pbar = progressbar.get(
+        total=total, unit="B", unit_scale=True, unit_divisor=chunk_size
     )
     pbar.set_description(_("Downloading"))
     pbar.set_postfix(file=os.path.basename(filename), refresh=False)

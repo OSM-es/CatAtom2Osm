@@ -16,7 +16,7 @@ m_log.app_level = logging.INFO
 
 class TestPolygonLayer(unittest.TestCase):
     @mock.patch("catatom2osm.geo.layer.base.log", m_log)
-    @mock.patch("catatom2osm.geo.layer.base.tqdm", mock.MagicMock())
+    @mock.patch("catatom2osm.geo.layer.base.progressbar", mock.MagicMock())
     def setUp(self):
         fn = "test/fixtures/cons.shp"
         self.fixture = QgsVectorLayer(fn, "building", "ogr")
@@ -38,7 +38,7 @@ class TestPolygonLayer(unittest.TestCase):
         self.assertEqual(round(area, 1), 1140234.8)
 
     @mock.patch("catatom2osm.geo.layer.base.log", m_log)
-    @mock.patch("catatom2osm.geo.layer.base.tqdm", mock.MagicMock())
+    @mock.patch("catatom2osm.geo.layer.base.progressbar", mock.MagicMock())
     def test_explode_multi_parts(self):
         multiparts = [
             f for f in self.layer.getFeatures() if len(Geometry.get_multipolygon(f)) > 1
@@ -102,7 +102,7 @@ class TestPolygonLayer(unittest.TestCase):
         )
 
     @mock.patch("catatom2osm.geo.layer.base.log", m_log)
-    @mock.patch("catatom2osm.geo.layer.base.tqdm", mock.MagicMock())
+    @mock.patch("catatom2osm.geo.layer.base.progressbar", mock.MagicMock())
     def test_difference(self):
         layer1 = PolygonLayer("Polygon", "test1", "memory")
         layer2 = PolygonLayer("Polygon", "test2", "memory")

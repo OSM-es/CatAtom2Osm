@@ -31,10 +31,10 @@ class TestGetResponse(unittest.TestCase):
 
 
 class TestWget(unittest.TestCase):
+    @mock.patch("catatom2osm.download.progressbar", mock.MagicMock())
     @mock.patch("catatom2osm.download.get_response")
-    @mock.patch("catatom2osm.download.tqdm")
     @mock.patch("catatom2osm.download.open")
-    def test_wget(self, mock_open, mock_pb, mock_gr):
+    def test_wget(self, mock_open, mock_gr):
         mock_gr.return_value = mock.MagicMock()
         mock_gr.return_value.iter_content = range
         mock_gr.return_value.headers = {"Content-Length": "99999"}
@@ -42,14 +42,11 @@ class TestWget(unittest.TestCase):
         mock_open.return_value.__enter__.return_value = file_mock
         wget("foo", "bar")
         self.assertEqual(file_mock.write.call_count, chunk_size)
-        mock_pb.assert_called_once_with(
-            total=99999, unit="B", unit_scale=True, unit_divisor=chunk_size, leave=False
-        )
 
+    @mock.patch("catatom2osm.download.progressbar", mock.MagicMock())
     @mock.patch("catatom2osm.download.get_response")
-    @mock.patch("catatom2osm.download.tqdm")
     @mock.patch("catatom2osm.download.open")
-    def test_wget0(self, mock_open, mock_pb, mock_gr):
+    def test_wget0(self, mock_open, mock_gr):
         mock_gr.return_value = mock.MagicMock()
         mock_gr.return_value.iter_content = range
         mock_gr.return_value.headers = {}
@@ -57,6 +54,3 @@ class TestWget(unittest.TestCase):
         mock_open.return_value.__enter__.return_value = file_mock
         wget("foo", "bar")
         self.assertEqual(file_mock.write.call_count, chunk_size)
-        mock_pb.assert_called_once_with(
-            total=0, unit="B", unit_scale=True, unit_divisor=chunk_size, leave=False
-        )

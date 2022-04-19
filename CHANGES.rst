@@ -2,6 +2,7 @@ Change log
 ==========
 
 **2022-04-19 (2.9.5)**
+* Optionally hides progress bars
 * Put split data in report
 
 **2022-04-13 (2.9.4)**

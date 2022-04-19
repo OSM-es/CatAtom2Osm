@@ -15,7 +15,7 @@ m_log.app_level = logging.INFO
 
 
 class TestParcelLayer(unittest.TestCase):
-    @mock.patch("catatom2osm.geo.layer.base.tqdm", mock.MagicMock())
+    @mock.patch("catatom2osm.geo.layer.base.progressbar", mock.MagicMock())
     @mock.patch("catatom2osm.geo.layer.base.log", m_log)
     def setUp(self):
         fn = "test/fixtures/parcel.gpkg|layername=parcel"
@@ -58,7 +58,7 @@ class TestParcelLayer(unittest.TestCase):
         self.assertEqual(len(pa_groups), 21)
         self.assertEqual(sum([len(gr) for gr in pa_groups]), 85)
 
-    @mock.patch("catatom2osm.geo.layer.base.tqdm", mock.MagicMock())
+    @mock.patch("catatom2osm.geo.layer.base.progressbar", mock.MagicMock())
     @mock.patch("catatom2osm.geo.layer.base.log", m_log)
     @mock.patch("catatom2osm.geo.layer.polygon.log", m_log)
     def test_merge_by_adjacent_buildings(self):
@@ -139,7 +139,7 @@ class TestParcelLayer(unittest.TestCase):
         self.assertEqual(len(merged), 71)
         self.assertTrue(all([tasks[ref] != ref for ref in merged]))
 
-    @mock.patch("catatom2osm.geo.layer.base.tqdm", mock.MagicMock())
+    @mock.patch("catatom2osm.geo.layer.base.progressbar", mock.MagicMock())
     @mock.patch("catatom2osm.geo.layer.base.log", m_log)
     @mock.patch("catatom2osm.geo.layer.polygon.log", m_log)
     def test_count_parts(self):
@@ -158,7 +158,7 @@ class TestParcelLayer(unittest.TestCase):
         self.assertEqual(f["parts"], 4)
         self.assertEqual(parts_count["8840502CS5284S"], 4)
 
-    @mock.patch("catatom2osm.geo.layer.base.tqdm", mock.MagicMock())
+    @mock.patch("catatom2osm.geo.layer.base.progressbar", mock.MagicMock())
     @mock.patch("catatom2osm.geo.layer.base.log", m_log)
     @mock.patch("catatom2osm.geo.layer.polygon.log", m_log)
     def test_get_groups_by_parts_count(self):
@@ -194,7 +194,7 @@ class TestParcelLayer(unittest.TestCase):
         )
         self.assertEqual(label_count, {1})
 
-    @mock.patch("catatom2osm.geo.layer.base.tqdm", mock.MagicMock())
+    @mock.patch("catatom2osm.geo.layer.base.progressbar", mock.MagicMock())
     @mock.patch("catatom2osm.geo.layer.base.log", m_log)
     @mock.patch("catatom2osm.geo.layer.polygon.log", m_log)
     def test_merge_by_parts_count(self):

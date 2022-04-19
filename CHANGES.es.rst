@@ -2,6 +2,7 @@ Registro de cambios
 ===================
 
 **19-04-2022 (2.9.5)**
+* Opcionalmente oculta las barras de progreso.
 * Pone los datos de división administrativa en el informe.
 
 **13-04-2022 (2.9.4)**

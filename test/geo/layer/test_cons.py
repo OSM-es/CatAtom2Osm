@@ -43,7 +43,7 @@ class TestConsLayerSimple(unittest.TestCase):
 
 class TestConsLayer(unittest.TestCase):
     @mock.patch("catatom2osm.geo.layer.base.log", m_log)
-    @mock.patch("catatom2osm.geo.layer.base.tqdm", mock.MagicMock())
+    @mock.patch("catatom2osm.geo.layer.base.progressbar", mock.MagicMock())
     def setUp(self):
         fn = "test/fixtures/cons.shp"
         self.fixture = QgsVectorLayer(fn, "building", "ogr")
@@ -68,7 +68,7 @@ class TestConsLayer(unittest.TestCase):
         self.assertLess(len(Geometry.get_multipolygon(geom)), len(parts))
 
     @mock.patch("catatom2osm.geo.layer.base.log", m_log)
-    @mock.patch("catatom2osm.geo.layer.base.tqdm", mock.MagicMock())
+    @mock.patch("catatom2osm.geo.layer.base.progressbar", mock.MagicMock())
     def test_explode_multi_parts(self):
         mp0 = [
             f for f in self.layer.getFeatures() if len(Geometry.get_multipolygon(f)) > 1
@@ -92,7 +92,7 @@ class TestConsLayer(unittest.TestCase):
         self.assertEqual(len(mp1), len(mp2))
 
     @mock.patch("catatom2osm.geo.layer.base.log", m_log)
-    @mock.patch("catatom2osm.geo.layer.base.tqdm", mock.MagicMock())
+    @mock.patch("catatom2osm.geo.layer.base.progressbar", mock.MagicMock())
     def test_append_building(self):
         layer = ConsLayer()
         self.assertTrue(layer.isValid(), "Init QGIS")
@@ -106,7 +106,7 @@ class TestConsLayer(unittest.TestCase):
         self.assertEqual(feature["localId"], new_fet["localId"])
 
     @mock.patch("catatom2osm.geo.layer.base.log", m_log)
-    @mock.patch("catatom2osm.geo.layer.base.tqdm", mock.MagicMock())
+    @mock.patch("catatom2osm.geo.layer.base.progressbar", mock.MagicMock())
     def test_append_buildingpart(self):
         layer = ConsLayer()
         self.assertTrue(layer.isValid(), "Init QGIS")
@@ -120,7 +120,7 @@ class TestConsLayer(unittest.TestCase):
         self.assertEqual(feature["localId"], new_fet["localId"])
 
     @mock.patch("catatom2osm.geo.layer.base.log", m_log)
-    @mock.patch("catatom2osm.geo.layer.base.tqdm", mock.MagicMock())
+    @mock.patch("catatom2osm.geo.layer.base.progressbar", mock.MagicMock())
     def test_append_othercons(self):
         layer = ConsLayer()
         self.assertTrue(layer.isValid(), "Init QGIS")
@@ -134,7 +134,7 @@ class TestConsLayer(unittest.TestCase):
         self.assertEqual(feature["localId"], new_fet["localId"])
 
     @mock.patch("catatom2osm.geo.layer.base.log", m_log)
-    @mock.patch("catatom2osm.geo.layer.base.tqdm", mock.MagicMock())
+    @mock.patch("catatom2osm.geo.layer.base.progressbar", mock.MagicMock())
     def test_append_cons(self):
         exp = QgsExpression("nature = 'openAirPool'")
         request = QgsFeatureRequest(exp)
@@ -147,7 +147,7 @@ class TestConsLayer(unittest.TestCase):
         self.assertNotEqual(feat, None)
 
     @mock.patch("catatom2osm.geo.layer.base.log", m_log)
-    @mock.patch("catatom2osm.geo.layer.base.tqdm", mock.MagicMock())
+    @mock.patch("catatom2osm.geo.layer.base.progressbar", mock.MagicMock())
     def test_remove_parts_below_ground(self):
         to_clean = [f.id() for f in self.layer.search("lev_above=0 and lev_below>0")]
         self.assertGreater(len(to_clean), 0, "There are parts below ground")
@@ -190,7 +190,7 @@ class TestConsLayer(unittest.TestCase):
         )
 
     @mock.patch("catatom2osm.geo.layer.base.log", m_log)
-    @mock.patch("catatom2osm.geo.layer.base.tqdm", mock.MagicMock())
+    @mock.patch("catatom2osm.geo.layer.base.progressbar", mock.MagicMock())
     def test_remove_outside_parts(self):
         refs = [
             "8742721CS5284S_part10",
@@ -204,7 +204,7 @@ class TestConsLayer(unittest.TestCase):
             self.assertNotIn(feat["localId"], refs)
 
     @mock.patch("catatom2osm.geo.layer.base.log", m_log)
-    @mock.patch("catatom2osm.geo.layer.base.tqdm", mock.MagicMock())
+    @mock.patch("catatom2osm.geo.layer.base.progressbar", mock.MagicMock())
     def test_get_parts(self):
         self.layer.explode_multi_parts()
         parts = [p for p in self.layer.search("localId like '8840501CS5284S_part%%'")]
@@ -224,7 +224,7 @@ class TestConsLayer(unittest.TestCase):
             self.assertEqual(min_level, min_levelc)
 
     @mock.patch("catatom2osm.geo.layer.base.log", m_log)
-    @mock.patch("catatom2osm.geo.layer.base.tqdm", mock.MagicMock())
+    @mock.patch("catatom2osm.geo.layer.base.progressbar", mock.MagicMock())
     def test_merge_adjacent_parts(self, ref=None):
         if ref is None:
             self.layer.explode_multi_parts()
@@ -258,7 +258,7 @@ class TestConsLayer(unittest.TestCase):
             self.assertEqual(ch[outline.id()][7], min_level)
 
     @mock.patch("catatom2osm.geo.layer.base.log", m_log)
-    @mock.patch("catatom2osm.geo.layer.base.tqdm", mock.MagicMock())
+    @mock.patch("catatom2osm.geo.layer.base.progressbar", mock.MagicMock())
     def test_merge_building_parts(self):
         self.layer.remove_outside_parts()
         self.layer.merge_building_parts()
@@ -268,7 +268,7 @@ class TestConsLayer(unittest.TestCase):
 
     @mock.patch("catatom2osm.geo.layer.base.log", m_log)
     @mock.patch("catatom2osm.geo.layer.polygon.log", m_log)
-    @mock.patch("catatom2osm.geo.layer.base.tqdm", mock.MagicMock())
+    @mock.patch("catatom2osm.geo.layer.base.progressbar", mock.MagicMock())
     def test_add_topological_points(self):
         refs = [
             ("8842708CS5284S", Point(358821.08, 3124205.68), 0),
@@ -288,7 +288,7 @@ class TestConsLayer(unittest.TestCase):
 
     @mock.patch("catatom2osm.geo.layer.base.log", m_log)
     @mock.patch("catatom2osm.geo.layer.polygon.log", m_log)
-    @mock.patch("catatom2osm.geo.layer.base.tqdm", mock.MagicMock())
+    @mock.patch("catatom2osm.geo.layer.base.progressbar", mock.MagicMock())
     def test_delete_invalid_geometries(self):
         f1 = QgsFeature(self.layer.fields())
         g1 = Geometry.fromPolygonXY(
@@ -402,7 +402,7 @@ class TestConsLayer(unittest.TestCase):
 
     @mock.patch("catatom2osm.geo.layer.base.log", m_log)
     @mock.patch("catatom2osm.geo.layer.polygon.log", m_log)
-    @mock.patch("catatom2osm.geo.layer.base.tqdm", mock.MagicMock())
+    @mock.patch("catatom2osm.geo.layer.base.progressbar", mock.MagicMock())
     def test_simplify1(self):
         refs = [
             ("8643326CS5284S", Point(358684.62, 3124377.54), True),
@@ -419,7 +419,7 @@ class TestConsLayer(unittest.TestCase):
 
     @mock.patch("catatom2osm.geo.layer.base.log", m_log)
     @mock.patch("catatom2osm.geo.layer.polygon.log", m_log)
-    @mock.patch("catatom2osm.geo.layer.base.tqdm", mock.MagicMock())
+    @mock.patch("catatom2osm.geo.layer.base.progressbar", mock.MagicMock())
     def test_simplify2(self):
         layer = ConsLayer()
         fn = "test/fixtures/38023.buildingpart.gml"
@@ -445,7 +445,7 @@ class TestConsLayer(unittest.TestCase):
         layer.merge_building_parts()
 
     @mock.patch("catatom2osm.geo.layer.base.log", m_log)
-    @mock.patch("catatom2osm.geo.layer.base.tqdm", mock.MagicMock())
+    @mock.patch("catatom2osm.geo.layer.base.progressbar", mock.MagicMock())
     def test_move_address(self):
         refs = {
             "38.012.10.10.8643403CS5284S": "Entrance",
@@ -475,7 +475,7 @@ class TestConsLayer(unittest.TestCase):
         self.assertEqual(address.featureCount(), 6)
 
     @mock.patch("catatom2osm.geo.layer.base.log", m_log)
-    @mock.patch("catatom2osm.geo.layer.base.tqdm", mock.MagicMock())
+    @mock.patch("catatom2osm.geo.layer.base.progressbar", mock.MagicMock())
     def test_validate(self):
         self.layer.merge_building_parts()
         max_level = {}
@@ -506,7 +506,7 @@ class TestConsLayer(unittest.TestCase):
 
     @mock.patch("catatom2osm.geo.layer.base.log", m_log)
     @mock.patch("catatom2osm.geo.layer.cons.log", m_log)
-    @mock.patch("catatom2osm.geo.layer.base.tqdm", mock.MagicMock())
+    @mock.patch("catatom2osm.geo.layer.base.progressbar", mock.MagicMock())
     def test_conflate(self):
         self.layer.reproject()
         d = osm.Osm()
