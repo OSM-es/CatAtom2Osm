@@ -1,6 +1,9 @@
 Change log
 ==========
 
+**2022-04-19 (2.9.5)**
+* Put split data in report
+
 **2022-04-13 (2.9.4)**
 * Update locale, CONTRIBUTING (#109)
 * Update readme help

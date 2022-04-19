@@ -29,6 +29,8 @@ class Report(object):
                 ("mun_name", _("Municipality")),
                 ("cat_mun", _("Cadastre name")),
                 ("mun_code", _("Code")),
+                ("split_id", _("Split ID")),
+                ("split_name", _("Split name")),
                 ("date", _("Date")),
                 ("options", _("Options")),
                 ("group_system_info", _("System info")),

@@ -183,7 +183,11 @@ class CatAtom2Osm(object):
                 msg = "Can't open %s" % self.options.split
                 fn = self.options.split
                 if os.path.basename(fn) == fn and "." not in fn:
+                    report.split_id = fn
                     fn = boundary.get_boundary(self.path, self.boundary_search_area, fn)
+                    name = fn.replace(".osm|layername=multipolygons", "")
+                    report.split_name = name.split("/")[-1].replace("_", " ")
+                    print(report.split_id, report.split_name)
                     split = geo.BaseLayer(fn, "zoningsplit", "ogr")
                     if not split.isValid():
                         raise CatIOError(msg)
