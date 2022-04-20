@@ -1,6 +1,9 @@
 Change log
 ==========
 
+**2022-04-20 (2.9.6)**
+* Dynamic setup of language
+
 **2022-04-19 (2.9.5)**
 * Optionally hides progress bars
 * Put split data in report

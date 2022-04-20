@@ -676,9 +676,30 @@ default_user_config = {
     "parcel_dist": default_parcel_dist,
 }
 
-# Define global variables whose name matches the keys of the default_user_config dict
-for key, value in default_user_config.items():
-    globals()[key] = value
+
+def set_config(a_config):
+    # Define global variables whose name matches the keys of default_user_config
+    log = logging.getLogger(app_name)
+    default_keys = default_user_config.keys()
+    for key in a_config.keys():
+        if key in default_keys:
+            globals()[key] = a_config[key]
+        else:
+            log.warning(_("Config key '%s' is not valid") % key)
+    for key in default_user_config.keys() & a_config.keys():
+        globals()[key] = a_config[key]
+    if "language" in a_config:
+        if "highway_types" not in a_config:
+            globals()["highway_types"] = highway_types_d[a_config["language"]]
+        if "place_types" not in a_config:
+            globals()["place_types"] = place_types_d["es_ES"]
+            if default_language != "es_ES":
+                globals()["place_types"] += place_types_d[a_config["language"]]
+        if "remove_place_from_name" not in a_config:
+            globals()["remove_place_from_name"] = [globals()["place_types"][26]]
+
+
+set_config(default_user_config)
 
 
 def install_gettext(app_name, localedir):
@@ -745,12 +766,7 @@ def get_user_config(path):
     try:
         with open(path, "r") as config_file:
             user_config = yaml.safe_load(config_file)
-        default_keys = default_user_config.keys()
-        for key in user_config.keys():
-            if key in default_keys:
-                globals()[key] = user_config[key]
-            else:
-                log.warning(_("Config key '%s' is not valid") % key)
+        set_config(user_config)
     except yaml.YAMLError as e:
         msg = _("Can't read '%s'") % path
         raise (CatConfigError(msg + ": " + str(e)))
