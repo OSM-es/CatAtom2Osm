@@ -1,6 +1,9 @@
 Change log
 ==========
 
+**2022-04-22 (2.9.7)**
+* Dynamic setup of progressbars
+
 **2022-04-20 (2.9.6)**
 * Dynamic setup of language
 

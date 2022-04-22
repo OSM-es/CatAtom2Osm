@@ -1,8 +1,11 @@
 Registro de cambios
 ===================
 
+**22-04-2022 (2.9.7)**
+* Configuración dinámica de barras de progreso.
+
 **20-04-2022 (2.9.6)**
-* Configuración dinámica de idioma
+* Configuración dinámica de idioma.
 
 **19-04-2022 (2.9.5)**
 * Opcionalmente oculta las barras de progreso.

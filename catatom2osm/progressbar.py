@@ -2,9 +2,9 @@ import logging
 
 from tqdm import tqdm
 
-from catatom2osm.config import app_name, show_progress_bars
+from catatom2osm import config
 
-log = logging.getLogger(app_name)
+log = logging.getLogger(config.app_name)
 
 
 class FakeTqdm:
@@ -27,7 +27,7 @@ class FakeTqdm:
 
 
 def get(*args, **kwargs):
-    if show_progress_bars:
+    if config.show_progress_bars:
         leave = getattr(log, "app_level", logging.DEBUG) <= logging.DEBUG
         kwargs.update({"leave": leave})
         return tqdm(*args, **kwargs)
