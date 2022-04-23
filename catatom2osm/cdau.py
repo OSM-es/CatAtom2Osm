@@ -209,7 +209,7 @@ class Reader(object):
         return csv
 
 
-def conflate(cdau_address, cat_address, cod_mun_cat):
+def conflate(cdau_address, cat_address, cod_mun_cat, split=None):
     """Conflate CDAU over Cadastre addresses datasets."""
     cod_mun = cod_mun_cat2ine(cod_mun_cat)
     q = "ine_mun='{}' and (tipo_portal_pk='{}' or tipo_portal_pk='{}')"
@@ -234,6 +234,9 @@ def conflate(cdau_address, cat_address, cod_mun_cat):
             g = geo.Geometry.fromPointXY(pt)
             g.transform(crs_transform)
             pt = g.asPoint()
+            if split is not None:
+                if not split.is_inside(g):
+                    continue
         if len(addresses[ref]) == 0:  # can't resolve cadastral reference
             area_of_candidates = geo.Point(pt).boundingBox(cdau_thr)
             fids = index.intersects(area_of_candidates)

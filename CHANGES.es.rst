@@ -1,6 +1,9 @@
 Registro de cambios
 ===================
 
+**23-04-2022 (2.9.8)**
+* Restringe las direcciones CDAU a los límites de división.
+
 **22-04-2022 (2.9.7)**
 * Configuración dinámica de barras de progreso.
 

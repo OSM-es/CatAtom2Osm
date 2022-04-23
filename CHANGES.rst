@@ -1,6 +1,9 @@
 Change log
 ==========
 
+**2020-04-23 (2.9.8)**
+* Restrict CDAU address to split limits
+
 **2022-04-22 (2.9.7)**
 * Dynamic setup of progressbars
 

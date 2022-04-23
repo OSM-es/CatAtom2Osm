@@ -488,6 +488,7 @@ class CatAtom2Osm(object):
         del postaldescriptor, thoroughfarename
         report.inp_zip_codes = self.address.count(unique="postCode")
         report.inp_street_names = self.address.count(unique="TN_text")
+        print(self.address.featureCount())
         self.get_auxiliary_addresses()
         self.export_layer(self.address, "address.geojson", target_crs_id=4326)
         self.get_translations(self.address)
@@ -560,7 +561,7 @@ class CatAtom2Osm(object):
                 aux_source = globals()[source]
                 reader = aux_source.Reader(self.aux_path)
                 aux = reader.read(self.cat.zip_code[:2])
-                aux_source.conflate(aux, self.address, self.cat.zip_code)
+                aux_source.conflate(aux, self.address, self.cat.zip_code, self.split)
 
     def merge_address(self, building_osm, address_osm):
         """
