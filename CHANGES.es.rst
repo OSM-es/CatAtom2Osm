@@ -1,6 +1,9 @@
 Registro de cambios
 ===================
 
+**11-05-2022 (2.9.9)**
+* Corrige prints de depuración olvidados.
+
 **23-04-2022 (2.9.8)**
 * Restringe las direcciones CDAU a los límites de división.
 

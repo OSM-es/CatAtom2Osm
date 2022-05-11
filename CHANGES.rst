@@ -1,7 +1,10 @@
 Change log
 ==========
 
-**2020-04-23 (2.9.8)**
+**2022-05-11 (2.9.9)**
+* Fix debug prints left out
+
+**2022-04-23 (2.9.8)**
 * Restrict CDAU address to split limits
 
 **2022-04-22 (2.9.7)**

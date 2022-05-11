@@ -187,7 +187,6 @@ class CatAtom2Osm(object):
                     fn = boundary.get_boundary(self.path, self.boundary_search_area, fn)
                     name = fn.replace(".osm|layername=multipolygons", "")
                     report.split_name = name.split("/")[-1].replace("_", " ")
-                    print(report.split_id, report.split_name)
                     split = geo.BaseLayer(fn, "zoningsplit", "ogr")
                     if not split.isValid():
                         raise CatIOError(msg)
@@ -488,7 +487,6 @@ class CatAtom2Osm(object):
         del postaldescriptor, thoroughfarename
         report.inp_zip_codes = self.address.count(unique="postCode")
         report.inp_street_names = self.address.count(unique="TN_text")
-        print(self.address.featureCount())
         self.get_auxiliary_addresses()
         self.export_layer(self.address, "address.geojson", target_crs_id=4326)
         self.get_translations(self.address)
