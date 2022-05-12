@@ -1,6 +1,9 @@
 Change log
 ==========
 
+**2022-05-22 (2.9.10)**
+* Allow existing user in dockerfile
+
 **2022-05-11 (2.9.9)**
 * Fix debug prints left out
 

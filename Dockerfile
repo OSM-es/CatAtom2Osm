@@ -29,10 +29,10 @@ ENV PYTHONIOENCODING=utf-8
 ENV QT_QPA_PLATFORM=offscreen
 
 # Create application user and home
-RUN mkdir -p "$home" && chown $uid:$gid "$home" \
+RUN (mkdir -p "$home" && chown $uid:$gid "$home" \
   && addgroup --gid $gid $group \
-  && useradd -d "$home" -u $uid -g $group -s /bin/bash $user \
-  && mkdir -p "/tmp/runtime-$user" \
+  && useradd -d "$home" -u $uid -g $group -s /bin/bash $user) || true
+RUN  mkdir -p "/tmp/runtime-$user" \
   && chown $uid:$gid "/tmp/runtime-$user"
 ENV XDG_RUNTIME_DIR="/tmp/runtime-$user"
 

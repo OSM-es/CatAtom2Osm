@@ -1,6 +1,9 @@
 Registro de cambios
 ===================
 
+**12-05-2022 (2.9.10)**
+* Permite usuarios existentes en el archivo docker.
+
 **11-05-2022 (2.9.9)**
 * Corrige prints de depuración olvidados.
 
