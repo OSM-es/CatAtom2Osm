@@ -1,6 +1,9 @@
 Registro de cambios
 ===================
 
+**16-05-2022 (2.9.11)**
+* Configuración dinámica de servidores overpass api.
+
 **12-05-2022 (2.9.10)**
 * Permite usuarios existentes en el archivo docker.
 

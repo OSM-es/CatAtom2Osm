@@ -635,6 +635,12 @@ default_parcel_dist = 1000  # Distance in meters to agregate parcels
 
 default_config_file = "config.yaml"
 
+# overpass api servers
+default_osm3s_servers = [
+    "http://overpass-api.de/api/interpreter?",
+    "http://overpass.osm.rambler.ru/cgi/interpreter?",
+]
+
 
 def get_config_comment():
     return _(
@@ -670,6 +676,7 @@ default_user_config = {
     "parcel_parts": default_parcel_parts,
     "parcel_dist": default_parcel_dist,
     "show_progress_bars": True,
+    "osm3s_servers": default_osm3s_servers,
 }
 
 

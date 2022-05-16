@@ -1,7 +1,10 @@
 Change log
 ==========
 
-**2022-05-22 (2.9.10)**
+**2022-05-16 (2.9.11)**
+* Dynamic setup of overpass api servers
+
+**2022-05-12 (2.9.10)**
 * Allow existing user in dockerfile
 
 **2022-05-11 (2.9.9)**
