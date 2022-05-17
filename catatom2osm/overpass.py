@@ -2,12 +2,8 @@
 import re
 
 from catatom2osm import download
+from catatom2osm.config import osm3s_servers as api_servers
 from catatom2osm.exceptions import CatIOError
-
-api_servers = [
-    "http://overpass-api.de/api/interpreter?",
-    "http://overpass.osm.rambler.ru/cgi/interpreter?",
-]
 
 
 class Query(object):
