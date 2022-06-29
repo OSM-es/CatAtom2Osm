@@ -1,6 +1,11 @@
 Change log
 ==========
 
+**2022-06-29 (2.9.12)**
+* Fix count of cdau addresses
+* Improve final review message
+* Fix error 'module' object is not callable
+
 **2022-05-16 (2.9.11)**
 * Dynamic setup of overpass api servers
 

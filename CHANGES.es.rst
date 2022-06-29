@@ -1,6 +1,11 @@
 Registro de cambios
 ===================
 
+**29-06-2022 (2.9.12)**
+* Corrige recuento de direcciones cdau.
+* Mejora mensaje de revisión final.
+* Corrige error 'module' object is not callable.
+
 **16-05-2022 (2.9.11)**
 * Configuración dinámica de servidores overpass api.
 

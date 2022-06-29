@@ -210,8 +210,8 @@ msgid "Generated '%s'"
 msgstr "Generado '%s'"
 
 #: catatom2osm/app.py:417
-msgid "Please, check it"
-msgstr "Por favor, compruébelo"
+msgid "Please, check it before publish"
+msgstr "Por favor, compruébelo antes de publicar"
 
 #: catatom2osm/app.py:426
 msgid "Finished!"

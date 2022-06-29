@@ -1,12 +1,12 @@
 """Main application processes."""
 import codecs
-import glob
 import gzip
 import io
 import logging
 import os
 import shutil
 from collections import defaultdict
+from glob import glob
 
 # isort: off
 from past.builtins import basestring  # NOQA: F401 - qgis/utils.py:744: Warning
@@ -414,7 +414,8 @@ class CatAtom2Osm(object):
             with open(self.cat.get_path(fn), "w") as fo:
                 fixmes = report.get_tasks_with_fixmes()
                 fo.write(config.eol.join(fixmes) + config.eol)
-                log.info(_("Generated '%s'") + ". " + _("Please, check it"), fn)
+                msg = _("Please, check it before publish")
+                log.info(_("Generated '%s'") + ". " + msg, fn)
         if options.building:
             report.cons_end_stats()
         else:
@@ -473,6 +474,7 @@ class CatAtom2Osm(object):
         report.inp_address = self.address.featureCount()
         report.inp_address_entrance = self.address.count("spec='Entrance'")
         report.inp_address_parcel = self.address.count("spec='Parcel'")
+        self.get_auxiliary_addresses()
         self.address.remove_address_wo_building(self.building)
         if report.inp_address == 0:
             msg = _("No addresses data")
@@ -487,7 +489,6 @@ class CatAtom2Osm(object):
         del postaldescriptor, thoroughfarename
         report.inp_zip_codes = self.address.count(unique="postCode")
         report.inp_street_names = self.address.count(unique="TN_text")
-        self.get_auxiliary_addresses()
         self.export_layer(self.address, "address.geojson", target_crs_id=4326)
         self.get_translations(self.address)
 
