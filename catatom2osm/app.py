@@ -410,12 +410,11 @@ class CatAtom2Osm(object):
             geo.BaseLayer.delete_shp(self.cat.get_path("building.shp"))
         if report.fixme_stats():
             log.warning(_("Check %d fixme tags"), report.fixme_count)
-            fn = "review.txt"
-            with open(self.cat.get_path(fn), "w") as fo:
-                fixmes = report.get_tasks_with_fixmes()
-                fo.write(config.eol.join(fixmes) + config.eol)
-                msg = _("Please, check it before publish")
-                log.info(_("Generated '%s'") + ". " + msg, fn)
+            fn = self.cat.get_path("review.txt")
+            fixmes = report.get_tasks_with_fixmes()
+            csvtools.dict2csv(fn, fixmes)
+            msg = _("Please, check it before publish")
+            log.info(_("Generated '%s'") + ". " + msg, fn)
         if options.building:
             report.cons_end_stats()
         else:

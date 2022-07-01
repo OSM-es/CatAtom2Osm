@@ -1,6 +1,9 @@
 Change log
 ==========
 
+**2022-07-01 (2.9.13)**
+* Include fixme count in review file
+
 **2022-06-29 (2.9.12)**
 * Fix count of cdau addresses
 * Improve final review message

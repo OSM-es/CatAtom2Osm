@@ -166,7 +166,7 @@ class Report(object):
             "building_counter": Counter(),
         }
         self.get_sys_info()
-        self.tasks_with_fixmes = set()
+        self.tasks_with_fixmes = Counter()
         for k, v in list(kwargs.items()):
             self.values[k] = v
 
@@ -210,10 +210,11 @@ class Report(object):
             if "fixme" in el.tags:
                 self.fixme_counter[el.tags["fixme"]] += 1
                 if task_label is not None:
-                    self.tasks_with_fixmes.add(task_label)
+                    self.tasks_with_fixmes[task_label] += 1
 
     def get_tasks_with_fixmes(self):
-        return sorted(self.tasks_with_fixmes)
+        fixmes = self.tasks_with_fixmes
+        return {k: fixmes[k] for k in sorted(fixmes.keys())}
 
     def osm_stats(self, data):
         self.inc("nodes", len(data.nodes))

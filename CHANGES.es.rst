@@ -1,6 +1,9 @@
 Registro de cambios
 ===================
 
+**01-07-2022 (2.9.13)**
+* Incluye número de fixmes en archivo review.
+
 **29-06-2022 (2.9.12)**
 * Corrige recuento de direcciones cdau.
 * Mejora mensaje de revisión final.
