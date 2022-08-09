@@ -165,7 +165,8 @@ class Report(object):
             "fixme_counter": Counter(),
             "building_counter": Counter(),
         }
-        self.get_sys_info()
+        if config.report_system_info:
+            self.get_sys_info()
         self.tasks_with_fixmes = Counter()
         for k, v in list(kwargs.items()):
             self.values[k] = v
@@ -278,6 +279,16 @@ class Report(object):
         for k in frozenset(self.values.keys()):
             if k.endswith(group):
                 del self.values[k]
+
+    def tags_for_info(self):
+        self.values.pop("date", None)
+        self.values.pop("warnings", None)
+        self.values.pop("errors", None)
+        self.values.pop("min_level", None)
+        self.values.pop("max_level", None)
+        self.values.pop("fixme_counter", None)
+        self.values.pop("building_counter", None)
+        self.values.pop("options", None)
 
     def validate(self):
         if self.sum("tasks_u", "tasks_r") != self.get("tasks"):

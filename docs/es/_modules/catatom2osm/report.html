@@ -14,7 +14,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.report &#8212; documentación de CatAtom2Osm - 2.9.4</title>
+    <title>catatom2osm.report &#8212; documentación de CatAtom2Osm - 2.9.14</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/guzzle.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.9.4</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.9.14</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Código de módulo</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.report</a></li> 
       </ul>
@@ -111,6 +111,8 @@
                 <span class="p">(</span><span class="s2">&quot;mun_name&quot;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Municipality&quot;</span><span class="p">)),</span>
                 <span class="p">(</span><span class="s2">&quot;cat_mun&quot;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Cadastre name&quot;</span><span class="p">)),</span>
                 <span class="p">(</span><span class="s2">&quot;mun_code&quot;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Code&quot;</span><span class="p">)),</span>
+                <span class="p">(</span><span class="s2">&quot;split_id&quot;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Split ID&quot;</span><span class="p">)),</span>
+                <span class="p">(</span><span class="s2">&quot;split_name&quot;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Split name&quot;</span><span class="p">)),</span>
                 <span class="p">(</span><span class="s2">&quot;date&quot;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Date&quot;</span><span class="p">)),</span>
                 <span class="p">(</span><span class="s2">&quot;options&quot;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Options&quot;</span><span class="p">)),</span>
                 <span class="p">(</span><span class="s2">&quot;group_system_info&quot;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;System info&quot;</span><span class="p">)),</span>
@@ -245,8 +247,9 @@
             <span class="s2">&quot;fixme_counter&quot;</span><span class="p">:</span> <span class="n">Counter</span><span class="p">(),</span>
             <span class="s2">&quot;building_counter&quot;</span><span class="p">:</span> <span class="n">Counter</span><span class="p">(),</span>
         <span class="p">}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">get_sys_info</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tasks_with_fixmes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">report_system_info</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">get_sys_info</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tasks_with_fixmes</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span></div>
 
@@ -290,10 +293,11 @@
             <span class="k">if</span> <span class="s2">&quot;fixme&quot;</span> <span class="ow">in</span> <span class="n">el</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">fixme_counter</span><span class="p">[</span><span class="n">el</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s2">&quot;fixme&quot;</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
                 <span class="k">if</span> <span class="n">task_label</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">tasks_with_fixmes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">task_label</span><span class="p">)</span></div>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">tasks_with_fixmes</span><span class="p">[</span><span class="n">task_label</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span></div>
 
 <div class="viewcode-block" id="Report.get_tasks_with_fixmes"><a class="viewcode-back" href="../../api/catatom2osm.report.html#catatom2osm.report.Report.get_tasks_with_fixmes">[documentos]</a>    <span class="k">def</span> <span class="nf">get_tasks_with_fixmes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tasks_with_fixmes</span><span class="p">)</span></div>
+        <span class="n">fixmes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tasks_with_fixmes</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">fixmes</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">fixmes</span><span class="o">.</span><span class="n">keys</span><span class="p">())}</span></div>
 
 <div class="viewcode-block" id="Report.osm_stats"><a class="viewcode-back" href="../../api/catatom2osm.report.html#catatom2osm.report.Report.osm_stats">[documentos]</a>    <span class="k">def</span> <span class="nf">osm_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">inc</span><span class="p">(</span><span class="s2">&quot;nodes&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">nodes</span><span class="p">))</span>
@@ -357,6 +361,16 @@
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">frozenset</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
             <span class="k">if</span> <span class="n">k</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">group</span><span class="p">):</span>
                 <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">k</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Report.tags_for_info"><a class="viewcode-back" href="../../api/catatom2osm.report.html#catatom2osm.report.Report.tags_for_info">[documentos]</a>    <span class="k">def</span> <span class="nf">tags_for_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;date&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;warnings&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;errors&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;min_level&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;max_level&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;fixme_counter&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;building_counter&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;options&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Report.validate"><a class="viewcode-back" href="../../api/catatom2osm.report.html#catatom2osm.report.Report.validate">[documentos]</a>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="s2">&quot;tasks_u&quot;</span><span class="p">,</span> <span class="s2">&quot;tasks_r&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tasks&quot;</span><span class="p">):</span>
@@ -530,7 +544,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.9.4</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.9.14</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Código de módulo</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.report</a></li> 
       </ul>

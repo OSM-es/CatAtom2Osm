@@ -14,7 +14,7 @@
   <link rel="stylesheet" type="text/css" href="../../../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>test.geo.layer.test_polygon &#8212; documentación de CatAtom2Osm - 2.9.4</title>
+    <title>test.geo.layer.test_polygon &#8212; documentación de CatAtom2Osm - 2.9.14</title>
     <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/guzzle.css" />
     <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">documentación de CatAtom2Osm - 2.9.4</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">documentación de CatAtom2Osm - 2.9.14</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Código de módulo</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">test.geo.layer.test_polygon</a></li> 
       </ul>
@@ -98,7 +98,7 @@
 
 <div class="viewcode-block" id="TestPolygonLayer"><a class="viewcode-back" href="../../../../api/test.geo.layer.test_polygon.html#test.geo.layer.test_polygon.TestPolygonLayer">[documentos]</a><span class="k">class</span> <span class="nc">TestPolygonLayer</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
 <div class="viewcode-block" id="TestPolygonLayer.setUp"><a class="viewcode-back" href="../../../../api/test.geo.layer.test_polygon.html#test.geo.layer.test_polygon.TestPolygonLayer.setUp">[documentos]</a>    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s2">&quot;catatom2osm.geo.layer.base.log&quot;</span><span class="p">,</span> <span class="n">m_log</span><span class="p">)</span>
-    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s2">&quot;catatom2osm.geo.layer.base.tqdm&quot;</span><span class="p">,</span> <span class="n">mock</span><span class="o">.</span><span class="n">MagicMock</span><span class="p">())</span>
+    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s2">&quot;catatom2osm.geo.layer.base.progressbar&quot;</span><span class="p">,</span> <span class="n">mock</span><span class="o">.</span><span class="n">MagicMock</span><span class="p">())</span>
     <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">fn</span> <span class="o">=</span> <span class="s2">&quot;test/fixtures/cons.shp&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fixture</span> <span class="o">=</span> <span class="n">QgsVectorLayer</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="s2">&quot;building&quot;</span><span class="p">,</span> <span class="s2">&quot;ogr&quot;</span><span class="p">)</span>
@@ -120,7 +120,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">area</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="mf">1140234.8</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="TestPolygonLayer.test_explode_multi_parts"><a class="viewcode-back" href="../../../../api/test.geo.layer.test_polygon.html#test.geo.layer.test_polygon.TestPolygonLayer.test_explode_multi_parts">[documentos]</a>    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s2">&quot;catatom2osm.geo.layer.base.log&quot;</span><span class="p">,</span> <span class="n">m_log</span><span class="p">)</span>
-    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s2">&quot;catatom2osm.geo.layer.base.tqdm&quot;</span><span class="p">,</span> <span class="n">mock</span><span class="o">.</span><span class="n">MagicMock</span><span class="p">())</span>
+    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s2">&quot;catatom2osm.geo.layer.base.progressbar&quot;</span><span class="p">,</span> <span class="n">mock</span><span class="o">.</span><span class="n">MagicMock</span><span class="p">())</span>
     <span class="k">def</span> <span class="nf">test_explode_multi_parts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">multiparts</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">()</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">Geometry</span><span class="o">.</span><span class="n">get_multipolygon</span><span class="p">(</span><span class="n">f</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">1</span>
@@ -184,7 +184,7 @@
         <span class="p">)</span></div>
 
 <div class="viewcode-block" id="TestPolygonLayer.test_difference"><a class="viewcode-back" href="../../../../api/test.geo.layer.test_polygon.html#test.geo.layer.test_polygon.TestPolygonLayer.test_difference">[documentos]</a>    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s2">&quot;catatom2osm.geo.layer.base.log&quot;</span><span class="p">,</span> <span class="n">m_log</span><span class="p">)</span>
-    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s2">&quot;catatom2osm.geo.layer.base.tqdm&quot;</span><span class="p">,</span> <span class="n">mock</span><span class="o">.</span><span class="n">MagicMock</span><span class="p">())</span>
+    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s2">&quot;catatom2osm.geo.layer.base.progressbar&quot;</span><span class="p">,</span> <span class="n">mock</span><span class="o">.</span><span class="n">MagicMock</span><span class="p">())</span>
     <span class="k">def</span> <span class="nf">test_difference</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">layer1</span> <span class="o">=</span> <span class="n">PolygonLayer</span><span class="p">(</span><span class="s2">&quot;Polygon&quot;</span><span class="p">,</span> <span class="s2">&quot;test1&quot;</span><span class="p">,</span> <span class="s2">&quot;memory&quot;</span><span class="p">)</span>
         <span class="n">layer2</span> <span class="o">=</span> <span class="n">PolygonLayer</span><span class="p">(</span><span class="s2">&quot;Polygon&quot;</span><span class="p">,</span> <span class="s2">&quot;test2&quot;</span><span class="p">,</span> <span class="s2">&quot;memory&quot;</span><span class="p">)</span>
@@ -284,7 +284,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">documentación de CatAtom2Osm - 2.9.4</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">documentación de CatAtom2Osm - 2.9.14</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" >Código de módulo</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">test.geo.layer.test_polygon</a></li> 
       </ul>

@@ -1,6 +1,9 @@
 Registro de cambios
 ===================
 
+**09-08-2023 (2.9.14)**
+* Opción para obtener información del conjunto de datos.
+
 **01-07-2022 (2.9.13)**
 * Incluye número de fixmes en archivo review.
 

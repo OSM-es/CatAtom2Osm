@@ -28,6 +28,7 @@ Submodules
    catatom2osm.osm
    catatom2osm.osmxml
    catatom2osm.overpass
+   catatom2osm.progressbar
    catatom2osm.report
    catatom2osm.translate
 

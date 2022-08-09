@@ -6,8 +6,8 @@ __pycache__/
 # C extensions
 *.so
 
-# Backup files # 
-*.bak 
+# Backup files #
+*.bak
 
 # Distribution / packaging
 .Python
@@ -101,8 +101,9 @@ ENV/
 # Backup of text files
 *~
 
-# PyCharm
+# Editors
 .idea/
+.vscode/
 
 # Makefile
 results/

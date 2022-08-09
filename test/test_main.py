@@ -31,6 +31,7 @@ class TestMain(unittest.TestCase):
             address=True,
             comment=False,
             download=False,
+            info=False,
             list="",
             log_level="INFO",
             manual=False,

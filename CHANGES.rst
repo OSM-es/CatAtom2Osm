@@ -1,6 +1,9 @@
 Change log
 ==========
 
+**2023-08-09 (2.9.14)**
+* Option to get dataset information.
+
 **2022-07-01 (2.9.13)**
 * Include fixme count in review file
 

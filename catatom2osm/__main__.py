@@ -57,6 +57,8 @@ def process(options):
             cat.download("cadastralzoning")
             cat.download("building")
     else:
+        if options.info:
+            config.report_system_info = False
         if not options.config_file and os.path.exists(config.default_config_file):
             options.config_file = config.default_config_file
         if options.config_file:
@@ -158,6 +160,13 @@ def run():
         help=_("Download only"),
     )
     parser.add_argument(
+        "-i",
+        "--info",
+        dest="info",
+        action="store_true",
+        help=_("Download and get dataset information"),
+    )
+    parser.add_argument(
         "--log",
         dest="log_level",
         metavar="LOG_LEVEL",
@@ -182,7 +191,7 @@ def run():
         action="store_true",
         help=_("Output a sample config file with the default user configuration"),
     )
-    # Reserved -i --info, -p --push, -u --urban, -r --rustic
+    # Reserved -p --push, -u --urban, -r --rustic
     options = parser.parse_args()
     options.args = " ".join(sys.argv[1:])
     log_level = getattr(logging, options.log_level.upper())

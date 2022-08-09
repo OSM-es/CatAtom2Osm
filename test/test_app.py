@@ -51,6 +51,7 @@ class TestCatAtom2Osm(unittest.TestCase):
             "version": False,
             "address": True,
             "manual": False,
+            "info": False,
             "zone": [],
             "task": ["33333"],
             "comment": False,

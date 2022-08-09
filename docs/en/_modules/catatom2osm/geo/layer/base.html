@@ -14,7 +14,7 @@
   <link rel="stylesheet" type="text/css" href="../../../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.geo.layer.base &#8212; CatAtom2Osm 2.9.4 documentation</title>
+    <title>catatom2osm.geo.layer.base &#8212; CatAtom2Osm 2.9.14 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/guzzle.css" />
     <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">CatAtom2Osm 2.9.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">CatAtom2Osm 2.9.14 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.geo.layer.base</a></li> 
       </ul>
@@ -97,9 +97,8 @@
     <span class="n">QgsVectorLayer</span><span class="p">,</span>
     <span class="n">QgsWkbTypes</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">tqdm</span> <span class="k">import</span> <span class="n">tqdm</span>
 
-<span class="kn">from</span> <span class="nn">catatom2osm</span> <span class="k">import</span> <span class="n">config</span><span class="p">,</span> <span class="n">osm</span><span class="p">,</span> <span class="n">translate</span>
+<span class="kn">from</span> <span class="nn">catatom2osm</span> <span class="k">import</span> <span class="n">config</span><span class="p">,</span> <span class="n">osm</span><span class="p">,</span> <span class="n">progressbar</span><span class="p">,</span> <span class="n">translate</span>
 <span class="kn">from</span> <span class="nn">catatom2osm.exceptions</span> <span class="k">import</span> <span class="n">CatIOError</span>
 <span class="kn">from</span> <span class="nn">catatom2osm.geo</span> <span class="k">import</span> <span class="n">BUFFER_SIZE</span>
 <span class="kn">from</span> <span class="nn">catatom2osm.geo.geometry</span> <span class="k">import</span> <span class="n">Geometry</span>
@@ -564,11 +563,10 @@
 
 <div class="viewcode-block" id="BaseLayer.get_progressbar"><a class="viewcode-back" href="../../../../api/catatom2osm.geo.layer.base.html#catatom2osm.geo.layer.base.BaseLayer.get_progressbar">[docs]</a>    <span class="k">def</span> <span class="nf">get_progressbar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return progress bar with &#39;description&#39; for &#39;total&#39; iterations.&quot;&quot;&quot;</span>
-        <span class="n">leave</span> <span class="o">=</span> <span class="n">log</span><span class="o">.</span><span class="n">app_level</span> <span class="o">&lt;=</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span>
         <span class="n">fn</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">())</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">name</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;memory&quot;</span><span class="p">:</span>
             <span class="n">fn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">()</span>
-        <span class="n">pbar</span> <span class="o">=</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">total</span><span class="o">=</span><span class="n">total</span><span class="p">,</span> <span class="n">leave</span><span class="o">=</span><span class="n">leave</span><span class="p">)</span>
+        <span class="n">pbar</span> <span class="o">=</span> <span class="n">progressbar</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">total</span><span class="o">=</span><span class="n">total</span><span class="p">)</span>
         <span class="n">pbar</span><span class="o">.</span><span class="n">set_description</span><span class="p">(</span><span class="n">description</span><span class="p">)</span>
         <span class="n">pbar</span><span class="o">.</span><span class="n">set_postfix</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">fn</span><span class="p">,</span> <span class="n">refresh</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">pbar</span></div></div>
@@ -588,7 +586,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">CatAtom2Osm 2.9.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">CatAtom2Osm 2.9.14 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.geo.layer.base</a></li> 
       </ul>

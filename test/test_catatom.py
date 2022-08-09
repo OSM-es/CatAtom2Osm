@@ -2,9 +2,9 @@
 import os
 import random
 import unittest
+import zipfile
 
 import mock
-import zipfile
 from requests.exceptions import ConnectionError
 
 os.environ["LANGUAGE"] = "C"

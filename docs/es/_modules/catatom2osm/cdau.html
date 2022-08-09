@@ -14,7 +14,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.cdau &#8212; documentación de CatAtom2Osm - 2.9.4</title>
+    <title>catatom2osm.cdau &#8212; documentación de CatAtom2Osm - 2.9.14</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/guzzle.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.9.4</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.9.14</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Código de módulo</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.cdau</a></li> 
       </ul>
@@ -291,7 +291,7 @@
         <span class="k">return</span> <span class="n">csv</span></div></div>
 
 
-<div class="viewcode-block" id="conflate"><a class="viewcode-back" href="../../api/catatom2osm.cdau.html#catatom2osm.cdau.conflate">[documentos]</a><span class="k">def</span> <span class="nf">conflate</span><span class="p">(</span><span class="n">cdau_address</span><span class="p">,</span> <span class="n">cat_address</span><span class="p">,</span> <span class="n">cod_mun_cat</span><span class="p">):</span>
+<div class="viewcode-block" id="conflate"><a class="viewcode-back" href="../../api/catatom2osm.cdau.html#catatom2osm.cdau.conflate">[documentos]</a><span class="k">def</span> <span class="nf">conflate</span><span class="p">(</span><span class="n">cdau_address</span><span class="p">,</span> <span class="n">cat_address</span><span class="p">,</span> <span class="n">cod_mun_cat</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Conflate CDAU over Cadastre addresses datasets.&quot;&quot;&quot;</span>
     <span class="n">cod_mun</span> <span class="o">=</span> <span class="n">cod_mun_cat2ine</span><span class="p">(</span><span class="n">cod_mun_cat</span><span class="p">)</span>
     <span class="n">q</span> <span class="o">=</span> <span class="s2">&quot;ine_mun=&#39;</span><span class="si">{}</span><span class="s2">&#39; and (tipo_portal_pk=&#39;</span><span class="si">{}</span><span class="s2">&#39; or tipo_portal_pk=&#39;</span><span class="si">{}</span><span class="s2">&#39;)&quot;</span>
@@ -316,6 +316,9 @@
             <span class="n">g</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">fromPointXY</span><span class="p">(</span><span class="n">pt</span><span class="p">)</span>
             <span class="n">g</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">crs_transform</span><span class="p">)</span>
             <span class="n">pt</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">asPoint</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">split</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">split</span><span class="o">.</span><span class="n">is_inside</span><span class="p">(</span><span class="n">g</span><span class="p">):</span>
+                    <span class="k">continue</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">addresses</span><span class="p">[</span><span class="n">ref</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># can&#39;t resolve cadastral reference</span>
             <span class="n">area_of_candidates</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="n">pt</span><span class="p">)</span><span class="o">.</span><span class="n">boundingBox</span><span class="p">(</span><span class="n">cdau_thr</span><span class="p">)</span>
             <span class="n">fids</span> <span class="o">=</span> <span class="n">index</span><span class="o">.</span><span class="n">intersects</span><span class="p">(</span><span class="n">area_of_candidates</span><span class="p">)</span>
@@ -371,7 +374,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.9.4</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.9.14</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Código de módulo</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.cdau</a></li> 
       </ul>

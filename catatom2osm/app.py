@@ -65,10 +65,11 @@ class CatAtom2Osm(object):
         self.cat = catatom.Reader(a_path)
         self.path = self.cat.path
         report.clear(options=self.options.args, mun_code=self.cat.zip_code)
-        report.qgs_version = qgis_utils.QGIS_VERSION
-        report.gdal_version = gdal.__version__
-        log.debug(_("Initialized QGIS %s API"), report.qgs_version)
-        log.debug(_("Using GDAL %s"), report.gdal_version)
+        if config.report_system_info:
+            report.qgs_version = qgis_utils.QGIS_VERSION
+            report.gdal_version = gdal.__version__
+            log.debug(_("Initialized QGIS %s API"), report.qgs_version)
+            log.debug(_("Using GDAL %s"), report.gdal_version)
         if not options.building and not options.address:
             options.address = True
             options.building = True
@@ -110,6 +111,14 @@ class CatAtom2Osm(object):
         """Launch the app processing."""
         if self.options.comment:
             self.add_comments()
+            return
+        if self.options.info:
+            self.get_parcel()
+            self.get_building()
+            self.get_address()
+            report.tags_for_info()
+            fn = f"_{self.options.split}" if self.options.split else ""
+            report.export(self.cat.get_path(f"info{fn}.json"))
             return
         if self.options.address and not self.is_new:
             log.info(_("Resume processing '%s'"), report.mun_code)
@@ -230,8 +239,9 @@ class CatAtom2Osm(object):
         """Merge building, parts and pools."""
         building_gml = self.cat.read("building")
         other_gml = self.cat.read("otherconstruction", True)
-        self.parcel.delete_void_parcels(building_gml, other_gml)
-        self.parcel.clean()
+        if not self.options.info:
+            self.parcel.delete_void_parcels(building_gml, other_gml)
+            self.parcel.clean()
         self.parcel.create_missing_parcels(building_gml, other_gml, split=self.split)
         self.tasks = {f["localId"]: f["localId"] for f in self.parcel.getFeatures()}
         self.building = geo.ConsLayer()
@@ -475,6 +485,8 @@ class CatAtom2Osm(object):
         report.inp_address_parcel = self.address.count("spec='Parcel'")
         self.get_auxiliary_addresses()
         self.address.remove_address_wo_building(self.building)
+        if self.options.info:
+            return
         if report.inp_address == 0:
             msg = _("No addresses data")
             if not self.options.building:

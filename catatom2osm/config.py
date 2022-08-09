@@ -31,6 +31,7 @@ log_level = "INFO"  # Default log level
 log_file = "catatom2osm.log"
 log_format = "%(asctime)s - %(levelname)s - %(message)s"
 show_progress_bars = True
+report_system_info = True
 
 fn_prefix = "A.ES.SDGC"  # Inspire Atom file name prefix
 
