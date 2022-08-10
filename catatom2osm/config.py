@@ -677,6 +677,7 @@ default_user_config = {
     "parcel_parts": default_parcel_parts,
     "parcel_dist": default_parcel_dist,
     "show_progress_bars": True,
+    "report_system_info": True,
     "osm3s_servers": default_osm3s_servers,
 }
 
