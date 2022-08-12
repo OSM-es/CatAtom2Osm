@@ -74,10 +74,12 @@ def get_districts(code):
     for d in sorted(district.values(), key=by_name_dist):
         e = d["boundary"]
         districts.append((False, str(e.id), _("District"), e.tags.get("name", "")))
-        for m in sorted(d["subarea"], key=by_name_ward):
+        subarea = d.get("subarea", [])
+        for m in sorted(subarea, key=by_name_ward):
             districts.append((True, str(m.id), _("Ward"), m.tags.get("name", "")))
     for w in sorted(ward, key=by_name_ward):
         districts.append((False, str(w.id), _("Ward"), w.tags.get("name", "")))
+    print(districts)
     return districts
 
 
