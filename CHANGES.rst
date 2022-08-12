@@ -1,7 +1,14 @@
 Change log
 ==========
 
-**2023-08-09 (2.9.14)**
+**2022-08-14 (2.9.16)**
+* Fix language output in the report
+* Add tasks config in the report
+
+**2022-08-12 (2.9.15)**
+* Fix error displaying municipality divisions when someone is defined with a closed way.
+
+**2022-08-09 (2.9.14)**
 * Option to get dataset information.
 
 **2022-07-01 (2.9.13)**

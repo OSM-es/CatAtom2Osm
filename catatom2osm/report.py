@@ -33,10 +33,10 @@ class Report(object):
                 ("split_name", _("Split name")),
                 ("date", _("Date")),
                 ("options", _("Options")),
+                ("language", _("Language")),
                 ("group_system_info", _("System info")),
                 ("app_version", _("Application version")),
                 ("platform", _("Platform")),
-                ("language", _("Language")),
                 ("qgs_version", _("QGIS version")),
                 ("gdal_version", _("GDAL version")),
                 ("cpu_count", _("CPU count")),
@@ -135,6 +135,8 @@ class Report(object):
                 ("dlag", _("Max. levels above ground (level: # of buildings)")),
                 ("dlbg", _("Min. levels below ground (level: # of buildings)")),
                 ("group_tasks", _("Project")),
+                ("parcel_parts", _("Building parts threshold")),
+                ("parcel_dist", _("Distance threshold")),
                 ("tasks", _("Tasks files")),
                 ("tasks_r", TAB + _("Rustic")),
                 ("tasks_u", TAB + _("Urban")),
@@ -165,6 +167,7 @@ class Report(object):
             "fixme_counter": Counter(),
             "building_counter": Counter(),
         }
+        self.language = config.language
         if config.report_system_info:
             self.get_sys_info()
         self.tasks_with_fixmes = Counter()
@@ -267,7 +270,6 @@ class Report(object):
         v.pop(1)
         self.platform = " ".join(v)
         self.app_version = config.app_name + " " + config.app_version
-        self.language = config.language
         self.cpu_count = psutil.cpu_count(logical=False)
         self.cpu_freq = getattr(getattr(psutil, "cpu_freq", lambda: 0)(), "max", 0)
         self.memory = psutil.virtual_memory().total / MEMORY_UNIT

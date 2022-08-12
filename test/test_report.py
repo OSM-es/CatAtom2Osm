@@ -113,7 +113,14 @@ class TestReport(unittest.TestCase):
         r = report.Report()
         r.start_time = None
         output = r.to_string()
-        expected = "Date: " + datetime.now().strftime("%x") + config.eol
+        expected = (
+            "Date: "
+            + datetime.now().strftime("%x")
+            + config.eol
+            + "Language: "
+            + config.language
+            + config.eol
+        )
         self.assertEqual(output, expected)
 
     @mock.patch("catatom2osm.report.Report.get_sys_info", mock.MagicMock())
@@ -130,6 +137,9 @@ class TestReport(unittest.TestCase):
             + config.eol
             + "Date: "
             + datetime.now().strftime("%x")
+            + config.eol
+            + "Language: "
+            + config.language
             + config.eol
             + config.eol
             + "=Addresses="
@@ -156,6 +166,9 @@ class TestReport(unittest.TestCase):
         expected = (
             "Date: "
             + datetime.now().strftime("%x")
+            + config.eol
+            + "Language: "
+            + config.language
             + config.eol
             + config.eol
             + "=Problems="

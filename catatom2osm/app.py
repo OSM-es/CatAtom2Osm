@@ -279,6 +279,8 @@ class CatAtom2Osm(object):
         tasks_u = 0
         to_clean = []
         to_change = {}
+        report.parcel_parts = config.parcel_parts
+        report.parcel_dist = config.parcel_dist
         for pa in self.parcel.getFeatures():
             label = pa["localId"]
             task = tasks.get(label, None)

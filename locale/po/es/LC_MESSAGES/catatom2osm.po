@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: CatAtom2Osm\n"
-"POT-Creation-Date: 2022-08-09 21:48+0000\n"
+"POT-Creation-Date: 2022-08-14 07:56+0000\n"
 "PO-Revision-Date: 2017-05-28 19:23+WEST\n"
 "Last-Translator: Javier Sánchez <javiersanp@gmail.com>\n"
 "Language: es\n"
@@ -564,11 +564,11 @@ msgstr "Añadidas %d parcelas perdidas"
 msgid "Assigned %d zones from %s to parcels"
 msgstr "Asginadas %d zonas desde %s a parcelas"
 
-#: catatom2osm/geo/layer/parcel.py:124 catatom2osm/report.py:139
+#: catatom2osm/geo/layer/parcel.py:124 catatom2osm/report.py:141
 msgid "Rustic"
 msgstr "Rústica"
 
-#: catatom2osm/geo/layer/parcel.py:124 catatom2osm/report.py:140
+#: catatom2osm/geo/layer/parcel.py:124 catatom2osm/report.py:142
 msgid "Urban"
 msgstr "Urbana"
 
@@ -665,20 +665,20 @@ msgid "Options"
 msgstr "Opciones"
 
 #: catatom2osm/report.py:36
+msgid "Language"
+msgstr "Idioma"
+
+#: catatom2osm/report.py:37
 msgid "System info"
 msgstr "Información del sistema"
 
-#: catatom2osm/report.py:37
+#: catatom2osm/report.py:38
 msgid "Application version"
 msgstr "Versión de la aplicación"
 
-#: catatom2osm/report.py:38
+#: catatom2osm/report.py:39
 msgid "Platform"
 msgstr "Plataforma"
-
-#: catatom2osm/report.py:39
-msgid "Language"
-msgstr "Idioma"
 
 #: catatom2osm/report.py:40
 msgid "QGIS version"
@@ -938,30 +938,38 @@ msgid "Project"
 msgstr "Proyecto"
 
 #: catatom2osm/report.py:138
+msgid "Building parts threshold"
+msgstr "Umbral de partes de edificios"
+
+#: catatom2osm/report.py:139
+msgid "Distance threshold"
+msgstr "Umbral de distancia"
+
+#: catatom2osm/report.py:140
 msgid "Tasks files"
 msgstr "Archivos de tareas"
 
-#: catatom2osm/report.py:141
+#: catatom2osm/report.py:143
 msgid "Problems"
 msgstr "Problemas"
 
-#: catatom2osm/report.py:142
+#: catatom2osm/report.py:144
 msgid "Report validation:"
 msgstr "Validación del informe:"
 
-#: catatom2osm/report.py:143
+#: catatom2osm/report.py:145
 msgid "Fixmes"
 msgstr "Correcciones (fixmes)"
 
-#: catatom2osm/report.py:145
+#: catatom2osm/report.py:147
 msgid "Warnings:"
 msgstr "Avisos:"
 
-#: catatom2osm/report.py:150
+#: catatom2osm/report.py:152
 msgid "seconds"
 msgstr "segundos"
 
-#: catatom2osm/report.py:296
+#: catatom2osm/report.py:300
 msgid ""
 "Sum of rustic and urban tasks should be equal to number of tasks in the "
 "project"
@@ -969,38 +977,38 @@ msgstr ""
 "La suma de tareas de urbana y rústica debe ser igual al número de tareas del "
 "proyecto"
 
-#: catatom2osm/report.py:305
+#: catatom2osm/report.py:309
 msgid "Sum of address types should be equal to the input addresses"
 msgstr ""
 "La suma de tipos de direcciones debe ser igual a las direcciones de entrada"
 
-#: catatom2osm/report.py:318
+#: catatom2osm/report.py:322
 msgid ""
 "Sum of output and deleted addresses should be equal to the input addresses"
 msgstr ""
 "La suma de las direcciones de salida y las eliminadas debe ser igual a las "
 "direcciones de entrada"
 
-#: catatom2osm/report.py:328
+#: catatom2osm/report.py:332
 msgid ""
 "Sum of entrance and parcel addresses should be equal to output addresses"
 msgstr ""
 "La suma de las direcciones tipo entrada y parcela debe ser igual a las "
 "direcciones de salida"
 
-#: catatom2osm/report.py:335
+#: catatom2osm/report.py:339
 msgid "Sum of street and place addresses should be equal to output addresses"
 msgstr ""
 "La suma de las direcciones tipo calle y lugar debe ser igual a las "
 "direcciones de salida"
 
-#: catatom2osm/report.py:344
+#: catatom2osm/report.py:348
 msgid "Sum of buildings, parts and pools should be equal to the feature count"
 msgstr ""
 "La suma de edificios, partes y piscinas debe ser igual al número de "
 "características"
 
-#: catatom2osm/report.py:361
+#: catatom2osm/report.py:365
 msgid ""
 "Sum of output and deleted minus created building features should be equal to "
 "input features"
@@ -1008,7 +1016,7 @@ msgstr ""
 "La suma de las características de edificios de salida y las eliminadas menos "
 "las creadas debe ser igual a las características de entrada"
 
-#: catatom2osm/report.py:369
+#: catatom2osm/report.py:373
 msgid "Sum of building types should be equal to the number of buildings"
 msgstr ""
 "La suma de los tipos de edificios debe ser igual al número de edificios"

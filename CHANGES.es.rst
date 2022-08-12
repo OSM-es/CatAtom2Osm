@@ -1,7 +1,14 @@
 Registro de cambios
 ===================
 
-**09-08-2023 (2.9.14)**
+**14-08-2022 (2.9.16)**
+* Corrige salida de idioma en el informe
+* Añade configuración de tareas en el informe
+
+**12-08-2022 (2.9.15)**
+* Corrige error mostrando divisiones de municipio cuando alguna está definida con una vía cerrada.
+
+**09-08-2022 (2.9.14)**
 * Opción para obtener información del conjunto de datos.
 
 **01-07-2022 (2.9.13)**
