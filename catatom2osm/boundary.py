@@ -79,7 +79,6 @@ def get_districts(code):
             districts.append((True, str(m.id), _("Ward"), m.tags.get("name", "")))
     for w in sorted(ward, key=by_name_ward):
         districts.append((False, str(w.id), _("Ward"), w.tags.get("name", "")))
-    print(districts)
     return districts
 
 
