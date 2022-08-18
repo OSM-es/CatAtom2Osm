@@ -7,6 +7,7 @@ import os
 import shutil
 from collections import defaultdict
 from glob import glob
+from zipfile import ZIP_DEFLATED, ZipFile
 
 # isort: off
 from past.builtins import basestring  # NOQA: F401 - qgis/utils.py:744: Warning
@@ -375,9 +376,11 @@ class CatAtom2Osm(object):
         if not self.options.parcel:
             self.parcel.topology(dup_thr=20 * config.dup_thr)
             self.parcel.set_muncode(self.cat.zip_code)
-            fn = "zoning.geojson"
-            self.export_layer(self.parcel, fn, target_crs_id=4326)
             report.tasks = self.parcel.featureCount()
+            self.export_layer(self.parcel, "zoning.geojson", target_crs_id=4326)
+            fp = self.cat.get_path("zoning")
+            with ZipFile(fp + ".zip", "w", ZIP_DEFLATED) as zf:
+                zf.write(fp + ".geojson", "zoning.geojson")
 
     def export_poly(self):
         bpoly = geo.ZoningLayer()

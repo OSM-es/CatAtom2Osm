@@ -1,6 +1,9 @@
 Change log
 ==========
 
+**18-08-2022 (2.9.18)**
+* Compress task zoning file
+
 **2022-08-17 (2.9.17)**
 * Harden task zoning node simplification to avoid problems when importing in Task Manager.
 

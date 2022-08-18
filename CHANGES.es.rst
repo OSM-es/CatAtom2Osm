@@ -1,6 +1,9 @@
 Registro de cambios
 ===================
 
+**18-08-2022 (2.9.18)**
+* Comprime archivo de zonificación de tareas
+
 **17-08-2022 (2.9.17)**
 * Endurece la simplificación de nodos de la zonificación de tareas para evitar problemas al importar en Gestor de Tareas
 
