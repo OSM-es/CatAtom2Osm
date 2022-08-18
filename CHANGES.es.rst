@@ -1,6 +1,9 @@
 Registro de cambios
 ===================
 
+**17-08-2022 (2.9.17)**
+* Endurece la simplificación de nodos de la zonificación de tareas para evitar problemas al importar en Gestor de Tareas
+
 **14-08-2022 (2.9.16)**
 * Corrige salida de idioma en el informe
 * Añade configuración de tareas en el informe
