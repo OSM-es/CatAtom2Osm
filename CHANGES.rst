@@ -1,6 +1,9 @@
 Change log
 ==========
 
+**2022-08-17 (2.9.17)**
+* Harden task zoning node simplification to avoid problems when importing in Task Manager.
+
 **2022-08-14 (2.9.16)**
 * Fix language output in the report
 * Add tasks config in the report

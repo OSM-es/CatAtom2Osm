@@ -158,10 +158,10 @@ class PolygonLayer(BaseLayer):
         groups = merge_groups(adjs)
         return (groups, geometries)
 
-    def topology(self):
+    def topology(self, dup_thr=False):
         """Add to nearest segments each vertex in a polygon layer."""
         threshold = self.dist_thr  # Distance threshold to create nodes
-        dup_thr = self.dup_thr
+        dup_thr = dup_thr or self.dup_thr
         straight_thr = self.straight_thr
         tp = 0
         td = 0

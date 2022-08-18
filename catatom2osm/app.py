@@ -373,7 +373,7 @@ class CatAtom2Osm(object):
     def output_zoning(self):
         """Generate project zoning file."""
         if not self.options.parcel:
-            self.parcel.simplify()
+            self.parcel.topology(dup_thr=20 * config.dup_thr)
             self.parcel.set_muncode(self.cat.zip_code)
             fn = "zoning.geojson"
             self.export_layer(self.parcel, fn, target_crs_id=4326)

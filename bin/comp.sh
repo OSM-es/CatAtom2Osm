@@ -17,6 +17,13 @@ function outrow {
     echo $t $leftcount $rightcount $diff
 }
 
+function tasks {
+    leftcount=$(grep -c localId $t1/zoning.geojson)
+    rightcount=$(grep -c localId $t2/zoning.geojson)
+    diff=$(($rightcount - $leftcount))
+    echo tareas $leftcount $rightcount $diff
+}
+
 function table {
     echo "exp $t1 $t2 diff"
     outrow nodos "<node"
@@ -26,6 +33,7 @@ function table {
     outrow partes 'building:part'
     outrow piscinas 'swimming_pool'
     outrow direcciones "addr:postcode"
+    tasks
 }
 
 table | column -t -s' '
