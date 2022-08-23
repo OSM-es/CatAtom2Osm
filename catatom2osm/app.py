@@ -126,6 +126,8 @@ class CatAtom2Osm(object):
             self.resume_address()
         else:
             log.info(_("Start processing '%s'"), report.mun_code)
+            if report.split_name:
+                log.info(_("Administrative boundary: '%s'"), report.split_name)
             self.get_parcel()
             self.get_building()
             self.get_zoning()

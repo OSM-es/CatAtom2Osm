@@ -1,7 +1,10 @@
 Change log
 ==========
 
-**18-08-2022 (2.9.18)**
+**2022-08-23 (2.9.19)**
+* Show administrative boundary on processing start
+
+**2022-08-18 (2.9.18)**
 * Compress task zoning file
 
 **2022-08-17 (2.9.17)**
