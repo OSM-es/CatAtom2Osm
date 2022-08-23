@@ -31,6 +31,7 @@ class Report(object):
                 ("mun_code", _("Code")),
                 ("split_id", _("Split ID")),
                 ("split_name", _("Split name")),
+                ("split_file", _("Split file")),
                 ("date", _("Date")),
                 ("options", _("Options")),
                 ("language", _("Language")),

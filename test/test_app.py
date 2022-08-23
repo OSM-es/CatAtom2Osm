@@ -136,6 +136,7 @@ class TestCatAtom2Osm(unittest.TestCase):
     @mock.patch("catatom2osm.app.os")
     def test_process_tasks(self, m_os):
         m_os.path.exists.return_value = True
+        self.m_app.tasks_folder = "tasks"
         self.m_app.get_tasks.return_value = {
             "123456A": mock.MagicMock(),
             "123456B": mock.MagicMock(),

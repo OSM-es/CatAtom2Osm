@@ -3,6 +3,7 @@ Change log
 
 **2022-08-23 (2.9.19)**
 * Show administrative boundary on processing start
+* Rearrange tasks folder
 
 **2022-08-18 (2.9.18)**
 * Compress task zoning file

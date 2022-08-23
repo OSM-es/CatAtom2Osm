@@ -6,7 +6,6 @@ import logging
 import os
 import shutil
 from collections import defaultdict
-from glob import glob
 from zipfile import ZIP_DEFLATED, ZipFile
 
 # isort: off
@@ -74,14 +73,20 @@ class CatAtom2Osm(object):
         if not options.building and not options.address:
             options.address = True
             options.building = True
+        opt = ""
+        if not self.options.address:
+            opt = "-b"
+        elif not self.options.building:
+            opt = "-d"
+        self.tasks_folder = tasks_folder + opt
+        self.tasks_path = self.cat.get_path(self.tasks_folder)
         if self.options.zoning:
             self.options.address = False
-        self.tasks_path = self.cat.get_path(tasks_folder)
         self.get_boundary()
         self.get_split()
         fn = self.options.split or ""
         bkp_dir = os.path.splitext(os.path.basename(fn))[0]
-        self.bkp_path = self.cat.get_path(tasks_folder, bkp_dir)
+        self.bkp_path = self.cat.get_path(bkp_dir)
         self.highway_names_path = self.cat.get_path("highway_names.csv")
         self.is_new = not os.path.exists(self.highway_names_path)
         self.source = "building"
@@ -126,8 +131,10 @@ class CatAtom2Osm(object):
             self.resume_address()
         else:
             log.info(_("Start processing '%s'"), report.mun_code)
-            if report.split_name:
+            if report.get("split_name"):
                 log.info(_("Administrative boundary: '%s'"), report.split_name)
+            elif self.options.split:
+                log.info(_("Split: '%s'"), self.options.split)
             self.get_parcel()
             self.get_building()
             self.get_zoning()
@@ -191,7 +198,9 @@ class CatAtom2Osm(object):
             if fn.endswith(".osm"):
                 fn += "|layername=multipolygons"
             split = geo.BaseLayer(fn, "zoningsplit", "ogr")
-            if not split.isValid():
+            if split.isValid():
+                report.split_file = self.options.split
+            else:
                 msg = "Can't open %s" % self.options.split
                 fn = self.options.split
                 if os.path.basename(fn) == fn and "." not in fn:
@@ -303,14 +312,7 @@ class CatAtom2Osm(object):
             if self.options.building:
                 report.cons_stats(task_osm, label)
                 report.osm_stats(task_osm)
-            fp = self.cat.get_path(tasks_folder, label)
-            if self.split and os.path.exists(fp + ".osm.gz"):
-                if not os.path.exists(self.bkp_path):
-                    n = len(glob(fp + "*.osm.gz"))
-                    label = f"{label}-{n}"
-                    pa["localId"] = label
-                    to_change[pa.id()] = geo.tools.get_attributes(pa)
-            self.write_osm(task_osm, tasks_folder, label + ".osm.gz")
+            self.write_osm(task_osm, self.tasks_folder, label + ".osm.gz")
             del task
         if to_clean:
             self.parcel.writer.deleteFeatures(to_clean)
@@ -735,15 +737,21 @@ class CatAtom2Osm(object):
             "report.json",
         ]
         if self.options.split:
-            copy_files.append(self.options.split)
+            shutil.move(self.tasks_path, self.bkp_path)
+        bkp_path = os.path.join(self.bkp_path, self.tasks_folder)
+        if self.options.split:
+            if self.options.split == report.get("split_id", " "):
+                copy_files.append(report.split_name.replace(" ", "_") + ".osm")
+            else:
+                copy_files.append(self.options.split)
         for f in move_files:
             fn = self.cat.get_path(f)
             if os.path.exists(fn):
-                os.rename(fn, os.path.join(self.bkp_path, f))
+                os.rename(fn, os.path.join(bkp_path, f))
         for f in copy_files:
             fn = self.cat.get_path(f)
             if os.path.exists(fn):
-                shutil.copy(fn, self.bkp_path)
+                shutil.copy(fn, bkp_path)
 
     def export_layer(self, layer, filename, driver_name="GeoJSON", target_crs_id=None):
         """

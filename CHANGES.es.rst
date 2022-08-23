@@ -1,8 +1,9 @@
 Registro de cambios
 ===================
 
-**23-08-2022 (2.9.19)**
-* Muestra división administrativa al ejecutar
+**23-08-2022 (2.9.19)** 
+* Muestra división al ejecutar
+* Reorganiza carpetas de tareas
 
 **18-08-2022 (2.9.18)**
 * Comprime archivo de zonificación de tareas
