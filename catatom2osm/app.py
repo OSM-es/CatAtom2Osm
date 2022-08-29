@@ -6,6 +6,7 @@ import logging
 import os
 import shutil
 from collections import defaultdict
+from glob import glob
 from zipfile import ZIP_DEFLATED, ZipFile
 
 # isort: off
@@ -312,6 +313,13 @@ class CatAtom2Osm(object):
             if self.options.building:
                 report.cons_stats(task_osm, label)
                 report.osm_stats(task_osm)
+            fp = self.cat.get_path(self.tasks_folder, label)
+            if self.split and os.path.exists(fp + ".osm.gz"):
+                if not os.path.exists(self.bkp_path):
+                    n = len(glob(fp + "*.osm.gz"))
+                    label = f"{label}-{n}"
+                    pa["localId"] = label
+                    to_change[pa.id()] = geo.tools.get_attributes(pa)
             self.write_osm(task_osm, self.tasks_folder, label + ".osm.gz")
             del task
         if to_clean:
