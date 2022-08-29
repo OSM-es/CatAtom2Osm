@@ -61,10 +61,10 @@ def match(name, choices):
                 normalize(parsed_name), normalized, scorer=fuzz.token_sort_ratio
             )
             if matching and matching[1] > MATCH_THR:
-                return choices[normalized.index(matching[0])]
+                return choices[normalized.index(matching[0])], "OSM"
         except RuntimeError:
             pass
-    return parsed_name
+    return parsed_name, "CAT"
 
 
 def dsmatch(name, dataset, fn):

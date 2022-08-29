@@ -669,7 +669,8 @@ class CatAtom2Osm(object):
         else:
             highway_names = csvtools.csv2dict(self.highway_names_path, {})
         for key, value in list(highway_names.items()):
-            highway_names[key] = value.strip()
+            v = value if isinstance(value, str) else value[0]
+            highway_names[key] = v.strip()
         return highway_names
 
     def get_highway(self):

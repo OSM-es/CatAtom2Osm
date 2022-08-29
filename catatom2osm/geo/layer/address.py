@@ -103,7 +103,8 @@ class AddressLayer(BaseLayer):
         """
         if highway is None or highway.featureCount() == 0:
             highway_names = {
-                f["TN_text"]: hgwnames.parse(f["TN_text"]) for f in self.getFeatures()
+                f["TN_text"]: (hgwnames.parse(f["TN_text"]), "CAT")
+                for f in self.getFeatures()
             }
         else:
             highway_names = defaultdict(list)

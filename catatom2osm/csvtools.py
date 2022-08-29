@@ -18,10 +18,11 @@ def dict2csv(csv_path, a_dict, sort=None):
         if sort in [0, 1]:
             dictitems.sort(key=lambda x: x[sort])
         for (k, v) in dictitems:
-            csv_file.write("%s%s%s%s" % (k, delimiter, v, "\n"))
+            row = delimiter.join(v) if isinstance(v, (list, tuple, set)) else v
+            csv_file.write("%s%s%s%s" % (k, delimiter, row, "\n"))
 
 
-def csv2dict(csv_path, a_dict=None, exists=False):
+def csv2dict(csv_path, a_dict=None, exists=False, single=True):
     """Read a dictionary from a csv file."""
     a_dict = {} if a_dict is None else a_dict
     msg = _("Failed to load CSV file '%s'") % os.path.basename(csv_path)
@@ -31,7 +32,7 @@ def csv2dict(csv_path, a_dict=None, exists=False):
             for row in csv_reader:
                 if len(row) < 2:
                     raise CatIOError(msg)
-                a_dict[row[0]] = row[1]
+                a_dict[row[0]] = row[1] if single else row[1:]
     elif exists:
         raise CatIOError(msg)
     return a_dict
