@@ -47,12 +47,16 @@ class TestHgwnames(unittest.TestCase):
             self.assertEqual(hgwnames.parse(inp), out)
 
     def test_fuzzy_match(self):
-        self.assertEqual(hgwnames.match("FOOB", self.choices), "Foobar")
-        self.assertEqual(hgwnames.match("CL FRANCIA", self.choices), "Calle Francia")
+        self.assertEqual(hgwnames.match("FOOB", self.choices), ("Foobar", "OSM"))
+        self.assertEqual(
+            hgwnames.match("CL FRANCIA", self.choices), ("Calle Francia", "CAT")
+        )
 
     @mock.patch("catatom2osm.hgwnames.fuzz", None)
     def test_nonfyzzy_match(self):
-        self.assertEqual(hgwnames.match("CL FOOBAR", self.choices), "Calle Foobar")
+        self.assertEqual(
+            hgwnames.match("CL FOOBAR", self.choices), ("Calle Foobar", "CAT")
+        )
 
     def test_fuzzy_dsmatch(self):
         self.assertEqual(hgwnames.dsmatch("FOOB", self.ds, self.fn)["id"], 1)

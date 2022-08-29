@@ -14,7 +14,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>test.test_hgwnames &#8212; documentación de CatAtom2Osm - 2.9.14</title>
+    <title>test.test_hgwnames &#8212; documentación de CatAtom2Osm - 2.9.20</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/guzzle.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.9.14</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.9.20</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Código de módulo</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">test.test_hgwnames</a></li> 
       </ul>
@@ -129,12 +129,12 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">hgwnames</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">inp</span><span class="p">),</span> <span class="n">out</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="TestHgwnames.test_fuzzy_match"><a class="viewcode-back" href="../../api/test.test_hgwnames.html#test.test_hgwnames.TestHgwnames.test_fuzzy_match">[documentos]</a>    <span class="k">def</span> <span class="nf">test_fuzzy_match</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">hgwnames</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;FOOB&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">choices</span><span class="p">),</span> <span class="s2">&quot;Foobar&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">hgwnames</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;CL FRANCIA&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">choices</span><span class="p">),</span> <span class="s2">&quot;Calle Francia&quot;</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">hgwnames</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;FOOB&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">choices</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;Foobar&quot;</span><span class="p">,</span> <span class="s2">&quot;OSM&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">hgwnames</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;CL FRANCIA&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">choices</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;Calle Francia&quot;</span><span class="p">,</span> <span class="s2">&quot;CAT&quot;</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="TestHgwnames.test_nonfyzzy_match"><a class="viewcode-back" href="../../api/test.test_hgwnames.html#test.test_hgwnames.TestHgwnames.test_nonfyzzy_match">[documentos]</a>    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s2">&quot;catatom2osm.hgwnames.fuzz&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">test_nonfyzzy_match</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">hgwnames</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;CL FOOBAR&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">choices</span><span class="p">),</span> <span class="s2">&quot;Calle Foobar&quot;</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">hgwnames</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;CL FOOBAR&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">choices</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;Calle Foobar&quot;</span><span class="p">,</span> <span class="s2">&quot;CAT&quot;</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="TestHgwnames.test_fuzzy_dsmatch"><a class="viewcode-back" href="../../api/test.test_hgwnames.html#test.test_hgwnames.TestHgwnames.test_fuzzy_dsmatch">[documentos]</a>    <span class="k">def</span> <span class="nf">test_fuzzy_dsmatch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">hgwnames</span><span class="o">.</span><span class="n">dsmatch</span><span class="p">(</span><span class="s2">&quot;FOOB&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fn</span><span class="p">)[</span><span class="s2">&quot;id&quot;</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
@@ -164,7 +164,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.9.14</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.9.20</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Código de módulo</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">test.test_hgwnames</a></li> 
       </ul>

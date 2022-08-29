@@ -14,7 +14,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>test.test_report &#8212; documentación de CatAtom2Osm - 2.9.14</title>
+    <title>test.test_report &#8212; documentación de CatAtom2Osm - 2.9.20</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/guzzle.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.9.14</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.9.20</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Código de módulo</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">test.test_report</a></li> 
       </ul>
@@ -195,7 +195,14 @@
         <span class="n">r</span> <span class="o">=</span> <span class="n">report</span><span class="o">.</span><span class="n">Report</span><span class="p">()</span>
         <span class="n">r</span><span class="o">.</span><span class="n">start_time</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">output</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">to_string</span><span class="p">()</span>
-        <span class="n">expected</span> <span class="o">=</span> <span class="s2">&quot;Date: &quot;</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%x</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">eol</span>
+        <span class="n">expected</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Date: &quot;</span>
+            <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%x</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">eol</span>
+            <span class="o">+</span> <span class="s2">&quot;Language: &quot;</span>
+            <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">language</span>
+            <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">eol</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">expected</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="TestReport.test_to_string1"><a class="viewcode-back" href="../../api/test.test_report.html#test.test_report.TestReport.test_to_string1">[documentos]</a>    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s2">&quot;catatom2osm.report.Report.get_sys_info&quot;</span><span class="p">,</span> <span class="n">mock</span><span class="o">.</span><span class="n">MagicMock</span><span class="p">())</span>
@@ -212,6 +219,9 @@
             <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">eol</span>
             <span class="o">+</span> <span class="s2">&quot;Date: &quot;</span>
             <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%x</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">eol</span>
+            <span class="o">+</span> <span class="s2">&quot;Language: &quot;</span>
+            <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">language</span>
             <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">eol</span>
             <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">eol</span>
             <span class="o">+</span> <span class="s2">&quot;=Addresses=&quot;</span>
@@ -238,6 +248,9 @@
         <span class="n">expected</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;Date: &quot;</span>
             <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%x</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">eol</span>
+            <span class="o">+</span> <span class="s2">&quot;Language: &quot;</span>
+            <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">language</span>
             <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">eol</span>
             <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">eol</span>
             <span class="o">+</span> <span class="s2">&quot;=Problems=&quot;</span>
@@ -374,7 +387,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.9.14</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.9.20</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Código de módulo</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">test.test_report</a></li> 
       </ul>

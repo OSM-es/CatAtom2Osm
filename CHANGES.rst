@@ -1,6 +1,10 @@
 Change log
 ==========
 
+**2022-08-29 (2.9.20)**
+* Add conversion source to highway_names.csv
+* Update feature term translation
+
 **2022-08-23 (2.9.19)**
 * Show administrative boundary on processing start
 * Rearrange tasks folder

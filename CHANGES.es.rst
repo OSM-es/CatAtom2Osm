@@ -1,7 +1,11 @@
 Registro de cambios
 ===================
 
-**23-08-2022 (2.9.19)** 
+**29-08-2022 (2.9.20)**
+* Incluye origen de conversión en highway_names.csv
+* Corrige traducción del término feature
+
+**23-08-2022 (2.9.19)**
 * Muestra división al ejecutar
 * Reorganiza carpetas de tareas
 

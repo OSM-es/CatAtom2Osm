@@ -14,7 +14,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.report &#8212; documentación de CatAtom2Osm - 2.9.14</title>
+    <title>catatom2osm.report &#8212; documentación de CatAtom2Osm - 2.9.20</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/guzzle.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.9.14</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.9.20</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Código de módulo</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.report</a></li> 
       </ul>
@@ -113,12 +113,13 @@
                 <span class="p">(</span><span class="s2">&quot;mun_code&quot;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Code&quot;</span><span class="p">)),</span>
                 <span class="p">(</span><span class="s2">&quot;split_id&quot;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Split ID&quot;</span><span class="p">)),</span>
                 <span class="p">(</span><span class="s2">&quot;split_name&quot;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Split name&quot;</span><span class="p">)),</span>
+                <span class="p">(</span><span class="s2">&quot;split_file&quot;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Split file&quot;</span><span class="p">)),</span>
                 <span class="p">(</span><span class="s2">&quot;date&quot;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Date&quot;</span><span class="p">)),</span>
                 <span class="p">(</span><span class="s2">&quot;options&quot;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Options&quot;</span><span class="p">)),</span>
+                <span class="p">(</span><span class="s2">&quot;language&quot;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Language&quot;</span><span class="p">)),</span>
                 <span class="p">(</span><span class="s2">&quot;group_system_info&quot;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;System info&quot;</span><span class="p">)),</span>
                 <span class="p">(</span><span class="s2">&quot;app_version&quot;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Application version&quot;</span><span class="p">)),</span>
                 <span class="p">(</span><span class="s2">&quot;platform&quot;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Platform&quot;</span><span class="p">)),</span>
-                <span class="p">(</span><span class="s2">&quot;language&quot;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Language&quot;</span><span class="p">)),</span>
                 <span class="p">(</span><span class="s2">&quot;qgs_version&quot;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;QGIS version&quot;</span><span class="p">)),</span>
                 <span class="p">(</span><span class="s2">&quot;gdal_version&quot;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;GDAL version&quot;</span><span class="p">)),</span>
                 <span class="p">(</span><span class="s2">&quot;cpu_count&quot;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;CPU count&quot;</span><span class="p">)),</span>
@@ -217,6 +218,8 @@
                 <span class="p">(</span><span class="s2">&quot;dlag&quot;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Max. levels above ground (level: # of buildings)&quot;</span><span class="p">)),</span>
                 <span class="p">(</span><span class="s2">&quot;dlbg&quot;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Min. levels below ground (level: # of buildings)&quot;</span><span class="p">)),</span>
                 <span class="p">(</span><span class="s2">&quot;group_tasks&quot;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Project&quot;</span><span class="p">)),</span>
+                <span class="p">(</span><span class="s2">&quot;parcel_parts&quot;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Building parts threshold&quot;</span><span class="p">)),</span>
+                <span class="p">(</span><span class="s2">&quot;parcel_dist&quot;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Distance threshold&quot;</span><span class="p">)),</span>
                 <span class="p">(</span><span class="s2">&quot;tasks&quot;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Tasks files&quot;</span><span class="p">)),</span>
                 <span class="p">(</span><span class="s2">&quot;tasks_r&quot;</span><span class="p">,</span> <span class="n">TAB</span> <span class="o">+</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Rustic&quot;</span><span class="p">)),</span>
                 <span class="p">(</span><span class="s2">&quot;tasks_u&quot;</span><span class="p">,</span> <span class="n">TAB</span> <span class="o">+</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Urban&quot;</span><span class="p">)),</span>
@@ -247,6 +250,7 @@
             <span class="s2">&quot;fixme_counter&quot;</span><span class="p">:</span> <span class="n">Counter</span><span class="p">(),</span>
             <span class="s2">&quot;building_counter&quot;</span><span class="p">:</span> <span class="n">Counter</span><span class="p">(),</span>
         <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">language</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">language</span>
         <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">report_system_info</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">get_sys_info</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tasks_with_fixmes</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
@@ -349,7 +353,6 @@
         <span class="n">v</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">platform</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">app_version</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">app_name</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">app_version</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">language</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">language</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cpu_count</span> <span class="o">=</span> <span class="n">psutil</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">(</span><span class="n">logical</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cpu_freq</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">psutil</span><span class="p">,</span> <span class="s2">&quot;cpu_freq&quot;</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="mi">0</span><span class="p">)(),</span> <span class="s2">&quot;max&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">memory</span> <span class="o">=</span> <span class="n">psutil</span><span class="o">.</span><span class="n">virtual_memory</span><span class="p">()</span><span class="o">.</span><span class="n">total</span> <span class="o">/</span> <span class="n">MEMORY_UNIT</span>
@@ -544,7 +547,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.9.14</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.9.20</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Código de módulo</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.report</a></li> 
       </ul>
