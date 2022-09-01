@@ -9,6 +9,7 @@ from catatom2osm.geo.layer.base import BaseLayer
 from catatom2osm.geo.layer.cons import ConsLayer
 from catatom2osm.geo.layer.highway import HighwayLayer
 from catatom2osm.geo.layer.parcel import ParcelLayer
+from catatom2osm.geo.layer.place import PlaceLayer
 from catatom2osm.geo.layer.polygon import PolygonLayer
 from catatom2osm.geo.layer.zoning import ZoningLayer
 from catatom2osm.geo.point import Point

@@ -532,6 +532,7 @@ class CatAtom2Osm(object):
             self.address.conflate(current_address)
         self.building.move_address(self.address)
         self.address.reproject()
+        self.export_layer(self.address, "address_out.geojson")
         self.address_osm = self.address.to_osm()
 
     def stop_address(self):
@@ -669,10 +670,13 @@ class CatAtom2Osm(object):
         if self.is_new:
             if self.options.manual:
                 highway = None
+                place = None
             else:
                 highway = self.get_highway()
                 highway.reproject(address.crs())
-            highway_names = address.get_highway_names(highway)
+                place = self.get_place()
+                place.reproject(address.crs())
+            highway_names = address.get_names(highway, place)
             csvtools.dict2csv(self.highway_names_path, highway_names, sort=1)
         else:
             highway_names = csvtools.csv2dict(self.highway_names_path, {})
@@ -680,6 +684,19 @@ class CatAtom2Osm(object):
             v = value if isinstance(value, str) else value[0]
             highway_names[key] = v.strip()
         return highway_names
+
+    def get_place(self):
+        """Get OSM places for street names conflation."""
+        ql = [
+            'node["place"]["name"]',
+            'way["place"]["name"]',
+            'relation["place"]["name"]',
+        ]
+        place_osm = self.read_osm("current_place.osm", ql=ql)
+        place = geo.PlaceLayer()
+        place.read_from_osm(place_osm)
+        del place_osm
+        return place
 
     def get_highway(self):
         """Get OSM highways for street names conflation."""

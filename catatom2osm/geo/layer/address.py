@@ -91,7 +91,7 @@ class AddressLayer(BaseLayer):
             log.debug(_("Deleted %d addresses without house number") % len(to_clean))
             report.addresses_without_number = len(to_clean)
 
-    def get_highway_names(self, highway=None):
+    def get_names(self, highway=None, place=None):
         """
         Return a dictionary with the translation for each street name.
 
@@ -106,18 +106,24 @@ class AddressLayer(BaseLayer):
                 f["TN_text"]: (hgwnames.parse(f["TN_text"]), "CAT")
                 for f in self.getFeatures()
             }
-        else:
-            highway_names = defaultdict(list)
-            index = highway.get_index()
-            features = {feat.id(): feat for feat in highway.getFeatures()}
-            for f in self.getFeatures():
-                if f["TN_text"]:
-                    highway_names[f["TN_text"]].append(f.geometry().asPoint())
-            for name, points in highway_names.items():
-                bbox = Geometry.fromMultiPointXY(points).boundingBox()
-                bbox.grow(config.bbox_buffer * 100000)
-                choices = [features[fid]["name"] for fid in index.intersects(bbox)]
-                highway_names[name] = hgwnames.match(name, choices)
+            return highway_names
+        highway_names = defaultdict(list)
+        hgw_ndx = highway.get_index()
+        hgw_feats = {feat.id(): feat for feat in highway.getFeatures()}
+        plc_ndx = place.get_index()
+        plc_feats = {feat.id(): feat for feat in place.getFeatures()}
+        for f in self.getFeatures():
+            if f["TN_text"]:
+                highway_names[f["TN_text"]].append(f.geometry().asPoint())
+        for name, points in highway_names.items():
+            hgw_type = hgwnames.parse(name).split(" ")[0].lower()
+            bbox = Geometry.fromMultiPointXY(points).boundingBox()
+            bbox.grow(config.bbox_buffer * 100000)
+            if hgw_type in config.place_types:
+                choices = [plc_feats[fid]["name"] for fid in plc_ndx.intersects(bbox)]
+            else:
+                choices = [hgw_feats[fid]["name"] for fid in hgw_ndx.intersects(bbox)]
+            highway_names[name] = hgwnames.match(name, choices)
         return highway_names
 
     def get_image_links(self):
