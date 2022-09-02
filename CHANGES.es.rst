@@ -1,6 +1,9 @@
 Registro de cambios
 ===================
 
+**02-09-2022 (2.10.0)**
+* Combinación de nombres de lugares osm con direcciones
+
 **29-08-2022 (2.9.20)**
 * Incluye origen de conversión en highway_names.csv
 * Corrige traducción del término feature

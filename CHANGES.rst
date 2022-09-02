@@ -1,6 +1,9 @@
 Change log
 ==========
 
+**2022-09-02 (2.10.0)**
+* Merge osm place names to addresses
+
 **2022-08-29 (2.9.20)**
 * Add conversion source to highway_names.csv
 * Update feature term translation
