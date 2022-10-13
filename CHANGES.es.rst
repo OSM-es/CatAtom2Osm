@@ -1,6 +1,9 @@
 Registro de cambios
 ===================
 
+**13-10-2022 (2.10.1)**
+** Pone nombres de place=square en addr:place
+
 **02-09-2022 (2.10.0)**
 * Combinación de nombres de lugares osm con direcciones
 

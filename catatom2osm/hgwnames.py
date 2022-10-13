@@ -9,7 +9,7 @@ MATCH_THR = 60
 
 
 def normalize(text):
-    return re.sub(r" *\(.*\)", "", text.lower().strip())
+    return re.sub(r" *\(.*\)", "", (text or "").lower().strip())
 
 
 def parse(name):

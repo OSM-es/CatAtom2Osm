@@ -121,9 +121,23 @@ class AddressLayer(BaseLayer):
             bbox.grow(config.bbox_buffer * 100000)
             if hgw_type in config.place_types:
                 choices = [plc_feats[fid]["name"] for fid in plc_ndx.intersects(bbox)]
+                highway_names[name] = hgwnames.match(name, choices)
+            elif name.split(" ")[0] == "PZ":
+                choices = [plc_feats[fid]["name"] for fid in plc_ndx.intersects(bbox)]
+                highway_names[name] = hgwnames.match(name, choices)
+                if highway_names[name][1] == "CAT":
+                    choices = [
+                        hgw_feats[fid]["name"] for fid in hgw_ndx.intersects(bbox)
+                    ]
+                    highway_names[name] = hgwnames.match(name, choices)
+                else:
+                    highway_names[name] = (
+                        "square" + highway_names[name][0],
+                        highway_names[name][1],
+                    )
             else:
                 choices = [hgw_feats[fid]["name"] for fid in hgw_ndx.intersects(bbox)]
-            highway_names[name] = hgwnames.match(name, choices)
+                highway_names[name] = hgwnames.match(name, choices)
         return highway_names
 
     def get_image_links(self):

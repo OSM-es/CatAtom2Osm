@@ -359,13 +359,13 @@ class TestCatAtom2Osm(unittest.TestCase):
             ]
         )
         self.assertEqual(names, {"RAZ": "raz"})
-        address.get_highway_names.return_value = {"TAZ": " taz "}
+        address.get_names.return_value = {"TAZ": " taz "}
         m_csv.csv2dict.reset_mock()
         m_os.path.exists.return_value = False
         self.m_app.is_new = True
         names = self.m_app.get_translations(self.m_app, address)
-        address.get_highway_names.assert_called_once_with(
-            self.m_app.get_highway.return_value
+        address.get_names.assert_called_once_with(
+            self.m_app.get_highway.return_value, self.m_app.get_place.return_value
         )
         m_csv.csv2dict.assert_not_called()
         m_csv.dict2csv.assert_has_calls(
@@ -377,7 +377,7 @@ class TestCatAtom2Osm(unittest.TestCase):
         self.assertEqual(names, {"TAZ": "taz"})
         self.m_app.options.manual = True
         names = self.m_app.get_translations(self.m_app, address)
-        address.get_highway_names.assert_called_with(None)
+        address.get_names.assert_called_with(None, None)
 
     @mock.patch("catatom2osm.app.geo")
     def test_get_highway(self, m_layer):

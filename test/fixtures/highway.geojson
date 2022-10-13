@@ -1,17 +1,37 @@
 
 {
-    "type":"FeatureCollection",
-    "generator":"JOSM",
-    "features":[
+    "type": "FeatureCollection",
+    "generator": "JOSM",
+    "features": [
         {
-            "type":"Feature",
-            "properties":{
-                "highway":"residential",
-                "name":"Calle San Joaquín"
+            "type": "Feature",
+            "properties": {
+                "highway": "residential",
+                "name": "Plaza Francisco Delgado"
             },
-            "geometry":{
-                "type":"LineString",
-                "coordinates":[
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        -16.43955678016,
+                        28.23623355249
+                    ],
+                    [
+                        -16.44062161714,
+                        28.23680776919
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "Calle San Joaquín",
+                "highway": "residential"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
                     [
                         -16.44071510000,
                         28.23724530000
@@ -28,14 +48,58 @@
             }
         },
         {
-            "type":"Feature",
-            "properties":{
-                "highway":"residential",
-                "name":"Calle el Hoyo"
+            "type": "Feature",
+            "properties": {
+                "highway": "residential",
+                "name": "Avenida la Paz"
             },
-            "geometry":{
-                "type":"LineString",
-                "coordinates":[
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        -16.44098300000,
+                        28.23707490000
+                    ],
+                    [
+                        -16.44076960000,
+                        28.23719310000
+                    ],
+                    [
+                        -16.44071510000,
+                        28.23724530000
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "highway": "residential",
+                "name": "Plaza Prueba"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        -16.43924027950,
+                        28.23526706556
+                    ],
+                    [
+                        -16.43906593591,
+                        28.23522925660
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "Calle el Hoyo",
+                "highway": "residential"
+            },
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
                     [
                         -16.44071510000,
                         28.23724530000
@@ -48,25 +112,20 @@
             }
         },
         {
-            "type":"Feature",
-            "properties":{
-                "highway":"residential",
-                "name":"Avenida la Paz"
+            "type": "Feature",
+            "properties": {
+                "highway": "residential"
             },
-            "geometry":{
-                "type":"LineString",
-                "coordinates":[
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
                     [
-                        -16.44098300000,
-                        28.23707490000
+                        -16.43990814954,
+                        28.23705352354
                     ],
                     [
-                        -16.44076960000,
-                        28.23719310000
-                    ],
-                    [
-                        -16.44071510000,
-                        28.23724530000
+                        -16.43954336911,
+                        28.23687157086
                     ]
                 ]
             }

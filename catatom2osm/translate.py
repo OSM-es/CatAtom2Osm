@@ -1,5 +1,6 @@
 """Translations from source fields to OSM tags."""
 import json
+import re
 
 from catatom2osm import config
 
@@ -23,7 +24,7 @@ def address_tags(feature):
     if hgw_type in config.remove_place_from_name:
         hgw_name = " ".join(hgw_name.split(" ")[1:])
     if hgw_type in config.place_types:
-        tags["addr:place"] = hgw_name
+        tags["addr:place"] = re.sub(r"^square", "", hgw_name)
     else:
         tags["addr:street"] = hgw_name
     tags["addr:housenumber"] = feature["designator"]

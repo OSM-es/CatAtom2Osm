@@ -14,7 +14,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>test.test_app &#8212; documentación de CatAtom2Osm - 2.9.20</title>
+    <title>test.test_app &#8212; documentación de CatAtom2Osm - 2.10.1</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/guzzle.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.9.20</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.10.1</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Código de módulo</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">test.test_app</a></li> 
       </ul>
@@ -441,13 +441,14 @@
             <span class="p">]</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;RAZ&quot;</span><span class="p">:</span> <span class="s2">&quot;raz&quot;</span><span class="p">})</span>
-        <span class="n">address</span><span class="o">.</span><span class="n">get_highway_names</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;TAZ&quot;</span><span class="p">:</span> <span class="s2">&quot; taz &quot;</span><span class="p">}</span>
+        <span class="n">address</span><span class="o">.</span><span class="n">get_names</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;TAZ&quot;</span><span class="p">:</span> <span class="s2">&quot; taz &quot;</span><span class="p">}</span>
         <span class="n">m_csv</span><span class="o">.</span><span class="n">csv2dict</span><span class="o">.</span><span class="n">reset_mock</span><span class="p">()</span>
         <span class="n">m_os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">m_app</span><span class="o">.</span><span class="n">is_new</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="n">names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m_app</span><span class="o">.</span><span class="n">get_translations</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_app</span><span class="p">,</span> <span class="n">address</span><span class="p">)</span>
-        <span class="n">address</span><span class="o">.</span><span class="n">get_highway_names</span><span class="o">.</span><span class="n">assert_called_once_with</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">m_app</span><span class="o">.</span><span class="n">get_highway</span><span class="o">.</span><span class="n">return_value</span>
+        <span class="n">address</span><span class="o">.</span><span class="n">get_names</span><span class="o">.</span><span class="n">assert_called_once_with</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">m_app</span><span class="o">.</span><span class="n">get_highway</span><span class="o">.</span><span class="n">return_value</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">m_app</span><span class="o">.</span><span class="n">get_place</span><span class="o">.</span><span class="n">return_value</span>
         <span class="p">)</span>
         <span class="n">m_csv</span><span class="o">.</span><span class="n">csv2dict</span><span class="o">.</span><span class="n">assert_not_called</span><span class="p">()</span>
         <span class="n">m_csv</span><span class="o">.</span><span class="n">dict2csv</span><span class="o">.</span><span class="n">assert_has_calls</span><span class="p">(</span>
@@ -459,7 +460,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;TAZ&quot;</span><span class="p">:</span> <span class="s2">&quot;taz&quot;</span><span class="p">})</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">m_app</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">manual</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="n">names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m_app</span><span class="o">.</span><span class="n">get_translations</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_app</span><span class="p">,</span> <span class="n">address</span><span class="p">)</span>
-        <span class="n">address</span><span class="o">.</span><span class="n">get_highway_names</span><span class="o">.</span><span class="n">assert_called_with</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span></div>
+        <span class="n">address</span><span class="o">.</span><span class="n">get_names</span><span class="o">.</span><span class="n">assert_called_with</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="TestCatAtom2Osm.test_get_highway"><a class="viewcode-back" href="../../api/test.test_app.html#test.test_app.TestCatAtom2Osm.test_get_highway">[documentos]</a>    <span class="nd">@mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s2">&quot;catatom2osm.app.geo&quot;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">test_get_highway</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m_layer</span><span class="p">):</span>
@@ -501,7 +502,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Índice de Módulos Python"
              >módulos</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.9.20</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">documentación de CatAtom2Osm - 2.10.1</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Código de módulo</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">test.test_app</a></li> 
       </ul>

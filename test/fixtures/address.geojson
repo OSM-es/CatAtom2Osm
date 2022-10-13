@@ -1,173 +1,254 @@
 
 {
-    "type":"FeatureCollection",
-    "generator":"JOSM",
-    "features":[
+    "type": "FeatureCollection",
+    "generator": "JOSM",
+    "features": [
         {
-            "type":"Feature",
-            "properties":{
-                "localId":"38.012.45.62.8643920CS5284S",
-                "spec":"Entrance",
-                "designator":"62",
-                "PD_id":"ES.SDGC.PD.38.012.38570",
-                "TN_id":"ES.SDGC.TN.38.012.45",
-                "AU_id":"ES.SDGC.AU.38.012",
-                "AU_text":"FASNIA",
-                "postCode":"38570",
-                "TN_text":"CL SAN JOAQUIN (FASNIA)"
+            "type": "Feature",
+            "properties": {
+                "spec": "Entrance",
+                "localId": "38.012.18.3.8745913CS5284N",
+                "postCode": "38570",
+                "TN_text": "CL HOYO (FASNIA)",
+                "PD_id": "ES.SDGC.PD.38.012.38570",
+                "designator": "3",
+                "AU_text": "FASNIA",
+                "TN_id": "ES.SDGC.TN.38.012.18",
+                "AU_id": "ES.SDGC.AU.38.012"
             },
-            "geometry":{
-                "type":"Point",
-                "coordinates":[
-                    -16.44063232984,
-                    28.23723144029
-                ]
-            }
-        },
-        {
-            "type":"Feature",
-            "properties":{
-                "localId":"38.012.18.1.8745904CS5284N",
-                "spec":"Entrance",
-                "designator":"1",
-                "PD_id":"ES.SDGC.PD.38.012.38570",
-                "TN_id":"ES.SDGC.TN.38.012.18",
-                "AU_id":"ES.SDGC.AU.38.012",
-                "AU_text":"FASNIA",
-                "postCode":"38570",
-                "TN_text":"CL HOYO (FASNIA)"
-            },
-            "geometry":{
-                "type":"Point",
-                "coordinates":[
-                    -16.44070891155,
-                    28.23732585123
-                ]
-            }
-        },
-        {
-            "type":"Feature",
-            "properties":{
-                "localId":"38.012.18.3.8745913CS5284N",
-                "spec":"Entrance",
-                "designator":"3",
-                "PD_id":"ES.SDGC.PD.38.012.38570",
-                "TN_id":"ES.SDGC.TN.38.012.18",
-                "AU_id":"ES.SDGC.AU.38.012",
-                "AU_text":"FASNIA",
-                "postCode":"38570",
-                "TN_text":"CL HOYO (FASNIA)"
-            },
-            "geometry":{
-                "type":"Point",
-                "coordinates":[
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
                     -16.44083600234,
                     28.23742451780
                 ]
             }
         },
         {
-            "type":"Feature",
-            "properties":{
-                "localId":"38.012.59.19.8643506CS5284S",
-                "spec":"Entrance",
-                "designator":"19",
-                "PD_id":"ES.SDGC.PD.38.012.38570",
-                "TN_id":"ES.SDGC.TN.38.012.59",
-                "AU_id":"ES.SDGC.AU.38.012",
-                "AU_text":"FASNIA",
-                "postCode":"38570",
-                "TN_text":"AV PAZ (FASNIA)"
+            "type": "Feature",
+            "properties": {
+                "TN_id": "ES.SDGC.TN.38.012.45",
+                "spec": "Entrance",
+                "postCode": "38570",
+                "designator": "62",
+                "PD_id": "ES.SDGC.PD.38.012.38570",
+                "localId": "38.012.45.62.8643920CS5284S",
+                "TN_text": "CL SAN JOAQUIN (FASNIA)",
+                "AU_text": "FASNIA",
+                "AU_id": "ES.SDGC.AU.38.012"
             },
-            "geometry":{
-                "type":"Point",
-                "coordinates":[
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -16.44063232984,
+                    28.23723144029
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "spec": "Entrance",
+                "localId": "38.012.59.19.8643506CS5284S",
+                "postCode": "38570",
+                "PD_id": "ES.SDGC.PD.38.012.38570",
+                "designator": "19",
+                "TN_text": "AV PAZ (FASNIA)",
+                "AU_text": "FASNIA",
+                "TN_id": "ES.SDGC.TN.38.012.59",
+                "AU_id": "ES.SDGC.AU.38.012"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
                     -16.44085892065,
                     28.23715856405
                 ]
             }
         },
         {
-            "type":"Feature",
-            "properties":{
-                "localId":"38.012.59.21.8643505CS5284S",
-                "spec":"Entrance",
-                "designator":"21",
-                "PD_id":"ES.SDGC.PD.38.012.38570",
-                "TN_id":"ES.SDGC.TN.38.012.59",
-                "AU_id":"ES.SDGC.AU.38.012",
-                "AU_text":"FASNIA",
-                "postCode":"38570",
-                "TN_text":"AV PAZ (FASNIA)"
+            "type": "Feature",
+            "properties": {
+                "spec": "Entrance",
+                "designator": "1",
+                "postCode": "38570",
+                "TN_text": "CL HOYO (FASNIA)",
+                "PD_id": "ES.SDGC.PD.38.012.38570",
+                "localId": "38.012.18.1.8745904CS5284N",
+                "AU_text": "FASNIA",
+                "TN_id": "ES.SDGC.TN.38.012.18",
+                "AU_id": "ES.SDGC.AU.38.012"
             },
-            "geometry":{
-                "type":"Point",
-                "coordinates":[
-                    -16.44079430397,
-                    28.23718857758
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -16.44070891155,
+                    28.23732585123
                 ]
             }
         },
         {
-            "type":"Feature",
-            "properties":{
-                "localId":"38.012.18.7.8745901CS5284N",
-                "spec":"Entrance",
-                "designator":"7",
-                "PD_id":"ES.SDGC.PD.38.012.38570",
-                "TN_id":"ES.SDGC.TN.38.012.18",
-                "AU_id":"ES.SDGC.AU.38.012",
-                "AU_text":"FASNIA",
-                "postCode":"38570",
-                "TN_text":"CL HOYO (FASNIA)"
+            "type": "Feature",
+            "properties": {
+                "TN_id": "ES.SDGC.TN.38.012.45",
+                "spec": "Entrance",
+                "postCode": "38570",
+                "localId": "38.012.45.16.8942324CS5284S",
+                "PD_id": "ES.SDGC.PD.38.012.38570",
+                "TN_text": "UR PRUEBA",
+                "AU_id": "ES.SDGC.AU.38.012",
+                "designator": "16"
             },
-            "geometry":{
-                "type":"Point",
-                "coordinates":[
-                    -16.44068163608,
-                    28.23744996712
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -16.43936366111,
+                    28.23647221907
                 ]
             }
         },
         {
-            "type":"Feature",
-            "properties":{
-                "localId":"38.012.45.60.8643919CS5284S",
-                "spec":"Entrance",
-                "designator":"60",
-                "PD_id":"ES.SDGC.PD.38.012.38570",
-                "TN_id":"ES.SDGC.TN.38.012.45",
-                "AU_id":"ES.SDGC.AU.38.012",
-                "AU_text":"FASNIA",
-                "postCode":"38570",
-                "TN_text":"CL SAN JOAQUIN (FASNIA)"
+            "type": "Feature",
+            "properties": {
+                "spec": "Entrance",
+                "designator": "1",
+                "postCode": "38570",
+                "TN_id": "ES.SDGC.TN.38.012.64",
+                "PD_id": "ES.SDGC.PD.38.012.38570",
+                "TN_text": "PZ CONSTITUCION (FASNIA)",
+                "localId": "38.012.64.1.8842801CS5284S",
+                "AU_id": "ES.SDGC.AU.38.012"
             },
-            "geometry":{
-                "type":"Point",
-                "coordinates":[
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -16.43859118491,
+                    28.23603978320
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "TN_id": "ES.SDGC.TN.38.012.45",
+                "localId": "38.012.45.60.8643919CS5284S",
+                "spec": "Entrance",
+                "postCode": "38570",
+                "PD_id": "ES.SDGC.PD.38.012.38570",
+                "designator": "60",
+                "TN_text": "CL SAN JOAQUIN (FASNIA)",
+                "AU_text": "FASNIA",
+                "AU_id": "ES.SDGC.AU.38.012"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
                     -16.44049110726,
                     28.23716523786
                 ]
             }
         },
         {
-            "type":"Feature",
-            "properties":{
-                "localId":"38.012.10.8.8643509CS5284S",
-                "spec":"Entrance",
-                "designator":"8",
-                "PD_id":"ES.SDGC.PD.38.012.38570",
-                "TN_id":"ES.SDGC.TN.38.012.10",
-                "AU_id":"ES.SDGC.AU.38.012",
-                "AU_text":"FASNIA",
-                "postCode":"38570",
-                "TN_text":"CJ CALLEJON (FASNIA)"
+            "type": "Feature",
+            "properties": {
+                "TN_id": "ES.SDGC.TN.38.012.58",
+                "localId": "38.012.58.S-N.8642325CS5484N",
+                "spec": "Entrance",
+                "postCode": "38570",
+                "PD_id": "ES.SDGC.PD.38.012.38570",
+                "designator": "4",
+                "TN_text": "PZ FRANCISCO DELGADO",
+                "AU_text": "FASNIA",
+                "AU_id": "ES.SDGC.AU.38.012"
             },
-            "geometry":{
-                "type":"Point",
-                "coordinates":[
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -16.44047409430,
+                    28.23703461820
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "designator": "21",
+                "spec": "Entrance",
+                "postCode": "38570",
+                "localId": "38.012.59.21.8643505CS5284S",
+                "PD_id": "ES.SDGC.PD.38.012.38570",
+                "TN_text": "AV PAZ (FASNIA)",
+                "AU_text": "FASNIA",
+                "TN_id": "ES.SDGC.TN.38.012.59",
+                "AU_id": "ES.SDGC.AU.38.012"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -16.44079430397,
+                    28.23718857758
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "spec": "Entrance",
+                "postCode": "38570",
+                "TN_id": "ES.SDGC.TN.38.012.100",
+                "TN_text": "PZ PRUEBA",
+                "PD_id": "ES.SDGC.PD.38.012.38570",
+                "designator": "25",
+                "AU_id": "ES.SDGC.AU.38.012",
+                "localId": "38.012.100.25.8742716CS5284S"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -16.43914908439,
+                    28.23528597003
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "spec": "Entrance",
+                "postCode": "38570",
+                "TN_id": "ES.SDGC.TN.38.012.10",
+                "PD_id": "ES.SDGC.PD.38.012.38570",
+                "localId": "38.012.10.8.8643509CS5284S",
+                "designator": "8",
+                "AU_text": "FASNIA",
+                "TN_text": "CJ CALLEJON (FASNIA)",
+                "AU_id": "ES.SDGC.AU.38.012"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
                     -16.44091552926,
                     28.23733651235
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "spec": "Entrance",
+                "postCode": "38570",
+                "TN_text": "CL HOYO (FASNIA)",
+                "PD_id": "ES.SDGC.PD.38.012.38570",
+                "designator": "7",
+                "AU_text": "FASNIA",
+                "TN_id": "ES.SDGC.TN.38.012.18",
+                "AU_id": "ES.SDGC.AU.38.012",
+                "localId": "38.012.18.7.8745901CS5284N"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -16.44068163608,
+                    28.23744996712
                 ]
             }
         }

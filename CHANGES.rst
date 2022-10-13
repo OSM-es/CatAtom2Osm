@@ -1,6 +1,9 @@
 Change log
 ==========
 
+**2022-10-13 (2.10.1)**
+* Put place=square names in addr:place
+
 **2022-09-02 (2.10.0)**
 * Merge osm place names to addresses
 

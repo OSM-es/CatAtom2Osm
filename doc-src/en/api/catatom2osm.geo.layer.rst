@@ -12,6 +12,7 @@ Submodules
    catatom2osm.geo.layer.cons
    catatom2osm.geo.layer.highway
    catatom2osm.geo.layer.parcel
+   catatom2osm.geo.layer.place
    catatom2osm.geo.layer.polygon
    catatom2osm.geo.layer.zoning
 

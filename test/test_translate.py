@@ -54,6 +54,19 @@ class TestTranslate(unittest.TestCase):
         tags = address_tags(feat)
         self.assertEqual(tags["addr:place"], "foo")
         self.assertNotIn("addr:street", tags)
+        feat = {
+            "localId": "000",
+            "TN_text": "Plaza foo",
+            "designator": "",
+            "postCode": "",
+            "spec": "",
+            "image": "foobar",
+        }
+        tags = address_tags(feat)
+        self.assertEqual(tags["addr:street"], "Plaza foo")
+        feat["TN_text"] = "squarePlaza foo"
+        tags = address_tags(feat)
+        self.assertEqual(tags["addr:place"], "Plaza foo")
 
     def test_building_tags(self):
         building_values = (

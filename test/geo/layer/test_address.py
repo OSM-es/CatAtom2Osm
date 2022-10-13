@@ -10,6 +10,7 @@ from catatom2osm import osm
 from catatom2osm.app import QgsSingleton
 from catatom2osm.geo.layer.address import AddressLayer
 from catatom2osm.geo.layer.highway import HighwayLayer
+from catatom2osm.geo.layer.place import PlaceLayer
 from catatom2osm.geo.layer.polygon import PolygonLayer
 
 gdal.PushErrorHandler("CPLQuietErrorHandler")
@@ -123,17 +124,26 @@ class TestAddressLayer(unittest.TestCase):
         self.layer.conflate(current_address)
         self.assertEqual(self.layer.featureCount(), 10)
 
-    def test_get_highway_names(self):
+    def test_get_names(self):
         fn = "test/fixtures/address.geojson"
         layer = AddressLayer(fn, "address", "ogr")
         fn = "test/fixtures/highway.geojson"
         highway = HighwayLayer(fn, "highway", "ogr")
-        highway_names = layer.get_highway_names(highway)
+        fn = "test/fixtures/place.geojson"
+        place = PlaceLayer(fn, "place", "ogr")
+        highway_names = layer.get_names(highway, place)
         test = {
             "AV PAZ (FASNIA)": ("Avenida la Paz", "OSM"),
             "CL SAN JOAQUIN (FASNIA)": ("Calle San Joaquín", "OSM"),
             "CL HOYO (FASNIA)": ("Calle el Hoyo", "OSM"),
             "CJ CALLEJON (FASNIA)": ("Calleja/Callejón Callejon (Fasnia)", "CAT"),
+            "PZ FRANCISCO DELGADO": (
+                "squarePlaza Francisco Delgado y Diaz Flores",
+                "OSM",
+            ),
+            "UR PRUEBA": ("Urbanización de prueba", "OSM"),
+            "PZ CONSTITUCION (FASNIA)": ("squarePlaza de la Constitución", "OSM"),
+            "PZ PRUEBA": ("Plaza Prueba", "OSM"),
         }
         for (k, v) in list(highway_names.items()):
             self.assertEqual(v, test[k])
