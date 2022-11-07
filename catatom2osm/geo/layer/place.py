@@ -4,8 +4,8 @@ from qgis.core import (
     QgsField,
     QgsFields,
     QgsGeometry,
-    QgsPointXY,
     QgsPoint,
+    QgsPointXY,
 )
 from qgis.PyQt.QtCore import QVariant
 
@@ -30,7 +30,7 @@ class PlaceLayer(BaseLayer):
         """Get features from a osm dataset."""
         to_add = []
         for elem in data.elements:
-            if "place" in elem.tags:
+            if "place" in elem.tags and "name" in elem.tags:
                 feat = QgsFeature(QgsFields(self.fields()))
                 feat.setAttribute("name", elem.tags["name"])
                 geom = False
