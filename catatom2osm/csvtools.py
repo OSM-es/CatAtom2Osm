@@ -3,7 +3,7 @@ import csv
 import io
 import os
 
-from catatom2osm.config import delimiter, encoding
+from catatom2osm import config
 from catatom2osm.exceptions import CatIOError
 
 
@@ -13,13 +13,15 @@ def dict2csv(csv_path, a_dict, sort=None):
 
     Optinally sorted by key (sort=0) or value (sort=1)
     """
-    with io.open(csv_path, "w", encoding=encoding) as csv_file:
+    with io.open(csv_path, "w", encoding=config.encoding) as csv_file:
         dictitems = list(a_dict.items())
         if sort in [0, 1]:
             dictitems.sort(key=lambda x: x[sort])
         for (k, v) in dictitems:
-            row = delimiter.join(v) if isinstance(v, (list, tuple, set)) else v
-            csv_file.write("%s%s%s%s" % (k, delimiter, row, "\n"))
+            row = v
+            if isinstance(v, (list, tuple, set)):
+                row = config.delimiter.join(v)
+            csv_file.write("%s%s%s%s" % (k, config.delimiter, row, "\n"))
 
 
 def csv2dict(csv_path, a_dict=None, exists=False, single=True):
@@ -28,7 +30,7 @@ def csv2dict(csv_path, a_dict=None, exists=False, single=True):
     msg = _("Failed to load CSV file '%s'") % os.path.basename(csv_path)
     if os.path.exists(csv_path):
         with open(csv_path) as csv_file:
-            csv_reader = csv.reader(csv_file, delimiter=str(delimiter))
+            csv_reader = csv.reader(csv_file, delimiter=str(config.delimiter))
             for row in csv_reader:
                 if len(row) < 2:
                     raise CatIOError(msg)
@@ -50,7 +52,7 @@ def filter(csv_path, *args, query=lambda row, args: True, stop=False):
     """
     output = []
     with open(csv_path) as csv_file:
-        csv_reader = csv.reader(csv_file, delimiter=str(delimiter))
+        csv_reader = csv.reader(csv_file, delimiter=str(config.delimiter))
         for row in csv_reader:
             if query(row, args):
                 if stop:

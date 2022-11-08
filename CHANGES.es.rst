@@ -1,6 +1,10 @@
 Registro de cambios
 ===================
 
+**08-11-2022 (2.10.3)**
+* Resuelve error calculando posición media de relación al leer lugares de OSM #112
+* Resuelve error no carga configuración definida por el usuario #113
+
 **07-11-2022 (2.10.2)**
 * Corrige error cuando falta el nombre a lugar
 

@@ -1,6 +1,10 @@
 Change log
 ==========
 
+**2022-11-08 (2.10.3)**
+* Fix error #112
+* Fix error #111
+
 **2022-11-07 (2.10.2)**
 * Fix error when name is missing in place
 

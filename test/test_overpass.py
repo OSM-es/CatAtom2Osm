@@ -2,8 +2,9 @@ import unittest
 
 import mock
 
+from catatom2osm.config import osm3s_servers
 from catatom2osm.exceptions import CatIOError
-from catatom2osm.overpass import Query, api_servers
+from catatom2osm.overpass import Query
 
 
 class TestQuery(unittest.TestCase):
@@ -54,18 +55,15 @@ class TestQuery(unittest.TestCase):
         self.assertEqual(q.get_url(), "")
         q.add("foo", "bar")
         url = (
-            api_servers[0] + "data=[out:xml][timeout:250];(area(3600001234)"
+            osm3s_servers[0] + "data=[out:xml][timeout:250];(area(3600001234)"
             "->.searchArea;foo(area.searchArea);bar(area.searchArea););"
             "(._;>>;);out meta;"
         )
         self.assertEqual(q.get_url(), url)
         q = Query("1,2,3,4", "json", False, False)
         q.add("foo", "bar")
-        url = (
-            api_servers[1] + "data=[out:json][timeout:250];(foo(1,2,3,4);"
-            "bar(1,2,3,4););out;"
-        )
-        self.assertEqual(q.get_url(1), url)
+        url = "taz?data=[out:json][timeout:250];(foo(1,2,3,4);" "bar(1,2,3,4););out;"
+        self.assertEqual(q.get_url("taz?"), url)
 
     @mock.patch("catatom2osm.overpass.download")
     def test_download(self, m_download):
@@ -73,12 +71,12 @@ class TestQuery(unittest.TestCase):
             raise CatIOError()
 
         def raises_io1(url, fn):
-            if url == api_servers[0]:
+            if url == osm3s_servers[0]:
                 raise CatIOError()
 
         q = Query("1,2,3,4").add("foo")
         q.download("bar")
-        m_download.wget.assert_called_once_with(q.get_url(0), "bar")
+        m_download.wget.assert_called_once_with(q.get_url(), "bar")
         m_download.wget = raises_io
         with self.assertRaises(CatIOError):
             q.download("bar")

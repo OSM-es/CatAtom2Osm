@@ -1,8 +1,7 @@
 """Minimum Overpass API interface."""
 import re
 
-from catatom2osm import download
-from catatom2osm.config import osm3s_servers as api_servers
+from catatom2osm import config, download
 from catatom2osm.exceptions import CatIOError
 
 
@@ -62,7 +61,7 @@ class Query(object):
                 self.statements += [rsc(s) for s in arg]
         return self
 
-    def get_url(self, n=0):
+    def get_url(self, server=config.osm3s_servers[0]):
         """Return the url for the query."""
         if len(self.statements) > 0:
             search_area = ""
@@ -73,17 +72,18 @@ class Query(object):
             search_area += f"({self.bbox});" if self.bbox else ";"
             query += search_area.join(self.statements) + search_area
             self.url = "{u}data=[out:{o}][timeout:250];({q});{d}{m}".format(
-                u=api_servers[n], q=query, o=self.output, d=self.down, m=self.meta
+                u=server, q=query, o=self.output, d=self.down, m=self.meta
             )
         return self.url
 
     def download(self, filename, log=False):
         """Download query results to filename."""
-        for i in range(len(api_servers)):
+        for server in config.osm3s_servers:
             try:
+                url = self.get_url(server)
                 if log:
-                    log.debug(self.get_url(i))
-                download.wget(self.get_url(i), filename)
+                    log.debug(self.url)
+                download.wget(url, filename)
                 return
             except IOError:
                 pass
