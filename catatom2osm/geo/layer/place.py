@@ -43,10 +43,10 @@ class PlaceLayer(BaseLayer):
                     xp = []
                     yp = []
                     for m in elem.members:
-                        if m.type == "way" and m.role == "outer":
+                        if m.type == "way" and m.role != "inner":
                             xp += [n.x for n in m.element.nodes]
                             yp += [n.y for n in m.element.nodes]
-                    if [xp]:
+                    if xp:
                         xm = sum(xp) / len(xp)
                         ym = sum(yp) / len(yp)
                         geom = QgsGeometry.fromPointXY(QgsPointXY(xm, ym))
