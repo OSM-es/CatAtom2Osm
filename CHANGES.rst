@@ -1,6 +1,9 @@
 Change log
 ==========
 
+**2022-12-03 (2.10.4)**
+* Fix error don't copy zoning.zip to tasks
+
 **2022-11-08 (2.10.3)**
 * Fix error #112
 * Fix error #111

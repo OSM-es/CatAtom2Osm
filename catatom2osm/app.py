@@ -758,6 +758,7 @@ class CatAtom2Osm(object):
             "address.osm",
             "address.geojson",
             "zoning.geojson",
+            "zoning.zip",
             "report.txt",
             "review.txt",
             "report.json",

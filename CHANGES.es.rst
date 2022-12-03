@@ -1,6 +1,9 @@
 Registro de cambios
 ===================
 
+**03-12-2022 (2.10.4)**
+* Resuelve error no copiaba zoning.zip a tasks
+
 **08-11-2022 (2.10.3)**
 * Resuelve error calculando posición media de relación al leer lugares de OSM #112
 * Resuelve error no carga configuración definida por el usuario #113
