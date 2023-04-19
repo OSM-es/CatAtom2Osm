@@ -1,8 +1,11 @@
 import io
+import json
 import os
 import re
 
-from catatom2osm import config, csvtools, osmxml, overpass
+from lxml import etree
+
+from catatom2osm import config, csvtools, download, hgwnames, osmxml, overpass
 from catatom2osm.exceptions import CatValueError
 
 
@@ -23,19 +26,6 @@ def list_provincial_offices():
     print("=" * len(title))
     for code, prov in config.prov_codes.items():
         print(f"{code} {prov}")
-
-
-def list_municipalities(code):
-    fn = os.path.join(config.app_path, "municipalities.csv")
-    if code not in config.prov_codes.keys():
-        msg = _("Province code '%s' is not valid") % code
-        raise CatValueError(msg)
-    office = config.prov_codes[code]
-    title = _("Territorial office %s - %s") % (code, office)
-    print(title)
-    print("=" * len(title))
-    for mun in csvtools.startswith(fn, code):
-        print(f"{mun[0]} {mun[2]}")
 
 
 def get_districts(code):
@@ -89,14 +79,58 @@ def list_districts(code):
         print(tab + " ".join(row[1:]))
 
 
-def get_municipality(code):
+def get_municipality(mun_code):
     fn = os.path.join(config.app_path, "municipalities.csv")
-    result = csvtools.get_key(fn, code)
-    if not result:
-        msg = _("Municipality code '%s' don't exists") % code
+    result = csvtools.get_key(fn, mun_code)
+    if result:
+        __, id, name = result
+        return (id, name)
+    return (None, None)
+
+
+def search_municipality(name, bounding_box):
+    if bounding_box is None:
+        return (None, None)
+    query = overpass.Query(bounding_box, "json", False, False)
+    query.add('rel["admin_level"="8"]')
+    try:
+        data = json.loads(query.read())
+        matching = hgwnames.dsmatch(
+            name, data["elements"], lambda e: e["tags"].get("name", "")
+        )
+    except ConnectionError:
+        pass
+    if matching:
+        id = str(matching["id"])
+        name = matching["tags"]["name"]
+        return (id, name)
+    return (None, None)
+
+
+def get_municipalities(prov_code):
+    url = config.prov_url["BU"].format(code=prov_code)
+    response = download.get_response(url)
+    root = etree.fromstring(response.content)
+    ns = {"atom": "http://www.w3.org/2005/Atom"}
+    municipios = []
+    for entry in root.findall("atom:entry", namespaces=ns):
+        row = entry.find("atom:title", ns).text.replace("buildings", "")
+        row = row.replace("Territorial office", "")
+        municipios.append(row.strip().split("-"))
+    return municipios
+
+
+def list_municipalities(prov_code):
+    municipalities = get_municipalities(prov_code)
+    if prov_code not in config.prov_codes.keys():
+        msg = _("Province code '%s' is not valid") % prov_code
         raise CatValueError(msg)
-    __, id, name = result
-    return (id, name)
+    office = config.prov_codes[prov_code]
+    title = _("Territorial office %s - %s") % (prov_code, office)
+    print(title)
+    print("=" * len(title))
+    for mun_code, mun_name in municipalities:
+        print(f"{mun_code} {mun_name}")
 
 
 def get_boundary(cat_path, boundary_search_area, id_or_name):

@@ -1,6 +1,10 @@
 Change log
 ==========
 
+**2023-04-19 (2.11.4)**
+* Search on line fir municipalities not previously registered (#114)
+* Update municipalities list.
+
 **2022-12-03 (2.10.4)**
 * Fix error don't copy zoning.zip to tasks
 

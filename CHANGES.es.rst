@@ -1,6 +1,10 @@
 Registro de cambios
 ===================
 
+**19-04-2023 (2.11.4)**
+* Busca en línea municipios que no estén registrados préviamente (#114)
+* Actualiza listado de municipios.
+
 **03-12-2022 (2.10.4)**
 * Resuelve error no copiaba zoning.zip a tasks
 

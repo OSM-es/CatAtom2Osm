@@ -83,8 +83,6 @@ class CatAtom2Osm(object):
         self.tasks_path = self.cat.get_path(self.tasks_folder)
         if self.options.zoning:
             self.options.address = False
-        self.get_boundary()
-        self.get_split()
         fn = self.options.split or ""
         bkp_dir = os.path.splitext(os.path.basename(fn))[0]
         self.bkp_path = self.cat.get_path(bkp_dir)
@@ -119,6 +117,8 @@ class CatAtom2Osm(object):
         if self.options.comment:
             self.add_comments()
             return
+        self.get_boundary()
+        self.get_split()
         if self.options.info:
             self.get_parcel()
             self.get_building()
@@ -379,6 +379,14 @@ class CatAtom2Osm(object):
     def get_boundary(self):
         """Get best boundary search area for overpass queries."""
         id, name = boundary.get_municipality(self.cat.zip_code)
+        if id is None:
+            zoning_gml = self.cat.read("cadastralzoning")
+            id, name = boundary.search_municipality(
+                self.cat.cat_mun, zoning_gml.bounding_box()
+            )
+        if id is None:
+            msg = _("Municipality code '%s' don't exists") % self.cat.zip_code
+            raise CatValueError(msg)
         self.boundary_search_area = id
         report.mun_name = name
         log.info(_("Municipality: '%s'"), name)
