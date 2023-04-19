@@ -14,7 +14,7 @@
   <link rel="stylesheet" type="text/css" href="../../../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.geo.layer.place &#8212; CatAtom2Osm 2.10.1 documentation</title>
+    <title>catatom2osm.geo.layer.place &#8212; CatAtom2Osm 2.11.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/guzzle.css" />
     <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">CatAtom2Osm 2.10.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">CatAtom2Osm 2.11.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.geo.layer.place</a></li> 
       </ul>
@@ -85,8 +85,8 @@
     <span class="n">QgsField</span><span class="p">,</span>
     <span class="n">QgsFields</span><span class="p">,</span>
     <span class="n">QgsGeometry</span><span class="p">,</span>
-    <span class="n">QgsPointXY</span><span class="p">,</span>
     <span class="n">QgsPoint</span><span class="p">,</span>
+    <span class="n">QgsPointXY</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">qgis.PyQt.QtCore</span> <span class="k">import</span> <span class="n">QVariant</span>
 
@@ -111,7 +111,7 @@
         <span class="sd">&quot;&quot;&quot;Get features from a osm dataset.&quot;&quot;&quot;</span>
         <span class="n">to_add</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">elements</span><span class="p">:</span>
-            <span class="k">if</span> <span class="s2">&quot;place&quot;</span> <span class="ow">in</span> <span class="n">elem</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;place&quot;</span> <span class="ow">in</span> <span class="n">elem</span><span class="o">.</span><span class="n">tags</span> <span class="ow">and</span> <span class="s2">&quot;name&quot;</span> <span class="ow">in</span> <span class="n">elem</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span>
                 <span class="n">feat</span> <span class="o">=</span> <span class="n">QgsFeature</span><span class="p">(</span><span class="n">QgsFields</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">()))</span>
                 <span class="n">feat</span><span class="o">.</span><span class="n">setAttribute</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="n">elem</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">])</span>
                 <span class="n">geom</span> <span class="o">=</span> <span class="kc">False</span>
@@ -124,10 +124,10 @@
                     <span class="n">xp</span> <span class="o">=</span> <span class="p">[]</span>
                     <span class="n">yp</span> <span class="o">=</span> <span class="p">[]</span>
                     <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">elem</span><span class="o">.</span><span class="n">members</span><span class="p">:</span>
-                        <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s2">&quot;way&quot;</span> <span class="ow">and</span> <span class="n">m</span><span class="o">.</span><span class="n">role</span> <span class="o">==</span> <span class="s2">&quot;outer&quot;</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s2">&quot;way&quot;</span> <span class="ow">and</span> <span class="n">m</span><span class="o">.</span><span class="n">role</span> <span class="o">!=</span> <span class="s2">&quot;inner&quot;</span><span class="p">:</span>
                             <span class="n">xp</span> <span class="o">+=</span> <span class="p">[</span><span class="n">n</span><span class="o">.</span><span class="n">x</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">m</span><span class="o">.</span><span class="n">element</span><span class="o">.</span><span class="n">nodes</span><span class="p">]</span>
                             <span class="n">yp</span> <span class="o">+=</span> <span class="p">[</span><span class="n">n</span><span class="o">.</span><span class="n">y</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">m</span><span class="o">.</span><span class="n">element</span><span class="o">.</span><span class="n">nodes</span><span class="p">]</span>
-                    <span class="k">if</span> <span class="p">[</span><span class="n">xp</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="n">xp</span><span class="p">:</span>
                         <span class="n">xm</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">xp</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">xp</span><span class="p">)</span>
                         <span class="n">ym</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">yp</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">yp</span><span class="p">)</span>
                         <span class="n">geom</span> <span class="o">=</span> <span class="n">QgsGeometry</span><span class="o">.</span><span class="n">fromPointXY</span><span class="p">(</span><span class="n">QgsPointXY</span><span class="p">(</span><span class="n">xm</span><span class="p">,</span> <span class="n">ym</span><span class="p">))</span>
@@ -151,7 +151,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">CatAtom2Osm 2.10.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">CatAtom2Osm 2.11.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.geo.layer.place</a></li> 
       </ul>

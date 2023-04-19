@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: CatAtom2Osm\n"
-"POT-Creation-Date: 2022-10-13 10:48+0000\n"
+"POT-Creation-Date: 2023-04-19 11:39+0000\n"
 "PO-Revision-Date: 2017-05-28 19:23+WEST\n"
 "Last-Translator: Javier Sánchez <javiersanp@gmail.com>\n"
 "Language: es\n"
@@ -176,7 +176,7 @@ msgstr "División: '%s'"
 msgid "No report found"
 msgstr "No se ha encontrado 'report.txt'"
 
-#: catatom2osm/app.py:175 catatom2osm/app.py:439
+#: catatom2osm/app.py:175 catatom2osm/app.py:447
 msgid "Check %d fixme tags"
 msgstr "Revisa %d etiquetas fixme"
 
@@ -192,11 +192,11 @@ msgstr "'%s' no incluye ninguna polígono"
 msgid "Parcel '%s' does not exists"
 msgstr "La parcela '%s' no existe"
 
-#: catatom2osm/app.py:249 catatom2osm/app.py:561
+#: catatom2osm/app.py:249 catatom2osm/app.py:569
 msgid "No parcels data"
 msgstr "No hay parcelas"
 
-#: catatom2osm/app.py:269 catatom2osm/app.py:568
+#: catatom2osm/app.py:269 catatom2osm/app.py:576
 msgid "No buildings data"
 msgstr "No hay edificios"
 
@@ -212,91 +212,92 @@ msgstr "Conflicto con %d tareas existentes"
 msgid "Generated %d rustic and %d urban tasks files"
 msgstr "Generados %d archivos de tareas de rústica y %d de urbana"
 
-#: catatom2osm/app.py:384
+#: catatom2osm/app.py:388 catatom2osm/catatom.py:96
+msgid "Municipality code '%s' don't exists"
+msgstr "El código de municipio '%s' no existe"
+
+#: catatom2osm/app.py:392
 msgid "Municipality: '%s'"
 msgstr "Municipio: '%s'"
 
-#: catatom2osm/app.py:403 catatom2osm/app.py:444 catatom2osm/app.py:549
-#: catatom2osm/app.py:794
+#: catatom2osm/app.py:411 catatom2osm/app.py:452 catatom2osm/app.py:557
+#: catatom2osm/app.py:803
 msgid "Generated '%s'"
 msgstr "Generado '%s'"
 
-#: catatom2osm/app.py:443
+#: catatom2osm/app.py:451
 msgid "Please, check it before publish"
 msgstr "Por favor, compruébelo antes de publicar"
 
-#: catatom2osm/app.py:453
+#: catatom2osm/app.py:461
 msgid "Finished!"
 msgstr "¡Terminado!"
 
-#: catatom2osm/app.py:489
+#: catatom2osm/app.py:497
 msgid "Could not resolve joined tables for the '%s' layer"
 msgstr "No se pudieron resolver las tablas combinadas para la capa '%s'"
 
-#: catatom2osm/app.py:508 catatom2osm/app.py:575
+#: catatom2osm/app.py:516 catatom2osm/app.py:583
 msgid "No addresses data"
 msgstr "No hay direcciones"
 
-#: catatom2osm/app.py:528
+#: catatom2osm/app.py:536
 msgid "Deleted %d addresses refused by street name"
 msgstr "Eliminadas %d direcciones rechazadas por nombre de vial"
 
-#: catatom2osm/app.py:550
+#: catatom2osm/app.py:558
 msgid "Please, check it and run again"
 msgstr "Por favor, compruébelo y ejecute de nuevo"
 
-#: catatom2osm/app.py:646
+#: catatom2osm/app.py:654
 msgid "Refused %d 'parcel' addresses not unique for it building"
 msgstr "Rechazadas %d direcciones tipo parcela no únicas para su edificio"
 
-#: catatom2osm/app.py:737
+#: catatom2osm/app.py:745
 msgid "There are %d address without house number in the OSM data"
 msgstr "Existen %d direcciones sin número de portal en OSM"
 
-#: catatom2osm/app.py:796
+#: catatom2osm/app.py:805
 msgid "Failed to write layer: '%s'"
 msgstr "Error al escribir la capa: '%s'"
 
-#: catatom2osm/app.py:817 catatom2osm/catatom.py:101 catatom2osm/cbcn.py:151
+#: catatom2osm/app.py:826 catatom2osm/catatom.py:101 catatom2osm/cbcn.py:151
 #: catatom2osm/cdau.py:199
 msgid "Downloading '%s'"
 msgstr "Descargando '%s'"
 
-#: catatom2osm/app.py:833
+#: catatom2osm/app.py:842
 msgid "No OSM data were obtained from '%s'"
 msgstr "No se obtuvieron datos OSM de '%s'"
 
-#: catatom2osm/app.py:838
+#: catatom2osm/app.py:847
 msgid "Read '%s': %d nodes, %d ways, %d relations"
 msgstr "Leído '%s': %d nodos, %d vías, %d relaciones"
 
-#: catatom2osm/app.py:866
+#: catatom2osm/app.py:875
 msgid "Generated '%s': %d nodes, %d ways, %d relations"
 msgstr "Generado '%s': %d nodos, %d vías, %d relaciones"
 
-#: catatom2osm/boundary.py:21
+#: catatom2osm/boundary.py:24
 msgid "Territorial office"
 msgstr "Oficina territorial"
 
-#: catatom2osm/boundary.py:31 catatom2osm/catatom.py:34 catatom2osm/cdau.py:194
-msgid "Province code '%s' is not valid"
-msgstr "El Código Provincial '%s' no es válido"
-
-#: catatom2osm/boundary.py:34
-msgid "Territorial office %s - %s"
-msgstr "Oficina territorial %s - %s"
-
-#: catatom2osm/boundary.py:76
+#: catatom2osm/boundary.py:66
 msgid "District"
 msgstr "Distrito"
 
-#: catatom2osm/boundary.py:79 catatom2osm/boundary.py:81
+#: catatom2osm/boundary.py:69 catatom2osm/boundary.py:71
 msgid "Ward"
 msgstr "Barrio"
 
-#: catatom2osm/boundary.py:96 catatom2osm/catatom.py:96
-msgid "Municipality code '%s' don't exists"
-msgstr "El código de municipio '%s' no existe"
+#: catatom2osm/boundary.py:126 catatom2osm/catatom.py:34
+#: catatom2osm/cdau.py:194
+msgid "Province code '%s' is not valid"
+msgstr "El Código Provincial '%s' no es válido"
+
+#: catatom2osm/boundary.py:129
+msgid "Territorial office %s - %s"
+msgstr "Oficina territorial %s - %s"
 
 #: catatom2osm/catatom.py:29
 msgid "Last directory name must be a 5 digits ZIP code"
@@ -416,7 +417,7 @@ msgstr "No se pudo leer '%s'"
 msgid "Config file '%s' not found"
 msgstr "Fichero de configuración '%s' no encontrado"
 
-#: catatom2osm/csvtools.py:28
+#: catatom2osm/csvtools.py:30
 msgid "Failed to load CSV file '%s'"
 msgstr "Error al cargar el archivo CSV '%s'"
 
@@ -436,7 +437,7 @@ msgstr "Rechazadas %d direcciones por existir en OSM"
 msgid "Deleted %d addresses without house number"
 msgstr "Eliminadas %d direcciones sin número de portal"
 
-#: catatom2osm/geo/layer/address.py:154
+#: catatom2osm/geo/layer/address.py:159
 msgid "Removed %d addresses without building"
 msgstr "Eliminadas %d direcciones sin edificio asociado"
 

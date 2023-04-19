@@ -14,7 +14,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/bootstrap-theme.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-    <title>catatom2osm.app &#8212; CatAtom2Osm 2.10.1 documentation</title>
+    <title>catatom2osm.app &#8212; CatAtom2Osm 2.11.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/guzzle.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.10.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.11.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.app</a></li> 
       </ul>
@@ -164,8 +164,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">tasks_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tasks_folder</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">zoning</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">address</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">get_boundary</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">get_split</span><span class="p">()</span>
         <span class="n">fn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">split</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>
         <span class="n">bkp_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fn</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bkp_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="n">bkp_dir</span><span class="p">)</span>
@@ -200,6 +198,8 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">comment</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">add_comments</span><span class="p">()</span>
             <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_boundary</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_split</span><span class="p">()</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">info</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">get_parcel</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">get_building</span><span class="p">()</span>
@@ -460,6 +460,14 @@
 <div class="viewcode-block" id="CatAtom2Osm.get_boundary"><a class="viewcode-back" href="../../api/catatom2osm.app.html#catatom2osm.app.CatAtom2Osm.get_boundary">[docs]</a>    <span class="k">def</span> <span class="nf">get_boundary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get best boundary search area for overpass queries.&quot;&quot;&quot;</span>
         <span class="nb">id</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="n">boundary</span><span class="o">.</span><span class="n">get_municipality</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">zip_code</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">zoning_gml</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;cadastralzoning&quot;</span><span class="p">)</span>
+            <span class="nb">id</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="n">boundary</span><span class="o">.</span><span class="n">search_municipality</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">cat_mun</span><span class="p">,</span> <span class="n">zoning_gml</span><span class="o">.</span><span class="n">bounding_box</span><span class="p">()</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="nb">id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Municipality code &#39;</span><span class="si">%s</span><span class="s2">&#39; don&#39;t exists&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">zip_code</span>
+            <span class="k">raise</span> <span class="n">CatValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">boundary_search_area</span> <span class="o">=</span> <span class="nb">id</span>
         <span class="n">report</span><span class="o">.</span><span class="n">mun_name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Municipality: &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">),</span> <span class="n">name</span><span class="p">)</span></div>
@@ -839,6 +847,7 @@
             <span class="s2">&quot;address.osm&quot;</span><span class="p">,</span>
             <span class="s2">&quot;address.geojson&quot;</span><span class="p">,</span>
             <span class="s2">&quot;zoning.geojson&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;zoning.zip&quot;</span><span class="p">,</span>
             <span class="s2">&quot;report.txt&quot;</span><span class="p">,</span>
             <span class="s2">&quot;review.txt&quot;</span><span class="p">,</span>
             <span class="s2">&quot;report.json&quot;</span><span class="p">,</span>
@@ -968,7 +977,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.10.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CatAtom2Osm 2.11.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">catatom2osm.app</a></li> 
       </ul>
