@@ -641,6 +641,7 @@ default_config_file = "config.yaml"
 
 # overpass api servers
 default_osm3s_servers = [
+    "https://osm3s.cartobase.es/api/interpreter?",
     "http://overpass-api.de/api/interpreter?",
     "http://overpass.osm.rambler.ru/cgi/interpreter?",
 ]

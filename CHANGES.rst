@@ -1,8 +1,11 @@
 Change log
 ==========
 
-**2023-04-19 (2.11.4)**
-* Search on line fir municipalities not previously registered (#114)
+**2023-04-20 (2.11.1)**
+* Adds cartobase overpass instance.
+
+**2023-04-19 (2.11.0)**
+* Search on line for municipalities not previously registered (#114)
 * Update municipalities list.
 
 **2022-12-03 (2.10.4)**

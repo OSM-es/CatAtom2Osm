@@ -1,7 +1,10 @@
 Registro de cambios
 ===================
 
-**19-04-2023 (2.11.4)**
+**20-04.2023 (2.11.1)**
+* Añade instancia cartobase de overpass.
+
+**19-04-2023 (2.11.0)**
 * Busca en línea municipios que no estén registrados préviamente (#114)
 * Actualiza listado de municipios.
 
