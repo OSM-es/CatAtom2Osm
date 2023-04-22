@@ -1,6 +1,9 @@
 Change log
 ==========
 
+**2023-04-22 (2.11.2)**
+* Capacity to format loggers externally.
+
 **2023-04-20 (2.11.1)**
 * Adds cartobase overpass instance.
 

@@ -721,10 +721,10 @@ def install_gettext(app_name, localedir):
 install_gettext(app_name, localedir)
 
 
-def setup_logger(name="", log_path=""):
+def setup_logger(name="", log_path="", fh_log_format=log_format):
     """Configure the application logger."""
     log = logging.getLogger(name or app_name)
-    formatter = logging.Formatter(log_format)
+    formatter = logging.Formatter(fh_log_format)
     fh = logging.FileHandler(os.path.join(log_path, log_file))
     fh.setLevel(logging.DEBUG)
     fh.setFormatter(formatter)
@@ -733,9 +733,9 @@ def setup_logger(name="", log_path=""):
     return log
 
 
-def set_log_level(log, log_level):
+def set_log_level(log, log_level, ch_log_format=log_format):
     """Configure console logger and level."""
-    formatter = logging.Formatter(log_format)
+    formatter = logging.Formatter(ch_log_format)
     ch = logging.StreamHandler(sys.stderr)
     ch.setLevel(log_level)
     ch.setFormatter(formatter)

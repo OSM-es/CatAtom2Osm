@@ -1,6 +1,9 @@
 Registro de cambios
 ===================
 
+**22-04-2023 (2.11.2)**
+* Capacidad para configurar formato de logs externamente.
+
 **20-04.2023 (2.11.1)**
 * Añade instancia cartobase de overpass.
 
