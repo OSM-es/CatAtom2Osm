@@ -206,9 +206,9 @@ class ConsLayer(PolygonLayer):
         outline["lev_above"] = max_level
         outline["lev_below"] = min_level
         building_area = round(outline.geometry().area(), 0)
-        for (level, parts) in parts_for_level.items():
+        for (level, level_parts) in parts_for_level.items():
             check_area = False
-            for part in parts:
+            for part in level_parts:
                 part_area = part.geometry().area()
                 parts_area += part_area
                 if round(part_area, 0) > building_area:
@@ -222,17 +222,23 @@ class ConsLayer(PolygonLayer):
             ):
                 to_clean = [p.id() for p in parts_for_level[max_level, min_level]]
             else:
-                geom = Geometry.merge_adjacent_features(parts)
+                geom = Geometry.merge_adjacent_features(level_parts)
                 poly = Geometry.get_multipolygon(geom)
-                if len(poly) < len(parts):
-                    for (i, part) in enumerate(parts):
+                if len(poly) < len(level_parts):
+                    for (i, part) in enumerate(level_parts):
                         if i < len(poly):
                             g = Geometry.fromPolygonXY(poly[i])
                             to_change_g[part.id()] = g
                         else:
                             to_clean_g.append(part.id())
-        if len(parts_for_level) > 1 and round(parts_area, 0) != building_area:
-            outline["fixme"] = _("Building parts don't fill the building outline")
+        if parts_area > 0 and round(parts_area, 0) < building_area:
+            msg = _("Building parts don't fill the building outline")
+            # outline["fixme"] = msg
+            # TODO: Cuando esté disponible la herramienta visor-catastro,
+            # se puede añadir un aviso para revisar estos edificios.
+            g = Geometry.merge_adjacent_features(parts)
+            if g:
+                to_change_g[outline.id()] = g
         to_change[outline.id()] = get_attributes(outline)
         return to_clean, to_clean_g, to_change, to_change_g
 

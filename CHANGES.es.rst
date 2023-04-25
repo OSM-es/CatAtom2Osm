@@ -1,6 +1,9 @@
 Registro de cambios
 ===================
 
+**25-04-2023 (2.12.0)**
+* Elimina fixme 'Las partes de edificio no cubren todo el contorno'.
+
 **22-04-2023 (2.11.2)**
 * Capacidad para configurar formato de logs externamente.
 

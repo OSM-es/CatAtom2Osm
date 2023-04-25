@@ -1,6 +1,9 @@
 Change log
 ==========
 
+**2023-04-25 (2.12.0)**
+* Removes fixme 'Building parts don't fill the building outline'.
+
 **2023-04-22 (2.11.2)**
 * Capacity to format loggers externally.
 
