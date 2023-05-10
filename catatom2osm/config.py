@@ -726,6 +726,8 @@ def setup_logger(name="", log_path="", fh_log_format=log_format):
     log = logging.getLogger(name or app_name)
     for handler in log.handlers:
         if isinstance(handler, logging.FileHandler):
+            handler.flush()
+            handler.close()
             log.removeHandler(handler)
     formatter = logging.Formatter(fh_log_format)
     fh = logging.FileHandler(os.path.join(log_path, log_file))
