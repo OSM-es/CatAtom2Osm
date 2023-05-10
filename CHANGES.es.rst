@@ -1,6 +1,9 @@
 Registro de cambios
 ===================
 
+**10-05-2023 (2.12.1)**
+* Corrige error por el que no se independizaban los archivos de registro.
+
 **25-04-2023 (2.12.0)**
 * Elimina fixme 'Las partes de edificio no cubren todo el contorno'.
 

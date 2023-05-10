@@ -1,6 +1,9 @@
 Change log
 ==========
 
+**2023-05-10 (2.12.1)**
+* Fix error log files were not made independent.
+
 **2023-04-25 (2.12.0)**
 * Removes fixme 'Building parts don't fill the building outline'.
 

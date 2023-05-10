@@ -724,6 +724,9 @@ install_gettext(app_name, localedir)
 def setup_logger(name="", log_path="", fh_log_format=log_format):
     """Configure the application logger."""
     log = logging.getLogger(name or app_name)
+    for handler in log.handlers:
+        if isinstance(handler, logging.FileHandler):
+            log.removeHandler(handler)
     formatter = logging.Formatter(fh_log_format)
     fh = logging.FileHandler(os.path.join(log_path, log_file))
     fh.setLevel(logging.DEBUG)
