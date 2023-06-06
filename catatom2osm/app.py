@@ -310,10 +310,13 @@ class CatAtom2Osm(object):
                 self.merge_address(task_osm, self.address_osm)
             if self.options.address:
                 report.address_stats(task_osm)
-            if self.options.building:
-                report.cons_stats(task_osm, label)
-                report.osm_stats(task_osm)
             fp = self.cat.get_path(self.tasks_folder, label)
+            if self.options.building:
+                if config.clean_fixmes:
+                    task.export_fixmes(fp)
+                report.fixme_stats(task, label)
+                report.cons_stats(task_osm)
+                report.osm_stats(task_osm)
             if self.split and os.path.exists(fp + ".osm.gz"):
                 if not os.path.exists(self.bkp_path):
                     n = len(glob(fp + "*.osm.gz"))
@@ -443,7 +446,7 @@ class CatAtom2Osm(object):
         if log.app_level > logging.DEBUG:
             geo.BaseLayer.delete_shp(self.cat.get_path("parcel.shp"))
             geo.BaseLayer.delete_shp(self.cat.get_path("building.shp"))
-        if report.fixme_stats():
+        if report.end_fixme_stats():
             log.warning(_("Check %d fixme tags"), report.fixme_count)
             fn = self.cat.get_path("review.txt")
             fixmes = report.get_tasks_with_fixmes()

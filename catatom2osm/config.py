@@ -32,6 +32,7 @@ log_file = "catatom2osm.log"
 log_format = "%(asctime)s - %(levelname)s - %(message)s"
 show_progress_bars = True
 report_system_info = True
+clean_fixmes = False
 
 fn_prefix = "A.ES.SDGC"  # Inspire Atom file name prefix
 
@@ -682,6 +683,7 @@ default_user_config = {
     "parcel_dist": default_parcel_dist,
     "show_progress_bars": True,
     "report_system_info": True,
+    "clean_fixmes": False,
     "osm3s_servers": default_osm3s_servers,
 }
 
@@ -724,11 +726,6 @@ install_gettext(app_name, localedir)
 def setup_logger(name="", log_path="", fh_log_format=log_format):
     """Configure the application logger."""
     log = logging.getLogger(name or app_name)
-    for handler in log.handlers:
-        if isinstance(handler, logging.FileHandler):
-            handler.flush()
-            handler.close()
-            log.removeHandler(handler)
     formatter = logging.Formatter(fh_log_format)
     fh = logging.FileHandler(os.path.join(log_path, log_file))
     fh.setLevel(logging.DEBUG)

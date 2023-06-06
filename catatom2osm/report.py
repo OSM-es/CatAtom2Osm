@@ -200,7 +200,14 @@ class Report(object):
                 if "entrance" not in el.tags:
                     self.inc("out_address_parcel")
 
-    def cons_stats(self, data, task_label=None):
+    def fixme_stats(self, data, task_label=None):
+        for feature in data.getFeatures():
+            if feature["fixme"]:
+                self.fixme_counter[feature["fixme"]] += 1
+                if task_label is not None:
+                    self.tasks_with_fixmes[task_label] += 1
+
+    def cons_stats(self, data):
         for el in data.elements:
             if "leisure" in el.tags and el.tags["leisure"] == "swimming_pool":
                 self.inc("out_pools")
@@ -212,10 +219,6 @@ class Report(object):
             if "building:part" in el.tags:
                 self.inc("out_parts")
                 self.inc("out_features")
-            if "fixme" in el.tags:
-                self.fixme_counter[el.tags["fixme"]] += 1
-                if task_label is not None:
-                    self.tasks_with_fixmes[task_label] += 1
 
     def get_tasks_with_fixmes(self):
         fixmes = self.tasks_with_fixmes
@@ -247,7 +250,7 @@ class Report(object):
             ["%s: %d" % (b, c) for (b, c) in list(self.building_counter.items())]
         )
 
-    def fixme_stats(self):
+    def end_fixme_stats(self):
         fixme_count = sum(self.fixme_counter.values())
         if fixme_count:
             self.fixme_count = fixme_count

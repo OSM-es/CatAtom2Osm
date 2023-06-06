@@ -82,6 +82,6 @@ def building_tags(feature):
     if feature["layer"] == 1:
         tags["layer"] = "1"
         tags["location"] = "roof"
-    if feature["fixme"]:
+    if feature["fixme"] and not config.clean_fixmes:
         tags["fixme"] = feature["fixme"]
     return tags

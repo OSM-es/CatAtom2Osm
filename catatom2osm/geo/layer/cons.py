@@ -7,6 +7,7 @@ from qgis.PyQt.QtCore import QVariant
 from catatom2osm import config, translate
 from catatom2osm.geo import BUFFER_SIZE, SIMPLIFY_BUILDING_PARTS
 from catatom2osm.geo.geometry import Geometry
+from catatom2osm.geo.layer.fixme import FixmeLayer
 from catatom2osm.geo.layer.polygon import PolygonLayer
 from catatom2osm.geo.point import Point
 from catatom2osm.geo.tools import get_attributes, is_inside
@@ -232,7 +233,7 @@ class ConsLayer(PolygonLayer):
                         else:
                             to_clean_g.append(part.id())
         if parts_area > 0 and round(parts_area, 0) < building_area:
-            msg = _("Building parts don't fill the building outline")
+            # msg = _("Building parts don't fill the building outline")
             # outline["fixme"] = msg
             # TODO: Cuando esté disponible la herramienta visor-catastro,
             # se puede añadir un aviso para revisar estos edificios.
@@ -575,3 +576,12 @@ class ConsLayer(PolygonLayer):
         report.osm_buildings = num_buildings
         report.osm_building_conflicts = conflicts
         return len(to_clean) > 0
+
+    def export_fixmes(self, fp):
+        """Save geojson with tasks fixmes."""
+        fixmes = FixmeLayer()
+        for feat in self.getFeatures():
+            if feat["fixme"]:
+                fixmes.add_fixme(feat)
+        if fixmes.featureCount() > 0:
+            fixmes.export(fp + ".fixmes.geojson", "GeoJSON")
