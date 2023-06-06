@@ -255,17 +255,13 @@ class TestReport(unittest.TestCase):
         self.assertEqual(r.out_parts, 1)
         self.assertEqual(r.building_counter["a"], 1)
         self.assertEqual(r.building_counter["b"], 1)
-        self.assertEqual(r.fixme_counter["f1"], 1)
-        self.assertEqual(r.fixme_counter["f2"], 2)
 
     def test_fixme_stats(self):
         r = report.Report()
         r.fixme_counter = {}
-        r.fixme_stats()
-        self.assertEqual(r.fixme_stats(), 0)
+        self.assertEqual(r.end_fixme_stats(), 0)
         r.fixme_counter = {"a": 1, "b": 2}
-        r.fixme_stats()
-        self.assertEqual(r.fixme_stats(), 3)
+        self.assertEqual(r.end_fixme_stats(), 3)
         self.assertEqual(len(r.fixmes), 2)
 
     @mock.patch("catatom2osm.report.open")
