@@ -1,11 +1,8 @@
 Change log
 ==========
 
-**2023-06-06 (2.13.0)**
-* Option to write task fixes in a separated file.
-
-**2023-06-05 (2.12.2)**
-* Minor change to allow overpass queries without area.
+**2023-06-12 (2.13.0)**
+* Option to include cadastral references in tasks files.
 
 **2023-05-10 (2.12.1)**
 * Fix error log files were not made independent.

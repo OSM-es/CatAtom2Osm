@@ -1,11 +1,8 @@
 Registro de cambios
 ===================
 
-**06-06-2023**
-* Opción para escribir los fixmes de tareas en archivo aparte.
-
-**05-06-2023 (2.12.2)**
-* Cambio menor para permitir búsquedas overpass sin área.
+**12-06-2023 (2.13.0)**
+* Opción para incluir las referencias catastrales en los archivos de tareas.
 
 **10-05-2023 (2.12.1)**
 * Corrige error por el que no se independizaban los archivos de registro.
