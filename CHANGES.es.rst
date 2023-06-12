@@ -1,6 +1,9 @@
 Registro de cambios
 ===================
 
+**12-06-2023 (2.13.0)**
+* Opción para incluir las referencias catastrales en los archivos de tareas.
+
 **10-05-2023 (2.12.1)**
 * Corrige error por el que no se independizaban los archivos de registro.
 

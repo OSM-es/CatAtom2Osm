@@ -861,9 +861,10 @@ class CatAtom2Osm(object):
             paths (str): output filename components relative to self.path
                             (compress if ends with .gz)
         """
-        for e in data.elements:
-            if "ref" in e.tags:
-                del e.tags["ref"]
+        if not config.show_refs:
+            for e in data.elements:
+                if "ref" in e.tags:
+                    del e.tags["ref"]
         data.merge_duplicated()
         osm_path = self.cat.get_path(*paths)
         if osm_path.endswith(".gz"):

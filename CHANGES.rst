@@ -1,6 +1,9 @@
 Change log
 ==========
 
+**2023-06-12 (2.13.0)**
+* Option to include cadastral references in tasks files.
+
 **2023-05-10 (2.12.1)**
 * Fix error log files were not made independent.
 
