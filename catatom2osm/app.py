@@ -639,7 +639,8 @@ class CatAtom2Osm(object):
                         entrance = w.search_node(ad.x, ad.y)
                         if entrance:
                             entrance.tags.update(ad.tags)
-                            entrance.tags.pop("ref", None)
+                            if not config.show_refs:
+                                entrance.tags.pop("ref", None)
                             entrance.tags.pop("image", None)
                             break
                 if entrance:
