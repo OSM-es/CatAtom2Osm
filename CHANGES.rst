@@ -1,6 +1,9 @@
 Change log
 ==========
 
+**2023-06-13 (2.14.1)**
+* Option to exclude addresses by street name.
+
 **2023-06-12 (2.13.0)**
 * Option to include cadastral references in tasks files.
 

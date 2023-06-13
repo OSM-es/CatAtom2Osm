@@ -632,6 +632,7 @@ default_remove_place_from_name = [default_place_types[26]]
 
 # List of highway types not to be parsed
 default_excluded_types = ["DS", "ER"]
+default_excluded_hgws = ["DISEMINADO"]
 
 default_warning_min_area = 1  # Area in m2 for small area warning
 default_warning_max_area = 30000  # Area in m2 for big area warning
@@ -677,6 +678,7 @@ default_user_config = {
     "place_types": default_place_types,
     "remove_place_from_name": default_remove_place_from_name,
     "excluded_types": default_excluded_types,
+    "excluded_hgws": default_excluded_hgws,
     "warning_min_area": default_warning_min_area,
     "warning_max_area": default_warning_max_area,
     "parcel_parts": default_parcel_parts,

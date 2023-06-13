@@ -16,6 +16,9 @@ def parse(name):
     """Transform the name of a street from Cadastre conventions to OSM ones."""
     name = name.split(";")[0]  # Remove additional information
     name = re.sub(r"[,]+", ", ", name).strip()  # Avoids comma without trailing space
+    for excl in config.excluded_hgws:
+        if excl in name:
+            return ""
     result = []
     for (i, word) in enumerate(re.split(r"[ ]+", name.strip())):
         nude_word = re.sub(r"^\(|\)$", "", word)  # Remove enclosing parenthesis

@@ -1,6 +1,9 @@
 Registro de cambios
 ===================
 
+**13-06-2023 (2.13.1)**
+* Opción para excluir direcciones por nombre de calle (DISEMINADOS)
+
 **12-06-2023 (2.13.0)**
 * Opción para incluir las referencias catastrales en los archivos de tareas.
 
