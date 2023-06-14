@@ -16,6 +16,9 @@ def all_tags(feature):
 def address_tags(feature):
     """Translate address layer fields."""
     tags = {}
+    if config.show_refs and feature.fieldNameIndex("cat_name") >= 0:
+        cat_name = feature["cat_name"]
+        tags["addr:cat_name"] = cat_name
     hgw_name = feature["TN_text"] or ""
     hgw_name = hgw_name.strip()
     if len(hgw_name) == 0:

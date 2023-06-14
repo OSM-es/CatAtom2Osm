@@ -28,6 +28,7 @@ class AddressLayer(BaseLayer):
                     QgsField("spec", QVariant.String, len=254),
                     QgsField("designator", QVariant.String, len=254),
                     QgsField("TN_text", QVariant.String, len=254),
+                    QgsField("cat_name", QVariant.String, len=254),
                     QgsField("postCode", QVariant.Int),
                     QgsField("image", QVariant.String, len=254),
                     QgsField("task", QVariant.String, len=254),

@@ -8,52 +8,35 @@ from catatom2osm import config, osm
 log = logging.getLogger(config.app_name)
 
 
-def write_elem(outfile, e):
-    try:
-        outfile.write(etree.tostring(e, pretty_print=True).decode())
-    except TypeError:  # pragma: no cover
-        outfile.write(etree.tostring(e).decode())
+def add_tags(item, elem):
+    for key, value in elem.tags.items():
+        etree.SubElement(item, "tag", dict(k=key, v=str(value)))
 
 
 def serialize(outfile, data):
     """Output XML for an OSM data set."""
-    outfile.write("<?xml version='1.0' encoding='UTF-8'?>\n")
-    attrs = "".join([" {}='{}'".format(k, v) for (k, v) in data.attrs.items()])
-    outfile.write("<osm{}>\n".format(attrs))
+    root = etree.Element("osm", data.attrs)
     if data.note is not None:
-        e = etree.Element("note")
-        e.text = data.note
-        write_elem(outfile, e)
+        etree.SubElement(root, "note").text = data.note
     if data.meta is not None:
-        e = etree.Element("meta")
-        for (k, v) in data.meta.items():
-            e.set(k, v)
-        write_elem(outfile, e)
+        etree.SubElement(root, "meta", data.meta)
     if data.tags:
-        e = etree.Element("changeset")
-        for (key, value) in data.tags.items():
-            e.append(etree.Element("tag", dict(k=key, v=str(value))))
-        write_elem(outfile, e)
+        cs = etree.SubElement(root, "changeset")
+        add_tags(cs, data)
     for node in data.nodes:
-        e = etree.Element("node", node.attrs)
-        for key, value in node.tags.items():
-            e.append(etree.Element("tag", dict(k=key, v=str(value))))
-        write_elem(outfile, e)
+        e = etree.SubElement(root, "node", node.attrs)
+        add_tags(e, node)
     for way in data.ways:
-        e = etree.Element("way", way.attrs)
-        for node in way.nodes:
-            e.append(etree.Element("nd", dict(ref=str(node.id))))
-        for key, value in way.tags.items():
-            e.append(etree.Element("tag", dict(k=key, v=str(value))))
-        write_elem(outfile, e)
+        e = etree.SubElement(root, "way", way.attrs)
+        add_tags(e, way)
     for rel in data.relations:
-        e = etree.Element("relation", rel.attrs)
+        e = etree.SubElement(root, "relation", rel.attrs)
         for m in rel.members:
-            e.append(etree.Element("member", m.attrs))
-        for key, value in rel.tags.items():
-            e.append(etree.Element("tag", dict(k=key, v=str(value))))
-        write_elem(outfile, e)
-    outfile.write("</osm>\n")
+            etree.SubElement(e, "member", m.attrs)
+        add_tags(e, rel)
+    options = dict(pretty_print=True, xml_declaration=True, encoding="utf-8")
+    output = etree.tostring(root, **options)
+    outfile.write(output.decode())
 
 
 def deserialize(infile, data=None):

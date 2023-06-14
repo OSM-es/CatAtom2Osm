@@ -122,7 +122,6 @@ class ParcelLayer(PolygonLayer):
                 m += 1
                 pa["zone"] = self.get_zone(pa)
             pa["type"] = _("Rustic") if len(pa["zone"]) == 3 else _("Urban")
-            pa["type"] = pa["type"].replace("ú", "&uacute;")
             to_change[pa.id()] = get_attributes(pa)
         if m:
             log.debug(_("There are %d parcels without zone"), m)

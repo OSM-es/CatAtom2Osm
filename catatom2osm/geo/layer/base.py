@@ -297,7 +297,7 @@ class BaseLayer(QgsVectorLayer):
         if total:
             log.debug(_("Joined '%s' to '%s'"), source_layer.name(), self.name())
 
-    def translate_field(self, field_name, translations, clean=True):
+    def translate_field(self, field_name, translations, clean=True, copy_to=None):
         """
         Transform the values of a field.
 
@@ -305,7 +305,10 @@ class BaseLayer(QgsVectorLayer):
             field_name (str): Name of the field to transform
             translations (dict): A dictionary used to transform field values
             clean (bool): If true (default), delete features without translation
+            copy_to (str): Name of a field to copy source value to (or none).
         """
+        if copy_to and self.writer.fieldNameIndex(copy_to) < 0:
+            copy_to = None
         to_clean = []
         field_ndx = self.writer.fieldNameIndex(field_name)
         if field_ndx >= 0:
@@ -314,6 +317,8 @@ class BaseLayer(QgsVectorLayer):
                 value = feat[field_name]
                 if value in translations and translations[value] != "":
                     new_value = translations[value]
+                    if copy_to:
+                        feat[copy_to] = value
                     feat[field_name] = new_value
                     to_change[feat.id()] = get_attributes(feat)
                 elif clean:

@@ -1,6 +1,10 @@
 Registro de cambios
 ===================
 
+**14-06-2023 (2.14.0)**
+* Incluye el nombre de la calle en Catastro junto con la referencia.
+* Salida OSM XML en utf-8.
+
 **13-06-2023 (2.13.1)**
 * Opción para excluir direcciones por nombre de calle (DISEMINADOS)
 

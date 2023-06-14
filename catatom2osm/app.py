@@ -534,7 +534,8 @@ class CatAtom2Osm(object):
     def process_address(self):
         """Fix street names, conflate and move addresses."""
         highway_names = self.get_translations(self.address)
-        ia = self.address.translate_field("TN_text", highway_names)
+        copy_to = "cat_name" if config.show_refs else None
+        ia = self.address.translate_field("TN_text", highway_names, copy_to=copy_to)
         if ia > 0:
             log.debug(_("Deleted %d addresses refused by street name"), ia)
             report.values["ignored_addresses"] = ia

@@ -1,7 +1,11 @@
 Change log
 ==========
 
-**2023-06-13 (2.14.1)**
+**2023-06-14 (2.14.0)**
+* Includes cadastre street names along ref.
+* Output OSM XML in utf-8.
+
+**2023-06-13 (2.13.1)**
 * Option to exclude addresses by street name.
 
 **2023-06-12 (2.13.0)**
