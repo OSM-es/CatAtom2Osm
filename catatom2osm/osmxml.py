@@ -28,6 +28,8 @@ def serialize(outfile, data):
         add_tags(e, node)
     for way in data.ways:
         e = etree.SubElement(root, "way", way.attrs)
+        for nd in way.nodes:
+            etree.SubElement(e, "nd", {"ref": str(nd.id)})
         add_tags(e, way)
     for rel in data.relations:
         e = etree.SubElement(root, "relation", rel.attrs)
