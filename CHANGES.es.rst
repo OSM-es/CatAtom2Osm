@@ -1,6 +1,9 @@
 Registro de cambios
 ===================
 
+**16-06-2023 (2.14.1)**
+* Correción para que nombre de la calle en Catastro salga en address.osm.
+
 **14-06-2023 (2.14.0)**
 * Incluye el nombre de la calle en Catastro junto con la referencia.
 * Salida OSM XML en utf-8.

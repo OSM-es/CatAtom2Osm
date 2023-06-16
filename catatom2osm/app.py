@@ -534,8 +534,7 @@ class CatAtom2Osm(object):
     def process_address(self):
         """Fix street names, conflate and move addresses."""
         highway_names = self.get_translations(self.address)
-        copy_to = "cat_name" if config.show_refs else None
-        ia = self.address.translate_field("TN_text", highway_names, copy_to=copy_to)
+        ia = self.address.translate_field("TN_text", highway_names, copy_to="cat_name")
         if ia > 0:
             log.debug(_("Deleted %d addresses refused by street name"), ia)
             report.values["ignored_addresses"] = ia
@@ -546,14 +545,13 @@ class CatAtom2Osm(object):
         self.address.reproject()
         self.export_layer(self.address, "address_out.geojson")
         self.address_osm = self.address.to_osm()
+        self.write_osm(self.address_osm, "address.osm")
 
     def stop_address(self):
         """Save current processing status and exits."""
         self.export_layer(self.parcel, "parcel.shp", driver_name="ESRI Shapefile")
         self.export_layer(self.building, "building.shp", driver_name="ESRI Shapefile")
         self.address.reproject()
-        address_osm = self.address.to_osm()
-        self.write_osm(address_osm, "address.osm")
         fn = self.cat.get_path("tasks.csv")
         csvtools.dict2csv(fn, self.tasks)
         report.to_file(self.cat.get_path("report.txt"))
@@ -627,7 +625,7 @@ class CatAtom2Osm(object):
             if "ref" in bu.tags:
                 building_index[bu.tags["ref"]].append(bu)
         for ad in address_osm.nodes:
-            if ad.tags["ref"] in building_index:
+            if ad.tags.get("ref", "") in building_index:
                 address_index[ad.tags["ref"]].append(ad)
         md = 0
         for (ref, group) in list(building_index.items()):

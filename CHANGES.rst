@@ -1,6 +1,9 @@
 Change log
 ==========
 
+**2023-06-16 (2.14.1)**
+* Fix catastro street name output in address.osm.
+
 **2023-06-14 (2.14.0)**
 * Includes cadastre street names along ref.
 * Output OSM XML in utf-8.
