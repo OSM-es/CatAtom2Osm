@@ -1,6 +1,10 @@
 Change log
 ==========
 
+**2023-06-29 (2.14.2)**
+* Upgrade certifi to fix catastro SSLCertVerificationError.
+* Upgrade to https urls (currently redirecting).
+
 **2023-06-16 (2.14.1)**
 * Fix catastro street name output in address.osm.
 

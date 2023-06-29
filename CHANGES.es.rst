@@ -1,6 +1,10 @@
 Registro de cambios
 ===================
 
+**29-06-2023 (2.14.2)**
+* Actualiza certifi para corregir catastro SSLCertVerificationError.
+* Actualiza a urls https (actualmente redirige).
+
 **16-06-2023 (2.14.1)**
 * Correción para que nombre de la calle en Catastro salga en address.osm.
 

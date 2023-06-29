@@ -61,9 +61,9 @@ changeset_tags = {
 }
 
 base_url = {
-    "BU": "http://www.catastro.minhap.es/INSPIRE/buildings/",
-    "AD": "http://www.catastro.minhap.es/INSPIRE/addresses/",
-    "CP": "http://www.catastro.minhap.es/INSPIRE/CadastralParcels/",
+    "BU": "https://www.catastro.minhap.es/INSPIRE/buildings/",
+    "AD": "https://www.catastro.minhap.es/INSPIRE/addresses/",
+    "CP": "https://www.catastro.minhap.es/INSPIRE/CadastralParcels/",
 }
 
 serv_url = {
@@ -79,7 +79,7 @@ prov_url = {
 }
 
 cadastre_doc_url = (
-    "http://ovc.catastro.meh.es/OVCServWeb/OVCWcfLibres/OVCFotoFachada.svc/"
+    "https://ovc.catastro.meh.es/OVCServWeb/OVCWcfLibres/OVCFotoFachada.svc/"
     "RecuperarFotoFachadaGet?ReferenciaCatastral={}"
 )
 
@@ -644,8 +644,7 @@ default_config_file = "config.yaml"
 # overpass api servers
 default_osm3s_servers = [
     "https://osm3s.cartobase.es/api/interpreter?",
-    "http://overpass-api.de/api/interpreter?",
-    "http://overpass.osm.rambler.ru/cgi/interpreter?",
+    "https://overpass-api.de/api/interpreter?",
 ]
 
 

@@ -4,3 +4,4 @@ lxml==4.5.0
 psutil==5.8.0
 requests==2.22.0
 tqdm==4.62.3
+certifi==2023.5.7
