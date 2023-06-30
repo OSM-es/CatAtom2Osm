@@ -79,7 +79,7 @@ prov_url = {
 }
 
 cadastre_doc_url = (
-    "https://ovc.catastro.meh.es/OVCServWeb/OVCWcfLibres/OVCFotoFachada.svc/"
+    "http://ovc.catastro.meh.es/OVCServWeb/OVCWcfLibres/OVCFotoFachada.svc/"
     "RecuperarFotoFachadaGet?ReferenciaCatastral={}"
 )
 
