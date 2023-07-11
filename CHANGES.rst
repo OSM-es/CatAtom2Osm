@@ -3,6 +3,7 @@ Change log
 
 **2023-07-11 (2.15.0)**
 * Add option to create municipality limits.
+* Use this file to improve municipality matching.
 
 **2023-06-29 (2.14.2)**
 * Upgrade certifi to fix catastro SSLCertVerificationError.

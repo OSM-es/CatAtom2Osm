@@ -2,6 +2,8 @@ import io
 import json
 import os
 import re
+from osm2geojson import json2shapes
+from shapely.geometry import shape
 
 from lxml import etree
 
@@ -88,13 +90,37 @@ def get_municipality(mun_code):
     return (None, None)
 
 
-def search_municipality(name, bounding_box):
+def search_municipality(cat_path, mun_code, name, bounding_box):
+    fn = os.path.join(cat_path, mun_code + ".geojson")
+    mun = None
+    if os.path.exists(fn):
+        with open(fn) as fo:
+            geojson = json.load(fo)
+        mun = shape(geojson['features'][0]['geometry'])
     if bounding_box is None:
-        return (None, None)
-    query = overpass.Query(bounding_box, "json", False, False)
+        if not s:
+            return (None, None)
+        bounding_box = "{1},{0},{3},{2}".format(*mun.bounds)
+    query = overpass.Query(bounding_box, "json", mun != None, False)
     query.add('rel["admin_level"="8"]')
     try:
         data = json.loads(query.read())
+        shapes = json2shapes(data)
+        if mun:
+            max_area = 0
+            name = ''
+            id = 0
+            matching = None
+            for s in shapes:
+                if s['properties']['tags'].get('admin_level') == '8':
+                    if s['shape'].intersects(mun):
+                        area = s['shape'].intersection(mun).area / s['shape'].area
+                        if area > max_area:
+                            max_area = area
+                            name = s['properties']['tags'].get('name')
+                            id = str(s['properties']['id'])
+            if name and max_area > 0.9:
+               return (id, name)
         matching = hgwnames.dsmatch(
             name, data["elements"], lambda e: e["tags"].get("name", "")
         )

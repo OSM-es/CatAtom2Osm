@@ -3,6 +3,7 @@ Registro de cambios
 
 **11-07-2023 (2.15.0)**
 * Añade opción para generar límites del municipio.
+* Mejora la localización del municipio si existe el archivo anterior.
 
 **29-06-2023 (2.14.2)**
 * Actualiza certifi para corregir catastro SSLCertVerificationError.

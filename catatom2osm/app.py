@@ -398,11 +398,14 @@ class CatAtom2Osm(object):
 
     def get_boundary(self):
         """Get best boundary search area for overpass queries."""
-        id, name = boundary.get_municipality(self.cat.zip_code)
+        id = None
+        fn = self.cat.get_path(self.cat.zip_code + ".geojson")
+        if not os.path.exists(fn):
+            id, name = boundary.get_municipality(self.cat.zip_code)
         if id is None:
             zoning_gml = self.cat.read("cadastralzoning")
             id, name = boundary.search_municipality(
-                self.cat.cat_mun, zoning_gml.bounding_box()
+                self.path, self.cat.zip_code, self.cat.cat_mun, zoning_gml.bounding_box()
             )
         if id is None:
             msg = _("Municipality code '%s' don't exists") % self.cat.zip_code
