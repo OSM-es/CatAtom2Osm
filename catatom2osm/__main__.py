@@ -130,6 +130,12 @@ def run():
         help=argparse.SUPPRESS,
     )
     parser.add_argument(
+        "--municipality",
+        dest="municipality",
+        action="store_true",
+        help=argparse.SUPPRESS,
+    )
+    parser.add_argument(
         "-s",
         "--split",
         dest="split",

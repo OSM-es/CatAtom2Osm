@@ -1,6 +1,9 @@
 Registro de cambios
 ===================
 
+**11-07-2023 (2.15.0)**
+* Añade opción para generar límites del municipio.
+
 **29-06-2023 (2.14.2)**
 * Actualiza certifi para corregir catastro SSLCertVerificationError.
 * Actualiza a urls https (actualmente redirige).

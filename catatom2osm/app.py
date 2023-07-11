@@ -114,6 +114,9 @@ class CatAtom2Osm(object):
 
     def run(self):
         """Launch the app processing."""
+        if self.options.municipality:
+            self.get_municipality()
+            return
         if self.options.comment:
             self.add_comments()
             return
@@ -155,6 +158,20 @@ class CatAtom2Osm(object):
             self.process_tasks(getattr(self, self.source))
         self.output_zoning()
         self.finish()
+
+    def get_municipality(self):
+        """Create municipality <mun_code>.geojson geometry from cadastral zoning."""
+        parcel_gml = self.cat.read("cadastralzoning")
+        municipality = geo.ZoningLayer(baseName="rusticzoning")
+        q = lambda f, kw: municipality.check_zone(f, kw["level"])
+        municipality.append(parcel_gml, query=q, level="P")
+        municipality.clean()
+        municipality.reproject()
+        municipality.merge_adjacents()
+        self.export_layer(
+            municipality, self.cat.zip_code + ".geojson", target_crs_id=4326
+        )
+        return
 
     def add_comments(self):
         """Recover missing task files metadata after JOSM editing."""

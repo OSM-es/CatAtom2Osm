@@ -57,6 +57,7 @@ class TestCatAtom2Osm(unittest.TestCase):
             "comment": False,
             "split": None,
             "args": "33333",
+            "municipality": False,
         }
         self.m_app = mock.MagicMock()
         self.m_app.options = Values(options)
