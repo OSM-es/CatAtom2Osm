@@ -1,6 +1,9 @@
 Change log
 ==========
 
+**2023-07-13 (2.15.1)**
+* Integrates municipality limits creation in the main flow.
+
 **2023-07-11 (2.15.0)**
 * Add option to create municipality limits.
 * Use this file to improve municipality matching.

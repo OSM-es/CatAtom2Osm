@@ -1,6 +1,9 @@
 Registro de cambios
 ===================
 
+**13-07-2023 (2.15.1)**
+* Integra la generación de límites del municipio con el proceso normal.
+
 **11-07-2023 (2.15.0)**
 * Añade opción para generar límites del municipio.
 * Mejora la localización del municipio si existe el archivo anterior.

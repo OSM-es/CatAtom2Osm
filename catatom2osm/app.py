@@ -83,6 +83,9 @@ class CatAtom2Osm(object):
         self.tasks_path = self.cat.get_path(self.tasks_folder)
         if self.options.zoning:
             self.options.address = False
+        self.split = None
+        if self.options.municipality:
+            self.options.split = False
         fn = self.options.split or ""
         bkp_dir = os.path.splitext(os.path.basename(fn))[0]
         self.bkp_path = self.cat.get_path(bkp_dir)
@@ -114,12 +117,11 @@ class CatAtom2Osm(object):
 
     def run(self):
         """Launch the app processing."""
-        if self.options.municipality:
-            self.get_municipality()
-            return
         if self.options.comment:
             self.add_comments()
             return
+        if self.options.municipality:
+            self.get_zoning()
         self.get_boundary()
         self.get_split()
         if self.options.info:
@@ -141,7 +143,8 @@ class CatAtom2Osm(object):
                 log.info(_("Split: '%s'"), self.options.split)
             self.get_parcel()
             self.get_building()
-            self.get_zoning()
+            if not self.options.municipality:
+                self.get_zoning()
             if self.options.zoning:
                 self.export_poly()
             self.process_building()
@@ -159,12 +162,14 @@ class CatAtom2Osm(object):
         self.output_zoning()
         self.finish()
 
-    def get_municipality(self):
+    def export_municipality(self, rustic):
         """Create municipality <mun_code>.geojson geometry from cadastral zoning."""
-        parcel_gml = self.cat.read("cadastralzoning")
-        municipality = geo.ZoningLayer(baseName="rusticzoning")
-        q = lambda f, kw: municipality.check_zone(f, kw["level"])
-        municipality.append(parcel_gml, query=q, level="P")
+        municipality = geo.PolygonLayer(
+            path="MultiPolygon",
+            baseName="rusticzoning",
+            providerLib="memory",
+        )
+        municipality.append(rustic)
         municipality.clean()
         municipality.reproject()
         municipality.merge_adjacents()
@@ -205,7 +210,6 @@ class CatAtom2Osm(object):
 
     def get_split(self):
         """Get boundary file for splitting."""
-        self.split = None
         if self.options.split:
             fn = self.options.split
             if not os.path.exists(fn):
@@ -394,6 +398,8 @@ class CatAtom2Osm(object):
             )
         self.rustic_zoning.append(zoning_gml, query=q, level="P")
         self.urban_zoning.append(zoning_gml, query=q, level="M")
+        if self.options.municipality:
+            self.export_municipality(self.rustic_zoning)
         del zoning_gml
 
     def get_boundary(self):
