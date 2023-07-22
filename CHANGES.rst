@@ -1,6 +1,9 @@
 Change log
 ==========
 
+**2023-07-22 (2.15.2)**
+* Filter nodes to avoid error from 2.15.0
+
 **2023-07-13 (2.15.1)**
 * Integrates municipality limits creation in the main flow.
 

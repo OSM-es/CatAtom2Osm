@@ -2,10 +2,10 @@ import io
 import json
 import os
 import re
-from osm2geojson import json2shapes
-from shapely.geometry import shape
 
 from lxml import etree
+from osm2geojson import json2shapes
+from shapely.geometry import shape
 
 from catatom2osm import config, csvtools, download, hgwnames, osmxml, overpass
 from catatom2osm.exceptions import CatValueError
@@ -96,39 +96,41 @@ def search_municipality(cat_path, mun_code, name, bounding_box):
     if os.path.exists(fn):
         with open(fn) as fo:
             geojson = json.load(fo)
-        mun = shape(geojson['features'][0]['geometry'])
+        mun = shape(geojson["features"][0]["geometry"])
     if bounding_box is None:
-        if not s:
+        if not mun:
             return (None, None)
         bounding_box = "{1},{0},{3},{2}".format(*mun.bounds)
-    query = overpass.Query(bounding_box, "json", mun != None, False)
+    query = overpass.Query(bounding_box, "json", mun is not None, False)
     query.add('rel["admin_level"="8"]')
     try:
         data = json.loads(query.read())
+        print(data)
         shapes = json2shapes(data)
         if mun:
             max_area = 0
-            name = ''
+            name = ""
             id = 0
             matching = None
             for s in shapes:
-                if s['properties']['tags'].get('admin_level') == '8':
-                    if s['shape'].intersects(mun):
-                        area = s['shape'].intersection(mun).area / s['shape'].area
+                if s["properties"]["tags"].get("admin_level") == "8":
+                    if s["shape"].intersects(mun):
+                        area = s["shape"].intersection(mun).area / s["shape"].area
                         if area > max_area:
                             max_area = area
-                            name = s['properties']['tags'].get('name')
-                            id = str(s['properties']['id'])
+                            name = s["properties"]["tags"].get("name")
+                            id = str(s["properties"]["id"])
             if name and max_area > 0.9:
-               return (id, name)
-        matching = hgwnames.dsmatch(
-            name, data["elements"], lambda e: e["tags"].get("name", "")
-        )
+                return (id, name)
+        getter = lambda e: e.get("tags", {}).get("name", "")
+        elements = [e for e in data["elements"] if e["type"] != "node"]
+        matching = hgwnames.dsmatch(name, elements, getter)
     except ConnectionError:
         pass
     if matching:
         id = str(matching["id"])
         name = matching["tags"]["name"]
+        print(id, name)
         return (id, name)
     return (None, None)
 
