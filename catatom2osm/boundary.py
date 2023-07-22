@@ -105,7 +105,6 @@ def search_municipality(cat_path, mun_code, name, bounding_box):
     query.add('rel["admin_level"="8"]')
     try:
         data = json.loads(query.read())
-        print(data)
         shapes = json2shapes(data)
         if mun:
             max_area = 0
