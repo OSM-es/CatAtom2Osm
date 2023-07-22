@@ -129,7 +129,6 @@ def search_municipality(cat_path, mun_code, name, bounding_box):
     if matching:
         id = str(matching["id"])
         name = matching["tags"]["name"]
-        print(id, name)
         return (id, name)
     return (None, None)
 
