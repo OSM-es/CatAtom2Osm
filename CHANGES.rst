@@ -1,8 +1,11 @@
 Change log
 ==========
 
-**2023-07-22 (2.15.2)**
+**2023-07-22 (2.15.3)**
 * Filter nodes to avoid error from 2.15.0
+
+**2023-07-14 (2.15.2)**
+* Fix 2.14.1 no adrresses if show_refs is false
 
 **2023-07-13 (2.15.1)**
 * Integrates municipality limits creation in the main flow.

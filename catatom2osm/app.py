@@ -159,6 +159,7 @@ class CatAtom2Osm(object):
         if not self.options.zoning:
             self.building.reproject()
             self.process_tasks(getattr(self, self.source))
+        self.write_osm(self.address_osm, "address.osm")
         self.output_zoning()
         self.finish()
 
@@ -571,7 +572,6 @@ class CatAtom2Osm(object):
         self.address.reproject()
         self.export_layer(self.address, "address_out.geojson")
         self.address_osm = self.address.to_osm()
-        self.write_osm(self.address_osm, "address.osm")
 
     def stop_address(self):
         """Save current processing status and exits."""

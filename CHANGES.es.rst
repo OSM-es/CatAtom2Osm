@@ -1,8 +1,11 @@
 Registro de cambios
 ===================
 
-**22-07-2023 (2.15.2)**
+**22-07-2023 (2.15.3)**
 * Filtra nodos para evitar errores introducidos en 2.15.0
+
+**14-07-2023 (2.15.2)**
+* Fix 2.14.1 sin direcciones si show_refs es false
 
 **13-07-2023 (2.15.1)**
 * Integra la generación de límites del municipio con el proceso normal.
