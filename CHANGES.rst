@@ -1,6 +1,9 @@
 Change log
 ==========
 
+**2023-07-23 (2.15.4)**
+* Fixs matching municipality name
+
 **2023-07-22 (2.15.3)**
 * Filter nodes to avoid error from 2.15.0
 

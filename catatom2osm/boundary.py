@@ -108,21 +108,32 @@ def search_municipality(cat_path, mun_code, name, bounding_box):
         shapes = json2shapes(data)
         if mun:
             max_area = 0
-            name = ""
+            mname = ""
             id = 0
             matching = None
             for s in shapes:
-                if s["properties"]["tags"].get("admin_level") == "8":
+                if (
+                    s["properties"]["tags"].get("admin_level") == "8"
+                    and "boundary" in s["properties"]["tags"]
+                ):
                     if s["shape"].intersects(mun):
                         area = s["shape"].intersection(mun).area / s["shape"].area
                         if area > max_area:
                             max_area = area
-                            name = s["properties"]["tags"].get("name")
+                            mname = s["properties"]["tags"].get("name")
                             id = str(s["properties"]["id"])
-            if name and max_area > 0.9:
-                return (id, name)
+            if mname and max_area > 0.9:
+                return (id, mname)
         getter = lambda e: e.get("tags", {}).get("name", "")
-        elements = [e for e in data["elements"] if e["type"] != "node"]
+        elements = [
+            e
+            for e in data["elements"]
+            if (
+                e.get("tags", {}).get("admin_level") == "8"
+                and "boundary" in e.get("tags", {})
+                and "name" in e.get("tags", {})
+            )
+        ]
         matching = hgwnames.dsmatch(name, elements, getter)
     except ConnectionError:
         pass

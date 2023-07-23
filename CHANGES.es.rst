@@ -1,6 +1,9 @@
 Registro de cambios
 ===================
 
+**23-07-2023 (2.15.4)**
+* Corrección emparejamiento nombre municipio
+
 **22-07-2023 (2.15.3)**
 * Filtra nodos para evitar errores introducidos en 2.15.0
 
