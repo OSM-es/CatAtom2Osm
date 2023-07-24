@@ -103,6 +103,7 @@ def search_municipality(cat_path, mun_code, name, bounding_box):
         bounding_box = "{1},{0},{3},{2}".format(*mun.bounds)
     query = overpass.Query(bounding_box, "json", mun is not None, False)
     query.add('rel["admin_level"="8"]')
+    print(query.get_url())
     try:
         data = json.loads(query.read())
         shapes = json2shapes(data)
@@ -113,7 +114,8 @@ def search_municipality(cat_path, mun_code, name, bounding_box):
             matching = None
             for s in shapes:
                 if (
-                    s["properties"]["tags"].get("admin_level") == "8"
+                    "tags" in s["properties"]
+                    and s["properties"]["tags"].get("admin_level") == "8"
                     and "boundary" in s["properties"]["tags"]
                 ):
                     if s["shape"].intersects(mun):
