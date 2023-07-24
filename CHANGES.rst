@@ -1,6 +1,9 @@
 Change log
 ==========
 
+**2023-07-24 (2.15.5)**
+* Fixs errors in municipality search
+
 **2023-07-23 (2.15.4)**
 * Fixs matching municipality name
 

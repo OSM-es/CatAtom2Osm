@@ -1,6 +1,9 @@
 Registro de cambios
 ===================
 
+**24-07-2023 (2.15.5)**
+* Corrige errores buscando municipios
+
 **23-07-2023 (2.15.4)**
 * Corrección emparejamiento nombre municipio
 
