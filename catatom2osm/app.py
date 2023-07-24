@@ -172,8 +172,9 @@ class CatAtom2Osm(object):
         )
         municipality.append(rustic)
         municipality.clean()
-        municipality.reproject()
+        municipality.explode_multi_parts()
         municipality.merge_adjacents()
+        municipality.reproject()
         self.export_layer(
             municipality, self.cat.zip_code + ".geojson", target_crs_id=4326
         )
@@ -412,7 +413,10 @@ class CatAtom2Osm(object):
         if id is None:
             zoning_gml = self.cat.read("cadastralzoning")
             id, name = boundary.search_municipality(
-                self.path, self.cat.zip_code, self.cat.cat_mun, zoning_gml.bounding_box()
+                self.path,
+                self.cat.zip_code,
+                self.cat.cat_mun,
+                zoning_gml.bounding_box(),
             )
         if id is None:
             msg = _("Municipality code '%s' don't exists") % self.cat.zip_code

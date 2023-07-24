@@ -1,6 +1,9 @@
 Change log
 ==========
 
+**2023-07-24 (2.15.6)**
+* Fixs error generating municipality limit
+
 **2023-07-24 (2.15.5)**
 * Fixs errors in municipality search
 

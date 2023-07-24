@@ -1,6 +1,9 @@
 Registro de cambios
 ===================
 
+**24-07-2023 (2.15.6)**
+* Corrige error generando límite de municipio
+
 **24-07-2023 (2.15.5)**
 * Corrige errores buscando municipios
 
