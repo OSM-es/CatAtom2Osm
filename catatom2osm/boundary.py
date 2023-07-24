@@ -97,13 +97,9 @@ def search_municipality(cat_path, mun_code, name, bounding_box):
         with open(fn) as fo:
             geojson = json.load(fo)
         mun = shape(geojson["features"][0]["geometry"])
-    if bounding_box is None:
-        if not mun:
-            return (None, None)
-        bounding_box = "{1},{0},{3},{2}".format(*mun.bounds)
+        bounding_box = "{1},{0},{3},{2}".format(*mun.buffer(0.01).bounds)
     query = overpass.Query(bounding_box, "json", mun is not None, False)
     query.add('rel["admin_level"="8"]')
-    print(query.get_url())
     try:
         data = json.loads(query.read())
         shapes = json2shapes(data)
