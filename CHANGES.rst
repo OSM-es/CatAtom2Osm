@@ -1,6 +1,9 @@
 Change log
 ==========
 
+**2023-07-27 (2.15.7)**
+* Fixs encoding error in 29900
+
 **2023-07-24 (2.15.6)**
 * Fixs error generating municipality limit
 

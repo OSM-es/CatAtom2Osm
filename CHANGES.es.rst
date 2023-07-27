@@ -1,6 +1,9 @@
 Registro de cambios
 ===================
 
+**27-07-2023 (2.15.7)**
+* Corrige error codificando 29900
+
 **24-07-2023 (2.15.6)**
 * Corrige error generando límite de municipio
 
