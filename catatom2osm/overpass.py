@@ -92,4 +92,4 @@ class Query(object):
     def read(self):
         """Return query results."""
         response = download.get_response(self.get_url())
-        return response.text.encode('utf-8')
+        return response.content
