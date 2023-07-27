@@ -85,7 +85,7 @@ class TestQuery(unittest.TestCase):
 
     @mock.patch("catatom2osm.overpass.download")
     def test_read(self, m_download):
-        m_download.get_response.return_value.text.encode.return_value = "bar"
+        m_download.get_response.return_value.content = "bar"
         q = Query("1,2,3,4").add("foo")
         out = q.read()
         m_download.get_response.assert_called_once_with(q.get_url())
