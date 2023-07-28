@@ -2,6 +2,7 @@ Registro de cambios
 ===================
 
 **27-07-2023 (2.15.7)**
+* Corrige shapely.errors.GEOSException: TopologyException: Input geom 1 is invalid: Self-intersection en 28022
 * Corrige error codificando 29900
 
 **24-07-2023 (2.15.6)**
