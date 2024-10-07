@@ -159,7 +159,8 @@ class CatAtom2Osm(object):
         if not self.options.zoning:
             self.building.reproject()
             self.process_tasks(getattr(self, self.source))
-        self.write_osm(self.address_osm, "address.osm")
+        if self.options.address:
+            self.write_osm(self.address_osm, "address.osm")
         self.output_zoning()
         self.finish()
 

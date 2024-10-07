@@ -1,6 +1,9 @@
 Registro de cambios
 ===================
 
+**07-10-2024 (2.15.8)**
+* Corrige "AttributeError: 'CatAtom2Osm' object has no attribute 'address_osm'" #117
+
 **27-07-2023 (2.15.7)**
 * Corrige shapely.errors.GEOSException: TopologyException: Input geom 1 is invalid: Self-intersection en 28022
 * Corrige error codificando 29900
