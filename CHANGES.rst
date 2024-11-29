@@ -1,6 +1,9 @@
 Change log
 ==========
 
+**2024-11-29 (2.15.9)**
+* Change catastro domain name #118
+
 **2024-10-07 (2.15.8)**
 * Fixs "AttributeError: 'CatAtom2Osm' object has no attribute 'address_osm'" #117
 

@@ -1,6 +1,9 @@
 Registro de cambios
 ===================
 
+**29-11-2024 (2.15.9)**
+* Cambio dominio catastro #118
+
 **07-10-2024 (2.15.8)**
 * Corrige "AttributeError: 'CatAtom2Osm' object has no attribute 'address_osm'" #117
 
