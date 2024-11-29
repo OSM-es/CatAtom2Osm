@@ -61,9 +61,9 @@ changeset_tags = {
 }
 
 base_url = {
-    "BU": "https://www.catastro.minhap.es/INSPIRE/buildings/",
-    "AD": "https://www.catastro.minhap.es/INSPIRE/addresses/",
-    "CP": "https://www.catastro.minhap.es/INSPIRE/CadastralParcels/",
+    "BU": "https://www.catastro.hacienda.gob.es/INSPIRE/buildings/",
+    "AD": "https://www.catastro.hacienda.gob.es/INSPIRE/addresses/",
+    "CP": "https://www.catastro.hacienda.gob.es/INSPIRE/CadastralParcels/",
 }
 
 serv_url = {
