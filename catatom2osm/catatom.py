@@ -54,6 +54,7 @@ class Reader(object):
 
     def get_metadata(self, md_path, zip_path=""):
         """Get the metadata of the source file."""
+        log.info(_(f'JUSTS 116-1 get_metadata {md_path}'))
         fo = self.get_file_object(md_path, zip_path)
         try:
             text = fo.read()
@@ -96,6 +97,12 @@ class Reader(object):
             msg = _("Municipality code '%s' don't exists") % self.zip_code
             raise CatValueError(msg)
         url = s.group(0)
+
+        # Fix for https://github.com/OSM-es/CatAtom2Osm/issues/120
+        # Some URLs have 2 or 3 spaces, mainly because of diacritics.
+        # https://codefather.tech/blog/python-replace-multiple-spaces-with-one
+        url = re.sub(' +', ' ', url)
+
         filename = url.split("/")[-1]
         out_path = self.get_path(filename)
         log.info(_("Downloading '%s'"), out_path)
