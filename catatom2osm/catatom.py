@@ -54,7 +54,6 @@ class Reader(object):
 
     def get_metadata(self, md_path, zip_path=""):
         """Get the metadata of the source file."""
-        log.info(_(f'JUSTS 116-1 get_metadata {md_path}'))
         fo = self.get_file_object(md_path, zip_path)
         try:
             text = fo.read()
