@@ -1,6 +1,14 @@
 Change log
 ==========
 
+**2026-06-25 (2.16.0)**
+* Fixes fails on (some but not all) municipalities with diacritics in name #120
+* Fixes version retrieval in docker_push
+* Updates the publish flow to prevent forced pushes and adds pre-validation in the publish target
+* Adds the publish-dry-run target for validation
+* Documents the Docker image update
+* Add error handling for XML response in get_municipalities and update imports
+
 **2024-11-29 (2.15.9)**
 * Change catastro domain name #118
 

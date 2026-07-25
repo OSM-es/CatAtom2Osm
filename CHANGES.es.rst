@@ -1,6 +1,14 @@
 Registro de cambios
 ===================
 
+**25-06-2025 (2.16.0)**
+* Corrige fails on (some but not all) municipalities with diacritics in name #120
+* Corrige obtención de versión en docker_push
+* Actualiza el flujo de publicación para evitar push forzado y añadir validaciones previas en el target publish.
+* Añade target publish-dry-run para validación
+* Documenta actualización de imagen docker
+* Agrega manejo de errores para la respuesta XML en get_municipalities y actualiza las importaciones
+
 **29-11-2024 (2.15.9)**
 * Cambio dominio catastro #118
 
