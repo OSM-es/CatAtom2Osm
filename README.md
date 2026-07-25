@@ -17,6 +17,31 @@ Install
 
 See INSTALL.md (https://OSM-es.github.io/CatAtom2Osm/en/install.html).
 
+Update Docker image
+-------------------
+
+Procedure to publish a new version to Docker Hub
+(https://hub.docker.com/r/egofer/catatom2osm):
+
+1. Update the version in `catatom2osm/__init__.py`.
+2. Update `CHANGES.es.rst` and `CHANGES.rst`.
+3. Build and test the image:
+
+   make build-dev
+   make dtest
+   make build
+
+4. Sign in to Docker Hub:
+
+   docker login
+
+5. Tag and push `latest` and the version:
+
+   make publish-dry-run
+   make publish
+
+`make publish-dry-run` validates the flow and prints publish commands without creating tags or pushing.
+
 
 Usage
 -----
