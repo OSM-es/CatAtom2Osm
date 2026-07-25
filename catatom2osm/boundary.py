@@ -8,7 +8,7 @@ from osm2geojson import json2shapes
 from shapely.geometry import shape
 
 from catatom2osm import config, csvtools, download, hgwnames, osmxml, overpass
-from catatom2osm.exceptions import CatValueError
+from catatom2osm.exceptions import CatIOError, CatValueError
 
 
 def list_code(code):
@@ -145,7 +145,11 @@ def search_municipality(cat_path, mun_code, name, bounding_box):
 def get_municipalities(prov_code):
     url = config.prov_url["BU"].format(code=prov_code)
     response = download.get_response(url)
-    root = etree.fromstring(response.content)
+    try:
+        root = etree.fromstring(response.content)
+    except etree.XMLSyntaxError as e:
+        msg = _("Invalid XML response while reading municipalities for province '%s'")
+        raise CatIOError(msg % prov_code) from e
     ns = {"atom": "http://www.w3.org/2005/Atom"}
     municipios = []
     for entry in root.findall("atom:entry", namespaces=ns):
@@ -156,10 +160,10 @@ def get_municipalities(prov_code):
 
 
 def list_municipalities(prov_code):
-    municipalities = get_municipalities(prov_code)
     if prov_code not in config.prov_codes.keys():
         msg = _("Province code '%s' is not valid") % prov_code
         raise CatValueError(msg)
+    municipalities = get_municipalities(prov_code)
     office = config.prov_codes[prov_code]
     title = _("Territorial office %s - %s") % (prov_code, office)
     print(title)
