@@ -121,11 +121,27 @@ dtest:  ## Run tests in docker dev image and exit
 .PHONY: publish
 publish: build dtest  ## Push last version to GitHub and Docker Hub
 	@echo $(VERSION)
-	@echo "Pulsa una tecla para continuar"
-	@read
-	@git tag -f -a v$(VERSION) -m "Version $(VERSION)"
-	@git push -f origin master v$(VERSION)
+	@git diff --quiet || (echo "ERROR: Working tree has uncommitted changes" && exit 1)
+	@git diff --cached --quiet || (echo "ERROR: Index has staged but uncommitted changes" && exit 1)
+	@git rev-parse --verify --quiet v$(VERSION) && (echo "ERROR: Tag v$(VERSION) already exists" && exit 1) || true
+	@git tag -a v$(VERSION) -m "Version $(VERSION)"
+	@git push origin master
+	@git push origin v$(VERSION)
 	@docker tag catatom2osm:latest egofer/catatom2osm:latest
 	@docker tag catatom2osm:latest egofer/catatom2osm:$(VERSION)
 	@docker push egofer/catatom2osm
 	@docker push egofer/catatom2osm:$(VERSION)
+
+.PHONY: publish-dry-run
+publish-dry-run: build dtest  ## Validate and print publish steps without changing remote state
+	@echo "Dry run for version $(VERSION)"
+	@git diff --quiet || (echo "ERROR: Working tree has uncommitted changes" && exit 1)
+	@git diff --cached --quiet || (echo "ERROR: Index has staged but uncommitted changes" && exit 1)
+	@git rev-parse --verify --quiet v$(VERSION) && (echo "ERROR: Tag v$(VERSION) already exists" && exit 1) || true
+	@echo "[DRY-RUN] git tag -a v$(VERSION) -m \"Version $(VERSION)\""
+	@echo "[DRY-RUN] git push origin master"
+	@echo "[DRY-RUN] git push origin v$(VERSION)"
+	@echo "[DRY-RUN] docker tag catatom2osm:latest egofer/catatom2osm:latest"
+	@echo "[DRY-RUN] docker tag catatom2osm:latest egofer/catatom2osm:$(VERSION)"
+	@echo "[DRY-RUN] docker push egofer/catatom2osm"
+	@echo "[DRY-RUN] docker push egofer/catatom2osm:$(VERSION)"
