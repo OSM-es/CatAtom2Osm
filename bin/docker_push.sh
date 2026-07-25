@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -ex
 
-VERSION=$(grep "app_version =" setup.py | cut -d"=" -f2 | tr -d " \"'")
+VERSION=$(python3 -c "import catatom2osm; print(catatom2osm.__version__)")
 
 # https://github.com/docker/docker-credential-helpers/issues/102
 # This code avoids unencrypted password warning, but user validation don't works
