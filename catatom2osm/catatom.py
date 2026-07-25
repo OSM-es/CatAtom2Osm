@@ -96,6 +96,12 @@ class Reader(object):
             msg = _("Municipality code '%s' don't exists") % self.zip_code
             raise CatValueError(msg)
         url = s.group(0)
+
+        # Fix for https://github.com/OSM-es/CatAtom2Osm/issues/120
+        # Some URLs have 2 or 3 spaces, mainly because of diacritics.
+        # https://codefather.tech/blog/python-replace-multiple-spaces-with-one
+        url = re.sub(' +', ' ', url)
+
         filename = url.split("/")[-1]
         out_path = self.get_path(filename)
         log.info(_("Downloading '%s'"), out_path)
