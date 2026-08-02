@@ -11,6 +11,7 @@ from catatom2osm import boundary, config
 from catatom2osm.app import CatAtom2Osm, QgsSingleton
 from catatom2osm.catatom import Reader
 from catatom2osm.exceptions import CatException
+from catatom2osm.municipalities import generate_municipalities
 
 log = config.setup_logger()
 
@@ -43,7 +44,9 @@ examples = _(
     List OSM administrative boundaries available in Madrid
   catatom2osm -s Atocha 28900
     Downloads administrative boundary of Atocha neighborhood in Madrid and
-    process it."""
+    process it.
+  catatom2osm -x new-municipalities.csv
+    Generates a new municipalities.csv from CAT AD and IGN AU data in the default output directory."""
 )
 
 
@@ -197,6 +200,13 @@ def run():
         action="store_true",
         help=_("Output a sample config file with the default user configuration"),
     )
+    parser.add_argument(
+        "-x",
+        "--gen-munis",
+        dest="generate_municipalities",
+        action="store_true",
+        help=_("Output a new CSV municipalities file from CAT AD and IGN AU Province info; PATHS is optional output filename."),
+    )
     # Reserved -p --push, -u --urban, -r --rustic
     options = parser.parse_args()
     options.args = " ".join(sys.argv[1:])
@@ -207,6 +217,9 @@ def run():
         options.building = True
     if options.generate_config:
         config.generate_default_user_config()
+    elif options.generate_municipalities:
+        generate_municipalities(options.path)
+
     elif options.split and len(options.path) > 1:
         log.error(_("Can't use split file with multiple municipalities"))
     elif len(options.path) == 0 and not options.list and not options.generate_config:
