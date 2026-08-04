@@ -26,7 +26,8 @@ SPECIAL_URLS = [
     'https://filescartografia.navarra.es/2_CARTOGRAFIA_TEMATICA/2_7_CATASTRO/2_7_3_INSPIRE_ATOM/2_7_3_3_AD/Addresses_ServiceATOM_Navarra.xml']
 CAT_AD_CSV = f'{HOME_DIR}/municipalities-cat-ad.csv'
 IGN_AU_CSV = f'{HOME_DIR}/municipalities-ign-au.csv'
-MUN_CSV = f'{HOME_DIR}/municipalities-new.csv'
+MUN_CSV = f'{HOME_DIR}/municipalities.csv'
+MUN_OLD_CSV = f'{HOME_DIR}/municipalities-old.csv'
 IGN_AU_GML_ZIP = f'{HOME_DIR}/lineas_limite_gml.zip'
 IGN_AU4_GML_FILE = 'au_AdministrativeUnit_4thOrder0.gml'
 MISSING_AU = [['55', '55101', 'Ceuta'], ['56', '56101', 'Melilla']]
@@ -36,6 +37,15 @@ MATCH_THR = 60
 
 def normalize(text):
     return re.sub(r" *\(.*\)", "", (text or "").lower().strip())
+
+
+def clean(text):
+    """
+    Clean excess spaces and begin+end whitespace.
+    :param text:
+    :return:
+    """
+    return re.sub(' +', ' ', text).lstrip().rstrip()
 
 
 def match(name, choices):
@@ -113,6 +123,13 @@ def generate_mun_csv(path):
             # Append the municipality CAT-name
             cat_ad_dict[prov_num][cat_mun_num].append(row[2])
 
+    # Collect the old version for the second column to preserve...
+    mun_old_dict = {}
+    with open(MUN_OLD_CSV) as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter=config.delimiter)
+        for row in csv_reader:
+            mun_old_dict[row[0]] = row[1]
+
     # Go through each of the Provinces and match all CAT with IGN AU municipalities.
     dest_csv = MUN_CSV
     if path is not None:
@@ -126,8 +143,13 @@ def generate_mun_csv(path):
             cat_muns = cat_ad_dict[prov_num]
             for cat_mun_code in cat_muns:
                 for cat_mun_name in cat_muns[cat_mun_code]:
-                    mun_name = match(cat_mun_name, ign_au_dict[prov_num])
-                    f.write(f'{cat_mun_code}{config.delimiter}{cat_mun_name}{config.delimiter}{mun_name}\n'.encode('utf-8'))
+                    cat_mun_name = clean(cat_mun_name)
+                    cat_mun_code = clean(cat_mun_code)
+                    mun_name = clean(match(cat_mun_name, ign_au_dict[prov_num]))
+
+                    # Try to get the original col2 number to keep new CSV largely same
+                    mun_old_col2 = mun_old_dict.get(cat_mun_code, '123456')
+                    f.write(f'{cat_mun_code}{config.delimiter}{mun_old_col2}{config.delimiter}{mun_name}\n'.encode('utf-8'))
 
     log.info(f'generate_mun_csv: DONE')
 
@@ -199,14 +221,15 @@ def create_cat_ad_csv():
             if prov_url not in SPECIAL_URLS:
                 xml = requests.get(prov_url)
                 root = etree.fromstring(xml.text.encode('utf8'))
-                mun_url_elms = root.xpath('/atom:feed//atom:entry/atom:title', namespaces={'atom': 'http://www.w3.org/2005/Atom'})
-
+                mun_url_elms = sorted(root.xpath('/atom:feed//atom:entry/atom:title', namespaces={'atom': 'http://www.w3.org/2005/Atom'}), key=lambda mun: mun.text)
+                # sorted(student_tuples, key=lambda student: student[2])
                 for mun_url_elm in mun_url_elms:
                     mun_entry = mun_url_elm.text
                     mun_entry = mun_entry[:-len(' addresses')] + '\n'
                     mun_entry = mun_entry.split('-')
                     prov_num = mun_entry[0].strip(' ')[:2]
                     f.write(f'{prov_num}{config.delimiter}{mun_entry[0]}{config.delimiter}{mun_entry[1]}'.encode('ISO-8859-1'))
+
     log.info(f'create_cat_ad_csv: DONE')
 
 

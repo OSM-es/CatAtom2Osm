@@ -7,7 +7,7 @@
 02008	346326	Alcaraz
 02009	346325	Almansa
 02010	342129	Alpera
-02011	342130	Ayna
+02011	342130	Aýna
 02012	342131	Balazote
 02013	342132	Balsa de Ves
 02014	346033	El Ballestero
@@ -25,11 +25,11 @@
 02026	346058	Cenizate
 02027	346057	Corral-Rubio
 02028	346064	Cotillas
-02029	342129	Chinchilla de Monte-Aragón
+02029	342129	Alpera
 02030	341798	Elche de la Sierra
 02031	341799	Férez
 02032	341796	Fuensanta
-02033	341797	FUENTE ALAMO
+02033	341797	Fuente-Álamo
 02034	341794	Fuentealbilla
 02035	342424	La Gineta
 02036	341792	Golosalvo
@@ -91,9 +91,9 @@
 03004	347416	Aigües
 03005	347417	Albatera
 03006	347418	Alcalalí
-03007	341981	ALCOCER DE PLANES
+03007	341981	Muro de Alcoy
 03008	347423	Alcoleja
-03009	347424	Alcoi/Alcoy
+03009	347424	Alcoi / Alcoy
 03010	340552	Alfafara
 03011	345031	l'Alfàs del Pi
 03012	342785	Algorfa
@@ -125,7 +125,7 @@
 03039	347656	Benimassot
 03040	345267	Benimeli
 03041	345268	Benissa
-03042	345269	el Poble Nou de Benitatxell/Benitachell
+03042	345269	el Poble Nou de Benitatxell / Benitachell
 03043	345272	Biar
 03044	344417	Bigastro
 03045	345282	Bolulla
@@ -134,7 +134,7 @@
 03048	347946	Callosa d'en Sarrià
 03049	347947	Callosa de Segura
 03050	340030	el Campello
-03051	344405	el Camp de Mirra/Campo de Mirra
+03051	344405	el Camp de Mirra / Campo de Mirra
 03052	343409	Cañada
 03053	344404	Castalla
 03054	344403	Castell de Castells
@@ -148,7 +148,7 @@
 03062	347677	Daya Vieja
 03063	347678	Dénia
 03064	347683	Dolores
-03065	347684	Elx/Elche
+03065	347684	Elx / Elche
 03066	347681	Elda
 03067	347682	Fageca
 03068	347685	Famorca
@@ -160,18 +160,18 @@
 03074	343122	Granja de Rocamora
 03075	343121	el Castell de Guadalest
 03076	343124	Guardamar del Segura
-03077	343123	el Fondó de les Neus/Hondón de las Nieves
+03077	343123	el Fondó de les Neus / Hondón de las Nieves
 03078	343126	Hondón de los Frailes
 03079	343125	Ibi
 03080	346029	Jacarilla
 03081	346030	Xaló
-03082	346031	Xàbia/Jávea
-03083	346032	Xixona/Jijona
-03084	346026	l'Orxa/Lorcha
+03082	346031	Xàbia / Jávea
+03083	346032	Xixona / Jijona
+03084	346026	l'Orxa / Lorcha
 03085	346027	Llíber
 03086	346028	Millena
 03088	346024	Monforte del Cid
-03089	346025	Monòver/Monóvar
+03089	346025	Monòver / Monóvar
 03090	341447	Mutxamel
 03091	341446	Murla
 03092	341981	Muro de Alcoy
@@ -187,7 +187,7 @@
 03102	345292	Pego
 03103	345291	Penàguila
 03104	345286	Petrer
-03105	345285	el Pinós/Pinoso
+03105	345285	el Pinós / Pinoso
 03106	345288	Planes
 03107	345287	Polop
 03109	345283	Rafal
@@ -203,7 +203,7 @@
 03119	340928	Sant Joan d'Alacant
 03120	345600	San Miguel de Salinas
 03121	345599	Santa Pola
-03122	345598	Sant Vicent del Raspeig/San Vicente del Raspeig
+03122	345598	Sant Vicent del Raspeig / San Vicente del Raspeig
 03123	345597	Sax
 03124	345603	Sella
 03125	345602	Senija
@@ -213,23 +213,23 @@
 03129	345594	Tibi
 03130	341234	Tollos
 03131	341235	Tormos
-03132	341236	la Torre de les Maçanes/Torremanzanas
+03132	341236	la Torre de les Maçanes / Torremanzanas
 03133	341237	Torrevieja
 03134	341230	la Vall d'Alcalà
 03135	341231	la Vall d'Ebo
 03136	341232	la Vall de Gallinera
 03137	341233	la Vall de Laguar
 03138	341240	el Verger
-03139	341241	la Vila Joiosa/Villajoyosa
+03139	341241	la Vila Joiosa / Villajoyosa
 03140	345862	Villena
 03141	340369	Los Montesinos
 03142	344926	Pilar de la Horadada
 03143	340365	San Isidro
-03900	342792	Alacant/Alicante
+03900	342792	Alacant / Alicante
 04001	343249	Abla
 04002	343251	Abrucena
 04003	343250	Adra
-04004	343253	Albanchez
+04004	343253	Albánchez
 04005	343252	Alboloduy
 04006	343255	Albox
 04007	343254	Alcolea
@@ -274,11 +274,11 @@
 04050	347262	Gérgal
 04051	347263	Huécija
 04052	347260	Huércal de Almería
-04053	346913	Huércal-Overa
+04053	346913	Lorca
 04054	347258	Íllar
 04055	347259	Instinción
 04056	347256	Laroya
-04057	347257	Laujar de Andarax
+04057	347257	Láujar de Andarax
 04058	347264	Líjar
 04059	347265	Lubrín
 04060	342927	Lucainena de las Torres
@@ -388,11 +388,11 @@
 05069	343851	Donjimeno
 05070	348038	Donvidas
 05072	348036	Espinosa de los Caballeros
-05073	345860	Villaflor
+05073	345860	Flores de Ávila
 05074	348042	Fontiveros
 05075	348041	Fresnedilla
 05076	348040	El Fresno
-05077	348039	Fuente el Saúz
+05077	348039	Fuente el Sauz
 05078	348032	Fuentes de Año
 05079	348031	Gallegos de Altamiros
 05080	342861	Gallegos de Sobrinos
@@ -431,7 +431,7 @@
 05116	346575	Malpartida de Corneja
 05117	346576	Mamblas
 05118	346580	Mancera de Arriba
-05119	342861	Manjabálago y Ortigosa de Rioalmar
+05119	342861	Gallegos de Sobrinos
 05120	341725	Marlín
 05121	341724	Martiherrero
 05122	341728	Martínez
@@ -494,7 +494,7 @@
 05182	340665	Pedro Bernardo
 05183	339795	Pedro-Rodríguez
 05184	340671	Peguerinos
-05185	340670	Nava de Arévalo
+05185	340670	Peñalba de Ávila
 05186	340669	Piedrahíta
 05187	340668	Piedralaves
 05188	340674	Poveda
@@ -542,7 +542,7 @@
 05233	344023	Serranillos
 05234	344026	Sigeres
 05235	344025	Sinlabajos
-05236	344028	Mancera de Arriba
+05236	344028	Solana de Ávila
 05237	344027	Solana de Rioalmar
 05238	344020	Solosancho
 05239	344019	Sotalbo
@@ -575,7 +575,7 @@
 05270	348955	Santa María del Cubillo
 05272	348954	Diego del Carpio
 05273	348958	Santiago del Tormes
-05274	348957	Villanueva del Campillo
+05274	348957	Villanueva de Ávila
 05900	348905	Ávila
 06001	346531	Acedera
 06002	346530	Aceuchal
@@ -618,7 +618,7 @@
 06040	345928	Corte de Peleas
 06041	345927	Cristina
 06042	345926	Cheles
-06043	345925	DON ALVARO
+06043	345925	Don Álvaro
 06044	345932	Don Benito
 06045	345931	Entrín Bajo
 06046	345930	Esparragalejo
@@ -670,7 +670,7 @@
 06092	345586	Nogales
 06093	345588	Oliva de la Frontera
 06094	346542	Oliva de Mérida
-06095	345593	Olivenza
+06095	345593	Olivenza / Olivença
 06096	345596	Orellana de la Sierra
 06097	343591	Orellana la Vieja
 06098	343581	Palomas
@@ -756,14 +756,14 @@
 07012	342920	Campanet
 07013	342919	Campos
 07014	342918	Capdepera
-07015	1809104	Ciutadella de Menorca
+07015	1809104	Ciutadella
 07016	342917	Consell
 07017	342916	Costitx
 07018	342915	Deià
 07019	342914	Escorca
 07020	347247	Esporles
 07021	347248	Estellencs
-07022	347246	Felanitx
+07022	347246	Felanich
 07023	1809111	Ferreries
 07024	2181768	Formentera
 07025	347251	Fornalutx
@@ -773,19 +773,19 @@
 07029	347253	Lloseta
 07030	342598	Llubí
 07031	342597	Llucmajor
-07032	1809102	MAO MAHON
+07032	1809102	Maó
 07033	342599	Manacor
 07034	342601	Mancor de la Vall
 07035	342600	Maria de la Salut
 07036	342602	Marratxí
-07037	1809115	Es Mercadal
+07037	1809115	es Mercadal
 07038	342605	Montuïri
 07039	342603	Muro
 07040	341321	Palma
 07041	342890	Petra
 07042	347644	Pollença
 07043	347645	Porreres
-07044	347624	Sa Pobla
+07044	347624	sa Pobla
 07045	347625	Puigpunyent
 07046	346793	Sant Antoni de Portmany
 07047	347634	Sencelles
@@ -808,12 +808,12 @@
 07064	1809108	es Castell
 07065	345708	Vilafranca de Bonany
 07066	342934	Ariany
-07067	1809101	Es Migjorn Gran
+07067	1809101	es Migjorn Gran
 08001	343408	Abrera
 08002	344406	Aguilar de Segarra
 08003	343410	Alella
 08004	343401	Alpens
-08005	343400	L'Ametlla del Vallès
+08005	343400	l'Ametlla del Vallès
 08006	343407	Arenys de Mar
 08007	343406	Arenys de Munt
 08008	343397	Argençola
@@ -832,9 +832,9 @@
 08022	343713	Berga
 08023	343712	Bigues i Riells del Fai
 08024	343719	Borredà
-08025	343718	El Bruc
+08025	343718	el Bruc
 08026	343717	el Brull
-08027	343716	Les Cabanyes
+08027	343716	les Cabanyes
 08028	343711	Cabrera d'Anoia
 08029	343710	Cabrera de Mar
 08030	348824	Cabrils
@@ -885,33 +885,33 @@
 08075	339971	Esparreguera
 08076	339972	Esplugues de Llobregat
 08077	339963	l'Espunyola
-08078	339964	L'Estany
+08078	339964	l'Estany
 08079	342069	Fígols
 08080	342068	Fogars de Montclús
 08081	342071	Fogars de la Selva
 08082	342070	Folgueroles
 08083	342065	Fonollosa
 08084	342064	Font-rubí
-08085	342067	Les Franqueses del Vallès
+08085	342067	les Franqueses del Vallès
 08086	342066	Gallifa
-08087	342073	La Garriga
+08087	342073	la Garriga
 08088	342072	Gavà
 08089	346614	Gaià
 08090	346615	Gelida
 08091	346612	Gironella
 08092	346613	Gisclareny
-08093	346610	La Granada
+08093	346610	la Granada
 08094	346611	Granera
 08095	346608	Granollers
 08096	346609	Gualba
 08097	346616	Sant Salvador de Guardiola
 08098	346617	Guardiola de Berguedà
 08099	345400	Gurb
-08100	345401	L'Hospitalet de Llobregat
+08100	345401	l'Hospitalet de Llobregat
 08101	345402	Igualada
 08102	347911	Jorba
-08103	345396	La Llacuna
-08104	345397	La Llagosta
+08103	345396	la Llacuna
+08104	345397	la Llagosta
 08105	345398	Llinars del Vallès
 08106	347892	Lliçà d'Amunt
 08107	345405	Lliçà de Vall
@@ -922,9 +922,9 @@
 08112	346721	Manresa
 08113	346746	Martorell
 08114	340908	Martorelles
-08115	340697	Les Masies de Roda
-08116	340696	Les Masies de Voltregà
-08117	340689	El Masnou
+08115	340697	les Masies de Roda
+08116	340696	les Masies de Voltregà
+08117	340689	el Masnou
 08118	340791	Masquefa
 08119	345823	Matadepera
 08120	345587	Mataró
@@ -940,7 +940,7 @@
 08130	340379	Montesquiu
 08131	340382	Montmajor
 08132	340381	Montmaneu
-08133	344956	Figaró-Montmany
+08133	344956	el Figueró i Montmany
 08134	340375	Montmeló
 08135	344964	Montornès del Vallès
 08136	340377	Montseny
@@ -948,7 +948,7 @@
 08138	340373	Mura
 08139	345999	Navarcles
 08140	346000	Navàs
-08141	345415	La Nou de Berguedà
+08141	345415	la Nou de Berguedà
 08142	345423	Òdena
 08143	346003	Olvan
 08144	346004	Olèrdola
@@ -956,7 +956,7 @@
 08146	342826	Olesa de Montserrat
 08147	345996	Olivella
 08148	345997	Olost
-08149	341803	Oristà
+08149	341803	Orís
 08150	341802	Oristà
 08151	341418	Orpí
 08152	341417	Òrrius
@@ -964,19 +964,19 @@
 08154	341791	Palafolls
 08155	341789	Palau-solità i Plegamans
 08156	341413	Pallejà
-08157	341787	El Papiol
+08157	341787	el Papiol
 08158	341410	Parets del Vallès
 08159	345698	Perafita
 08160	345699	Piera
-08161	345695	Els Hostalets de Pierola
+08161	345695	els Hostalets de Pierola
 08162	345696	Pineda de Mar
-08163	345702	El Pla del Penedès
-08164	340843	La Pobla de Claramunt
-08165	345694	La Pobla de Lillet
+08163	345702	el Pla del Penedès
+08164	340843	la Pobla de Claramunt
+08165	345694	la Pobla de Lillet
 08166	345701	Polinyà
 08167	340848	Pontons
-08168	345761	El Prat de Llobregat
-08169	341047	Els Prats de Rei
+08168	345761	el Prat de Llobregat
+08169	341047	els Prats de Rei
 08170	341046	Prats de Lluçanès
 08171	341049	Premià de Mar
 08173	341051	Puigdàlber
@@ -986,10 +986,10 @@
 08177	339862	Rajadell
 08178	341486	Rellinars
 08179	344203	Ripollet
-08180	344204	La Roca del Vallès
-08181	344205	El Pont de Vilomara i Rocafort
+08180	344204	la Roca del Vallès
+08181	344205	el Pont de Vilomara i Rocafort
 08182	344206	Roda de Ter
-08183	344200	Rubió
+08183	344200	Rubí
 08184	344201	Rubió
 08185	342961	Rupit i Pruit
 08186	344202	Sabadell
@@ -1060,7 +1060,7 @@
 08251	339493	Santa Margarida i els Monjos
 08252	341730	Barberà del Vallès
 08253	341733	Santa Maria de Besora
-08254	339488	L'Esquirol
+08254	339488	l'Esquirol
 08255	339489	Santa Maria de Merlès
 08256	339490	Santa Maria de Martorelles
 08257	342590	Santa Maria de Miralles
@@ -1092,7 +1092,7 @@
 08283	343670	Tona
 08284	343669	Tordera
 08285	343668	Torelló
-08286	343659	La Torre de Claramunt
+08286	343659	la Torre de Claramunt
 08287	346131	Torrelavit
 08288	346101	Torrelles de Foix
 08289	346099	Torrelles de Llobregat
@@ -1118,7 +1118,7 @@
 08310	341774	Vilanova del Vallès
 08311	341775	Sant Julià de Cerdanyola
 08312	342959	Badia del Vallès
-08313	342960	La Palma de Cervelló
+08313	342960	la Palma de Cervelló
 08900	347950	Barcelona
 09001	346142	Abajas
 09003	346141	Adrada de Haza
@@ -1134,7 +1134,7 @@
 09017	343545	Anguix
 09018	343553	Aranda de Duero
 09019	343552	Arandilla
-09020	348924	Arauzo de Miel
+09020	348924	Araúzo de Miel
 09021	348925	Arauzo de Salce
 09022	348926	Arauzo de Torre
 09023	348927	Arcos
@@ -1318,7 +1318,7 @@
 09261	345055	Pardilla
 09263	345054	Partido de la Sierra en Tobalina
 09264	345053	Pedrosa de Duero
-09265	345052	Pedrosa de Duero
+09265	345052	Pedrosa del Páramo
 09266	345051	Pedrosa del Príncipe
 09267	345050	Pedrosa de Río Úrbel
 09269	340366	Peñaranda de Duero
@@ -1506,7 +1506,7 @@
 10013	347648	La Aldea del Obispo
 10014	347655	Aldeanueva de la Vera
 10015	1863566	Aldeanueva del Camino
-10016	347653	Aldehuela del Jerte
+10016	347653	Aldehuela de Jerte
 10017	1864210	Alía
 10018	1900002	Aliseda
 10019	347646	Almaraz
@@ -1538,7 +1538,7 @@
 10047	1898686	Carbajo
 10048	340002	Carcaboso
 10049	1864201	Carrascalejo
-10050	1909133	Casas del Castañar
+10050	1909133	Casar de Cáceres
 10051	348187	Casar de Palomero
 10052	1866453	Casares de las Hurdes
 10053	1864692	Casas de Don Antonio
@@ -1569,7 +1569,7 @@
 10079	1863693	La Garganta
 10080	347909	Garganta la Olla
 10081	342058	Gargantilla
-10082	342059	Gargüera
+10082	342059	Gargüera de la Vera
 10083	342060	Garrovillas de Alconétar
 10084	1865475	Garvín
 10085	1871087	Gata
@@ -1585,7 +1585,7 @@
 10097	1898727	Herrera de Alcántara
 10098	1899915	Herreruela
 10099	1863735	Hervás
-10100	346288	Holguera
+10100	346288	Higuera de Albalat
 10101	346293	Hinojal
 10102	346292	Holguera
 10103	1874916	Hoyos
@@ -1776,10 +1776,10 @@
 12025	344581	Benafigos
 12026	342698	Benassal
 12027	344583	Benicarló
-12028	344591	Benicàssim/Benicasim
+12028	344591	Benicàssim / Benicasim
 12029	342712	Benlloc
 12031	339851	Borriol
-12032	339850	Borriana/Burriana
+12032	339850	Borriana / Burriana
 12033	339849	Cabanes
 12034	339854	Càlig
 12036	341745	Canet lo Roig
@@ -1797,8 +1797,8 @@
 12050	340175	les Coves de Vinromà
 12051	340174	Culla
 12052	340177	Xert
-12053	340176	Chilches/Xilxes
-12055	340178	Xodos/Chodos
+12053	340176	Xilxes / Chilches
+12055	340178	Xodos / Chodos
 12056	340180	Chóvar
 12057	340179	Eslida
 12058	340182	Espadilla
@@ -1813,10 +1813,10 @@
 12069	346297	Higueras
 12070	340492	la Jana
 12071	340491	Jérica
-12072	342939	Llucena/Lucena del Cid
+12072	342939	Llucena / Lucena del Cid
 12073	340489	Ludiente
 12074	340488	la Llosa
-12075	347362	la Mata de Morella
+12075	347362	Portell de Morella
 12076	340486	Matet
 12077	340485	Moncofa
 12078	345447	Montán
@@ -1826,10 +1826,10 @@
 12082	343023	Nules
 12083	343026	Olocau del Rey
 12084	343021	Onda
-12085	343022	Orpesa/Oropesa del Mar
+12085	343022	Orpesa / Oropesa del Mar
 12087	343020	Palanques
 12088	343062	Pavías
-12089	343063	Peníscola/Peñíscola
+12089	343063	Peníscola / Peñíscola
 12090	347363	Pina de Montalgrao
 12091	347362	Portell de Morella
 12092	341211	Puebla de Arenoso
@@ -1839,7 +1839,7 @@
 12096	347361	Rossell
 12097	347360	Sacañet
 12098	345773	la Salzadella
-12099	341224	Sant Jordi/San Jorge
+12099	341224	Sant Jordi / San Jorge
 12100	342169	Sant Mateu
 12101	342168	San Rafael del Río
 12102	342167	Santa Magdalena de Pulpis
@@ -1848,7 +1848,7 @@
 12105	342164	Sierra Engarcerán
 12106	342163	Soneja
 12107	342162	Sot de Ferrer
-12108	342171	Suera/Sueras
+12108	342171	Suera / Sueras
 12109	342170	Tales
 12110	346709	Teresa
 12111	346710	Tírig
@@ -1862,14 +1862,14 @@
 12119	346719	la Torre d'en Besora
 12120	341846	la Torre d'en Doménec
 12121	341845	Traiguera
-12122	341848	les Useres/Useras
+12122	341848	les Useres / Useras
 12123	341847	Vallat
 12124	341850	Vall d'Alba
 12125	341849	Vall de Almonacid
 12126	341852	la Vall d'Uixó
 12127	341851	Vallibona
 12128	341843	Vilafamés
-12129	341841	Vilafranca/Villafranca del Cid
+12129	341841	Vilafranca / Villafranca del Cid
 12130	346369	Villahermosa del Río
 12131	346370	Villamalur
 12132	346367	Vilanova d'Alcolea
@@ -1883,9 +1883,9 @@
 12140	341560	Viver
 12141	341559	Zorita del Maestrazgo
 12142	341558	Zucaina
-12143	346901	les Alqueries/Alquerías del Niño Perdido
+12143	346901	les Alqueries / Alquerías del Niño Perdido
 12144	346900	Sant Joan de Moró
-12900	344858	Castillo de Villamalefa
+12900	344858	Castelló de la Plana
 13001	343422	Abenójar
 13002	343424	Agudo
 13003	343423	Alamillo
@@ -2126,7 +2126,7 @@
 15061	341665	Oroso
 15062	341664	Ortigueira
 15063	341667	Outes
-15064	8521274	OZA DOS RIOS
+15064	8521274	Oza-Cesuras
 15065	341661	Paderne
 15066	341660	Padrón
 15067	341663	O Pino
@@ -2179,7 +2179,7 @@
 16018	344436	Almonacid del Marquesado
 16019	344435	Altarejos
 16020	340311	Arandilla del Arroyo
-16021	344458	Arcas
+16021	344458	Las Valeras
 16022	340314	Chillarón de Cuenca
 16023	340313	Arcos de la Sierra
 16024	343277	Arguisuelas
@@ -2200,7 +2200,7 @@
 16042	348868	Buendía
 16043	348865	Campillo de Altobuey
 16044	348866	Campillos-Paravientos
-16045	344592	Campillos-Sierra
+16045	344592	Valdemoro-Sierra
 16046	348864	Canalejas del Arroyo
 16047	348861	Cañada del Hoyo
 16048	348862	Cañada Juncosa
@@ -2309,7 +2309,7 @@
 16172	347329	Portilla
 16174	1809116	Poyatos
 16175	347332	Pozoamargo
-16176	347331	Pozorrubio de Santiago
+16176	347331	Pozorrubio
 16177	344465	Pozorrubielos de la Mancha
 16178	347333	El Pozuelo
 16179	342977	Priego
@@ -2401,30 +2401,30 @@
 17002	348055	Aiguaviva
 17003	348054	Albanyà
 17004	348057	Albons
-17005	348056	El Far d'Empordà
+17005	348056	el Far d'Empordà
 17006	348059	Alp
 17007	348058	Amer
 17008	348051	Anglès
 17009	348050	Arbúcies
 17010	343838	Argelaguer
-17011	343839	L'Armentera
+17011	343839	l'Armentera
 17012	343836	Avinyonet de Puigventós
 17014	343837	Begur
-17015	343841	La Vajol
+17015	343841	la Vajol
 17016	343842	Banyoles
-17017	343311	La Vall d'en Bas
+17017	343311	la Vall d'en Bas
 17018	343840	Bàscara
 17021	343834	Bellcaire d'Empordà
 17022	343835	Besalú
 17023	348893	Bescanó
 17024	348892	Beuda
-17025	348891	La Bisbal d'Empordà
+17025	348891	la Bisbal d'Empordà
 17026	348890	Blanes
 17027	348889	Bolvir
 17028	348888	Bordils
 17029	348887	Borrassà
 17030	348886	Breda
-17031	348895	Banyoles
+17031	348895	Brunyola i Sant Martí Sapresa
 17032	348894	Boadella i les Escaules
 17033	344126	Cabanes
 17034	344127	Cabanelles
@@ -2444,7 +2444,7 @@
 17049	347510	Cassà de la Selva
 17051	347512	Castellfollit de la Roca
 17052	347511	Castelló d'Empúries
-17053	347518	Castell d'Aro, Platja d'Aro i s'Agaró
+17053	347518	Castell-Platja d'Aro
 17054	347517	Celrà
 17055	343220	Cervià de Ter
 17056	343221	Cistella
@@ -2454,10 +2454,10 @@
 17061	343215	Cornellà del Terri
 17062	343216	Corçà
 17063	343222	Crespià
-17064	342520	Cruïlles, Monells i Sant Sadurní de l'Heura
+17064	342520	Santa Cristina d'Aro
 17065	347767	Darnius
 17066	347766	Das
-17068	347765	L'Escala
+17068	347765	l'Escala
 17069	347764	Espinelves
 17070	347771	Espolla
 17071	347770	Esponellà
@@ -2480,7 +2480,7 @@
 17089	340343	Hostalric
 17090	340346	Isòvol
 17091	340345	Jafre
-17093	340348	La Jonquera
+17093	340348	la Jonquera
 17094	340347	Juià
 17095	340350	Lladó
 17096	340349	Llagostera
@@ -2493,10 +2493,10 @@
 17103	345037	les Llosses
 17104	345038	Madremanya
 17105	345041	Meranges
-17106	341140	Bàscara
-17107	341141	Massanes
+17106	341140	Masarac
+17107	341141	Maçanes
 17108	341142	Maçanet de Cabrenys
-17109	340390	La Selva de Mar
+17109	340390	Maçanet de la Selva
 17110	345040	Maià de Montcal
 17112	341144	Mieres
 17113	341145	Mollet de Peralada
@@ -2519,16 +2519,16 @@
 17134	340870	Parlavà
 17136	340865	Pau
 17137	340866	Pedret i Marzà
-17138	345219	La Pera
+17138	345219	la Pera
 17140	345221	Peralada
-17142	345220	Les Planes d'Hostoles
+17142	345220	les Planes d'Hostoles
 17143	345223	Planoles
 17144	345222	Pont de Molins
 17145	345225	Pontós
 17146	345224	Porqueres
 17147	345217	Portbou
-17148	345216	Les Preses
-17149	340545	El Port de la Selva
+17148	345216	les Preses
+17149	340545	el Port de la Selva
 17150	340546	Puigcerdà
 17151	340547	Quart
 17152	340548	Rabós
@@ -2573,14 +2573,14 @@
 17197	342524	Sant Joan les Fonts
 17198	342525	Sarrià de Ter
 17199	342526	Saus, Camallera i Llampaies
-17200	342517	La Selva de Mar
-17201	342518	La Cellera de Ter
+17200	342517	la Selva de Mar
+17201	342518	la Cellera de Ter
 17202	346731	Serinyà
 17203	346730	Serra de Daró
 17204	346729	Setcases
 17205	346728	Sils
 17206	346727	Susqueda
-17207	346726	La Tallada d'Empordà
+17207	346726	la Tallada d'Empordà
 17209	346725	Terrades
 17210	346724	Torrent
 17211	346723	Torroella de Fluvià
@@ -2592,7 +2592,7 @@
 17217	343314	Ullà
 17218	343313	Ullastret
 17220	343312	Urús
-17221	343306	La Vall de Bianya
+17221	343306	la Vall de Bianya
 17222	344631	Vallfogona de Ripollès
 17223	343305	Vall-llobrega
 17224	347893	Ventalló
@@ -2679,7 +2679,7 @@
 18068	343748	Deifontes
 18069	343749	Diezma
 18070	343743	Dílar
-18071	343744	Dílar
+18071	343744	Dólar
 18072	347977	Dúdar
 18073	347976	Dúrcal
 18074	347978	Escúzar
@@ -3164,8 +3164,8 @@
 22002	344122	Abizanda
 22005	344121	Adahuesca
 22007	344123	Agüero
-22009	346261	Aínsa-Sobrarbe
-22010	344125	Aisa
+22009	346261	Aínsa-Sobrarbe/L´Aínsa-Sobrarbe
+22010	344125	Aísa
 22011	344124	Albalate de Cinca
 22012	344119	Albalatillo
 22013	344118	Albelda
@@ -3173,8 +3173,8 @@
 22016	339661	Albero Bajo
 22018	339662	Alberuela de Tubo
 22019	339667	Alcalá de Gurrea
-22020	339668	Alcalá del Obispo
-22021	343629	Alcampell
+22020	339668	Alcalá del Obispo/Alcalá d’o Bispe
+22021	343629	Almacelles
 22022	339666	Alcolea de Cinca
 22023	339659	Alcubierre
 22024	339660	Alerre
@@ -3183,7 +3183,7 @@
 22028	344422	Almunia de San Juan
 22029	344421	Almuniente
 22030	344420	Alquézar
-22031	344419	Altorricón
+22031	344419	Altorricón / el Torricó
 22032	344418	Angüés
 22034	344426	Ansó
 22035	344425	Antillón
@@ -3196,18 +3196,18 @@
 22050	343505	Azanuy-Alins
 22051	343504	Azara
 22052	343507	Azlor
-22053	343506	Baélls
+22053	343506	Baells
 22054	343501	Bailo
 22055	343500	Baldellou
 22056	343503	Ballobar
-22059	343502	Banastás
+22059	343502	Banastás/Banastars
 22061	343510	Barbastro
 22063	343509	Barbués
 22064	348027	Barbuñales
 22065	348028	Bárcabo
 22067	348025	Belver de Cinca
-22068	348026	Benabarre
-22069	348023	Benasque
+22068	348026	Benabarre/Benavarri
+22069	348023	Benasque/Benás
 22071	339810	Beranuy
 22072	348024	Berbegal
 22073	348883	Canal de Berdún
@@ -3225,15 +3225,15 @@
 22092	343822	Borau
 22094	343821	Broto
 22102	348881	Campo
-22103	348882	Camporrélls
+22103	348882	Camporrells
 22104	348884	Candasnos
 22105	348879	Canfranc
 22106	348880	Capdesaso
 22107	345322	Capella
-22109	345321	Casbas de Huesca
+22109	345321	Casbas de Huesca/Casbas de Uesca
 22112	345324	Castejón del Puente
 22113	345323	Castejón de Monegros
-22115	345326	Castejón de Sos
+22115	345326	Castejón de Sos / Castilló de Sos
 22116	345325	Castelflorite
 22117	345328	Castiello de Jaca
 22118	345327	Castigaleu
@@ -3246,20 +3246,20 @@
 22140	340973	Esplús
 22144	346039	Estada
 22145	346040	Estadilla
-22147	346042	Estopiñán del Castillo
+22147	346042	Estopiñán del Castillo / Estopanyà
 22148	346043	Fago
 22149	346044	Fanlo
 22152	346045	Fiscal
 22153	341532	Fonz
 22154	341531	Foradada del Toscar
 22155	341530	Fraga
-22160	341527	Gistaín
+22160	341527	Gistaín/Chistén
 22161	341525	El Grado
 22162	341523	Grañén
 22163	341522	Graus
 22167	341533	Gurrea de Gállego
 22168	346255	Valle de Hecho
-22169	346253	Hoz y Costean
+22169	346253	Hoz y Costeán
 22170	345765	Hoz de Jaca
 22171	346260	Santa María de Dulcis
 22172	345768	Huerto
@@ -3268,22 +3268,22 @@
 22176	345763	Ilche
 22178	341121	Jaca
 22179	341120	Jasa
-22185	341122	Labuerda
+22185	341122	Labuerda/A Buerda
 22189	341123	Laluenga
 22190	341125	Lalueza
 22191	341124	Lanaja
 22193	341119	Laperdiguera
 22196	345483	Lascellas-Ponzano
 22197	345484	Lascuarre
-22198	345485	Laspaúles
+22198	345485	Laspaúles/Laspaúls
 22199	345482	Laspuña
 22205	345481	Loarre
 22206	340822	Loporzano
-22207	340821	Loscorrales
+22207	340821	Loscorrales/Os Corrals
 22208	346259	Lupiñén-Ortilla
-22215	340828	Monesma y Cajigar
+22215	340828	Monesma y Cajigar/Monesma i Caixigar
 22216	340827	Monflorite-Lascasas
-22217	340826	Montanuy
+22217	340826	Montanuy/Montanui
 22218	340829	Monzón
 22222	345171	Naval
 22226	345169	Novales
@@ -3305,9 +3305,9 @@
 22253	346257	San Miguel del Cinca
 22255	347475	Pozán de Vero
 22256	347476	La Puebla de Castro
-22259	347468	Puente de Montañana
+22259	347468	Puente de Montañana/Pont de Montanyana
 22260	347738	Puértolas
-22261	342828	El Pueyo de Araguás
+22261	342828	El Pueyo de Araguás/O Pueyo d'Araguás
 22264	342827	Pueyo de Santa Cruz
 22266	342825	Quicena
 22270	340483	Las Peñas de Riglos
@@ -3321,7 +3321,7 @@
 22282	348114	Sallent de Gállego
 22283	348113	San Esteban de Litera
 22284	348112	Sangarrén
-22285	348111	San Juan de Plan
+22285	348111	San Juan de Plan/San Chuan de Plan
 22286	348106	Santa Cilia
 22287	348105	Santa Cruz de la Serós
 22288	346256	Puente la Reina de Jaca
@@ -3333,13 +3333,13 @@
 22303	343952	Senés de Alcubierre
 22305	347835	Sesa
 22306	347834	Sesué
-22309	347837	Siétamo
+22309	347837	Siétamo/Sietemo
 22313	347836	Sopeira
 22315	348103	Tamarite de Litera
 22316	347833	Tardienta
 22317	343948	Tella-Sin
 22318	347827	Tierz
-22320	347826	Tolva
+22320	347826	Tolva/Tolba
 22321	343590	Torla-Ordesa
 22323	343588	Torralba de Aragón
 22324	343589	Torre la Ribera
@@ -3351,7 +3351,7 @@
 22337	339813	Valle de Bardají
 22338	339812	Valle de Lierp
 22339	339811	Velilla de Cinca
-22341	339809	Viacamp y Litera
+22341	339809	Viacamp y Litera/Viacamp i Lliterà
 22342	339808	Vicién
 22343	339807	Villanova
 22344	344559	Villanúa
@@ -3359,9 +3359,9 @@
 22347	344561	Yebra de Basa
 22348	344562	Yésero
 22349	344563	Zaidín
-22350	341528	La Fueva
+22350	341528	La Fueva/A Fueba
 22351	346254	Vencillón
-22901	345769	Huesca
+22901	345769	Huesca/Uesca
 23001	344998	Albanchez de Mágina
 23002	344996	Alcalá la Real
 23003	344997	Alcaudete
@@ -3442,7 +3442,7 @@
 23082	343753	Siles
 23084	343758	Sorihuela del Guadalimar
 23085	343759	Torreblascopedro
-23086	346324	Torredelcampo
+23086	346324	Torre del Campo
 23087	343757	Torredonjimeno
 23088	343752	Torreperogil
 23090	347989	Torres
@@ -3492,7 +3492,7 @@
 24033	340414	Campazas
 24035	340415	Campo de Villavidel
 24036	340410	Camponaraya
-24038	342763	Valle de Ancares
+24038	342763	Candín
 24039	342764	Cármenes
 24040	342773	Carracedelo
 24041	342774	Carrizo
@@ -3514,7 +3514,7 @@
 24059	343691	Congosto
 24060	343692	Corbillos de los Oteros
 24061	343693	Corullón
-24062	347663	Cármenes
+24062	347663	Crémenes
 24063	347662	Cuadros
 24064	343395	Cubillas de los Oteros
 24065	343394	Cubillas de Rueda
@@ -3746,7 +3746,7 @@
 25102	346870	l'Espluga Calba
 25104	346871	Espot
 25107	346867	Estaràs
-25108	346868	Esterri de Cardós
+25108	346868	Esterri d'Àneu
 25109	346869	Esterri de Cardós
 25110	346865	Estamariu
 25111	346866	Farrera
@@ -3773,7 +3773,7 @@
 25144	341806	Ivorra
 25146	341807	Isona i Conca Dellà
 25147	345922	Josa i Tuixén
-25148	341315	la Guingueta d'Àneu
+25148	341315	La Guingueta d'Àneu
 25149	341804	Juncosa
 25150	341805	Juneda
 25152	346338	Les
@@ -3864,7 +3864,7 @@
 25268	342726	Talarn
 25269	342728	Talavera
 25272	342727	Tàrrega
-25273	342733	Arres
+25273	342733	Tarrés
 25274	342732	Tarroja de Segarra
 25275	347640	Térmens
 25276	347641	Tírvia
@@ -3904,7 +3904,7 @@
 26001	345772	Ábalos
 26002	346928	Agoncillo
 26003	348194	Aguilar del Río Alhama
-26004	348189	Ajamil de Cameros
+26004	348189	Ajamil
 26005	341488	Albelda de Iregua
 26006	345770	Alberite
 26007	345762	Alcanadre
@@ -4145,7 +4145,7 @@
 28001	345883	La Acebeda
 28002	345882	Ajalvir
 28003	345881	Alameda del Valle
-28004	345880	El Boalo
+28004	345880	El Álamo
 28005	345879	Alcalá de Henares
 28006	345878	Alcobendas
 28007	345877	Alcorcón
@@ -4211,7 +4211,7 @@
 28067	346655	Guadalix de la Sierra
 28068	346597	Guadarrama
 28069	346586	La Hiruela
-28070	346066	Horcajo de la Sierra-Aoslos
+28070	346066	Madarcos
 28071	345626	Horcajuelo de la Sierra
 28072	346078	Hoyo de Manzanares
 28073	346079	Humanes de Madrid
@@ -4458,7 +4458,7 @@
 30034	340615	Ricote
 30035	340614	San Javier
 30036	346008	San Pedro del Pinatar
-30037	346007	Torre-Pacheco
+30037	346007	Torre Pacheco
 30038	346021	Las Torres de Cotillas
 30039	346019	Totana
 30040	345591	Ulea
@@ -4482,7 +4482,7 @@
 32015	344743	A Bola
 32016	339729	O Bolo
 32017	339522	Calvos de Randín
-32018	339521	Carballeda de Avia
+32018	339521	Carballeda de Valdeorras
 32019	344755	Carballeda de Avia
 32020	339737	O Carballiño
 32021	343981	Cartelle
@@ -4579,12 +4579,12 @@
 33021	345579	Cudillero
 33022	345582	Degaña
 33023	345581	El Franco
-33026	345578	Grado
+33026	345578	Grau/Grado
 33027	339759	Grandas de Salime
 33028	345572	Ibias
 33029	345571	Illano
 33030	340715	Illas
-33031	340716	Langreo
+33031	340716	Llangréu/Langreo
 33032	340710	Laviana
 33033	340714	Lena
 33034	340703	Valdés
@@ -4608,11 +4608,11 @@
 33053	342189	Quirós
 33054	342190	Las Regueras
 33055	342191	Ribadedeva
-33056	342192	Ribadesella
+33056	342192	Ribeseya
 33057	342193	Ribera de Arriba
 33058	342183	Riosa
 33059	342184	Salas
-33060	343616	San Martín del Rey Aurelio
+33060	343616	Samartín del Rei Aurelio
 33061	343615	San Martín de Oscos
 33062	343619	Santa Eulalia de Oscos
 33063	343617	San Tirso de Abres
@@ -5054,7 +5054,7 @@
 37152	343902	Golpejas
 37153	343904	Gomecello
 37155	343906	Guadramiro
-37156	343905	GUIJO DE AVILA
+37156	343905	Guijo de Ávila
 37157	343908	Guijuelo
 37158	343907	Herguijuela de Ciudad Rodrigo
 37159	343901	Herguijuela de la Sierra
@@ -5119,13 +5119,13 @@
 37219	342398	Navamorales
 37220	342399	Navarredonda de la Rinconada
 37222	346920	Navasfrías
-37223	346914	Negrilla de Palencia
+37223	346914	Palencia de Negrilla
 37224	346918	Olmedo de Camaces
 37225	346923	La Orbada
 37226	346922	Pajares de la Laguna
 37227	346921	Palacios del Arzobispo
 37229	346915	Palaciosrubios
-37230	346914	Negrilla de Palencia
+37230	346914	Palencia de Negrilla
 37232	342767	Parada de Arriba
 37233	342768	Parada de Rubiales
 37234	340416	Paradinas de San Juan
@@ -5197,7 +5197,7 @@
 37302	341009	Los Santos
 37303	339746	Sardón de los Frailes
 37304	339747	Saucelle
-37305	339748	El Sahugo
+37305	339748	El Sahúgo
 37306	339738	Sepulcro-Hilario
 37307	339739	Sequeros
 37308	339742	Serradilla del Arroyo
@@ -5313,7 +5313,7 @@
 38035	340734	San Miguel de Abona
 38036	340733	San Sebastián de la Gomera
 38037	340732	Santa Cruz de la Palma
-38039	340717	SANTA URSULA
+38039	340717	Santa Úrsula
 38040	340739	Santiago del Teide
 38041	347972	El Sauzal
 38042	345682	Los Silos
@@ -5326,7 +5326,7 @@
 38049	345691	Valle Gran Rey
 38050	341042	Vallehermoso
 38051	341032	La Victoria de Acentejo
-38052	341044	Vilaflor de Chasna
+38052	341044	Vilaflor
 38053	341043	Villa de Mazo
 38054	1809123	El Pinar de El Hierro
 38900	340727	Santa Cruz de Tenerife
@@ -5431,7 +5431,7 @@
 39100	346206	Villafufre
 39101	346207	Valle de Villaverde
 39102	346208	Voto
-39103	340042	CDAD CAM CAB
+39103	340042	Mancomunidad de Campoo-Cabuérniga
 39900	340797	Santander
 40001	343982	Abades
 40002	344003	Adrada de Pirón
@@ -5509,7 +5509,7 @@
 40094	339755	Frumales
 40095	339758	Fuente de Santa Cruz
 40096	339757	Fuente el Olmo de Fuentidueña
-40097	341126	Fuente el Olmo de Fuentidueña
+40097	341126	Fuente el Olmo de Íscar
 40100	339761	Fuentepelayo
 40101	339760	Fuentepiñel
 40102	339753	Fuenterrebollo
@@ -5693,7 +5693,7 @@
 41049	345243	Guillena
 41050	340576	Herrera
 41051	340567	Huévar del Aljarafe
-41052	340578	Lantejuela
+41052	340578	La Lantejuela
 41053	340577	Lebrija
 41054	340564	Lora de Estepa
 41055	340563	Lora del Río
@@ -5813,7 +5813,7 @@
 42108	345785	Covaleda
 42109	341549	Cubilla
 42111	341550	Cubo de la Solana
-42114	342384	Cabrejas del Campo
+42114	342384	Cueva de Ágreda
 42120	341546	Dévanos
 42121	342475	Deza
 42124	342473	Duruelo de la Sierra
@@ -5868,7 +5868,7 @@
 42233	344470	La Póveda de Soria
 42234	344468	Pozalmuro
 42236	344471	Quintana Redonda
-42237	344472	Quintanas de Gormaz
+42237	344472	Quintanas de Gormáz
 42241	344466	Quiñonería
 42242	344467	Los Rábanos
 42244	339720	Rebollar
@@ -5933,21 +5933,21 @@
 42900	340050	Soria
 43001	342688	Aiguamúrcia
 43002	342689	Albinyana
-43003	342690	L'Albiol
+43003	342690	l'Albiol
 43004	342691	Alcanar
 43005	342692	Alcover
 43006	342693	Aldover
-43007	342694	L'Aleixar
+43007	342694	l'Aleixar
 43008	342695	Alfara de Carles
 43009	342696	Alforja
 43010	346862	Alió
 43011	346861	Almoster
 43012	346860	Altafulla
-43013	346859	L'Ametlla de Mar
+43013	346859	l'Ametlla de Mar
 43014	346858	Amposta
 43015	346857	Arbolí
-43016	346856	L'Arboç
-43017	346855	L'Argentera
+43016	346856	l'Arboç
+43017	346855	l'Argentera
 43018	346864	Arnes
 43019	346863	Ascó
 43020	342337	Banyeres del Penedès
@@ -5957,11 +5957,11 @@
 43024	342341	Bellvei
 43025	342342	Benifallet
 43026	342339	Benissanet
-43027	342340	La Bisbal del Penedès
-43028	342333	La Bisbal del Penedès
+43027	342340	la Bisbal de Falset
+43028	342333	la Bisbal del Penedès
 43029	342334	Blancafort
 43030	346544	Bonastre
-43031	346543	Les Borges del Camp
+43031	346543	les Borges del Camp
 43032	346546	Bot
 43033	346545	Botarell
 43034	346548	Bràfim
@@ -5969,13 +5969,13 @@
 43036	346550	Cabra del Camp
 43037	346549	Calafell
 43038	346541	Cambrils
-43039	1809117	La Canonja
+43039	1809117	la Canonja
 43040	346540	Capafonts
-43041	342004	Gandesa
+43041	342004	Capçanes
 43042	342005	Caseres
 43043	342006	Castellvell del Camp
-43044	342007	El Catllar
-43045	341999	La Sénia
+43044	342007	el Catllar
+43045	341999	la Sénia
 43046	342001	Colldejou
 43047	342002	Conesa
 43048	342003	Constantí
@@ -5985,25 +5985,25 @@
 43052	346230	Cunit
 43053	346229	Xerta
 43054	346228	Duesaigües
-43055	346235	L'Espluga de Francolí
+43055	346235	l'Espluga de Francolí
 43056	346234	Falset
-43057	346233	La Fatarella
-43058	346232	La Febró
-43059	346237	La Figuera
+43057	346233	la Fatarella
+43058	346232	la Febró
+43059	346237	la Figuera
 43060	346236	Figuerola del Camp
 43061	341701	Flix
 43062	341702	Forès
 43063	341699	Freginals
-43064	341700	La Galera
+43064	341700	la Galera
 43065	341697	Gandesa
 43066	341698	Garcia
-43067	341695	Els Garidells
+43067	341695	els Garidells
 43068	341696	Ginestar
 43069	341709	Godall
 43070	341711	Gratallops
-43071	345944	Els Guiamets
+43071	345944	els Guiamets
 43072	345943	Horta de Sant Joan
-43073	345946	El Lloar
+43073	345946	el Lloar
 43074	345945	Llorac
 43075	342470	Llorenç del Penedès
 43076	342456	Margalef
@@ -6013,10 +6013,10 @@
 43080	346050	Masllorenç
 43081	343939	la Masó
 43082	343940	Maspujols
-43083	343941	El Masroig
-43084	343942	El Milà
+43083	343941	el Masroig
+43084	343942	el Milà
 43085	343943	Miravet
-43086	343944	El Molar
+43086	343944	el Molar
 43087	343945	Montblanc
 43089	343936	Montbrió del Camp
 43090	343937	Montferri
@@ -6025,25 +6025,25 @@
 43093	348138	Mont-roig del Camp
 43094	348137	Móra d'Ebre
 43095	348136	Móra la Nova
-43096	348135	El Morell
-43097	348134	La Morera de Montsant
-43099	348133	La Nou de Gaià
+43096	348135	el Morell
+43097	348134	la Morera de Montsant
+43099	348133	la Nou de Gaià
 43100	348132	Nulles
-43101	348131	La Palma d'Ebre
-43102	340531	Els Pallaresos
+43101	348131	la Palma d'Ebre
+43102	340531	els Pallaresos
 43103	340530	Passanant i Belltall
 43104	340533	Paüls
 43105	340532	Perafort
-43106	340535	El Perelló
-43107	340534	Les Piles
-43108	340537	El Pinell de Brai
+43106	340535	el Perelló
+43107	340534	les Piles
+43108	340537	el Pinell de Brai
 43109	340536	Pira
-43110	340527	El Pla de Santa Maria
-43111	340526	La Pobla de Mafumet
-43112	345208	La Pobla de Massaluca
-43113	345210	La Pobla de Montornès
+43110	340527	el Pla de Santa Maria
+43111	340526	la Pobla de Mafumet
+43112	345208	la Pobla de Massaluca
+43113	345210	la Pobla de Montornès
 43114	345206	Poboleda
-43115	345207	El Pont d'Armentera
+43115	345207	el Pont d'Armentera
 43116	345213	Porrera
 43117	345214	Pradell de la Teixeta
 43118	345211	Prades
@@ -6054,9 +6054,9 @@
 43123	340855	Rasquera
 43124	340854	Renau
 43125	340853	Reus
-43126	340852	La Riba
+43126	340852	la Riba
 43127	340851	Riba-roja d'Ebre
-43128	340850	La Riera de Gaià
+43128	340850	la Riera de Gaià
 43129	340849	Riudecanyes
 43130	340859	Riudecols
 43131	340858	Riudoms
@@ -6064,9 +6064,9 @@
 43133	345490	Roda de Berà
 43134	345491	Rodonyà
 43135	345492	Roquetes
-43136	345493	El Rourell
+43136	345493	el Rourell
 43137	345494	Salomó
-43138	345495	La Ràpita
+43138	345495	la Ràpita
 43139	345496	Sant Jaume dels Domenys
 43140	345497	Santa Bàrbara
 43141	345498	Santa Coloma de Queralt
@@ -6074,14 +6074,14 @@
 43143	339877	Pontils
 43144	339880	Sarral
 43145	339879	Savallà del Comtat
-43146	339874	La Secuita
-43147	339873	La Selva del Camp
+43146	339874	la Secuita
+43147	339873	la Selva del Camp
 43148	339876	Senan
 43149	339875	Solivella
 43151	341837	Tivenys
 43152	344616	Tivissa
-43153	344617	La Torre de Fontaubella
-43154	344614	La Torre de l'Espanyol
+43153	344617	la Torre de Fontaubella
+43154	344614	la Torre de l'Espanyol
 43155	344615	Torredembarra
 43156	344612	Torroja del Priorat
 43157	344613	Tortosa
@@ -6092,18 +6092,18 @@
 43162	340196	Vallmoll
 43163	340195	Valls
 43164	340194	Vandellòs i l'Hospitalet de l'Infant
-43165	340193	El Vendrell
+43165	340193	el Vendrell
 43166	340200	Vespella de Gaià
 43167	340199	Vilabella
 43168	340198	Vilallonga del Camp
 43169	340197	Vilanova d'Escornalbou
 43170	340202	Vilanova de Prades
 43171	340201	Vilaplana
-43172	345491	Vila-rodona
+43172	345491	Rodonyà
 43173	344923	Vila-seca
 43174	344924	Vilaverd
-43175	344925	La Vilella Alta
-43176	344887	La Vilella Baixa
+43175	344925	la Vilella Alta
+43176	344887	la Vilella Baixa
 43177	344919	Vilalba dels Arcs
 43178	344920	Vimbodí i Poblet
 43179	344921	Vinebre
@@ -6111,14 +6111,14 @@
 43181	343185	Deltebre
 43182	343187	Sant Jaume d'Enveja
 43183	343186	Camarles
-43184	343189	L'Aldea
+43184	343189	l'Aldea
 43185	343188	Salou
-43186	343190	L'Ampolla
+43186	343190	l'Ampolla
 43900	339887	Tarragona
 44001	345067	Ababuj
 44002	345070	Abejuela
 44003	345069	Aguatón
-44004	345064	Aguaviva
+44004	345064	Aguaviva / Aiguaviva de Bergantes
 44005	345063	Aguilar del Alfambra
 44006	345814	Alacón
 44007	345065	Alba
@@ -6140,7 +6140,7 @@
 44024	345371	Anadón
 44025	345370	Andorra
 44026	345369	Arcos de las Salinas
-44027	347785	Arens de Lledó
+44027	347785	Lledó / Lledó d'Algars
 44028	345363	Argente
 44029	345362	Ariño
 44031	339857	Azaila
@@ -6149,8 +6149,8 @@
 44034	339845	Bañón
 44035	339848	Barrachina
 44036	339853	Bea
-44037	339855	Beceite
-44038	341056	Belmonte de San José
+44037	339855	Beceite / Beseit
+44038	341056	Belmonte de San José / Bellmunt de Mesquí
 44039	341057	Bello
 44040	340831	Berge
 44041	340830	Bezas
@@ -6161,7 +6161,7 @@
 44046	346051	Bueña
 44047	346219	Burbáguena
 44048	345705	Cabra de Mora
-44049	345704	Calaceite
+44049	345704	Calaceite / Calaceit
 44050	341405	Calamocha
 44051	341408	Calanda
 44052	341403	Calomarde
@@ -6171,7 +6171,7 @@
 44056	341409	Caminreal
 44059	341795	Cantavieja
 44060	346006	Cañada de Benatanduz
-44061	345972	La Cañada de Verich
+44061	345972	La Cañada de Verich / la Canyada de Beric
 44062	345970	Cañada Vellida
 44063	345968	Cañizar del Olivar
 44064	346002	Cascante del Río
@@ -6185,11 +6185,11 @@
 44075	341759	Celadas
 44076	341760	Cella
 44077	341762	La Cerollera
-44081	343894	La Codoñera
+44081	343894	La Codoñera / la Codonyera
 44084	343895	Corbalán
 44086	343891	Cortes de Aragón
 44087	343890	Cosa
-44088	343893	Cretas
+44088	343893	Cretas / Queretes
 44089	343892	Crivillén
 44090	343897	La Cuba
 44091	343896	Cubla
@@ -6204,16 +6204,16 @@
 44106	340443	Ferreruela de Huerva
 44107	347240	Fonfría
 44108	347241	Formiche Alto
-44110	347188	Fórnoles
+44110	347188	Fórnoles / Fórnols
 44111	347213	Fortanete
-44112	341408	Foz-Calanda
-44113	347244	La Fresneda
+44112	341408	Calanda
+44113	347244	La Fresneda / la Freixneda
 44114	347245	Frías de Albarracín
 44115	342548	Fuenferrada
 44116	342547	Fuentes Calientes
 44117	342546	Fuentes Claras
 44118	342545	Fuentes de Rubielos
-44119	342552	Fuentespalda
+44119	342552	Fuentespalda / Fontdespatla
 44120	342551	Galve
 44121	342550	Gargallo
 44122	342549	Gea de Albarracín
@@ -6237,24 +6237,24 @@
 44143	341743	Lidón
 44144	342213	Linares de Mora
 44145	342206	Loscos
-44148	347785	Lledó
+44148	347785	Lledó / Lledó d'Algars
 44149	347786	Maicas
 44150	347787	Manzanera
 44151	347788	Martín del Río
 44152	347789	Mas de las Matas
 44153	347790	La Mata de los Olmos
-44154	347791	Mazaleón
+44154	347791	Mazaleón / Massalió
 44155	347782	Mezquita de Jarque
 44157	347783	Mirambel
 44158	343246	Miravete de la Sierra
 44159	343245	Molinos
 44160	343244	Monforte de Moyuela
 44161	343243	Monreal del Campo
-44162	343242	Monroyo
+44162	343242	Monroyo / Montroig
 44163	343241	Montalbán
 44164	343240	Monteagudo del Castillo
 44165	343433	Monterde de Albarracín
-44167	340241	Mora de Rubielos
+44167	340241	Rubielos de Mora
 44168	343237	Moscardón
 44169	347532	Mosqueruela
 44170	347533	Muniesa
@@ -6272,7 +6272,7 @@
 44185	342909	Palomar de Arroyos
 44186	342908	Pancrudo
 44187	342911	Las Parras de Castellote
-44189	342910	Peñarroya de Tastavins
+44189	342910	Peñarroya de Tastavíns / Pena-roja de Tastavins
 44190	345856	Peracense
 44191	345857	Peralejos
 44192	345858	Perales del Alfambra
@@ -6285,14 +6285,14 @@
 44202	341215	La Puebla de Híjar
 44203	341214	La Puebla de Valverde
 44204	341213	Puertomingalvo
-44205	342891	Ráfales
+44205	342891	Ráfales / Ràfels
 44207	341219	Rillo
 44208	342879	Riodeva
 44209	341217	Ródenas
 44210	341222	Royuela
 44211	341221	Rubiales
 44212	340242	Rubielos de la Cérida
-44213	340241	Mora de Rubielos
+44213	340241	Rubielos de Mora
 44215	340240	Salcedillo
 44216	340239	Saldón
 44217	340238	Samper de Calanda
@@ -6311,14 +6311,14 @@
 44233	339927	Torralba de los Sisones
 44234	339926	Torrecilla de Alcañiz
 44235	339929	Torrecilla del Rebollar
-44236	339928	Torre de Arcas
+44236	339928	Torre de Arcas / Torredarques
 44237	339931	Torre de las Arcas
-44238	339930	Torre del Compte
+44238	339930	Torre del Compte / La Torre del Comte
 44239	339933	Torrelacárcel
 44240	339932	Torre los Negros
 44241	339935	Torremocha de Jiloca
 44242	339934	Torres de Albarracín
-44243	344648	Torrevelilla
+44243	344648	Torrevelilla / Torre de Vilella
 44244	344649	Torrijas
 44245	344647	Torrijo del Campo
 44247	344652	Tramacastiel
@@ -6331,8 +6331,8 @@
 44254	339570	Valdealgorfa
 44257	339569	Valdecuenca
 44258	339576	Valdelinares
-44259	339574	Valdeltormo
-44260	339573	Valderrobres
+44259	339574	Valdeltormo / La Vall del Tormo
+44260	339573	Valderrobres / Vall de Roures
 44261	339572	Valjunquera
 44263	339567	El Vallecillo
 44264	344358	Veguillas de la Sierra
@@ -6526,7 +6526,7 @@
 45176	347629	Turleque
 45177	347626	Ugena
 45178	347627	Urda
-45179	344681	Santo Domingo-Caudilla
+45179	344681	Escalonilla
 45180	343146	Valdeverdeja
 45181	342722	Valmojado
 45182	342721	Velada
@@ -6567,20 +6567,20 @@
 46010	345245	Albalat dels Tarongers
 46011	345246	Alberic
 46012	345247	Alborache
-46013	345248	Alboraia/Alboraya
+46013	345248	Alboraia / Alboraya
 46014	344174	Albuixech
 46015	340661	Alcàsser
 46016	340700	Alcàntera de Xúquer
 46017	345244	Alzira
 46018	346360	Alcublas
-46019	346361	l'Alcúdia
+46019	346361	L'Alcúdia
 46020	340329	l'Alcúdia de Crespins
 46021	340328	Aldaia
 46022	340331	Alfafar
 46023	340330	Alfauir
 46024	342477	Alfara de la Baronia
 46025	340307	Alfara del Patriarca
-46026	340319	Alfarb
+46026	340319	Alfarp
 46027	342478	Alfarrasí
 46028	341540	Algar de Palància
 46029	341537	Algemesí
@@ -6636,7 +6636,7 @@
 46081	347021	Calles
 46082	340503	Camporrobles
 46083	340502	Canals
-46084	340501	Canet d'En Berenguer
+46084	340501	Canet d'en Berenguer
 46085	340500	Carcaixent
 46086	340507	Càrcer
 46087	340506	Carlet
@@ -6673,7 +6673,7 @@
 46118	344537	l'Eliana
 46119	348158	Emperador
 46120	346702	Enguera
-46121	348160	l'Eliana
+46121	348160	l'Énova
 46122	344266	Estivella
 46123	344267	Estubeny
 46124	344268	Faura
@@ -6705,7 +6705,7 @@
 46150	343326	Loriguilla
 46151	343327	Losa del Obispo
 46152	347621	Llutxent
-46153	347620	Llocnou d'En Fenollet
+46153	347620	Llocnou d'en Fenollet
 46154	347623	Llocnou de la Corona
 46155	347622	Llocnou de Sant Jeroni
 46156	347617	Llanera de Ranes
@@ -6724,17 +6724,17 @@
 46169	343641	Millares
 46170	343647	Miramar
 46171	343648	Mislata
-46172	347873	Moixent/Mogente
-46173	347872	Montcada/Moncada
+46172	347873	Moixent / Mogente
+46173	347872	Moncada
 46174	347871	Montserrat
 46175	347870	Montaverner
 46176	347877	Montesa
-46177	347876	Montitxelvo/Montichelvo
-46178	347875	Montroi/Montroy
+46177	347876	Montitxelvo / Montichelvo
+46178	347875	Montroi / Montroy
 46179	347874	Museros
-46180	347869	Enguera
+46180	347869	Nàquera / Náquera
 46181	347868	Navarrés
-46182	342675	NOVELE NOVETLE
+46182	342675	Novetlè
 46183	342677	Oliva
 46184	342673	Olocau
 46185	342674	l'Olleria
@@ -6759,7 +6759,7 @@
 46204	346557	la Pobla de Vallbona
 46205	346556	la Pobla Llarga
 46206	346560	el Puig de Santa Maria
-46207	346558	PU OL
+46207	346558	Puçol
 46208	346562	Quesa
 46209	346561	Rafelbunyol
 46210	346552	Rafelcofer
@@ -6774,7 +6774,7 @@
 46219	342355	Rotglà i Corberà
 46220	342343	Ròtova
 46221	342344	Rugat
-46222	348833	Sagunt/Sagunto
+46222	348833	Sagunt / Sagunto
 46223	348832	Salem
 46224	348831	Sant Joanet
 46225	348828	Sedaví
@@ -6808,7 +6808,7 @@
 46254	344949	Vallanca
 46255	344950	Vallés
 46256	344886	Venta del Moro
-46257	343511	Vilallonga/Villalonga
+46257	343511	Vilallonga / Villalonga
 46258	344867	Vilamarxant
 46259	344873	Castelló
 46260	345012	Villar del Arzobispo
@@ -7026,7 +7026,7 @@
 47212	340260	Villalba de la Loma
 47213	340266	Villalba de los Alcores
 47214	340264	Villalbarba
-47215	340254	Villalán de Campos
+47215	340254	Villalón de Campos
 47216	340253	Villamuriel de Campos
 47217	340258	Villán de Tordesillas
 47218	340256	Villanubla
@@ -7224,7 +7224,7 @@
 49213	340220	San Miguel de la Ribera
 49214	340221	San Miguel del Valle
 49215	347013	San Pedro de Ceque
-49216	345042	San Pedro de la Nave-Almendra
+49216	345042	Zamora
 49220	340218	Santa Clara de Avedillo
 49222	347005	Santa Colomba de las Monjas
 49223	343476	Santa Cristina de la Polvorosa
@@ -7394,9 +7394,9 @@
 50099	344217	Épila
 50100	345465	Erla
 50101	345464	Escatrón
-50103	345466	Fabara
+50103	345466	Fabara / Favara
 50105	345468	Farlete
-50106	345467	Fayón
+50106	345467	Fayón / Faió
 50107	345470	Los Fayos
 50108	345469	Figueruelas
 50109	345463	Fombuena
@@ -7472,11 +7472,11 @@
 50183	346638	La Muela
 50184	346637	Munébrega
 50185	346640	Murero
-50186	346639	Murillo de Gállego
+50186	346639	Murillo de Gállego/Morillo de Galligo
 50187	346642	Navardún
 50188	346641	Nigüella
 50189	346644	Nombrevilla
-50190	346643	Nonaspe
+50190	346643	Nonaspe / Nonasp
 50191	342430	Novallas
 50192	342431	Novillas
 50193	342428	Nuévalos
@@ -7524,7 +7524,7 @@
 50238	347429	San Mateo de Gállego
 50239	347428	Santa Cruz de Grío
 50240	347427	Santa Cruz de Moncayo
-50241	347426	Santa Eulalia de Gállego
+50241	347426	Santa Eulalia de Gállego/Santolaria de Galligo
 50242	347425	Santed
 50243	342082	Sástago
 50244	342083	Sabiñán
@@ -7587,25 +7587,25 @@
 50305	348009	Marracos
 50306	1809122	Villamayor de Gállego
 50900	345740	Zaragoza
-51016	344228	CARTAGENA
-51021	345280	FUENTE ALAMO DE MURCIA
-51041	345592	LA UNION
-52014	342669	CARREÑO
-52019	341600	COLUNGA
-52024	345576	GIJON
-52025	345575	GOZON
-52076	341872	VILLAVICIOSA
-53003	342439	ALGAR
-53006	342444	ARCOS DE LA FRONTERA
-53010	346954	BORNOS
-53017	346953	ESPERA
-53020	342097	JEREZ DE LA FRONTERA
-53026	342094	PRADO DEL REY
-53041	343141	VILLAMARTIN
-53044	346897	SAN JOSE DEL VALLE
-54003	346566	BAIONA
-54021	346271	GONDOMAR
-54035	341741	NIGRAN
-54057	341381	VIGO
+51016	344228	Cartagena
+51021	345280	Fuente-Álamo
+51041	345592	La Unión
+52014	342669	Carreño
+52019	341600	Colunga
+52024	345576	Gijón/Xixón
+52025	345575	Gozón
+52076	341872	Villaviciosa
+53003	342439	Algar
+53006	342444	Arcos de la Frontera
+53010	346954	Bornos
+53017	346953	Espera
+53020	342097	Jerez de la Frontera
+53026	342094	Prado del Rey
+53041	343141	Villamartín
+53044	346897	San José del Valle
+54003	346566	Baiona
+54021	346271	Gondomar
+54035	341741	Nigrán
+54057	341381	Vigo
 55101	1822781	Ceuta
 56101	7523933	Melilla
