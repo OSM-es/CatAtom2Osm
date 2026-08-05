@@ -70,7 +70,7 @@ the Spanish Cadastre.
 * \-m, --manual              Dissable conflation with OSM data
 * \-c, --comment             Recovers the metadata of the tasks
 * \-w, --download            Download only
-* \-x, --gen-munis [PATH]    Generate municipalities CSV with IGN data (used in CatAtomWeb dropdown list)
+* \-x, --gen-munis [PATH]    Generate municipalities.csv CSV with IGN data (used in CatAtomWeb dropdown list)
 * \--log=log_level           Select the log level between DEBUG, INFO, WARNING, ERROR or CRITICAL
 
 More info about the split option in the [wiki](Más información sobre dividir municipio en la [wiki](https://wiki.openstreetmap.org/wiki/ES:Catastro_espa%C3%B1ol/Importaci%C3%B3n_de_edificios/Gesti%C3%B3n_de_proyectos#Anexo:_Modificar_proyectos) (es)
