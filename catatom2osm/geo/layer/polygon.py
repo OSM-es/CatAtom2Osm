@@ -180,6 +180,10 @@ class PolygonLayer(BaseLayer):
                     area_of_candidates = Point(point).boundingBox(threshold)
                     fids = index.intersects(area_of_candidates)
                     for fid in fids:
+                        # Degenerate features (slivers with area ~ 0) must not be modified: deleteVertex() collapses their minimal rings and the subsequent GEOS validity check segfaults.
+                        # See issue #125 (03104, Petrer).
+                        if geometries[fid].area() < config.min_area:
+                            continue
                         g = QgsGeometry(geometries[fid])
                         (p, ndx, ndxa, ndxb, dist_v) = g.closestVertex(point)
                         (dist_s, closest, vertex) = g.closestSegmentWithContext(point)[
